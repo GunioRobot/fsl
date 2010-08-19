@@ -84,6 +84,7 @@ Usage() {
     echo "-b (burnin period, default 1000)"
     echo "-j (number of jumps, default 1250)"
     echo "-s (sample every, default 25)"
+    echo "-l (job limit, default 20)"
     echo ""
     exit 1
 }
@@ -114,7 +115,7 @@ fudge=1
 burnin=1000
 njumps=1250
 sampleevery=25
-model=1
+njobs=20
 while [ ! -z "$2" ]
 do
   case "$2" in
@@ -123,7 +124,7 @@ do
       -b) burnin=$3;shift;;
       -j) njumps=$3;shift;;
       -s) sampleevery=$3;shift;;
-      -model) model=$3;shift;;
+      -l) njobs=$3;shift;;
       *) break;;
   esac
   shift
@@ -164,15 +165,25 @@ mkdir -p ${subjdir}.bedpostX/logs
 mkdir -p ${subjdir}.bedpostX/logs/pid_${$}
 mkdir -p ${subjdir}.bedpostX/xfms
 
-mailto=`whoami`@fmrib.ox.ac.uk
+# [DiN]
+mailto=`whoami`@`hostname`
 echo Queuing preprocessing stages
-preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m as -N bpx_preproc -l ${subjdir}.bedpostX/logs ${FSLDIR}/bin/bedpostx_preproc.sh ${subjdir}`
+# [DiN] as -> ae
+echo "${FSLDIR}/bin/bedpostx_preproc.sh ${subjdir} " >${subjdir}.bedpostX/commands_pre.sh
+chmod +x ${subjdir}.bedpostX/commands_pre.sh
+# preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${FSLDIR}/bin/bedpostx_preproc.sh ${subjdir}`
+echo "${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh"
+preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh`
+echo preprocid $preprocid
 
 echo Queuing parallel processing stage
 nslices=`${FSLDIR}/bin/fslval ${subjdir}/data dim3`
+echo 1
 [ -f ${subjdir}.bedpostX/commands.txt ] && rm ${subjdir}.bedpostX/commands.txt
-if [ "x$SGE_ROOT" = "x" ]; then
-
+echo 2
+# if [ "x$SGE_ROOT" = "x" ]; then
+if (( 1 )); then
+echo 3
 # 
 # Need to set off a backgrounded monitoring task
 # 
@@ -180,74 +191,81 @@ if [ "x$SGE_ROOT" = "x" ]; then
 #!/bin/sh
 finished=0
 logdir=${subjdir}.bedpostX/logs
-
-check() {
-    if [ \$finished -eq 1 ];then
-        echo "\$nfin slices processed"
-    else
-        nfin=0
-        slice=0
-        while [ "\$slice" -le $nslices ];do
-            slicezp=\`\$FSLDIR/bin/zeropad \$slice 4\`
-            isimg=\`\$FSLDIR/bin/imtest ${subjdir}.bedpostX/diff_slices/data_slice_\$slicezp/dyads1\`
-            if [ \$isimg -eq 1 ];then
-                nfin=\$((\$nfin + 1))
-            fi
-                slice=\$((\$slice + 1))
-        done
-        if [ \$nfin -eq $nslices ] ; then
-            finished=1
-        fi
-        echo "\$nfin slices processed"
-    fi
-}
-exit_test() {
-    isimg=\`\$FSLDIR/bin/imtest ${subjdir}.bedpostX/dyads1\`
-    if [ \$isimg -eq 0 ] ; then
-	echo For some reason the bedpostX process DOES NOT appear
-	echo to have successfully completed. Please examine your
-	echo results carefully.
-    else
-	echo All slices processed
-    fi
-}
-
-check
-n=0
 while [ \$finished -eq 0 ] ; do
-    sleep 10
-    if [ \$n -eq 60 ] ; then
-        check
-        n=0
-    else
-        n=\$((\$n + 1))
+    nfin=0
+    slice=0
+    while [ "\$slice" -le $nslices ];do
+        slicezp=\`$FSLDIR/bin/zeropad \$slice 4\`
+        if [ -f ${subjdir}.bedpostX/diff_slices/data_slice_\$slicezp/dyads2.nii.gz ];then
+          nfin=\$((\$nfin + 1))
+        fi
+        slice=\$((\$slice + 1))
+    done
+
+    if [ \$nfin -eq $nslices -a -f ${subjdir}.bedpostX/xfms/eye.mat ] ; then
+        finished=1
     fi
+
+    echo "\$nfin slices processed"
+    sleep 600;
 done
-exit_test
 EOM
     chmod +x ${subjdir}.bedpostX/monitor
     ${subjdir}.bedpostX/monitor&
     monitorpid=$!
 fi
 slice=0
+bedpostids=''
+depend=''
 while [ $slice -lt $nslices ]
 do
+  newdepend=''
+  for i in `seq 1 $njobs`
+  do
     slicezp=`$FSLDIR/bin/zeropad $slice 4`
-    if [ `$FSLDIR/bin/imtest ${subjdir}.bedpostX/diff_slices/data_slice_$slicezp/dyads1` -eq 1 ];then
+    if [ -f ${subjdir}.bedpostX/diff_slices/data_slice_$slicezp/dyads2.nii.gz ];then
 	echo "slice $slice has already been processed"
     else
-	echo "${FSLDIR}/bin/bedpostx_single_slice.sh $subjdir $nfibres $fudge $burnin $njumps $sampleevery $model $slice" \
-	    >> ${subjdir}.bedpostX/commands.txt
+	echo "${FSLDIR}/bin/bedpostx_single_slice.sh $subjdir $nfibres $fudge $burnin $njumps $sampleevery $slice" \
+	    > ${subjdir}.bedpostX/commands.$slice.txt
     fi
+    #slice=$(($slice + 1))
+    #done
+    #echo  END
+    chmod +x ${subjdir}.bedpostX/commands.$slice.txt
+    # bedpostid=`${FSLDIR}/bin/fsl_sub -j $preprocid -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx -t ${subjdir}.bedpostX/commands.$slice.txt`
+    # bedpostid=`${FSLDIR}/bin/fsl_sub -j $preprocid -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt`
+    echo ${FSLDIR}/bin/fsl_sub -k $depend@$i -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt >&2
+    bedpostid=`${FSLDIR}/bin/fsl_sub -k $depend@$i -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt`
+    newdepend=$newdepend:$bedpostid
+    echo bedpostid $bedpostid >&2
     slice=$(($slice + 1))
+    if [ x"$bedpostids" == "x" ]
+    then
+       bedpostids=$bedpostid
+    else
+       bedpostids=$bedpostids:$bedpostid
+    fi
+  done
+  depend=$newdepend
+done
+# dummy tasks
+for i in `seq 1 20`
+do
+  qsub -W depend=beforeany:$depend,afterany:$preprocid $FSLDIR/bin/fslecho
 done
 
-bedpostid=`${FSLDIR}/bin/fsl_sub -j $preprocid -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx -t ${subjdir}.bedpostX/commands.txt`
+#[ "x$SGE_ROOT" = "x" ] && kill $monitorpid
 
-echo Queuing post processing stage
-mergeid=`${FSLDIR}/bin/fsl_sub -j $bedpostid -T 60 -m as -N bpx_postproc -l ${subjdir}.bedpostX/logs ${FSLDIR}/bin/bedpostx_postproc.sh $subjdir`
-
-[ "x$SGE_ROOT" = "x" ] && kill -USR1 $monitorpid
+# [DiN] as => ae
+echo Queuing post processing stage $bedpostids
+# sleep 10
+#showq
+echo ${FSLDIR}/bin/bedpostx_postproc.sh $subjdir >${subjdir}.bedpostX/commands_post.sh
+chmod +x ${subjdir}.bedpostX/commands_post.sh
+# mergeid=`${FSLDIR}/bin/fsl_sub -j $bedpostids -T 60 -m ae -N bpx_postproc -l ${subjdir}.bedpostX/logs ${FSLDIR}/bin/bedpostx_postproc.sh $subjdir`
+mergeid=`${FSLDIR}/bin/fsl_sub -j $bedpostids -T 60 -m ae -N bpx_postproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_post.sh`
+echo mergeid $mergeid
 
 if [ "x$SGE_ROOT" != "x" ]; then
     echo
@@ -260,20 +278,18 @@ while [ \$finished -eq 0 ] ; do
     nfin=0
     slice=0
     while [ "\$slice" -le $nslices ];do
-        slicezp=\`\$FSLDIR/bin/zeropad \$slice 4\`
-        isimg=\`\$FSLDIR/bin/imtest ${subjdir}.bedpostX/diff_slices/data_slice_\$slicezp/dyads1\`
-        if [ \$isimg -eq 1 ];then
+        slicezp=\`$FSLDIR/bin/zeropad \$slice 4\`
+        if [ -f ${subjdir}.bedpostX/diff_slices/data_slice_\$slicezp/dyads2.nii.gz ];then
           nfin=\$((\$nfin + 1))
         fi
         slice=\$((\$slice + 1))
     done
-    echo "\$nfin slices processed"
 
-    if [ -f ${subjdir}.bedpostX/xfms/eye.mat ] ; then
+    if [ \$nfin -eq $nslices -a -f ${subjdir}.bedpostX/xfms/eye.mat ] ; then
         finished=1
-        echo "All slices processed"
     fi
 
+    echo "\$nfin slices processed"
     sleep 600;
 done
 EOM
@@ -282,7 +298,7 @@ EOM
     echo Type ${subjdir}.bedpostX/cancel to terminate all the queued tasks.
     cat <<EOC > ${subjdir}.bedpostX/cancel
 #!/bin/sh
-qdel $mergeid $bedpostid $preprocid
+qdel $mergeid `echo $bedpostids | sed 's/:/ /g'` $preprocid
 EOC
     chmod +x ${subjdir}.bedpostX/cancel
 
