@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<HTML><HEAD><meta http-equiv="Content-Type"
+content="text/html;charset=utf-8">
+<link REL="stylesheet" TYPE="text/css"
+href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
+<BODY><IFRAME width="100%" scrolling="no" frameborder="0" src="fdt_top.html">Broken</IFRAME>
+
+
+
+<h3>Running probtrackx from freesurfer cortical surfaces</h3>
+
+<p>
+
+In probtrackx, it is possible to use a seed that is described as a surface patch from a FreeSurfer cortical reconstruction. The advantage of seeding from a cortical surface is that probtrackx then "knows" where the brain is, and tracking is performed towards the brain. In practice, this often leads to less false positive connections such as those crossing a gyrus near the seed location.<br><br>
+In order to seed from a FreeSurfer cortical surface, you simply need to (i) define your seed as a FreeSurfer <i>label file</i>, (ii) provide a transformation from FreeSurfer <i>conformed space</i> to diffusion space, and (iii) provide a description of the overall surface that the seed patch lives in. Below we describe each of these steps in more details.
+
+<p>
+
+Before you proceed, make sure that FreeSurfer is installed correctly on your computer.<br>
+We will assume that you have already ran <code>recon_all</code> on a subject (that we will call john), and already have a surface model for that subject's cortex. We will also assume that you have provided <code>recon_all</code> with a structural image called struct.nii.gz. <br>
+Finally, you will need to create a directory in $SUBJECTS_DIR/john/mri called nifti, and convert the conformed FreeSurfer-type structural image into a nifti file:<br><br>
+<code>
+mkdir $SUBJECTS_DIR/john/mri/nifti <br>
+mri_convert $SUBJECTS_DIR/john/mri/brain.mgz $SUBJECTS_DIR/john/mri/nifti/brain.nii.gz 
+</code>
+<br><br>
+You also need to convert the grey/white boundary surface file into ascii format (assuming you want to use the recommended option of tracking from this surface). For example, if you are tracking from the left hemisphere:<br><br>
+<code>
+mris_convert $SUBJECTS_DIR/john/surf/lh.white $SUBJECTS_DIR/john/surf/lh.white.asc
+</code>
+
+<h4>1. Registering FreeSurfer conformed structural space to diffusion space</h4>
+Here we assume that you have ran dtifit on your diffusion data with an FA map called dti_FA.nii.gz (we recommend using an FA map to register to T1 structural images), and also that you have a file called struct.nii.gz that you have used as an input to FreeSurfer <code>recon_all</code> program.<br><br>
+We will carry on a few steps that aim at calculating the following transformations: fa<->struct<->freesurfer. Then we will concatenate these transformations to get fa<->freesurfer. <br><br>
+Let us start with struct<->freesufer:<br><br>
+<code>
+tkregister2 --mov $SUBJECTS_DIR/john/mri/orig.mgz --targ $SUBJECTS_DIR/john/mri/rawavg.mgz --regheader --reg junk --fslregout freesurfer2struct.mat --noedit <br
+convert_xfm -omat struct2freesurfer.mat -inverse freesurfer2struct.mat
+</code>
+<br><br>
+Now for transforming FA to struct, we can either calculate a linear transformation (with FLIRT), or a nonlinear warpfield (with FNIRT). This second option is only recommended when the FA data is of good quality (e.g. at least 2mm isotropic resolution). The structural image needs to be brain extracted (e.g. with BET), and we assume that the brain-extracted structural is called <code>struct_brain.nii.gz</code><br><br>
+Alignment using FLIRT:<br><br>
+<code>
+flirt -in dti_FA -ref struct_brain -omat fa2struct.mat <br>
+convert_xfm -omat struct2fa.mat -inverse fa2struct.mat
+</code>
+<br><br>
+And using FNIRT (still need to run FLIRT first!):<br><br>
+<code>
+flirt -in dti_FA -ref struct_brain -omat fa2struct.mat <br>
+fnirt --in=dti_FA --ref=struct_brain --aff=fa2struct.mat --cout=fa2struct_warp <br>
+invwarp -w fa2struct_warp -o struct2fa_warp -r dti_FA
+</code>
+<br><br>
+The final stage is to concatenate these transformations:<br>
+If you have used FLIRT for fa<-->struct:<br><br>
+<code>
+convert_xfm -omat fa2freesurfer.mat -concat struct2freesurfer.mat fa2struct.mat <br>
+convert_xfm -omat freesurfer2fa.mat -inverse fa2freesurfer.mat
+</code>
+<br><br>
+And if you have used FNIRT for fa<-->struct:<br><br>
+<code>
+convertwarp -o fa2freesurfer_warp -r $SUBJECTS_DIR/john/mri/nifti/brain -w fa2struct_warp --postmat=struct2freesurfer.mat <br>
+convertwarp -o freesurfer2fa_warp -r dti_FA -m freesurfer2struct.mat -w struct2fa_warp 
+</code>
+
+<h4>2. Creating a label file from FreeSurfer</h4>
+<p>
+You can create a label file (text file that contains labels of vertices on a surface) using FreeSurfer's <code>tksurfer</code>. <br>
+Alternatively, you might have defined a cortical ROI on a T1 structural image, and want to project that onto a FreeSurfer cortical surface, and turn that into a label file. <br>
+The first thing to do is to transform this ROI from T1 to the conformed space using the transformation that you have calculated in the previous step. for example: <br><br>
+<code>
+flirt -in myroi -ref $SUBJECTS_DIR/john/mri/nifti/brain -out myconformedroi -applyxfm -init struct2freesurfer.mat -interp nearestneighbour
+</code>
+<br>
+<p>
+The next thing to do is to project this ROI into a FreeSurfer surface. We recommend using the grey/white interface to seed tractography from the cortex: (assuming the ROI is in the left hemisphere)<br><br>
+<code>
+printf "john\n1\n1\n1\n1 0 0 0\n0 1 0 0\n0 0 1 0\n0 0 0 1\n" > reg.dat <br>
+mri_vol2surf --src myconformedroi.nii.gz --srcreg reg.dat --projfrac 0.5 --hemi lh --out myroi2surf.mgh <br>
+mri_binarize --i myroi2surf.mgh --min 0.5 --o myroi2surf.mgh <br>
+mri_cor2label --i myroi2surf.mgh --surf john lh white --id 1 --l ./myroilabel <br>
+</code>
+<br>
+This will create a file called <code>myroilabel.label</code> that you can use directly in probtrackx (see following section). We recommend checking the label file by loading it onto a freesurfer surface using <code>tksurfer</code>. E.g.:
+<br><br>
+<code>
+tksurfer john lh white
+</code>
+<br><br>Then File->Label->Load labels
+<br><br>
+
+<h4>3. Running probtrackx using surfaces</h4>
+All you need to do now is to run probtrackx specifying at least four things: (1) the label file as a seed, (2) a description of the whole cortical surface for the corresponding hemisphere [e.g. lh.white.asc], (3) provide a transformation from conformed FreeSurfer space to diffusion space, and (4) a conformed FreeSurfer volume as a reference space:
+<br><br>
+<code>
+probtrackx -x myroilabel.label --mesh=$SUBJECTS_DIR/john/surf/lh.white.asc --xfm=freesurfer2fa.mat --seedref=$SUBJECTS_DIR/john/mri/nifti/brain [+all the other options]
+</code>
+<br><br>
+You can also run probtrackx using a nonlinear warpfield to get from freesurfer space to diffusion space (if you had used FNIRT in step 1 above):<br><br>
+<code>
+probtrackx -x myroilabel.label --mesh=$SUBJECTS_DIR/john/surf/lh.white.asc --xfm=freesurfer2fa_warp --invxfm=fa2freesurfer_warp --seedref=$SUBJECTS_DIR/john/mri/nifti/brain [+all the other options]
+</code>
+<br><br>
+Note: in this last case, we need both forward and backward transforms fa<-->freesurfer.
+
+<h4>4. Using some of the outputs</h4>
+When using classification targets in probtrackx, together with a surface-based seed, you may use the probtrackx option <code>--s2tastext</code>, in which case an output is created in the form of a matrix called matrix_seeds_to_all_targets. You can use this file to run find_the_biggest and produce label files for each of the hard-classified clusters. You can also use it to produce overlay files containing connectivity scores to each target.<br><br>
+Running find_the_biggest using matrix_seeds_to_all_targets:<br><br>
+<code>
+find_the_biggest matrix_seeds_to_all_targets myroilabel.label myclusters  
+</code>
+<br><br>
+The output of this command will be a set of files called myclusters&lt;i&gt;.label, i.e. one label file per cluster. You can combine these to produce a single annotation file:
+<br><br>
+<code>
+mris_label2annot --s john --h lh --ctab $FSLDIR/etc/luts/fsrandlut.txt --a myannot `ls myclusters_*.label | awk '{print "--l " $1}'`
+</code>
+<br><br>
+Once this is done, you can load the result myannot.annot onto <code>tksurfer</code>. Simply type:<br><br>
+<code>
+tksurfer john lh pial 
+</code>
+<br><br>
+And then load the annotation file using File->Load label->Import annotation.<br><br>
+
+
+

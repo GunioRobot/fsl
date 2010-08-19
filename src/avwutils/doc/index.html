@@ -1,0 +1,465 @@
+<HTML><HEAD><link REL="stylesheet" TYPE="text/css" href="../fsl.css"><TITLE>FSLUTILS DOCS</TITLE></HEAD><BODY><hr><TABLE BORDER=0 WIDTH="100%"><TR><TD ALIGN=CENTER><H1>
+FSLUTILS
+</H1>
+Miscellaneous FSL Image Utilities
+<TD ALIGN=RIGHT><a href="../index.html"><IMG BORDER=0 SRC="../images/fsl-logo.jpg"></a></TR></TABLE><HR>
+ 
+<P>FSLUTILS is a set of useful command-line utilities which allow the
+conversion, processing etc. of Analyze and Nifti format data sets.
+Many of them work on both 3D and 4D data. For each of these programs,
+<i>type just the program name to get the usage help</i>.
+
+
+<p>The different FSLUTILS programs are:
+<UL>
+
+<LI><b>fsl2ascii</b> - convert image files to ASCII text file (or files if
+data is 4D).
+
+<br><br><LI><b>fslcc</b> - run cross-correlations between every volume in
+one 4D data set with every volume in another (for investigating
+similarities in ICA outputs).
+
+<br><br><LI><b>fslchfiletype</b> - used to change the file type of
+an image (e.g. from ANALYZE_GZ to NIFTI).  The first argument is
+the desired file type (one of ANALYZE, ANALYZE_GZ, NIFTI, NIFTI_GZ,
+NIFTI_PAIR, NIFTI_PAIR_GZ) and the second is the input file.  If
+no third argument is given then the input file is converted in place.
+This in place conversion removes the original files: e.g. for an
+Analyze file called stdimg then
+<kbd>fslchfiletype NIFTI_GZ stdimg</kbd> would replace stdimg.hdr and
+stdimg.img with stdimg.nii.gz.  Note that having multiple copies of
+an image with the same basename and different filetypes (e.g. stdimg.nii.gz
+and stdimg.hdr and stdimg.img) creates many problems for determining
+what images to read, and in general will cause FSL programs to stop.
+
+<br><br><a name="fslcomplex"></a><LI><b>fslcomplex</b> - a utility that allows 3D or 4D complex
+image files to be split or constructed from corresponding real
+components (either Cartesian or polar). The initial flag indicates
+what kind of processing is done.  In addition, two optional arguments
+at the end specify the first and last 3D volumes to be processed when
+the input is 4D (default is to do all volumes).
+
+<br><br><LI><b>fslcpgeom</b> - copy certain parts of the header 
+information (image
+dimensions, voxel dimensions, voxel dimensions units string, image
+orientation/origin or qform/sform info) from one image to another.
+Note that only copies from Analyze to Analyze or Nifti to Nifti
+will work properly.  Copying from different files will result in
+loss of information or potentially incorrect settings.
+
+<br><br><LI><b>fslcreatehd</b> - creates a new image header along with
+a zero intensity data image.  There are two forms of input: one takes
+a list of minimal information on the command line, the other takes in
+an xml-style file, as written by <kbd>fslhd -x</kbd>.  The information
+required in the first version is: x/y/z/tsize for image dimensions,
+x/y/zvoxsize for voxel dimensions (eg in mm), tr in seconds for time
+between volumes (for 3D data set to 0), x/y/zorigin for voxel
+co-ordinate origin (eg for standard space - otherwise leave as 0 0 0),
+datatype for the voxel data type (the commonest are: 1=binary,
+2=unsigned char, 4=signed short, 8=signed int, 16=float).  Note that
+this is <b><i>different</i></b> from the previous versions in that an
+entire image is created, and will <b><i>overwrite</i></b> any
+<kbd>.img</kbd> file contents of the same image name.
+
+<br><br><LI><b>fsledithd</b> - allows the header information in
+and image to be edited in a text-based xml-style format (like the
+output of <kbd>fslhd -x</kbd> but with redundant fields removed
+and some help text provided).  Note that
+the default text editor used is nano, but other editors can be
+specified by the second argument.
+
+<br><br><LI><b>fslfft</b> - outputs the Fast-Fourier Transform (or inverse)
+for a complex input volume.
+
+<br><br><LI><b>fslhd</b> - report every field of an Analyze or Nifti
+header (note that the fields are different although some are common,
+e.g. pixdims).  The option "-x" produces an xml-style output which can
+be used in conjunction with <kbd>fslcreatehd</kbd>.  The reported
+values are those used internally in FSL programs and are sometimes
+different from the raw values stored in the file to avoid incorrect
+settings (e.g. dimN has a minimum value of 1, not 0).
+
+<br><br><LI><b>fslinfo</b> - report a basic subset of an Analyze or
+Nifti header.
+
+<br><br><LI><b>fslinterleave</b> - interleave two inputs to form a
+combined image.
+
+<br><br><LI><b>fslmaths</b> - simple but powerful program to allow
+mathematical manipulation of images.  Now includes spatial and
+temporal filtering, statistic conversion (e.g. z to p-values),
+diffusion tensor decomposition, and TFCE calculation.
+
+<br><br><LI><b>fslmeants</b> - output the average timeseries of a set of voxels, or the individual time series for each of these voxels.
+
+<br><br><LI><b>fslmerge</b> - concatenate image files into a single
+output. This concatenation can be in time, or in X, Y or Z. All image
+dimensions (except for the one being concatenated over) must be the
+same in all input images. For example, this can be used to take
+multiple 3D files (eg as output by SPM) and create a single 4D image
+file.
+
+<br><br><LI><b>fslnvols</b> - report how many time points are in the
+input 4D data set.
+
+<br><br><LI><b>fslpspec</b> - outputs the spectral power density of an
+input 4D data set.
+
+<br><br><LI><b>fslroi</b> - extract region of interest (ROI) from an
+image. You can a) take a 3D ROI from a 3D data set (or if it is 4D,
+the same ROI is taken from each time point and a new 4D data set is
+created), b) extract just some time points from a 4D data set, or c)
+control time and space limits to the ROI.  Note that the arguments are
+minimum index and <i>size</i> (not maximum index).  So to extract
+voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 12).
+
+<br><br><LI><b>fslslice</b> - split a 3D file into lots of 2D files (along z-axis).
+
+<br><br><LI><b>fslsplit</b> - split a 4D file into lots of 3D files
+(eg for inputting to SPM).
+
+<br><br><LI><b>fslstats</b> - report certain summary statistics for an
+input 3D/4D image. Of particular value is the "robust intensity range"
+which calculates values similar to the 2% and 98% percentiles, but
+ensuring that the majority of the intensity range is captured, even
+for binary images. In addition, it can take an aribitrary mask as
+input so that statistics are only calculated within the mask and can
+also generate histogram data.
+
+<br><br><LI><b>fslval</b> - report a particular parameter (given a
+particular keyword eg "dim4") from an image header. To see the list of
+keywords run <kbd>fslhd</kbd> on the header and look at the first column.
+
+</ul>
+
+<hr>
+<h2>Orientation-related Utilities</h2>
+
+<p> Orientation, labelling and getting left and right correct are
+important but often confusing issues.  You should always look at your
+data and check if the labels in FSLView are correct.  <b><i>No further
+analysis should ever be done if the labels in FSLView are incorrect or
+missing.</i></b> If your labels are fine then you probably will not
+need to use any other these tools, although
+<code>fslreorient2std</code> may be useful. If not, then you will need
+to read on. We have tried to simplify the usage of the tools for
+common tasks involving orientation issues, although still providing
+flexible and powerful tools for the expert user.
+
+<p>
+<b>Common problems</b>
+<br>We describe here the most common problems and how to solve
+them. If you have a different problem then you will need to work
+with the advanced tools described later (and read the information on
+NIfTI orientation).
+<ol>
+  <li> <b>The labels in FSLView are wrong or missing</b>
+  <br>  This is <i>very serious</i> and needs to be fixed before doing
+  any analysis at all.  Ideally it should be fixed by using a
+  tool that creates a correct NIfTI file. There are numerous
+  converters from DICOM to NIfTI -- for recommendations, see the
+   <a href="http://www.fmrib.ox.ac.uk/fslfaq">FSL FAQ</a>.
+  A correct converter should store the correct information in the
+  NIfTI file so that the labels are correct when viewed in FSLView.
+  If you have tried many converters and still cannot get the images
+  converted correctly then you will need to use the advanced tools,
+  <code>fslswapdim</code> and <code>fslorient</code>, to fix the
+  problem (more info below). 
+  <li> <b>The labels in FSLView are correct but the image is oriented
+  "wrongly"</b>
+  <br> By default FSLView shows the image in the way that the scanner
+  acquired it, so that sagittal, coronal and axial scans look very
+  different. Hence this is not really "wrong" - just how FSLView
+  chooses to display the images.  If you do not want this but want to
+  see the image in the same orientation as the standard templates
+  (MNI152) then you can run the tool <code>fslreorient2std</code>
+  which is designed for just this task.  However, make sure that the
+  labels are correct in FSLView to start with, as this tool only works if they are correct.
+</ol>
+
+<!---
+The following utilities allow you to report and modify the
+orientation information in NIFTI files (and ANALYZE to some extent).
+For more information about orientation and the NIFTI format see
+the <a href="http://www.fmrib.ox.ac.uk/fslfaq">FSL FAQ</a>.
+!--->
+
+<p>
+<b>Tools</b>
+<ul>
+  <LI><b>fslreorient2std</b> - this is a simple tool designed to
+  reorient an image to match the orientation of the standard template
+  images (MNI152) so that they appear "the same way around" in
+  FSLView. It requires that the image labels are correct in FSLView
+  before this is run.  It is also not a registration tool, so it will
+  not align the image to standard space, it will only apply 90,
+  180 or 270 degree rotations about the different axes as necessary to
+  get the labels in the same position as the standard template.
+
+  <br><br><LI><b>fslorient</b> - this is an advanced tool that reports
+or sets the orientation information in a file.  Note that only in
+NIfTI files can the orientation be changed - Analyze files are
+<i>always treated as "radiological"</i> (meaning that they could
+be simply rotated into the same alignment as the <code>MNI152</code> standard
+images - equivalent to the appropriate <i>sform</i> or <i>qform</i> in
+a NIfTI file having a negative determinant).
+
+<p>In nifti files it is possible to independently report or modify
+the <i>qform</i> or <i>sform</i> fields (see below for background
+  information on NIfTI orientation).  However, the FSL4.1 output
+routines will try to keep
+<i>qform and sform matrices the same</i> whenever one would otherwise
+be unset.  Therefore it is not possible, for instance, to delete only
+the qform, as if the sform is set then doing this will result in the
+qform being set equal (as close as possible) to the sform.  This is
+currently done to aid interoperability with other packages.  However, if both
+qform and sform are given different values then these are
+preserved by the output routines.
+
+<p>This command does not change the data storage at all - only the
+orientation information in the header and so should be used with great
+  caution.  Only modify header information if you understand the
+  information about the NIfTI orientation given below or are following
+  (exactly) a set of steps prescribed by someone who does.
+
+<p>The option <code>-deleteorient</code> is useful for the first stage
+of correcting orientation/label information in images where the
+conversion to NIfTI does not provide the correction information.  Note
+that the first, and by far the best, solution to this problem is to
+find a method of converting the images to NIfTI in a way that
+correctly stores the information (see above) but if this really is
+not possible then a combination of <code>fslorient</code> and
+<code>fslswapdim</code> can be used to fix it (see below).
+
+<br><br><LI><b>fslswapdim</b> - this is an advanced tool that
+re-orders the data storage to permit changes between axial, sagittal
+and coronal slicing.  When used in this mode the same left-right
+convention (also called coordinate handedness or
+radiological/neurological convention) will be maintained <i>as long as
+no warning is printed</i>.
+
+<p>
+The new orientation of the data is specified by selecting what the new
+axes should represent.  This can either be done in terms of the old
+axes (<kbd>x y z -x -y -z</kbd>) or in terms of anatomical labels
+<i>when this information is available</i> (in a nifti image where
+either the sform or qform code is non-zero).  The anatomical labels
+are RL LR AP PA SI IS. Note that the anatomical label version will not
+allow the left-right convention to be changed.
+
+<p>
+Ordinarily <kbd>fslswapdim</kbd> will change the orientation
+information in the header as well as reordering the data.  This is so
+that the anatomical labels stay attached to the same parts of the
+image and not fixed to the voxel coordinates.  Hence, reordering a
+coronal image to axial slicing should keep the labels correctly
+attached to the relevant parts of the image, as long as they were
+correct initially.  If the initial labels are incorrect (see the
+labels in <kbd>fslview</kbd>) then <kbd>fslorient</kbd> needs to be
+used in conjunction with <kbd>fslswapdim</kbd> in order to correct
+this.
+
+<p> When <kbd>fslswapdim</kbd> is given arguments that will change the
+left-right orientation it will issue a warning that the left-right
+orientation is being flipped.  It will also try to modify the
+orientation information in the header (only when either the sform or
+qform code is non-zero), but <i>not</i> in a way that swaps this
+left-right orientation in the header.  Hence there is a net change in
+orientation as the data is swapped while the header is not.  If the
+swap occurs on the x-axis then nothing is done to the header at all.
+Otherwise, the axis which is being swapped, together with the x-axis,
+have their orientation changed.  In this way the handedness of the
+header is preserved, the labels associated with the y-axis and z-axis
+follow the image change, but the x-axis labels do not.  It is
+recommended that if a left-right swap in storage is desired (and this
+should only be done if the reconstruction is initially incorrect, and
+cannot be fixed by finding any better conversion method) then the
+arguments <kbd>-x y z</kbd> should be used as this is the simplest
+form of swapping since it only affects the x-axis data and no labels
+or header information is changed.
+
+</UL>
+
+<p>
+<b>Serious (uncommon) problems</b>
+<br>
+<ol>
+  <li><b>The labels in FSLView are wrong or missing and no conversion
+  to NIfTI can fix this</b>
+  <br>If this really cannot be fixed at the conversion stage, then it
+  is possible to fix by the follow (only to be attempted after reading
+  the following section on background information on NIfTI
+  orientation):
+  <br> <code>fslorient -deleteorient <i>imagename</i></code>
+  <br> <code>fslswapdim <i>imagename</i> <i>a b c</i> <i>imagename</i></code>
+  <br> <code>fslorient -setqformcode 1 <i>imagename</i></code>
+  <br> where <i>a b c</i> need to be chosen, usually by trial and
+  error, so that the image after this is in the same orientation (as
+  viewed in FSLView) as the MNI152 images.  However, unless you have
+  some way of telling left from right in the image (e.g. by a vitamin
+  capsule or clearly known structural asymmetry) this method can
+  easily result in an incorrect left-right labelling and so should not
+  be attempted.
+</ol>
+
+<p>
+<b>Background information on NIfTI Orientation</b>
+<br>
+
+This section is purely optional but is extremely useful to understand
+if you are working with any of the advanced tools, have unusual
+problems, or are just plain interested.
+
+<p>
+
+The NIfTI standard is confusing for many people on the issue of
+orientation, largely because it is intrinsically a confusing issue.
+It is complicated because the intensity data is stored on disk as a
+list of numbers - there is no concept of spatial or anatomical
+location with these numbers, and so information and standard
+conventions are used to associate spatial and anatomical location
+information with these numbers.
+
+<p>
+
+To start with, voxel coordinates are associated with the numbers (intensity values), such
+that the first number is at coordinate (0,0,0) the second at (1,0,0),
+the third at (2,0,0), etc.  So, for example, say the image was 64 by
+64 by 20 in size, then the coordinates would go as (0,0,0) then
+(1,0,0) ... then (63,0,0) then (0,1,0) then (1,1,0) then (2,1,0)
+... then (63,1,0) then (0,2,0) ... then (63,63,0) then (0,0,1) then
+(1,0,1) ... until (63,63,19).  Note that all coordinates start at 0,
+not 1, and that the first coordinate (i) here is the one that
+increases the fastest as you go through the list, followed by second
+(j) and then the third (k).  These voxel coordinates - (i,j,k) - give
+spatial information (using information about how many voxels are in
+the three spatial directions) but do not attribute any anatomical
+information at all.
+
+<p>
+
+To go from voxel coordinates to more anatomically meaningful
+coordinates is the job of the <code>qform</code> and
+<code>sform</code> matrices that are stored in the NIfTI file.  Note
+that these matrices only provide useful information if they have a
+non-zero <code>code</code>, since a zero <code>code</code> indicates
+that the matrix is "Unknown" and hence cannot be used. Having two
+matrices here is a common source of confusion. They were originally
+proposed so that two different coordinates could be kept track of -
+one representing the scanner coordinate system (the real space inside
+the scanner bore) and the other one relating to standard space
+coordinates (e.g. MNI152). However, in practice, it is rare that both
+contain different information as they are often set to be the same, or
+one of them is "Unknown" in which case the other contains all the
+useful information.
+
+<p>
+
+Either matrix (qform or sform) is used to convert the voxel coordinates into
+"real world" coordinates (also called continuous coordinates, or mm
+coordinates, or other names).  These new coordinates - called (x,y,z)
+here - have units of mm, and can take any values, not just positive
+whole numbers like the (i,j,k) voxel coordinates.  Note that FSLView
+displays both voxel and mm coordinates.
+[Aside: the conversion is done by
+multiplying the matrix with the voxel coordinate, reshaped as a 4x1
+vector with the last element equal to 1 - although this detail is not
+important for any of the discussion or understanding.]
+
+<p>
+
+If the <code>qform</code> (or <code>sform</code>) is set so that it
+gives information about scanner coordinates (as indicated by the
+<code>code</code>), then a standard convention is used to relate the
+coordinate values to the anatomy.  The convention is: +x = Right; +y =
+Anterior; +z = Superior.  That is, moving in the positive x-direction
+(so that the x-coordinate increases) will be moving to the right,
+etc.  This now allows left and right to be distinguished, which is
+usually not possible just by looking at brain images.  Hence this
+information is absolutely crucial and getting this right for the
+conversion of the image to NIfTI format is extremely important.
+If it is incorrect then it would be easy for left and right to be
+assigned incorrectly and all analysis results to be on the wrong side.
+The information from the <code>qform</code> and <code>sform</code>
+is what is used by FSLView to determine the labels that are shown on
+the image.
+
+<p>
+
+If the <code>sform</code> is set so that it gives information about
+standard space coordinates then the situation is the same as above,
+since the standard convention used above was chosen to be the same as
+the convention chosen for the standard space coordinate systems
+(MNI152 and Talairach).  The main difference between the two
+situations is that the transformation to standard space (represented
+by the <code>sform</code> matrix) also involves scaling and shearing
+of the coordinate axes to make the brain "fit" the standard templates,
+whereas the transformation to scanner space coordinates is normally just a
+rotation and translation.
+
+<p>
+
+An aside on left-right conventions: it is possible to <i>store</i> an
+image in many different ways that are totally and completely
+equivalent in terms of the intensities and the (x,y,z) coordinates.
+What can be different is the voxel coordinates (and hence the order of
+the intensities stored in the file) but these are completely
+unimportant for all analysis purposes - they are purely related to the
+storage format, in this case NIfTI - only the (x,y,z) coordinates and
+the intensity values count with respect to the analysis.  That being
+said, one common confusion arises when the left-right order of the
+storage is changed (but the mm coordinates and intensities are
+unchanged).  For instance, imagine taking an image where the first
+voxel is on the left and then swapping the left-right order so that
+the new image is stored such that the first voxel is now the rightmost
+one, but modifying the <code>qform</code> and <code>sform</code>
+matrices appropriately so that this rightmost voxel still has the same
+(x,y,z) coordinate as it had before - just a different voxel
+coordinate.  This kind of change will not affect any analysis in FSL
+or any programs that are fully NIfTI compliant.  However, some
+programs are only happy with one sort of ordering (sometimes called
+left-handed/right-handed, or radiological/neurological, or RAS/LAS,
+etc.)
+This used to be the case for old versions of FSL, but is no longer true.
+But if only the order of the intensities in the file is swapped,
+<i>without</i> compensating for this in the <code>sform</code> and
+<code>qform</code> matrices, then the swapped version is no longer
+equivalent to the original.  This is why both the data order and
+header information need to be kept in sync, and why running either
+<code>fslswapdim</code> or <code>fslorient</code> alone to change the
+orientation information is dangerous and usually incorrect.
+
+<p>
+
+An aside on display orientation: everything that has been said above
+about the NIfTI format refers to coordinates and data storage and has
+<i>nothing</i> to do with what way the images can be <i>displayed</i>
+in different viewing programs. Although the storage can be referred to
+as "radiological" or "neurological" this does not mean anything with
+respect to the displayed orientation.  A valid NIfTI image can be
+displayed in any orientation that the viewing tool chooses, with the
+left side of the brain shown on the right side of the screen (so
+called radiological convention) or the other way around (neurological
+convention).  It is also possible to display the inferior side of the
+brain at the top of the image, or any other configuration.  It is
+entirely up to the display software how it chooses to show the image
+on the screen.  What the NIfTI format does do is provide information
+to determine how to label the different parts of the image (with mm
+coordinates or anatomical labels such as left, right, anterior,
+posterior, superior and inferior).  As long as the display tool
+correctly interprets this information and keeps it consistent with its
+choice of display orientation, there is no conflict between any type
+of NIfTI image and any displayed orientation.
+
+<p><HR><FONT SIZE=1>Copyright &copy; 2000-2008, University of
+Oxford. Written by <A
+HREF="http://www.fmrib.ox.ac.uk/~steve/index.html">S. Smith</A> and M. Jenkinson.</FONT>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</BODY></HTML>
+

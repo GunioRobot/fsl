@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<HTML><HEAD><meta http-equiv="Content-Type"
+content="text/html;charset=utf-8">
+<link REL="stylesheet" TYPE="text/css"
+href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
+<BODY><IFRAME width="100%" scrolling="no" frameborder="0" src="fdt_top.html">Broken</IFRAME>
+
+<a name="thresh"></a>
+<h3>proj_thresh</h3>
+<b>proj_thresh</b> is a command line utility that provides an alternative way of
+expressing connection probability in connectivity-based segmentation.  It is
+run on the output of <a href="fdt_probtrackx.html"> <b>probtrackx</b></a> when <b>classification targets</b> are used.
+
+<p>The output of <b>Connectivity-based seed classification</b> is a single volume for
+each target mask, named <b>seeds_to_{target}</b> where {target} is replaced
+by the file name of the relevant target mask. In these output images, the
+value of each voxel within the seed mask is the number of samples seeded
+from that voxel reaching the target mask. 
+<br><b>proj_thresh</b> is run as follows:
+<p><b>proj_thresh list_of_volumes threshold</b></p>
+Where the list of volumes is the outputs of <b>Connectivity-based seed
+classification</b> (i.e., files named seeds_to_target1 etc etc) and threshold is expressed as a number of samples
+<br>For each voxel in the seeds mask that has a value above threshold for at
+least one target mask, <b>proj_thresh</b> calculates the number of samples reaching each target mask
+as a proportion of the total number of samples reaching any target mask.  The
+output of <b>proj_thresh</b> is a single volume for each target mask.  
+
+<hr>
+
+<a name="biggest"></a>
+<h3>find_the_biggest</h3>
+<b>find_the_biggest</b> is a command line utility that performs hard
+segmentation of a seed region on the basis of outputs of <a
+href="fdt_probtrackx.html"><b>probtrackx</b></a> when <b>classification targets</b> are being used.
+
+<p>The output of <b>Connectivity-based seed classification</b> is a single volume for
+each target mask, named <b>seeds_to_{target}</b> where {target} is replaced
+by the file name of the relevant target mask. In these output images, the
+value of each voxel within the seed mask is the number of samples seeded
+from that voxel reaching the target mask. <b>find_the_biggest</b> classifies
+seed voxels according to the target mask with which they show the highest
+probability of connection. It is run as follows:
+<p><b>find_the_biggest list_of_volumes outputname</b>
+Where the list of volumes is the outputs of <b>Connectivity-based seed
+classification</b> (i.e., files named seeds_to_target1 etc etc).
+
+<p>The example below uses <a href="fdt_probtrackx.html"><b>probtrackx</b></a> and find_the_biggest to perform hard segmentation
+of the thalamus on the basis of its connections to cortex.
+
+
+<p><IMG height=300 SRC="fdt_images/fdt_seeds2targets_thal.gif"
+ALT="connectivity-based classification of thalamus">
+
+<hr>
+
+<a name="vecreg"></a>
+<h3>vecreg - Registration of vector images</h3>
+
+<p>
+
+<IMG ALIGN=RIGHT height=200 SRC="fdt_images/fdt_vecreg.gif"
+ALT="vecreg applied to V1">  
+After running dtifit or bedpostx, it is often useful to register vector data to another space. For example, one might want to represent V1 for different subjects in standard space. <b>vecreg</b> is a command line tool that allows to perform such registration.<br><br>
+Vector images cannot be registered by simply applying a transformation (as calculated by, say, <a href="http://www.fmrib.ox.ac.uk/fsl/flirt/index.html">FLIRT</a>) to every voxel's coordinates. The corresponding vectors have to be reoriented accordingly (see D. Alexander 2001, IEEE-TMI 20:1131-39). <b>vecreg</b> performs this operation for you.
+The image on the right shows the effect of applying vecreg (right) to the V1 image on the left, compared to simply applying voxelwise transformation (e.g. using applyxfm4D) to the vectors (centre).
+<br><br>
+<b> Important: </b> vecreg does not calculate a transformation, but simply applies a given transformation to the input vector field. vecreg can apply a linear transformation calculated with FLIRT, or a non-linear transformation calculated by FNIRT.
+
+<p>
+
+types of input that may be used for vecreg<br>
+from <a href="fdt_dtifit.html"><b>dtifit</b></a>: V1,V2,V3,tensor<br>
+from <a href="fdt_bedpostx.html"><b>bedpostx</b><a>: dyads1, dyads2, etc. <br>
+
+<p>
+
+<h3>Command-line utility</h3>
+<b>using a flirt matrix</b><br>
+vecreg -i input_vector -o output_vector -r reference_image -t flirt_transform.mat<br>
+<b>using a warpfield</b><br>
+vecreg -i input_vector -o output_vector -r reference_image -w warp_field<br>
+
+<br><b>more options</b>
+<pre> 
+vecreg -i &lt;input4D&gt; -o &lt;output4D&gt; -r &lt;refvol&gt; [-t &lt;transform&gt;]
+
+
+Compulsory arguments (You MUST set one or more of):
+	-i,--input	filename for input vector or tensor field
+	-o,--output	filename for output registered vector or tensor field
+	-r,--ref	filename for reference (target) volume
+
+Optional arguments (You may optionally specify one or more of):
+	-v,--verbose	switch on diagnostic messages
+	-h,--help	display this message
+	-t,--affine	filename for affine transformation matrix
+	-w,--warpfield	filename for 4D warp field for nonlinear registration
+	--rotmat	filename for secondary affine matrix 
+			if set, this will be used for the rotation of the vector/tensor field 
+	--rotwarp	filename for secondary warp field 
+			if set, this will be used for the rotation of the vector/tensor field 
+	--interp	interpolation method : nearestneighbour, trilinear (default), sinc or spline
+	-m,--mask	brain mask in input space
+	--refmask	brain mask in output space (useful for speed up of nonlinear reg)
+
+</pre>
+ 

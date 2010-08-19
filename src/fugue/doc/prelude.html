@@ -1,0 +1,72 @@
+<HTML><HEAD><link REL="stylesheet" TYPE="text/css" href="../fsl.css"><TITLE>PRELUDE DOCS</TITLE></HEAD><BODY><hr><TABLE BORDER=0 WIDTH="100%"><TR><TD ALIGN=CENTER><H1>
+<STYLE TYPE="text/css">BODY { background-image: url("../images/fugue-bg.jpg") }</STYLE>
+PRELUDE - Phase Unwrapping
+</H1>
+Phase Region Expanding Labeller for Unwrapping Discrete Estimates
+<TD ALIGN=RIGHT><a href="../index.html"><IMG BORDER=0 SRC="../images/fsl-logo.jpg"></a></TR></TABLE>
+
+<!-- No Table of Contents -->
+
+
+<A NAME="section2"></A><HR><H2>PRELUDE</H2>
+ 
+<I>prelude</I> performs 3D phase unwrapping of images.  This is useful
+for fieldmap acquisitions, susceptibility weighted imaging (SWI), or
+other applications involving phase in MR (or non-MR) images. The input
+can either be a single complex image (NIfTI or Analyze), or a pair of
+real images giving the phase and absolute values separately.  Also see
+<a href="../../avwutils/doc/index.html#fslcomplex">fslcomplex</a> for
+more ways to manipulate complex image formats.
+
+<p>
+If the images are 4D images, then each 3D volume is unwrapped
+separately, and the result saved as a 4D image of unwrapped phase
+images.  The output in either case is a real, unwrapped phase image
+(in radians).
+
+<p>
+For higher resolution images (e.g. for Susceptibility Weighted
+Imaging) a mask should be used in order to reduce run-times since any
+areas that include noisy voxels will significantly increase the
+required run-time.  The best way to generate a mask for a whole brain
+image is to run BET to perform brain extraction on the absolute image.
+
+<P>
+The three main forms of usage are:
+<dl>
+<dt> <FONT COLOR=PURPLE>prelude -c data -u result</FONT>  </dt>
+<dd> uses a single complex input file </dd>
+<dt> <FONT COLOR=PURPLE>prelude -a data_abs -p data_phase -u result</FONT> </dt>
+<dd> uses separate phase and absolute input files </dd>
+<dt> <FONT COLOR=PURPLE>prelude -a data_abs -p data_phase -u result -m mask</FONT> </dt>
+<dd> uses separate phase and absolute input files with a mask </dd>
+</dl>
+
+<P>
+Additional options that are useful are:
+<dl>
+<dt> <FONT COLOR=PURPLE>-m mask</FONT> </dt> 
+<dd>uses the user-defined mask (e.g. a BET mask - especially for high resolution images)</dd>
+<dt> <FONT COLOR=PURPLE>-n num</FONT> </dt> 
+<dd>specifies the number of phase partitions 
+the algorithm uses for initial labelling - a larger value is likely to be more
+robust but slower </dd>
+<dt> <FONT COLOR=PURPLE>-s</FONT> </dt> 
+<dd>unwrap in 2D, then stick slices together
+with appropriate offsets - this is less robust but fast - mainly used for
+very high-resolution images where optimising speed is an issue </dd>
+<dt> <FONT COLOR=PURPLE>--labelslices</FONT> </dt> 
+<dd>does labelling in 2D, but
+unwrapping in 3D - the default for high-res images </dd>
+</dl>
+
+
+ <!-- J-Back -->
+
+
+
+
+   <HR>
+  <!-- No Footnotes -->
+  <H4>Mark Jenkinson  <BR><BR>Copyright &copy; 2001-2010, University of Oxford</H4><BR>
+</BODY></HTML>

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+POSIXLY_CORRECT=1
+
+string=$@
+my_os=`uname -s`
+
+if [ "X${my_os}" = "XLinux" ]; then
+    /bin/echo -e "$string "
+else
+    /bin/echo "$string"
+fi
