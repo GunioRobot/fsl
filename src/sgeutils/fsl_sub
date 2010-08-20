@@ -260,9 +260,8 @@ while [ $1 != -- ] ; do
       mailto=$2
       shift;;
     -j)
-      # to shorten dependencies, remove hostnames
-      jid=`echo $2 | sed 's/,/\n/g' | sed s/\..*//g`
 
+      jid=`echo $2 | sed 's/,/\n/g' | sed s/\.neuroecon.caltech.edu//g`
         for arg in `echo $jid`
         do #checkjob $arg > /dev/null
                 if [ $? = 0 ]
@@ -282,7 +281,7 @@ while [ $1 != -- ] ; do
       #jid=$2
       dependjid=${2%%@*}
       dependon=${2#*@}
-      jid=`echo $dependjid | sed 's/,/\n/g' | sed s/\..*//g`
+      jid=`echo $dependjid | sed 's/,/\n/g' | sed s/\.neuroecon.caltech.edu//g`
 
 	#echo jid : $jid >&2
 

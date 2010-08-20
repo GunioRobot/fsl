@@ -84,7 +84,7 @@ Usage() {
     echo "-b (burnin period, default 1000)"
     echo "-j (number of jumps, default 1250)"
     echo "-s (sample every, default 25)"
-    echo "-l (job limit, default 20)"
+    echo "-h (wait for a task to finish first)"
     echo ""
     exit 1
 }
@@ -115,7 +115,7 @@ fudge=1
 burnin=1000
 njumps=1250
 sampleevery=25
-njobs=20
+waitfortask=0
 while [ ! -z "$2" ]
 do
   case "$2" in
@@ -124,7 +124,7 @@ do
       -b) burnin=$3;shift;;
       -j) njumps=$3;shift;;
       -s) sampleevery=$3;shift;;
-      -l) njobs=$3;shift;;
+      -h) waitfortask=$3;shift;;
       *) break;;
   esac
   shift
@@ -172,8 +172,15 @@ echo Queuing preprocessing stages
 echo "${FSLDIR}/bin/bedpostx_preproc.sh ${subjdir} " >${subjdir}.bedpostX/commands_pre.sh
 chmod +x ${subjdir}.bedpostX/commands_pre.sh
 # preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${FSLDIR}/bin/bedpostx_preproc.sh ${subjdir}`
-echo "${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh"
-preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh`
+echo $waitfortask
+if [ "$waitfortask" == "0" ]; then
+   echo "${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh" 
+   preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh`
+else
+   echo "${FSLDIR}/bin/fsl_sub -T 60 -m ae -j $waitfortask -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh" 
+   preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -m ae -j $waitfortask -N bpx_preproc -l ${subjdir}.bedpostX/logs ${subjdir}.bedpostX/commands_pre.sh`
+
+fi
 echo preprocid $preprocid
 
 echo Queuing parallel processing stage
@@ -214,13 +221,25 @@ EOM
     ${subjdir}.bedpostX/monitor&
     monitorpid=$!
 fi
-slice=0
+slice=$(($nslices - 1))
 bedpostids=''
 depend=''
-while [ $slice -lt $nslices ]
+blocksize=20
+last_block=0
+echo $nslices
+while [ $slice -ne -1 ]
 do
   newdepend=''
-  for i in `seq 1 $njobs`
+ let "rest=$nslices % $blocksize"
+   echo $waitfortask
+   if [ "$last_block" == "0" ]; then
+	block_seq=`seq 1 $rest`
+        last_block=1;
+   else
+	block_seq=`seq 1 $blocksize`	
+   fi
+  for i in $block_seq
+  
   do
     slicezp=`$FSLDIR/bin/zeropad $slice 4`
     if [ -f ${subjdir}.bedpostX/diff_slices/data_slice_$slicezp/dyads2.nii.gz ];then
@@ -237,9 +256,15 @@ do
     # bedpostid=`${FSLDIR}/bin/fsl_sub -j $preprocid -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt`
     echo ${FSLDIR}/bin/fsl_sub -k $depend@$i -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt >&2
     bedpostid=`${FSLDIR}/bin/fsl_sub -k $depend@$i -l ${subjdir}.bedpostX/logs -M $mailto -N bedpostx ${subjdir}.bedpostX/commands.$slice.txt`
-    newdepend=$newdepend:$bedpostid
+    echo #slice
+    if [ x"$newdepend" == "x" ]
+    then
+	newdepend=$bedpostid
+    else
+    	newdepend=$newdepend:$bedpostid
+    fi
     echo bedpostid $bedpostid >&2
-    slice=$(($slice + 1))
+    slice=$(($slice - 1))
     if [ x"$bedpostids" == "x" ]
     then
        bedpostids=$bedpostid
@@ -252,7 +277,7 @@ done
 # dummy tasks
 for i in `seq 1 20`
 do
-  qsub -W depend=beforeany:$depend,afterany:$preprocid $FSLDIR/bin/fslecho
+  qsub -W depend=beforeany:$depend,afterany:$preprocid $FSLDIR/bin/dummy.sh
 done
 
 #[ "x$SGE_ROOT" = "x" ] && kill $monitorpid
