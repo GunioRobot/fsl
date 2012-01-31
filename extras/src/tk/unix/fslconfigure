@@ -16,4 +16,4 @@ elif [ -f ${configure_script} ]; then
 fi
 
 echo "CFLAGS=\"${cflags}\" CPPFLAGS=\"${cppflags}\" LDFLAGS=\"${ldflags}\" ./configure ${tcl_conf_opts} ${configure_opts}"
-CFLAGS="${cflags}" CPPFLAGS="${cppflags}" LDFLAGS="${ldflags}" ./configure ${configure_opts} 
+CFLAGS="${cflags}" CPPFLAGS="${cppflags}" LDFLAGS="${ldflags}" ./configure ${configure_opts}

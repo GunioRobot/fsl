@@ -17,7 +17,7 @@
 
 int
 main()
-{   
+{
     char buf[1024];
     int n;
     char *err;
@@ -34,4 +34,4 @@ main()
 
     return 0;
 }
-	
+

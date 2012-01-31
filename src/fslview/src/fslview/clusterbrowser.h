@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -30,7 +30,7 @@ class ClusterBrowser: public ClusterBrowserBase
   Q_OBJECT
 
 public:
-  ClusterBrowser(QWidget*, Image::Handle, 
+  ClusterBrowser(QWidget*, Image::Handle,
 		 Cursor::Handle, ModelFit::Handle);
 
   class Exception: public std::runtime_error

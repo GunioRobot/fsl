@@ -25,10 +25,10 @@ class OrthoWidget : public ImageWidget
 public:
   typedef enum {Traditional=0, InRow, InColumn} Layout;
 
-  OrthoWidget(QWidget *parent, ImageGroup::Handle& i, 
+  OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
               OverlayList::Handle ol, Cursor::Handle& c );
   virtual ~OrthoWidget();
- 
+
   void update(const OverlayList*, OverlayListMsg);
 
 signals:
@@ -47,7 +47,7 @@ private:
   SliceView         *m_coronal;
   SliceView         *m_sagittal;
   SliceView         *m_axial;
-  QGridLayout       *m_grid; 
+  QGridLayout       *m_grid;
   ImageGroup::Handle m_image;
   QWidget           *m_centralWidget;
   Layout             m_layout;

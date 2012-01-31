@@ -69,7 +69,7 @@ class sequenced_index:
   BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type
 #endif
 
-{ 
+{
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
     BOOST_WORKAROUND(__MWERKS__,<=0x3003)
 /* The "ISO C++ Template Parser" option in CW8.3 has a problem with the
@@ -108,7 +108,7 @@ public:
   typedef index_iterator<node_type>                  const_iterator;
 #endif
 
-  typedef std::size_t                                size_type;      
+  typedef std::size_t                                size_type;
   typedef std::ptrdiff_t                             difference_type;
   typedef typename allocator_type::pointer           pointer;
   typedef typename allocator_type::const_pointer     const_pointer;
@@ -121,7 +121,7 @@ public:
 protected:
   typedef typename super::final_node_type     final_node_type;
   typedef tuples::cons<
-    ctor_args, 
+    ctor_args,
     typename super::ctor_args_list>           ctor_args_list;
   typedef typename mpl::push_front<
     typename super::index_type_list,
@@ -179,7 +179,7 @@ public:
     clear();
     for(size_type i=0;i<n;++i)push_back(value);
   }
-    
+
   allocator_type get_allocator()const
   {
     return this->final().get_allocator();
@@ -212,7 +212,7 @@ public:
       iterator it=begin();
       std::advance(it,n);
       erase(it,end());
-    }   
+    }
   }
 
   /* access: no non-const versions provided as sequenced_index
@@ -248,7 +248,7 @@ public:
     BOOST_MULTI_INDEX_SEQ_INDEX_CHECK_INVARIANT;
     for(size_type i=0;i<n;++i)insert(position,x);
   }
- 
+
   template<typename InputIterator>
   void insert(iterator position,InputIterator first,InputIterator last)
   {
@@ -265,7 +265,7 @@ public:
     this->final_erase_(static_cast<final_node_type*>(position++.get_node()));
     return position;
   }
-  
+
   iterator erase(iterator first,iterator last)
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(first);
@@ -472,7 +472,7 @@ public:
     if(position!=last)relink(
       position.get_node(),first.get_node(),last.get_node());
   }
-    
+
 BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   sequenced_index(const ctor_args_list& args_list,const allocator_type& al):
     super(args_list.get_tail(),al)

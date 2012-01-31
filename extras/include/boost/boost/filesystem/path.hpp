@@ -7,7 +7,7 @@
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_PATH_HPP
 #define BOOST_FILESYSTEM_PATH_HPP
@@ -98,7 +98,7 @@ namespace boost
         const path *            m_path_ptr; // path being iterated over.
         std::string::size_type  m_pos;      // position of name in
                                             // path_ptr->string(). The
-                                            // end() iterator is indicated by 
+                                            // end() iterator is indicated by
                                             // pos == path_ptr->string().size()
       };
 
@@ -112,7 +112,7 @@ namespace boost
       }
 
       // default name_check mechanism:
-      static bool default_name_check_writable(); 
+      static bool default_name_check_writable();
       static void default_name_check( name_check new_check );
       static name_check default_name_check();
 
@@ -136,8 +136,8 @@ namespace boost
 
       friend class directory_iterator;
       // Was qualified; como433beta8 reports:
-      //    warning #427-D: qualified name is not allowed in member declaration 
-      friend class iterator; 
+      //    warning #427-D: qualified name is not allowed in member declaration
+      friend class iterator;
 
     public: // should be private, but friend functions don't work for me
       void m_path_append( const std::string & src, name_check checker );
@@ -151,7 +151,7 @@ namespace boost
 
     inline path operator / ( const std::string & lhs, const path & rhs )
       { return path( lhs ) /= rhs; }
-   
+
   //  path::name_checks  ---------------------------------------------------//
 
     BOOST_FILESYSTEM_DECL bool portable_posix_name( const std::string & name );

@@ -31,7 +31,7 @@ extern const char *Release;
 
 class Version
 {
-public:   
+public:
   Version();
   ~Version();
 };

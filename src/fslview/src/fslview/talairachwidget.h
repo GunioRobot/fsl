@@ -42,7 +42,7 @@ private:
   Cursor::Handle m_cursor;
   OverlayList::Handle m_overlayList;
   std::vector<MetaImage::Handle> m_imageVector;
-  
+
   QStringList m_selectedAtlases;
   AtlasOptions m_options;
   AtlasOptionsDialog m_optionsDialog;

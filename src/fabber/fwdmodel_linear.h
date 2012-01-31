@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -73,23 +73,23 @@
 class LinearFwdModel : public FwdModel {
  public:
   // Virtual function overrides
-  virtual void Evaluate(const ColumnVector& params, 
+  virtual void Evaluate(const ColumnVector& params,
                       ColumnVector& result) const;
   virtual int NumParams() const { return centre.Nrows(); }
   virtual void DumpParameters(const ColumnVector& vec,
-                              const string& indent = "") const;                            
+                              const string& indent = "") const;
   virtual void NameParams(vector<string>& names) const;
 
   ReturnMatrix Jacobian() const { return jacobian; }
   ReturnMatrix Centre() const { return centre; }
   ReturnMatrix Offset() const { return offset; }
 
-  LinearFwdModel(const Matrix& jac, 
-		 const ColumnVector& ctr, 
-		 const ColumnVector& off) 
-    : jacobian(jac), centre(ctr), offset(off) 
+  LinearFwdModel(const Matrix& jac,
+		 const ColumnVector& ctr,
+		 const ColumnVector& off)
+    : jacobian(jac), centre(ctr), offset(off)
     { assert(jac.Nrows() == ctr.Ncols()); assert(jac.Ncols() == off.Ncols()); }
-    
+
   // Upgrading to a full externally-accessible model type
   LinearFwdModel(ArgsType& args);
   virtual string ModelVersion() const;
@@ -116,22 +116,22 @@ public:
 
   // Constructor (leaves centre, offset and jacobian empty)
   LinearizedFwdModel(const FwdModel* model) : fcn(model) { return; }
-  
+
   // Copy constructor (needed for using vector<LinearizedFwdModel>)
   // NOTE: This is a reference, not a pointer... and it *copies* the
   // given LinearizedFwdModel, rather than using it as its nonlinear model!
-  LinearizedFwdModel(const LinearizedFwdModel& from) 
+  LinearizedFwdModel(const LinearizedFwdModel& from)
     : LinearFwdModel(from), fcn(from.fcn) { return; }
 
   void ReCentre(const ColumnVector& about);
-  // centre=about; offset=fcn(about); 
+  // centre=about; offset=fcn(about);
   // jacobian = numerical differentiation about centre
 
   virtual void HardcodedInitialDists(MVNDist& prior, MVNDist& posterior) const
     { assert(fcn); fcn->HardcodedInitialDists(prior, posterior); }
 
-  
+
 private:
-  const FwdModel* fcn;  
+  const FwdModel* fcn;
 };
 

@@ -253,7 +253,7 @@ public:
         BOOST_ASSERT(px != 0);
         return px;
     }
-    
+
     T * get() const // never throws
     {
         return px;
@@ -273,13 +273,13 @@ public:
     ( defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 304) )
 
     typedef T * (this_type::*unspecified_bool_type)() const;
-    
+
     operator unspecified_bool_type() const // never throws
     {
         return px == 0? 0: &this_type::get;
     }
 
-#else 
+#else
 
     typedef T * this_type::*unspecified_bool_type;
 
@@ -435,7 +435,7 @@ using std::basic_ostream;
 template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, shared_ptr<Y> const & p)
 # else
 template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, shared_ptr<Y> const & p)
-# endif 
+# endif
 {
     os << p.get();
     return os;
@@ -471,7 +471,7 @@ template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)
-#endif    
+#endif
 
 #endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 

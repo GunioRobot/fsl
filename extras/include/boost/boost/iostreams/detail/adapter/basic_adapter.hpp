@@ -25,38 +25,38 @@ public:
     explicit basic_adapter(param_type t) : t_(t) { }
     T& component() { return t_; }
 
-    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out) 
-    { 
+    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
+    {
         BOOST_STATIC_ASSERT(is_device<T>::value);
-        iostreams::close(t_, which); 
+        iostreams::close(t_, which);
     }
 
     template<typename Device>
-    void close( Device& dev, 
-                BOOST_IOS::openmode which = 
-                    BOOST_IOS::in | BOOST_IOS::out ) 
-    { 
+    void close( Device& dev,
+                BOOST_IOS::openmode which =
+                    BOOST_IOS::in | BOOST_IOS::out )
+    {
         BOOST_STATIC_ASSERT(is_filter<T>::value);
-        iostreams::close(t_, dev, which); 
+        iostreams::close(t_, dev, which);
     }
 
-    bool flush() 
-    { 
+    bool flush()
+    {
         BOOST_STATIC_ASSERT(is_device<T>::value);
-        return iostreams::flush(t_); 
+        return iostreams::flush(t_);
     }
 
     template<typename Device>
-    void flush(Device& dev) 
-    { 
+    void flush(Device& dev)
+    {
         BOOST_STATIC_ASSERT(is_filter<T>::value);
-        return iostreams::flush(t_, dev); 
+        return iostreams::flush(t_, dev);
     }
 
     template<typename Locale> // Avoid dependency on <locale>
     void imbue(const Locale& loc) { iostreams::imbue(t_, loc); }
 
-    std::streamsize optimal_buffer_size() const 
+    std::streamsize optimal_buffer_size() const
     { return iostreams::optimal_buffer_size(t_); }
 public:
     value_type t_;

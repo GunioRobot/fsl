@@ -212,7 +212,7 @@ namespace boost { namespace numeric { namespace ublas {
                                 break;
                             }
                         }
-                        if (i <= j) { 
+                        if (i <= j) {
                              // this is the first time we read this element - set the value
                             s(i,j) = value;
                         }
@@ -245,7 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         return is;
     }
- 
+
 
 }}}
 

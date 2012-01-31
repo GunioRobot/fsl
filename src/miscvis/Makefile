@@ -10,15 +10,15 @@ LIBS = -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lfslio -lniftiio -lz
 
 WOBJS = writepng.o wpng.o
 
-DOBJS = readpng.o 
+DOBJS = readpng.o
 
-XFILES = slicer overlay fsl_tsplot fsl_boxplot fsl_histogram create_lut wpng pngappend 
+XFILES = slicer overlay fsl_tsplot fsl_boxplot fsl_histogram create_lut wpng pngappend
 
 SCRIPTS =  slices slicesdir slicesmask
 
 RUNTCLS = Renderstats
 
-all:	slicer overlay fsl_tsplot fsl_boxplot fsl_histogram create_lut wpng pngappend 
+all:	slicer overlay fsl_tsplot fsl_boxplot fsl_histogram create_lut wpng pngappend
 
 slicer:	slicer.o
 	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o slicer slicer.o  ${LIBS}
@@ -52,4 +52,4 @@ pngappend: pngappend.cc
 	$(CXX)  ${CXXFLAGS} ${LDFLAGS} -o pngappend pngappend.cc ${LIBS}
 
 wpng: ${WOBJS}
-	$(CC)  ${CXXFLAGS} ${LDFLAGS} -o $@ ${WOBJS} ${LIBS} 
+	$(CC)  ${CXXFLAGS} ${LDFLAGS} -o $@ ${WOBJS} ${LIBS}

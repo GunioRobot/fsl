@@ -40,29 +40,29 @@ public:
   static Handle create(const QString & featDir);
   typedef class Exception;
 
-  virtual ~ModelFit(); 
+  virtual ~ModelFit();
 
   QString& featDir() const;
   static bool isFeatDir(const QString& featDir);
 
   //  TimeSeries::Handle getModelTimeSeries(short x, short y, short z, float offset);
   TimeSeries::Handle getDataTimeSeries(short x, short y, short z);
-  TimeSeries::Handle fullModel(short x, short y, short z, float mean); 
+  TimeSeries::Handle fullModel(short x, short y, short z, float mean);
   TimeSeries::Handle CopeCurve(short x, short y, short z, float mean);
-  TimeSeries::Handle peCurve(short x, short y, short z, float mean); 
-  TimeSeries::Handle perCentChange(short x, short y, short z, float mean); 
-  
+  TimeSeries::Handle peCurve(short x, short y, short z, float mean);
+  TimeSeries::Handle perCentChange(short x, short y, short z, float mean);
+
   Image::Handle getFilteredFuncImage();
 
   virtual void attach(ModelFitObserver *);
   virtual void detach(ModelFitObserver *);
   virtual void notify();
-  
+
   QString getConName(unsigned int i) const;
-  
+
   unsigned int curFit(void) const;
   void curFit(unsigned int i);
-  
+
   unsigned int numEVs(void) const;
   unsigned int numFits(void) const;
 
@@ -73,7 +73,7 @@ public:
   bool copePe(void) const;
 
 private:
-  ModelFit(const QString & featDir); 
+  ModelFit(const QString & featDir);
 
   typedef struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
@@ -90,7 +90,7 @@ class ModelFitObserver
 public:
   virtual ~ModelFitObserver(){}
   virtual void update(ModelFit *m)=0;
-  
+
 protected:
   ModelFitObserver(){}
 };

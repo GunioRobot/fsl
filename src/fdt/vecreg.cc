@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -121,7 +121,7 @@ ReturnMatrix rodrigues(const float& angle,ColumnVector& w){
   W <<  0.0  << -w(3) << -w(2)
     <<  w(3) << 0.0   << -w(1)
     << -w(2) << w(1)  <<  0.0;
-  
+
   R << 1.0 << 0.0 << 0.0
     << 0.0 << 1.0 << 0.0
     << 0.0 << 0.0 << 1.0;
@@ -137,7 +137,7 @@ ReturnMatrix rodrigues(const float& s,const float& c,ColumnVector& w){
   W <<  0.0  << -w(3) <<  w(2)
     <<  w(3) <<  0.0  << -w(1)
     << -w(2) <<  w(1) <<  0.0;
-  
+
   R << 1.0 << 0.0 << 0.0
     << 0.0 << 1.0 << 0.0
     << 0.0 << 0.0 << 1.0;
@@ -149,13 +149,13 @@ ReturnMatrix rodrigues(const float& s,const float& c,ColumnVector& w){
 }
 ReturnMatrix rodrigues(const ColumnVector& n1,const ColumnVector& n2){
   ColumnVector w(3);
-  
+
   w=cross(n1,n2);
 
   if(w.MaximumAbsoluteValue()>0){
     float ca=dot(n1,n2);
     float sa=sqrt(cross(n1,n2).SumSquare());
-    
+
     return rodrigues(sa,ca,w);
   }
   else{
@@ -204,12 +204,12 @@ ReturnMatrix ppd(const Matrix& F,ColumnVector& e1){
 }
 
 void sjgradient(const volume<float>& im,volume4D<float>& grad){
-  
+
   grad.reinitialize(im.xsize(),im.ysize(),im.zsize(),3);
   copybasicproperties(im,grad[0]);
 
   int fx,fy,fz,bx,by,bz;
-  float dx,dy,dz; 
+  float dx,dy,dz;
   for (int z=0; z<grad.zsize(); z++){
     fz = z ==(grad.zsize()-1) ? 0 :  1;
     bz = z == 0              ? 0 : -1;
@@ -276,7 +276,7 @@ void vecreg_aff(const volume4D<float>& tens,
   seeddim << tens.xdim() << tens.ydim() << tens.zdim();
   targetdim  << refvol.xdim() << refvol.ydim() << refvol.zdim();
   SymmetricMatrix Tens(3);
-  ColumnVector X_seed(3),X_target(3); 
+  ColumnVector X_seed(3),X_target(3);
   ColumnVector V_seed(3),V_target(3);
   for(int z=0;z<oV1.zsize();z++)
     for(int y=0;y<oV1.ysize();y++)
@@ -288,10 +288,10 @@ void vecreg_aff(const volume4D<float>& tens,
 	// compute seed coordinates
 	X_target << x << y << z;
 	X_seed=vox_to_vox(X_target,targetdim,seeddim,iM);
-	
+
 	if(mask((int)round(float(X_seed(1))),(int)round(float(X_seed(2))),(int)round(float(X_seed(3))))==0)
 	  continue;
-	
+
 
 	 // compute interpolated tensor
 	 Tens.Row(1) << tens[0].interpolate(X_seed(1),X_seed(2),X_seed(3));
@@ -307,26 +307,26 @@ void vecreg_aff(const volume4D<float>& tens,
 	   // Local Jacobian of the backward warpfield
 	   Jw <<   jx(x,y,z,0) <<  jx(x,y,z,1) << jx(x,y,z,2)
 	      <<   jy(x,y,z,0) <<  jy(x,y,z,1) << jy(x,y,z,2)
-	      <<   jz(x,y,z,0) <<  jz(x,y,z,1) << jz(x,y,z,2); 
-	   // compute local forward affine transformation	
+	      <<   jz(x,y,z,0) <<  jz(x,y,z,1) << jz(x,y,z,2);
+	   // compute local forward affine transformation
 	   F = (I + Jw).i();
 	 }
-	 
+
 	 if(oV1.tsize()==3){ // case where input is a vector
 	   // compute first eigenvector
 	   EigenValues(Tens,d,v);
 	   V_seed = v.Column(3);
-	   
+
 	   // rotate vector
 	   V_target=F*V_seed;
 	   if(V_target.MaximumAbsoluteValue()>0)
 	     V_target/=sqrt(V_target.SumSquare());
-	   
+
 	   oV1(x,y,z,0)=V_target(1);
 	   oV1(x,y,z,1)=V_target(2);
 	   oV1(x,y,z,2)=V_target(3);
 	 }
-	
+
 	 // create tensor
 	 if(oV1.tsize()==6){
 	   if(warp2.value()!=""){
@@ -337,18 +337,18 @@ void vecreg_aff(const volume4D<float>& tens,
 	   else{
 	     Tens << R*Tens*R.t();
 	   }
-	   
+
 	   oV1(x,y,z,0)=Tens(1,1);
 	   oV1(x,y,z,1)=Tens(2,1);
 	   oV1(x,y,z,2)=Tens(3,1);
 	   oV1(x,y,z,3)=Tens(2,2);
 	   oV1(x,y,z,4)=Tens(3,2);
 	   oV1(x,y,z,5)=Tens(3,3);
-	   
+
 	 }
-	
+
       }
-  
+
 }
 
 
@@ -357,15 +357,15 @@ void vecreg_nonlin(const volume4D<float>& tens,volume4D<float>& oV1,
 		   const volume<float>& mask){
 
   ColumnVector X_seed(3),X_target(3);
-  
-  
+
+
   // read warp field created by Jesper
   FnirtFileReader ffr(warp.value());
   warpvol=ffr.FieldAsNewimageVolume4D(true);
- 
+
   Matrix F(3,3),u(3,3),v(3,3);
   DiagonalMatrix d(3);
-    
+
   /////////////////////////////////////////////////////////////////////////
   // Where we define a potential affine transfo for the rotation
   Matrix M2;
@@ -415,7 +415,7 @@ void vecreg_nonlin(const volume4D<float>& tens,volume4D<float>& oV1,
 
 	if(mask((int)round(float(X_seed(1))),(int)round(float(X_seed(2))),(int)round(float(X_seed(3))))==0)
 	  continue;
-	
+
 	 // compute interpolated tensor
 	 Tens.Row(1) << tens[0].interpolate(X_seed(1),X_seed(2),X_seed(3));
 	 Tens.Row(2) << tens[1].interpolate(X_seed(1),X_seed(2),X_seed(3))
@@ -429,8 +429,8 @@ void vecreg_nonlin(const volume4D<float>& tens,volume4D<float>& oV1,
 	   // Local Jacobian of the backward warpfield
 	   Jw <<   jx(x,y,z,0) <<  jx(x,y,z,1) << jx(x,y,z,2)
 	      <<   jy(x,y,z,0) <<  jy(x,y,z,1) << jy(x,y,z,2)
-	      <<   jz(x,y,z,0) <<  jz(x,y,z,1) << jz(x,y,z,2); 
-	   // compute local forward affine transformation	
+	      <<   jz(x,y,z,0) <<  jz(x,y,z,1) << jz(x,y,z,2);
+	   // compute local forward affine transformation
 	   F = (I + Jw).i();
 	 }
 
@@ -438,7 +438,7 @@ void vecreg_nonlin(const volume4D<float>& tens,volume4D<float>& oV1,
 	   // compute first eigenvector
 	   EigenValues(Tens,d,v);
 	   V_seed = v.Column(3);
-	 
+
 	   V_target=F*V_seed;
 
 	   if(V_target.MaximumAbsoluteValue()>0)
@@ -468,11 +468,11 @@ void vecreg_nonlin(const volume4D<float>& tens,volume4D<float>& oV1,
 	   oV1(x,y,z,5)=Tens(3,3);
 
 	 }
-	 
+
 
        }
-  
-  
+
+
 }
 
 
@@ -527,8 +527,8 @@ int do_vecreg(){
   volume4D<float> tens(ivol.xsize(),ivol.ysize(),ivol.zsize(),6);
   copybasicproperties(ivol,tens);
   if(ivol.tsize()==3)
-    for(int z=0;z<ivol.zsize();z++) 
-      for(int y=0;y<ivol.ysize();y++)  
+    for(int z=0;z<ivol.zsize();z++)
+      for(int y=0;y<ivol.ysize();y++)
 	for(int x=0;x<ivol.xsize();x++){
 	  tens(x,y,z,0)=ivol(x,y,z,0)*ivol(x,y,z,0);
 	  tens(x,y,z,1)=ivol(x,y,z,1)*ivol(x,y,z,0);
@@ -581,7 +581,7 @@ int main(int argc,char *argv[]){
 
     options.parse_command_line(argc,argv);
 
-    
+
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
       options.usage();
       exit(EXIT_FAILURE);
@@ -604,18 +604,18 @@ int main(int argc,char *argv[]){
 	   << endl << endl;
       exit(EXIT_FAILURE);
     }
-    
+
   }
   catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
-  } 
+  }
   catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
-  
+  }
+
   return do_vecreg();
-  
-  
+
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkGeometry.c --
  *
  *	This file contains generic Tk code for geometry management
@@ -275,7 +275,7 @@ Tk_SetInternalBorder(tkwin, width)
  *	None.
  *
  * Side effects:
- *	The minimum request size is recorded for the window, and 
+ *	The minimum request size is recorded for the window, and
  *      a new size is requested for the window, if necessary.
  *
  *----------------------------------------------------------------------
@@ -380,7 +380,7 @@ Tk_MaintainGeometry(slave, master, x, y, width, height)
      */
 
     parent = Tk_Parent(slave);
-    hPtr = Tcl_CreateHashEntry(&dispPtr->maintainHashTable, 
+    hPtr = Tcl_CreateHashEntry(&dispPtr->maintainHashTable,
             (char *) master, &new);
     if (!new) {
 	masterPtr = (MaintainMaster *) Tcl_GetHashValue(hPtr);
@@ -501,7 +501,7 @@ Tk_UnmaintainGeometry(slave, master)
 	 */
 	return;
     }
-    
+
     if (!dispPtr->geomInit) {
 	dispPtr->geomInit = 1;
 	Tcl_InitHashTable(&dispPtr->maintainHashTable, TCL_ONE_WORD_KEYS);

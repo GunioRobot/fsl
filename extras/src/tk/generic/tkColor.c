@@ -1,4 +1,4 @@
-/* 
+/*
  * tkColor.c --
  *
  *	This file maintains a database of color values for the Tk
@@ -17,7 +17,7 @@
 #include "tkColor.h"
 
 /*
- * Structures of the following following type are used as keys for 
+ * Structures of the following following type are used as keys for
  * colorValueTable (in TkDisplay).
  */
 
@@ -30,7 +30,7 @@ typedef struct {
 
 
 /*
- * The structure below is used to allocate thread-local data. 
+ * The structure below is used to allocate thread-local data.
  */
 
 typedef struct ThreadSpecificData {
@@ -73,8 +73,8 @@ Tcl_ObjType tkColorObjType = {
  * Results:
  *	The return value is a pointer to an XColor structure that
  *	indicates the red, blue, and green intensities for the color
- *	given by the string in objPtr, and also specifies a pixel value 
- *	to use to draw in that color.  If an error occurs, NULL is 
+ *	given by the string in objPtr, and also specifies a pixel value
+ *	to use to draw in that color.  If an error occurs, NULL is
  *	returned and an error message will be left in interp's result
  *	(unless interp is NULL).
  *
@@ -131,7 +131,7 @@ Tk_AllocColorFromObj(interp, tkwin, objPtr)
      */
 
     if (tkColPtr != NULL) {
-	TkColor *firstColorPtr = 
+	TkColor *firstColorPtr =
 		(TkColor *) Tcl_GetHashValue(tkColPtr->hashPtr);
 	FreeColorObjProc(objPtr);
 	for (tkColPtr = firstColorPtr; tkColPtr != NULL;
@@ -313,7 +313,7 @@ Tk_GetColorByValue(tkwin, colorPtr)
     valueKey.blue = colorPtr->blue;
     valueKey.colormap = Tk_Colormap(tkwin);
     valueKey.display = display;
-    valueHashPtr = Tcl_CreateHashEntry(&dispPtr->colorValueTable, 
+    valueHashPtr = Tcl_CreateHashEntry(&dispPtr->colorValueTable,
             (char *) &valueKey, &new);
     if (!new) {
 	tkColPtr = (TkColor *) Tcl_GetHashValue(valueHashPtr);
@@ -368,14 +368,14 @@ Tk_NameOfColor(colorPtr)
     XColor *colorPtr;		/* Color whose name is desired. */
 {
     register TkColor *tkColPtr = (TkColor *) colorPtr;
-    
+
     if ((tkColPtr->magic == COLOR_MAGIC) &&
 	    (tkColPtr->type == TK_COLOR_BY_NAME)) {
 	return tkColPtr->hashPtr->key.string;
     } else {
-	ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+	ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
-	sprintf(tsdPtr->rgbString, "#%04x%04x%04x", colorPtr->red, 
+	sprintf(tsdPtr->rgbString, "#%04x%04x%04x", colorPtr->red,
 		colorPtr->green, colorPtr->blue);
 	return tsdPtr->rgbString;
     }
@@ -527,7 +527,7 @@ Tk_FreeColor(colorPtr)
  *
  * Side effects:
  *	The reference count associated with the color represented by
- *	objPtr is decremented, and the color is released to X if there are 
+ *	objPtr is decremented, and the color is released to X if there are
  *	no remaining uses for it.
  *
  *----------------------------------------------------------------------
@@ -546,7 +546,7 @@ Tk_FreeColorFromObj(tkwin, objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * FreeColorObjProc -- 
+ * FreeColorObjProc --
  *
  *	This proc is called to release an object reference to a color.
  *	Called when the object's internal rep is released or when
@@ -571,7 +571,7 @@ FreeColorObjProc(objPtr)
 
     if (tkColPtr != NULL) {
 	tkColPtr->objRefCount--;
-	if ((tkColPtr->objRefCount == 0) 
+	if ((tkColPtr->objRefCount == 0)
 		&& (tkColPtr->resourceRefCount == 0)) {
 	    ckfree((char *) tkColPtr);
 	}
@@ -582,7 +582,7 @@ FreeColorObjProc(objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * DupColorObjProc -- 
+ * DupColorObjProc --
  *
  *	When a cached color object is duplicated, this is called to
  *	update the internal reps.
@@ -603,7 +603,7 @@ DupColorObjProc(srcObjPtr, dupObjPtr)
     Tcl_Obj *dupObjPtr;		/* The object we are copying to. */
 {
     TkColor *tkColPtr = (TkColor *) srcObjPtr->internalRep.twoPtrValue.ptr1;
-    
+
     dupObjPtr->typePtr = srcObjPtr->typePtr;
     dupObjPtr->internalRep.twoPtrValue.ptr1 = (VOID *) tkColPtr;
 
@@ -627,7 +627,7 @@ DupColorObjProc(srcObjPtr, dupObjPtr)
  *
  * Side effects:
  *	If the object is not already a color, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -646,7 +646,7 @@ Tk_GetColorFromObj(tkwin, objPtr)
     if (objPtr->typePtr != &tkColorObjType) {
 	InitColorObj(objPtr);
     }
-  
+
     /*
      * First check to see if the internal representation of the object
      * is defined and is a color that is valid for the current screen
@@ -673,7 +673,7 @@ Tk_GetColorFromObj(tkwin, objPtr)
      * list looking for the right TkColor structure.
      */
 
-    hashPtr = Tcl_FindHashEntry(&dispPtr->colorNameTable, 
+    hashPtr = Tcl_FindHashEntry(&dispPtr->colorNameTable,
 	    Tcl_GetString(objPtr));
     if (hashPtr == NULL) {
 	goto error;
@@ -723,7 +723,7 @@ InitColorObj(objPtr)
     Tcl_ObjType *typePtr;
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     Tcl_GetString(objPtr);
@@ -758,7 +758,7 @@ ColorInit(dispPtr)
     if (!dispPtr->colorInit) {
         dispPtr->colorInit = 1;
 	Tcl_InitHashTable(&dispPtr->colorNameTable, TCL_STRING_KEYS);
-	Tcl_InitHashTable(&dispPtr->colorValueTable, 
+	Tcl_InitHashTable(&dispPtr->colorValueTable,
                 sizeof(ValueKey)/sizeof(int));
     }
 }
@@ -805,7 +805,7 @@ TkDebugColor(tkwin, name)
 	    Tcl_ListObjAppendElement(NULL, objPtr,
 		    Tcl_NewIntObj(tkColPtr->resourceRefCount));
 	    Tcl_ListObjAppendElement(NULL, objPtr,
-		    Tcl_NewIntObj(tkColPtr->objRefCount)); 
+		    Tcl_NewIntObj(tkColPtr->objRefCount));
 	    Tcl_ListObjAppendElement(NULL, resultPtr, objPtr);
 	}
     }

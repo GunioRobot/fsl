@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvLine.c --
  *
  *	This file implements line items for canvas widgets.
@@ -537,7 +537,7 @@ ConfigureLine(interp, canvas, itemPtr, objc, objv, flags)
 	newGC = Tk_GetGC(tkwin, mask, &gcValues);
 #ifdef MAC_OSX_TK
 	/*
-	 * Mac OS X CG drawing needs access to linewidth even for 
+	 * Mac OS X CG drawing needs access to linewidth even for
 	 * arrow fills (as linewidth controls antialiasing).
 	 */
 	mask |= GCLineWidth;
@@ -792,7 +792,7 @@ ComputeLineBbox(canvas, linePtr)
 		i--, coordPtr += 2) {
 	    double miter[4];
 	    int j;
-    
+
 	    if (TkGetMiterPoints(coordPtr, coordPtr+2, coordPtr+4,
 		    width, miter, miter+2)) {
 		for (j = 0; j < 4; j += 2) {
@@ -1608,7 +1608,7 @@ LineToArea(canvas, itemPtr, rectPtr)
 	width = 1.0;
     }
 
-    result = TkThickPolyLineToArea(linePoints, numPoints, 
+    result = TkThickPolyLineToArea(linePoints, numPoints,
 	    width, linePtr->capStyle, linePtr->joinStyle,
 	    rectPtr);
     if (result == 0) {
@@ -2010,7 +2010,7 @@ ArrowParseProc(clientData, interp, tkwin, value, widgRec, offset)
 	return TCL_OK;
     }
 
-    Tcl_AppendResult(interp, "bad arrow spec \"", value, 
+    Tcl_AppendResult(interp, "bad arrow spec \"", value,
 	    "\": must be none, first, last, or both",
 	    (char *) NULL);
     *arrowPtr = ARROWS_NONE;

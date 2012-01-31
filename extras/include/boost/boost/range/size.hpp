@@ -27,22 +27,22 @@
 #include <iterator>
 #include <utility>
 
-namespace boost 
+namespace boost
 {
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
-namespace range_detail 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+namespace range_detail
 {
 #endif
         //////////////////////////////////////////////////////////////////////
         // primary template
         //////////////////////////////////////////////////////////////////////
-        
+
         template< typename C >
         inline BOOST_DEDUCED_TYPENAME C::size_type
         boost_range_size(  const C& c )
         {
-            return c.size(); 
+            return c.size();
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -62,15 +62,15 @@ namespace range_detail
         template< typename T, std::size_t sz >
         inline std::size_t boost_range_size(  const T (&array)[sz] )
         {
-            return range_detail::array_size<T,sz>( array ); 
+            return range_detail::array_size<T,sz>( array );
         }
-        
+
         template< typename T, std::size_t sz >
         inline std::size_t boost_range_size(  T (&array)[sz] )
         {
             return boost::range_detail::array_size<T,sz>( array );
         }
-        
+
         //////////////////////////////////////////////////////////////////////
         // string
         //////////////////////////////////////////////////////////////////////
@@ -85,16 +85,16 @@ namespace range_detail
             return boost::range_detail::str_size( s );
         }
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 } // namespace 'range_detail'
 #endif
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_size<T>::type size(  const T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     using namespace range_detail;
-#endif    
+#endif
     return boost_range_size( r );
 }
 

@@ -147,7 +147,7 @@ namespace boost { namespace numeric { namespace ublas {
                     ref (data () [sizeM]).resize (0, false);
                 }
             } else {
-                for (size_type i = 0; i < sizeM; ++ i) 
+                for (size_type i = 0; i < sizeM; ++ i)
                     data_.insert_element (i, vector_data_value_type ()) .resize (sizem, false);
                 data_.insert_element (sizeM, vector_data_value_type ());
             }
@@ -236,7 +236,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        generalized_vector_of_vector &plus_assign (const matrix_expression<AE> &ae) { 
+        generalized_vector_of_vector &plus_assign (const matrix_expression<AE> &ae) {
             matrix_assign<scalar_plus_assign> (*this, ae);
             return *this;
         }
@@ -348,7 +348,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base2<iterator2> reverse_iterator2;
 
         // Element lookup
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
                 const_vectoriterator_type itv (data ().find (layout_type::address1 (i, size1_, j, size2_)));
@@ -386,7 +386,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
                 vectoriterator_type itv (data ().find (layout_type::address1 (i, size1_, j, size2_)));
@@ -424,7 +424,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
                 const_vectoriterator_type itv (data ().find (layout_type::address1 (i, size1_, j, size2_)));
@@ -462,7 +462,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
                 vectoriterator_type itv (data ().find (layout_type::address1 (i, size1_, j, size2_)));
@@ -534,7 +534,7 @@ namespace boost { namespace numeric { namespace ublas {
                 else {
                     const self_type &m = (*this) ();
                     i_ = index1 () + 1;
-                    if (rank_ == 1 && ++ itv_ == m.end1 ().itv_) 
+                    if (rank_ == 1 && ++ itv_ == m.end1 ().itv_)
                         *this = m.find1 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
                         it_ = (*itv_).begin ();
@@ -557,7 +557,7 @@ namespace boost { namespace numeric { namespace ublas {
                         it_ = (*itv_).begin ();
                         if (it_ == (*itv_).end () || index2 () != j_)
                             *this = m.find1 (rank_, i_, j_, -1);
-                    } 
+                    }
                 }
                 return *this;
             }
@@ -794,7 +794,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<self_type>::assign (&it ());
@@ -824,7 +824,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type j_;
             vectoriterator_type itv_;
             subiterator_type it_;
-            
+
             friend class const_iterator1;
         };
 
@@ -869,7 +869,7 @@ namespace boost { namespace numeric { namespace ublas {
                 else {
                     const self_type &m = (*this) ();
                     j_ = index2 () + 1;
-                    if (rank_ == 1 && ++ itv_ == m.end2 ().itv_) 
+                    if (rank_ == 1 && ++ itv_ == m.end2 ().itv_)
                         *this = m.find2 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
                         it_ = (*itv_).begin ();
@@ -964,7 +964,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1057,7 +1057,7 @@ namespace boost { namespace numeric { namespace ublas {
                         it_ = (*itv_).begin ();
                         if (it_ == (*itv_).end () || index1 () != i_)
                             *this = m.find2 (rank_, i_, j_, -1);
-                    } 
+                    }
                 }
                 return *this;
             }
@@ -1129,7 +1129,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<self_type>::assign (&it ());

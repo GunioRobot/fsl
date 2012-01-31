@@ -40,7 +40,7 @@ namespace detail
   struct keywords_base
   {
       BOOST_STATIC_CONSTANT(std::size_t, size = nkeywords);
-      
+
       keyword_range range() const
       {
           return keyword_range(elements, elements + nkeywords);
@@ -54,7 +54,7 @@ namespace detail
       keywords<nkeywords + 1>
       operator,(char const *name) const;
   };
-  
+
   template <std::size_t nkeywords>
   struct keywords : keywords_base<nkeywords>
   {
@@ -67,7 +67,7 @@ namespace detail
       {
           elements[0].name = name;
       }
-    
+
       template <class T>
       python::arg& operator=(T const& value)
       {
@@ -75,7 +75,7 @@ namespace detail
           elements[0].default_value = handle<>(python::borrowed(object(value).ptr()));
           return *this;
       }
-    
+
       operator detail::keyword const&() const
       {
           return elements[0];
@@ -106,7 +106,7 @@ namespace detail
   template<typename T>
   struct is_keywords
   {
-      BOOST_STATIC_CONSTANT(bool, value = false); 
+      BOOST_STATIC_CONSTANT(bool, value = false);
   };
 
   template<std::size_t nkeywords>
@@ -122,14 +122,14 @@ namespace detail
       typedef typename remove_cv<deref>::type key_t;
       BOOST_STATIC_CONSTANT(bool, is_key = is_keywords<key_t>::value);
       BOOST_STATIC_CONSTANT(bool, value = (is_ref & is_key));
-      
+
       typedef mpl::bool_<value> type;
       BOOST_PYTHON_MPL_LAMBDA_SUPPORT(1,is_reference_to_keywords,(T))
   };
-# else 
+# else
   typedef char (&yes_keywords_t)[1];
   typedef char (&no_keywords_t)[2];
-      
+
   no_keywords_t is_keywords_test(...);
 
   template<std::size_t nkeywords>
@@ -150,11 +150,11 @@ namespace detail
       typedef mpl::bool_<value> type;
       BOOST_PYTHON_MPL_LAMBDA_SUPPORT(1,is_reference_to_keywords,(T))
   };
-# endif 
+# endif
 }
 
 inline detail::keywords<1> args(char const* name)
-{ 
+{
     return detail::keywords<1>(name);
 }
 

@@ -76,11 +76,11 @@ fnirt_clp::fnirt_clp(const Utilities::Option<string>&                     pref,
                      const Utilities::Option<bool>&                       pverbose,
                      const Utilities::Option<int>&                        pdebug,
                      const Utilities::Option<string>&                     p_hess_prec)
-  : ref(pref.value()), obj(pobj.value()), inwarp(pinwarp.value()), in_int(pin_int.value()), coef(pcoef.value()), objo(pobjo.value()), 
-    fieldo(pfieldo.value()), jaco(pjaco.value()), refo(prefo.value()), into(pinto.value()), logo(plogo.value()), 
-    refm(prefm.value()), objm(pobjm.value()), ref_pl(pref_pl.value()), obj_pl(pobj_pl.value()), rimf((primf.value()==0) ? false : true), 
-    rimv(primv.value()), oimf((poimf.value()==0) ? false : true), oimv(poimv.value()), spordr(static_cast<unsigned int>(pspordr.value())), 
-    ssqlambda((pssqlambda.value()==0) ? false : true), jacrange(pjacrange.value()), userefderiv((puserefderiv.value()==0) ? false : true), 
+  : ref(pref.value()), obj(pobj.value()), inwarp(pinwarp.value()), in_int(pin_int.value()), coef(pcoef.value()), objo(pobjo.value()),
+    fieldo(pfieldo.value()), jaco(pjaco.value()), refo(prefo.value()), into(pinto.value()), logo(plogo.value()),
+    refm(prefm.value()), objm(pobjm.value()), ref_pl(pref_pl.value()), obj_pl(pobj_pl.value()), rimf((primf.value()==0) ? false : true),
+    rimv(primv.value()), oimf((poimf.value()==0) ? false : true), oimv(poimv.value()), spordr(static_cast<unsigned int>(pspordr.value())),
+    ssqlambda((pssqlambda.value()==0) ? false : true), jacrange(pjacrange.value()), userefderiv((puserefderiv.value()==0) ? false : true),
     verbose(pverbose.value()), debug(static_cast<unsigned int>(pdebug.value()))
 {
   // Parse and assert input
@@ -201,7 +201,7 @@ fnirt_clp::fnirt_clp(const Utilities::Option<string>&                     pref,
 
   // Assign
   if (pmi.value().size() == nlev) {
-    mi.resize(pmi.value().size()); 
+    mi.resize(pmi.value().size());
     for (unsigned int i=0; i<pmi.value().size(); i++) mi[i] = static_cast<unsigned int>(pmi.value()[i]);
   }
   else {mi = vector<unsigned int>(nlev); for (unsigned int i=0; i<nlev; i++) mi[i] = (pmi.value())[0];}
@@ -229,7 +229,7 @@ fnirt_clp::fnirt_clp(const Utilities::Option<string>&                     pref,
 	else if (regmod == MembraneEnergy) {for (unsigned int i=0; i<nlev; i++) lambda[i] = ss[i] * 2.5;}
       }
       else {
-	if (regmod == BendingEnergy) {for (unsigned int i=0; i<nlev; i++) lambda[i] = ss[i] * 15000.0;} 
+	if (regmod == BendingEnergy) {for (unsigned int i=0; i<nlev; i++) lambda[i] = ss[i] * 15000.0;}
 	else if (regmod == MembraneEnergy) {for (unsigned int i=0; i<nlev; i++) lambda[i] = ss[i] * 1500;}
       }
       plambda.set_T(lambda);
@@ -272,7 +272,7 @@ fnirt_clp::fnirt_clp(const Utilities::Option<string>&                     pref,
     throw fnirt_error("fnirt_clp: Argument to --intorder, cannot use polynomial of order > 5 for intensity mapping when also modelling intensity bias");
   }
 
-  
+
   double pxs[] = {vref.xdim(), vref.ydim(), vref.zdim()};
   int    dim[] = {vref.xsize(), vref.ysize(), vref.zsize()};
 
@@ -328,7 +328,7 @@ fnirt_clp::fnirt_clp(const Utilities::Option<string>&                     pref,
   }
   else if (bf == DCT) {
     throw fnirt_error("Sorry, not yet implemented");
-  }  
+  }
 }
 
 boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
@@ -397,7 +397,7 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
       string("name of file with points/coordinates in input image space"),false, Utilities::requires_argument);
 
   Utilities::HiddenOption<float> mpl_lambda(string("--pointlistlambda"),1.0,
-      string("Weight of landmark distances relative to intensities, default 1"), 
+      string("Weight of landmark distances relative to intensities, default 1"),
       false, Utilities::requires_argument);
 
   vector<int> applyrefmaskdefault(4,1);
@@ -421,16 +421,16 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
       string("Value to mask out in --in image. Default =0.0"),false, Utilities::requires_argument);
 
   Utilities::Option<string> minimisationmethod(string("--minmet"), string("lm"),
-      string("non-linear minimisation method [lm | scg | cg] (Leveberg-Marquardt, Scaled Conjugate Gradient or Conjugate Gradient)"), 
+      string("non-linear minimisation method [lm | scg | cg] (Leveberg-Marquardt, Scaled Conjugate Gradient or Conjugate Gradient)"),
       false, Utilities::requires_argument);
 
   vector<int> maxiterdefault(4,0);
-  maxiterdefault[0] = 5; maxiterdefault[1] = 5; maxiterdefault[2] = 5; maxiterdefault[3] = 5; 
+  maxiterdefault[0] = 5; maxiterdefault[1] = 5; maxiterdefault[2] = 5; maxiterdefault[3] = 5;
   Utilities::Option<vector<int> > maxiter(string("--miter"), maxiterdefault,
       string("\tMax # of non-linear iterations, default 5,5,5,5"), false, Utilities::requires_argument);
 
   vector<int> subsamplingdefault(4,0);
-  subsamplingdefault[0] = 4; subsamplingdefault[1] = 2; subsamplingdefault[2] = 1; subsamplingdefault[3] = 1; 
+  subsamplingdefault[0] = 4; subsamplingdefault[1] = 2; subsamplingdefault[2] = 1; subsamplingdefault[3] = 1;
   Utilities::Option<vector<int> > subsampling(string("--subsamp"), subsamplingdefault,
       string("sub-sampling scheme, default 4,2,1,1"), false, Utilities::requires_argument);
 
@@ -453,11 +453,11 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
 
   Utilities::Option<string> regularisationmodel(string("--regmod"),string("bending_energy"),
 				                string("Model for regularisation of warp-field [membrane_energy bending_energy], default bending_energy"),
-				                false,Utilities::requires_argument); 
+				                false,Utilities::requires_argument);
 
   vector<float> lambdadefault(0);
   Utilities::Option<vector<float> > lambda(string("--lambda"),lambdadefault,
-      string("Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documetation."), 
+      string("Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documetation."),
       false, Utilities::requires_argument);
 
   Utilities::Option<int> ssqlambda(string("--ssqlambda"),true,string("If set (=1), lambda is weighted by current ssq, default 1"),
@@ -466,7 +466,7 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
   vector<float> jacrangedefault(2,0);
   jacrangedefault[0] = 0.01; jacrangedefault[1] = 100.0;   // Basically non-negativity
   Utilities::Option<vector<float> > jacrange(string("--jacrange"),jacrangedefault,
-      string("Allowed range of Jacobian determinants, default 0.01,100.0"), 
+      string("Allowed range of Jacobian determinants, default 0.01,100.0"),
       false, Utilities::requires_argument);
 
   Utilities::Option<int> userefderiv(string("--refderiv"),0,string("If =1, ref image is used to calculate derivatives. Default =0"),
@@ -474,12 +474,12 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
 
   Utilities::Option<string> intensitymodel(string("--intmod"),string("global_non_linear_with_bias"),
       string("Model for intensity-mapping [none global_linear global_non_linear local_linear global_non_linear_with_bias local_non_linear]"),
-      false,Utilities::requires_argument); 
+      false,Utilities::requires_argument);
 
   int intensityorderdefault = 5;
   Utilities::Option<int> intensityorder(string("--intorder"),intensityorderdefault,
       string("Order of poynomial for mapping intensities, default 5"),false,Utilities::requires_argument);
-   
+
   vector<float> biasresdefault(3,50.0);
   Utilities::Option<vector<float> > biasfieldres(string("--biasres"),biasresdefault,
       string("Resolution (in mm) of bias-field modelling local intensities, default 50,50,50"),false,Utilities::requires_argument);
@@ -649,7 +649,7 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
     // Uncomment these when pointlist functionality is released
     // if (refpointlistname.set()) logfs << refpointlistname << endl;
     // if (objpointlistname.set()) logfs << objpointlistname << endl;
-    // logfs << mpl_lambda << endl;    
+    // logfs << mpl_lambda << endl;
     logfs << imprefflag << endl;
     logfs << impobjflag << endl;
     logfs << imprefval << endl;
@@ -670,7 +670,7 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
     logfs << biasfieldres << endl;
     logfs << biasfieldlambda << endl;
     logfs << numprec << endl;
-    logfs << userefderiv << endl;    
+    logfs << userefderiv << endl;
     logfs.close();
   }
   catch (...) {
@@ -678,7 +678,7 @@ boost::shared_ptr<fnirt_clp> parse_fnirt_command_line(unsigned int   narg,
     throw;
   }
 
-  return(clp);  
+  return(clp);
 }
 
 bool constrain_warpfield(const SSD_fnirt_CF&   cf,
@@ -695,11 +695,11 @@ bool constrain_warpfield(const SSD_fnirt_CF&   cf,
     range = cf.JacobianRange();
     if (clp.Verbose()) cout << "Jacobian range is " << range.first << " -- " << range.second << endl;
     n_try++;
-  } 
+  }
 
   if (range.first < clp.JacLowerBound() || range.second > clp.JacUpperBound()) return(false);
 
-  return(true);  
+  return(true);
 }
 
 vector<boost::shared_ptr<basisfield> > init_warpfield(const fnirt_clp&  clp)
@@ -726,15 +726,15 @@ vector<boost::shared_ptr<basisfield> > init_warpfield(const fnirt_clp&  clp)
     if (clp.Basis() == FNIRT::Spline) {
       for (int i=0; i<3; i++) field[i] = boost::shared_ptr<splinefield>(new splinefield(reader.FieldAsSplinefield(i,clp.FullResKsp())));
     }
-    else if (clp.Basis() == FNIRT::DCT) {  
+    else if (clp.Basis() == FNIRT::DCT) {
       for (int i=0; i<3; i++) field[i] = boost::shared_ptr<dctfield>(new dctfield(reader.FieldAsDctfield(i,clp.DCTOrder(clp.NoLevels()))));
-    }      
+    }
   }
   else { // If we are starting from scratch
     if (clp.Basis() == FNIRT::Spline) {
       for (int i=0; i<3; i++) field[i] = boost::shared_ptr<splinefield>(new splinefield(clp.RefSize(),clp.RefVxs(),clp.FullResKsp(),clp.SplineOrder()));
     }
-    else if (clp.Basis() == FNIRT::DCT) {  
+    else if (clp.Basis() == FNIRT::DCT) {
       for (int i=0; i<3; i++) field[i] = boost::shared_ptr<dctfield>(new dctfield(clp.RefSize(),clp.RefVxs(),clp.DCTOrder(clp.NoLevels())));
     }
   }
@@ -851,15 +851,15 @@ void set_nlpars(NonlinParam&  nlp)
 
 // Combine an inclusive/exclusive explicit mask with an implicit mask
 
-boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&                  mfname, 
-                                                     MaskType                       mt, 
-                                                     const NEWIMAGE::volume<float>& ima, 
-                                                     bool                           impf, 
+boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&                  mfname,
+                                                     MaskType                       mt,
+                                                     const NEWIMAGE::volume<float>& ima,
+                                                     bool                           impf,
                                                      double                         impv)
 {
   boost::shared_ptr<NEWIMAGE::volume<char> >  maskp;
   if (!((mfname.length() && mt!=IgnoreMask) || impf)) return(maskp); // Return null-pointer
-  
+
   if (mfname.length() && mt!=IgnoreMask) { // If there is an explicit mask
     maskp = boost::shared_ptr<NEWIMAGE::volume<char> >(new NEWIMAGE::volume<char>);
     NEWIMAGE::volume<char>&  mask = *maskp;
@@ -879,7 +879,7 @@ boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&              
     *maskp = 1;
   }
 
-  if (impf) { // Add implicit mask 
+  if (impf) { // Add implicit mask
     NEWIMAGE::volume<char>&  mask = *maskp;
     for (int k=0; k<mask.zsize(); k++) {
       for (int j=0; j<mask.ysize(); j++) {
@@ -889,8 +889,8 @@ boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&              
       }
     }
   }
-  
-  return(maskp);  
+
+  return(maskp);
 }
 
 double spmlike_mean(NEWIMAGE::volume<float>&  ima)
@@ -915,7 +915,7 @@ double spmlike_mean(NEWIMAGE::volume<float>&  ima)
     }
   }
   mean /= n;
-  
+
   return(mean);
 }
 
@@ -936,7 +936,7 @@ bool trying_to_register_to_self(const string&                    ref_fname,
     if (ref_fname == obj_fname) return(true);
     if (ref == obj) return(true);
   }
-  
+
   return(false);
 }
 
@@ -968,22 +968,22 @@ void write_self_results(const fnirt_clp&                clp,
   if (clp.RefOutFname().length()) cf->SaveScaledRef(clp.RefOutFname());   // Intensity modulated ref scan
   if (clp.ObjOutFname().length()) cf->SaveScaledRef(clp.ObjOutFname());   // Warped object image
   // Intensity-mapping
-  if (clp.IntensityMappingFname().length()) cf->SaveIntensityMapping(clp.IntensityMappingFname());  
+  if (clp.IntensityMappingFname().length()) cf->SaveIntensityMapping(clp.IntensityMappingFname());
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // Try to find existing file matching the name ref_fname
-// It is needed because when we read the filenames from 
+// It is needed because when we read the filenames from
 // the configuration file the shell will not be able to
 // do variable substitutions for us.
 //
 // It will
 // 1. Check to see if there is an absolute path,
 //    if so it will check for existence of that.
-// 2. If no path explicitly given it will look 
+// 2. If no path explicitly given it will look
 //    in the current directory.
-// 3. If no path given and not in the current 
+// 3. If no path given and not in the current
 //    directory it will look in ${FSLDIR}/data/standard
 //
 ////////////////////////////////////////////////////////////////////////////
@@ -1044,7 +1044,7 @@ string existing_ref_fname(const string& ref_fname)
 ////////////////////////////////////////////////////////////////////////////
 //
 // Try to find existing file matching the name cfname. It will look for
-// (in turn) i) cfname , ii) cfname + ".cnf" , 
+// (in turn) i) cfname , ii) cfname + ".cnf" ,
 // iii) $FSLDIR + "/etc/flirtsch/" + cfname and
 // iv) $FSLDIR + "/etc/flirtsch/" + cfname + ".cnf"
 // and returns the first one that exists.
@@ -1084,7 +1084,7 @@ bool check_exist(const string& fname)
   return((ins) ? true : false);
 }
 
-/* Old version (used for first release that had a problem 
+/* Old version (used for first release that had a problem
 bool check_exist(const string& fname)
 {
   std::ifstream  ins;

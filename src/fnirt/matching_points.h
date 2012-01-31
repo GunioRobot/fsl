@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2008 University of Oxford 
+// Copyright (C) 2008 University of Oxford
 //
 
 
@@ -38,7 +38,7 @@ public:
 class MatchingPoints
 {
 public:
-  MatchingPoints(const NEWIMAGE::PointList&  points_in_ref, const NEWIMAGE::PointList& points_in_in) 
+  MatchingPoints(const NEWIMAGE::PointList&  points_in_ref, const NEWIMAGE::PointList& points_in_in)
   {
     if (points_in_ref.NPoints() != points_in_in.NPoints()) throw MatchingPointsException("MatchingPoints: Size mismatch between point-lists");
     _in_ref = boost::shared_ptr<NEWIMAGE::PointList>(new NEWIMAGE::PointList(points_in_ref));
@@ -53,10 +53,10 @@ public:
   // Returns the gradient of the sum-of-squared differences for the dimension given by dim
   virtual NEWMAT::ReturnMatrix SSD_Gradient(unsigned int dim, const BASISFIELD::basisfield& bf) const;
   // Returns the Hessian of the sum-of-squared differences for the dimension given by dim
-  virtual boost::shared_ptr<MISCMATHS::BFMatrix> SSD_Hessian(unsigned int                     dim, 
+  virtual boost::shared_ptr<MISCMATHS::BFMatrix> SSD_Hessian(unsigned int                     dim,
                                                              const BASISFIELD::basisfield&    bf,
                                                              MISCMATHS::BFMatrixPrecisionType prec=BFMatrixDoublePrecision) const;
- 
+
 private:
   boost::shared_ptr<NEWIMAGE::PointList>  _in_ref;
   boost::shared_ptr<NEWIMAGE::PointList>  _in_in;

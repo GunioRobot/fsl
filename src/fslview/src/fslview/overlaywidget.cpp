@@ -51,29 +51,29 @@ public:
   {
     refresh();
   }
-  
+
   void refresh()
   {
     if(inqVisibility())
       setPixmap(0,QPixmap(eye));
-    else 
+    else
       setPixmap(0,NULL);
     if(inqReadOnly())
       setPixmap(1,QPixmap(padlock));
-    else 
+    else
       setPixmap(1,NULL);
     setText(2,inqImageName().c_str());
     setText(3,QString::number(inqTransparency()));
     if(inqIsMainImage())
       setPixmap(4,QPixmap(mainimage));
-    else 
+    else
       setPixmap(4,NULL);
   }
-  
+
   const MetaImage::Handle getMetaImage() { return m_mi;}
   bool inqIsMainImage()          { return m_mi->getInfo()->isMainImage();}
   std::string inqImageName()     { return m_mi->inqImageName();}
-  float inqTransparency()        { return m_mi->getDs()->inqTransparency();}  
+  float inqTransparency()        { return m_mi->getDs()->inqTransparency();}
   bool  inqVisibility()          { return m_mi->inqVisibility();}
   bool  inqReadOnly()            { return m_mi->inqReadOnly();}
   bool  inqTransMod()            { return m_mi->getDs()->inqTransMod();}
@@ -93,7 +93,7 @@ private:
   QListView* m_lv;
 };
 
-void InsertLayerItem::operator()(MetaImage::Handle mi) 
+void InsertLayerItem::operator()(MetaImage::Handle mi)
 {
    new LayerListItem(m_lv, mi);
 }
@@ -106,13 +106,13 @@ OverlayWidget::OverlayWidget(QWidget* w, OverlayList::Handle l):
 
   m_transSlider->setMinValue(0);
   m_transSlider->setMaxValue(10);
-  m_transSlider->setPageStep(1); 
+  m_transSlider->setPageStep(1);
 
   m_modTransSlider->setMinValue(0);
   m_modTransSlider->setMaxValue(10);
   m_modTransSlider->setPageStep(1);
   m_modTransSlider->hide();
-  
+
   m_addButton->hide();
   m_removeButton->hide();
 
@@ -124,25 +124,25 @@ OverlayWidget::OverlayWidget(QWidget* w, OverlayList::Handle l):
   connect(m_downButton, SIGNAL(pressed()), this, SLOT(downButtonPressed()));
   connect(m_detailsButton, SIGNAL(pressed()), this, SLOT(detailsButtonPressed()));
 
-  connect(m_overlayListView,SIGNAL(selectionChanged()),          
+  connect(m_overlayListView,SIGNAL(selectionChanged()),
           this ,SLOT(listSelectChanged()));
   connect(m_overlayListView,SIGNAL(doubleClicked(QListViewItem*)),
         this,SLOT(listDoubleClicked(QListViewItem*)));
 
   connect(m_visibleButton,SIGNAL(toggled(bool)),
-        this,SLOT(visibleButtonChanged(bool)));  
+        this,SLOT(visibleButtonChanged(bool)));
   connect(m_lockedButton,SIGNAL(toggled(bool)),
         this,SLOT(lockedButtonChanged(bool)));
 
   connect(m_transSlider, SIGNAL(valueChanged(int)),
-        this,SLOT(transSliderChanged(int)));  
+        this,SLOT(transSliderChanged(int)));
   connect(m_modTransSlider, SIGNAL(valueChanged(int)),
         this,SLOT(modTransSliderChanged(int)));
 
 //   connect(m_addButton, SIGNAL(pressed()), qApp, SLOT(addOverlay()));
 //   connect(m_removeButton, SIGNAL(pressed()), qApp, SLOT(remOverlay()));
 
-  QToolTip::add(m_visibleButton,tr(toggleVisibiltyText));  
+  QToolTip::add(m_visibleButton,tr(toggleVisibiltyText));
   QToolTip::add(m_lockedButton, tr(toggleLockText));
   QToolTip::add(m_detailsButton,  tr(infoButtonText));
   QToolTip::add(m_upButton,     tr(upButtonText));
@@ -188,7 +188,7 @@ void OverlayWidget::updateListView()
   std::for_each(m_overlayList->begin(),
                 m_overlayList->end(),
                 InsertLayerItem(m_overlayListView));
-  
+
   QListViewItem* curItem = getLayerItem(m_overlayList->getActiveMetaImage());
 
   if(curItem)
@@ -204,14 +204,14 @@ void OverlayWidget::update(const OverlayList* l, OverlayListMsg msg)
   switch(msg)
   {
    case OverlayListMsg(Select):       updateListItem();updateControls();break;
-   case OverlayListMsg(Visibility):   
+   case OverlayListMsg(Visibility):
    case OverlayListMsg(Transparency): updateListItem();updateControls();break;
    case OverlayListMsg(Security):
    case OverlayListMsg(Order):
    case OverlayListMsg(Add):
    case OverlayListMsg(Rem):          updateListView();updateControls();
                                       updateUpDownButtons();break;
-   case OverlayListMsg(LookUpTable):  break;   
+   case OverlayListMsg(LookUpTable):  break;
    case OverlayListMsg(ModImage):     updateListView();updateControls();break;
    case OverlayListMsg(ImageName):    updateListView();break;
   default: break;
@@ -234,9 +234,9 @@ void OverlayWidget::listSelectChanged()
     updateUpDownButtons();
 
     m_overlayList->setActiveMetaImage(mi);
-    
+
   }
-  else 
+  else
   {
     m_overlayList->setActiveMetaImage(m_overlayList->getMainMetaImage());
   }
@@ -248,12 +248,12 @@ QListViewItem* OverlayWidget::getLayerItem(const MetaImage::Handle mi) const
   bool success(false);
   QListViewItem* itemFound = NULL;
   QListViewItemIterator it( m_overlayListView );
-    
-  while(it.current() && !success)   
+
+  while(it.current() && !success)
   {
     if(((LayerListItem*)it.current())->getMetaImage() == mi)
       {
-      itemFound = it.current(); 
+      itemFound = it.current();
       success = true;
       }
 
@@ -267,13 +267,13 @@ void OverlayWidget::transSliderChanged(int value)
 {
   TRACKER("OverlayWidget::transSliderChanged(int value)");
   if(m_blockEvents) return;
-  m_blockSliderUpdate = true;  
+  m_blockSliderUpdate = true;
   m_overlayList->setTransparency((float)value/10.0f);
   m_blockSliderUpdate = false;
 }
 
 void OverlayWidget::modTransSliderChanged(int value)
-{  
+{
   TRACKER("OverlayWidget::modTransSliderChanged(int value)");
   if(m_blockEvents) return;
   m_blockSliderUpdate = true;
@@ -282,7 +282,7 @@ void OverlayWidget::modTransSliderChanged(int value)
 }
 
 void OverlayWidget::visibleButtonChanged(bool state)
-{  
+{
   TRACKER("OverlayWidget::visibleButtonChanged(bool state)");
   if(m_blockEvents) return;
   m_overlayList->setVisibility(state);
@@ -291,7 +291,7 @@ void OverlayWidget::visibleButtonChanged(bool state)
 }
 
 void OverlayWidget::lockedButtonChanged(bool state)
-{  
+{
   TRACKER("OverlayWidget::lockedButtonChanged(bool state)");
   if(m_blockEvents) return;
   m_overlayList->setReadOnly(state);
@@ -300,10 +300,10 @@ void OverlayWidget::lockedButtonChanged(bool state)
 void OverlayWidget::listDoubleClicked(QListViewItem* item)
 {
   TRACKER("OverlayWidget::listDoubleClicked(QListViewItem* item)");
-  if(m_blockEvents) return; 
- 
+  if(m_blockEvents) return;
+
   bool state;
-   
+
   state = m_overlayList->getActiveMetaImage()->inqVisibility();
   m_overlayList->setVisibility(!state);
 
@@ -325,18 +325,18 @@ void OverlayWidget::downButtonPressed()
 }
 
 void OverlayWidget::updateUpDownButtons()
-{   
+{
   TRACKER("OverlayWidget::updateUpDownButtons()");
   LayerListItem* i = (LayerListItem*)m_overlayListView->selectedItem();
- 
+
   if(i)
     {
-      if(i->itemAbove()) 
+      if(i->itemAbove())
         m_upButton->setEnabled(true);
       else
         m_upButton->setEnabled(false);
 
-      if(i->itemBelow()) 
+      if(i->itemBelow())
         m_downButton->setEnabled(true);
       else
         m_downButton->setEnabled(false);
@@ -352,33 +352,33 @@ void OverlayWidget::updateUpDownButtons()
 void OverlayWidget::updateListItem()
 {
   TRACKER("OverlayWidget::updateListItem()");
-  LayerListItem* curOverlay = (LayerListItem*)getLayerItem(m_overlayList->getActiveMetaImage()); 
-  if(curOverlay) 
+  LayerListItem* curOverlay = (LayerListItem*)getLayerItem(m_overlayList->getActiveMetaImage());
+  if(curOverlay)
     curOverlay->refresh();
 }
 
 void OverlayWidget::updateControls()
 {
-  TRACKER("OverlayWidget::updateControls()");    
-  
-  LayerListItem* curOverlay = (LayerListItem*)getLayerItem(m_overlayList->getActiveMetaImage()); 
+  TRACKER("OverlayWidget::updateControls()");
+
+  LayerListItem* curOverlay = (LayerListItem*)getLayerItem(m_overlayList->getActiveMetaImage());
 
        if(curOverlay)
          {
            if(!m_blockSliderUpdate)
              m_transSlider->setValue((int)(curOverlay->inqTransparency() * 10));
-           
+
            m_visibleButton->setChecked(curOverlay->inqVisibility());
            m_lockedButton->setChecked(curOverlay->inqReadOnly());
-          
-           if(!m_blockSliderUpdate) 
+
+           if(!m_blockSliderUpdate)
              {
                m_modTransSlider->setValue((int)(curOverlay->inqModTransparency() * 10));
 
                if(curOverlay->inqTransMod()){m_modTransSlider->show();}
                else                         {m_modTransSlider->hide();}
              }
-           
+
          }
 }
 

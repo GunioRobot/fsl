@@ -1,4 +1,4 @@
-/* 
+/*
  * tkImage.c --
  *
  *	This module implements the image protocol, which allows lots
@@ -75,11 +75,11 @@ typedef struct ImageMaster {
 } ImageMaster;
 
 typedef struct ThreadSpecificData {
-    Tk_ImageType *imageTypeList;/* First in a list of all known image 
-				 * types. */  
-    Tk_ImageType *oldImageTypeList;/* First in a list of all known old-style image 
-				 * types. */  
-} ThreadSpecificData;           
+    Tk_ImageType *imageTypeList;/* First in a list of all known image
+				 * types. */
+    Tk_ImageType *oldImageTypeList;/* First in a list of all known old-style image
+				 * types. */
+} ThreadSpecificData;
 static Tcl_ThreadDataKey dataKey;
 
 /*
@@ -116,7 +116,7 @@ Tk_CreateOldImageType(typePtr)
 				 * in by caller.  Must not have been passed
 				 * to Tk_CreateImageType previously. */
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     typePtr->nextPtr = tsdPtr->oldImageTypeList;
@@ -130,7 +130,7 @@ Tk_CreateImageType(typePtr)
 				 * in by caller.  Must not have been passed
 				 * to Tk_CreateImageType previously. */
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     typePtr->nextPtr = tsdPtr->imageTypeList;
@@ -178,7 +178,7 @@ Tk_ImageObjCmd(clientData, interp, objc, objv)
     Tcl_HashSearch search;
     char idString[16 + TCL_INTEGER_SPACE], *name;
     TkDisplay *dispPtr = winPtr->dispPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (objc < 2) {
@@ -355,7 +355,7 @@ Tk_ImageObjCmd(clientData, interp, objc, objv)
 	    }
 	    break;
 	}
-	case IMAGE_HEIGHT: {	
+	case IMAGE_HEIGHT: {
 	    char *arg;
 	    if (objc != 3) {
 		Tcl_WrongNumArgs(interp, 2, objv, "name");
@@ -407,7 +407,7 @@ Tk_ImageObjCmd(clientData, interp, objc, objv)
 	    }
 	    break;
 	}
-	
+
 	case IMAGE_TYPE: {
 	    char *arg;
 	    if (objc != 3) {
@@ -649,7 +649,7 @@ Tk_FreeImage(image)
     }
     ckfree((char *) imagePtr);
 
-    /* 
+    /*
      * If there are no more instances left for the master, and if the
      * master image has been deleted, then delete the master too.
      */
@@ -723,7 +723,7 @@ Tk_PostscriptImage(image, interp, tkwin, psinfo, x, y, width, height, prepass)
 
     /*
      * Create a Pixmap, tell the image to redraw itself there, and then
-     * generate an XImage from the Pixmap.  We can then read pixel 
+     * generate an XImage from the Pixmap.  We can then read pixel
      * values out of the XImage.
      */
 
@@ -744,7 +744,7 @@ Tk_PostscriptImage(image, interp, tkwin, psinfo, x, y, width, height, prepass)
 	    (unsigned int)width, (unsigned int)height, AllPlanes, ZPixmap);
 
     Tk_FreePixmap(Tk_Display(tkwin), pmap);
-    
+
     if (ximage == NULL) {
 	/* The XGetImage() function is apparently not
 	 * implemented on this system. Just ignore it.

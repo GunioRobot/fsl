@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_oprimitive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -30,8 +30,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -66,7 +66,7 @@ public:
     OStream &os;
     boost::scoped_ptr<std::locale> archive_locale;
     io::basic_ios_locale_saver<
-        BOOST_DEDUCED_TYPENAME OStream::char_type, 
+        BOOST_DEDUCED_TYPENAME OStream::char_type,
         BOOST_DEDUCED_TYPENAME OStream::traits_type
     > locale_saver;
 
@@ -90,18 +90,18 @@ public:
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
-    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     basic_binary_oprimitive(OStream & os, bool no_codecvt);
-    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     ~basic_binary_oprimitive();
 public:
     void save_binary(const void *address, std::size_t count);
 };
 
 template<class Archive, class OStream>
-inline void 
+inline void
 basic_binary_oprimitive<Archive, OStream>::save_binary(
-    const void *address, 
+    const void *address,
     std::size_t count
 ){
     assert(
@@ -114,16 +114,16 @@ basic_binary_oprimitive<Archive, OStream>::save_binary(
     if(os.fail())
         boost::throw_exception(archive_exception(archive_exception::stream_error));
     // figure number of elements to output - round up
-    count = ( count + sizeof(BOOST_DEDUCED_TYPENAME OStream::char_type) - 1) 
+    count = ( count + sizeof(BOOST_DEDUCED_TYPENAME OStream::char_type) - 1)
         / sizeof(BOOST_DEDUCED_TYPENAME OStream::char_type);
     os.write(
-        static_cast<const BOOST_DEDUCED_TYPENAME OStream::char_type *>(address), 
+        static_cast<const BOOST_DEDUCED_TYPENAME OStream::char_type *>(address),
         count
     );
     assert(os.good());
 }
 
-} //namespace boost 
-} //namespace archive 
+} //namespace boost
+} //namespace archive
 
 #endif // BOOST_ARCHIVE_BASIC_BINARY_OPRIMITIVE_HPP

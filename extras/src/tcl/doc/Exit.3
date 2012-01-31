@@ -3,9 +3,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: Exit.3,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH Tcl_Exit 3 8.1 Tcl "Tcl Library Procedures"
 .BS
@@ -120,7 +120,7 @@ before the exit handlers for \fBA\fR.
 .VE
 .VS
 .PP
-\fBTcl_Finalize\fR and \fBTcl_Exit\fR call \fBTcl_FinalizeThread\fR 
+\fBTcl_Finalize\fR and \fBTcl_Exit\fR call \fBTcl_FinalizeThread\fR
 and the thread exit handlers \fIafter\fR
 the process-wide exit handlers.  This is because thread finalization shuts
 down the I/O channel system, so any attempt at I/O by the global exit

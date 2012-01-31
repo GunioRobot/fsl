@@ -25,25 +25,25 @@ TESTXFILES=interpwarp
 all: ${XFILES}
 
 prelude: ${PRELUDEOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PRELUDEOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PRELUDEOBJS} ${LIBS}
 
 fugue:  ${FUGUEOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FUGUEOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FUGUEOBJS} ${LIBS}
 
 applywarp:  ${APPLYOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${APPLYOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${APPLYOBJS} ${LIBS}
 
 convertwarp:  ${CONVERTOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${CONVERTOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${CONVERTOBJS} ${LIBS}
 
 invwarp_exe: ${IOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${IOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${IOBJS} ${LIBS}
 
 interpwarp: ${I2OBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${I2OBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${I2OBJS} ${LIBS}
 
 sigloss: ${SOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SOBJS} ${LIBS}
 
 fnirtfileutils: ${FNIRTFILEUTILSOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FNIRTFILEUTILSOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FNIRTFILEUTILSOBJS} ${LIBS}

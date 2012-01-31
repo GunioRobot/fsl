@@ -1641,15 +1641,15 @@ TkMacOSXSetupDrawingContext(
 	}
 	if (gc) {
 	    static const CGLineCap cgCap[] = {
-		[CapNotLast] = kCGLineCapButt, 
-		[CapButt] = kCGLineCapButt, 
-		[CapRound] = kCGLineCapRound, 
-		[CapProjecting] = kCGLineCapSquare, 
+		[CapNotLast] = kCGLineCapButt,
+		[CapButt] = kCGLineCapButt,
+		[CapRound] = kCGLineCapRound,
+		[CapProjecting] = kCGLineCapSquare,
 	    };
 	    static const CGLineJoin cgJoin[] = {
-		[JoinMiter] = kCGLineJoinMiter, 
-		[JoinRound] = kCGLineJoinRound, 
-		[JoinBevel] = kCGLineJoinBevel, 
+		[JoinMiter] = kCGLineJoinMiter,
+		[JoinRound] = kCGLineJoinRound,
+		[JoinBevel] = kCGLineJoinBevel,
 	    };
 	    bool shouldAntialias;
 	    double w = gc->line_width;

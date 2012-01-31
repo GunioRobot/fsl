@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -66,12 +66,12 @@
     University, to negotiate a licence. Contact details are:
     innovation@isis.ox.ac.uk quoting reference DE/1112. */
 
-#include <stdexcept> 
+#include <stdexcept>
 #include "easyoptions.h"
 using namespace Utilities;
 #include <fstream>
 #include <sstream>
- 
+
 EasyOptions::EasyOptions(int argc, char** argv)
 {
     Tracer_Plus tr("EasyOptions::EasyOptions");
@@ -79,17 +79,17 @@ EasyOptions::EasyOptions(int argc, char** argv)
     // Accepted forms:
     // --key=value -> args[key] == value
     // --key value -> args[key] == value
-    // --key       -> args[key] == "" 
+    // --key       -> args[key] == ""
     // For the last one, use args.count(key) as a boolean flag.  Do not look at
     //   args[key] because that will create the empty key for you!
     // Also, the command name is stored in args[""].
 
-    // Extensions: 
+    // Extensions:
     // - use a multimap so duplicate options are okay
     // - accept short-form options (e.g. -k)
 
     // For completeness, store the command line as well
-    // Easy enough to dispose of (if you remember) 
+    // Easy enough to dispose of (if you remember)
     args[""] = argv[0];
 
     for (int a = 1; a < argc; a++)
@@ -117,15 +117,15 @@ EasyOptions::EasyOptions(int argc, char** argv)
                 else if (param == "")
 		    { } // repeated whitespace, so do nothing
 		else if (string(param, 0, 2) == "--") // we have an option
-                { 
-                    AddKey(string(param,2,string::npos)); 
-                    param = ""; 
+                {
+                    AddKey(string(param,2,string::npos));
+                    param = "";
                 }
                 else if (string(param, 0, 1) == "#") // comment
                 {
                     // discard this word and the rest of the line.
                     param = "";
-                    while (is.good() && c != '\n') 
+                    while (is.good() && c != '\n')
                         is.get(c);
                 }
                 else if (string(param, 0, 2) == "-@")
@@ -136,7 +136,7 @@ EasyOptions::EasyOptions(int argc, char** argv)
                 {
                     throw Invalid_option("Invalid option '" + param + "' found in file '" + argv[a] + "'\n");
                 }
-            }       
+            }
         }
         else
         {
@@ -165,38 +165,38 @@ string EasyOptions::Read(const string& key, const string& msg)
 {
     if (args.count(key) == 0)
         throw Invalid_option(msg);
-                
+
     if (args[key] == "")
         throw Invalid_option("No value given for mandatory option: --" + key + "=???");
-        
+
     // okay, option is valid.  Now remove it.
     string ret = args[key];
     args.erase(key);
     return ret;
 }
-        
+
 bool EasyOptions::ReadBool(const string& key)
 {
     if (args.count(key) == 0)
         return false;
-        
+
     if (args[key] == "")
     {
         args.erase(key);
         return true;
     }
-        
+
     throw Invalid_option(
         "Value should not be given for boolean option --" + key);
 }
-        
-string EasyOptions::ReadWithDefault(const string& key, 
+
+string EasyOptions::ReadWithDefault(const string& key,
                                     const string& def)
 {
     if (args.count(key) == 0)
         return def;
     if (args[key] == "")
-        throw Invalid_option("Option requires a value: --" + key + 
+        throw Invalid_option("Option requires a value: --" + key +
             " (or omit, equivalent to --" + key + "=" + def);
     string ret = args[key];
     args.erase(key);
@@ -207,10 +207,10 @@ string EasyOptions::ReadWithDefault(const string& key,
 void EasyOptions::CheckEmpty()
 {
     args.erase(""); // not worth complaining about this
-    
+
     if (args.empty())
         return;
-    
+
     string msg = "\nUnused arguments:\n" + stringify(*this);
     throw Invalid_option(msg);
 }

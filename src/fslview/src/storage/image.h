@@ -56,7 +56,7 @@ public:
   const ImageInfo::Handle getInfo() const;
   void setAvw(FSLIO* avw){m_avw = avw;}
   const FSLIO* getAvw()const {return m_avw;}
-  
+
   //  FslNiftiExtension * getExtension(int n) { return FslGetExtension(m_avw, n); }
 
 private:
@@ -65,7 +65,7 @@ private:
 
   FSLIO* m_avw;
   ImageInfo::Handle m_imageInfo;
-  
+
   mutable std::vector<Volume::Handle> m_cachedVolumes;
   mutable TimeSeriesMap               m_cachedTimeSeries;
   Volume::Handle blankDraw();
@@ -83,5 +83,5 @@ inline bool isValidImage(const Image::Handle img)
   if(!img.get()){return false;}
   else           {return true;}
 }
- 
+
 #endif

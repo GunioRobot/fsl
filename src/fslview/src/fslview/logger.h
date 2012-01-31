@@ -1,6 +1,6 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
-    Authors:	David Flitney 
+    Authors:	David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -41,7 +41,7 @@ public:
   void notice(const std::string& facility, const std::string& message);
   void info(const std::string& facility, const std::string& message);
   void debug(const std::string& facility, const std::string& message);
-  
+
 private:
   struct Implementation;
   const std::auto_ptr<Implementation> m_impl;

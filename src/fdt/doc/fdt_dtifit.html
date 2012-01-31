@@ -15,7 +15,7 @@ use the probabilistic tractography (which depends on the output of
 BEDPOSTX not DTIFIT).
 
 <p>To call the FDT GUI, either run <b>Fdt</b>, or run <b>fsl</b> and press the
-<b>FDT</b> button.  Use the top left drop down menu to select <b>DTIFIT</b>.  
+<b>FDT</b> button.  Use the top left drop down menu to select <b>DTIFIT</b>.
 
 <p><b>Input:</b> You can specify an input directory containing all the required files
 with standardized filenames,
@@ -38,14 +38,14 @@ will be dti</li>
 <li><b>Gradient directions</b> (bvecs): An ASCII text file containing a list
 of gradient directions applied during diffusion weighted volumes.  The
 order of entries in this file must match the order of volumes in the
-input data series. 
+input data series.
 <br>
 The format is <br>
 <pre>
 x_1 x_2 x_3 ... x_n
 y_1 y_2 y_3 ... y_n
 z_1 z_2 z_3 ... z_n<br>
-</pre> 
+</pre>
 Vectors are normalised to unit length within the <b>dtifit</b> code. For volumes in which there was no
 diffusion weighting, the entry should still be present, although the
 direction of the vector does not matter!  </li>

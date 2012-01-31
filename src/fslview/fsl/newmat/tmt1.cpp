@@ -131,15 +131,15 @@ void trymat1()
       Matrix M1X = BM1; Matrix M2X = BM2; Matrix MX = BM;
       MX -= M1X + M2X; Print(MX);
       MX = BM1; MX += BM2; MX -= M1X; MX -= M2X; Print(MX);
-      SymmetricBandMatrix SM1; SM1 << BM1 * BM1.t(); 
+      SymmetricBandMatrix SM1; SM1 << BM1 * BM1.t();
       SymmetricBandMatrix SM2; SM2 << BM2 * BM2.t();
       SM1 *= 5.5;
       M1X *= M1X.t(); M1X *= 5.5; M2X *= M2X.t();
       SM1 -= SM2; M1 = SM1 - M1X + M2X; Print(M1);
-      M1 = BM1; BM1 *= SM1; M1 = M1 * SM1 - BM1; Print(M1); 
-      M1 = BM1; BM1 -= SM1; M1 = M1 - SM1 - BM1; Print(M1); 
-      M1 = BM1; BM1 += SM1; M1 = M1 + SM1 - BM1; Print(M1); 
-      
+      M1 = BM1; BM1 *= SM1; M1 = M1 * SM1 - BM1; Print(M1);
+      M1 = BM1; BM1 -= SM1; M1 = M1 - SM1 - BM1; Print(M1);
+      M1 = BM1; BM1 += SM1; M1 = M1 + SM1 - BM1; Print(M1);
+
    }
    {
       Tracer et1("Stage 6");

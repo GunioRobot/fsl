@@ -36,7 +36,7 @@ private:
 public:
 
     typedef T element_type;
-      
+
     explicit shared_array(T * p = 0): px(p)
     {
 #ifndef BOOST_NO_EXCEPTIONS
@@ -123,7 +123,7 @@ private:
 
     T * px;            // contained pointer
     count_type * pn;   // ptr to reference counter
-      
+
 };  // shared_array
 
 template<class T, class U> inline bool operator==(shared_array<T> const & a, shared_array<U> const & b)

@@ -5,7 +5,7 @@ setoption paramsubset 6  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0
 clear U
 clear UA
 setrow UA 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4 
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4
 
 # 4mm scale
 setscale 4

@@ -116,7 +116,7 @@ private: // helpers, for metafunction result (below)
 
     typedef typename mpl::transform1<Sequence, F>::type transformed_;
     typedef typename mpl::max_element<transformed_
-          
+
         >::type max_it;
 
 public: // metafunction result
@@ -1197,7 +1197,7 @@ private: // helpers, for structors, cont. (below)
         int internal_visit(T& operand, int) const
         {
             // NOTE TO USER :
-            // Compile error here indicates one of the source variant's types 
+            // Compile error here indicates one of the source variant's types
             // cannot be unambiguously converted to the destination variant's
             // types (or that no conversion exists).
             //
@@ -1252,7 +1252,7 @@ private: // helpers, for structors, cont. (below)
 
     friend class convert_copy_into;
 
-private: // helpers, for structors, below 
+private: // helpers, for structors, below
 
     template <typename T>
     void convert_construct(
@@ -1262,7 +1262,7 @@ private: // helpers, for structors, below
         )
     {
         // NOTE TO USER :
-        // Compile error here indicates that the given type is not 
+        // Compile error here indicates that the given type is not
         // unambiguously convertible to one of the variant's types
         // (or that no conversion exists).
         //
@@ -1329,7 +1329,7 @@ private: // helpers, for structors, below
         , long
         )
     {
-        convert_construct_variant(operand);    
+        convert_construct_variant(operand);
     }
 
 public: // structors, cont.
@@ -1558,7 +1558,7 @@ private: // helpers, for modifiers (below)
         {
             // Otherwise, perform general (copy-based) variant assignment:
             assigner visitor(*this, rhs.which());
-            rhs.internal_apply_visitor(visitor); 
+            rhs.internal_apply_visitor(visitor);
         }
     }
 

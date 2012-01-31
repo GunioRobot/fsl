@@ -9,11 +9,11 @@
 #  if defined(BOOST_PYTHON_NO_SFINAE)
 #   include <boost/mpl/eval_if.hpp>
 #   include <boost/mpl/identity.hpp>
-#  else 
+#  else
 #   include <boost/python/detail/enable_if.hpp>
-#  endif 
+#  endif
 
-namespace boost { namespace python { namespace detail { 
+namespace boost { namespace python { namespace detail {
 
 #  if defined(BOOST_PYTHON_NO_SFINAE)
 template <class T>
@@ -21,14 +21,14 @@ struct unwrap_wrapper_helper
 {
     typedef typename T::_wrapper_wrapped_type_ type;
 };
-  
+
 template <class T>
 typename mpl::eval_if<is_wrapper<T>,unwrap_wrapper_helper<T>,mpl::identity<T> >::type*
 unwrap_wrapper(T*)
 {
     return 0;
 }
-#  else 
+#  else
 template <class T>
 typename disable_if_ret<is_wrapper<T>,T*>::type
 unwrap_wrapper(T*)
@@ -41,7 +41,7 @@ T* unwrap_wrapper(wrapper<T>*)
 {
     return 0;
 }
-#  endif 
+#  endif
 
 }}} // namespace boost::python::detail
 

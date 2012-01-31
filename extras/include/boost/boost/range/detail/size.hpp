@@ -25,7 +25,7 @@
 # endif
 # include <iterator>
 
-namespace boost 
+namespace boost
 {
     namespace range_detail
     {
@@ -35,7 +35,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_size_<std_container_>
         {
@@ -45,26 +45,26 @@ namespace boost
                 return c.size();
             };
         };
-                    
+
         //////////////////////////////////////////////////////////////////////
         // pair
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_size_<std_pair_>
         {
             template< typename P >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type 
+            static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type
             fun( const P& p )
             {
                 return std::distance( p.first, p.second );
             }
         };
- 
+
         //////////////////////////////////////////////////////////////////////
         // array
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_size_<array_>
         {
@@ -82,7 +82,7 @@ namespace boost
             }
         #endif
         };
-        
+
         template<>
         struct range_size_<char_array_>
         {
@@ -92,7 +92,7 @@ namespace boost
                 return boost::range_detail::array_size( boost_range_array );
             }
         };
-        
+
         template<>
         struct range_size_<wchar_t_array_>
         {
@@ -124,7 +124,7 @@ namespace boost
                 return boost::range_detail::str_size( s );
             }
         };
-        
+
         template<>
         struct range_size_<wchar_t_ptr_>
         {
@@ -142,17 +142,17 @@ namespace boost
                 return boost::range_detail::str_size( s );
             }
         };
-  
+
     } // namespace 'range_detail'
-    
+
 
     template< typename C >
-    BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type 
+    BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type
     size( const C& c )
     {
         return range_detail::range_size_<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
-    
+
 } // namespace 'boost'
 
 # endif

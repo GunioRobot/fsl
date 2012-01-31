@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -78,15 +78,15 @@ using namespace NEWIMAGE;
 
 namespace Filmbabe {
 
-  Filmbabe_Manager::~Filmbabe_Manager() 
-  { 
+  Filmbabe_Manager::~Filmbabe_Manager()
+  {
     delete filmbabe_vb_flobs;
   }
 
   void Filmbabe_Manager::setup()
   {
     Tracer_Plus trace("Filmbabe_Manager::setup");
-    
+
     if(FilmbabeOptions::getInstance().debuglevel.value()==2)
       {
 	cout << "******************************************" << endl
@@ -94,9 +94,9 @@ namespace Filmbabe {
 	     << endl;
       }
 
-    cout << "datafile =" << opts.datafile.value() << endl;    
+    cout << "datafile =" << opts.datafile.value() << endl;
     read_volume4D(data, opts.datafile.value());
-    
+
     cout << "maskfile =" << opts.maskfile.value() << endl;
     copybasicproperties(data[0],mask);
     read_volume(mask, opts.maskfile.value());
@@ -114,21 +114,21 @@ namespace Filmbabe {
     localweights.reinitialize(data.xsize(),data.ysize(),data.zsize(),6);
     localweights = 0;
     int num_superthreshold = 0;
-  
+
     for(int x = 0; x < data.xsize(); x++)
       for(int y = 0; y < data.ysize(); y++)
 	for(int z = 0; z < data.zsize(); z++)
 	  if(mask(x,y,z))
 	    {
 	      num_superthreshold++;
-	      
+
 	      int xi,yi,zi;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      localweights(x,y,z,connected_offsets[i].ind) = 1;
@@ -136,26 +136,26 @@ namespace Filmbabe {
 		}
 	    }
 
-    OUT(num_superthreshold);       
-   
-    filmbabe_vb_flobs = new Filmbabe_Vb_Flobs(data, mask, designmatrix, flobsregressors, localweights, connected_offsets, num_superthreshold);   
+    OUT(num_superthreshold);
+
+    filmbabe_vb_flobs = new Filmbabe_Vb_Flobs(data, mask, designmatrix, flobsregressors, localweights, connected_offsets, num_superthreshold);
     filmbabe_vb_flobs->setup();
-     
-  } 
-  
+
+  }
+
   void Filmbabe_Manager::run()
   {
     Tracer_Plus trace("Filmbabe_Manager::run");
-    
+
     if(FilmbabeOptions::getInstance().debuglevel.value()==2)
       {
 	cout << "******************************************" << endl
-	     << "RUN" << endl << "******************************************" 
+	     << "RUN" << endl << "******************************************"
 	     << endl;
       }
 
     filmbabe_vb_flobs->run();
-   
+
     cout << endl << "Finished" << endl;
   }
 

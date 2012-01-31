@@ -5,7 +5,7 @@ function img = read_avw_img(filename);
 %   array (depending on the header information)
 %  Ouput coordinates for all dimensions start at 1 rather than 0
 %  Note: automatically detects char, short, long or double formats
-%  
+%
 %  See also: READ_AVW, READ_AVW_HDR, SAVE_AVW, SAVE_AVW_HDR, SAVE_AVW_IMG
 
 fnimg=strcat(filename,'.img');

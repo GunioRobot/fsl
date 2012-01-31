@@ -145,7 +145,7 @@ MAN2TCL			= man2tcl$(EXEEXT)
 
 @SET_MAKE@
 
-# Setting the VPATH variable to a list of paths will cause the 
+# Setting the VPATH variable to a list of paths will cause the
 # makefile to look into these paths when resolving .c to .obj
 # dependencies.
 
@@ -283,7 +283,7 @@ WIN_OBJS = \
 	tclWinPipe.$(OBJEXT) \
 	tclWinSock.$(OBJEXT) \
 	tclWinThrd.$(OBJEXT) \
-	tclWinTime.$(OBJEXT) 
+	tclWinTime.$(OBJEXT)
 
 COMPAT_OBJS = \
 	strftime.$(OBJEXT) strtoll.$(OBJEXT) strtoull.$(OBJEXT)

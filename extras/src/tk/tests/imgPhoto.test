@@ -705,7 +705,7 @@ test imgPhoto-14.4 {GIF buffer overflow} -setup {
 	mf9mzP9m//+ZAP+ZM/+ZZv+Zmf+ZzP+Z///MAP/MM//MZv/Mmf/MzP/M////
 	AP//M///Zv//mf//zP///yH5BAEAABAALAAAAAAKAAoAABUSAAD/HEiwoMGD
 	CBMqXMiwYcKAADs=
-    } 
+    }
 } -cleanup {
     image delete $i
 } -returnCodes error -result {malformed image}

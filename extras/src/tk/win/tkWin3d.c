@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWin3d.c --
  *
  *	This file contains the platform specific routines for
@@ -375,10 +375,10 @@ TkpGetShadows(borderPtr, tkwin)
 	((WinBorder*)borderPtr)->dark2ColorPtr = Tk_GetColorByValue(tkwin,
 	    &darkColor);
 	lightColor = *(borderPtr->bgColorPtr);
-	((WinBorder*)borderPtr)->light2ColorPtr = Tk_GetColorByValue(tkwin, 
+	((WinBorder*)borderPtr)->light2ColorPtr = Tk_GetColorByValue(tkwin,
 	    &lightColor);
     }
-    
+
     /*
      * First, handle the case of a color display with lots of colors.
      * The shadow colors get computed using whichever formula results
@@ -463,7 +463,7 @@ TkpGetShadows(borderPtr, tkwin)
 	    tmp2 = (MAX_INTENSITY + b)/2;
 	    lightColor.blue = (tmp1 > tmp2) ? tmp1 : tmp2;
 	}
-	
+
        /*
         * Allocate the light shadow color and its GC
         */
@@ -530,7 +530,7 @@ TkpGetShadows(borderPtr, tkwin)
  * TkWinGetBorderPixels --
  *
  *	This routine returns the 5 COLORREFs used to draw a given
- *	3d border.  
+ *	3d border.
  *
  * Results:
  *	Returns the colors in the specified array.
@@ -549,7 +549,7 @@ TkWinGetBorderPixels(tkwin, border, which)
 				 * TK_3D_DARK_GC, TK_3D_LIGHT2, TK_3D_DARK2 */
 {
     WinBorder *borderPtr = (WinBorder *) border;
-    
+
     if (borderPtr->info.lightGC == None) {
 	TkpGetShadows(&borderPtr->info, tkwin);
     }

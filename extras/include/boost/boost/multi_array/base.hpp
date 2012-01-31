@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -59,10 +59,10 @@ namespace multi_array_types {
 
 
 // boost::extents and boost::indices are now a part of the public
-// interface.  That way users don't necessarily have to create their 
-// own objects.  On the other hand, one may not want the overhead of 
+// interface.  That way users don't necessarily have to create their
+// own objects.  On the other hand, one may not want the overhead of
 // object creation in small-memory environments.  Thus, the objects
-// can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
+// can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS
 // before loading multi_array.hpp.
 #if !BOOST_MULTI_ARRAY_NO_GENERATORS
 namespace {
@@ -115,7 +115,7 @@ class value_accessor_n : public multi_array_base {
 public:
   typedef typename super_type::index index;
 
-  // 
+  //
   // public typedefs used by classes that inherit from this base
   //
   typedef T element;
@@ -193,7 +193,7 @@ struct choose_value_accessor_one {
 template <typename T, typename NumDims>
 struct value_accessor_generator {
     BOOST_STATIC_CONSTANT(std::size_t, dimensionality = NumDims::value);
-    
+
   typedef typename
   mpl::eval_if_c<(dimensionality == 1),
                   choose_value_accessor_one<T>,
@@ -213,7 +213,7 @@ struct eti_value_accessor
   typedef int reference;
   typedef int const_reference;
 };
-    
+
 template <>
 struct value_accessor_generator<int,int>
 {
@@ -257,7 +257,7 @@ class multi_array_impl_base
        >::type
 #else
       public value_accessor_generator<T,mpl::size_t<NumDims> >::type
-#endif 
+#endif
 {
   typedef associated_types<T,mpl::size_t<NumDims> > types;
 public:
@@ -311,9 +311,9 @@ protected:
                            const IndexList& indices,
                            const index* strides) const {
     index offset = 0;
-    for (size_type n = 0; n != NumDims; ++n) 
+    for (size_type n = 0; n != NumDims; ++n)
       offset += indices[n] * strides[n];
-    
+
     return base[offset];
   }
 
@@ -325,16 +325,16 @@ protected:
     index stride = 1;
     for (size_type n = 0; n != NumDims; ++n) {
       index stride_sign = +1;
-      
+
       if (!storage.ascending(storage.ordering(n)))
         stride_sign = -1;
-      
+
       // The stride for this dimension is the product of the
       // lengths of the ranks minor to it.
       stride_list[storage.ordering(n)] = stride * stride_sign;
-      
+
       stride *= extent_list[storage.ordering(n)];
-    } 
+    }
   }
 
   // This calculates the offset to the array base pointer due to:
@@ -362,7 +362,7 @@ protected:
                                 const general_storage_order<NumDims>& storage)
   {
     index offset = 0;
-    if (!storage.all_dims_ascending()) 
+    if (!storage.all_dims_ascending())
       for (size_type n = 0; n != NumDims; ++n)
         if (!storage.ascending(n))
           offset -= (extent_list[n] - 1) * stride_list[n];
@@ -387,11 +387,11 @@ protected:
 
   // Slicing using an index_gen.
   // Note that populating an index_gen creates a type that encodes
-  // both the number of dimensions in the current Array (NumDims), and 
-  // the Number of dimensions for the resulting view.  This allows the 
+  // both the number of dimensions in the current Array (NumDims), and
+  // the Number of dimensions for the resulting view.  This allows the
   // compiler to fail if the dimensions aren't completely accounted
   // for.  For reasons unbeknownst to me, a BOOST_STATIC_ASSERT
-  // within the member function template does not work. I should add a 
+  // within the member function template does not work. I should add a
   // note to the documentation specifying that you get a damn ugly
   // error message if you screw up in your slicing code.
   template <typename ArrayRef, int NDims, typename TPtr>
@@ -427,7 +427,7 @@ protected:
         // The index_factor for each dimension is included into the
         // strides for the array_view (see [Garcia] for the math involved).
         new_strides[dim] = index_factor * strides[n];
-        
+
         // calculate new extents
         new_extents[dim] = len;
         ++dim;
@@ -440,7 +440,7 @@ protected:
                new_extents,
                new_strides);
   }
-                     
+
 
 };
 

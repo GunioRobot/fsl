@@ -1,4 +1,4 @@
-/* 
+/*
  * tkError.c --
  *
  *	This file provides a high-performance mechanism for

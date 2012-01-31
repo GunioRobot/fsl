@@ -1,6 +1,6 @@
-// Copyright David Abrahams, Daniel Wallin 2003. Use, modification and 
-// distribution is subject to the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Copyright David Abrahams, Daniel Wallin 2003. Use, modification and
+// distribution is subject to the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // This file generates overloads in this format:
@@ -42,12 +42,12 @@
     aux::make_arg_list< \
         BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n) \
 
-#define BOOST_PARAMETER_close_list(z, n, text) > 
+#define BOOST_PARAMETER_close_list(z, n, text) >
 
 #define BOOST_PARAMETER_arg_list(n) \
     BOOST_PP_ENUM(N, BOOST_PARAMETER_open_list, _) \
   , mpl::identity<aux::empty_arg_list> \
-    BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _) 
+    BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _)
 
 template<BOOST_PP_ENUM_PARAMS(N, class A)>
 typename BOOST_PARAMETER_arg_list(N)::type

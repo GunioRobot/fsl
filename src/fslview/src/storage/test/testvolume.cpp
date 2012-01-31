@@ -60,7 +60,7 @@ void TestVolumeStoreImpl::testAccept()
 	Volume::Handle c = v;
 	Sum sum;
 	v->accept(sum);
-	
+
 	float total = sum.total();
 	int count = sum.count();
 

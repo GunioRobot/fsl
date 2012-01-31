@@ -13,7 +13,7 @@ struct	GDC_FONT_T	GDC_fontc[GDC_numfonts] = { { (gdFontPtr)NULL, 8,  5 } ,
 						    { (gdFontPtr)NULL, 16, 8 } ,
 						    { (gdFontPtr)NULL, 15, 9 } };
 
-/* ------------------------------------------------------------------- *\ 
+/* ------------------------------------------------------------------- *\
  * convert from enum GDC_font_size to gd fonts
  * for now load them all
  *	#defines and #ifdefs might enable loading only needed fonts
@@ -30,7 +30,7 @@ load_font_conversions()
 	GDC_fontc[GDC_GIANT].f   = gdFontGiant;
 }
 
-/* ------------------------------------------------------------------ *\ 
+/* ------------------------------------------------------------------ *\
  * count (natural) substrings (new line sep)
 \* ------------------------------------------------------------------ */
 short
@@ -65,7 +65,7 @@ cnt_nl( char	*nstr,
 	return c;
 }
 
-/* ------------------------------------------------------------------ *\ 
+/* ------------------------------------------------------------------ *\
  * gd out a string with '\n's
  * handle FTs (TTFs) and gd fonts
  * gdImageString() draws from the upper left;
@@ -89,7 +89,7 @@ GDCImageStringNL( gdImagePtr		im,
 
 #ifdef HAVE_LIBFREETYPE
 	/* TODO: honor justifies */
-	if( ftfont && ftptsz ) 
+	if( ftfont && ftptsz )
 		{
 		/* need one line height */
 		/* remember last one (will likely be the same) */
@@ -194,7 +194,7 @@ GDCImageStringNL( gdImagePtr		im,
 	return retval;
 }
 
-/* ------------------------------------------------------------------------ *\ 
+/* ------------------------------------------------------------------------ *\
  * TODO:                                                                    *
  * really get a unique color from the color map                             *
 \* ------------------------------------------------------------------------ */

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkAtom.c --
  *
  *	This file manages a cache of X Atoms in order to avoid

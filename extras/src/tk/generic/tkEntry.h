@@ -1,6 +1,6 @@
 /*
  *  tkEntry.h --
- *  
+ *
  *  This module defined the structures for the Entry & SpinBox widgets.
  *
  * See the file "license.terms" for information on usage and redistribution
@@ -48,7 +48,7 @@ typedef struct {
     /*
      * Fields that are set by widget commands other than "configure".
      */
-     
+
     CONST char *string;		/* Pointer to storage for string;
 				 * NULL-terminated;  malloc-ed. */
     int insertPos;		/* Character index before which next typed
@@ -276,7 +276,7 @@ typedef struct {
 
 /*
  * The following enum is used to define a type for the -state option
- * of the Entry widget.  These values are used as indices into the 
+ * of the Entry widget.  These values are used as indices into the
  * string table below.
  */
 
@@ -284,18 +284,18 @@ enum state {
     STATE_DISABLED, STATE_NORMAL, STATE_READONLY
 };
 
-/* 
+/*
  * This is the element index corresponding to the strings in selElementNames.
  * If you modify them, you must modify the numbers here.
  */
- 
+
 enum selelement {
     SEL_NONE, SEL_BUTTONDOWN, SEL_BUTTONUP, SEL_NULL, SEL_ENTRY
 };
 
 /*
  * Declaration of procedures used in the implementation of the native side
- * of the Entry widget. 
+ * of the Entry widget.
  */
 
 int TkpDrawEntryBorderAndFocus(Entry *entryPtr, Drawable d, int isSpinbox);

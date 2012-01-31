@@ -1,7 +1,7 @@
 include ${FSLCONFDIR}/default.mk
 
 PROJNAME = libgdc
-DBGFLAGS = 
+DBGFLAGS =
 
 # MUST compile without optimisation as gcc-4.0.1 has a loop unrolling bug (or something)
 USRINCFLAGS = -O0 -I${INC_GD} -I${INC_PNG} -I${INC_ZLIB}
@@ -14,7 +14,7 @@ LIBS = -lgd -lpng -lz -lm
 
 TESTXFILES = gdc_samp1 gdc_samp2 gdc_pie_samp
 
-all: libgdc.a 
+all: libgdc.a
 
 test: $(TEST_PROGRAMS)
 

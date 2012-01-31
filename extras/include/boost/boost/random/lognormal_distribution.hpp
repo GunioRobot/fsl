@@ -53,7 +53,7 @@ public:
   explicit lognormal_distribution(result_type mean = result_type(1),
                                   result_type sigma = result_type(1))
     : _mean(mean), _sigma(sigma)
-  { 
+  {
     assert(mean > result_type(0));
     init();
   }

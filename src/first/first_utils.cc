@@ -4,20 +4,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -29,13 +29,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -46,7 +46,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,8 +91,8 @@ string title="firt_utils (Version 1.2) University of Oxford (Brian Patenaude)";
 string examples="first_utils [options] -i input -o output ";
 
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("output F-stats to standard out"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("output F-stats to standard out"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -204,13 +204,13 @@ float refYdim=1.0;
 float refZdim=1.0;
 
 
-void setShapeMesh(shapeModel * model1, const Mesh & m){	
+void setShapeMesh(shapeModel * model1, const Mesh & m){
   vector<float>::iterator j=model1->smean.begin();
   for (vector<Mpoint*>::const_iterator i = m._points.begin(); i!=m._points.end(); i++ , j+=3){
     *j=(*i)->get_coord().X;
     *(j+1)=(*i)->get_coord().Y;
     *(j+2)=(*i)->get_coord().Z;
-  }	
+  }
 }
 
 void meshReg(Mesh & m, const string & flirtmatname){
@@ -220,9 +220,9 @@ void meshReg(Mesh & m, const string & flirtmatname){
   Matrix MeshPts(4,numPoints);
   Matrix NewMeshPts(4,numPoints);
   Matrix flirtmat(4,4);
-	
+
   //read in flirt matrix, uses ascii
-	
+
   ifstream fmat;
   fmat.open(flirtmatname.c_str());
   float tmpfloat=0;
@@ -235,18 +235,18 @@ void meshReg(Mesh & m, const string & flirtmatname){
     //cout<<endl;
   }
   flirtmat=flirtmat.i();
-	
-	
+
+
   //	cout<<"transform mesh points..."<<endl;
   int count=0;
   for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
-    //	cout<<"count "<<count<<endl;	
-		
+    //	cout<<"count "<<count<<endl;
+
     MeshPts.element(0,count)=(*i)->get_coord().X;
     MeshPts.element(1,count)=(*i)->get_coord().Y;
     MeshPts.element(2,count)=(*i)->get_coord().Z;
     MeshPts.element(3,count)=1;
-		
+
     count++;
   }
   //		cout<<"mesh points loaded into matrix..."<<endl;
@@ -258,40 +258,40 @@ void meshReg(Mesh & m, const string & flirtmatname){
     count++;
   }
   m.update();
-	
-	
+
+
 }
 
 void meshReg(Mesh & m, const vector< vector<float> > & flirtmatv){
-	
+
 	//refsize is actually target image
 	int numPoints=m.nvertices();
 	Matrix MeshPts(4,numPoints);
 	Matrix NewMeshPts(4,numPoints);
 	Matrix flirtmat(4,4);
-	
+
 	//read in flirt matrix, uses ascii
 	for (int i=0; i<4;i++){
 		for (int j=0; j<4;j++){
-			
+
 			flirtmat.element(i,j)=flirtmatv.at(i).at(j);
 				cout<<flirtmat.element(i,j)<<" ";
 		}
 		cout<<endl;
 	}
 	flirtmat=flirtmat.i();
-	
-	
+
+
 	//	cout<<"transform mesh points..."<<endl;
 	int count=0;
 	for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
-		//	cout<<"count "<<count<<endl;	
-		
+		//	cout<<"count "<<count<<endl;
+
 		MeshPts.element(0,count)=(*i)->get_coord().X;
 		MeshPts.element(1,count)=(*i)->get_coord().Y;
 		MeshPts.element(2,count)=(*i)->get_coord().Z;
 		MeshPts.element(3,count)=1;
-		
+
 		count++;
 	}
 	//		cout<<"mesh points loaded into matrix..."<<endl;
@@ -303,12 +303,12 @@ void meshReg(Mesh & m, const vector< vector<float> > & flirtmatv){
 		count++;
 	}
 	m.update();
-	
-	
+
+
 }
 
 inline
-ReturnMatrix unwrapMatrix(const Matrix & m) 
+ReturnMatrix unwrapMatrix(const Matrix & m)
 {
   ColumnVector munwrap(m.Nrows()*m.Ncols());
   unsigned int count=0;
@@ -320,7 +320,7 @@ ReturnMatrix unwrapMatrix(const Matrix & m)
 
 template<class T>
 vector<T> vectorToVector( const Matrix & sm, const int & MaxModes){
-  vector<T> vecM;	
+  vector<T> vecM;
   if (sm.Nrows()==1){
     for (int i=0;i<  MaxModes ; i++){
       vecM.push_back(static_cast<T>(sm.element(0,i)));
@@ -329,16 +329,16 @@ vector<T> vectorToVector( const Matrix & sm, const int & MaxModes){
     for (int i=0;i<  MaxModes ; i++){
       vecM.push_back(static_cast<T>(sm.element(i,0)));
     }
-		
-		
+
+
   }
-	
+
   return vecM;
 }
 
 template<class T>
 vector<T> vectorToVector( const Matrix & sm){
-  vector<T> vecM;	
+  vector<T> vecM;
   if (sm.Nrows()==1){
     for (int i=0;i< sm.Ncols() ; i++){
       vecM.push_back(static_cast<T>(sm.element(0,i)));
@@ -347,37 +347,37 @@ vector<T> vectorToVector( const Matrix & sm){
     for (int i=0;i< sm.Nrows() ; i++){
       vecM.push_back(static_cast<T>(sm.element(i,0)));
     }
-		
-		
+
+
   }
-	
+
   return vecM;
 }
 
 template<class T>
 vector< vector<T> > matrixToVector( const Matrix & sm, const int & MaxModes){
-  vector< vector<T> > vecM;	
+  vector< vector<T> > vecM;
   for (int j=0;j< MaxModes ; j++){
     vector<T> mode;
     for (int i=0;i< sm.Nrows() ; i++){
       mode.push_back(sm.element(i,j));
     }
     vecM.push_back(mode);
-  }   
-	
+  }
+
   return vecM;
 }
 
 template<class T>
 vector< vector<T> > matrixToVector( const Matrix & sm){
-  vector< vector<T> > vecM;	
+  vector< vector<T> > vecM;
   for (int j=0;j< sm.Ncols() ; j++)
     {
       vector<T> mode;
       for (int i=0;i< sm.Nrows() ; i++)
 	mode.push_back(static_cast<T>(sm.element(i,j)));
       vecM.push_back(mode);
-    }   
+    }
 
   return vecM;
 }
@@ -391,7 +391,7 @@ shapeModel* loadAndCreateShapeModel( const string & modelname)
   fslvtkIO* fmodel = new fslvtkIO(modelname,static_cast<fslvtkIO::DataType>(0));
   if (verbose.value()) cout<<"done reading model"<<endl;
   const int Npts=fmodel->getPointsAsMatrix().Nrows();
-	
+
   unsigned int M = static_cast<unsigned int>(fmodel->getField("numSubjects").element(0,0));
   int MaxModes=M;
   if (verbose.value()) cout<<"setting up shape/appearance model"<<endl;
@@ -406,7 +406,7 @@ shapeModel* loadAndCreateShapeModel( const string & modelname)
     Smean.push_back(Pts->element(i,0));
     Smean.push_back(Pts->element(i,1));
     Smean.push_back(Pts->element(i,2));
-  }   
+  }
   Pts->ReleaseAndDelete();
 
   //read polygon data
@@ -416,11 +416,11 @@ shapeModel* loadAndCreateShapeModel( const string & modelname)
   Matrix SmodesM;
   Matrix ImodesM;
 
-	
+
   SmodesM=unwrapMatrix(fmodel->getField("mode0"));
   ImodesM=unwrapMatrix(fmodel->getField("Imode0"));
-	
-	
+
+
   for (int i =1; i<MaxModes;i++)
     {
       stringstream ss;
@@ -429,17 +429,17 @@ shapeModel* loadAndCreateShapeModel( const string & modelname)
       ss>>mode;
       SmodesM=SmodesM | unwrapMatrix(fmodel->getField("mode"+mode));
       ImodesM=ImodesM | unwrapMatrix(fmodel->getField("Imode"+mode));
-		
+
     }
   if (verbose.value()) cout<<MaxModes<<" modes of variation are retained."<<endl;
 
-	
+
   vector< vector<float > > Smodes = matrixToVector<float>(SmodesM);
   vector< vector<float > > Imodes = matrixToVector<float>(ImodesM);
   ImodesM.Release();
   SmodesM.Release();
-	
-	
+
+
   //process rest of information, including intensity variance
   vector< vector<float > > Iprec = matrixToVector<float>(fmodel->getField("iCondPrec0").t());
   vector<float > Errs =  vectorToVector<float>(fmodel->getField("ErrPriors0"));
@@ -453,7 +453,7 @@ shapeModel* loadAndCreateShapeModel( const string & modelname)
 
   //have read in all data and store in local structures, now delete the reader.
   delete fmodel;
-	
+
   //create shape model
   shapeModel* model1 = new shapeModel(Smean, Smodes, se, Imean, Imodes,Iprec, ie, M,Errs,polygons,labels);
 
@@ -469,15 +469,15 @@ Mesh convertToMesh( const vector<float> & pts, const vector< vector<unsigned int
 
   mesh._points.clear();
   mesh._triangles.clear();
-  
+
   int i=0;
   for (vector<float>::const_iterator p= pts.begin(); p!=pts.end(); p+=3,i++)
     {
       Mpoint * pt = new Mpoint(*p, *(p+1), *(p+2), i);
       mesh._points.push_back(pt);
     }
-	
-	
+
+
   for (vector< vector<unsigned int> >::const_iterator p=polys.begin(); p!=polys.end(); p++)
     {
       Triangle * tr = new Triangle( mesh._points.at( p->at(0) ), mesh._points.at( p->at(1) ), mesh._points.at( p->at(2) ));
@@ -490,7 +490,7 @@ Mesh convertToMesh( const vector<float> & pts, const vector< vector<unsigned int
 
 //%%%%%%%%%%%%%%mesh fill
 void getBounds(Mesh m, int *bounds, float xdim, float ydim, float zdim){
-	
+
   float xmin=1000,xmax=-1000,ymin=1000,ymax=-1000,zmin=1000,zmax=-1000;
   for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
     float tempx=(*i)->get_coord().X;
@@ -521,7 +521,7 @@ void getBounds(Mesh m, int *bounds, float xdim, float ydim, float zdim){
   *(bounds+3)=static_cast<int>(ceil(ymax/ydim)+1);
   *(bounds+4)=static_cast<int>(floor(zmin/zdim)-1);
   *(bounds+5)=static_cast<int>(ceil(zmax/zdim)+1);
-	
+
 }
 
 
@@ -535,7 +535,7 @@ void draw_segment(volume<short>& image, const Pt& p1, const Pt& p2, int label)
   double mininc = min(xdim,min(ydim,zdim)) * .5;
 
 
-	
+
   Vec n = (p1 - p2);
   double d = n.norm();
   n.normalize();
@@ -565,40 +565,40 @@ volume<short> draw_mesh(const volume<short>& image, const Mesh &m, int label)
       Vec n = (*(*i)->get_vertice(0) - *(*i)->get_vertice(1));
       double d = n.norm();
       n.normalize();
-	       
-		
+
+
       for (double j=0; j<=d ;  j+=mininc)
 	{
 	  Pt p = (*i)->get_vertice(1)->get_coord()  + (double)j* n;
 	  draw_segment(res, p, (*i)->get_vertice(2)->get_coord(),label);
-	} 
+	}
     }
   return res;
 }
 
 volume<short> make_mask_from_meshInOut(const volume<float> & image, const Mesh& m, int label, int* bounds)
 {
-	
+
   float xdim = (float) image.xdim();
   float ydim = (float) image.ydim();
   float zdim = (float) image.zdim();
-	
+
   volume<short> mask;
   copyconvert(image,mask);
-	
-	
+
+
   mask = 0;
   mask = draw_mesh(mask, m,label+100);
-	
-	
-	
+
+
+
   // THIS EXCLUDEDS THE ACTUAL MESH
   volume<short> otl=mask;
   getBounds(m,bounds,xdim,ydim,zdim);
   vector<Pt> current;
   current.clear();
   Pt c(bounds[0]-2, bounds[2]-2, bounds[4]-2);
-		
+
   mask.value(static_cast<int>(c.X),static_cast<int>(c.Y),static_cast<int>(c.Z)) = label;
   current.push_back(c);
   int fillCount=0;
@@ -607,11 +607,11 @@ volume<short> make_mask_from_meshInOut(const volume<float> & image, const Mesh& 
       Pt pc = current.back();
       int x, y, z;
       x=(int) pc.X; y=(int) pc.Y; z=(int) pc.Z;
-			
+
       current.pop_back();
       fillCount++;
-			
-			
+
+
       if (bounds[0]<=x-1 && mask.value(x-1, y, z)==0) {
 	mask.value(x-1, y, z) = label;
 	current.push_back(Pt(x-1, y, z));
@@ -634,9 +634,9 @@ volume<short> make_mask_from_meshInOut(const volume<float> & image, const Mesh& 
       }
       if (bounds[5]>=z+1 && mask.value(x, y, z+1)==0){
 	mask.value(x, y, z+1) = label;
-	current.push_back(Pt(x, y, z+1)); 
+	current.push_back(Pt(x, y, z+1));
       }
-			
+
     }
   for (int i=bounds[0];i<bounds[1];i++){
     for (int j=bounds[2];j<bounds[3];j++){
@@ -664,16 +664,16 @@ bool findAddLabel(int label1,int label2,int* indseg, vector<int>* vlabels, vecto
   int ind2=-1;//ind1=-1, ind2=-1;
   int ind1=-1;
   //return 1 signifies intersection
-	
+
   *indseg=-1;
   for (unsigned int i=0;i<segImLabels->size();i++){
     if ((segImLabels->at(i)==label1)&&(label1!=0)){
       *indseg=i;
       i=segImLabels->size()+1;
     }
-  } 
+  }
   if ((*indseg==-1)&&(label1!=0)){
-		
+
     segImLabels->push_back(label1);
     minInterX->push_back(10000);
     maxInterX->push_back(0);
@@ -683,9 +683,9 @@ bool findAddLabel(int label1,int label2,int* indseg, vector<int>* vlabels, vecto
     maxInterZ->push_back(0);
     *indseg=segImLabels->size()-1;
   }
-  for (unsigned int i=0;i<vlabels->size();i++){	
+  for (unsigned int i=0;i<vlabels->size();i++){
     // cout<<"labels "<<label1<<" "<<label2<<endl;
-    if ((vlabels->at(i)==label1)|(vlabels->at(i)==label2)){ 
+    if ((vlabels->at(i)==label1)|(vlabels->at(i)==label2)){
       if (label1==label2){
 	//	cout<<"found ind1=ind2"<<endl;
 	ind1=ind2=i;
@@ -721,13 +721,13 @@ bool findAddLabel(int label1,int label2,int* indseg, vector<int>* vlabels, vecto
 	  vFN->push_back(0);
 	  vFP->push_back(0);
 	}
-				
+
       }
     }
   }
-	
+
   //	cout<<"out of loop"<<endl;
-	
+
   if (label1==label2){
     vTP->at(ind1)+=1;
     return true;
@@ -736,14 +736,14 @@ bool findAddLabel(int label1,int label2,int* indseg, vector<int>* vlabels, vecto
     vFN->at(ind2)+=1;
     return false;
   }
-	
+
   //vCount->at(*ind1)+=1;
-	
-	
+
+
 }
 
 Matrix overlaps(const volume<short> segIm, const volume<short> gold){
-	
+
   int sizex= segIm.xsize();
   int sizey=segIm.ysize();
   int sizez=segIm.zsize();
@@ -758,7 +758,7 @@ Matrix overlaps(const volume<short> segIm, const volume<short> gold){
   vFN.push_back(0);
   vFP.push_back(0);
   for (int k=0;k<sizez;k++){
-    for (int j=0;j<sizey;j++){ 
+    for (int j=0;j<sizey;j++){
       for (int i= 0; i<sizex;i++){
 	//    cout<<"prefindlabel "<<i<<" "<<j<<" "<<k<<endl;
 	inter=findAddLabel(segIm.value(i,j,k), gold.value(i,j,k),&indseg,&vlabels,&vTP, &vFN, &vFP,&segLabels,&minInterX,&maxInterX,&minInterY,&maxInterY,&minInterZ,&maxInterZ);
@@ -788,11 +788,11 @@ Matrix overlaps(const volume<short> segIm, const volume<short> gold){
       }
     }
   }
-	
-	
+
+
   //this overlap does not give distance weighted stuff
   Matrix simMeasures(static_cast<int>(segLabels.size()),9);
-	
+
   for (unsigned int i=0; i<segLabels.size();i++){
     //cout<<"add measures "<<endl;
     //for each label in segmentation
@@ -823,14 +823,14 @@ string read_bvars(string fname,Matrix & bvars, vector<string> & vnames, vector<i
 	fmatv.clear();
 	ifstream fin;
 	fin.open(fname.c_str());
-	//throw away first three lines 
+	//throw away first three lines
 	getline(fin,stemp);//this is bvars file
 	getline(fin,modelNames);//modelnames;
 	fin>>stemp>>N;
 	vnvars.clear();
 	//int NmaxBvars=0;
 	//vector< vector<float> > all_bvars;
-	
+
 	for (int i=0; i<N;i++){
 		vector<float> vbvars;
 
@@ -850,7 +850,7 @@ string read_bvars(string fname,Matrix & bvars, vector<string> & vnames, vector<i
 		for (int j=0;j<nvars;j++){
 			if (j<nvars){
 				float ftemp;
-			
+
 			//	fin>>ftemp;
 				fin.read(reinterpret_cast<char*>(&ftemp),sizeof(float));
 
@@ -876,19 +876,19 @@ string read_bvars(string fname,Matrix & bvars, vector<string> & vnames, vector<i
 		}
 		fmatv.push_back(mat);
 	}
-	
+
 
 	return modelNames;
 }
 
 void write_bvars(string fname,string modelname,Matrix bvars, int numModes,vector<string> vnames){
   ofstream fout;
-	
+
   fout.open(fname.c_str());
-  fout<<"this is a bvars file"<<endl; 
+  fout<<"this is a bvars file"<<endl;
   fout<<modelname<<endl;
   fout<<"NumberOfSubjects "<<bvars.Nrows()<<endl;
-	
+
   for (int i=0;i<bvars.Nrows();i++){
     fout<<vnames.at(i)<<" ";
     fout<<numModes<<" ";
@@ -903,7 +903,7 @@ void write_bvars(string fname,string modelname,Matrix bvars, int numModes,vector
     }
     fout<<endl;
   }
-	
+
   fout<<endl;
   fout.close();
 }
@@ -913,10 +913,10 @@ string read_bvars_ModelName(string fname){
   string modelNames;
   ifstream fin;
   fin.open(fname.c_str());
-  //throw away first three lines 
+  //throw away first three lines
   getline(fin,stemp);//this is bvars file
   getline(fin,modelNames);//modelnames
-			
+
   return modelNames;
 }
 
@@ -927,14 +927,14 @@ string read_bvars_ModelName(string fname){
 float mode(vector<float> vdists, float min, float max){
   int N=static_cast<int>(vdists.size());
   float bins=128;
-	
+
   float binwidth=(max-min)/bins;
   vector<int> bincounts;
   //innitialize bincounts to zero
   for (int b=0;b<bins;b++){
     bincounts.push_back(0);
   }
-	
+
   for (int i=0;i<N;i++){
     //search thgrough each bin
     for (int b=0;b<bins;b++){
@@ -944,7 +944,7 @@ float mode(vector<float> vdists, float min, float max){
       }
     }
   }
-	
+
   //search for max bin count
   int maxcount=0;
   int maxind=0;
@@ -954,9 +954,9 @@ float mode(vector<float> vdists, float min, float max){
       maxcount=bincounts.at(b);
       maxind=b;
     }
-		
+
   }
-	
+
   return (min+maxind*binwidth+binwidth/2.0);
 }
 float mode(vector<float> vdists,int *maxcount){
@@ -967,11 +967,11 @@ float mode(vector<float> vdists,int *maxcount){
   float bins=256;
   bins=128;
   float binwidth=(vdists.at(N-1)-0)/bins;
-  int count=0;	
+  int count=0;
   int bincount=1;
   float lowint=0;
   for (int i=0;i<N;i++){
-		
+
     //cout<<"imode "<<i<<" "<<N<<endl;
     if (vdists.at(i)<lowint+binwidth){
       count++;
@@ -985,11 +985,11 @@ float mode(vector<float> vdists,int *maxcount){
       bincount++;
       lowint=bincount*binwidth;
     }
-		
+
   }
-	
+
   return (maxlowint+binwidth/2.0);
-}	
+}
 float fullwidthhalfmax(vector<float> vdists,float halfmaxval, float *halfmin,float *halfmax){
   int N=static_cast<int>(vdists.size());
   int maxcount=0;
@@ -998,15 +998,15 @@ float fullwidthhalfmax(vector<float> vdists,float halfmaxval, float *halfmin,flo
   bins=128;
   float binwidth=(vdists.at(N-1)-0)/bins;
   int countprev=0;
-	
+
   bool foundmin=false;
-	
-  int count=0;	
+
+  int count=0;
   int bincount=1;
   float lowint=0;
   for (int i=0;i<N;i++){
-		
-		
+
+
     if (vdists.at(i)<lowint+binwidth){
       count++;
       if (count>(maxcount)){
@@ -1027,27 +1027,27 @@ float fullwidthhalfmax(vector<float> vdists,float halfmaxval, float *halfmin,flo
       bincount++;
       lowint=bincount*binwidth;
     }
-		
+
   }
-	
+
   return (maxlowint+binwidth/2.0);
 }
 
 float boundaryCorr(volume<short>* mask, volume<float>* ref, int label, float zthresh, int* bounds){
   //returns volume
-  //build intensity vector 
+  //build intensity vector
   vector<float> vgraylevels;
   vector <float>::iterator Iter;
   float dist=10000;
-	
+
   for (int i=bounds[0];i<bounds[1];i++){
-		
+
     for (int j=bounds[2];j<bounds[3];j++){
-      for (int k=bounds[4];k<bounds[5];k++){		
-				
+      for (int k=bounds[4];k<bounds[5];k++){
+
 	if (mask->value(i,j,k)==label){
 	  dist=ref->value(i,j,k);
-					
+
 	  if (vgraylevels.empty()){
 	    vgraylevels.push_back(dist);
 	  }else if (dist>=vgraylevels.back()){
@@ -1055,16 +1055,16 @@ float boundaryCorr(volume<short>* mask, volume<float>* ref, int label, float zth
 	  }else {
 	    for ( Iter = vgraylevels.begin( ) ; Iter !=vgraylevels.end( ) ; Iter++ ){
 	      if (dist<*Iter){
-								
+
 		vgraylevels.insert(Iter,dist);
 		break;
 	      }
-							
+
 	    }
-						
-						
+
+
 	  }
-					
+
 	}
       }
     }
@@ -1078,13 +1078,13 @@ float boundaryCorr(volume<short>* mask, volume<float>* ref, int label, float zth
   fullwidthhalfmax(vgraylevels,maxcount/2.0,&halfmin, &halfmax);
   float mean=(halfmin+halfmax)/2;
   float sdev=abs(halfmax-halfmin)/2.35;
-	
+
   //tets for thalamus
   //	volume<float> zvol;
   //	copyconvert(*mask, zvol);
   //	zvol=0;
 
-	
+
   float vol=0;
 
   float min=0, max=0;
@@ -1101,7 +1101,7 @@ float boundaryCorr(volume<short>* mask, volume<float>* ref, int label, float zth
 	      mask->value(i,j,k)=0;
 	    }else{
 	      mask->value(i,j,k)=label;
-	      vol++;			
+	      vol++;
 	    }
 	  }
 	}else if (mask->value(i,j,k)==label){
@@ -1114,7 +1114,7 @@ float boundaryCorr(volume<short>* mask, volume<float>* ref, int label, float zth
       }
     }
   }
-	
+
   //	save_volume(zvol,outname.value());
 
   return vol;
@@ -1128,7 +1128,7 @@ int findStructLabel(volume<short>* mask, int* bounds){
   bool found=false;
   for (int i=bounds[0];i<bounds[1];i++){
     for (int j=bounds[2];j<bounds[3];j++){
-      for (int k=bounds[4];k<bounds[5];k++){		
+      for (int k=bounds[4];k<bounds[5];k++){
 	if (mask->value(i,j,k)>0){
 	  if (xmin>i){ xmin=i; }
 	  if (ymin>j){ ymin=j; }
@@ -1136,7 +1136,7 @@ int findStructLabel(volume<short>* mask, int* bounds){
 	  if (xmax<i){ xmax=i; }
 	  if (ymax<j){ ymax=j; }
 	  if (zmax<k){ zmax=k; }
-					
+
 	}
 	if ((mask->value(i,j,k)<100)&&(mask->value(i,j,k)!=0)&&(!found)){
 	  label=mask->value(i,j,k);
@@ -1162,7 +1162,7 @@ int findStructLabel(volume<short>* mask, int* bounds){
 
 //********************************GLM for stats******************************//
 ColumnVector GLM_fit(Matrix G, Matrix D, ColumnVector contrast){
-	
+
   //start for only well connditioned design matrices
   Matrix A=G.t()*G;
   Matrix Betas(D.Nrows(),D.Ncols());
@@ -1173,9 +1173,9 @@ ColumnVector GLM_fit(Matrix G, Matrix D, ColumnVector contrast){
   ColumnVector avgRes(D.Ncols());
   for (int i=0; i<D.Ncols();i++){
     avgRes.element(i)=((Mres.SubMatrix(1,Mres.Nrows(),i+1,i+1)).t()*(Mres.SubMatrix(1,Mres.Nrows(),i+1,i+1))).AsScalar()/(G.Nrows()-G.Ncols());
-  } 
+  }
   //convert to standard error
-  avgRes=avgRes*(contrast.t()*A.i()*contrast).AsScalar();	
+  avgRes=avgRes*(contrast.t()*A.i()*contrast).AsScalar();
   Matrix test;
   test=contrast.t()*Betas.SubMatrix(1,Betas.Nrows(),1,1)*Betas.SubMatrix(1,Betas.Nrows(),1,1).t()*contrast;
   ColumnVector tstats(avgRes.Nrows());
@@ -1187,11 +1187,11 @@ ColumnVector GLM_fit(Matrix G, Matrix D, ColumnVector contrast){
 
 
 float MVGLM_fit(Matrix G, Matrix D, Matrix contrast, int& df1, int& df2){
-	
+
   // conversion to "normal" notation is:
   //  G -> X = design matrix (N_subj by N_evs)
   //  D -> Y = data matrix (N_subj by 3)
-	
+
   //Calculate estimated values
   Matrix Yhat=G*(G.t()*G).i()*G.t()*D;
   //caluclate E covariance matrix
@@ -1205,29 +1205,29 @@ float MVGLM_fit(Matrix G, Matrix D, Matrix contrast, int& df1, int& df2){
   H=H.t()*H-E;
 
   // Calculate Pillai's Trace
-  
-  int N=D.Nrows();//number of samples 
+
+  int N=D.Nrows();//number of samples
   int p=D.Ncols();//number of dimensions (3 for vertex coordinates)
   int N_R=G.Ncols();//number of regressors
   int N_C=contrast.Nrows(); //number of rows in contrast matrix
-  
+
   int v_h = N_R - N_C;
-  int v_e = N-N_R;	
-  
+  int v_e = N-N_R;
+
   int s=Min(p,v_h);
   float t = (abs(p-v_h)-1)/2.0;
   float u = (v_e-p-1)/2.0;
   df1=MISCMATHS::round(s*(2*t+s+1));
   df2=MISCMATHS::round(s*(2*u+s+1));
-  
+
   float pillai=(H*(H+E).i()).Trace();
   float F=0;
   F=(pillai/(s-pillai))*(df2/df1);
-  
+
   if (verbose.value()){
     cout<<"Pillai F "<<pillai<<" "<<F<<" "<<df1<<" "<<df2<<endl;
   }
-  
+
   return F;
 }
 
@@ -1263,7 +1263,7 @@ void do_work_SingleClean(){
 
   boundaryCorr(&segim, &t1im,label, thresh.value(), bounds);
   save_volume(segim,outname.value());
-	
+
 }
 
 //*****************************LINEA TRANSFORM********************************************************//
@@ -1272,8 +1272,8 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
   //determine translations
   int Nsub=Data.Ncols();
   int Npoints=Data.Nrows()/3;
-	
-	
+
+
   //***********CALCULATE CENTROIDS*************//
   //calculate centroid of mean mesh
   float Mxr=0,Myr=0,Mzr=0;
@@ -1285,8 +1285,8 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
   Mxr/=(meanm.Nrows()/3);
   Myr/=(meanm.Nrows()/3);
   Mzr/=(meanm.Nrows()/3);
-	
-  //calculate centroid 
+
+  //calculate centroid
   vector<float> vMx,vMy,vMz;
   for (int i=0;i<Nsub;i++){
     float sx=0,sy=0,sz=0;
@@ -1302,7 +1302,7 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
   }
   vector< Matrix > vR;
   vector< float > vscale;
-	
+
   for (int subject=0;subject<Data.Ncols();subject++){
     //***********Demena data*************//
     //Deamean the Data and reformat
@@ -1317,7 +1317,7 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
       RefDM.element(1,i/3)=meanm.element(i+1)-Myr;
       RefDM.element(2,i/3)=meanm.element(i+2)-Mzr;
     }
-		
+
     //*************This includes scale calculation ***********
     float scale=1.0;
     if (useScale.value()){
@@ -1343,20 +1343,20 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
     for (int i=0;i<D.Nrows();i++){
       D.element(i)=1/sqrt(D.element(i));
     }
-		
+
     Matrix R(3,3);
     R=M*(U*D*U.t());
     vR.push_back(R);
   }
-	
+
   //*****************APPLY TRANFSORMATIOON TO MESHES**********************//
   //NO SCALE IS CALCULATED
-	
-	
+
+
   Matrix DataNew(Data.Nrows(),Data.Ncols());
   for (int subject=0;subject<Data.Ncols();subject++){
     //	cout<<"subject "<<subject<<endl;
-		
+
     //reshape data
     Matrix DataRS(3,Data.Nrows()/3);
     Matrix RefMean(3,Data.Nrows()/3);
@@ -1385,16 +1385,16 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
     }else{
       Reg=vR.at(subject)*DataRS+(RefMean-vR.at(subject)*DataMean);
       //Reg=R*DataRS+(RefMean-R*DataMean);
-				
+
     }
-			
+
     for (int i=0;i<Reg.Ncols();i++){
       DataNew.element(3*i,subject)=Reg.element(0,i);
       DataNew.element(3*i+1,subject)=Reg.element(1,i);
       DataNew.element(3*i+2,subject)=Reg.element(2,i);
     }
-		
-			
+
+
     Mesh m=mesh;
     int count=0;
     for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
@@ -1402,17 +1402,17 @@ Matrix rigid_linear_xfm(Matrix Data,ColumnVector meanm, Mesh mesh, bool writeToF
       (*i)->_update_coord.Y=DataNew.element(count+1,subject);
       (*i)->_update_coord.Z=DataNew.element(count+2,subject);
       count+=3;
-    }	
+    }
     m.update();
-				
+
 //    	string snum;
  //   stringstream ssnum;
    // ssnum<<subject;
   //  ssnum>>snum;
   //  m.save(snum+"reg.vtk",3);
   }
-	
-  return DataNew;			
+
+  return DataNew;
 
 }
 
@@ -1424,9 +1424,9 @@ Matrix recon_meshesMNI( shapeModel* model1, Matrix bvars, ColumnVector* meanm, M
   //want to return mean mesh in vector form
   meanm->ReSize(model1->smean.size());
   {
-		
+
     int count=0;
-    int cumnum=0; 
+    int cumnum=0;
     for (int sh=0; sh<1;sh++)
       {
 	Mesh m= convertToMesh(model1->smean, model1->cells);//model1->getTranslatedMesh(sh);
@@ -1438,9 +1438,9 @@ Matrix recon_meshesMNI( shapeModel* model1, Matrix bvars, ColumnVector* meanm, M
 	  count+=3;
 
 	}
-	cumnum+=model1->smean.size();	
+	cumnum+=model1->smean.size();
       }
-			
+
   }
 
 
@@ -1462,7 +1462,7 @@ Matrix recon_meshesMNI( shapeModel* model1, Matrix bvars, ColumnVector* meanm, M
     int cumnum=0;
     for (int sh=0; sh<1;sh++){
       //cout<<"cumnum "<<cumnum<<endl;
-      Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);	
+      Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);
       vMeshes->push_back(m);
       int count=0;
       for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
@@ -1470,9 +1470,9 @@ Matrix recon_meshesMNI( shapeModel* model1, Matrix bvars, ColumnVector* meanm, M
 	MeshVerts.element(3*cumnum+count+1,j)=(*i)->get_coord().Y;
 	MeshVerts.element(3*cumnum+count+2,j)=(*i)->get_coord().Z;
 	count+=3;
-      }	
-      cumnum+=model1->smean.size();	
-    }	
+      }
+      cumnum+=model1->smean.size();
+    }
   }
 
   return MeshVerts;
@@ -1489,13 +1489,13 @@ Matrix recon_meshesNative( const string & modelname, const Matrix & bvars, Colum
   //	cout<<"load model "<<modelname<<endl;
   //	model1->load_bmv_binaryInfo(modelname,1);
   //	model1->load_bmv_binary(modelname,1);
-	
+
   //want to return mean mesh in vector form
   meanm.ReSize(model1->smean.size());
   {
-		
+
     int count=0;
-    int cumnum=0; 
+    int cumnum=0;
     for (int sh=0; sh<1;sh++){
       //dieferrence between origin specification
       Mesh m=convertToMesh( model1->smean , model1->cells );
@@ -1510,11 +1510,11 @@ Matrix recon_meshesNative( const string & modelname, const Matrix & bvars, Colum
 
 	count+=3;
       }
-      cumnum+=model1->smean.size()/3;	
+      cumnum+=model1->smean.size()/3;
     }
-		
+
   }
-	
+
   //need number of subjects (to detrmine number of modes)
   int Tpts=model1->smean.size()/3;
   Matrix MeshVerts(3*Tpts,bvars.Ncols());
@@ -1531,9 +1531,9 @@ Matrix recon_meshesNative( const string & modelname, const Matrix & bvars, Colum
     //keep track of number of points preceding
     int cumnum=0;
     for (int sh=0; sh<1;sh++){
-      Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);	
+      Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);
       meshReg(m, flirtmats.at(j));
-		
+
       vMeshes.push_back(m);
       int count=0;
       for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ ){
@@ -1541,14 +1541,14 @@ Matrix recon_meshesNative( const string & modelname, const Matrix & bvars, Colum
 	MeshVerts.element(3*cumnum+count+1,j)=(*i)->get_coord().Y;
 	MeshVerts.element(3*cumnum+count+2,j)=(*i)->get_coord().Z;
 	count+=3;
-      }	
-      cumnum+=model1->smean.size()/3;	
-    }	
+      }
+      cumnum+=model1->smean.size()/3;
+    }
   }
 
 
   return MeshVerts;
-	
+
 }
 
 Matrix deMeanMatrix(Matrix M){
@@ -1557,15 +1557,15 @@ Matrix deMeanMatrix(Matrix M){
   for (int i=0; i<M.Nrows();i++){
     float sum=0;
     for (int j=0; j<M.Ncols();j++){
-      sum+=M.element(i,j); 
+      sum+=M.element(i,j);
     }
     //sum becomes mean
     sum/=M.Ncols();
     for (int j=0; j<M.Ncols();j++){
-      Mnew.element(i,j)=M.element(i,j)-sum; 
+      Mnew.element(i,j)=M.element(i,j)-sum;
     }
   }
-	
+
   return Mnew;
 }
 
@@ -1573,9 +1573,9 @@ Matrix deMeanMatrix(Matrix M){
 void do_work_bvars(){
   //**********read in bvars and models and lfirt matrices***************//
   string mname;
-  mname=read_bvars_ModelName(inname.value() );	
-	
-  //load model 
+  mname=read_bvars_ModelName(inname.value() );
+
+  //load model
   shapeModel* model1=loadAndCreateShapeModel(mname);
   cout<<"model loaded"<<endl;
   //need number of subjects (to detrmine number of modes)
@@ -1585,7 +1585,7 @@ void do_work_bvars(){
   Matrix target;	//target is only used for glm
   //must include a design matrix with bvars to use glm
   //modelname is used to set a path
-	vector< vector< vector<float> > > vec_fmats; 
+	vector< vector< vector<float> > > vec_fmats;
   read_bvars(inname.value(),bvars,subjectnames, vN, pathname.value(),vec_fmats);
   target=read_vest(designname.value());
   //can filter meshes
@@ -1593,34 +1593,34 @@ void do_work_bvars(){
     //truncate number of mdoes to recon mehs (smoothing)
     bvars=bvars.SubMatrix(1,numModes.value(),1,bvars.Ncols());
   }
-				
+
   volume<float> t1im;
   volume<short> segim;
-				
+
   vector<Mesh> vMeshes;
   Matrix MeshVerts;//this is used when placing t-stats on a mesh
-					
-					
+
+
   //need flirt matrices
   //load their names into a vector
   ifstream flirtmats;
   vector<string> flirtmatnames;
-					
+
   //**********done reading in bvars and models adn lfirt matrices ***************//
   //****************RECONSTRUCTION AND ALIGNMENT*********************/
-					
+
   //Choose the space in which to reconstruct the meshes
   Mesh modelMeanMesh;
   ColumnVector CVmodelMeanMesh;
   if (useReconNative.value()){
     flirtmats.open(flirtmatsname.value().c_str());
-						
+
     for (unsigned int i =0; i<subjectnames.size();i++){
       string stemp;
       flirtmats>>stemp;
       flirtmatnames.push_back(stemp); ///inversion fo flirtmatrix is handled in shape model function when a string is input
     }
-						
+
     //Reconstruct in native spoace of the image (it recons the mni then applies flirt matrix)
     MeshVerts=recon_meshesNative( mname, bvars, CVmodelMeanMesh, modelMeanMesh,subjectnames, vec_fmats, vMeshes);
 	  cout<<"done recon"<<endl;
@@ -1640,23 +1640,23 @@ void do_work_bvars(){
   }
   //****************END RECONSTRUCTION AND ALIGNMENT*********************/
   //****************DEMEAN DESIGN MATRIX AND ADD ONE COLUMS*********************/
-					
-					
+
+
   cout<<"done recon and reg"<<endl;
   //if the design has nto been demeaned and you are dooing discrimiant analysis
   //then perform demean of matrix
-					
-					
+
+
   bool isOne=true;
-  //checks for mean Column as first column, if it decides there is a column of ones (first column) then 
+  //checks for mean Column as first column, if it decides there is a column of ones (first column) then
   //it will not demean the design matrix
   for (int i=0;i<target.Nrows();i++){
     if (target.element(i,0)!=1){
       isOne=false;
     }
   }
-						
-						
+
+
   if(!isOne){
     //create demena deisgn, assume a nomean column at start
     Matrix targTemp(target.Nrows(),target.Ncols()+1);
@@ -1669,41 +1669,41 @@ void do_work_bvars(){
 	float mean=0;
 	for (int j=0;j<target.Nrows();j++){
 	  mean+=target.element(j,i-1);
-	}	
+	}
 	mean/=target.Nrows();
 	for (int j=0;j<target.Nrows();j++){
 	  targTemp.element(j,i)=target.element(j,i-1)-mean;
 	}
       }
     }
-							
+
     target=targTemp;
   }
   //this displays the demean design matrix
   cout<<"new design matrix"<<endl;
   for (int j=0;j<target.Nrows();j++){
-    for (int i=0;i<target.Ncols();i++){	
+    for (int i=0;i<target.Ncols();i++){
       cout<<target.element(j,i)<<" ";
-    }	
+    }
     cout<<endl;
   }
-					
+
   //cout<<"done processing design"<<endl;
   if (!vertexAnalysis.value()){
-						
+
     //calculate volumes
     vector<float> vnorm;
-						
+
     if (useNorm.value()){
       ifstream fnorm;
       fnorm.open(normname.value().c_str());
       for (int subject=0;subject<bvars.Ncols();subject++){
 	float temp;
 	fnorm>>temp;
-	vnorm.push_back(temp);							
+	vnorm.push_back(temp);
       }
     }
-						
+
     Matrix Volumes(target.Nrows(),1); //this is only used for GLM
     ofstream fvol_all;
     fvol_all.open((outname.value()+".vols").c_str());
@@ -1712,7 +1712,7 @@ void do_work_bvars(){
       //if volumes are load the loop is broken
       read_volume(t1im,subjectnames.at(subject));
       Mesh m = vMeshes.at(subject);
-							
+
       //fill mesh
       int bounds[6]={0,0,0,0,0,0};
       segim=make_mask_from_meshInOut(t1im,m,model1->getLabel(0),bounds);
@@ -1720,7 +1720,7 @@ void do_work_bvars(){
       string outnamess;
       sstemp<<subject;
       sstemp>>outnamess;
-							
+
       float voltemp;
       volume<short> segimB;
       segimB=segim;
@@ -1729,7 +1729,7 @@ void do_work_bvars(){
       sstemp2<<model1->getLabel(0);
       string lbst;
       sstemp2>>lbst;
-							
+
       save_volume(segim,subjectnames.at(subject)+"FIRSTbcorr_lb"+lbst);
       fvol_all<<subjectnames.at(subject)<<" "<<voltemp<<" "<<voltemp*t1im.xdim()*t1im.ydim()*t1im.zdim()<<endl;
       //save volume to a matrix if you wish to use in GLM
@@ -1738,21 +1738,21 @@ void do_work_bvars(){
       }else{
 	Volumes.element(subject,0)=voltemp*t1im.xdim()*t1im.ydim()*t1im.zdim();
       }
-							
-							
+
+
     }
     //now that volumes are load perform GLM
     cout<<"volumes loaded"<<endl;
     ColumnVector tstats;
     ColumnVector contrast(target.Ncols());
-						
+
     for (int EV=1;EV<target.Ncols();EV++){
-							
+
       stringstream ev2st;
       ev2st<<EV;
       string evnum;
       ev2st>>evnum;
-							
+
       for (int i=0;i<contrast.Nrows();i++){
 	if(i==EV){
 	  contrast.element(i)=1;
@@ -1761,7 +1761,7 @@ void do_work_bvars(){
 	}
 	cout<<contrast.element(i)<<" ";
       }
-							
+
       tstats=GLM_fit(target, Volumes,contrast);
       ofstream fTs;
       string ftname=outname.value()+evnum+".tstat";
@@ -1770,7 +1770,7 @@ void do_work_bvars(){
 	fTs<<tstats.element(i)<<endl;
       }
     }
-						
+
   }else{
 	  ColumnVector CVnorm(target.Nrows());
 	  // if chosen can include a normalization EV (i.e. control for size) ...useful for vertex shape statistics
@@ -1784,16 +1784,16 @@ void do_work_bvars(){
 		  }
 		  target=target | CVnorm ;
 	  }
-	  
-	  
-	  
+
+
+
 	  //****************END DEMEAN DESIGN MATRIX AND ADD ONE COLUMS*********************/
-	  
+
 	  Matrix contrast(target.Ncols()-1,target.Ncols());
 	  int EVmin=1;//ignore mean column first EV to examine
 	  //int EVmax=1;//EV to include
 	  int	EVmax=target.Ncols();
-	  
+
 	  for (int EV=EVmin;EV<EVmax;EV++){
 		  cout<<"evs "<<EV<<endl;
 
@@ -1802,17 +1802,17 @@ void do_work_bvars(){
 		  ev2st<<EV;
 		  string evnum;
 		  ev2st>>evnum;
-		  
+
 		  //update average mesh
 		  //these vector store tstats to plot on mesh
 		  vector<float> meandifx;
 		  vector<float> meandify;
 		  vector<float> meandifz;
-		  
+
 		  Mesh m=vMeshes.at(0);//mesh.at(0) is used to determine topology/number of vertices
 		  int count=0;
 		  for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ )
-		  { 
+		  {
 			  float meanx1=0,meany1=0,meanz1=0,meanx2=0,meany2=0, meanz2=0;
 			  // for (int i=0;i<MeshVerts.Nrows();i=i+3){
 			  int n1=0,n2=0;
@@ -1833,25 +1833,25 @@ void do_work_bvars(){
 			  meanx1/=n1;
 			  meany1/=n1;
 			  meanz1/=n1;
-			  
+
 			  meanx2/=n2;
 			  meany2/=n2;
 			  meanz2/=n2;
-			  
+
 			  //as binary classification was assumed we just finish calculating the mean for each group
-			  
+
 			  //save vectors point from group1 mean to group2 mean, size 1 (they will be scaled to reflect
 			  //the test statistic)
 			  float vecx=meanx2-meanx1;
 			  float vecy=meany2-meany1;
 			  float vecz=meanz2-meanz1;
 			  //	float norm=sqrt(vecx*vecx+vecy*vecy+vecz*vecz);
-			  
+
 			  //scaling occurs later
 			  meandifx.push_back(vecx);///norm);
 			  meandify.push_back(vecy);///norm);
 			  meandifz.push_back(vecz);///norm);
-			  
+
 			  //for each point calculate mean vertex for each group
 			  (*i)->_update_coord = Pt(meanx1,meany1,meanz1);
 			  count+=3;
@@ -1860,8 +1860,8 @@ void do_work_bvars(){
 		  setShapeMesh(model1,m);
 		  cout<<"set hsape Mesh"<<endl;
 		  vector<float> scalarsT;
-		  
-		  //this provides the option to do stats on the vertices 
+
+		  //this provides the option to do stats on the vertices
 		  //create F test contrast matrix (testing each EV separately
 		  count=0;
 		  for (int j=0;j<contrast.Ncols();j++){
@@ -1873,14 +1873,14 @@ void do_work_bvars(){
 					  }else{
 						  contrast.element(count,i)=0;
 					  }
-					  
+
 					  cout<<contrast.element(count,i)<<" ";
 				  }
 				  cout<<endl;
 				  count++;
 			  }
 		  }
-		  
+
 		  // save vertex Matrix if requested
 		  if (saveVertices.set()) {
 			  Matrix ReshapedVerts(MeshVerts.Nrows(),MeshVerts.Ncols());
@@ -1899,41 +1899,41 @@ void do_work_bvars(){
 			  vertices.setmatrix(ReshapedVerts.t());
 			  save_volume4D(vertices,saveVertices.value());
 		  }
-		  
+
 		  //use multivariate test on each vertex
 		  int dof1=0, dof2=0;
 		  for (int i=0;i<MeshVerts.Nrows();i=i+3){
-			  //use multivariate multiple regression on each veretx 
+			  //use multivariate multiple regression on each veretx
 			  cout<<"do mvglm"<<endl;
 			  float F=MVGLM_fit(target, MeshVerts.SubMatrix(i+1,i+3,1,MeshVerts.Ncols()).t(),contrast,dof1,dof2);
 			  cout<<"done mvglm"<<endl;
 
 			  //	tstatsx.at(i/3)*=wilkL;
 			  //	tstatsy.at(i/3)*=wilkL;
-			  //	tstatsz.at(i/3)*=wilkL;	
-			  //this may 
+			  //	tstatsz.at(i/3)*=wilkL;
+			  //this may
 			  scalarsT.push_back(F);
 		  }
-		  
+
 		  fslvtkIO * fout = new fslvtkIO();
 		  fout->setPoints(model1->smean);
 		  fout->setPolygons(model1->cells);
-		  
-		  fout->setScalars(scalarsT); 
+
+		  fout->setScalars(scalarsT);
 		  Matrix Mmeandif(meandifx.size(),3);
 		  for (unsigned int mj=0; mj<meandifx.size(); mj++) { Mmeandif.element(mj,0)=meandifx.at(mj);  Mmeandif.element(mj,1)=meandify.at(mj); Mmeandif.element(mj,2)=meandifz.at(mj); }
 		  fout->setVectors(Mmeandif);
-		  
+
 		  // also save the DOFs
 		  Matrix dofvals(2,1);
 		  dofvals << dof1 << dof2;
 		  fout->addFieldData(dofvals,"FStatDOFs","float");
-		  
+
 		  //save the mesg with vectors
 		  fout->save(outname.value()+evnum+".vtk");//,5,0);
 	  }
   }
-}		
+}
 
 
 void do_work_meshToVol(){
@@ -1955,8 +1955,8 @@ void do_work_meshToVol(){
   //	  m1=mesh1->getShapeMesh(0);
   //	}
   int bounds[6]={0,0,0,0,0,0};
-  int label=meshLabel.value();	
-	
+  int label=meshLabel.value();
+
   segim=make_mask_from_meshInOut(ref,m1,label,bounds);
 
   save_volume(segim,outname.value());
@@ -1964,7 +1964,7 @@ void do_work_meshToVol(){
 }
 void do_work_overlap(){
   //this function is working directly on volumes
-  
+
 
   volume<short> gold;
   volume<short> segim;
@@ -1972,7 +1972,7 @@ void do_work_overlap(){
   read_volume(gold,refname.value());
   read_volume(segim,inname.value());
   overlaps(segim,gold);
-  
+
 }
 
 void do_work_MVGLM()
@@ -1991,7 +1991,7 @@ void do_work_MVGLM()
 	}
 	targ_in.close();
 	int N=count/Nevs ;
-	
+
 	Matrix target(N,Nevs);
 	Matrix Y(N,k);
 	Matrix contrast(1,Nevs);
@@ -2027,8 +2027,8 @@ while (y_in>>ftemp)
 
 	}
 	cout<<"Y "<<Y<<endl;
-	
-	
+
+
 	ifstream c_in;
 	c_in.open(refname.value().c_str());
 	col=0;
@@ -2037,8 +2037,8 @@ while (y_in>>ftemp)
 		contrast.element(0,col)=ftemp;
 		col++;
 		}
-		cout<<"contrast "<<contrast<<endl;	
-	
+		cout<<"contrast "<<contrast<<endl;
+
 		float F=MVGLM_fit(target,Y,contrast);
 	cout<<"F "<<F<<endl;
 }
@@ -2046,11 +2046,11 @@ while (y_in>>ftemp)
 void do_work_reconMesh()
 {
 	string mname;
-	mname=read_bvars_ModelName(inname.value() );	
+	mname=read_bvars_ModelName(inname.value() );
 	shapeModel* model1=loadAndCreateShapeModel(mname);
 	vector<string> subjectnames;
 	Matrix bvars;
-	vector<int> vN;	
+	vector<int> vN;
 	Matrix flirtmat(4,4);
 	vector< vector< vector<float> > > fmatv;
 	read_bvars(inname.value(),bvars,subjectnames, vN, pathname.value(),fmatv);
@@ -2058,8 +2058,8 @@ void do_work_reconMesh()
 	for (int i=0; i<bvars.Nrows();i++){
 		vars.push_back(bvars.element(i,0));
 	}
-	
-	
+
+
 	for (int i=0; i<4;i++){
 		for (int j=0; j<4;j++){
 			flirtmat.element(i,j)=fmatv.at(0).at(i).at(j);
@@ -2075,15 +2075,15 @@ void do_work_reconMesh()
 		}
 		//cout<<endl;
 	}
-	
+
 //	model1->registerModel(fmatv.at(0));
 	cout<<"vars "<<vars.size()<<endl;
-	Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);	
+	Mesh m=convertToMesh(model1->getDeformedGrid(vars),model1->cells);
 	meshReg(m,fmatv.at(0));
 
 	m.save(outname.value(),3);
-}	
-	
+}
+
 void do_work_readBvars(const string & filename)
 {
 	string stemp,modelname,imagename;
@@ -2116,15 +2116,15 @@ void do_work_readBvars(const string & filename)
 			if (i%4 == 0)
 				cout<<endl;
 		}
-		
-		
+
+
 		Nsubs--;
 	}
 }
 
 void do_work_concatBvars(const string & filename, const string & fileout)
 {
-	
+
 	ifstream flist;
 	flist.open(filename.c_str());
 	string fname,modelname,imagename;
@@ -2136,14 +2136,14 @@ void do_work_concatBvars(const string & filename, const string & fileout)
 	while (flist>>fname)
 	{
 		count++;
-	
+
 		string stemp,modelname_temp;
 		int Nsubs,Nbvars;
 		ifstream fin;
 		fin.open(fname.c_str());
 		getline(fin,stemp);
 		fin>>modelname_temp;
-	
+
 		if (count==1)
 			modelname=modelname_temp;
 		if (strcmp(modelname.c_str(),modelname_temp.c_str()))
@@ -2153,7 +2153,7 @@ void do_work_concatBvars(const string & filename, const string & fileout)
 		}
 		fin>>stemp>>Nsubs;
 		fin>>imagename>>Nbvars;
-	
+
 		vimages.push_back(imagename);
 		char blank;
 		fin.read(reinterpret_cast<char*>(&blank),sizeof(char));
@@ -2180,7 +2180,7 @@ void do_work_concatBvars(const string & filename, const string & fileout)
 		all_fmats.push_back(fmat);
 		fin.close();
 	}
-	
+
 	ofstream fout;
 	fout.open(fileout.c_str());
 	fout<<"This is a bvars file"<<endl;
@@ -2198,17 +2198,17 @@ void do_work_concatBvars(const string & filename, const string & fileout)
 				fout.write(reinterpret_cast<char *>(&(*i_fmat2)),sizeof(*i_fmat2));
 
 	}
-	
+
 
 }
 
 
 int main(int argc,char *argv[])
 {
-	
+
   Tracer tr("main");
   OptionParser options(title, examples);
-	
+
   try {
     // must include all wanted options here (the order determines how
     //  the help message is printed)
@@ -2244,19 +2244,19 @@ int main(int argc,char *argv[])
 	  options.add(concatBvars);
 
     nonoptarg = options.parse_command_line(argc, argv);
-		
-    // line below stops the program if the help was requested or 
+
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-		
+
     // Call the local functions
     if  (usebvars.value()){
       do_work_bvars();
-			
+
       //	}else if (imfrombvars.value()){
       //	do_work_bvarsToVols();
     }else if (meshToVol.value()){
@@ -2277,16 +2277,16 @@ int main(int argc,char *argv[])
 	{
 		do_work_concatBvars(inname.value(), outname.value());
 	}
-		
-		
+
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
-	
+  }
+
   return 0;// do_work(argc,argv);
 }
 

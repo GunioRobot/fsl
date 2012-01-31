@@ -111,7 +111,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (singular != 0 ||
                            detail::expression_type_check (prod (triangular_adaptor<matrix_type, unit_lower> (m),
-                                                                triangular_adaptor<matrix_type, upper> (m)), 
+                                                                triangular_adaptor<matrix_type, upper> (m)),
                                                           cm), internal_logic ());
 #endif
         return singular;

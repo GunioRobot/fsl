@@ -2,8 +2,8 @@ include ${FSLCONFDIR}/default.mk
 
 PROJNAME=fnirt
 
-USRINCFLAGS=-I${INC_NEWMAT} -I${INC_BOOST} 
-USRLDFLAGS=-L${LIB_NEWMAT} 
+USRINCFLAGS=-I${INC_NEWMAT} -I${INC_BOOST}
+USRLDFLAGS=-L${LIB_NEWMAT}
 
 FNIRT_OBJS=fnirt_costfunctions.o intensity_mappers.o matching_points.o fnirtfns.o fnirt.o
 LIBS=-lwarpfns -lmeshclass -lbasisfield -lnewimage -lmiscmaths -lprob -lfslio -lniftiio -lznz -lutils -lnewmat -lm -lz

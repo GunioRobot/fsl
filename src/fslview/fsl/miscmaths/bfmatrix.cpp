@@ -3,7 +3,7 @@
 //
 //    Jesper Andersson, FMRIB Image Analysis Group
 //
-//    Copyright (C) 2007 University of Oxford 
+//    Copyright (C) 2007 University of Oxford
 //
 
 #include <iostream>
@@ -27,7 +27,7 @@ void FullBFMatrix::Print(const std::string fname) const
   else write_ascii_matrix(fname,*mp);
 }
 
-boost::shared_ptr<BFMatrix> FullBFMatrix::Transpose() 
+boost::shared_ptr<BFMatrix> FullBFMatrix::Transpose()
 const
 {
   boost::shared_ptr<FullBFMatrix>  tm(new FullBFMatrix(mp->t()));
@@ -42,24 +42,24 @@ void FullBFMatrix::HorConcat(const BFMatrix& B, BFMatrix& AB) const
 {
   if (B.Nrows() && Nrows() != B.Nrows()) {throw BFMatrixException("FullBFMatrix::HorConcat: Matrices must have same # of rows");}
 
-  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);  
+  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);
   if (pAB) { // This means output is a full matrix
     *pAB = *this;
     pAB->HorConcat2MyRight(B);
   }
   else {
     SparseBFMatrix<double> *psdAB = dynamic_cast<SparseBFMatrix<double> *>(&AB);
-    if (psdAB) { 
+    if (psdAB) {
       *psdAB = SparseBFMatrix<double>(this->AsMatrix());
       psdAB->HorConcat2MyRight(B);
     }
     else {
       SparseBFMatrix<float> *psfAB = dynamic_cast<SparseBFMatrix<float> *>(&AB);
-      if (psfAB) { 
+      if (psfAB) {
         *psfAB = SparseBFMatrix<float>(this->AsMatrix());
         psfAB->HorConcat2MyRight(B);
       }
-      else throw BFMatrixException("FullBFMatrix::HorConcat: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::HorConcat: dynamic cast error");
     }
   }
 }
@@ -68,7 +68,7 @@ void FullBFMatrix::HorConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
 {
   if (B.Nrows() && int(Nrows()) != B.Nrows()) {throw BFMatrixException("FullBFMatrix::HorConcat: Matrices must have same # of rows");}
 
-  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);  
+  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);
   if (pAB) { // This means output is a full matrix
     *pAB = *this;
     pAB->HorConcat2MyRight(B);
@@ -85,7 +85,7 @@ void FullBFMatrix::HorConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
         *psfAB = SparseBFMatrix<float>(this->AsMatrix());
         psfAB->HorConcat2MyRight(B);
       }
-      else throw BFMatrixException("FullBFMatrix::HorConcat: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::HorConcat: dynamic cast error");
     }
   }
 }
@@ -94,7 +94,7 @@ void FullBFMatrix::VertConcat(const BFMatrix& B, BFMatrix& AB) const
 {
   if (B.Ncols() && Ncols() != B.Ncols()) {throw BFMatrixException("FullBFMatrix::VertConcat: Matrices must have same # of columns");}
 
-  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);  
+  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);
   if (pAB) { // This means output is a full matrix
     *pAB = *this;
     pAB->VertConcatBelowMe(B);
@@ -111,7 +111,7 @@ void FullBFMatrix::VertConcat(const BFMatrix& B, BFMatrix& AB) const
         *psfAB = SparseBFMatrix<float>(this->AsMatrix());
         psfAB->VertConcatBelowMe(B);
       }
-      else throw BFMatrixException("FullBFMatrix::VertConcat: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::VertConcat: dynamic cast error");
     }
   }
 }
@@ -120,7 +120,7 @@ void FullBFMatrix::VertConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
 {
   if (B.Ncols() && int(Ncols()) != B.Ncols()) {throw BFMatrixException("FullBFMatrix::VertConcat: Matrices must have same # of columns");}
 
-  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);  
+  FullBFMatrix *pAB = dynamic_cast<FullBFMatrix *>(&AB);
   if (pAB) { // This means output is a full matrix
     *pAB = *this;
     pAB->VertConcatBelowMe(B);
@@ -137,12 +137,12 @@ void FullBFMatrix::VertConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
         *psfAB = SparseBFMatrix<float>(this->AsMatrix());
         psfAB->VertConcatBelowMe(B);
       }
-      else throw BFMatrixException("FullBFMatrix::VertConcat: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::VertConcat: dynamic cast error");
     }
   }
 }
 
-//  
+//
 // Concatenation of another matrix to *this
 //
 void FullBFMatrix::HorConcat2MyRight(const BFMatrix& B)
@@ -160,12 +160,12 @@ void FullBFMatrix::HorConcat2MyRight(const BFMatrix& B)
     if (psdB) {
       this->HorConcat2MyRight(psdB->AsMatrix());
     }
-    else { 
+    else {
       const SparseBFMatrix<float> *psfB = dynamic_cast<const SparseBFMatrix<float> *>(&B);
       if (psfB) {
         this->HorConcat2MyRight(psfB->AsMatrix());
       }
-      else throw BFMatrixException("FullBFMatrix::HorConcat2MyRight: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::HorConcat2MyRight: dynamic cast error");
     }
   }
 }
@@ -198,7 +198,7 @@ void FullBFMatrix::VertConcatBelowMe(const BFMatrix& B)
       if (psfB) {
         this->VertConcatBelowMe(psfB->AsMatrix());
       }
-      else throw BFMatrixException("FullBFMatrix::HorConcatBelowMe: dynamic cast error"); 
+      else throw BFMatrixException("FullBFMatrix::HorConcatBelowMe: dynamic cast error");
     }
   }
 }
@@ -262,5 +262,5 @@ NEWMAT::ReturnMatrix FullBFMatrix::SolveForx(const NEWMAT::ColumnVector& b,     
   ret.Release();
   return(ret);
 }
-    
+
 } // End namespace MISCMATHS

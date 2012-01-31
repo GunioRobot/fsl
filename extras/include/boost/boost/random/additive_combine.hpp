@@ -28,7 +28,7 @@ namespace random {
 // L'Ecuyer 1988
 template<class MLCG1, class MLCG2,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename MLCG1::result_type 
+  typename MLCG1::result_type
 #else
   int32_t
 #endif
@@ -50,7 +50,7 @@ public:
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_mlcg1.max)()-1; }
 
   additive_combine() : _mlcg1(), _mlcg2() { }
-  additive_combine(typename MLCG1::result_type seed1, 
+  additive_combine(typename MLCG1::result_type seed1,
                    typename MLCG2::result_type seed2)
     : _mlcg1(seed1), _mlcg2(seed2) { }
   template<class It> additive_combine(It& first, It last)

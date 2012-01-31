@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//SoftQuad Software//DTD HoTMetaL PRO 5.0::19981217::extensions to HTML 4.0//EN" "hmpro5.dtd">
- 
+
 <HTML>
- 
+
 <HEAD>
 <meta http-equiv="Content-Language" content="en-nz">
 <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
@@ -32,7 +32,7 @@ Error messages</A><BR>
 </TABLE>
 <P>This is the <I>how to use</I> documentation for <I>newmat</I> plus some
 background information on its design. </P>
-<P>There is additional support material on my <A HREF="#where">web site</A>. 
+<P>There is additional support material on my <A HREF="#where">web site</A>.
 </P>
 <P CLASS="small">Navigation:&nbsp; This page is arranged in sections,
 sub-sections and sub-sub-sections; four cross-references are given at the top
@@ -187,7 +187,7 @@ multiply </LI>
 operators so you can write things like <TT> X = A * (B + C);</TT></LI>
 <LI>need a variety of types of matrices (but not sparse)</LI>
 <LI>need only one element type (float or double)</LI>
-<LI>work with matrices in the range 10 x 10 up to what can be stored in memory 
+<LI>work with matrices in the range 10 x 10 up to what can be stored in memory
 </LI>
 <LI>tolerate a moderately large but not huge package</LI>
 <LI>need high quality but not necessarily the latest numerical methods. </LI>
@@ -229,21 +229,21 @@ author</H2>
 <P><b>Newmat10D - April, 2006:</b></P>
 <P class="small">Compatibility fix for Gnu G++ 4.1.</P>
 <P><b>Newmat10C - March, 2006:</b></P>
-<P class="small">Update conditions of use to be acceptable for Debian 
-distribution, a few minor fixes; additional <i>make</i> files; update include.h, myexpect.h, 
+<P class="small">Update conditions of use to be acceptable for Debian
+distribution, a few minor fixes; additional <i>make</i> files; update include.h, myexpect.h,
 myexcept.cpp, precisio.h. </P>
 <P><b>Newmat10B - January, 2005:</b></P>
-<P class="small">Fix compatibility problems with Gnu G++ 3.4 and Intel 8.1 
-compilers; update include.h, myexpect.h, 
+<P class="small">Fix compatibility problems with Gnu G++ 3.4 and Intel 8.1
+compilers; update include.h, myexpect.h,
 myexcept.cpp, precisio.h.</P>
 <P><b>Newmat10A - October, 2002:</b></P>
-<P CLASS="small">Fix error in Kronecker product; fixes for Intel and GCC3 
+<P CLASS="small">Fix error in Kronecker product; fixes for Intel and GCC3
 compilers.</P>
 <P><B>Newmat10 - January, 2002:</B> </P>
 <P CLASS="small">Improve compatibility with GCC, fix errors in FFT and
 GenericMatrix, update simulated exceptions, maxima, minima, determinant, dot
 product and Frobenius norm functions, update make files for CC and GCC, faster
-FFT, <TT>A.ReSize(B)</TT>, fix pointer arithmetic, <TT>&lt;&lt;</TT> for loading 
+FFT, <TT>A.ReSize(B)</TT>, fix pointer arithmetic, <TT>&lt;&lt;</TT> for loading
 data into rows, IdentityMatrix, Kronecker product, sort singular values.</P>
 <P><B>Newmat09 - September, 1997:</B> </P>
 <P CLASS="small">Operator <TT>==</TT>, <TT>!=</TT>, <TT>+=</TT>, <TT>-=</TT>,
@@ -283,7 +283,7 @@ LinearEquationSolver, primitive version of exceptions. </P>
 <P><B>Newmat05 - June 1992:</B> </P>
 <P CLASS="small">For private release only </P>
 <P><B>Newmat04 - December 1991:</B> </P>
-<P CLASS="small">Fix problem with G++1.40, some extra documentation  
+<P CLASS="small">Fix problem with G++1.40, some extra documentation
 </P>
 <P><B>Newmat03 - November 1991:</B> </P>
 <P CLASS="small">Col and Cols become Column and Columns. Added Sort, SVD,
@@ -397,18 +397,18 @@ are using. </P>
 <H2><A NAME="make"></A>2.2 Make files</H2>
 <P CLASS="small"><A HREF="#custom">next</A> - <A HREF="#custom">skip</A> -
 <A HREF="#starting">up</A> - <A HREF="#top">start</A></P>
-<P>I have included <I>make</I> files for CC, Microsoft, Intel, Borland 5.5 and Gnu compilers 
-for compiling the examples. You 
+<P>I have included <I>make</I> files for CC, Microsoft, Intel, Borland 5.5 and Gnu compilers
+for compiling the examples. You
 can generate make files for a number of other compilers with my
 <a href="genmake.htm">genmake</a> utility. Make files provide
 a way of compiling your programs  without using the IDE that comes with
 PC compilers. See the <A HREF="#files">files section</A> for details. See the
 <A HREF="#example">example</A> for how to use them. Leave out the target name
-to compile and link all my examples and test files. For more information on how 
+to compile and link all my examples and test files. For more information on how
 to use these files see the documentation for my
 <a href="genmake.htm">genmake</a> utility.</P>
 <H3>PC</H3>
-<P>I include make files for Microsoft, Intel, Borland 5.5. For Borland you will need to edit it to show where 
+<P>I include make files for Microsoft, Intel, Borland 5.5. For Borland you will need to edit it to show where
 you have stored your Borland compiler. For make files for other compilers use my
 <a href="genmake.htm">genmake</a> utility.</P>
 <H3>Unix</H3>
@@ -478,8 +478,8 @@ again if the compiler reports inaccessible variables or the linker reports
 missing links. </P>
 <P>Activate <TT>#define _STANDARD_</TT> to use the standard names for the
 included files and to find the floating point precision data using the floating
-point standard. This will work only with the most recent compilers. This is 
-automatically turned on for the Gnu compiler version 3 and the Intel compiler 
+point standard. This will work only with the most recent compilers. This is
+automatically turned on for the Gnu compiler version 3 and the Intel compiler
 for Linux. </P>
 <P>If you haven't defined <TT>_STANDARD_</TT> and are using a compiler that
 <I>include.h</I> does not recognise and you want to pick up the floating point
@@ -507,7 +507,7 @@ particular. </P>
 <P>I have tested this library on a number of compilers. Here are the levels of
 success and any special considerations. In most cases I have chosen code that
 works under all the compilers I have access to, but I have had to include some
-specific work-arounds for some compilers. For the PC versions,  I use Pentium 3 
+specific work-arounds for some compilers. For the PC versions,  I use Pentium 3
 &amp; 4 computers running windows 2000 or XP or various varieties of Linux
 (Red Hat or Fedora). The Unix versions are on a Sun Sparc
 station. Thanks to Victoria University for access to the Sparc. </P>
@@ -520,7 +520,7 @@ your own set of options in include.h. </P>
 <P CLASS="small"><A HREF="#borland">next</A> - <A HREF="#borland">skip</A> -
 <A HREF="#compiler">up</A> - <A HREF="#top">start</A></P>
 <P>The AT&amp;T compiler used to be available on a wide variety of Unix
-workstations. I don't know if anyone still uses it. However the AT&amp;T options are 
+workstations. I don't know if anyone still uses it. However the AT&amp;T options are
 the default if your compiler is not recognised.</P>
 <P>AT&amp;T C++ 2.1; 3.0.1 on a Sun: Previous versions worked on these
 compilers, which I no longer have access to. </P>
@@ -535,12 +535,12 @@ Triangular Matrices. You need to evaluate the expression separately. </P>
 newmat10</i>. Use <i>newmat11</i> instead.</P>
 <P><B>Borland Builder version 5:</B> This works fine in console mode and no
 special editing of the source codes is required. I haven't tested it in GUI
-mode. You can set the <i>newmat10</i> options to use namespace and the standard 
+mode. You can set the <i>newmat10</i> options to use namespace and the standard
 library. <b> You
-should turn <I>off</I> the Borland option to use pre-compiled headers.</b> There 
-are notes on compiling with the IDE on my <a href="#where">website</a>. 
+should turn <I>off</I> the Borland option to use pre-compiled headers.</b> There
+are notes on compiling with the IDE on my <a href="#where">website</a>.
 Alternatively you can use the <i>nm_b55.mak</i> make file<i>.</i></P>
-<P><B>Borland Builder version 4</B>: I have successfully used this on older 
+<P><B>Borland Builder version 4</B>: I have successfully used this on older
 versions of newmat using the
 console wizard (menu item file/new - select new tab). Use compiler
 exceptions. Suppose you are compiling my test program <I>tmt</I>. Rename my
@@ -555,15 +555,15 @@ the compiler supported exceptions and turn on <I>standard</I> in include.h. You
 can use the make file <i>nm_b55.mak</i> after editing to correct the file locations for
 your system.</P>
 <H3>Older compilers</H3>
-<P><B>Borland C++ 3.1,  5.02</B>: Use the simulated exceptions with these. Then 
-version 5.02 works OK.  You will need to use 
-the large or 32 bit flat model. If you are not debugging, turn off the options 
-that collect debugging information. It compiles with version 3.1 but you can't 
+<P><B>Borland C++ 3.1,  5.02</B>: Use the simulated exceptions with these. Then
+version 5.02 works OK.  You will need to use
+the large or 32 bit flat model. If you are not debugging, turn off the options
+that collect debugging information. It compiles with version 3.1 but you can't
 run the tmt test program.</P>
 <P>If you are using versions earlier than 5 remember to edit include.h to
 activate my Boolean class. </P>
 <P>When running my test program under ms-dos you may run out of memory. Either
-compile the test routine to run under <I>easywin</I> or use simulated exceptions 
+compile the test routine to run under <I>easywin</I> or use simulated exceptions
 rather than the built in exceptions. </P>
 <P>If you can, upgrade to windows 9X or window NT and use the 32 bit console
 model. </P>
@@ -571,7 +571,7 @@ model. </P>
 less than 64K bytes in length (90x90 for a rectangular matrix if you are using
 <TT>double</TT> as your element type). Otherwise your program will crash
 without warning or explanation. You will need to break the <A
-HREF="#testing">tmt</A> set of test files into several parts to get the program 
+HREF="#testing">tmt</A> set of test files into several parts to get the program
 to fit into your computer and run without stack overflow. </P>
 <P>One version of Borland had DBL_MIN incorrectly defined. If you are using an
 older version of Borland and are getting strange numerical errors in the test
@@ -581,7 +581,7 @@ genmake</a> utility.</P>
 <H2><A NAME="gcc"></A>2.4.3 Gnu G++</H2>
 <P CLASS="small"><A HREF="#hpux">next</A> - <A HREF="#hpux">skip</A> -
 <A HREF="#compiler">up</A> - <A HREF="#top">start</A></P>
-<P><B>Gnu G++ 3.3, 4.0, 4.1:</B> These work OK. If you are using a much 
+<P><B>Gnu G++ 3.3, 4.0, 4.1:</B> These work OK. If you are using a much
 earlier version see if you can upgrade. Standard is automatically turned on with 3.X.</P>
 <P>If you are using 2.6 or earlier remember to edit include.h to activate my
 Boolean class. In 2.6.?, <TT>fabs(*X++)</TT> causes a problem. You may need to write you
@@ -606,7 +606,7 @@ present, I think these can be ignored. </P>
 <P>Here are comments I made in 1997. </P>
 <P>I have tried the library on two versions of HP-UX. (I don't know the version
 numbers, the older is a clone of AT&amp;T 3, the newer is HP's version with
-exceptions). Both worked after the modifications described in this section. 
+exceptions). Both worked after the modifications described in this section.
 </P>
 <P>With the older version of the compiler I needed to edit the math.h library
 file to remove a duplicate definition of abs. </P>
@@ -629,8 +629,8 @@ the #include statement to access your edited copy of setjmp.h. </P>
 <P CLASS="small"><A HREF="#microso">next</A> - <A HREF="#microso">skip</A> -
 <A HREF="#compiler">up</A> - <A HREF="#top">start</A></P>
 
-<P>Newmat works correctly with the Intel 9 C++ compilers for Windows and for 
-Linux. Standard is automatically switched on for the Linux version and for the 
+<P>Newmat works correctly with the Intel 9 C++ compilers for Windows and for
+Linux. Standard is automatically switched on for the Linux version and for the
 Windows version if you are emulating VC++ 7 or higher.</P>
 
 <H2><A NAME="microso"></A>2.4.6 Microsoft</H2>
@@ -639,13 +639,13 @@ Windows version if you are emulating VC++ 7 or higher.</P>
 <H3>Newer versions</H3>
 <P>See my <A HREF="#where">web site</A> for instructions how to work
 Microsoft's IDE.</P>
-<P><b>Microsoft Visual C++ 8:</b> I have tested the <i>express</i> version using 
+<P><b>Microsoft Visual C++ 8:</b> I have tested the <i>express</i> version using
 my make file run the compiler.</P>
-<P><b>Microsoft Visual C++ 7, 7.1:</b> This works OK. Note that all my tests have 
-been in console mode. The standard option is on by default but I am still a bit 
+<P><b>Microsoft Visual C++ 7, 7.1:</b> This works OK. Note that all my tests have
+been in console mode. The standard option is on by default but I am still a bit
 wary about the namespace option.</P>
-<P><B>Microsoft Visual C++ 6:</B> <b>Get the latest service pack</b>. I have tried this 
-in console mode and it seems to work satisfactorily. Use the compiler supported exceptions. You 
+<P><B>Microsoft Visual C++ 6:</B> <b>Get the latest service pack</b>. I have tried this
+in console mode and it seems to work satisfactorily. Use the compiler supported exceptions. You
 <i>may</i> be able to
 use the namespace and standard options but I suggest not using namespace. If you want to work under MFC
 you may need to <TT>#include &quot;stdafx.h&quot;</TT> at the beginning of each .cpp file. </P>
@@ -657,7 +657,7 @@ you want to work under MFC&nbsp;
 you may need to <TT>#include &quot;stdafx.h&quot;</TT> at the
 beginning of each .cpp file.</P>
 <H3>Older versions</H3>
-<P>Microsoft Visual C++ 2.0: This used to work OK. I haven't tried it with 
+<P>Microsoft Visual C++ 2.0: This used to work OK. I haven't tried it with
 recent versions of newmat.</P>
 <P>You must <TT>#define TEMPS_DESTROYED_QUICKLY</TT> owing to a bug in version
 7 (at least) of MSC. There are some notes in the file <TT>include.h</TT> on
@@ -684,7 +684,7 @@ out and you get <I>Unexpected end of file</I>. </P>
 <H2><A NAME="sun"></A>2.4.7 Sun</H2>
 <P CLASS="small"><A HREF="#watcom">next</A> - <A HREF="#watcom">skip</A> -
 <A HREF="#compiler">up</A> - <A HREF="#top">start</A></P>
-<P><B>Sun C++:</B> The current version works fine with 
+<P><B>Sun C++:</B> The current version works fine with
 compiler supported exceptions. <B>Sun C++ (version
 5):</B> There seems to be a problem with exceptions. If you use my simulated
 exceptions the non-linear optimisation programs hang. If you use the compiler
@@ -701,10 +701,10 @@ versions</H2>
 <P><B>Newmat10</B> includes new <A HREF="#scalar2">maxima, minima</A>,
 <A HREF="#scalar3">determinant, dot product and Frobenius norm</A> functions, a
 faster <A HREF="#fft">FFT</A>, revised <A HREF="#make">make</A> files for GCC
-and CC compilers, several corrections, new <A HREF="#dimen">ReSize</A> function, <a href="#constr">IdentityMatrix</a> 
+and CC compilers, several corrections, new <A HREF="#dimen">ReSize</A> function, <a href="#constr">IdentityMatrix</a>
 and <a href="#binary">Kronecker Product</a>. Singular values from <a href="#svd">
 SVD</a> are sorted. The program files include a new file, <TT>newfft.cpp</TT>, so you
-will need to include this in the list of files in your IDE and make files. There 
+will need to include this in the list of files in your IDE and make files. There
 is also a new test file tmtm.cpp.
 <A HREF="#pointer">Pointer arithmetic</A> now mostly meets requirements of
 standard. You can use <A HREF="#entering">&lt;&lt;</A> to load data into rows
@@ -717,7 +717,7 @@ next section as there were some late changes to newmat09. </P>
 <LI>Boolean, TRUE, FALSE are now bool, true, false. See
 <A HREF="#custom">customising</A> if your compiler supports the bool class.
 </LI>
-<LI>ReDimension is now <A HREF="#dimen">ReSize</A>.  
+<LI>ReDimension is now <A HREF="#dimen">ReSize</A>.
 </LI>
 <LI>The <A HREF="#except">simulated exception</A> package has
 been updated. </LI>
@@ -759,7 +759,7 @@ use compiler supported exceptions, simulated exceptions or disable exceptions.
 Edit the file include.h to select one of these three options. Don't simulate
 exceptions if you have set your compiler's option to implement exceptions.
 </LI>
-<LI>New <A HREF="#qr">QR decomposition</A> functions.  
+<LI>New <A HREF="#qr">QR decomposition</A> functions.
 </LI>
 <LI>A <A HREF="#nonlin">non-linear least squares</A> class.
 </LI>
@@ -767,7 +767,7 @@ exceptions if you have set your compiler's option to implement exceptions.
 </LI>
 <LI><A HREF="#binary">Concatenation and elementwise
 multiplication</A>. </LI>
-<LI>A new <A HREF="#unspec">GenericMatrix</A> class.  
+<LI>A new <A HREF="#unspec">GenericMatrix</A> class.
 </LI>
 <LI><A HREF="#scalar3">Sum</A> function. </LI>
 <LI>Some of the <A HREF="#make">make</A> files reorganised.
@@ -883,8 +883,8 @@ before I allocate the first memory block. Programs may allocate memory for
 different sized items in different places, or might not allocate items
 consecutively. Or they might mix the items with memory blocks from other
 programs. Nevertheless, I seem to get consistent answers from <i>some</i> of the
-compilers I work with, so I think this is a worthwhile test. The compilers that 
-the test seems to work for include the Borland compilers, Microsoft VC++ 6 , 
+compilers I work with, so I think this is a worthwhile test. The compilers that
+the test seems to work for include the Borland compilers, Microsoft VC++ 6 ,
 Watcom 10a, and Gnu 2.96 for Linux.</P>
 <P>If the <A HREF="#custom">DO_FREE_CHECK</A> option in include.h is activated,
 the program checks that each <TT>new</TT> is balanced with exactly one
@@ -1327,7 +1327,7 @@ use, for example </P>
     DiagonalMatrix D(n);
 </PRE>
 
-<P>Band matrices need to include bandwidth information in their constructors. 
+<P>Band matrices need to include bandwidth information in their constructors.
 </P>
 <PRE>    BandMatrix BM(n, lower, upper);
     UpperBandMatrix UB(n, upper);
@@ -1350,10 +1350,10 @@ To set all the elements to zero use, for example, </P>
 <PRE>    Matrix A(m, n); A = 0.0;
 </PRE>
 
-<P>The IdentityMatrix takes one argument in its constructor specifying its 
+<P>The IdentityMatrix takes one argument in its constructor specifying its
 dimension.</P>
 <pre>    IdentityMatrix I(n);</pre>
-<p>The value of the diagonal elements <b>is</b> set to 1 by default, but you can 
+<p>The value of the diagonal elements <b>is</b> set to 1 by default, but you can
 change this value as with other matrix types. </p>
 
 <P>You can also construct vectors and matrices without specifying the
@@ -1371,7 +1371,7 @@ matrix expression. </P>
 
 <P>Only conversions that don't lose information are supported - eg you cannot
 convert an upper triangular matrix into a diagonal matrix using =. </P>
-<H2><A NAME="elements"></A>3.2 Accessing elements 
+<H2><A NAME="elements"></A>3.2 Accessing elements
 </H2>
 <P CLASS="small"><A HREF="#copy">next</A> - <A HREF="#copy">skip</A> -
 <A HREF="#refer">up</A> - <A HREF="#top">start</A></P>
@@ -1398,7 +1398,7 @@ subscript. However, if you are using the <TT>A(i,j)</TT> method the program
 will swap <TT>i</TT> and <TT>j</TT> if necessary; so it doesn't matter if you
 think of the storage as being in the upper triangle (but it <I>does</I> matter
 in some other situations such as when <A HREF="#entering">entering</A> data).</P>
-<P>The IdentityMatrix type does not support element access. 
+<P>The IdentityMatrix type does not support element access.
 </P>
 <H2><A NAME="copy"></A>3.3 Assignment and copying</H2>
 <P CLASS="small"><A HREF="#entering">next</A> - <A HREF="#entering">skip</A> -
@@ -1464,14 +1464,14 @@ the left hand side. See the section on <A HREF="#submat">submatrices</A>. </P>
 <p>Notes:</p>
 
 <ul>
-  <li>When you do a matrix assignment to another matrix or matrix expression with 
-either <tt>=</tt> or <tt>&lt;&lt;</tt> the original data array associated with the matrix 
-  being assigned to is destroyed 
-even if there is no change in length. See the section on <a href="#stor">storage</a>. 
+  <li>When you do a matrix assignment to another matrix or matrix expression with
+either <tt>=</tt> or <tt>&lt;&lt;</tt> the original data array associated with the matrix
+  being assigned to is destroyed
+even if there is no change in length. See the section on <a href="#stor">storage</a>.
 This means, in particular, that pointers to matrix elements - e.g.
-<tt>Real* a; a = &amp;(A(1,1));</tt> become invalid. If you want avoid this you 
-  can use 
-<tt>Inject</tt> rather than <tt>=</tt>. But remember that you may need to zero 
+<tt>Real* a; a = &amp;(A(1,1));</tt> become invalid. If you want avoid this you
+  can use
+<tt>Inject</tt> rather than <tt>=</tt>. But remember that you may need to zero
   the matrix first.<br>
   </li>
 </ul>
@@ -1590,9 +1590,9 @@ throw an exception. So don't try to sort a <I>list</I> of matrices. </LI>
 <LI> A row vector multiplied by a column vector yields a 1x1 matrix, <I>not</I>
 a Real. To get a Real result use either <A HREF="#scalar3"> AsScalar or
 DotProduct</A>.</LI>
-<LI> The result from Kronecker product, KP(A, B), possesses an attribute such as 
-upper triangular, lower triangular, band, symmetric, diagonal if both of the 
-matrices A and B have the attribute. (This differs slightly from the way the 
+<LI> The result from Kronecker product, KP(A, B), possesses an attribute such as
+upper triangular, lower triangular, band, symmetric, diagonal if both of the
+matrices A and B have the attribute. (This differs slightly from the way the
 January 2002 version of newmat10 worked).</LI>
 </UL>
 <P CLASS="small">Remember that the product of symmetric matrices is not
@@ -1614,14 +1614,14 @@ use</P>
 <A HREF="#refer">up</A> - <A HREF="#top">start</A></P>
 <P>The following expressions multiply the elements of a matrix <TT>A</TT> by a
 scalar <TT>f</TT>: <TT>A * f</TT> or <TT>f * A</TT> . Likewise one can divide
-the elements of a matrix <TT>A</TT> by a scalar <TT>f</TT>: <TT>A / f</TT> . 
+the elements of a matrix <TT>A</TT> by a scalar <TT>f</TT>: <TT>A / f</TT> .
 </P>
 <P>The expressions <TT>A + f</TT> and <TT>A - f</TT> add or subtract a
 rectangular matrix of the same dimension as <TT>A</TT> with elements equal to
 <TT>f</TT> to or from the matrix <TT>A</TT> . </P>
 <P>The expression <TT>f + A</TT> is an alternative to <TT>A + f</TT>. The
 expression <TT>f - A</TT> subtracts matrix <TT>A</TT> from a rectangular matrix
-of the same dimension as <TT>A</TT> and with elements equal to <TT>f</TT> . 
+of the same dimension as <TT>A</TT> and with elements equal to <TT>f</TT> .
 </P>
 <P>The expression <TT>A += f</TT> replaces <TT>A</TT> by <TT>A + f</TT>.
 Operators <TT>-=</TT>, <TT>*=</TT>, <TT>/=</TT> are similarly defined. </P>
@@ -1726,7 +1726,7 @@ column vectors. </P>
 <P>The versions Sum(A), SumSquare(A), SumAbsoluteValue(A), Trace(A),
 LogDeterminant(A), Determinant(A), Norm1(A), NormInfinity(A), NormFrobenius(A)
 can be used in place of A.Sum(), A.SumSquare(), A.SumAbsoluteValue(),
-A.Trace(), A.LogDeterminant(), A.Norm1(), A.NormInfinity(), A.NormFrobenius(). 
+A.Trace(), A.LogDeterminant(), A.Norm1(), A.NormInfinity(), A.NormFrobenius().
 </P>
 <H2><A NAME="submat"></A>3.11 Submatrices</H2>
 <P CLASS="small"><A HREF="#dimen">next</A> - <A HREF="#dimen">skip</A> -
@@ -1736,7 +1736,7 @@ A.Trace(), A.LogDeterminant(), A.Norm1(), A.NormInfinity(), A.NormFrobenius().
 
 <P>This selects a submatrix from <TT>A</TT>. The arguments
 <TT>fr</TT>,<TT>lr</TT>,<TT>fc</TT>,<TT>lc</TT> are the first row, last row,
-first column, last column of the submatrix with the numbering beginning at 1. 
+first column, last column of the submatrix with the numbering beginning at 1.
 </P>
 <P>I allow <TT>lr = fr-1</TT> or <TT>lc = fc-1</TT> or to indicate that a
 matrix of zero rows or columns is to be returned. </P>
@@ -1788,8 +1788,8 @@ Load only the number of elements that are actually going to be stored in
 memory. </P>
 <P>Do not use the <TT>+=</TT> and <TT>-=</TT> operations with a submatrix of a
 SymmetricMatrix or BandSymmetricMatrix on the LHS and a Real on the RHS.</P>
-<P>You can't pass a submatrix (or any of its variants) as a reference 
-non-constant matrix in a function argument. For example, the following will not 
+<P>You can't pass a submatrix (or any of its variants) as a reference
+non-constant matrix in a function argument. For example, the following will not
 work:</P>
 <pre>   void YourFunction(Matrix&amp; A);
    ...
@@ -1809,7 +1809,7 @@ the elements are lost. </P>
     A.ReSize(n,lower);            // for LowerBandMatrix
     A.ReSize(n,upper);            // for UpperBandMatrix
     A.ReSize(n,lower);            // for SymmetricBandMatrix
-    A.ReSize(B);                  // set dims to those of B 
+    A.ReSize(B);                  // set dims to those of B
 </PRE>
 
 <P>Use <TT>A.CleanUp()</TT> to set the dimensions of <TT>A</TT> to zero and
@@ -1889,7 +1889,7 @@ references as an alternative to copying. </P>
 
 <P>This will choose the most appropriate decomposition of <TT>A</TT>. That is,
 the band form if <TT>A</TT> is banded; the Crout decomposition if <TT>A</TT> is
-square or symmetric and no decomposition if <TT>A</TT> is triangular or 
+square or symmetric and no decomposition if <TT>A</TT> is triangular or
 diagonal.</P>
 <H2><A NAME="memory"></A>3.15 Memory management</H2>
 <P CLASS="small"><A HREF="#efficien">next</A> - <A HREF="#efficien">skip</A> -
@@ -1934,7 +1934,7 @@ created with new). For example </P>
     }
 </PRE>
 
-<P>If your compiler objects to this code, replace the return statements with 
+<P>If your compiler objects to this code, replace the return statements with
 </P>
 <PRE>    return A.ForReturn();
 </PRE>
@@ -2067,7 +2067,7 @@ calculate this use </P>
 </PRE>
 
 <P>If <TT>S</TT> is a symmetric band matrix then <TT>L</TT> is a band matrix
-and an alternative procedure is provided for carrying out the decomposition: 
+and an alternative procedure is provided for carrying out the decomposition:
 </P>
 <PRE>    SymmetricBandMatrix S;
     ......
@@ -2093,7 +2093,7 @@ matrix Q to get </P>
          s    t
 </PRE>
 
-<P>where <TT>U</TT> is upper triangular (the R of the QR transform). That is 
+<P>where <TT>U</TT> is upper triangular (the R of the QR transform). That is
 </P>
 <PRE>      Q  / 0   0 \  =  / U   M \
          \ X   Y /     \ 0   Z / </PRE>
@@ -2219,7 +2219,7 @@ Sedgewick's algorithms in C++. If the sort seems to be failing (as quicksort
 can do) an exception is thrown. </P>
 <P>You will get incorrect results if you try to sort a band matrix - but why
 would you want to sort a band matrix? </P>
-<H2><A NAME="fft"></A>3.24 Fast Fourier transform 
+<H2><A NAME="fft"></A>3.24 Fast Fourier transform
 </H2>
 <P CLASS="small"><A HREF="#trigtran">next</A> - <A HREF="#trigtran">skip</A> -
 <A HREF="#refer">up</A> - <A HREF="#top">start</A></P>
@@ -2241,7 +2241,7 @@ less than about 10 for fast execution. </P>
 <TT>Y(j+1)</TT>. Likewise <TT>h[k]</TT> is complex and stored in
 <TT>F(k+1)</TT> and <TT>G(k+1)</TT>. The fast Fourier algorithm takes order <I>
 n</I> log(<I>n</I>) operations (for <I>good</I> values of <I>n</I>) rather than
-<I>n</I>**2 that straight evaluation (see the file <TT>tmtf.cpp</TT>) takes. 
+<I>n</I>**2 that straight evaluation (see the file <TT>tmtf.cpp</TT>) takes.
 </P>
 <P>I use one of two methods: </P>
 <UL>
@@ -2401,10 +2401,10 @@ of the routine detecting the exception, and any other information set by the
 <A HREF="#error">Tracer</A> class. Also see the section on <A
 HREF="#error">error messages</A> for additional notes on the messages generated
 by the exceptions. </P>
-<P>You can also print this information in a <i>catch</i> clause by printing <TT>Exception::what()</TT>. 
+<P>You can also print this information in a <i>catch</i> clause by printing <TT>Exception::what()</TT>.
 </P>
 <P>If you are using <i> compiler supported</i> exceptions then see the section
-on <a href="#except_1">catching exceptions</a>.&nbsp; 
+on <a href="#except_1">catching exceptions</a>.&nbsp;
 </P>
 <P>See the file <TT>test_exc.cpp</TT> as an example of catching an exception
 and printing the error message. </P>
@@ -2415,7 +2415,7 @@ such as <TT>cout &lt;&lt; Exception::what() &lt;&lt; endl;</TT> in the
 <TT>Catch</TT> or <TT>CatchAll</TT> block to determine the action. </P>
 <P>The library includes the alternatives of using the inbuilt exceptions
 provided by a compiler, simulating exceptions, or disabling exceptions. See
-<A HREF="#custom">customising</A> for selecting the correct exception option. 
+<A HREF="#custom">customising</A> for selecting the correct exception option.
 </P>
 <P>The rest of this section describes my partial simulation of exceptions for
 compilers which do not support C++ exceptions. I use Carlos Vidal's article in
@@ -2471,7 +2471,7 @@ occupy space until the program terminates. </P>
 <P>To overcome this problem newmat keeps a list of all the currently declared
 matrices and its exception mechanism will return heap memory when you do a
 Throw and Catch. </P>
-<P>However it will not return heap memory from objects from other packages. 
+<P>However it will not return heap memory from objects from other packages.
 </P>
 <P>If you want the mechanism to work with another class you will have to do
 four things: </P>
@@ -2530,7 +2530,7 @@ unexpectedly didn't work. </P>
 <LI>Make sure the option <A HREF="#custom">DO_FREE_CHECK</A> is <EM>not</EM>
 turned on. </LI>
 <LI>You can store only one type of matrix in a container. If you want to use a
-variety of types use the GenericMatrix type or store pointers to the matrices. 
+variety of types use the GenericMatrix type or store pointers to the matrices.
 </LI>
 <LI>The vector and deque container templates like to copy their elements. For
 the vector container this happens when you insert an element anywhere except at
@@ -2653,7 +2653,7 @@ efficiency</H2>
 <P>By <B>safety</B>, I mean getting the right answer, and not causing crashes
 or damage to the computer system. </P>
 <P>By <B>usability</B>, I mean being easy to learn and use, including not being
-too complicated, being intuitive, saving the users' time, being nice to use. 
+too complicated, being intuitive, saving the users' time, being nice to use.
 </P>
 <P><B>Efficiency</B> means minimising the use of computer memory and time. </P>
 <P>In the early days of computers the emphasis was on efficiency. But computer
@@ -2710,53 +2710,53 @@ efficiency is compromised a little. If you penetrate inside the <I>box</I>
 safety is reduced but you can get better efficiency. </P>
 <H3>Some performance data</H3>
 <P>This section looks at the performance on <I>newmat</I> for simple sums,
-comparing it with C code and with a simple array program. 
+comparing it with C code and with a simple array program.
 </P>
 <P>The following table lists the time (in seconds) for carrying out the
 operations <TT>X=A+B;</TT>, <TT>X=A+B+C;</TT>, <TT>X=A+B+C+D;</TT>, <TT>X=A+B+C+D+E;</TT> where
 <TT>X,A,B,C,D,E</TT> are of type ColumnVector, with a variety of programs. I am
-using Microsoft VC++, version 6 in  console mode under windows 2000 on a PC with 
+using Microsoft VC++, version 6 in  console mode under windows 2000 on a PC with
 a 1 ghz Pentium III and 512 mbytes of memory. </P>
 <pre>    length    iters. newmat      C C-res.  subs.  array
 <b>X = A + B</b>
-         2   5000000   27.8    0.3    8.8    1.9    9.5 
-        20    500000    3.0    0.3    1.1    1.9    1.2 
-       200     50000    0.5    0.3    0.4    1.9    0.3 
-      2000      5000    0.4    0.3    0.4    2.0    1.0 
-     20000       500    4.5    4.5    4.5    6.7    4.4 
-    200000        50    5.2    4.7    5.5    5.8    5.2 
+         2   5000000   27.8    0.3    8.8    1.9    9.5
+        20    500000    3.0    0.3    1.1    1.9    1.2
+       200     50000    0.5    0.3    0.4    1.9    0.3
+      2000      5000    0.4    0.3    0.4    2.0    1.0
+     20000       500    4.5    4.5    4.5    6.7    4.4
+    200000        50    5.2    4.7    5.5    5.8    5.2
 
 <b>X = A + B + C</b>
-         2   5000000   36.6    0.4    8.9    2.5   12.2 
-        20    500000    4.0    0.4    1.2    2.5    1.6 
-       200     50000    0.8    0.3    0.5    2.5    0.5 
-      2000      5000    3.6    4.4    4.6    9.0    4.4 
-     20000       500    6.8    5.4    5.4    9.6    6.8 
-    200000        50    8.6    6.0    6.7    7.1    8.6 
+         2   5000000   36.6    0.4    8.9    2.5   12.2
+        20    500000    4.0    0.4    1.2    2.5    1.6
+       200     50000    0.8    0.3    0.5    2.5    0.5
+      2000      5000    3.6    4.4    4.6    9.0    4.4
+     20000       500    6.8    5.4    5.4    9.6    6.8
+    200000        50    8.6    6.0    6.7    7.1    8.6
 
 <b>X = A + B + C + D</b>
-         2   5000000   44.0    0.7    9.3    3.1   14.6 
-        20    500000    4.9    0.6    1.5    3.1    1.9 
-       200     50000    1.0    0.6    0.8    3.2    0.8 
-      2000      5000    5.6    6.6    6.8   11.5    5.9 
-     20000       500    9.0    6.7    6.8   11.0    8.5 
-    200000        50   11.9    7.1    7.9    9.5   12.0 
+         2   5000000   44.0    0.7    9.3    3.1   14.6
+        20    500000    4.9    0.6    1.5    3.1    1.9
+       200     50000    1.0    0.6    0.8    3.2    0.8
+      2000      5000    5.6    6.6    6.8   11.5    5.9
+     20000       500    9.0    6.7    6.8   11.0    8.5
+    200000        50   11.9    7.1    7.9    9.5   12.0
 
 <b>X = A + B + C + D + E</b>
-         2   5000000   50.6    1.0    9.5    3.8   17.1 
-        20    500000    5.7    0.8    1.7    3.9    2.4 
-       200     50000    1.3    0.9    1.0    3.9    1.0 
-      2000      5000    7.0    8.3    8.2   13.8    7.1 
-     20000       500   11.5    8.1    8.4   13.2   11.0 
-    200000        50   15.2    8.7    9.5   12.4   15.4 
+         2   5000000   50.6    1.0    9.5    3.8   17.1
+        20    500000    5.7    0.8    1.7    3.9    2.4
+       200     50000    1.3    0.9    1.0    3.9    1.0
+      2000      5000    7.0    8.3    8.2   13.8    7.1
+     20000       500   11.5    8.1    8.4   13.2   11.0
+    200000        50   15.2    8.7    9.5   12.4   15.4
 </pre>
-<P>I have <a target="_blank" href="add_time.png">graphed</a> the results 
+<P>I have <a target="_blank" href="add_time.png">graphed</a> the results
 and included rather more array lengths.</P>
 
 <P>The first column gives the lengths of the arrays, the second the number of
 iterations and the remaining columns the total time required in seconds. If the
 only thing that consumed time was the double precision addition then the
-numbers within each block of the table would be the same. The summation is 
+numbers within each block of the table would be the same. The summation is
 repeated 5 times within each loop, for example:</P>
 <pre>   for (i=1; i&lt;=m; ++i)
    {
@@ -2766,30 +2766,30 @@ repeated 5 times within each loop, for example:</P>
 <P>The column labelled <I>newmat</I> is using the standard <I>newmat</I> add. The column labelled <I>C</I> uses the usual C method: <TT>while
 (j1--) *x1++ = *a1++ + *b1++;</TT> . The following column also includes an
 <TT>X.ReSize()</TT> in the outer loop to correspond to the reassignment of
-memory that <I>newmat</I> would do. In the next column the calculation is using 
+memory that <I>newmat</I> would do. In the next column the calculation is using
 the usual C style <I>for</I> loop
 and accessing the elements using <I>newmat</I> subscripts such as
 <TT>A(i)</TT>. The final column is the time taken by a
-simple array package. This uses an alternative method for avoiding temporaries 
+simple array package. This uses an alternative method for avoiding temporaries
 and unnecessary copies that does not involve runtime tests. It does its sums in blocks of 4 and copies in blocks of
 8 in the same way that <I>newmat</I> does. </P>
 <P>Here are my conclusions. </P>
 <UL>
 <LI><I>Newmat</I> does very badly for length 2 and doesn't do  well for
 length 20. There is  a lot of code in <I>newmat</I> for
-determining which sum algorithm to use and it is not surprising that this 
+determining which sum algorithm to use and it is not surprising that this
 impacts on performance for small lengths.
 However the <I>array</I> program is also having difficulty with length 2 so it
 is unlikely that the problem could be completely eliminated. </LI>
 <LI>For arrays of length 2000 or longer <I>newmat</I> is doing about as well as
 C and slightly better than C with resize in the <TT>X=A+B</TT> table. For the
 other two tables it tends to be slower, but not dramatically so. </LI>
-<LI>It is really important for fast processing with the Pentium III to stay 
+<LI>It is really important for fast processing with the Pentium III to stay
 within the Pentium cache.</LI>
 <LI>Addition using the <I>newmat</I> subscripts, while considerably slower than
 the others, is still surprisingly good for the longer arrays. </LI>
 <LI>The <I>array</I> program and <I>newmat</I> are similar for
-lengths 2000 or higher (the longer times for the array program for the longest 
+lengths 2000 or higher (the longer times for the array program for the longest
 arrays shown on the graph are probably a quirk of the timing program). </LI>
 </UL>
 <P>In summary: for the situation considered here, <I>newmat</I> is doing very
@@ -2989,70 +2989,70 @@ and column functions. </P>
 <P CLASS="small"><A HREF="#mem_man">next</A> - <A HREF="#mem_man">skip</A> -
 <A HREF="#design">up</A> - <A HREF="#top">start</A> </P>
 <H3>The stack and heap</H3>
-<p>To understand how <i>newmat</i> stores matrices you need to know a little bit 
+<p>To understand how <i>newmat</i> stores matrices you need to know a little bit
 about the <i>heap</i> and <i>stack</i>.</p>
-<p>The data values of variables or objects in a C++ program are stored in either 
-of two sections of memory called the <i>stack</i> and the <i>heap</i>. Sometimes 
+<p>The data values of variables or objects in a C++ program are stored in either
+of two sections of memory called the <i>stack</i> and the <i>heap</i>. Sometimes
 there is more than one <i>heap</i> to cater for different sized variables.</p>
 <p>If you declare an <i>automatic</i> variable</p>
 <pre>   int x;</pre>
-<p>then the value of <i>x</i> is stored on the <i>stack</i>. As you declare more 
-variables the stack gets bigger. When you exit a block (i.e a section of code 
-delimited by curly brackets <i>{...}</i>) the memory used by the automatic 
+<p>then the value of <i>x</i> is stored on the <i>stack</i>. As you declare more
+variables the stack gets bigger. When you exit a block (i.e a section of code
+delimited by curly brackets <i>{...}</i>) the memory used by the automatic
 variables declared in the block is released and the <i>stack</i> shrinks.</p>
 <p>When you declare a variable with <i>new</i>, for example,</p>
 <pre>   int* y = new int;</pre>
-<p>the pointer <i>y</i> is stored on the <i>stack</i> but the value it is 
-pointing to is stored on the <i>heap</i>. Memory on the <i>heap</i> is not 
+<p>the pointer <i>y</i> is stored on the <i>stack</i> but the value it is
+pointing to is stored on the <i>heap</i>. Memory on the <i>heap</i> is not
 released until the program explicitly does this with a <i>delete</i> statement</p>
 <pre>   delete *y;</pre>
 <p>or the program exits.</p>
-<p>On the <i>stack</i>, variables and objects are is always added to the end of 
-the <i>stack</i> and are removed in the reverse order to that in which they are 
+<p>On the <i>stack</i>, variables and objects are is always added to the end of
+the <i>stack</i> and are removed in the reverse order to that in which they are
 added - that is the last on will be the first off. This is not the case with the <i>
-heap</i>, where the variables and objects can be removed in any order. So one 
-can get alternating pieces of used and unused memory. When a new variable or 
-object is declared on the <i>heap</i> the system needs to search for piece of 
-unused memory large enough to hold it. This means that storing on the <i>heap</i> 
-will usually be a slower process than storing on the <i>stack</i>. There is also 
-likely to be waste space on the <i>heap</i> because of gaps between the used 
+heap</i>, where the variables and objects can be removed in any order. So one
+can get alternating pieces of used and unused memory. When a new variable or
+object is declared on the <i>heap</i> the system needs to search for piece of
+unused memory large enough to hold it. This means that storing on the <i>heap</i>
+will usually be a slower process than storing on the <i>stack</i>. There is also
+likely to be waste space on the <i>heap</i> because of gaps between the used
 blocks of memory that are too small for the next object you want to store on the
-<i>heap</i>. There is also the possibility of wasting space if you forget to 
-remove a variable or object on the <i>heap</i> even though you have finished 
-using it. However, the <i>stack</i> is usually limited to holding small objects 
-with size known at compile time. Large objects, objects whose size you don't 
-know at compile time, and objects that you want to persist after the end of the 
+<i>heap</i>. There is also the possibility of wasting space if you forget to
+remove a variable or object on the <i>heap</i> even though you have finished
+using it. However, the <i>stack</i> is usually limited to holding small objects
+with size known at compile time. Large objects, objects whose size you don't
+know at compile time, and objects that you want to persist after the end of the
 block need to be stored on the <i>heap</i>.</p>
-<p>In C++, the <i>constructor</i>/<i>destructor</i> system enables one to build 
-complicated objects such as matrices that behave as automatic variables stored 
-on the <i>stack</i>, so the programmer doesn't have to worry about deleting them 
-at the end of the block, but which really utilise the <i>heap</i> for storing 
+<p>In C++, the <i>constructor</i>/<i>destructor</i> system enables one to build
+complicated objects such as matrices that behave as automatic variables stored
+on the <i>stack</i>, so the programmer doesn't have to worry about deleting them
+at the end of the block, but which really utilise the <i>heap</i> for storing
 their data.</p>
 <H3>Structure of matrix objects</H3>
 <P>Each matrix object contains the basic information such as the number of rows
 and columns, the amount of memory used, a status variable and a pointer to the data array which is on
 the heap. So if you declare a matrix</P>
 <pre>   Matrix A(1000,1000);</pre>
-<p>there is an small amount of memory used on the stack for storing the numbers 
-of rows and columns, the amount of&nbsp; memory used, the status variable and 
-the pointer together with 1,000,000 <i>Real</i> locations stored on the heap. 
+<p>there is an small amount of memory used on the stack for storing the numbers
+of rows and columns, the amount of&nbsp; memory used, the status variable and
+the pointer together with 1,000,000 <i>Real</i> locations stored on the heap.
 When you exit the block in which <i>A</i> is declared, the heap memory used by
-<i>A</i> is automatically returned to the system, as well as the memory used on 
+<i>A</i> is automatically returned to the system, as well as the memory used on
 the stack.</p>
 <p>Of course, if you use new to declare a matrix</p>
 <pre>   Matrix* B = new Matrix(1000,1000);</pre>
-<p>both the information about the size and the actual data are stored on heap 
+<p>both the information about the size and the actual data are stored on heap
 and not deleted until the program exits or you do an explicit delete:</p>
 <pre>   delete *B;</pre>
-<p>If you carry out an assignment with <tt>=</tt> or <tt>&lt;&lt;</tt> or do a 
-<tt>resize()</tt> the data array currently associated with a matrix is destroyed and 
+<p>If you carry out an assignment with <tt>=</tt> or <tt>&lt;&lt;</tt> or do a
+<tt>resize()</tt> the data array currently associated with a matrix is destroyed and
 a new array generated. For example</p>
 <pre>   Matrix A(1000,1000);
    Matrix B(50, 50);
    ... put some values in B
    A = B;</pre>
-<p>At the last step the heap memory associated with <i>A</i> is returned to the 
-system and a new block of heap memory is assigned to contain the new values. 
+<p>At the last step the heap memory associated with <i>A</i> is returned to the
+system and a new block of heap memory is assigned to contain the new values.
 This happens even if there is no change in the amount of memory required. </p>
 <H3>One block or several</H3>
 <P>The elements of the matrix are stored as a single array. Alternatives would
@@ -3339,7 +3339,7 @@ approach. </P>
 matrices of the same type then there is no need to access the individual rows
 or columns and a faster general algorithm is appropriate. </P>
 <P>Generally the method works well. However symmetric matrices are not always
-handled very efficiently (yet) since complete rows are not stored explicitly. 
+handled very efficiently (yet) since complete rows are not stored explicitly.
 </P>
 <P>The original version of the package did not use this access by row or column
 method and provided the multitude of algorithms for the combination of
@@ -3347,7 +3347,7 @@ different matrix types. The code file length turned out to be just a little
 longer than the present one when providing the same facilities with 5 distinct
 types of matrices. It would have been very difficult to increase the number of
 matrix types in the original version. Apparently 4 to 5 types is about the
-break even point for switching to the approach adopted in the present package. 
+break even point for switching to the approach adopted in the present package.
 </P>
 <P>However it must also be admitted that there is a substantial overhead in the
 approach adopted in the present package for small matrices. The test program
@@ -3481,9 +3481,9 @@ get a bounds error report. </P>
    }
 </PRE>
 
-<P>which is more complicated and consequently introduces more chance of error. 
+<P>which is more complicated and consequently introduces more chance of error.
 </P>
-<H2><A NAME="err_hand"></A>5.12 Error handling 
+<H2><A NAME="err_hand"></A>5.12 Error handling
 </H2>
 <P CLASS="small"><A HREF="#sparse">next</A> - <A HREF="#sparse">skip</A> -
 <A HREF="#design">up</A> - <A HREF="#top">start</A> </P>
@@ -3494,7 +3494,7 @@ had access to was unreliable. I recommended you used my simulated exceptions.
 In 1997 compiler supported exceptions  seemed to work on a variety of
 compilers - but not all compilers. This is still true in 2001. Try using the
 compiler supported exceptions if you have a recent compiler, but if you are
-getting strange crashes or errors try going back to my simulated exceptions. 
+getting strange crashes or errors try going back to my simulated exceptions.
 </P>
 <P>The approach in the present library, attempting to simulate C++ exceptions,
 is not completely satisfactory, but seems a good interim solution for those who
@@ -3541,7 +3541,7 @@ and really should be fully supported in a comprehensive package. </P>
 <P>You can simulate most complex operations by representing <TT>Z = X + iY</TT>
 by </P>
 <PRE>    /  X   Y \
-    \ -Y   X / 
+    \ -Y   X /
 </PRE>
 
 <P>Most matrix operations will simulate the corresponding complex operation,

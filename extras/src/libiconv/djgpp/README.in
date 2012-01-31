@@ -97,7 +97,7 @@ This is a port of GNU Libiconv @VER@ to MSDOS/DJGPP.
         e.g:
           x:\src\gnu\libiconv.@treeversion@\djgpp\config x:/src/gnu/libiconv.@treeversion@
 
-        Lets assume you want to build the binaries in a directory placed on a 
+        Lets assume you want to build the binaries in a directory placed on a
         different drive (z:\build in this case) from where the sources are,
         then you will run the following commands:
           z:

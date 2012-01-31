@@ -1,4 +1,4 @@
-/* 
+/*
  * tclTestProcBodyObj.c --
  *
  *	Implements the "procbodytest" package, which contains commands
@@ -151,7 +151,7 @@ static int RegisterCommand(interp, namespace, cmdTablePtr)
         if (Tcl_Eval(interp, buf) != TCL_OK)
             return TCL_ERROR;
     }
-    
+
     sprintf(buf, "%s::%s", namespace, cmdTablePtr->cmdName);
     Tcl_CreateObjCommand(interp, buf, cmdTablePtr->proc, 0, 0);
 
@@ -189,7 +189,7 @@ ProcBodyTestInitInternal(interp, isSafe)
             return TCL_ERROR;
         }
     }
-    
+
     return Tcl_PkgProvide(interp, packageName, packageVersion);
 }
 
@@ -240,7 +240,7 @@ ProcBodyTestProcObjCmd (dummy, interp, objc, objv)
     Tcl_Obj *bodyObjPtr;
     Tcl_Obj *myobjv[5];
     int result;
-    
+
     if (objc != 4) {
 	Tcl_WrongNumArgs(interp, 1, objv, "newName argsList bodyName");
 	return TCL_ERROR;
@@ -249,7 +249,7 @@ ProcBodyTestProcObjCmd (dummy, interp, objc, objv)
     /*
      * Find the Command pointer to this procedure
      */
-    
+
     fullName = Tcl_GetStringFromObj(objv[3], (int *) NULL);
     procCmd = Tcl_FindCommand(interp, fullName, (Tcl_Namespace *) NULL,
             TCL_LEAVE_ERR_MSG);
@@ -279,7 +279,7 @@ ProcBodyTestProcObjCmd (dummy, interp, objc, objv)
     /*
      * it is a Tcl procedure: the client data is the Proc structure
      */
-    
+
     if (cmdPtr->objProc != NULL) {
         procPtr = (Proc *) cmdPtr->objClientData;
     } else if (cmdPtr->proc != NULL) {
@@ -292,7 +292,7 @@ ProcBodyTestProcObjCmd (dummy, interp, objc, objv)
 		"\" does not have a Proc struct!", (char *) NULL);
         return TCL_ERROR;
     }
-        
+
     /*
      * create a new object, initialize our argument vector, call into Tcl
      */

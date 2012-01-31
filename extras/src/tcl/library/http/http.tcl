@@ -639,7 +639,7 @@ proc http::data {token} {
     return $state(body)
 }
 proc http::status {token} {
-    if {![info exists $token]} { return "error" }    
+    if {![info exists $token]} { return "error" }
     variable $token
     upvar 0 $token state
     return $state(status)

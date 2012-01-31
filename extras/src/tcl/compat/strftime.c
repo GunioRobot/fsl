@@ -1,4 +1,4 @@
-/* 
+/*
  * strftime.c --
  *
  *	This file contains a modified version of the BSD 4.4 strftime
@@ -77,7 +77,7 @@ typedef struct {
  * It may be acceptable to do localization of month/day names, as the
  * numerical values would be considered the locale-independent versions.
  */
-static const _TimeLocale _DefaultTimeLocale = 
+static const _TimeLocale _DefaultTimeLocale =
 {
     {
 	"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
@@ -472,7 +472,7 @@ ISO8601Week( t, year )
 {
     /* Find the day-of-year of the Thursday in
      * the week in question. */
-    
+
     int ydayThursday;
     int week;
     if ( t->tm_wday == 0 ) {
@@ -480,9 +480,9 @@ ISO8601Week( t, year )
     } else {
 	ydayThursday = t->tm_yday - t->tm_wday + 4;
     }
-    
+
     if ( ydayThursday < 0 ) {
-	
+
 	/* This is the last week of the previous year. */
 	if ( IsLeapYear(( t->tm_year + TM_YEAR_BASE - 1 )) ) {
 	    ydayThursday += 366;
@@ -493,29 +493,29 @@ ISO8601Week( t, year )
 	if ( year != NULL ) {
 	    *year = t->tm_year + 1899;
 	}
-	
+
     } else if ( ( IsLeapYear(( t -> tm_year + TM_YEAR_BASE ))
 		  && ydayThursday >= 366 )
 		|| ( !IsLeapYear(( t -> tm_year
 				   + TM_YEAR_BASE ))
 		     && ydayThursday >= 365 ) ) {
-	
+
 	/* This is week 1 of the following year */
-	
+
 	week = 1;
 	if ( year != NULL ) {
 	    *year = t->tm_year + 1901;
 	}
-	
+
     } else {
-	
+
 	week = ydayThursday / 7 + 1;
 	if ( year != NULL ) {
 	    *year = t->tm_year + 1900;
 	}
-	
+
     }
 
     return week;
-    
+
 }

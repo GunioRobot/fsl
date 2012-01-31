@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -534,10 +534,10 @@ public:
    string_out_iterator& operator++() { return *this; }
    string_out_iterator& operator++(int) { return *this; }
    string_out_iterator& operator*() { return *this; }
-   string_out_iterator& operator=(typename S::value_type v) 
-   { 
-      out->append(1, v); 
-      return *this; 
+   string_out_iterator& operator=(typename S::value_type v)
+   {
+      out->append(1, v);
+      return *this;
    }
 
 #ifdef BOOST_NO_STD_ITERATOR
@@ -563,8 +563,8 @@ OutputIterator regex_format_imp(OutputIterator out,
    }
 
    re_detail::basic_regex_formatter<
-      OutputIterator, 
-      match_results<Iterator, Alloc>, 
+      OutputIterator,
+      match_results<Iterator, Alloc>,
       traits > f(out, m, t);
    return f.format(p1, p2, flags);
 }
@@ -592,11 +592,11 @@ OutputIterator regex_format(OutputIterator out,
 {
    re_detail::trivial_format_traits<charT> traits;
    return re_detail::regex_format_imp(out, m, fmt.data(), fmt.data() + fmt.size(), flags, traits);
-}  
+}
 
 template <class Iterator, class charT>
-std::basic_string<charT> regex_format(const match_results<Iterator>& m, 
-                                      const charT* fmt, 
+std::basic_string<charT> regex_format(const match_results<Iterator>& m,
+                                      const charT* fmt,
                                       match_flag_type flags = format_all)
 {
    std::basic_string<charT> result;
@@ -607,8 +607,8 @@ std::basic_string<charT> regex_format(const match_results<Iterator>& m,
 }
 
 template <class Iterator, class charT>
-std::basic_string<charT> regex_format(const match_results<Iterator>& m, 
-                                      const std::basic_string<charT>& fmt, 
+std::basic_string<charT> regex_format(const match_results<Iterator>& m,
+                                      const std::basic_string<charT>& fmt,
                                       match_flag_type flags = format_all)
 {
    std::basic_string<charT> result;

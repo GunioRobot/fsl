@@ -1,5 +1,5 @@
 // Boost Lambda Library -  function_adaptors.hpp ----------------------------
- 
+
 // Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
 //
 // Distributed under the Boost Software License, Version 1.0. (See
@@ -14,14 +14,14 @@
 
 #include "boost/type_traits/same_traits.hpp"
 
-namespace boost { 
+namespace boost {
 namespace lambda {
 
 template <class Func> struct function_adaptor {
 
   // we do not know the return type off-hand, we must ask it from Func
-  template <class Args> class sig { 
-    typedef typename Args::head_type F; 
+  template <class Args> class sig {
+    typedef typename Args::head_type F;
     typedef typename detail::remove_reference_and_cv<Func>::type plainF;
   public:
     // To sig we pass a cons list, where the head is the function object type
@@ -56,33 +56,33 @@ template <class Func> struct function_adaptor {
   static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6) {
     return a1(a2, a3, a4, a5, a6);
   }
-  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6, 
+  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6,
            class A7>
-  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6, 
+  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6,
                            A7& a7) {
     return a1(a2, a3, a4, a5, a6, a7);
   }
-  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6, 
+  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6,
            class A7, class A8>
-  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6, 
+  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6,
                            A7& a7, A8& a8) {
     return a1(a2, a3, a4, a5, a6, a7, a8);
   }
-  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6, 
+  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6,
            class A7, class A8, class A9>
-  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6, 
+  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6,
                            A7& a7, A8& a8, A9& a9) {
     return a1(a2, a3, a4, a5, a6, a7, a8, a9);
   }
-  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6, 
+  template<class RET, class A1, class A2, class A3, class A4, class A5, class A6,
            class A7, class A8, class A9, class A10>
-  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6, 
+  static RET apply(A1& a1, A2& a2, A3& a3, A4& a4, A5& a5, A6& a6,
                            A7& a7, A8& a8, A9& a9, A10& a10) {
     return a1(a2, a3, a4, a5, a6, a7, a8, a9, a10);
   }
 };
 
-template <class Func> struct function_adaptor<const Func>; // error 
+template <class Func> struct function_adaptor<const Func>; // error
 
 // -- function adaptors with data member access
 template <class Object, class T>
@@ -93,7 +93,7 @@ struct function_adaptor<T Object::*> {
   // T can have qualifiers and can be a reference type
   // We get the return type by adding const, if the object through which
   // the data member is accessed is const, and finally adding a reference
-  template<class Args> class sig { 
+  template<class Args> class sig {
     typedef typename boost::tuples::element<1, Args>::type argument_type;
 
     typedef typename detail::IF<boost::is_const<argument_type>::value,
@@ -109,7 +109,7 @@ struct function_adaptor<T Object::*> {
 
 
   public:
-    typedef typename 
+    typedef typename
       boost::add_reference<properly_cvd_return_type>::type type;
   };
 
@@ -148,10 +148,10 @@ struct function_adaptor<T Object::*> {
 };
 
 // -- function adaptors with 1 argument apply
-   
+
 template <class Result>
 struct function_adaptor<Result (void)> {
-  
+
   template<class T> struct sig { typedef Result type; };
   template <class RET>
   static Result apply(Result (*func)()) {
@@ -226,12 +226,12 @@ struct function_adaptor<Result (Object::*)(Arg1) const> {
 
   template<class T> struct sig { typedef Result type; };
   template <class RET, class A1>
-  static Result apply( Result (Object::*func)(Arg1) const, const Object* o, 
+  static Result apply( Result (Object::*func)(Arg1) const, const Object* o,
     A1& a1) {
     return (o->*func)(a1);
   }
   template <class RET, class A1>
-  static Result apply( Result (Object::*func)(Arg1) const, const Object& o, 
+  static Result apply( Result (Object::*func)(Arg1) const, const Object& o,
     A1& a1) {
     return (o.*func)(a1);
   }

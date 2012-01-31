@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinInit.c --
  *
  *	This file contains Windows-specific interpreter initialization

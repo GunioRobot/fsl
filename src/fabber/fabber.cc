@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -94,20 +94,20 @@ int main(int argc, char** argv)
 
       EasyOptions args(argc, argv);
 
-      if (args.ReadBool("help")) 
-        { 
+      if (args.ReadBool("help"))
+        {
             string model = args.ReadWithDefault("model","");
             if (model == "")
                 Usage();
             else
                 FwdModel::ModelUsageFromName(model, args);
-                                 
-            return 0; 
+
+            return 0;
         }
-      EasyLog::StartLog(args.Read("output", 
+      EasyLog::StartLog(args.Read("output",
         "Must specify an output directory, for example: --output=mytestrun"));
-        
-      LOG_ERR("Logfile started: " << EasyLog::GetOutputDirectory() 
+
+      LOG_ERR("Logfile started: " << EasyLog::GetOutputDirectory()
 	          << "/logfile" << endl);
 
       time_t startTime;
@@ -124,12 +124,12 @@ int main(int argc, char** argv)
 
       // Start timing/tracing if requested
       bool recordTimings = false;
-  
-      if (args.ReadBool("debug-timings")) 
+
+      if (args.ReadBool("debug-timings"))
         { recordTimings = true; Tracer_Plus::settimingon(); }
-      if (args.ReadBool("debug-instant-stack")) 
+      if (args.ReadBool("debug-instant-stack"))
         { Tracer_Plus::setinstantstackon(); } // instant stack isn't used?
-      if (args.ReadBool("debug-running-stack")) 
+      if (args.ReadBool("debug-running-stack"))
         { Tracer_Plus::setrunningstackon(); }
       gzLog = args.ReadBool("gzip-log");
 
@@ -139,23 +139,23 @@ int main(int argc, char** argv)
       // Start a new tracer for timing purposes
       { Tracer_Plus tr2("FABBER main()");
 
-      InferenceTechnique* infer = 
+      InferenceTechnique* infer =
         InferenceTechnique::NewFromName(args.Read("method"));
 
       infer->Setup(args);
       infer->SetOutputFilenames(EasyLog::GetOutputDirectory());
-      
+
       DataSet allData;
       allData.LoadData(args);
 
       // Arguments should all have been used by now, so complain if there's anything left.
-      args.CheckEmpty();   
-      
+      args.CheckEmpty();
+
       // Calculations
       infer->DoCalculations(allData);
       infer->SaveResults(allData);
       delete infer;
-      
+
       LOG_ERR("FABBER is all done." << endl);
 
       time_t endTime;
@@ -165,10 +165,10 @@ int main(int argc, char** argv)
       LOG_ERR("Duration: " << endTime-startTime << " seconds." << endl);
 
       } // End of timings
-     
+
       if (recordTimings) {
         tr.dump_times(EasyLog::GetOutputDirectory());
-        LOG_ERR("Timing profile information recorded to " 
+        LOG_ERR("Timing profile information recorded to "
 		<< EasyLog::GetOutputDirectory() << "/timings.html" << endl);
       }
 
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
   catch (Exception)
     {
       Warning::ReissueAll();
-      LOG_ERR_SAFE("NEWMAT exception caught in fabber:\n  " 
+      LOG_ERR_SAFE("NEWMAT exception caught in fabber:\n  "
 	      << Exception::what() << endl);
     }
   catch (...)
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
       Warning::ReissueAll();
       LOG_ERR_SAFE("Some other exception caught in fabber!" << endl);
     }
-  
+
   if (EasyLog::LogStarted())
     {
       // Only gzip the logfile if we exited normally.

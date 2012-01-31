@@ -41,7 +41,7 @@ proc balloonhelp_for {win mesg} {
        bind $win <B1-Leave> {set bhInfo(click) 1}
     bind $win <Enter> {if {$bhInfo(click)!=1} { balloonhelp_pending %W } else {balloonhelp_cancel;set bhInfo(click) 0 } }
     bind $win <Leave> {balloonhelp_cancel; set bhInfo(click) 0}
- 
+
 }
 
 # ----------------------------------------------------------------------
@@ -56,8 +56,8 @@ proc balloonhelp_control {state} {
     global bhInfo
     if {$state==2 && $bhInfo(active)} {set state 0}
     if {$state==2 && !$bhInfo(active)} {set state 1}
-    if {$state==1} {set bhInfo(active) 1} 
-    if {$state==0} { 
+    if {$state==1} {set bhInfo(active) 1}
+    if {$state==0} {
         balloonhelp_cancel
         set bhInfo(active) 0
     }
@@ -103,7 +103,7 @@ proc balloonhelp_cancel {} {
 # ----------------------------------------------------------------------
 proc balloonhelp_show {win} {
     global bhInfo
-  
+
     if {$bhInfo(active)} {
     .balloonhelp.info configure -text $bhInfo($win)
 #Define initial position + screensize

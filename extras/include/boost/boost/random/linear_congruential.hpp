@@ -52,11 +52,11 @@ public:
 
   explicit linear_congruential(IntType x0 = 1)
     : _modulus(modulus), _x(_modulus ? (x0 % _modulus) : x0)
-  { 
+  {
     assert(c || x0); /* if c == 0 and x(0) == 0 then x(n) = 0 for all n */
     // overflow check
     // disabled because it gives spurious "divide by zero" gcc warnings
-    // assert(m == 0 || (a*(m-1)+c) % m == (c < a ? c-a+m : c-a)); 
+    // assert(m == 0 || (a*(m-1)+c) % m == (c < a ? c-a+m : c-a));
 
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -95,21 +95,21 @@ public:
   static bool validation(IntType x) { return val == x; }
 
 #ifdef BOOST_NO_OPERATORS_IN_NAMESPACE
-    
+
   // Use a member function; Streamable concept not supported.
   bool operator==(const linear_congruential& rhs) const
   { return _x == rhs._x; }
   bool operator!=(const linear_congruential& rhs) const
   { return !(*this == rhs); }
 
-#else 
+#else
   friend bool operator==(const linear_congruential& x,
                          const linear_congruential& y)
   { return x._x == y._x; }
   friend bool operator!=(const linear_congruential& x,
                          const linear_congruential& y)
   { return !(x == y); }
-    
+
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
@@ -126,11 +126,11 @@ public:
   {
     return is >> lcg._x;
   }
- 
+
 private:
 #endif
 #endif
-    
+
   IntType _modulus;   // work-around for gcc "divide by zero" warning in ctor
   IntType _x;
 };
@@ -185,7 +185,7 @@ const IntType linear_congruential<IntType,a,c,m,val>::modulus;
 } // namespace random
 
 // validation values from the publications
-typedef random::linear_congruential<int32_t, 16807, 0, 2147483647, 
+typedef random::linear_congruential<int32_t, 16807, 0, 2147483647,
   1043618065> minstd_rand0;
 typedef random::linear_congruential<int32_t, 48271, 0, 2147483647,
   399268537> minstd_rand;
@@ -193,7 +193,7 @@ typedef random::linear_congruential<int32_t, 48271, 0, 2147483647,
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 // emulate the lrand48() C library function; requires support for uint64_t
-class rand48 
+class rand48
 {
 public:
   typedef int32_t result_type;
@@ -206,7 +206,7 @@ public:
 #endif
   int32_t min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
   int32_t max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::numeric_limits<int32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
-  
+
   explicit rand48(int32_t x0 = 1) : lcf(cnv(x0)) { }
   explicit rand48(uint64_t x0) : lcf(x0) { }
   template<class It> rand48(It& first, It last) : lcf(first, last) { }
@@ -248,7 +248,7 @@ private:
   random::linear_congruential<uint64_t,
     uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32), // xxxxULL is not portable
     0xB, uint64_t(1)<<48, /* unknown */ 0> lcf;
-  static uint64_t cnv(int32_t x) 
+  static uint64_t cnv(int32_t x)
   { return (static_cast<uint64_t>(x) << 16) | 0x330e;  }
 };
 #endif /* !BOOST_NO_INT64_T && !BOOST_NO_INTEGRAL_INT64_T */

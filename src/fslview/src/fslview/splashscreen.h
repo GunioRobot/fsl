@@ -19,7 +19,7 @@ class SplashScreen : public QFrame
 public:
   SplashScreen(QWidget *parent, ApplicationOptions& opts, const char *name=0);
   virtual ~SplashScreen();
-  
+
   void showEvent(QShowEvent *);
 
 public slots:

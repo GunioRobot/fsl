@@ -1,4 +1,4 @@
-void 
+void
 gdImageEllipse (gdImagePtr im, int cx, int cy, int w, int h, int color)
 {
   long d, b_sq, b_sq_4, b_sq_6;

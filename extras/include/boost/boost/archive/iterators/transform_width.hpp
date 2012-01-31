@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // transform_width.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -30,7 +30,7 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
-namespace boost { 
+namespace boost {
 namespace archive {
 namespace iterators {
 
@@ -38,12 +38,12 @@ namespace iterators {
 // class used by text archives to translate char strings to wchar_t
 // strings of the currently selected locale
 template<
-    class Base, 
-    int BitsOut, 
-    int BitsIn, 
+    class Base,
+    int BitsOut,
+    int BitsIn,
     class CharType = BOOST_DEDUCED_TYPENAME boost::iterator_value<Base>::type // output character
 >
-class transform_width : 
+class transform_width :
     public boost::iterator_adaptor<
         transform_width<Base, BitsOut, BitsIn, CharType>,
         Base,
@@ -112,14 +112,14 @@ class transform_width :
 public:
     // make composible buy using templated constructor
     template<class T>
-    transform_width(BOOST_PFTO_WRAPPER(T) start) : 
+    transform_width(BOOST_PFTO_WRAPPER(T) start) :
         super_t(Base(BOOST_MAKE_PFTO_WRAPPER(static_cast<T>(start)))),
         m_displacement(0),
         m_full(false),
         m_bufferfull(false)
     {}
     // intel 7.1 doesn't like default copy constructor
-    transform_width(const transform_width & rhs) : 
+    transform_width(const transform_width & rhs) :
         super_t(rhs.base_reference()),
         m_current_value(rhs.m_current_value),
         m_displacement(rhs.m_displacement),

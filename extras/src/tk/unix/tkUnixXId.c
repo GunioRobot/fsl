@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixXId.c --
  *
  *	This file provides a replacement function for the default X
@@ -80,7 +80,7 @@ TkInitXId(dispPtr)
 					 * display. */
 {
     dispPtr->idStackPtr = NULL;
-    dispPtr->defaultAllocProc = (XID (*) _ANSI_ARGS_((Display *display))) 
+    dispPtr->defaultAllocProc = (XID (*) _ANSI_ARGS_((Display *display)))
             dispPtr->display->resource_alloc;
     dispPtr->display->resource_alloc = AllocXId;
     dispPtr->windowStackPtr = NULL;
@@ -161,7 +161,7 @@ AllocXId(display)
      */
 
     dispPtr = TkGetDisplay(display);
-    
+
     /*
      * If the topmost chunk on the stack is empty then free it.  Then
      * check for a free id on the stack and return it if it exists.
@@ -227,7 +227,7 @@ Tk_FreeXId(display, xid)
     /*
      * Add a new chunk to the stack if the current chunk is full.
      */
-    
+
     stackPtr = dispPtr->idStackPtr;
     if ((stackPtr == NULL) || (stackPtr->numUsed >= IDS_PER_STACK)) {
 	stackPtr = (TkIdStack *) ckalloc(sizeof(TkIdStack));
@@ -599,7 +599,7 @@ TkpWindowWasRecentlyDeleted(win, dispPtr)
 
 int
 TkpScanWindowId(interp, string, idPtr)
-    Tcl_Interp *interp;	
+    Tcl_Interp *interp;
     CONST char *string;
     Window *idPtr;
 {

@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -82,7 +82,7 @@ struct typed_argument_factory : public argument_factory {
         optionally_assign( m_value_interpreter, m, interpreter );
 
         if( m.has( default_value ) ) {
-            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_generator, 
+            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_generator,
                 BOOST_RT_PARAM_LITERAL( "multiple value generators for parameter" ) );
 
             T const& dv_ref = m[default_value];
@@ -90,7 +90,7 @@ struct typed_argument_factory : public argument_factory {
         }
 
         if( m.has( default_refer_to ) ) {
-            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_generator, 
+            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_generator,
                 BOOST_RT_PARAM_LITERAL( "multiple value generators for parameter" ) );
 
             cstring ref_id = m[default_refer_to];
@@ -98,7 +98,7 @@ struct typed_argument_factory : public argument_factory {
         }
 
         if( m.has( assign_to ) ) {
-            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_handler, 
+            BOOST_RT_PARAM_VALIDATE_LOGIC( !m_value_handler,
                 BOOST_RT_PARAM_LITERAL( "multiple value handlers for parameter" ) );
 
             m_value_handler = rt_cla_detail::assigner<T>( m[assign_to] );
@@ -137,24 +137,24 @@ typed_argument_factory<T>::produce_using( parameter& p, argv_traverser& tr )
 
     argument_ptr arg = p.actual_argument();
 
-    BOOST_RT_CLA_VALIDATE_INPUT( !!value || p.p_optional_value, tr, 
+    BOOST_RT_CLA_VALIDATE_INPUT( !!value || p.p_optional_value, tr,
         BOOST_RT_PARAM_LITERAL( "Argument value missing for parameter " ) << p.id_2_report() );
 
-    BOOST_RT_CLA_VALIDATE_INPUT( !arg || p.p_multiplicable, tr, 
+    BOOST_RT_CLA_VALIDATE_INPUT( !arg || p.p_multiplicable, tr,
         BOOST_RT_PARAM_LITERAL( "Unexpected repetition of the parameter " ) << p.id_2_report() );
 
     if( !!value && !!m_value_handler )
         m_value_handler( p, *value );
 
     if( !p.p_multiplicable )
-        arg.reset( p.p_optional_value 
+        arg.reset( p.p_optional_value
             ? (argument*)new typed_argument<boost::optional<T> >( p, value )
             : (argument*)new typed_argument<T>( p, *value ) );
     else {
         typedef std::list<boost::optional<T> > optional_list;
 
         if( !arg )
-            arg.reset( p.p_optional_value 
+            arg.reset( p.p_optional_value
                 ? (argument*)new typed_argument<optional_list>( p )
                 : (argument*)new typed_argument<std::list<T> >( p ) );
 
@@ -165,7 +165,7 @@ typed_argument_factory<T>::produce_using( parameter& p, argv_traverser& tr )
         }
         else {
             std::list<T>& values = arg_value<std::list<T> >( *arg );
-            
+
             values.push_back( *value );
         }
     }
@@ -176,7 +176,7 @@ typed_argument_factory<T>::produce_using( parameter& p, argv_traverser& tr )
 //____________________________________________________________________________//
 
 template<typename T>
-inline argument_ptr 
+inline argument_ptr
 typed_argument_factory<T>::produce_using( parameter& p, parser const& pa )
 {
     argument_ptr arg;

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -82,27 +82,27 @@ namespace Bint {
 
   void LSMCMCManager::setup()
   {
-    Tracer_Plus tr("LSMCMCManager::setup"); 
+    Tracer_Plus tr("LSMCMCManager::setup");
 
     ntpts = data.Nrows();
     nvoxels = data.Ncols();
 
     // need to get nparams by dummy call to model:
     model.setparams();
-    nparams = model.getnparams();    
-	    
+    nparams = model.getnparams();
+
     // initialise samples
     samples.resize(nparams);
     cout << "nparams=" << nparams << endl;
     cout << "nsamples=" << nsamples << endl;
 
     // initialise some more in case nvoxels is zero
-    for(int p=0; p<nparams; p++) {      
+    for(int p=0; p<nparams; p++) {
       samples[p].ReSize(nsamples,nvoxels);
       samples[p] = 0;
 
-      paramnames.push_back(model.getparam(p).getname());	  
-    }       
+      paramnames.push_back(model.getparam(p).getname());
+    }
     if(!analmargprec)
       {
 	precsamples.ReSize(nsamples,nvoxels);
@@ -121,14 +121,14 @@ namespace Bint {
 	cout.flush();
 
 	if(debuglevel==2)
-	  {	  
+	  {
 	    cout << endl;
 	    cout << "----------------------------------" << endl;
 	  }
 
-	voxelmanager.setdata(data.Column(vox));	
-	voxelmanager.setupparams(precin);	
-	voxelmanager.run();	
+	voxelmanager.setdata(data.Column(vox));
+	voxelmanager.setupparams(precin);
+	voxelmanager.run();
 
 	// Now store samples:
 	for(int p=0; p<nparams; p++) {
@@ -140,10 +140,10 @@ namespace Bint {
 
 	  if(!analmargprec)
 	    {
-	      const vector<float>& precsamps = voxelmanager.getprecsamples();	
+	      const vector<float>& precsamps = voxelmanager.getprecsamples();
 	      precsamples.Column(vox)=vector2ColumnVector(precsamps);
 	    }
-	}      
+	}
       }
 
     cout << endl;
@@ -152,7 +152,7 @@ namespace Bint {
   void LSMCMCManager::save()
   {
     Tracer_Plus tr("LSMCMCManager::save");
-    
+
     cout << "Saving results...";
 
     for(int p=0; p<nparams; p++) {
@@ -192,18 +192,18 @@ namespace Bint {
     float old = val;
 
     // propose new values
-    val += normrnd().AsScalar()*proposal_std;      
+    val += normrnd().AsScalar()*proposal_std;
 
-    // calculate acceptance threshold   
-    float tmp = unifrnd().AsScalar();    
+    // calculate acceptance threshold
+    float tmp = unifrnd().AsScalar();
     float tmpold = old_energy();
     float tmpnew = new_energy();
 
     bool accept=false;
 
     if(tmpnew!=float(MAX_EN))
-      {	
-	accept = ((tmpold - tmpnew) > std::log(tmp));    
+      {
+	accept = ((tmpold - tmpnew) > std::log(tmp));
       }
 
     if(debuglevel==2)
@@ -222,12 +222,12 @@ namespace Bint {
       }
 
     if(accept)
-      {	
+      {
 	naccepted++;
       }
     else
       {
-	// restore old values	    
+	// restore old values
 	val = old;
 	restore_energy();
 	nrejected++;
@@ -239,41 +239,41 @@ namespace Bint {
 	jumpcount = 0;
       }
     else
-      {	
+      {
 	jumpcount++;
       }
   }
-  
-  float LSMCMCPrecParameter::calc_extra() 
-  { 
+
+  float LSMCMCPrecParameter::calc_extra()
+  {
     Tracer_Plus trace("LSMCMCPrecParameter::calc_extra");
 
-    extra_old_energy = extra_energy; 
-    
+    extra_old_energy = extra_energy;
+
     float minprec = 0;
-    
+
     if(val <= minprec)
       {
 	extra_energy = 1e16;
 	impropercount++;
-	
+
 	if(impropercount==int(lsmcmc.getnsamples()/4.0))
 	  cout << "too many low precisions for LSMCMCPrecParameter" << endl;
       }
     else
-      {	       
-	extra_energy = -(N/2.0)*std::log(val)+param.getprior().calc_energy(val);	
+      {
+	extra_energy = -(N/2.0)*std::log(val)+param.getprior().calc_energy(val);
       }
-    
+
     if(debuglevel==2)
       {
 	cout << "extra_old_energy=" << extra_old_energy << endl;
 	cout << "extra_energy=" << extra_energy << endl;
       }
-      
-    return extra_energy; 
-  }  
-  
+
+    return extra_energy;
+  }
+
   void LSMCMCVoxelManager::calcsumsquares()
     {
       Tracer_Plus trace("LSMCMCVoxelManager::calcsumsquares");
@@ -295,7 +295,7 @@ namespace Bint {
   void LSMCMCVoxelManager::setupparams(float prec)
   {
     Tracer_Plus trace("LSMCMCVoxelManager::setupparams");
-    
+
     model.setparams();
     model.initialise(data);
     nparams = model.getnparams();
@@ -310,7 +310,7 @@ namespace Bint {
 
     sumsquares = 0;
     calcsumsquares();
-    
+
     //    OUT(analmargprec);
 
     if(!analmargprec)
@@ -322,16 +322,16 @@ namespace Bint {
 	    updateprec = true;
 	    mean = ntpts/sumsquares;
 	  }
-	else 
+	else
 	  {
 	    updateprec = false;
 	    mean = prec;
-	  }      
+	  }
 
 	float var = Sqr(mean)*1000000;
 	float a = Sqr(mean)/var;
 	float b = mean/var;
-	
+
 	precparamprior = new GammaPrior(a,b);
 	precparam = new Parameter("prec", mean, mean/10.0, *precparamprior);
 	precmcmcparam = new LSMCMCPrecParameter(*precparam,nsamples,updateproposalevery,acceptancerate,*this);
@@ -354,7 +354,7 @@ namespace Bint {
   void LSMCMCVoxelManager::run()
   {
     Tracer_Plus trace("LSMCMCVoxelManager::run");
-    
+
     int samples = 0;
     int jumps = 0;
     int subsamplejumps = 0;
@@ -366,31 +366,31 @@ namespace Bint {
 	{
 	  x(p+1) = mcmcparams[p]->value();
 	}
-      
+
       ColumnVector retstart = model.nonlinearfunc(x);
 
     while(true)
       {
 	jumps++;
 	subsamplejumps++;
-	    
+
   	jump();
 
 	if(subsamplejumps >= sampleevery)
 	  {
 	    subsamplejumps = 0;
-	    
+
 	    // sample components after burnin
 	    if(jumps > burnin)
-	      {	   		
+	      {
 		sample();
 		samples++;
-		
+
 		if(samples>=nsamples)
 		  break;
 	      }
 	  }
-      }    
+      }
 
       x = 0;
 
@@ -398,12 +398,12 @@ namespace Bint {
 	{
 	  x(p+1) = mcmcparams[p]->value();
 	}
-      
+
       ColumnVector retend = model.nonlinearfunc(x);
   }
 
-  void LSMCMCVoxelManager::sample() 
-  { 
+  void LSMCMCVoxelManager::sample()
+  {
     Tracer_Plus trace("LSMCMCVoxelManager::sample");
 
     for(int p=0; p<nparams; p++) {
@@ -414,9 +414,9 @@ namespace Bint {
     if(!analmargprec)
       precmcmcparam->sample();
   }
-  
-  void LSMCMCVoxelManager::jump() 
-  { 
+
+  void LSMCMCVoxelManager::jump()
+  {
     Tracer_Plus trace("LSMCMCVoxelManager::jump");
 
     if(debuglevel==2)
@@ -425,7 +425,7 @@ namespace Bint {
     for(int p=0; p<nparams; p++) {
       if(mcmcparams[p]->getallowtovary())
 	mcmcparams[p]->jump();
-    }    
+    }
 
     if(!analmargprec)
       {

@@ -13,7 +13,7 @@ GOBJS = genimage.o
 HOBJS = testhistfns.o
 LIBS = -lstorage -lfslio -lniftiio -lznz -lz
 
-all: testhistfns 
+all: testhistfns
 
 genimage: ${GOBJS}
 	${CXX} ${LDFLAGS} -o $@ ${GOBJS} -lcppunit -ldl ${LIBS}

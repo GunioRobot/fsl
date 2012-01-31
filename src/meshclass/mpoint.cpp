@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -86,16 +86,16 @@ void Mpoint::translation(const double x,const double y,const double z)
 {
   _coord+= Pt(x, y, z);
 }
-void Mpoint::rotation(const double r11, const double r12, const double r13, const double r21, const double r22, const double r23, const double r31, const double r32, const double r33,const double x, const double y, const double z) 
+void Mpoint::rotation(const double r11, const double r12, const double r13, const double r21, const double r22, const double r23, const double r31, const double r32, const double r33,const double x, const double y, const double z)
 {
 	Vec cen=_coord - Pt(x, y, z);
-	
+
   _coord = Pt(x, y, z) + Vec( (cen.X*r11+cen.Y*r12+cen.Z*r13) , (cen.X*r21+cen.Y*r22+cen.Z*r23) , (cen.X*r31+cen.Y*r32+cen.Z*r33));
-  
-  
-  
+
+
+
 }
-void Mpoint::rescale(const double t, const double x, const double y, const double z) 
+void Mpoint::rescale(const double t, const double x, const double y, const double z)
 {
   _coord = Pt(x, y, z) + t*(_coord - Pt(x, y, z));
 }
@@ -154,14 +154,14 @@ const double Mpoint::medium_distance_of_neighbours() const
   return l;
 }
 const Vec Mpoint::max_triangle() const
-{  
+{
   //returns a vector pointing from the vertex to the triangle centroid, scaled by the triangle area
- 
+
   vector<float> Areas;
   int ind=0;
   Vec vA,temp;
   for (list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++)
-    {  
+    {
       temp=(*i)->area(this);
       Areas.push_back(temp.norm());
 		//don't need to store in vector anymore
@@ -171,7 +171,7 @@ const Vec Mpoint::max_triangle() const
       }
     }
 
-  return vA; 
+  return vA;
 }
 
 
@@ -195,7 +195,7 @@ const bool operator <(const Mpoint &p1,const Mpoint &p2){
   bool result = false;
   for (list<Mpoint *>::const_iterator i= p1._neighbours.begin(); i!=p1._neighbours.end();i++){
     if (*(*i)==p2) result = true;
-  } 
+  }
   return result;
 }
 

@@ -15,7 +15,7 @@ namespace detail
   struct BOOST_PYTHON_DECL arg_to_python_base
 # if !defined(BOOST_MSVC) || BOOST_MSVC <= 1300 || _MSC_FULL_VER > 13102179
       : handle<>
-# endif 
+# endif
   {
       arg_to_python_base(void const volatile* source, registration const&);
 # if defined(BOOST_MSVC) && BOOST_MSVC > 1300 && _MSC_FULL_VER <= 13102179
@@ -23,7 +23,7 @@ namespace detail
       PyObject* release() { return m_ptr.release(); }
    private:
       handle<> m_ptr;
-# endif 
+# endif
   };
 }
 

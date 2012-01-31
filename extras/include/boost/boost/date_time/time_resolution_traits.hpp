@@ -2,7 +2,7 @@
 #define DATE_TIME_TIME_RESOLUTION_TRAITS_HPP
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -18,10 +18,10 @@ namespace boost {
 namespace date_time {
 
   //! Simple function to calculate absolute value of a numeric type
-  template <typename T> 
-  // JDG [7/6/02 made a template], 
+  template <typename T>
+  // JDG [7/6/02 made a template],
   // moved here from time_duration.hpp 2003-Sept-4.
-  inline T absolute_value(T x) 
+  inline T absolute_value(T x)
   {
     return x < 0 ? -x : x;
   }
@@ -58,8 +58,8 @@ namespace date_time {
     //! Used to determine if implemented type is int_adapter or int
     static bool is_adapted() { return true;}
   };
-  
-  template<typename frac_sec_type, 
+
+  template<typename frac_sec_type,
            time_resolutions res,
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
              boost::int64_t resolution_adjust,
@@ -77,7 +77,7 @@ namespace date_time {
     typedef v_type  hour_type;
     typedef v_type  min_type;
     typedef v_type  sec_type;
-    
+
     // bring in function from frac_sec_type traits structs
     static typename frac_sec_type::int_type as_number(typename frac_sec_type::impl_type i)
     {
@@ -87,11 +87,11 @@ namespace date_time {
     {
       return frac_sec_type::is_adapted();
     }
-    
+
     //Would like this to be frac_sec_type, but some compilers complain
     BOOST_STATIC_CONSTANT(int, ticks_per_second = resolution_adjust);
     //    static const boost::int32_t ticks_per_second = resolution_adjust;
-    
+
     static time_resolutions resolution()
     {
       return res;
@@ -116,17 +116,17 @@ namespace date_time {
         minutes = absolute_value(minutes);
         seconds = absolute_value(seconds);
         fs = absolute_value(fs);
-        return (((((fractional_seconds_type(hours)*3600) 
-                   + (fractional_seconds_type(minutes)*60) 
+        return (((((fractional_seconds_type(hours)*3600)
+                   + (fractional_seconds_type(minutes)*60)
                    + seconds)*res_adjust()) + fs) * -1);
       }
       else{
-        return (((fractional_seconds_type(hours)*3600) 
-                 + (fractional_seconds_type(minutes)*60) 
+        return (((fractional_seconds_type(hours)*3600)
+                 + (fractional_seconds_type(minutes)*60)
                  + seconds)*res_adjust()) + fs;
       }
     }
-    
+
   };
 
   typedef time_resolution_traits<time_resolution_traits_adapted32_impl, milli, 1000, 3 > milli_res;

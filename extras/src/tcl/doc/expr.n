@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: expr.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH expr n 8.4 Tcl "Tcl Built-In Commands"
 .BS
@@ -183,7 +183,7 @@ precedence level.  For example, the command
 returns 0.
 .PP
 The \fB&&\fR, \fB||\fR, and \fB?:\fR operators have ``lazy
-evaluation'', just as in C, 
+evaluation'', just as in C,
 which means that operands are not evaluated if they are
 not needed to determine the outcome.  For example, in the command
 .CS
@@ -284,7 +284,7 @@ Computes the value of \fIx\fR raised to the power \fIy\fR.  If \fIx\fR
 is negative, \fIy\fR must be an integer value.
 .TP
 \fBrand()\fR
-Returns a pseudo-random floating-point value in the range (\fI0\fR,\fI1\fR).  
+Returns a pseudo-random floating-point value in the range (\fI0\fR,\fI1\fR).
 The generator algorithm is a simple linear congruential generator that
 is not cryptographically secure.  Each result from \fBrand\fR completely
 determines all future results from subsequent calls to \fBrand\fR, so
@@ -413,7 +413,7 @@ Most expressions do not require a second round of substitutions.
 Either they are enclosed in braces or, if not,
 their variable and command substitutions yield numbers or strings
 that don't themselves require substitutions.
-However, because a few unbraced expressions 
+However, because a few unbraced expressions
 need two rounds of substitutions,
 the bytecode compiler must emit
 additional instructions to handle this situation.

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclLoadShl.c --
  *
  *	This procedure provides a version of the TclLoadFile that works
@@ -49,9 +49,9 @@ TclpDlopen(interp, pathPtr, loadHandle, unloadProcPtr)
     Tcl_Obj *pathPtr;		/* Name of the file containing the desired
 				 * code (UTF-8). */
     Tcl_LoadHandle *loadHandle;	/* Filled with token for dynamically loaded
-				 * file which will be passed back to 
+				 * file which will be passed back to
 				 * (*unloadProcPtr)() to unload the file. */
-    Tcl_FSUnloadFileProc **unloadProcPtr;	
+    Tcl_FSUnloadFileProc **unloadProcPtr;
 				/* Filled with address of Tcl_FSUnloadFileProc
 				 * function which should be used for
 				 * this file. */
@@ -118,7 +118,7 @@ TclpDlopen(interp, pathPtr, loadHandle, unloadProcPtr)
  *----------------------------------------------------------------------
  */
 Tcl_PackageInitProc*
-TclpFindSymbol(interp, loadHandle, symbol) 
+TclpFindSymbol(interp, loadHandle, symbol)
     Tcl_Interp *interp;
     Tcl_LoadHandle loadHandle;
     CONST char *symbol;
@@ -167,8 +167,8 @@ TclpFindSymbol(interp, loadHandle, symbol)
 void
 TclpUnloadFile(loadHandle)
     Tcl_LoadHandle loadHandle;	/* loadHandle returned by a previous call
-				 * to TclpDlopen().  The loadHandle is 
-				 * a token that represents the loaded 
+				 * to TclpDlopen().  The loadHandle is
+				 * a token that represents the loaded
 				 * file. */
 {
     shl_t handle;

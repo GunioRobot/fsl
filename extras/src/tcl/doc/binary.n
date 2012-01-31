@@ -3,9 +3,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: binary.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH binary n 8.0 Tcl "Tcl Built-In Commands"
 .BS
@@ -179,7 +179,7 @@ example,
 .CS
 \fBbinary format s3 {3 -3 258 1}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\x03\\x00\\xfd\\xff\\x02\\x01\fR.
 .RE
 .IP \fBS\fR 5
@@ -190,7 +190,7 @@ example,
 .CS
 \fBbinary format S3 {3 -3 258 1}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\x00\\x03\\xff\\xfd\\x01\\x02\fR.
 .RE
 .IP \fBi\fR 5
@@ -203,7 +203,7 @@ example,
 .CS
 \fBbinary format i3 {3 -3 65536 1}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\x03\\x00\\x00\\x00\\xfd\\xff\\xff\\xff\\x00\\x00\\x01\\x00\fR
 .RE
 .IP \fBI\fR 5
@@ -214,7 +214,7 @@ For example,
 .CS
 \fBbinary format I3 {3 -3 65536 1}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\x00\\x00\\x00\\x03\\xff\\xff\\xff\\xfd\\x00\\x01\\x00\\x00\fR
 .RE
 .IP \fBw\fR 5
@@ -258,7 +258,7 @@ on a Windows system running on an Intel Pentium processor,
 .CS
 \fBbinary format f2 {1.6 3.4}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\xcd\\xcc\\xcc\\x3f\\x9a\\x99\\x59\\x40\fR.
 .RE
 .IP \fBd\fR 5
@@ -270,7 +270,7 @@ Windows system running on an Intel Pentium processor,
 .CS
 \fBbinary format d1 {1.6}\fR
 .CE
-will return a string equivalent to 
+will return a string equivalent to
 \fB\\x9a\\x99\\x99\\x99\\x99\\x99\\xf9\\x3f\fR.
 .RE
 .IP \fBx\fR 5
@@ -374,8 +374,8 @@ will be sign extended.  Thus the following will occur:
 \fBset signShort [binary format s1 0x8000]\fR
 \fBbinary scan $signShort s1 val; \fI# val == 0xFFFF8000\fR
 .CE
-If you want to produce an unsigned value, then you can mask the return 
-value to the desired size.  For example, to produce an unsigned short 
+If you want to produce an unsigned value, then you can mask the return
+value to the desired size.  For example, to produce an unsigned short
 value:
 .CS
 \fBset val [expr {$val & 0xFFFF}]; \fI# val == 0x8000\fR
@@ -507,7 +507,7 @@ order.  For example,
 \fBbinary scan \\x00\\x05\\x00\\x07\\xff\\xf0 S2S* var1 var2\fR
 .CE
 will return \fB2\fR with \fB5 7\fR stored in \fBvar1\fR and \fB-16\fR
-stored in \fBvar2\fR. 
+stored in \fBvar2\fR.
 .RE
 .IP \fBi\fR 5
 The data is interpreted as \fIcount\fR 32-bit signed integers

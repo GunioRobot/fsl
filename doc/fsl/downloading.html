@@ -6,7 +6,7 @@
 <IFRAME width="100%" scrolling="no" frameborder="0" src="top.html" type="text/html">Broken</IFRAME>
 
 <H2>DOWNLOADING AND INSTALLING</H2>
- 
+
 <p><br><H3>Downloading</H3>
 
 <P> FSL is available precompiled for various different operating
@@ -28,7 +28,7 @@ gunzip ~/fsl-*-macosx.tar.gz
 tar xvf ~/fsl-*-macosx.tar
 </PRE>
 
-<br><br><H3>Special instructions for installation if:</H3> 
+<br><br><H3>Special instructions for installation if:</H3>
 <UL>
 
 <LI><a href="macosx.html">You are installing on Mac OS X</a>
@@ -74,7 +74,7 @@ individual FSL GUI tools, just type <b>fsl</b>.
 <br><br><a name="custom"></a><br><br><H3>Customising (for different output datatypes, etc.) </H3>
 
 <p>There are several environment variables which FSL uses to determine
-certain user preferences, such as the output file format (NIFTI_GZ, NIFTI_PAIR, etc). 
+certain user preferences, such as the output file format (NIFTI_GZ, NIFTI_PAIR, etc).
 The defaults for these are set when you source the
 setup file as shown above (i.e., ${FSLDIR}/etc/fslconf/fsl.sh or
 ${FSLDIR}/etc/fslconf/fsl.csh). If you wish to change these defaults
@@ -86,7 +86,7 @@ cd .fslconf</pre>
 and in this directory create a file called fsl.sh or fsl.csh,
 depending on the shell that you use, setting any or all of the
 variables that appear in the central ${FSLDIR}/etc/fslconf/fsl.sh or
-${FSLDIR}/etc/fslconf/fsl.csh files. 
+${FSLDIR}/etc/fslconf/fsl.csh files.
 <p>
 <b>
 DO NOT copy the central files into <kbd>~/.fslconf/</kbd> as it
@@ -121,7 +121,7 @@ cluster computing, via SunGridEngine (SGE):
 <LI>TBSS will run all registrations in parallel.
 
 <LI>BEDPOST (FDT) low-level diffusion processing will run all slices
-  in parallel. 
+  in parallel.
 
 <LI>FSL-VBM will run all registrations in parallel, both at the
   template-creation stage and at the final registrations stage.

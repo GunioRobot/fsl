@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvPoly.c --
  *
  *	This file implements polygon items for canvas widgets.
@@ -405,7 +405,7 @@ PolygonCoords(interp, canvas, itemPtr, objc, objv)
 	/*
 	 * Close the polygon if it isn't already closed.
 	 */
-    
+
 	if (objc>2 && ((polyPtr->coordPtr[objc-2] != polyPtr->coordPtr[0])
 		|| (polyPtr->coordPtr[objc-1] != polyPtr->coordPtr[1]))) {
 	    polyPtr->autoClosed = 1;
@@ -534,7 +534,7 @@ ConfigurePolygon(interp, canvas, itemPtr, objc, objv, flags)
 	 * Mac OS X CG drawing needs access to the outline linewidth
 	 * even for fills (as linewidth controls antialiasing).
 	 */
-	gcValues.line_width = polyPtr->outline.gc != None ? 
+	gcValues.line_width = polyPtr->outline.gc != None ?
 		polyPtr->outline.gc->line_width : 0;
 	mask |= GCLineWidth;
 #endif
@@ -771,7 +771,7 @@ ComputePolygonBbox(canvas, polyPtr)
 	     }
 	    for (i = polyPtr->numPoints ; i >= 3;
 		    i--, coordPtr += 2) {
-    
+
 		if (TkGetMiterPoints(coordPtr, coordPtr+2, coordPtr+4,
 			width, miter, miter+2)) {
 		    for (j = 0; j < 4; j += 2) {
@@ -1443,7 +1443,7 @@ PolygonToArea(canvas, itemPtr, rectPtr)
 				 * means everything seen so far was
 				 * inside the area;  -1 means everything
 				 * was outside the area.  0 means overlap
-				 * has been found. */ 
+				 * has been found. */
     double width;
     Tk_State state = itemPtr->state;
 
@@ -1518,7 +1518,7 @@ PolygonToArea(canvas, itemPtr, rectPtr)
     changedMiterToBevel = 0;
     for (count = numPoints, coordPtr = polyPoints; count >= 2;
 	    count--, coordPtr += 2) {
- 
+
 	/*
 	 * If rounding is done around the first point of the edge
 	 * then test a circular region around the point with the

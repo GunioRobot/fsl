@@ -1,4 +1,4 @@
-/* 
+/*
  * tkPointer.c --
  *
  *	This file contains functions for emulating the X server
@@ -146,7 +146,7 @@ GenerateEnterLeave(winPtr, x, y, state)
     int state;			/* State flags. */
 {
     int crossed = 0;		/* 1 if mouse crossed a window boundary */
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     TkWindow *restrictWinPtr = tsdPtr->restrictWinPtr;
     TkWindow *lastWinPtr = tsdPtr->lastWinPtr;
@@ -239,7 +239,7 @@ Tk_UpdatePointer(tkwin, x, y, state)
     int x, y;			/* Pointer location in root coords. */
     int state;			/* Modifier state mask. */
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     TkWindow *winPtr = (TkWindow *)tkwin;
     TkWindow *targetWinPtr;
@@ -277,7 +277,7 @@ Tk_UpdatePointer(tkwin, x, y, state)
     for (b = Button1; b <= Button3; b++) {
 	mask = ButtonMask(b);
 	if (changes & mask) {
-	    if (state & mask) {	
+	    if (state & mask) {
 		type = ButtonPress;
 
 	        /*
@@ -344,7 +344,7 @@ Tk_UpdatePointer(tkwin, x, y, state)
 		    GenerateEnterLeave(winPtr, x, y, tsdPtr->lastState);
 		    tsdPtr->lastPos = pos;
 		    continue;
-		}		
+		}
 	    }
 
 	    /*
@@ -449,14 +449,14 @@ XGrabPointer(display, grab_window, owner_events, event_mask, pointer_mode,
     Cursor cursor;
     Time time;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     display->request++;
     tsdPtr->grabWinPtr = (TkWindow *) Tk_IdToWindow(display, grab_window);
     tsdPtr->restrictWinPtr = NULL;
     TkpSetCapture(tsdPtr->grabWinPtr);
-    if (TkPositionInTree(tsdPtr->lastWinPtr, tsdPtr->grabWinPtr) 
+    if (TkPositionInTree(tsdPtr->lastWinPtr, tsdPtr->grabWinPtr)
             != TK_GRAB_IN_TREE) {
 	UpdateCursor(tsdPtr->grabWinPtr);
     }
@@ -484,7 +484,7 @@ XUngrabPointer(display, time)
     Display* display;
     Time time;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     display->request++;
@@ -514,7 +514,7 @@ void
 TkPointerDeadWindow(winPtr)
     TkWindow *winPtr;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (winPtr == tsdPtr->lastWinPtr) {
@@ -553,7 +553,7 @@ UpdateCursor(winPtr)
     TkWindow *winPtr;
 {
     Cursor cursor = None;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -601,7 +601,7 @@ XDefineCursor(display, w, cursor)
     Cursor cursor;
 {
     TkWindow *winPtr = (TkWindow *)Tk_IdToWindow(display, w);
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (tsdPtr->cursorWinPtr == winPtr) {
@@ -636,8 +636,8 @@ TkGenerateActivateEvents(winPtr, active)
 				 * activated, else 0.*/
 {
     XEvent event;
-    
-    /* 
+
+    /*
      * Generate Activate and Deactivate events.  This event
      * is sent to every subwindow in a toplevel window.
      */
@@ -649,5 +649,5 @@ TkGenerateActivateEvents(winPtr, active)
 
     event.xany.type = active ? ActivateNotify : DeactivateNotify;
     TkQueueEventForAllChildren(winPtr, &event);
-    
+
 }

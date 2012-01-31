@@ -1,4 +1,4 @@
-/* 
+/*
  * tclHash.c --
  *
  *	Implementation of in-memory hash tables for Tcl and Tcl-based
@@ -191,11 +191,11 @@ Tcl_InitCustomHashTable(tablePtr, keyType, typePtr)
     Tcl_HashKeyType *typePtr;		/* Pointer to structure which defines
 					 * the behaviour of this table. */
 {
-#if (TCL_SMALL_HASH_TABLE != 4) 
+#if (TCL_SMALL_HASH_TABLE != 4)
     panic("Tcl_InitCustomHashTable: TCL_SMALL_HASH_TABLE is %d, not 4\n",
 	    TCL_SMALL_HASH_TABLE);
 #endif
-    
+
     tablePtr->buckets = tablePtr->staticBuckets;
     tablePtr->staticBuckets[0] = tablePtr->staticBuckets[1] = 0;
     tablePtr->staticBuckets[2] = tablePtr->staticBuckets[3] = 0;
@@ -341,7 +341,7 @@ Tcl_FindHashEntry(tablePtr, key)
 	    }
 	}
     }
-    
+
     return NULL;
 }
 
@@ -454,7 +454,7 @@ Tcl_CreateHashEntry(tablePtr, key, newPtr)
 	hPtr = (Tcl_HashEntry *) ckalloc((unsigned) sizeof(Tcl_HashEntry));
 	hPtr->key.oneWordValue = (char *) key;
     }
-					 
+
     hPtr->tablePtr = tablePtr;
 #if TCL_HASH_KEY_STORE_HASH
 #   if TCL_PRESERVE_BINARY_COMPATABILITY
@@ -530,7 +530,7 @@ Tcl_DeleteHashEntry(entryPtr)
 #else
     typePtr = tablePtr->typePtr;
 #endif
-    
+
 #if TCL_HASH_KEY_STORE_HASH
     if (typePtr->hashKeyProc == NULL
 	|| typePtr->flags & TCL_HASH_KEY_RANDOMIZE_HASH) {
@@ -543,7 +543,7 @@ Tcl_DeleteHashEntry(entryPtr)
 #else
     bucketPtr = entryPtr->bucketPtr;
 #endif
-    
+
     if (*bucketPtr == entryPtr) {
 	*bucketPtr = entryPtr->nextPtr;
     } else {
@@ -820,12 +820,12 @@ AllocArrayEntry(tablePtr, keyPtr)
     unsigned int size;
 
     count = tablePtr->keyType;
-    
+
     size = sizeof(Tcl_HashEntry) + (count*sizeof(int)) - sizeof(hPtr->key);
     if (size < sizeof(Tcl_HashEntry))
 	size = sizeof(Tcl_HashEntry);
     hPtr = (Tcl_HashEntry *) ckalloc(size);
-    
+
     for (iPtr1 = array, iPtr2 = hPtr->key.words;
 	    count > 0; count--, iPtr1++, iPtr2++) {
 	*iPtr2 = *iPtr1;

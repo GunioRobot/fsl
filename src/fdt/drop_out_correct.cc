@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -74,19 +74,19 @@ int main ( int argc, char **argv ){
     cerr<<"usage: dropout_correct <reference> <brain_mask> <output_basename> <bvals> <%thresh> <avg1> <avg2> ..."<<endl;
     exit(0);
   }
-  
+
   vector<volume4D<float> > imvec;
   imvec.reserve(argc-6);
-  
+
   vector<volume4D<float> > outvec;
   outvec.reserve(argc-6);
-  
+
   volume4D<float> tmpim;
   cout<<"number of averages "<<argc-6<<endl;
-  
+
 //    for (int i=0;i<argc;i++){
 //      cerr<<argv[i]<<endl;
-   
+
 //    }
 
   for(int i=6;i<argc;i++){
@@ -97,12 +97,12 @@ int main ( int argc, char **argv ){
     for(int j=tmpim.tsize();j>0;j--){
       tmpim.deletevolume(j-1);
     }
-    
+
   }
   int ipthr=atoi(argv[5]);
   Matrix bvals;
   bvals=read_ascii_matrix(argv[4]);
-  
+
   volume<float> ref;
   read_volume(ref,argv[1]);
   volume<float> mask;
@@ -123,7 +123,7 @@ int main ( int argc, char **argv ){
       for(unsigned int i=0;i<imvec.size();i++){
 	slice_tot[i]=0;
       }
-  
+
 
       //add up all the values in the slice for every avg and the ref.
       for(int y=0;y<imvec[0].ysize();y++){
@@ -134,20 +134,20 @@ int main ( int argc, char **argv ){
 	    for(unsigned int i=0;i<imvec.size();i++){
 	      slice_tot[i]+=imvec[i](x,y,z,t);
 	    }
-	    
+
 	  }
-	  
+
 	}
-	
+
       }
-      
-     
+
+
       if(vox_count>0){
 	 //compute all the means
 	for(unsigned int i=0;i<imvec.size();i++){
 	  slice_mean[i]=slice_tot[i]/vox_count;
 	}
-	ref_slice_mean=ref_slice_tot/vox_count;              
+	ref_slice_mean=ref_slice_tot/vox_count;
 	//do the testing;
 	ok_count=0;
 	buggered_count=0;
@@ -164,7 +164,7 @@ int main ( int argc, char **argv ){
 	    buggered_count++;
 	    cerr<<"avg "<<i<<" Vol "<<t+1<<" slice "<<z<<" rejected"<<endl;
 	  }
-	 
+
 	}
 	// If they all failed
 	if(ok_count==0){
@@ -173,7 +173,7 @@ int main ( int argc, char **argv ){
 	}
 	else{
 	//replace failed slices
-	
+
 	for(unsigned int i=0;i<imvec.size();i++){
 	  for(int y=0;y<imvec[0].ysize();y++){
 	    for(int x=0;x<imvec[0].xsize();x++){
@@ -197,29 +197,29 @@ int main ( int argc, char **argv ){
 //  		  cerr<<outvec[i](x,y,z,t)<<endl;
 //  		  return 0;
 //  		}
-				  
+
 	      }
-	      
-	      
+
+
 	    }
 	  }
 	}
       }
       }
-      
-      
+
+
     }
   }
 
-  
+
   for(unsigned int i=0;i<imvec.size();i++){
     string oname=argv[3];
     make_basename(oname);
     oname=oname+"_"+num2str(i+1);
     save_volume4D(outvec[i],oname);
   }
-  
-  
+
+
 }
 
 

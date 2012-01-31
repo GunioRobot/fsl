@@ -293,7 +293,7 @@ BumpCmdRefEpochs(nsPtr)
  *	  typedef int (Tcl_ResolveCmdProc) _ANSI_ARGS_((
  *		Tcl_Interp* interp, CONST char* name, Tcl_Namespace *context,
  *              int flags, Tcl_Command *rPtr));
- *          
+ *
  *	Whenever a command is executed or Tcl_FindCommand is invoked
  *	within the namespace, this procedure is called to resolve the
  *	command name.  If this procedure is able to resolve the name,

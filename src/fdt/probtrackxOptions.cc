@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -96,40 +96,40 @@ probtrackxOptions* probtrackxOptions::gopt = NULL;
 	{
 	  options.usage();
 	  exit(2);
-	}   
+	}
 
       else{
 	modecheck(); // check all the correct options are set for this mode.
-	//if(mode.value()!="simple"){  
+	//if(mode.value()!="simple"){
 	  if(forcedir.value())
 	    logger.setthenmakeDir(logdir.value(),"probtrackx.log");
 	  else
 	    logger.makeDir(logdir.value(),"probtrackx.log");
-	  
+
 	  cout << "Log directory is: " << logger.getDir() << endl;
-	  
+
 	  // do again so that options are logged
 	  for(int a = 0; a < argc; a++)
 	    logger.str() << argv[a] << " ";
 	  logger.str() << endl << "---------------------------------------------" << endl << endl;
 	  //}
-	
+
       }
-    
-      
+
+
     }
     catch(X_OptionError& e){
       cerr<<e.what()<<endl;
       cerr<<"try: probtrackx --help"<<endl;
       exit(2);
     }
-    
-    
-    
-    
+
+
+
+
   }
-  
-  
+
+
   void probtrackxOptions::modecheck()
   {
     bool check=true;
@@ -198,7 +198,7 @@ probtrackxOptions* probtrackxOptions::gopt = NULL;
 	check=false;
       }
     }
-    
+
     if(mode.value()=="matrix2"){
       if(logdir.value()==""){
 	mesg+="You must set an output directory name in matrix2 mode: --dir\n";
@@ -213,7 +213,7 @@ probtrackxOptions* probtrackxOptions::gopt = NULL;
 	check=false;
       }
     }
-    
+
     if(mode.value()=="maskmatrix"){
       if(logdir.value()==""){
 	mesg+="You must set an output directory name in maskmatrix mode: --dir\n";
@@ -228,24 +228,24 @@ probtrackxOptions* probtrackxOptions::gopt = NULL;
       cerr<<mesg;
       exit(2);
     }
-    
+
   }
 
 
-  
+
   void probtrackxOptions::modehelp()
   {
     /* cout<<"tracking mode -  Options are:\n\n simple (default)\n    Input is text file defining start point.\n    Output is dti space volume with connectivity values at each voxel.\n   If your seed voxel is not in diffusion space\n    you need to specify a volume in yuour input\n    space (--seedref)\n   and a matrix taking this space to diffusion space(--xfm).\n\n seeds_to_targets\n    Inputs are a volume with ones at all seed points\n    (requires a matrix taking it to DTI space (--xfm))\n    and a text file with the name of a single target mask\n    on each new line (--targetmasks).\n    Output is a single volume for each target mask where the value of each\n    volume within the seed mask corresponds to the number of particles \n    seeded from this voxel reaching this target mask.\n\n seedmask\n    Input is a volume with ones at all seed points\n    (requires a matrix taking it to DTI space (--xfm))\n    Output is seed space volume with connectivity values at each voxel\n    summed from every seed.\n\n twomasks_symm\n    Input is a binary volume for first mask (-x)\n    also requires a binary volume for second mask (--mask2)\n    (requires a matrix taking both seeds to DTI space (--xfm))\n    Output is the sum of all paths the from first mask which pass\n    through the second and vice-versa  i.e. only paths\n    which pass through both masks are retained.\n\n waypoints\n    Input is a binary volume for seed mask (-x)\n    also requires a binary waypoint mask or ascii list\n    of waypoint masks (--mask2)\n    (requires a matrix taking both seeds to DTI space (--xfm))\n    Output is a volume containing all the paths from the\n    seedmask which pass through ALL of the waypoint masks.\n"<<endl;
     if ( getenv("FSLINFMRIB"))
-      matrixmodehelp(); 
+      matrixmodehelp();
     */
  }
-  
+
   void probtrackxOptions::matrixmodehelp(){
     cout<<" matrix1\n    Input is a volume with ones at all seed points\n    (requires a matrix taking it to DTI space (--xfm))\n    Output is an avw format nseeds x nseeds matrix \n    where element ij contains the number of particles leaving seed \n    voxel i and passing through seed voxel j. \n    Second output is an nsees x 3 matrix containing the \n    anatomical locations in Seed space of each matrix node.\n\n matrix2\n    Inputs are a volume with ones at all seed points\n    (requires a matrix taking it to DTI space (--xfm))\n    and a low resolution binary mask in register with the\n    seed volume (--lrmask)\n    Output is a matrix of size nseeds x nlowres \n    which contains the connectivity distributions from every seed voxel.\n    Auxiliary outputs are index matrices for each axis \n    of this matrix containing the anatomical location of each\n    node in seed space (x-axis) and low res space (y-axis)\n\n maskmatrix\n    Input is volume with integers in each seed location\n    Integer values distinguish different clusters\n    (e.g. output of Feat clustering)\n    (requires a matrix taking it to DTI space (--xfm))\n    Output is two matrices whose ij^th element is the\n     mean and max number of particles seeded from cluster i which pass \n    through cluster j\n"<<endl;
   }
-  
-  
+
+
   void probtrackxOptions::status()
   {
     cout<<"basename   "<<basename.value()<<endl;
@@ -256,11 +256,11 @@ probtrackxOptions* probtrackxOptions::gopt = NULL;
     cout<<"nparticles "<<nparticles.value()<<endl;
     cout<<"nsteps     "<<nsteps.value()<<endl;
     cout<<"usef       "<<usef.value()<<endl;
-    cout<<"rseed      "<<rseed.value()<<endl; 
+    cout<<"rseed      "<<rseed.value()<<endl;
     cout<<"randfib    "<<randfib.value()<<endl;
     cout<<"fibst      "<<fibst.value()<<endl;
 }
-  
+
 }
 
 

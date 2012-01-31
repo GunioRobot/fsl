@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // void_cast.hpp:   interface for run-time casting of void pointers.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -32,20 +32,20 @@
 #  pragma warning(disable : 4251 4231 4660 4275)
 #endif
 
-namespace boost { 
-namespace serialization { 
+namespace boost {
+namespace serialization {
 
 class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info;
 
 // Given a void *, assume that it really points to an instance of one type
 // and alter it so that it would point to an instance of a related type.
 // Return the altered pointer. If there exists no sequence of casts that
-// can transform from_type to to_type, return a NULL.  
+// can transform from_type to to_type, return a NULL.
 
 BOOST_SERIALIZATION_DECL(void const *)
 void_upcast(
-    extended_type_info const & derived_type,  
-    extended_type_info const & base_type, 
+    extended_type_info const & derived_type,
+    extended_type_info const & base_type,
     void const * const t,
     bool top = true
 );
@@ -54,19 +54,19 @@ inline void *
 void_upcast(
     extended_type_info const & derived_type_,
     extended_type_info const & base_type_,
-    void * const t 
+    void * const t
 ){
     return const_cast<void*>(void_upcast(
-        derived_type_, 
-        base_type_, 
+        derived_type_,
+        base_type_,
         const_cast<void const *>(t)
     ));
 }
 
 BOOST_SERIALIZATION_DECL(void const *)
 void_downcast(
-    extended_type_info const & derived_type,  
-    extended_type_info const & base_type, 
+    extended_type_info const & derived_type,
+    extended_type_info const & base_type,
     void const * const t,
     bool top = true
 );
@@ -75,11 +75,11 @@ inline void *
 void_downcast(
     extended_type_info const & derived_type_,
     extended_type_info const & base_type_,
-    void * const t 
+    void * const t
 ){
     return const_cast<void*>(void_downcast(
-        derived_type_, 
-        base_type_, 
+        derived_type_,
+        base_type_,
         const_cast<void const *>(t)
     ));
 }
@@ -90,16 +90,16 @@ namespace void_cast_detail {
 class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
 {
     friend struct void_caster_compare ;
-    friend 
-    BOOST_SERIALIZATION_DECL(void const *)  
+    friend
+    BOOST_SERIALIZATION_DECL(void const *)
     boost::serialization::void_upcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,
         const void * t,
         bool top
     );
-    friend 
-    BOOST_SERIALIZATION_DECL(void const *)  
+    friend
+    BOOST_SERIALIZATION_DECL(void const *)
     boost::serialization::void_downcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,
@@ -118,7 +118,7 @@ public:
     // Constructor
     void_caster(
         extended_type_info const & derived_type_,
-        extended_type_info const & base_type_ 
+        extended_type_info const & base_type_
     );
     // predicate used to determine if this void caster includes
     // a particular eti *
@@ -127,7 +127,7 @@ public:
 };
 
 template <class Derived, class Base>
-class void_caster_primitive : 
+class void_caster_primitive :
     public void_caster
 {
     virtual void const* downcast( void const * t ) const {
@@ -150,9 +150,9 @@ public:
 
 template <class Derived, class Base>
 void_caster_primitive<Derived, Base>::void_caster_primitive() :
-    void_caster( 
-        * type_info_implementation<Derived>::type::get_instance(), 
-        * type_info_implementation<Base>::type::get_instance() 
+    void_caster(
+        * type_info_implementation<Derived>::type::get_instance(),
+        * type_info_implementation<Base>::type::get_instance()
     )
 {
     this->static_register(& instance);
@@ -165,28 +165,28 @@ template<class Derived, class Base>
 const void_caster_primitive<Derived, Base>
     void_caster_primitive<Derived, Base>::instance;
 
-} // void_cast_detail 
+} // void_cast_detail
 
 // Register a base/derived pair.  This indicates that it is possible
 // to upcast a void pointer from Derived to Base and downcast a
 // void pointer from Base to Derived.  Note bogus arguments to workaround
 // bug in msvc 6.0
 template<class Derived, class Base>
-BOOST_DLLEXPORT 
+BOOST_DLLEXPORT
 inline const void_cast_detail::void_caster &
 void_cast_register(
-    const Derived * /* dnull = NULL */, 
+    const Derived * /* dnull = NULL */,
     const Base * /* bnull = NULL */
 ) BOOST_USED;
 template<class Derived, class Base>
-BOOST_DLLEXPORT 
+BOOST_DLLEXPORT
 inline const void_cast_detail::void_caster &
 void_cast_register(
-    const Derived * /* dnull = NULL */, 
+    const Derived * /* dnull = NULL */,
     const Base * /* bnull = NULL */
 ){
     return void_cast_detail::void_caster_primitive<
-        const Derived, 
+        const Derived,
         const Base
     >::instance;
 }

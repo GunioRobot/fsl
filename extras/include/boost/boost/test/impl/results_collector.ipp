@@ -94,7 +94,7 @@ test_results::clear()
 }
 
 //____________________________________________________________________________//
-    
+
 // ************************************************************************** //
 // **************               results_collector              ************** //
 // ************************************************************************** //
@@ -142,7 +142,7 @@ results_collector_t::test_unit_start( test_unit const& tu )
     test_results& tr = s_rc_impl().m_results_store[tu.p_id];
 
     tr.clear();
-    
+
     tr.p_expected_failures.value    = tu.p_expected_failures;
     tr.p_skipped.value              = false;
 }
@@ -193,7 +193,7 @@ results_collector_t::test_unit_finish( test_unit const& tu, unsigned long )
     }
     else {
         test_results const& tr = s_rc_impl().m_results_store[tu.p_id];
-        
+
         BOOST_WARN_MESSAGE( tr.p_aborted || tr.p_assertions_failed >= tr.p_expected_failures, "Test case has less failures then expected" );
     }
 }
@@ -210,7 +210,7 @@ results_collector_t::test_unit_skipped( test_unit const& tu )
         test_results& tr = s_rc_impl().m_results_store[tu.p_id];
 
         tr.clear();
-    
+
         tr.p_skipped.value              = true;
         tr.p_test_cases_skipped.value   = tcc.m_count;
     }

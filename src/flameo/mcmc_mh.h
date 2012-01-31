@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -83,20 +83,20 @@ using namespace NEWIMAGE;
 using namespace NEWMAT;
 
 namespace Gs {
-    
+
   class Mcmc_Mh
     {
     public:
 
       // constructor
-      Mcmc_Mh(const ColumnVector pcopedata, 
-	      const ColumnVector pvarcopedata, 
-	      const ColumnVector pdofvarcopedata, 
-	      const Design& pdesign, 
-	      ColumnVector pgamma_mean, 
-	      SymmetricMatrix pgamma_S, 
-	      ColumnVector pbeta_b, 
-	      ColumnVector pbeta_c, 
+      Mcmc_Mh(const ColumnVector pcopedata,
+	      const ColumnVector pvarcopedata,
+	      const ColumnVector pdofvarcopedata,
+	      const Design& pdesign,
+	      ColumnVector pgamma_mean,
+	      SymmetricMatrix pgamma_S,
+	      ColumnVector pbeta_b,
+	      ColumnVector pbeta_c,
 	      Matrix& pgamma_samples,
 	      Matrix& pbeta_samples,
 	      Matrix& pphi_samples,
@@ -156,7 +156,7 @@ namespace Gs {
 	global_prob_outlier(pglobal_prob_outlier),
 	beta_outlier(pbeta_outlier),
 	infer_outliers(pinfer_outliers)
-	{ 
+	{
 	}
 
       // load data from file in from file and set up starting values
@@ -170,25 +170,25 @@ namespace Gs {
 
       // sample chain
       void sample(int samp);
-      
+
       // DIC
 /*       void dic(float& DIC, float& pd); */
 
       // getters
-      const int getnsamples() const { return nsamples; }   
+      const int getnsamples() const { return nsamples; }
 
       const ColumnVector& getgamma_naccepted() const { return gamma_naccepted; }
-      const ColumnVector& getgamma_nrejected() const { return gamma_nrejected; } 
+      const ColumnVector& getgamma_nrejected() const { return gamma_nrejected; }
       const ColumnVector& getbeta_naccepted() const { return beta_naccepted; }
-      const ColumnVector& getbeta_nrejected() const { return beta_nrejected; } 
+      const ColumnVector& getbeta_nrejected() const { return beta_nrejected; }
       const ColumnVector& getphi_naccepted() const { return phi_naccepted; }
-      const ColumnVector& getphi_nrejected() const { return phi_nrejected; }  
+      const ColumnVector& getphi_nrejected() const { return phi_nrejected; }
       // Destructor
       virtual ~Mcmc_Mh() {}
 
-      ColumnVector c_samples; 
+      ColumnVector c_samples;
     private:
-    
+
       void beta_jump();
       void phi_jump();
       void gamma_jump();
@@ -205,7 +205,7 @@ namespace Gs {
 /*       float sumsquare_residuals(const Matrix& pdm, const ColumnVector& pdata, const ColumnVector& ppes); */
 
       Mcmc_Mh();
-      const Mcmc_Mh& operator=(Mcmc_Mh& mcmc_mh);     
+      const Mcmc_Mh& operator=(Mcmc_Mh& mcmc_mh);
       Mcmc_Mh(Mcmc_Mh& mcmc_mh);
 
       const ColumnVector copedata;
@@ -259,7 +259,7 @@ namespace Gs {
       float c_latest;
 
       ColumnVector delta;
-      
+
       int sampcount;
       int subsampcount;
 
@@ -276,8 +276,8 @@ namespace Gs {
       const vector<float>& beta_outlier;
 
       bool infer_outliers;
- 
+
     };
-}   
+}
 #endif
 

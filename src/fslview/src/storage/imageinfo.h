@@ -57,7 +57,7 @@ public:
   inline float xdim() const { return inqXDim(); }
   inline float ydim() const { return inqYDim(); }
   inline float zdim() const { return inqZDim(); }
- 
+
   float inqTr() const;
   short inqDt() const;
   std::string inqDtAsString() const;
@@ -86,7 +86,7 @@ public:
   void setAsMainImage();
   void setLutName(std::string);
   void setTarnished(bool state);
-  bool inqTarnished() const;     
+  bool inqTarnished() const;
   void inqAxisOrientations(int& icode, int& jcode, int& kcode) const;
 
   /** Image min instensity
@@ -146,15 +146,15 @@ private:
   char  m_auxFile[24];
   std::string m_fileName;
   std::string m_imageName;
- 
+
   mat44 m_stdmat, m_rigidmat;
   short m_sformcode, m_qformcode;
   short m_intent;
   std::string m_intentDescriptor;
 
   size_t m_bitsPerVoxel;
-  
-  short m_type;  
+
+  short m_type;
   bool  m_readOnly;
   bool  m_tarnished;
   bool  m_dtiImage;

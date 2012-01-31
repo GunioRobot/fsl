@@ -1,6 +1,6 @@
 # This file is a Tcl script to test out scrollbar widgets and
 # the "scrollbar" command of Tk.  This file only tests Macintosh
-# specific features.  It is organized in the standard fashion for 
+# specific features.  It is organized in the standard fashion for
 # Tcl tests.
 #
 # Copyright (c) 1996 Sun Microsystems, Inc.

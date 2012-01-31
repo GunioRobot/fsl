@@ -1,6 +1,6 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
-    Authors:    David Flitney 
+    Authors:    David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -24,7 +24,7 @@
 
 struct SelectionListItem: public QCheckListItem
 {
-  SelectionListItem(QListView* parent, const QString& text): 
+  SelectionListItem(QListView* parent, const QString& text):
     QCheckListItem(parent, text, CheckBox), m_preview(false) { refresh(); }
 
   void refresh();
@@ -61,8 +61,8 @@ AtlasSelectionDialog::~AtlasSelectionDialog() {}
 
 AtlasSelectionDialog::AtlasSelectionDialog(QWidget* p, const AtlasGroup::Handle ag):
   AtlasSelectionDialogBase(p),
-//   AtlasSelectionDialogBase(p, "AtlasSelectionDialog", true, 
-// 			   WStyle_Customize|WStyle_DialogBorder), 
+//   AtlasSelectionDialogBase(p, "AtlasSelectionDialog", true,
+// 			   WStyle_Customize|WStyle_DialogBorder),
   m_impl(new Implementation(ag))
 {
   m_atlasList->clear();
@@ -79,7 +79,7 @@ void AtlasSelectionDialog::toggleDisplayAtlas(QListViewItem* i)
 
 bool AtlasSelectionDialog::showSummary(Atlas::Handle ah)
 {
-  SelectionListItem *item = 
+  SelectionListItem *item =
     dynamic_cast<SelectionListItem*>( m_atlasList->findItem(ah->inqName(), 0) );
   if(item)
     return item->m_preview;

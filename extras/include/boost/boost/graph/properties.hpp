@@ -28,12 +28,12 @@ namespace boost {
     static default_color_type red() { return red_color; }
     static default_color_type black() { return black_color; }
   };
-  
+
   // These functions are now obsolete, replaced by color_traits.
   inline default_color_type white(default_color_type) { return white_color; }
   inline default_color_type gray(default_color_type) { return gray_color; }
   inline default_color_type green(default_color_type) { return green_color; }
-  inline default_color_type red(default_color_type) { return red_color; } 
+  inline default_color_type red(default_color_type) { return red_color; }
   inline default_color_type black(default_color_type) { return black_color; }
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -88,7 +88,7 @@ namespace boost {
   BOOST_DEF_PROPERTY(vertex, in_degree);
   BOOST_DEF_PROPERTY(vertex, out_degree);
   BOOST_DEF_PROPERTY(vertex, current_degree);
-  BOOST_DEF_PROPERTY(vertex, priority); 
+  BOOST_DEF_PROPERTY(vertex, priority);
   BOOST_DEF_PROPERTY(vertex, discover_time);
   BOOST_DEF_PROPERTY(vertex, finish_time);
   BOOST_DEF_PROPERTY(vertex, predecessor);
@@ -215,7 +215,7 @@ namespace boost {
   template <class Graph, class Property>
   class graph_property {
   public:
-    typedef typename property_value<typename Graph::graph_property_type, 
+    typedef typename property_value<typename Graph::graph_property_type,
       Property>::type type;
   };
 
@@ -231,9 +231,9 @@ namespace boost {
   };
 
   template <typename Graph>
-  class degree_property_map 
+  class degree_property_map
     : public put_get_helper<typename graph_traits<Graph>::degree_size_type,
-                            degree_property_map<Graph> >                  
+                            degree_property_map<Graph> >
   {
   public:
     typedef typename graph_traits<Graph>::vertex_descriptor key_type;
@@ -254,7 +254,7 @@ namespace boost {
   }
 
   //========================================================================
-  // Iterator Property Map Generating Functions contributed by 
+  // Iterator Property Map Generating Functions contributed by
   // Kevin Vanhorn. (see also the property map generating functions
   // in boost/property_map.hpp)
 
@@ -273,8 +273,8 @@ namespace boost {
   make_iterator_vertex_map(RandomAccessIterator iter, const PropertyGraph& g)
   {
     return make_iterator_property_map(iter, get(vertex_index, g));
-  }  
-  
+  }
+
   // Use this next function when vertex_descriptor is known to be an
   // integer type, with values ranging from 0 to num_vertices(g).
   //
@@ -289,7 +289,7 @@ namespace boost {
   make_iterator_vertex_map(RandomAccessIterator iter)
   {
     return make_iterator_property_map(iter, identity_property_map());
-  }      
+  }
 #endif
 
   template <class PropertyGraph, class RandomAccessContainer>
@@ -304,7 +304,7 @@ namespace boost {
   {
     assert(c.size() >= num_vertices(g));
     return make_iterator_vertex_map(c.begin(), g);
-  }   
+  }
 
   template <class RandomAccessContainer> inline
   iterator_property_map<
@@ -344,9 +344,9 @@ namespace boost {
     template<typename VertexBundle, typename EdgeBundle, typename Bundle>
       struct is_vertex_bundle : is_convertible<Bundle*, VertexBundle*> {};
   }
-  
+
   template <typename Graph, typename T, typename Bundle>
-  struct property_map<Graph, T Bundle::*>  
+  struct property_map<Graph, T Bundle::*>
   {
   private:
     typedef graph_traits<Graph> traits;
@@ -356,7 +356,7 @@ namespace boost {
                        typename traits::vertex_descriptor,
                        typename traits::edge_descriptor>::type
       descriptor;
-    
+
   public:
     typedef bundle_property_map<Graph, descriptor, Bundle, T> type;
     typedef bundle_property_map<const Graph, descriptor, Bundle, const T> const_type;

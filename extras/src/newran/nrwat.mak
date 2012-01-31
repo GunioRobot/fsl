@@ -19,20 +19,20 @@ tryrand.exe:    $(OBJ_T)
 
 newranxx = include.h newran.h boolean.h myexcept.h
 
-tryrand.obj:    $(newranxx) tryrand.cpp 
+tryrand.obj:    $(newranxx) tryrand.cpp
 
-tryrand1.obj:   $(newranxx) tryrand1.cpp 
+tryrand1.obj:   $(newranxx) tryrand1.cpp
 
-tryrand2.obj:   $(newranxx) tryrand2.cpp 
+tryrand2.obj:   $(newranxx) tryrand2.cpp
 
-tryrand3.obj:   $(newranxx) tryrand3.cpp 
+tryrand3.obj:   $(newranxx) tryrand3.cpp
 
-tryrand4.obj:   $(newranxx) tryrand4.cpp 
+tryrand4.obj:   $(newranxx) tryrand4.cpp
 
-hist.obj:       $(newranxx) hist.cpp 
+hist.obj:       $(newranxx) hist.cpp
 
-newran.obj:     $(newranxx) newran.cpp 
+newran.obj:     $(newranxx) newran.cpp
 
-extreal.obj:    include.h boolean.h extreal.h myexcept.h extreal.cpp 
+extreal.obj:    include.h boolean.h extreal.h myexcept.h extreal.cpp
 
-myexcept.obj:   include.h boolean.h myexcept.h myexcept.cpp 
+myexcept.obj:   include.h boolean.h myexcept.h myexcept.cpp

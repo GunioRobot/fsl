@@ -8,20 +8,20 @@
  * options for the Dialog Box.  We will not use this, for now, so we
  * turn it off here.
  */
- 
+
 #define DLOG_RezTemplateVersion 0
 
 #include <Types.r>
 #include <SysTypes.r>
 #include <AEUserTermTypes.r>
 
-/* 
+/*
  * We now load the Tclets code into the resource fork
  */
 
 #define TK_LIBRARY_RESOURCES 3000
 
-read 'TEXT' (TK_LIBRARY_RESOURCES+114, "tclshrc", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+114, "tclshrc", purgeable)
 	"::mac:tclets.tcl";
 
 data 'icns' (-16455) {

@@ -7,7 +7,7 @@
 
 # include <boost/python/cast.hpp>
 
-namespace boost { namespace python { namespace converter { 
+namespace boost { namespace python { namespace converter {
 
 BOOST_PYTHON_DECL PyObject* checked_downcast_impl(PyObject*, PyTypeObject*);
 

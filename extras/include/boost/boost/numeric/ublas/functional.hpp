@@ -340,7 +340,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    struct vector_sum: 
+    struct vector_sum:
         public vector_scalar_unary_functor<T> {
         typedef typename vector_scalar_unary_functor<T>::size_type size_type;
         typedef typename vector_scalar_unary_functor<T>::difference_type difference_type;
@@ -349,7 +349,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         static BOOST_UBLAS_INLINE
-        result_type apply (const vector_expression<E> &e) { 
+        result_type apply (const vector_expression<E> &e) {
             result_type t = result_type (0);
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i)
@@ -359,24 +359,24 @@ namespace boost { namespace numeric { namespace ublas {
         // Dense case
         template<class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) { 
+        result_type apply (difference_type size, I it) {
             result_type t = result_type (0);
             while (-- size >= 0)
                 t += *it, ++ it;
-            return t; 
+            return t;
         }
         // Sparse case
         template<class I>
         static BOOST_UBLAS_INLINE
         result_type apply (I it, const I &it_end) {
             result_type t = result_type (0);
-            while (it != it_end) 
+            while (it != it_end)
                 t += *it, ++ it;
-            return t; 
+            return t;
         }
     };
 
-    // Unary returning real scalar 
+    // Unary returning real scalar
     template<class T>
     struct vector_scalar_real_unary_functor {
         typedef std::size_t size_type;
@@ -567,15 +567,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Sparse case
         template<class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (I it, const I &it_end) { 
+        result_type apply (I it, const I &it_end) {
             real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
-                if (u > t) 
+                if (u > t)
                     t = u;
                 ++ it;
             }
-            return t; 
+            return t;
         }
     };
 
@@ -1315,7 +1315,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (u > t)
                     t = u;
             }
-            return t; 
+            return t;
         }
     };
     template<class T>
@@ -1329,7 +1329,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         static BOOST_UBLAS_INLINE
-        result_type apply (const matrix_expression<E> &e) { 
+        result_type apply (const matrix_expression<E> &e) {
             real_type t = real_type ();
             size_type size1 (e ().size1 ());
             for (size_type i = 0; i < size1; ++ i) {
@@ -1339,11 +1339,11 @@ namespace boost { namespace numeric { namespace ublas {
                     t +=  u * u;
                 }
             }
-            return type_traits<real_type>::sqrt (t); 
+            return type_traits<real_type>::sqrt (t);
         }
     };
     template<class T>
-    struct matrix_norm_inf: 
+    struct matrix_norm_inf:
         public matrix_scalar_real_unary_functor<T> {
         typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
         typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
@@ -1363,10 +1363,10 @@ namespace boost { namespace numeric { namespace ublas {
                     real_type v (type_traits<value_type>::norm_inf (e () (i, j)));
                     u += v;
                 }
-                if (u > t) 
-                    t = u;  
+                if (u > t)
+                    t = u;
             }
-            return t; 
+            return t;
         }
     };
 

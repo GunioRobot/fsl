@@ -42,7 +42,7 @@ LookUpTable::LookUpTable(const std::string& filename):
   QFileInfo fi(QString::fromLatin1(filename.c_str()));
   if(!fi.exists())
     throw std::runtime_error("LookUpTable: no such file: " + filename);
-  
+
   std::string ext( fi.extension().ascii() );
 
   if(ext == "lml") {
@@ -53,7 +53,7 @@ LookUpTable::LookUpTable(const std::string& filename):
 
     if(fi.extension() == "rgb")
       m_isIndexLut = true;
- 
+
     if(m_isIndexLut)
       FileManager::readRgbFile(m_fileName,this);
     else
@@ -71,28 +71,28 @@ LookUpTable::LookUpTable():
   m_black.setColours(0, 0, 0);
 }
 
-/** 
+/**
  * Read a lut from a file.
- * 
+ *
  * @param filename The file containing the MEDx style lut definition.
- * 
+ *
  * @return Handle to the new lut.
  */
 LookUpTable::Handle LookUpTable::load(const std::string& filename)
 {
-  return LookUpTable::Handle(new LookUpTable(filename)); 
-} 
+  return LookUpTable::Handle(new LookUpTable(filename));
+}
 
-/** 
+/**
  * Generate a grey-scale look up table.
- * 
- * 
+ *
+ *
  * @return A lut populated from black to white.
  */
 LookUpTable::Handle LookUpTable::greyScale()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   for(unsigned char i = 0; i < 255; ++i)
@@ -100,22 +100,22 @@ LookUpTable::Handle LookUpTable::greyScale()
       int value = int((i / (255.0 - 1.0)) * 255);
       lut->pushValue(value, value, value, i);
     }
-  
+
   lut->m_lutName = std::string("Greyscale");
   lut->m_isAutoSelectable = false;
   return lut;
 }
 
-/** 
+/**
  * Generate a red look up table.
- * 
- * 
+ *
+ *
  * @return A lut populated from black to red.
  */
 LookUpTable::Handle LookUpTable::red()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float offset = 100.0;
@@ -126,22 +126,22 @@ LookUpTable::Handle LookUpTable::red()
       int red = int(((i + 1) * step) + offset);
       lut->pushValue(red, 0, 0, i);
     }
-  
+
   lut->m_lutName = std::string("Red");
 
   return lut;
 }
 
-/** 
+/**
  * Generate a green look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated from black to green.
  */
 LookUpTable::Handle LookUpTable::green()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float offset = 100.0;
@@ -158,16 +158,16 @@ LookUpTable::Handle LookUpTable::green()
   return lut;
 }
 
-/** 
+/**
  * Generate a blue look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated from black to blue.
  */
 LookUpTable::Handle LookUpTable::blue()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   float offset = 100.0;
   float step = (255.0 - offset) / 255.0;
 
@@ -184,16 +184,16 @@ LookUpTable::Handle LookUpTable::blue()
   return lut;
 }
 
-/** 
+/**
  * Generate a yellow look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated from black to yellow.
  */
 LookUpTable::Handle LookUpTable::yellow()
 {
   LookUpTable::Handle lut = Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float offset = 100.0;
@@ -211,16 +211,16 @@ LookUpTable::Handle LookUpTable::yellow()
   return lut;
 }
 
-/** 
+/**
  * Generate a red-yellow look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated from red to yellow.
  */
 LookUpTable::Handle LookUpTable::redYellow()
 {
   LookUpTable::Handle lut = Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   for(unsigned char i = 0; i < 255; ++i)
@@ -234,16 +234,16 @@ LookUpTable::Handle LookUpTable::redYellow()
   return lut;
 }
 
-/** 
+/**
  * Generate a blue-lightblue look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated from blue to lightblue
  */
 LookUpTable::Handle LookUpTable::blueLightblue()
 {
   LookUpTable::Handle lut = Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   for(unsigned char i = 0; i < 255; ++i)
@@ -257,16 +257,16 @@ LookUpTable::Handle LookUpTable::blueLightblue()
   return lut;
 }
 
-/** 
+/**
  * Generate a pink look up table.
- * 
- * 
+ *
+ *
  * @return a lut populated with shades of pink
  */
 LookUpTable::Handle LookUpTable::pink()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float offset = 100.0;
@@ -283,16 +283,16 @@ LookUpTable::Handle LookUpTable::pink()
   return lut;
 }
 
-/** 
+/**
  * Generate a "hot" look up table.
- * 
- * 
+ *
+ *
  * @return a lut
  */
 LookUpTable::Handle LookUpTable::hot()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float offset = 100.0;
@@ -319,16 +319,16 @@ LookUpTable::Handle LookUpTable::hot()
   return lut;
 }
 
-/** 
+/**
  * Generate a "copper" look up table.
- * 
- * 
+ *
+ *
  * @return a lut
  */
 LookUpTable::Handle LookUpTable::copper()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   float rstep = 1.2;
@@ -348,16 +348,16 @@ LookUpTable::Handle LookUpTable::copper()
   return lut;
 }
 
-/** 
+/**
  * Generate a "cool" look up table.
- * 
- * 
+ *
+ *
  * @return a lut
  */
 LookUpTable::Handle LookUpTable::cool()
 {
   LookUpTable::Handle lut = LookUpTable::Handle(new LookUpTable());
-  
+
   lut->allocateMemory(255);
 
   for(unsigned char i = 0; i < 255; ++i)
@@ -389,7 +389,7 @@ LookUpTable::Handle LookUpTable::rainbow()
   lut->allocateMemory(1200);
 
   float step = 360.0/1200.0;
-  for(unsigned int i = 0; i < 1200; ++i) 
+  for(unsigned int i = 0; i < 1200; ++i)
     {
       int h(i * step), r, g, b;
       QColor c(h, 255, 255, QColor::Hsv);
@@ -483,11 +483,11 @@ LookUpTable::Handle LookUpTable::LoadStdLut(const char** lutData,
 
 
 
-/** 
+/**
  * Get a value from the lut.
- * 
+ *
  * @param f The value to be converted [0..1]
- * 
+ *
  * @return A color-triplet value from the look up table.
  */
 const LutElement& LookUpTable::inqValue(float f)

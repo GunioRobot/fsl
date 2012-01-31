@@ -30,12 +30,12 @@ echo "1.brain"
 struct=T1weighted structural image
 
 #run bet on $struct in order to remove the skull and stuff.
-bet ${struct} ${struct}_brain -f 0.5 -g 0 
+bet ${struct} ${struct}_brain -f 0.5 -g 0
 
 #running fast in order to obtain all of the segmented partial volumes. For this case we only use one chanel input T1-weighted image. The output of this is $struct_brain_seg_0-2 for thre different tissue types,$struct_seg is all of them in one image, $struct_bias is the estimates biased field (1/bias). In order to calculate the restore image you just need to multiply this field with the $struct.
 
 fast -t1 -c 3 -os -ob -od ${struct}_brain ${struct}_brain
-avwmerge -t brain ${struct}_brain_seg_1  ${struct}_brain_seg_2 ${struct}_brain_seg_0 
+avwmerge -t brain ${struct}_brain_seg_1  ${struct}_brain_seg_2 ${struct}_brain_seg_0
 
 ***NOTE: in case you need change in voxel dimensions BUT preservation of the size do:
 
@@ -49,8 +49,8 @@ echo "2.MRpar"
 t1t2=fids you get from the scanner
 #CONSTRUCTING THE MRpar MATRIX
 #run stuarts script in order to estimate T1 and T2
-#this can only work on phal so either run the whole script there or do this step seperatly. No need to use load_varian first. It will do all automaticaly from fids. The output for this step should be T1.nii.gz and T2.nii.gz. From here I choose either average value of the non-zero voxels or the highest value from the histogram (more commonly). 
-if [ ${t1t2} != mj ] && [ ${t1t2} != def ]; then 
+#this can only work on phal so either run the whole script there or do this step seperatly. No need to use load_varian first. It will do all automaticaly from fids. The output for this step should be T1.nii.gz and T2.nii.gz. From here I choose either average value of the non-zero voxels or the highest value from the histogram (more commonly).
+if [ ${t1t2} != mj ] && [ ${t1t2} != def ]; then
 
 ~stuart/perl/scripts/autot1t2 ${t1t2}
 
@@ -115,7 +115,7 @@ echo "4.slcprof"
 cp ~/ivana/possum_data/input/rf/slcprof_msinc3 $subjdir/slcprof
 
 echo "5.pulse, pulse.info"
-#the best way is to copy script generate_pulse into your working directory, make it executable 
+#the best way is to copy script generate_pulse into your working directory, make it executable
 cp  ~/fslsrc/possum/generate_pulse .
 chmod +x generate_pulse
 emacs generate_pulse &
@@ -138,7 +138,7 @@ echo "7.T2*"
 
 There are two ways of inputting T2*. One is with mask and a timecourse which has info on time (col1), AND multiplicative factor (col2). For this version the input is already dT2*
 
-The other was is to input 4D version of T2* and a timecourse which only has one col (time). In this set up T2* input is THE ACTUAL T2* so it gets substracted in the code to get dT2*. 
+The other was is to input 4D version of T2* and a timecourse which only has one col (time). In this set up T2* input is THE ACTUAL T2* so it gets substracted in the code to get dT2*.
 
 I you want to calculate the 4D T2* map from your subject, use the script fmri2t2.
 
@@ -155,7 +155,7 @@ avwcomplex -realphase ${fmap} ${fmap}phase2 1 1
 
 avwmaths_32R ${fmap}phase1 -sub ${fmap}phase2 ${fmap}phasediff
 
-avwcomplex -complexpolar ${fmap}abs ${fmap}phasediff ${fmap}complex 0 0 
+avwcomplex -complexpolar ${fmap}abs ${fmap}phasediff ${fmap}complex 0 0
 avwcomplex -realphase ${fmap}complex ${fmap}phase 0 0
 
 prelude -a ${fmap}abs -p ${fmap}phase -o ${fmap}uphase -v
@@ -169,7 +169,7 @@ flirt -in ${fmap}abs_brain -ref ${struct}_brain -omat regmatrix.mat  -bins 256 -
 
 flirt -in b0_tesla -ref ${struct}_brain -out b0 -applyxfm -init regmatrix.mat -interp trilinear
 
-avwmaths_32R b0 -mul -1 
+avwmaths_32R b0 -mul -1
 
 cp b0.nii.gz $subjdir/b0z_dz.nii.gz
 
@@ -179,9 +179,9 @@ cp b0.nii.gz $subjdir/b0z_dz.nii.gz
 #CHI=${INPUT}/b0inh/colin_best_chi_smooth
 #BRAINMASK=${INPUT}/b0inh/brain_mask
 #time ${CODE}/b0calc -i ${CHI} -o ${b0}x --xyz --b0x=1 --b0y=0 --b0=0
-#time ${CODE}/b0calc -i ${CHI} -o ${b0}y --xyz --b0x=0 --b0y=1 --b0=0 
+#time ${CODE}/b0calc -i ${CHI} -o ${b0}y --xyz --b0x=0 --b0y=1 --b0=0
 #time ${CODE}/b0calc -i ${CHI} -o ${b0}z --xyz --b0x=0 --b0y=0 --b0=1
-#time ${CODE}/spharm_rm ${b0}x ${BRAINMASK} ${b0} 
+#time ${CODE}/spharm_rm ${b0}x ${BRAINMASK} ${b0}
 #avwmaths ${b0}x -mul -1 ${b0}x
 
 echo "10.b0timecourse"

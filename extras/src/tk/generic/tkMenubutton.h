@@ -33,7 +33,7 @@
  */
 
 enum direction {
-    DIRECTION_ABOVE, DIRECTION_BELOW, DIRECTION_FLUSH, 
+    DIRECTION_ABOVE, DIRECTION_BELOW, DIRECTION_FLUSH,
     DIRECTION_LEFT, DIRECTION_RIGHT
 };
 
@@ -220,7 +220,7 @@ extern Tk_ClassProcs tkpMenubuttonClass;
 
 /*
  * Declaration of procedures used in the implementation of the button
- * widget. 
+ * widget.
  */
 
 EXTERN void		TkpComputeMenuButtonGeometry _ANSI_ARGS_((

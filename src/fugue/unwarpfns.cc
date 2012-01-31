@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,21 +91,21 @@ int maximum_position(const Matrix& vec)
 }
 
 
-ColumnVector pava(const ColumnVector& data, const ColumnVector& weight0) 
+ColumnVector pava(const ColumnVector& data, const ColumnVector& weight0)
 {
   Tracer tr("pava");
-  
+
   int length = (int) data.Nrows();
   ColumnVector values = data;
   ColumnVector weights = weight0;
   ColumnVector index(length);
   for(int j=1; j<=length; j++)  index(j) = j;
-  
+
   bool anyviolators = true;
   // the PAVA
   while(anyviolators) {
     anyviolators = false;
-    
+
     for(int k=2; k<=values.Nrows(); k++) {
       if (values(k) > values(k-1)) {
 	anyviolators = true;
@@ -114,7 +114,7 @@ ColumnVector pava(const ColumnVector& data, const ColumnVector& weight0)
 	values = values.Rows(1,k-1) & values.Rows(k+1,values.Nrows());
 	weights(k-1) = weights(k) + weights(k-1);
 	weights = weights.Rows(1,k-1) & weights.Rows(k+1,weights.Nrows());
-	
+
 	for(int j=1; j<=length; j++) {
 	  if (index(j)>=k)  index(j) = index(j)-1;
 	}
@@ -132,7 +132,7 @@ ColumnVector pava(const ColumnVector& data, const ColumnVector& weight0)
 }
 
 
-ColumnVector pava(const ColumnVector& data) 
+ColumnVector pava(const ColumnVector& data)
 {
   ColumnVector weights=data;
   weights=1.0;
@@ -159,7 +159,7 @@ volume<float> despike_filter2D(const volume<float>& vol, float threshold)
 	float range = vals(8) - vals(1);
 	float median = vals(5);
 	float cval = vol(x,y,z);
-	if ( (fabs(range)<1e-9) || 
+	if ( (fabs(range)<1e-9) ||
 	     (fabs((cval - median)/range) > threshold) ) {
 	  outvol(x,y,z) = median;
 	}
@@ -191,7 +191,7 @@ volume<float> median_filter2D(const volume<float>& vol)
   return outvol;
 }
 
-volume<float> masked_despike_filter2D(const volume<float>& vol, 
+volume<float> masked_despike_filter2D(const volume<float>& vol,
 				      const volume<float>& mask,
 				      float threshold)
 {
@@ -215,7 +215,7 @@ volume<float> masked_despike_filter2D(const volume<float>& vol,
 	  float median = littlevals(Max(1,(count-1)/2));
 	  float range = littlevals(count-1) - littlevals(1);
 	  float cval = vol(x,y,z);
-	  if ( (fabs(range)<1e-9) || 
+	  if ( (fabs(range)<1e-9) ||
 	       (fabs((cval - median)/range) > threshold) ) {
 	    outvol(x,y,z) = median;
 	  }
@@ -227,7 +227,7 @@ volume<float> masked_despike_filter2D(const volume<float>& vol,
 }
 
 
-volume<float> masked_median_filter2D(const volume<float>& vol, 
+volume<float> masked_median_filter2D(const volume<float>& vol,
 				     const volume<float>& mask)
 {
   volume<float> outvol(vol);
@@ -279,7 +279,7 @@ volume<float> make_basic_head_mask(const volume<float>& absmap, float thresh)
 
 
 volume<float> largest_connected_component(const volume<float>& mask)
-{ 
+{
   mask.setextrapolationmethod(extraslice);
   volume<int> label;
   ColumnVector hist;
@@ -297,8 +297,8 @@ volume<float> largest_connected_component(const volume<float>& mask)
 }
 
 
-volume<float> make_head_mask(const volume<float>& absmap, float thresh) 
-{ 
+volume<float> make_head_mask(const volume<float>& absmap, float thresh)
+{
   volume<float> mask;
   mask = make_basic_head_mask(absmap,thresh);
   mask = largest_connected_component(mask);
@@ -306,8 +306,8 @@ volume<float> make_head_mask(const volume<float>& absmap, float thresh)
 }
 
 
-volume<float> make_head_mask2D(const volume<float>& absmap, float thresh) 
-{ 
+volume<float> make_head_mask2D(const volume<float>& absmap, float thresh)
+{
   volume<float> mask(absmap);
   mask = 0.0;
   // ONLY USES 2D CONNECTIVITY
@@ -329,10 +329,10 @@ volume<float> make_head_mask2D(const volume<float>& absmap, float thresh)
 		      mask.maxx(),mask.maxy(),z);
     mask.copyROIonly(mslice);
   }
-  
+
   // restore previous ROI status...
   absmap.deactivateROI();
-  
+
   return mask;
 }
 
@@ -368,8 +368,8 @@ volume<float> fill_head_mask(const volume<float>& origmask)
 }
 
 
-volume<float> make_filled_head_mask(const volume<float>& absmap) 
-{ 
+volume<float> make_filled_head_mask(const volume<float>& absmap)
+{
   volume<float> mask;
   float thresh = basic_mask_threshold(absmap);
   mask = make_basic_head_mask(absmap, thresh);
@@ -377,8 +377,8 @@ volume<float> make_filled_head_mask(const volume<float>& absmap)
   return mask;
 }
 
-void fill_holes(volume<float>& vol, const volume<float>& holemask, 
-		const volume<float>& mask) 
+void fill_holes(volume<float>& vol, const volume<float>& holemask,
+		const volume<float>& mask)
 {
   // initially just find average of nearest valid entries and fill
   //  invalid voxels with these
@@ -505,7 +505,7 @@ volume<float> polynomial_extrapolate(const volume<float>& datavol,
 	for (int y=temp.miny(); y<=temp.maxy(); y++) {
 	  for (int x=temp.minx(); x<=temp.maxx(); x++) {
 	    if (dir==1)  temp(x,y,z) = MISCMATHS::pow(x-midx,int(m))/
-			   MISCMATHS::pow(16.0,int(m));  
+			   MISCMATHS::pow(16.0,int(m));
 	    if (dir==2)  temp(x,y,z) = MISCMATHS::pow(y-midy,int(m))/
 			   MISCMATHS::pow(16.0,int(m));
 	    if (dir==3)  temp(x,y,z) = MISCMATHS::pow(z-midz,int(m))/
@@ -541,12 +541,12 @@ volume<float> polynomial_extrapolate(const volume<float>& datavol,
     if (verbose) cout << ".";
   }
   if (verbose) cout << endl;
-  
+
   // find least-squares solution
   if (verbose) cout << "Finding least-squares solution" << endl;
   ColumnVector C;
   C = extrapolate_coefficients(BB,IB);
-  
+
   // generate the resultant extrapolation
   if (verbose) cout << "Regenerating result" << endl;
   volume<float> resvol;
@@ -639,12 +639,12 @@ volume<float> fourier_extrapolate(const volume<float>& datavol,
     if (verbose) cout << ".";
   }
   if (verbose) cout << endl;
-  
+
   // find least-squares solution
   if (verbose) cout << "Finding least-squares solution" << endl;
   ColumnVector C;
   C = extrapolate_coefficients(BB,IB);
-  
+
   // generate the resultant extrapolation
   if (verbose) cout << "Regenerating result" << endl;
   volume<float> resvol;
@@ -680,7 +680,7 @@ void restore_linear_ramps(const ColumnVector& ramp,
       for (int x=uph.minx(); x<uph.maxx(); x++) {
 	if (mask(x,y,z)>0.5) {
 	  uph(x,y,z) += ramp(1)*(x-xav) + ramp(2)*(y-yav) + ramp(3)*(z-zav);
-	}	
+	}
       }
     }
   }
@@ -698,7 +698,7 @@ void remove_linear_ramps(const ColumnVector& ramp,
       for (int x=ph.minx(); x<ph.maxx(); x++) {
 	if (mask(x,y,z)>0.5) {
 	  ph(x,y,z) = wrap(ph(x,y,z) - ramp(1)*(x-xav) - ramp(2)*(y-yav) - ramp(3)*(z-zav));
-	}	
+	}
       }
     }
   }
@@ -753,7 +753,7 @@ constraintmap::iterator find(constraintmap& conmap, int r, int s)
   return conmap.find(pair<int,int>(Min(r,s),Max(r,s)));
 }
 
-constraintmap::iterator find_maxC(constraintmap& conmap) 
+constraintmap::iterator find_maxC(constraintmap& conmap)
 {
   if (conmap.empty()) return conmap.begin();
   constraintmap::iterator itm = conmap.begin(), it;
@@ -781,7 +781,7 @@ void calc_constraint(constraint& con)
   con.C = N*(0.5 - fabs(round(K) - K));
 }
 
-void make_constraints(const volume<float>& phasemap, const volume<int>& label, 
+void make_constraints(const volume<float>& phasemap, const volume<int>& label,
 		      constraintmap& conmap)
 {
   label.setextrapolationmethod(zeropad);
@@ -803,10 +803,10 @@ void make_constraints(const volume<float>& phasemap, const volume<int>& label,
 	      float pp1=p1, pp2=p2;
 	      if (v2<v1) { swap(v1,v2); swap(pp1,pp2); }
 	      it = conmap.find(pair<int,int>(v1,v2));
-	      if (it != conmap.end()) { 
+	      if (it != conmap.end()) {
 		(*it).second.N++;
 		(*it).second.P += pp1-pp2;
-	      } else { 
+	      } else {
 		// insert this new value
 		constraint newcon;
 	        newcon.C=0;
@@ -826,15 +826,15 @@ void make_constraints(const volume<float>& phasemap, const volume<int>& label,
   // also form C which are the delta cost estimates
   for (it = conmap.begin(); it!=conmap.end(); ++it) {
     calc_constraint((*it).second);
-  }  
+  }
   return;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////
 
-volume<float> apply_unwrapping(const volume<float>& phasemap, 
-			       const volume<int>& label, 
+volume<float> apply_unwrapping(const volume<float>& phasemap,
+			       const volume<int>& label,
 			       const Matrix& label_offsets)
 {
   volume<float> uphase(phasemap);
@@ -858,9 +858,9 @@ volume<float> apply_unwrapping(const volume<float>& phasemap,
 }
 
 
-volume<int> find_phase_labels(const volume<float>& phasemap, 
+volume<int> find_phase_labels(const volume<float>& phasemap,
 			      const volume<float>& mask,
-			      int n) 
+			      int n)
 {
   // divides the phasemap into n regions and labels the connected
   //  components in each
@@ -890,9 +890,9 @@ volume<int> find_phase_labels(const volume<float>& phasemap,
 }
 
 
-volume<int> find_phase_labels2D(const volume<float>& phasemap, 
+volume<int> find_phase_labels2D(const volume<float>& phasemap,
 				const volume<float>& mask,
-				int n, bool unique3Dlabels) 
+				int n, bool unique3Dlabels)
 {
   // divides the phasemap into n regions and labels the connected
   //  components in each
@@ -944,7 +944,7 @@ volume<int> find_phase_labels2D(const volume<float>& phasemap,
 
 
 
-volume<float> unwrap(const volume<float>& phasemap, 
+volume<float> unwrap(const volume<float>& phasemap,
 		     const volume<int>& label, bool verbose)
 {
 
@@ -952,7 +952,7 @@ volume<float> unwrap(const volume<float>& phasemap,
   // New consistent constraint method //
   //////////////////////////////////////
 
-  if (verbose) cout << "Calculating starting matrices ("<<label.max()<<" by " 
+  if (verbose) cout << "Calculating starting matrices ("<<label.max()<<" by "
        <<label.max()<<")"<<endl;
 
   constraintmap conmap;
@@ -961,7 +961,7 @@ volume<float> unwrap(const volume<float>& phasemap,
 
   int nclass = label.max();
 
-  // find the area with the biggest interface 
+  // find the area with the biggest interface
   vector<float> Q(nclass+1,0.0);
   for (constraintmap::iterator it=conmap.begin(); it!=conmap.end(); ++it)
     {
@@ -1020,9 +1020,9 @@ volume<float> unwrap(const volume<float>& phasemap,
     }
   }
   if (verbose) cout << "Did while loop " << iterations << " times" << endl;
-  
+
   Matrix Mbest(nclass,1);
-  for (int n=1; n<=nclass; n++)  
+  for (int n=1; n<=nclass; n++)
       Mbest(n,1) = (float) Dvec[n] - Dvec[bigclassnum];
 
   // now unwrap the phase
@@ -1034,7 +1034,7 @@ volume<float> unwrap(const volume<float>& phasemap,
 
 
 
-volume<float> unwrap2D(const volume<float>& phasemap, 
+volume<float> unwrap2D(const volume<float>& phasemap,
 		       const volume<int>& label, bool verbose)
 {
   // ONLY USES 2D CONNECTIVITY
@@ -1067,10 +1067,10 @@ volume<float> unwrap2D(const volume<float>& phasemap,
     lslice = label.ROI();
     copyconvert(lslice,mslice);
     mslice.binarise(0.5);
-    // unwrap 
+    // unwrap
     uslice = unwrap(pslice,lslice,verbose);
     // fix any potential phase difference
-    if (z>zmin) { 
+    if (z>zmin) {
       udiff = uslice - olduslice;
       volume<float> combmslice;
       combmslice = mslice * oldmslice;
@@ -1090,18 +1090,18 @@ volume<float> unwrap2D(const volume<float>& phasemap,
 			uphase.maxx(),uphase.maxy(),z);
     uphase.copyROIonly(uslice);
   }
-  
+
   // restore previous ROI status...
   phasemap.deactivateROI();
   label.deactivateROI();
-  
+
   return uphase;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////
 
-volume<float> calc_fmap(const volume<float>& phase1, 
+volume<float> calc_fmap(const volume<float>& phase1,
 			const volume<float>& phase2,
 			const volume<float>& mask1,
 			const volume<float>& mask2,
@@ -1137,7 +1137,7 @@ float fmap2pixshift_factor(const volume<float>& invol, float pe_dwell_time,
 }
 
 
-volume<float> yderiv(const volume<float>& vol) 
+volume<float> yderiv(const volume<float>& vol)
 {
   vol.setextrapolationmethod(zeropad);
   ColumnVector derivmask(3), unitmask(1);
@@ -1156,8 +1156,8 @@ volume<float> apply_pixshift(const volume<float>& epivol,
   for (int z=0; z<outvol.zsize(); z++) {
     for (int y=0; y<outvol.ysize(); y++) {
       for (int x=0; x<outvol.xsize(); x++) {
-	outvol(x,y,z) = epivol.interpolate((float) x, 
-					   ((float) y)+pixshiftmap(x,y,z), 
+	outvol(x,y,z) = epivol.interpolate((float) x,
+					   ((float) y)+pixshiftmap(x,y,z),
 					   (float) z);
       }
     }
@@ -1166,7 +1166,7 @@ volume<float> apply_pixshift(const volume<float>& epivol,
 }
 
 
-volume<float> limit_pixshift(const volume<float>& pixshift, 
+volume<float> limit_pixshift(const volume<float>& pixshift,
 			     const volume<float>& mask, float mindiff)
 {
   volume<float> outvol(pixshift);
@@ -1184,7 +1184,7 @@ volume<float> limit_pixshift(const volume<float>& pixshift,
       if (n>2) {
 	ycom = round(sum/((float) n));
       }
-	
+
       for (int y=ycom; y<pixshift.ysize()-1; y++) {
 	outvol(x,y+1,z) = Max(pixshift(x,y+1,z),outvol(x,y,z) + mindiff);
       }
@@ -1194,7 +1194,7 @@ volume<float> limit_pixshift(const volume<float>& pixshift,
     }
   }
   return outvol;
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////
 

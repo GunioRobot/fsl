@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #   first_roi_slicesdir - script to view slicesdir on a region of interest
-#   defined by a set of label images (e.g. output of FIRST). A set of 
+#   defined by a set of label images (e.g. output of FIRST). A set of
 #   temporary roi images are created, slicesdir is then run on those.
 #
 #   Brian Patenaude and Matthew Webster, FMRIB Image Analysis Group
@@ -11,20 +11,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -36,13 +36,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -53,7 +53,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -86,30 +86,30 @@ echo "total number of image: " $num
 num=`echo "${num}/2 " | bc`
 echo "number of image pairs: " $num
 
-#this loop creates the paired list  
+#this loop creates the paired list
 i=1;
-while [ $i -le ${num} ] ; do 
+while [ $i -le ${num} ] ; do
 
     pout=`echo $@ | awk '{ print $'$i' }'`
-    
+
     imind=`echo ${i} + ${num} | bc`
     imlb=`echo $@ | awk '{ print $'$imind' }'`
       imlbout=`echo $imlb | awk -F / '{ print $NF }'`
       imlbout=`remove_ext $imlbout `
 
-    roi=`${FSLDIR}/bin/fslstats $imlb -w` 
+    roi=`${FSLDIR}/bin/fslstats $imlb -w`
 
     xmin=`echo $roi | awk '{ print $1 }'`
     xsize=`echo $roi | awk '{ print $2 }'`
     xmin=`echo $xmin - 10 | bc`
     xsize=`echo $xsize + 20 | bc`
 
-    
+
     ymin=`echo $roi | awk '{ print $3 }'`
     ysize=`echo $roi | awk '{ print $4 }'`
     ymin=`echo $ymin - 10 | bc`
     ysize=`echo $ysize + 20 | bc`
- 
+
     zmin=`echo $roi | awk '{ print $5 }'`
     zsize=`echo $roi | awk '{ print $6 }'`
     zmin=`echo $zmin - 10 | bc`
@@ -119,7 +119,7 @@ while [ $i -le ${num} ] ; do
 
     pout=`remove_ext $pout`
     imlb=`remove_ext $imlb`
-    
+
     pout2=`echo $pout | awk -F / '{ print $NF }'`
     pout2=`remove_ext $pout2`
     echo $i $pout2
@@ -127,8 +127,8 @@ while [ $i -le ${num} ] ; do
     ${FSLDIR}/bin/fslroi $pout ${pout2}_t1grot${i} $roi
     ${FSLDIR}/bin/fslroi $imlb ${imlbout}lbgrot${i} $roi
     pairlist=${pairlist}" "${pout2}_t1grot${i}" "${imlbout}lbgrot${i}
-   
-    i=$((i+1)); 
+
+    i=$((i+1));
 done
 
 echo "run slicesdir"
@@ -137,9 +137,9 @@ ${FSLDIR}/bin/slicesdir -o -e -1 ${pairlist}
 #remove tmeporrary images
 
 echo "removing files..."
-for i in $pairlist; do 
-    echo $i; 
-   ${FSLDIR}/bin/imrm $i; 
+for i in $pairlist; do
+    echo $i;
+   ${FSLDIR}/bin/imrm $i;
 done
 
 

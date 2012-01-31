@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 

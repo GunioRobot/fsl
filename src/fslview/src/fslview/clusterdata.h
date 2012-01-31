@@ -3,7 +3,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -29,17 +29,17 @@ class BaseCluster
 public:
   typedef boost::shared_ptr<BaseCluster> Handle;
 
-  typedef enum {Index, Voxels, P, MinusLog10P, 
+  typedef enum {Index, Voxels, P, MinusLog10P,
 		ZMax,
-		ZMaxX, ZMaxY, ZMaxZ, 
-		ZCOGX, ZCOGY, ZCOGZ, 
+		ZMaxX, ZMaxY, ZMaxZ,
+		ZCOGX, ZCOGY, ZCOGZ,
 		COPEMax,
-		COPEMaxX, COPEMaxY, COPEMaxZ, 
+		COPEMaxX, COPEMaxY, COPEMaxZ,
 		COPEMean} ColumnValue;
 
   typedef std::map<std::string, ColumnValue> HeadingMap;
   typedef std::list<std::string> ColumnList;
-  
+
   virtual void scanFrom(std::istream&) = 0;
   virtual void outputTo(std::ostream&) const = 0;
 
@@ -101,11 +101,11 @@ public:
   virtual std::string inqMaxCOGx() const;
   virtual std::string inqMaxCOGy() const;
   virtual std::string inqMaxCOGz() const;
-  
+
   virtual std::string inqMaxCOPEx() const;
   virtual std::string inqMaxCOPEy() const;
   virtual std::string inqMaxCOPEz() const;
-  
+
   void setCursorToMaxZ(Cursor::Handle&) const;
   void setCursorToCOG(Cursor::Handle&) const;
   void setCursorToMaxCOPE(Cursor::Handle&) const;

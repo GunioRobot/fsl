@@ -13,7 +13,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // variant.hpp - non-intrusive serialization of variant types
 //
-// copyright (c) 2005   
+// copyright (c) 2005
 // troy d. straszheim <troy@resophonic.com>
 // http://www.resophonic.com
 //
@@ -128,7 +128,7 @@ struct variant_impl {
 
 template<class Archive, BOOST_VARIANT_ENUM_PARAMS(/* typename */ class T)>
 void load(
-    Archive & ar, 
+    Archive & ar,
     boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& v,
     unsigned int version
 ){

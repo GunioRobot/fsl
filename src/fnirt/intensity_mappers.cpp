@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #include <cstdlib>
@@ -91,7 +91,7 @@ void IntensityMapper::SetPar(const NEWMAT::ColumnVector&  par)
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-void IntensityMapper::SaveGlobalMapping(const std::string& fname) 
+void IntensityMapper::SaveGlobalMapping(const std::string& fname)
 const
 {
   if (_sfac.size()) {
@@ -107,7 +107,7 @@ const
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-void IntensityMapper::SaveLocalMapping(const std::string& fname) 
+void IntensityMapper::SaveLocalMapping(const std::string& fname)
 const
 {
   if (_sfld.size()) {
@@ -116,7 +116,7 @@ const
     for (unsigned int i=0; i<_sfld.size(); i++) {
       _sfld[i]->AsVolume(volfld[i]);
     }
-    save_volume4D(volfld,fname); 
+    save_volume4D(volfld,fname);
   }
 }
 
@@ -235,7 +235,7 @@ const
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-double IntensityMapper::CFContribution() 
+double IntensityMapper::CFContribution()
 const
 {
   double memen = 0.0;
@@ -266,7 +266,7 @@ void IntensityMapper::NewSubSampling(const std::vector<unsigned int>&    ms,    
     ksp[0] = tmp_fld.Ksp_x(); ksp[1] = tmp_fld.Ksp_y(); ksp[2] = tmp_fld.Ksp_z();
     for (unsigned int j=0; j<3; j++) ksp[j] = static_cast<unsigned int>((double(old_ss[j]) / double(new_ss[j])) * double(ksp[j]) + 0.5);
     _sfld[i] = _sfld[i]->ZoomField(ms,vxs);       // First step changes voxel-size
-    _sfld[i] = _sfld[i]->ZoomField(ms,vxs,ksp);   // Second step changes knot-spacing 
+    _sfld[i] = _sfld[i]->ZoomField(ms,vxs,ksp);   // Second step changes knot-spacing
   }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ NEWMAT::ReturnMatrix IntensityMapper::Gradient(const NEWIMAGE::volume<float>&   
 
 boost::shared_ptr<MISCMATHS::BFMatrix> IntensityMapper::Hessian(const NEWIMAGE::volume<float>&    ref,
                                                                 const NEWIMAGE::volume<char>      *mask,
-                                                                MISCMATHS::BFMatrixPrecisionType  prec) 
+                                                                MISCMATHS::BFMatrixPrecisionType  prec)
 const
 {
   if (_mt != NO_SCALING) throw IntensityMapperException("IntensityMapper::Hessian: Must use derived class for intensity mapping");
@@ -313,7 +313,7 @@ boost::shared_ptr<MISCMATHS::BFMatrix> IntensityMapper::CrossHessian(const BASIS
                                                                      const NEWIMAGE::volume<float>&       dima,
                                                                      const NEWIMAGE::volume<float>&       ref,
                                                                      const NEWIMAGE::volume<char>         *mask,
-                                                                     MISCMATHS::BFMatrixPrecisionType     prec) 
+                                                                     MISCMATHS::BFMatrixPrecisionType     prec)
 const
 {
   if (_mt != NO_SCALING) throw IntensityMapperException("IntensityMapper::CrossHessian: Must use derived class for intensity mapping");
@@ -340,7 +340,7 @@ NEWMAT::ReturnMatrix SSDIntensityMapper::Gradient(const NEWIMAGE::volume<float>&
                                                   const NEWIMAGE::volume<char>        *mask)
 {
   if (!samesize(ref,diff) || (mask && !samesize(ref,*mask))) throw IntensityMapperException("SSDIntensityMapper::Gradient: Image size mismatch");
-  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) || 
+  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) ||
                        _sfld[0]->FieldSz_y() != static_cast<unsigned int>(ref.ysize()) ||
                        _sfld[0]->FieldSz_z() != static_cast<unsigned int>(ref.zsize()))) {
     throw IntensityMapperException("SSDIntensityMapper::Gradient: Size mismatch between intensity field and input image");
@@ -409,7 +409,7 @@ NEWMAT::ReturnMatrix SSDIntensityMapper::Gradient(const NEWIMAGE::volume<float>&
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Calculate the Hessian of a sum-of-squared-differences cost-function 
+// Calculate the Hessian of a sum-of-squared-differences cost-function
 // with respect to the paramaters of the intensity mapping.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,12 +420,12 @@ boost::shared_ptr<MISCMATHS::BFMatrix> SSDIntensityMapper::Hessian(const NEWIMAG
 const
 {
   if (mask && !samesize(ref,*mask)) throw IntensityMapperException("SSDIntensityMapper::Gradient: Image-Mask size mismatch");
-  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) || 
+  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) ||
                        _sfld[0]->FieldSz_y() != static_cast<unsigned int>(ref.ysize()) ||
                        _sfld[0]->FieldSz_z() != static_cast<unsigned int>(ref.zsize()))) {
     throw IntensityMapperException("SSDIntensityMapper::Gradient: Size mismatch between intensity field and input image");
   }
-  
+
   boost::shared_ptr<MISCMATHS::BFMatrix>   hess; // Null-pointer
   if (Fixed()) {
     hess = boost::shared_ptr<MISCMATHS::BFMatrix>(new MISCMATHS::FullBFMatrix(0,0));  // Empty matrix
@@ -484,7 +484,7 @@ const
     boost::shared_ptr<MISCMATHS::BFMatrix>   reg = _sfld[0]->BendEnergyHess(prec);
     reg->MulMeByScalar(0.5 * _lambda);
     hess = _sfld[0]->JtJ(wgtrefpwr,mask,prec);
-    hess->AddToMe(*reg);    
+    hess->AddToMe(*reg);
     // Cross (between local and global) part
     NEWMAT::Matrix                           JtF(_sfld[0]->CoefSz(),_sfac.size());
     wgtrefpwr *= biasfield;
@@ -505,7 +505,7 @@ const
     ref_power_i.copyproperties(ref);
     ref_power_i = 1.0;
     NEWIMAGE::volume<float>     ref_power_j(ref_power_i);
-    // Fill in upper right part of vector-vector 
+    // Fill in upper right part of vector-vector
     // "matrix" of matrices.
     for (unsigned int i=0; i<_sfld.size(); i++) {
       if (i) ref_power_i *= ref;
@@ -536,13 +536,13 @@ const
       }
     }
     // Concatenates top->bottom into hess
-    hess = JtJ[0][0];    
+    hess = JtJ[0][0];
     for (unsigned int row = 1; row<_sfld.size(); row++) {
       hess->VertConcatBelowMe(*(JtJ[row][0]));
     }
   }
 
-  return(hess);    
+  return(hess);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -558,18 +558,18 @@ boost::shared_ptr<MISCMATHS::BFMatrix> SSDIntensityMapper::CrossHessian(const BA
                                                                         const NEWIMAGE::volume<float>&       dima,
                                                                         const NEWIMAGE::volume<float>&       ref,
                                                                         const NEWIMAGE::volume<char>         *mask,
-                                                                        MISCMATHS::BFMatrixPrecisionType     prec) 
+                                                                        MISCMATHS::BFMatrixPrecisionType     prec)
 const
 {
   if (!samesize(dima,ref)) throw IntensityMapperException("SSDIntensityMapper::Gradient: Image-Image size mismatch");
   if (mask && !samesize(ref,*mask)) throw IntensityMapperException("SSDIntensityMapper::Gradient: Image-Mask size mismatch");
-  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) || 
+  if (_sfld.size() && (_sfld[0]->FieldSz_x() != static_cast<unsigned int>(ref.xsize()) ||
                        _sfld[0]->FieldSz_y() != static_cast<unsigned int>(ref.ysize()) ||
                        _sfld[0]->FieldSz_z() != static_cast<unsigned int>(ref.zsize()))) {
     throw IntensityMapperException("SSDIntensityMapper::Gradient: Size mismatch between intensity field and input image");
   }
-  if (_sfld.size() && (_sfld[0]->FieldSz_x() != dfield.FieldSz_x() || 
-                       _sfld[0]->FieldSz_y() != dfield.FieldSz_y() || 
+  if (_sfld.size() && (_sfld[0]->FieldSz_x() != dfield.FieldSz_x() ||
+                       _sfld[0]->FieldSz_y() != dfield.FieldSz_y() ||
                        _sfld[0]->FieldSz_z() != dfield.FieldSz_z())) {
     throw IntensityMapperException("SSDIntensityMapper::Hessian: Size mismatch between intensity field and displacement field");
   }
@@ -590,7 +590,7 @@ const
     hess = boost::shared_ptr<MISCMATHS::BFMatrix>(new MISCMATHS::FullBFMatrix(-dfield.Jte(dima,ref,mask)));  // N.B. the minus sign
   }
   else if (_mt == GLOBAL_NON_LINEAR) {
-    NEWMAT::Matrix           JtF(dfield.CoefSz(),_sfac.size()); 
+    NEWMAT::Matrix           JtF(dfield.CoefSz(),_sfac.size());
     NEWIMAGE::volume<float>  ref_power(ref);
     JtF.Column(1) = - _presc[0] * dfield.Jte(dima,mask);                  // N.B. the minus sign
     for (unsigned int i=1; i<_sfac.size(); i++) {
@@ -657,7 +657,7 @@ double SSDIntensityMapper::funny_dotproduct(const NEWIMAGE::volume<float>&   vol
       rval += static_cast<double>(val * (*it2) * (*it3));
     }
   }
-  return(rval); 
+  return(rval);
 }
 
 double SSDIntensityMapper::funny_dotproduct(const NEWIMAGE::volume<float>&   vol1,
@@ -675,7 +675,7 @@ double SSDIntensityMapper::funny_dotproduct(const NEWIMAGE::volume<float>&   vol
     for (unsigned int i=0; i<n; i++) val *= *it1;
     rval += static_cast<double>(val * (*it2) * (*it3));
   }
-  return(rval); 
+  return(rval);
 }
 
 double SSDIntensityMapper::funny_dotproduct(const NEWIMAGE::volume<float>&   vol1,
@@ -716,9 +716,9 @@ vector<unsigned int> IntensityMapperReader::LocalFieldSize() const
 {
   vector<unsigned int> rvec(3,0);
   if (!_has_local) throw IntensityMapperReaderException("LocalFieldSize: No local intensity mapping info available.");
-  rvec[0] = static_cast<unsigned int>(_local.xsize()); 
-  rvec[1] = static_cast<unsigned int>(_local.ysize()); 
-  rvec[2] = static_cast<unsigned int>(_local.zsize()); 
+  rvec[0] = static_cast<unsigned int>(_local.xsize());
+  rvec[1] = static_cast<unsigned int>(_local.ysize());
+  rvec[2] = static_cast<unsigned int>(_local.zsize());
   return(rvec);
 }
 
@@ -739,7 +739,7 @@ vector<shared_ptr<basisfield> > IntensityMapperReader::GetLocalAsSplinefieldVect
   size[0] = static_cast<unsigned int>(_local.xsize());
   size[1] = static_cast<unsigned int>(_local.ysize());
   size[2] = static_cast<unsigned int>(_local.zsize());
-  vxs[0] = _local.xdim(); vxs[1] = _local.ydim(); vxs[2] = _local.zdim(); 
+  vxs[0] = _local.xdim(); vxs[1] = _local.ydim(); vxs[2] = _local.zdim();
   for (int i=0; i<_local.tsize(); i++) {
     rvec[i] = shared_ptr<basisfield>(new splinefield(size,vxs,ksp));
     rvec[i]->Set(_local[i]);
@@ -756,7 +756,7 @@ splinefield IntensityMapperReader::GetLocalAsSingleSplinefield(const vector<unsi
   size[0] = static_cast<unsigned int>(_local[indx].xsize());
   size[1] = static_cast<unsigned int>(_local[indx].ysize());
   size[2] = static_cast<unsigned int>(_local[indx].zsize());
-  vxs[0] = _local[indx].xdim(); vxs[1] = _local[indx].ydim(); vxs[2] = _local[indx].zdim(); 
+  vxs[0] = _local[indx].xdim(); vxs[1] = _local[indx].ydim(); vxs[2] = _local[indx].zdim();
   splinefield                      field(size,vxs,ksp);
   field.Set(_local[indx]);
   return(field);
@@ -778,7 +778,7 @@ void IntensityMapperReader::common_read(const string& fname)
     }
   }
   // First read .txt file, if we are asked to
-  if ((FNIRT::extension(fname).size() && FNIRT::extension(fname)==string(".txt")) || 
+  if ((FNIRT::extension(fname).size() && FNIRT::extension(fname)==string(".txt")) ||
       !FNIRT::extension(fname).size()) {
     string tmpname;
     if (!FNIRT::extension(fname).size()) tmpname = fname + string(".txt");

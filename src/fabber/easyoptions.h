@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -76,32 +76,32 @@ class EasyOptions {
     // The only way to create an instance:
     EasyOptions(int argc, char** argv);
         // break down options into key=value clauses
-    
-    // Below: option-reading values.  Once they are called, 
+
+    // Below: option-reading values.  Once they are called,
     // the corresponding key=value pair is removed... this is deliberate, to
     // ensure that eacy argument is used exactly once.  If you want to use an
     // argument in more than one place, you're probably doing something wrong...
     // this should make code more maintainable by making it easy to see where
     // options have an effect on code.
-    
+
     string Read(const string& key)
         { return Read(key, "Missing mandatory option: --" + key + "\n"); }
         // Get a mandatory option.
         // throws if option is missing or has no =value clause
     string Read(const string& key, const string& msg);
         // supply msg if you want a customized (helpful) error message.
-        
+
     bool ReadBool(const string& key);
         // true if present, false if absent, throws error if --key=value.
-        
+
     string ReadWithDefault(const string& key, const string& def);
         // Like default, but if --key=value is omitted it just treats
         // as if --key=default.
-        
+
     void CheckEmpty();
         // throws if there are any options left
 
-    ~EasyOptions() { }; 
+    ~EasyOptions() { };
         // throwing an exception in a destructor would be a bad idea!
         // Also, note that args may not be empty, if an exception has
         // been thrown.
@@ -113,7 +113,7 @@ private:
         // all remaining unused options.
     void AddKey(const string& key); // internal helper function
  };
- 
+
 typedef EasyOptions ArgsType;
 
 // Use NEWMAT's exception handling base class
@@ -125,7 +125,7 @@ public:
   Invalid_option(const string& s) : Runtime_error(s.c_str()) { return; }
 };
 
-// Convert a string into almost anything, using operator>>. See the C++ FAQ-Lite: 
+// Convert a string into almost anything, using operator>>. See the C++ FAQ-Lite:
 // http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.3
 template<typename T>
 inline T convertTo(const std::string& s)

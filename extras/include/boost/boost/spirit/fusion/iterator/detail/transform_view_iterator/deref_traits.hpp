@@ -30,10 +30,10 @@ namespace boost { namespace fusion
             static type
             call(Iterator const& i);
         };
-        
+
         template<typename Iterator>
-        BOOST_DEDUCED_TYPENAME deref_traits_impl<Iterator>::type 
-        deref_traits_impl<Iterator>::call(Iterator const& i) 
+        BOOST_DEDUCED_TYPENAME deref_traits_impl<Iterator>::type
+        deref_traits_impl<Iterator>::call(Iterator const& i)
         {
             return i.f(*i.first);
         }

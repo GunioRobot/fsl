@@ -24,11 +24,11 @@ public:
 private:
   void clearDialog();
   void synchronizeDialog();
-  OverlayList::Handle m_overlayList; 
+  OverlayList::Handle m_overlayList;
   ImageGroup::Handle  m_imageGroup;
 
   bool m_blockOverlayListUpdate;
-  
+
 
 protected slots:
 
@@ -38,11 +38,11 @@ protected slots:
    void dtiComboChanged(int n);
    void modComboChanged(int n);
    void intentChanged(int n);
-   void lutButtonPressed(); 
+   void lutButtonPressed();
    void overlayTextChanged( const QString & );
    void help();
 
-signals: 
+signals:
 
    virtual void openLookUpTable();
    virtual void message(const QString&, int);

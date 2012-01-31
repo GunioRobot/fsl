@@ -7,9 +7,9 @@ FABBER - Fast ASL &amp; BOLD Bayesian Estimation Routine - v1.1
 
 <p>Bayesian nonlinear model fitting provides a more flexible alternative to traditional linear analysis of perfusion data.  In multi-echo or multi-inversion-time data, this approach uses all time points to estimate all the parameters of interest simultaneously.  This can be more accurate because it uses a detailed nonlinear model of the pulse sequence, rather than assuming that different parts of the signal are linearly related to each quantity of interest.
 
-<p>To make this analysis technique fast enough for routine use, we have adapted a fast approximate method known as Variational Bayes (VB) to work with non-linear generative models.  Experimentally we have found that these calculations provide nearly identical results to sampling method and require only a fraction of the computation time (around a minute per slice).  
+<p>To make this analysis technique fast enough for routine use, we have adapted a fast approximate method known as Variational Bayes (VB) to work with non-linear generative models.  Experimentally we have found that these calculations provide nearly identical results to sampling method and require only a fraction of the computation time (around a minute per slice).
 
-<p>For further information, see 
+<p>For further information, see
 
 <cite> Chappell, M.A., Groves, A.R., Woolrich, M.W., "Variational Bayesian inference for a non-linear forward model", IEEE Trans. Sig. Proc., 2008 (in review)</cite>.</p>
 
@@ -24,7 +24,7 @@ FABBER - Fast ASL &amp; BOLD Bayesian Estimation Routine - v1.1
 
 <p>Dual-echo Arterial Spin Labelling is a pulse sequence used to acquire BOLD and Cerebral Blood Flow (CBF) information simultaneously.  The standard analysis methods involve performing separate analyses on the data from each echo time to obtain separate BOLD and CBF estimates.  A more flexible approach is to use a nonlinear forward model to determine all the physical parameters of interest simultaneously, using data from both echo times.  This models blood flow and inversion recovery explicitly and is built into a Bayesian framework to provide estimates of uncertainty.
 
-<p>For more details of this approach and the nonlinear QUIPSS II model we used, please refer to 
+<p>For more details of this approach and the nonlinear QUIPSS II model we used, please refer to
 <p><cite> Woolrich, M., Chiarelli, P., Gallichan, D., Perthen, J., Liu, T. "Bayesian Inference of Haemodynamic Changes in Functional ASL Data", Magnetic Resonance in Medicine, 56:891-906, 2006</i>.
 
 <h3>Using <b>fabber</b> on dual-echo ASL data</h3>
@@ -55,10 +55,10 @@ The typical syntax for analysing a QUIPSS II data set is:
 
 <p><samp>
 fabber --method=vb --model=quipss2 --noise=ar --num-echoes=2
---output=&lt;output_directory&gt; 
---data1=&lt;low_te_data&gt; --data2=&lt;high_te_data&gt; 
+--output=&lt;output_directory&gt;
+--data1=&lt;low_te_data&gt; --data2=&lt;high_te_data&gt;
 --mask=&lt;mask_image&gt;
---bold-basis=&lt;bold_design&gt; --cbf-basis=&lt;cbf_design&gt; 
+--bold-basis=&lt;bold_design&gt; --cbf-basis=&lt;cbf_design&gt;
 --statmag-basis=&lt;statmag_design&gt;
 </samp>
 
@@ -81,7 +81,7 @@ In addition, the T1 of blood and the inversion efficiency are normally treated a
 
 After FABBER finishes, the output folder will contain point estimate and pseudo-Z-statistic images for each of the forward model parameters, stored in <b>mean_&lt;parameter_name&gt;.nii.gz</b> and <b>zstat_&lt;parameter_name&gt;.nii.gz</b> respectively.  To find significant stimulus-correlated changes in the BOLD effect, CBF, and Static Magnetization, look at <b>zstat_BOLD_abschg_1.nii.gz</b>, <b>zstat_Q_abschg_1.nii.gz</b>, and <b>zstat_M_abschg_1.nii.gz</b>.  For quantitative parameter estimates, use the various <b>mean_*.nii.gz</b> files (e.g. % CBF change is simply <samp>100 * mean_Q_abschg_1 / mean_Q0</samp>).
 
-<p>For more detailed analysis of the Bayesian results (e.g. looking for covariance in parameter uncertainties), use <b>finalMeans.nii.gz</b> and <b>finalCovariance.nii.gz</b>.  These completely describe the multivariate normal distribution on the forward model parameters (in the NIFTI formats for vectors and symmetric matrices).  Some noise parameter distributions are also appended to this distribution.  The parameter names corresponding to the vector elements are saved (one per line) in <b>paramnames.txt</b>.  
+<p>For more detailed analysis of the Bayesian results (e.g. looking for covariance in parameter uncertainties), use <b>finalMeans.nii.gz</b> and <b>finalCovariance.nii.gz</b>.  These completely describe the multivariate normal distribution on the forward model parameters (in the NIFTI formats for vectors and symmetric matrices).  Some noise parameter distributions are also appended to this distribution.  The parameter names corresponding to the vector elements are saved (one per line) in <b>paramnames.txt</b>.
 
 <p>If you encounter problems, start by reading the output carefully and looking at the <b>logfile</b> &mdash; there may be some useful warning messages there.
 

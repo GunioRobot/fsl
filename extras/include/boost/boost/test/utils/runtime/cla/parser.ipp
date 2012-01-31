@@ -83,9 +83,9 @@ BOOST_RT_PARAM_INLINE parser&
 parser::operator<<( parameter_ptr new_param )
 {
     BOOST_TEST_FOREACH( parameter_ptr, old_param, m_parameters ) {
-        BOOST_RT_PARAM_VALIDATE_LOGIC( !old_param->conflict_with( *new_param ) && 
+        BOOST_RT_PARAM_VALIDATE_LOGIC( !old_param->conflict_with( *new_param ) &&
                                        !new_param->conflict_with( *old_param ),
-            BOOST_RT_PARAM_LITERAL( "Definition of parameter " )                << new_param->id_2_report() << 
+            BOOST_RT_PARAM_LITERAL( "Definition of parameter " )                << new_param->id_2_report() <<
             BOOST_RT_PARAM_LITERAL( " conflicts with defintion of parameter " ) << old_param->id_2_report() );
     }
 
@@ -153,7 +153,7 @@ parser::parse( int& argc, char_type** argv )
         }
     }
     catch( bad_lexical_cast const& ) {
-        BOOST_RT_PARAM_REPORT_LOGIC_ERROR( 
+        BOOST_RT_PARAM_REPORT_LOGIC_ERROR(
             BOOST_RT_PARAM_LITERAL( "String to value convertion error during input parsing" ) );
     }
 
@@ -214,7 +214,7 @@ parser::usage( out_stream& ostr )
 
         if( curr_param->p_multiplicable ) {
             fs << BOOST_RT_PARAM_CSTRING_LITERAL( " ... " );
-            
+
             if( curr_param->p_optional )
                 fs << BOOST_RT_PARAM_LITERAL( '[' );
 

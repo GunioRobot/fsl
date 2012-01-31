@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -173,7 +173,7 @@ void parse_command_line(int argc, char* argv[])
       n++;
       continue;
     }
-    
+
     // put options without arguments here
     if ( arg == "-help" ) {
       print_usage(argc,argv);
@@ -205,10 +205,10 @@ void parse_command_line(int argc, char* argv[])
       continue;
     }
 
-    if (n+1>=argc) 
-      { 
+    if (n+1>=argc)
+      {
 	cerr << "Lacking argument to option " << arg << endl;
-	break; 
+	break;
       }
 
     // put options with 1 argument here
@@ -229,10 +229,10 @@ void parse_command_line(int argc, char* argv[])
       globalopts.warpfname = argv[n+1];
       n+=2;
       continue;
-    } else { 
+    } else {
       cerr << "Unrecognised option " << arg << endl;
       exit(-1);
-    } 
+    }
 
   }  // while (n<argc)
 
@@ -247,11 +247,11 @@ void parse_command_line(int argc, char* argv[])
 ////////////////////////////////////////////////////////////////////////////
 
 void print_info(const volume<float>& vol, const string& name) {
-  cout << name << ":: SIZE = " << vol.xsize() << " x " << vol.ysize() 
+  cout << name << ":: SIZE = " << vol.xsize() << " x " << vol.ysize()
        << " x " << vol.zsize() << endl;
-  cout << name << ":: DIMS = " << vol.xdim() << " x " << vol.ydim() 
+  cout << name << ":: DIMS = " << vol.xdim() << " x " << vol.ydim()
        << " x " << vol.zdim() << " mm" << endl << endl;
-}  
+}
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -287,7 +287,7 @@ int main(int argc,char *argv[])
     cerr << "Cannot read standard image" << endl;
     return -1;
   }
-    
+
   if (globalopts.verbose>3) {
     if (globalopts.usestd) { print_info(stdvol,"standard image"); }
     print_info(imgvol,"input image");
@@ -308,7 +308,7 @@ int main(int argc,char *argv[])
     affmat = IdentityMatrix(4);
   }
 
-    
+
   if (globalopts.verbose>3) {
     cout << " affmat =" << endl << affmat << endl << endl;
   }
@@ -328,9 +328,9 @@ int main(int argc,char *argv[])
 
   /////////////// SET UP MATRICES ////////////////
 
-  if ( (stdvol.sform_code()==NIFTI_XFORM_UNKNOWN) && 
-       (stdvol.qform_code()==NIFTI_XFORM_UNKNOWN) ) { 
-    cerr << "WARNING:: mm coordinate space not set in standard volume" << endl; 
+  if ( (stdvol.sform_code()==NIFTI_XFORM_UNKNOWN) &&
+       (stdvol.qform_code()==NIFTI_XFORM_UNKNOWN) ) {
+    cerr << "WARNING:: mm coordinate space not set in standard volume" << endl;
   }
   if (globalopts.verbose>3) {
     cout << " stdvox2world =" << endl << stdvol.newimagevox2mm_mat() << endl << endl;
@@ -361,44 +361,44 @@ int main(int argc,char *argv[])
   if (use_stdin) {
     if (globalopts.verbose>0) {
       cout << "Please type in input image coordinates";
-      if (globalopts.mm) { 
+      if (globalopts.mm) {
 	cout << " (in mm) :" << endl;
-      } else { 
-	cout << " (in voxels) :" << endl; 
+      } else {
+	cout << " (in voxels) :" << endl;
       }
-    } 
+    }
   } else {
-    if (!matfile) { 
+    if (!matfile) {
       cerr << "Could not open matrix file " << globalopts.coordfname << endl;
       return -1;
     }
   }
-  
+
   // loop around reading coordinates and displaying output
-  
+
   while ( (use_stdin && (!cin.eof())) || ((!use_stdin) && (!matfile.eof())) ) {
     for (int j=1; j<=3; j++) {
       if (use_stdin) { cin >> imgcoord(j); }
       else { matfile >> imgcoord(j); }
-    } 
+    }
     if  (use_stdin) {
       // this is in case the pipe continues to input a stream of zeros
       if (oldimg == imgcoord)  return 0;
       oldimg = imgcoord;
     }
-    
+
     if (globalopts.mm) {  // in mm
-      stdcoord = stdvol.newimagevox2mm_mat() * 
+      stdcoord = stdvol.newimagevox2mm_mat() *
 	NewimageCoord2NewimageCoord(fnirtfile,affmat,imgvol,stdvol,imgvol.newimagevox2mm_mat().i() * imgcoord);
     } else { // in voxels
-      stdcoord = stdvol.newimagevox2mm_mat() * 
-	NewimageCoord2NewimageCoord(fnirtfile,affmat,imgvol,stdvol,imgvol.niftivox2newimagevox_mat() * imgcoord); 
+      stdcoord = stdvol.newimagevox2mm_mat() *
+	NewimageCoord2NewimageCoord(fnirtfile,affmat,imgvol,stdvol,imgvol.niftivox2newimagevox_mat() * imgcoord);
     }
     cout << stdcoord(1) << "  " << stdcoord(2) << "  " << stdcoord(3) << endl;
   }
-  
+
   if (!use_stdin) { matfile.close(); }
-  
+
   return 0;
 }
 

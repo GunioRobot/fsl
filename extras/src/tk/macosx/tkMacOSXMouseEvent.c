@@ -416,7 +416,7 @@ HandleWindowTitlebarMouseDown(MouseEventData * medPtr, Tk_Window tkwin)
 	    result = -1;
 	    break;
     }
-    
+
     if (result == INT_MAX) {
 	result = 0;
 	TkMacOSXTrackingLoop(1);
@@ -550,7 +550,7 @@ BringWindowForward(
     if (wRef && !TkpIsWindowFloating(wRef) && IsValidWindowPtr(wRef)) {
 	WindowRef frontWindow = FrontNonFloatingWindow();
 	WindowModality frontWindowModality = kWindowModalityNone;
-	
+
 	if (frontWindow && frontWindow != wRef) {
 	    ChkErr(GetWindowModality, frontWindow, &frontWindowModality, NULL);
 	}
@@ -641,7 +641,7 @@ TkMacOSXBringWindowForward(
 
 Tk_Window
 GetGrabWindowForWindow(
-    Tk_Window tkwin) 
+    Tk_Window tkwin)
 {
     Tk_Window grabWin = TkMacOSXGetCapture();
 
@@ -652,7 +652,7 @@ GetGrabWindowForWindow(
 	    grabWin = (Tk_Window) (((TkWindow*)tkwin)->dispPtr->grabWinPtr);
 	}
     }
-    
+
     return grabWin;
 }
 

@@ -18,7 +18,7 @@ namespace boost {
 // implement special shared_ptr handling for rvalue conversions.
 template <class T> class shared_ptr;
 
-namespace python { namespace converter { 
+namespace python { namespace converter {
 
 struct registration;
 
@@ -61,23 +61,23 @@ namespace detail
   register_shared_ptr0(...)
   {
   }
-  
+
   template <class T>
   inline void
   register_shared_ptr0(shared_ptr<T>*)
   {
       registry::lookup_shared_ptr(type_id<shared_ptr<T> >());
   }
-  
+
   template <class T>
   inline void
   register_shared_ptr1(T const volatile*)
   {
       detail::register_shared_ptr0((T*)0);
   }
-  
+
   template <class T>
-  registration const& 
+  registration const&
   registry_lookup(T&(*)())
   {
       detail::register_shared_ptr1((T*)0);

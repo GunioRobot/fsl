@@ -1,4 +1,4 @@
-/* 
+/*
  * tclIndexObj.c --
  *
  *	This file implements objects of type "index".  This object type
@@ -157,7 +157,7 @@ Tcl_GetIndexFromObj(interp, objPtr, tablePtr, msg, flags, indexPtr)
  */
 
 int
-Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset, msg, flags, 
+Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset, msg, flags,
 	indexPtr)
     Tcl_Interp *interp; 	/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* Object containing the string to lookup. */
@@ -205,7 +205,7 @@ Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset, msg, flags,
      *  - A single abbreviation (allowed depending on flags)
      *  - Several abbreviations (never allowed, but overridden by exact match)
      */
-    for (entryPtr = tablePtr, i = 0; *entryPtr != NULL; 
+    for (entryPtr = tablePtr, i = 0; *entryPtr != NULL;
 	    entryPtr = NEXT_ENTRY(entryPtr, offset), i++) {
 	for (p1 = key, p2 = *entryPtr; *p1 == *p2; p1++, p2++) {
 	    if (*p1 == '\0') {
@@ -227,7 +227,7 @@ Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset, msg, flags,
 	}
     }
     /*
-     * Check if we were instructed to disallow abbreviations. 
+     * Check if we were instructed to disallow abbreviations.
      */
     if ((flags & TCL_EXACT) || (key[0] == '\0') || (numAbbrev != 1)) {
 	goto error;
@@ -297,7 +297,7 @@ Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset, msg, flags,
  *
  * Results:
  *	The return value is always TCL_ERROR, and an error message is
- *	left in interp's result if interp isn't NULL. 
+ *	left in interp's result if interp isn't NULL.
  *
  * Side effects:
  *	None.
@@ -453,7 +453,7 @@ Tcl_WrongNumArgs(interp, objc, objv, message)
 	 * for the correct error message even if the subcommand was
 	 * abbreviated.  Otherwise, just use the string rep.
 	 */
-	
+
 	if (objv[i]->typePtr == &tclIndexType) {
 	    indexRep = (IndexRep *) objv[i]->internalRep.otherValuePtr;
 	    Tcl_AppendStringsToObj(objPtr, EXPAND_OF(indexRep), (char *) NULL);

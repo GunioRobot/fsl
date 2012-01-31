@@ -244,7 +244,7 @@ test canvas-9.1 {canvas id creation and deletion} {
 	    $c delete $id
 	}
     }] 0]
-	
+
     set x ""
 } {}
 test canvas-10.1 {find items using tag expressions} {
@@ -386,10 +386,10 @@ test canvas-11.2 {canvas poly overlap fill check, bug 226357} {
 test canvas-12.1 {canvas mm obj, patch SF-403327, 102471} {
     destroy .c
     pack [canvas .c]
-    set qx [expr {1.+1.}] 
-    # qx has type double and no string representation 
+    set qx [expr {1.+1.}]
+    # qx has type double and no string representation
     .c scale all $qx 0 1. 1.
-    # qx has now type MMRep and no string representation 
+    # qx has now type MMRep and no string representation
     list $qx [string length $qx]
 } {2.0 3}
 test canvas-12.2 {canvas mm obj, patch SF-403327, 102471} {
@@ -397,9 +397,9 @@ test canvas-12.2 {canvas mm obj, patch SF-403327, 102471} {
     pack [canvas .c]
     set val 10
     incr val
-    # qx has type double and no string representation 
+    # qx has type double and no string representation
     .c scale all $val 0 1 1
-    # qx has now type MMRep and no string representation 
+    # qx has now type MMRep and no string representation
     incr val
 } {12}
 

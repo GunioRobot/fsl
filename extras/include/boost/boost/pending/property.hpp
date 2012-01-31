@@ -1,4 +1,4 @@
-//  (C) Copyright Jeremy Siek 2004 
+//  (C) Copyright Jeremy Siek 2004
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -10,7 +10,7 @@
 
 namespace boost {
 
-  struct no_property { 
+  struct no_property {
     typedef no_property tag_type;
     typedef no_property next_type;
     typedef no_property value_type;
@@ -41,14 +41,14 @@ namespace boost {
   };
 
   template <class P>
-  struct has_property { 
+  struct has_property {
     BOOST_STATIC_CONSTANT(bool, value = true);
     typedef true_type type;
   };
   template <>
-  struct has_property<no_property> { 
-    BOOST_STATIC_CONSTANT(bool, value = false); 
-    typedef false_type type; 
+  struct has_property<no_property> {
+    BOOST_STATIC_CONSTANT(bool, value = false);
+    typedef false_type type;
   };
 
 } // namespace boost
@@ -66,13 +66,13 @@ namespace boost {
     typedef typename detail::build_property_tag_value_alist<PropertyList>::type AList;
     typedef typename detail::ev_selector<AList>::type Extractor;
     typedef typename Extractor::template bind_<AList,Tag>::type type;
-#endif  
+#endif
   };
 
   template <class Tag1, class Tag2, class T1, class Base>
-  inline typename property_value<property<Tag1,T1,Base>, Tag2>::type& 
+  inline typename property_value<property<Tag1,T1,Base>, Tag2>::type&
   get_property_value(property<Tag1,T1,Base>& p, Tag2 tag2) {
-    BOOST_STATIC_CONSTANT(bool, 
+    BOOST_STATIC_CONSTANT(bool,
                           match = (detail::same_property<Tag1,Tag2>::value));
     typedef property<Tag1,T1,Base> Prop;
     typedef typename property_value<Prop, Tag2>::type T2;
@@ -82,9 +82,9 @@ namespace boost {
   }
   template <class Tag1, class Tag2, class T1, class Base>
   inline
-  const typename property_value<property<Tag1,T1,Base>, Tag2>::type& 
+  const typename property_value<property<Tag1,T1,Base>, Tag2>::type&
   get_property_value(const property<Tag1,T1,Base>& p, Tag2 tag2) {
-    BOOST_STATIC_CONSTANT(bool, 
+    BOOST_STATIC_CONSTANT(bool,
                           match = (detail::same_property<Tag1,Tag2>::value));
     typedef property<Tag1,T1,Base> Prop;
     typedef typename property_value<Prop, Tag2>::type T2;

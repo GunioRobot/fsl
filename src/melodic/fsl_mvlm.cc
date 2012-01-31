@@ -1,4 +1,4 @@
-/*  fsl_glm - 
+/*  fsl_glm -
 
     Christian F. Beckmann, FMRIB Image Analysis Group
 
@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -116,7 +116,7 @@ using namespace std;
   string examples="fsl_mvlm -i <input> -o <output> [options]";
 
 
-//Command line Options 
+//Command line Options
     Option<string> fnin(string("-i,--in"), string(""),
 		string("        input file name (text matrix or 3D/4D image file)"),
 		true, requires_argument);
@@ -125,7 +125,7 @@ using namespace std;
 		true, requires_argument);
 	Option<string> approach(string("-a,--alg"), string("PCA"),
 		string("algorithm for decomposition: PCA (or SVD; default), PLS, orthoPLS, CVA, SVD-CVA, MLM, NMF"),
-		false, requires_argument);	
+		false, requires_argument);
     Option<string> fndesign(string("-d,--design"), string(""),
 		string("file name of the GLM design matrix (time courses or spatial maps)"),
 		false, requires_argument);
@@ -156,7 +156,7 @@ using namespace std;
 	Option<bool> debug(string("--debug"),FALSE,
 		string("switch on debug output"),
 		false, no_argument, false);
-	// Output options	
+	// Output options
 	Option<string> outres(string("--out_res"),string(""),
 		string("output file name for residuals"),
 		false, requires_argument, false);
@@ -167,16 +167,16 @@ using namespace std;
 		string("output file name for scaling factors for variance normalisation"),
 		false, requires_argument);
 
-//Globals 
+//Globals
 	Melodic::basicGLM glm;
 	int voxels = 0;
 	Matrix data, tmpdata;
 	Matrix design;
 	Matrix meanR;
 	Matrix svd_X_U, svd_X_V, svd_Y_U, svd_Y_V;
-	DiagonalMatrix svd_X_D, svd_Y_D;	
+	DiagonalMatrix svd_X_D, svd_Y_D;
 	RowVector vnscales;
-	volume<float> mask;  
+	volume<float> mask;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -209,14 +209,14 @@ void saveit(Matrix what, string fname){
 }
 
 int setup(){
-	
+
 	dbgmsg(" In <setup>");
 	message(" Reading data " << fnin.value() << " ... ");
 	if(fsl_imageexists(fnin.value())){//read data
 		//input is 3D/4D vol
 		volume4D<float> tmpdata;
 		read_volume4D(tmpdata,fnin.value());
-		
+
 		// create mask
 		if(fnmask.value()>""){
 			read_volume(mask,fnmask.value());
@@ -225,9 +225,9 @@ int setup(){
 				return 1;
 			};
 		}else{
-			mask = tmpdata[0]*0.0+1.0;	
+			mask = tmpdata[0]*0.0+1.0;
 		}
-		
+
 		data = tmpdata.matrix(mask);
 		voxels = data.Ncols();
 		if(perf_demean.value())
@@ -236,7 +236,7 @@ int setup(){
 			vnscales = Melodic::varnorm(data);
 	}
 	else
-		data = read_ascii_matrix(fnin.value());	
+		data = read_ascii_matrix(fnin.value());
 
 	message("done" << endl;);
 	if(fndesign.value().length()>0){
@@ -262,10 +262,10 @@ int setup(){
 		data = remmean(data,1);
 		design = remmean(design,1);
 	}
-	
+
 	if(normdes.value())
 		design =  SP(design,ones(design.Nrows(),1)*pow(stdev(design,1),-1));
-	
+
 	SVD( design, svd_X_D, svd_X_U, svd_X_V );
 	if(approach.value()!=string("NMF")){
 		if(data.Nrows()>=data.Ncols())
@@ -273,14 +273,14 @@ int setup(){
 		else{
 			SVD ( data.t(), svd_Y_D, svd_Y_V, svd_Y_U );
 		}
-	}		
+	}
 
 	if(fnout.value().length() == 0){
 		string basename = fnin.value();
 		basename = make_basename(basename);
-		fnout.set_T(basename+string("_mvlm_"));	
+		fnout.set_T(basename+string("_mvlm_"));
 	}
-	
+
 	outM("Data matrix : ", data);
 	outM("Design matrix : ", design);
 
@@ -294,12 +294,12 @@ int setup(){
 	outMsize("svd_X_D",svd_X_D);
 
 	dbgmsg(" Leaving <setup>");
-	return 0;	
+	return 0;
 }
 
 void write_res(){
 	dbgmsg(" In <write_res>");
-	
+
 	message(" Writing results ... ")
 	if(isimage(svd_Y_V)){
 		saveit(svd_Y_V,fnout.value()+string("maps"));
@@ -311,39 +311,39 @@ void write_res(){
 	}
 	saveit(svd_Y_D.AsColumn(),fnout.value()+string("scales"));
 	if(outres.value()>"")
-		
+
 	if(outdata.value()>"")
 		saveit(data,outdata.value());
 	if(outvnscales.value()>"")
 		saveit(vnscales,outvnscales.value());
-	
+
 	message("done" << endl;);
 	dbgmsg(" Leaving <write_res>");
-		
+
 }
 
 int do_work(int argc, char* argv[]) {
 	dbgmsg(" In <do_work>");
-	
+
     if(setup())
       exit(1);
 
 	//modify data
-	
+
 	//X = svd_X_U * svd_X_D * svd_X_V.t();
 	//Y = svd_Y_U * svd_Y_D * svd_Y_V.t();
 	//X'X = svd_X_V *pow(svd_X_D,2) * svd_X_V.t();
 	//(X'X)^(-1) = svd_X_V *pow(svd_X_D,-2) * svd_X_V.t()
  	//(X'X)^(-1/2) = svd_X_V *pow(svd_X_D,-1) * svd_X_V.t()
-			
+
 	if(approach.value()==string("PLS")) {
 		message(" Using method : " << approach.value() << endl;);
 		data = design.t() * data;
-	} 
+	}
 	if(approach.value()==string("orthoPLS")) {
 		message(" Using method : " << approach.value() << endl;);
 		data = (svd_X_V * svd_X_D.i() * svd_X_V.t()) * design.t() * data;
-	} 
+	}
 	if(approach.value()==string("CVA")) {
 		message(" Using method : " << approach.value() << endl;);
 		data = design.t() * svd_Y_U * svd_Y_V.t();
@@ -364,7 +364,7 @@ int do_work(int argc, char* argv[]) {
 	    tmp << cov(data.t());
 	    EigenValues(tmp,RD,RE);
 //		S = RE * RD * RE.t()
-		
+
 		tmp << sqrtm(svd_X_V * svd_X_D * svd_X_U.t() * RE * RD * RE.t() *svd_X_U * svd_X_D * svd_X_V.t());
 		data =  tmp.i()*design.t() * data;
 	}
@@ -372,26 +372,26 @@ int do_work(int argc, char* argv[]) {
     if( approach.value()!=string("MLM") && approach.value()!=string("CVA") && approach.value()!=string("PLS") &&
 		approach.value()!=string("SVD-CVA") && approach.value()!=string("orthoPLS") && approach.value()!=string("NMF"))
 		message(" Using method : PCA" << endl;);
-	
-	//perform an SVD on data	
+
+	//perform an SVD on data
 	outMsize(" New Data ", data);
-	
-	if(approach.value()!=string("NMF")){	
+
+	if(approach.value()!=string("NMF")){
 		if(data.Nrows()>=data.Ncols())
 			SVD ( data, svd_Y_D, svd_Y_U, svd_Y_V );
 		else{
 			SVD ( data.t(), svd_Y_D, svd_Y_V, svd_Y_U );
 			svd_Y_U = svd_Y_U.t();
-			svd_Y_V = svd_Y_V.t();		
-		}	
+			svd_Y_V = svd_Y_V.t();
+		}
 
 		dbgmsg(" Finished SVD : ");
 		outMsize("svd_Y_U",svd_Y_U);
 		outMsize("svd_Y_V",svd_Y_V);
 		outMsize("svd_Y_D",svd_Y_D);
-	
-		svd_Y_V = sqrtm(svd_Y_D) * svd_Y_V;	
-		svd_Y_U = svd_Y_U * sqrtm(svd_Y_D);	
+
+		svd_Y_V = sqrtm(svd_Y_D) * svd_Y_V;
+		svd_Y_U = svd_Y_U * sqrtm(svd_Y_D);
 
 		if(approach.value()==string("SVD-CVA"))
 			svd_Y_V = svd_Y_V *tmpdata;
@@ -402,26 +402,26 @@ int do_work(int argc, char* argv[]) {
 
 		if(nmfdim.value()==0)
 			nmfdim.set_T(data.Nrows());
-		
-		message("Using "<< nmfdim.value() << " dimensions" << endl;); 	
+
+		message("Using "<< nmfdim.value() << " dimensions" << endl;);
 		svd_Y_U =  unifrnd(data.Nrows(), nmfdim.value());
 		svd_Y_V =  unifrnd(nmfdim.value(), data.Ncols());
 		// re-scale columns of svd_Y_U to unit amplitude
 		Ratio = pow(stdev(svd_Y_U),-1);
 		svd_Y_U = SP(svd_Y_U,ones(svd_Y_U.Nrows(),1)*Ratio);
-				
+
 		Diff = data - svd_Y_U * svd_Y_V;
 		err = Diff.SumAbsoluteValue()/(data.Ncols()*data.Nrows());
-			
+
 		for(int k=1; k< nmfitt.value(); k++)
 		{
 		//	Ratio = SP(data,pow(svd_Y_U * svd_Y_V,-1));
 		//	svd_Y_U  =  SP(svd_Y_U, Ratio * svd_Y_V.t());
 		//	svd_Y_U  =  SP(svd_Y_U, pow( ones(svd_Y_U.Nrows(),1) * sum(svd_Y_U,1),-1));
 		//	svd_Y_V  =  SP(svd_Y_V, svd_Y_U.t()* Ratio);
-		//	
+		//
 		// Lee & Seung multiplicatice updates
-		
+
 			Ratio = SP(svd_Y_U.t() * data, pow(svd_Y_U.t() * svd_Y_U * svd_Y_V ,-1));
 			svd_Y_V  = SP(svd_Y_V,Ratio);
 
@@ -431,18 +431,18 @@ int do_work(int argc, char* argv[]) {
 			// re-scale columns of svd_Y_U to unit amplitude
 			Ratio = pow(stdev(svd_Y_U),-1);
 			svd_Y_U = SP(svd_Y_U,ones(svd_Y_U.Nrows(),1)*Ratio);
-			
+
 			Diff = data - svd_Y_U * svd_Y_V;
 			err_old = err;
-			err = Diff.SumSquare()/(data.Ncols()*data.Nrows());			
+			err = Diff.SumSquare()/(data.Ncols()*data.Nrows());
 			message(" Error " << err << endl;);
-		}	
+		}
 	}
-	
+
 	write_res();
-	
+
 	dbgmsg(" Leaving <do_work>");
-	
+
 	return 0;
 }
 
@@ -473,7 +473,7 @@ int main(int argc,char *argv[]){
 
 	    	options.parse_command_line(argc, argv);
 
-	    // line below stops the program if the help was requested or 
+	    // line below stops the program if the help was requested or
 	    //  a compulsory option was not set
 	    if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
 			options.usage();
@@ -490,6 +490,6 @@ int main(int argc,char *argv[]){
 	  }
 	  catch(std::exception &e){
 	    cerr << e.what() << endl;
-	  } 
+	  }
 }
 

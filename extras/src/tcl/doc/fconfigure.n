@@ -1,4 +1,4 @@
-'\" 
+'\"
 '\" Copyright (c) 1995-1996 Sun Microsystems, Inc.
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
@@ -95,7 +95,7 @@ byte-oriented data.
 .PP
 The default encoding for newly opened channels is the same platform- and
 locale-dependent system encoding used for interfacing with the operating
-system.  
+system.
 .RE
 .TP
 \fB\-eofchar\fR \fIchar\fR
@@ -119,7 +119,7 @@ reading and the empty string for writing.
 .TP
 \fB\-translation\fR \fImode\fR
 .TP
-\fB\-translation\fR \fB{\fIinMode outMode\fB}\fR 
+\fB\-translation\fR \fB{\fIinMode outMode\fB}\fR
 .
 In Tcl scripts the end of a line is always represented using a single
 newline character (\en).  However, in actual files and devices the end of
@@ -158,7 +158,7 @@ Macintosh platform it chooses \fBcr\fR and for the various flavors of
 Windows it chooses \fBcrlf\fR.  The default setting for
 \fB\-translation\fR is \fBauto\fR for both input and output.
 .TP
-\fBbinary\fR 
+\fBbinary\fR
 .
 No end-of-line translations are performed.  This is nearly identical to
 \fBlf\fP mode, except that in addition \fBbinary\fP mode also sets the

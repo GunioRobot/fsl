@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacRegion.c --
  *
  *	Implements X window calls for manipulating regions
@@ -68,7 +68,7 @@ TkCreateRegion()
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkDestroyRegion(
     TkRegion r)
 {
@@ -94,7 +94,7 @@ TkDestroyRegion(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkIntersectRegion(
     TkRegion sra,
     TkRegion srb,
@@ -125,7 +125,7 @@ TkIntersectRegion(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkUnionRectWithRegion(
     XRectangle* rectangle,
     TkRegion src_region,
@@ -159,7 +159,7 @@ TkUnionRectWithRegion(
  *----------------------------------------------------------------------
  */
 
-int 
+int
 TkRectInRegion(
     TkRegion region,
     int x,
@@ -170,7 +170,7 @@ TkRectInRegion(
     RgnHandle rgn = (RgnHandle) region;
     RgnHandle rectRgn, destRgn;
     int result;
-    
+
     rectRgn = NewRgn();
     destRgn = NewRgn();
     SetRectRgn(rectRgn, x,  y, x + width, y + height);
@@ -204,7 +204,7 @@ TkRectInRegion(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkClipBox(
     TkRegion r,
     XRectangle* rect_return)
@@ -234,7 +234,7 @@ TkClipBox(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkSubtractRegion(
     TkRegion sra,
     TkRegion srb,

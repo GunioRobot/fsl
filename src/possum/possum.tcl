@@ -7,20 +7,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -76,7 +76,7 @@ if [ info exists env(POSSUMDIR) ] {
 }
 puts $POSSUMDIR
 proc possum { w } {
-    global entries guivars FSLDIR PWD HOME 
+    global entries guivars FSLDIR PWD HOME
     # ---- Set up Frames ----
     toplevel $w
     wm title $w "Possum"
@@ -93,7 +93,7 @@ proc possum { w } {
     $w.nb insert 5 noise -text "Noise"
     $w.nb insert 6 output -text "Output"
     $w.nb raise object
-    
+
     #----- Object-------
     set objectlf [$w.nb getframe object]
     set entries($w,obvol) ${FSLDIR}/data/possum/brain.nii.gz
@@ -117,7 +117,7 @@ proc possum { w } {
     set pulself [$w.nb getframe pulse]
     LabelFrame $w.pul -text "EPI" -font {Helvetica 11 bold}
     pack $w.pul -in $pulself -side top -anchor w -padx 3 -pady 3
-    
+
     # set up default values
     set entries($w,te) 0.030
     set entries($w,tr) 3
@@ -125,7 +125,7 @@ proc possum { w } {
     set entries($w,autotrslc) 1
     set entries($w,outsize_nx) 64
     set entries($w,outsize_ny) 64
-    set entries($w,outsize_nz) 1   
+    set entries($w,outsize_nz) 1
     set entries($w,outsize_dx) 4.0
     set entries($w,outsize_dy) 4.0
     set entries($w,outsize_dz) 1.0
@@ -152,10 +152,10 @@ proc possum { w } {
 
     # calculate dependendent quantities from the defaults
     possum:updateTRSLC $w
-    possum:updateFOV $w 
+    possum:updateFOV $w
     possum:updateechosp $w
-    possum:updatecomptime $w 
-    
+    possum:updatecomptime $w
+
     # set up the GUI widgets
     frame $w.t
     label $w.t.lab -text "" -width 0
@@ -173,7 +173,7 @@ proc possum { w } {
     pack $w.t.lab $w.t.x $w.t.y $w.t.trs -in $w.t -side left -anchor w -padx 3 -pady 3
 
     frame $w.n
-    label $w.n.lab -text "Number of Voxels: " -width 22 -anchor w -justify left 
+    label $w.n.lab -text "Number of Voxels: " -width 22 -anchor w -justify left
     LabelSpinBox $w.n.x -label " X "  -width 6 \
          -textvariable entries($w,outsize_nx) -range { 1   10000  1 } \
 	-command "$w.n.x.spin.e validate; possum:updateFOV $w; possum:updatecomptime $w; possum:updateechosp $w" \
@@ -187,27 +187,27 @@ proc possum { w } {
 	-command "$w.n.z.spin.e validate; possum:updateFOV $w;possum:updatecomptime $w;possum:updateechosp $w; possum:updateTRSLC $w" \
 	 -modifycmd " possum:updateFOV $w;possum:updatecomptime $w;possum:updateechosp $w; possum:updateTRSLC $w"
     pack $w.n.lab $w.n.x $w.n.y $w.n.z -in $w.n -side left -anchor w -padx 3 -pady 3
-     
+
     frame $w.d
-    label $w.d.lab -text "Voxel Size (mm): " -width 22 -anchor w -justify left 
+    label $w.d.lab -text "Voxel Size (mm): " -width 22 -anchor w -justify left
     LabelSpinBox $w.d.x -label " X " -width 6 \
 	 -textvariable entries($w,outsize_dx) -range { 0.000001  10000.0 0.1 } \
 	-command "$w.d.x.spin.e validate; possum:updateFOV $w; possum:updatecomptime $w;possum:updateechosp $w" \
 	-modifycmd " possum:updateFOV $w; possum:updatecomptime $w;possum:updateechosp $w"
-   
+
     LabelSpinBox $w.d.y -label " Y "  -width 6 \
 	 -textvariable entries($w,outsize_dy) -range { 0.000001   10000.0  0.1 } \
 	-command "$w.d.y.spin.e validate; possum:updateFOV $w;possum:updatecomptime $w;possum:updateechosp $w" \
 	-modifycmd " possum:updateFOV $w; possum:updatecomptime $w;possum:updateechosp $w"
-   
+
     LabelSpinBox $w.d.z -label " Z "  -width 6 \
 	 -textvariable entries($w,outsize_dz) -range { 0.000001   10000.0  0.1 } \
 	-command "$w.d.z.spin.e validate; possum:updateFOV $w; possum:updatecomptime $w;possum:updateechosp $w" \
 	-modifycmd "possum:updateFOV $w; possum:updatecomptime $w;possum:updateechosp $w"
-    pack $w.d.lab $w.d.x $w.d.y $w.d.z -in $w.d -side left -anchor w -padx 3 -pady 3 
-    
+    pack $w.d.lab $w.d.x $w.d.y $w.d.z -in $w.d -side left -anchor w -padx 3 -pady 3
+
     frame $w.fov
-    label $w.fov.lab -text "Field of view (mm): " -width 22 -anchor w -justify left 
+    label $w.fov.lab -text "Field of view (mm): " -width 22 -anchor w -justify left
     LabelSpinBox $w.fov.x -label " X "  -width 6 \
 	 -textvariable entries($w,fov_x) -range { 0.000001   10000.0  0.1 }\
          -command "$w.fov.x.spin.e validate; possum:updateVSIZE $w; possum:updatecomptime $w;possum:updateechosp $w" \
@@ -220,40 +220,40 @@ proc possum { w } {
 	 -textvariable entries($w,fov_z) -range { 0.000001   10000.0  0.1 }\
          -command "$w.fov.z.spin.e validate; possum:updateVSIZE $w; possum:updatecomptime $w;possum:updateechosp $w" \
 	 -modifycmd "possum:updateVSIZE $w; possum:updatecomptime $w;possum:updateechosp $w"
-    pack $w.fov.lab $w.fov.x $w.fov.y $w.fov.z -in $w.fov -side left -anchor w -padx 3 -pady 3  
-      
+    pack $w.fov.lab $w.fov.x $w.fov.y $w.fov.z -in $w.fov -side left -anchor w -padx 3 -pady 3
+
     frame $w.ph
-    label $w.ph.lab -text "k-space coverage (%): " -width 22 -anchor w -justify left 
+    label $w.ph.lab -text "k-space coverage (%): " -width 22 -anchor w -justify left
     LabelSpinBox $w.ph.x -label " " -width 6 \
 	 -textvariable entries($w,cover) -range { 50   100  0.1 } \
          -command "$w.ph.x.spin.e validate; possum:updatecomptime $w" \
 	 -modifycmd "possum:updatecomptime $w"
-    pack $w.ph.lab $w.ph.x -in $w.ph -side left -anchor w -padx 3 -pady 3  
+    pack $w.ph.lab $w.ph.x -in $w.ph -side left -anchor w -padx 3 -pady 3
 
     frame $w.fa
-    label $w.fa.lab -text "Flip angle (deg): " -width 22 -anchor w -justify left 
+    label $w.fa.lab -text "Flip angle (deg): " -width 22 -anchor w -justify left
     LabelSpinBox $w.fa.x -label " " -width 6 \
-	 -textvariable entries($w,flipangle) -range { 0   180  0.1 } 
-    pack $w.fa.lab $w.fa.x -in $w.fa -side left -anchor w -padx 3 -pady 3  
+	 -textvariable entries($w,flipangle) -range { 0   180  0.1 }
+    pack $w.fa.lab $w.fa.x -in $w.fa -side left -anchor w -padx 3 -pady 3
 
     frame $w.v
-    label $w.v.lab -text "Number of Volumes: " -width 22 -anchor w -justify left 
+    label $w.v.lab -text "Number of Volumes: " -width 22 -anchor w -justify left
     LabelSpinBox $w.v.x -label " " -width 6 \
 	 -textvariable entries($w,numvol) -range { 1   10000  1 } \
          -command "$w.v.x.spin.e validate; possum:updatecomptime $w" \
 	 -modifycmd "possum:updatecomptime $w"
-    pack $w.v.lab $w.v.x -in $w.v -side left -anchor w -padx 3 -pady 3  
-    
+    pack $w.v.lab $w.v.x -in $w.v -side left -anchor w -padx 3 -pady 3
+
     frame $w.gap
-    label $w.gap.lab -text "Gap (mm): " -width 22 -anchor w -justify left 
+    label $w.gap.lab -text "Gap (mm): " -width 22 -anchor w -justify left
     LabelSpinBox $w.gap.v -label " " -width 6 \
 	 -textvariable entries($w,gap) -range { 0.0   100.0  0.001 } \
          -command "$w.gap.v.spin.e validate; possum:updatecomptime $w" \
 	-modifycmd "possum:updatecomptime $w"
-    pack $w.gap.lab $w.gap.v -in $w.gap -side left -anchor w -padx 3 -pady 3 
- 
-    frame $w.bw 
-    label $w.bw.lab -text "BW (Hz): " -width 22 -anchor w -justify left 
+    pack $w.gap.lab $w.gap.v -in $w.gap -side left -anchor w -padx 3 -pady 3
+
+    frame $w.bw
+    label $w.bw.lab -text "BW (Hz): " -width 22 -anchor w -justify left
     LabelSpinBox $w.bw.x -label " " -width 8 \
 	    -textvariable entries($w,bw) -range { 0   1000000  10 }\
             -command "$w.bw.x.spin.e validate; possum:updateechosp $w" \
@@ -263,34 +263,34 @@ proc possum { w } {
     label $w.slcprs.lab1 -text " "
     label $w.slcprs.lab2 -text "Slice Prescription" -font { Helvetica 12 italic }
     pack $w.slcprs.lab1 $w.slcprs.lab2 -in $w.slcprs
-     
+
     frame $w.s
-    label $w.s.lab -text "Starting slice position (mm): " -width 22 -anchor w -justify left 
+    label $w.s.lab -text "Starting slice position (mm): " -width 22 -anchor w -justify left
     LabelSpinBox $w.s.x -label " " -width 6 \
 	    -textvariable entries($w,zstart) -range { 0.0   10000.0  1.0 }
     label $w.s.filler -text " " -width 10
     button $w.s.preview -text "Preview slice prescription" -command "possum:previewslices $w"
-    pack $w.s.lab $w.s.x $w.s.filler $w.s.preview -in $w.s -side left -anchor w -padx 3 -pady 3  
-   
+    pack $w.s.lab $w.s.x $w.s.filler $w.s.preview -in $w.s -side left -anchor w -padx 3 -pady 3
+
     frame $w.sr
-    label $w.sr.lab -text "Read gradient: " -width 22 -anchor w -justify left 
+    label $w.sr.lab -text "Read gradient: " -width 22 -anchor w -justify left
     radiobutton $w.sr.x -text "X" -variable entries($w,readgrad) -value x -anchor w
     radiobutton $w.sr.y -text "Y" -variable entries($w,readgrad) -value y -anchor w
     radiobutton $w.sr.z -text "Z" -variable entries($w,readgrad) -value z -anchor w
     $w.sr.x select
     pack $w.sr.lab $w.sr.x $w.sr.y $w.sr.z -in $w.sr -side left -anchor w -padx 3 -pady 3
- 
-    frame $w.sp    
-    label $w.sp.lab -text "Phase encode gradient: " -width 22 -anchor w -justify left 
+
+    frame $w.sp
+    label $w.sp.lab -text "Phase encode gradient: " -width 22 -anchor w -justify left
     radiobutton $w.sp.x -text "X" -variable entries($w,phencode) -value x -anchor w
     radiobutton $w.sp.y -text "Y" -variable entries($w,phencode) -value y -anchor w
     radiobutton $w.sp.z -text "Z" -variable entries($w,phencode) -value z -anchor w
     $w.sp.y select
     pack $w.sp.lab $w.sp.x $w.sp.y $w.sp.z -in $w.sp -side left -anchor w -padx 3 -pady 3
-   
+
 
     frame $w.ss
-    label $w.ss.lab -text "Slice select gradient: " -width 22 -anchor w -justify left 
+    label $w.ss.lab -text "Slice select gradient: " -width 22 -anchor w -justify left
     radiobutton $w.ss.x -text "X" -variable entries($w,slcselect) -value x -anchor w
     radiobutton $w.ss.y -text "Y" -variable entries($w,slcselect) -value y -anchor w
     radiobutton $w.ss.z -text "Z" -variable entries($w,slcselect) -value z -anchor w
@@ -298,7 +298,7 @@ proc possum { w } {
     pack $w.ss.lab $w.ss.x $w.ss.y $w.ss.z -in $w.ss -side left -anchor w -padx 3 -pady 3
 
     frame $w.dir
-    label $w.dir.lab -text "Slice acquisition order: " -width 22 -anchor w -justify left 
+    label $w.dir.lab -text "Slice acquisition order: " -width 22 -anchor w -justify left
     radiobutton $w.dir.x -text "+" -variable entries($w,plus) -value + -anchor w
     radiobutton $w.dir.y -text "-" -variable entries($w,plus) -value - -anchor w
     $w.dir.x select
@@ -306,16 +306,16 @@ proc possum { w } {
 
 
     collapsible frame $w.scan -title "Scanner properties" -command "$w.nb compute_size; set dummy"
-    
+
     frame $w.maxG
     LabelSpinBox $w.maxG.v -label "Maximal gradient strength (T/m) :" -width 8 \
 	 -textvariable entries($w,maxG) -range { 0.0   100.0  0.001 }
-    pack $w.maxG.v -in $w.maxG -side left -anchor w -padx 3 -pady 3 
-  
+    pack $w.maxG.v -in $w.maxG -side left -anchor w -padx 3 -pady 3
+
     frame $w.riseT
     LabelSpinBox $w.riseT.v -label "Rise time (s): " -width 8 \
 	 -textvariable entries($w,riseT) -range { 0.0   100.0  0.00001 }
-    pack $w.riseT.v -in $w.riseT -side left -anchor w -padx 3 -pady 3   
+    pack $w.riseT.v -in $w.riseT -side left -anchor w -padx 3 -pady 3
 
     FileEntry $w.slcprof \
 	-textvariable entries($w,slcprof) \
@@ -324,20 +324,20 @@ proc possum { w } {
 	-width 40 \
 	-filedialog directory
     pack $w.maxG $w.riseT $w.slcprof -in $w.scan.b  -anchor w -padx 3 -pady 3 -expand yes -fill both
-    
+
     frame $w.pcheck
     button $w.pulsecheck     -command "Possum:pulsecheck $w" \
 	    -text "Consistency check" -width 15
     pack $w.pulsecheck -in $w.pcheck -side left
-    
-    label $w.bw.echolab -text "    Echo spacing (s):" -anchor w -justify left 
-    entry $w.bw.echox -textvariable entries($w,echosp) -width 12 -readonlybackground white -state readonly 
-    pack $w.bw.lab $w.bw.x $w.bw.echolab $w.bw.echox -in $w.bw -side left -anchor w -padx 3 -pady 3  
+
+    label $w.bw.echolab -text "    Echo spacing (s):" -anchor w -justify left
+    entry $w.bw.echox -textvariable entries($w,echosp) -width 12 -readonlybackground white -state readonly
+    pack $w.bw.lab $w.bw.x $w.bw.echolab $w.bw.echox -in $w.bw -side left -anchor w -padx 3 -pady 3
     pack $w.t $w.n $w.d $w.fov $w.ph $w.fa $w.v $w.gap $w.bw $w.slcprs $w.sr $w.sp $w.ss $w.dir $w.s -in  $pulself  -anchor w -padx 3 -pady 3
     pack $w.pcheck -in  $pulself -anchor center -side left -side bottom -padx 5 -pady 5
     pack $w.scan -in  $pulself -side left -padx 5 -pady 5
 
-    
+
     # -------- B0ield -------------
     set guivars($w,lfb0field) [$w.nb getframe b0field]
 
@@ -385,7 +385,7 @@ proc possum { w } {
     $w.b0main.b0u.ppm select
     label $w.b0main.b0u.unit -text "Units: "
     pack $w.b0main.b0u.unit $w.b0main.b0u.ppm $w.b0main.b0u.tesla -anchor w -side left
-    
+
     LabelFrame $w.b0main.b0fi -text "B0 field inhomogeneities"
     optionMenu2 $w.b0main.b0fi.menu entries($w,b0inh_yn)  -command "possum:updateb0fieldinh $w; possum:updateBASEname $w ; possum:updatecomptime $w" 0 "None" 1 "Custom file"
     pack $w.b0main.b0fi.menu
@@ -427,7 +427,7 @@ proc possum { w } {
     optionMenu2 $w.b0maintime.b0fi.menu entries($w,b0inhtime_yn)  -command "possum:updateb0fieldinhtime $w; possum:updateBASEnametime $w ; possum:updatecomptime $w" 0 "None" 1 "Custom file"
     pack $w.b0maintime.b0fi.menu
     pack $w.b0maintime.b0fi -in $w.b0maintime  -side top -anchor w -padx 3 -pady 3
-    pack $w.b0maintime -in $guivars($w,lfb0field) -side top -anchor w -padx 3 -pady 3 
+    pack $w.b0maintime -in $guivars($w,lfb0field) -side top -anchor w -padx 3 -pady 3
 
     # --------Motion-------------
     set guivars($w,lfmotion) [$w.nb getframe motion]
@@ -467,7 +467,7 @@ proc possum { w } {
     frame $w.activim
     label $w.activim.label -image "" -text " "
     button $w.activim.preview -text "Preview image" -command "possum:previewactiv $w"
-    
+
     LabelFrame $w.activ -text ""
     optionMenu2 $w.activ.menu entries($w,activ_yn)  -command "possum:updateactivation $w" 0 "None" 1 "Custom file"
     pack $w.activ.menu
@@ -496,9 +496,9 @@ proc possum { w } {
        -value sigma -anchor w \
        -command "possum:updatenoiseunits $w " -width 35
     pack $w.noiseval1.unitssnr $w.noiseval1.snr \
-       -in $w.noiseval1 -side left -anchor w -padx 3 -pady 3 
+       -in $w.noiseval1 -side left -anchor w -padx 3 -pady 3
     pack $w.noiseval2.unitssigma $w.noiseval2.sigma \
-       -in $w.noiseval2 -side left -anchor w -padx 3 -pady 3 
+       -in $w.noiseval2 -side left -anchor w -padx 3 -pady 3
     pack $w.noiseval1 $w.noiseval2 -in $w.noiseval
     $w.noiseval1.unitssnr select
     $w.noiseval2.sigma configure -state disabled
@@ -520,7 +520,7 @@ proc possum { w } {
 
     # Outside the nb part.
     frame $w.np
-    label $w.np.lab -text "Number of processors: " -anchor w -justify left 
+    label $w.np.lab -text "Number of processors: " -anchor w -justify left
     LabelSpinBox $w.np.x -label " " -textvariable entries($w,numproc) \
 	-range { 1   10000  1 } \
 	-command "$w.np.x.spin.e validate; possum:updatecomptime $w" \
@@ -529,7 +529,7 @@ proc possum { w } {
 
     possum:updatecomptime $w
     frame $w.ct
-    label $w.ct.lab -text "Approximate run time: " -anchor w -justify left 
+    label $w.ct.lab -text "Approximate run time: " -anchor w -justify left
     entry $w.ct.x -textvariable entries($w,comptime) -width 12 -readonlybackground white -state readonly
     pack $w.ct.lab $w.ct.x -in $w.ct -side left -anchor w -padx 3 -pady 3
 
@@ -539,7 +539,7 @@ proc possum { w } {
     pack $w.nb -in $w.f.opts -side top
     pack $w.np $w.ct -in $w.f.opts  -side left -padx 10
     pack $w.f.opts -in $w.f -side left -padx 8 -pady 6 -expand yes -fill both
-   
+
     # ---- Button Frame ----
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
@@ -568,7 +568,7 @@ proc Possum:apply { w } {
     global entries FSLDIR
 
     # start by saving the fsf file (with all variables as they are now)
-    #if { ! [ file isdirectory $entries($w,out) ] } { 
+    #if { ! [ file isdirectory $entries($w,out) ] } {
 	#catch { exec sh -c "mkdir $entries($w,out)" } oval
     #}
     puts ""
@@ -578,7 +578,7 @@ proc Possum:apply { w } {
     if { $entries($w,obvol) == "" } {
        puts "The input object not specified."
      return
-    } 
+    }
     if { $entries($w,mrpar) == "" } {
        puts "The input MR parameters not specified."
        return
@@ -591,7 +591,7 @@ proc Possum:apply { w } {
        puts "Warning: At the moment B0 field changing in time can not be simulated while the object is moving. This will be implemented into POSSUM at a later stage."
        return
     }
-    # checks if the object is the same size as the b0file 
+    # checks if the object is the same size as the b0file
    if { $entries($w,b0inh_yn) == 1 } {
     if { $entries($w,vcX) != $entries($w,vcXb0) || $entries($w,vcY) != $entries($w,vcYb0) ||  $entries($w,vcZ) != $entries($w,vcZb0) ||  $entries($w,inNx) != $entries($w,inNxb0) ||  $entries($w,inNy) != $entries($w,inNyb0) ||  $entries($w,inNz) != $entries($w,inNzb0) } {
      puts "The object and the B0 file do not match in dimension or voxel size."
@@ -635,40 +635,40 @@ puts "The output image voxel size: $entries($w,outsize_dx), $entries($w,outsize_
     if { $entries($w,out)  == "" } {
        puts "The output directory not specified."
      exit
-    } else { 
+    } else {
 	new_file $entries($w,out)
 	catch { exec sh -c "mkdir $entries($w,out)" } oval
     }
     possum:write $w $entries($w,out)/possum.fsf
 
     # now do some logic to figure out the parameters to pass on
-    if { $entries($w,b0inh_yn) == 0 } { 
-	set b0file "" 
+    if { $entries($w,b0inh_yn) == 0 } {
+	set b0file ""
     } else {
 	set b0file $entries($w,b0f)
     }
-    if { $entries($w,b0inhtime_yn) == 0 } { 
-	set b0filetime "" 
-	set b0filetimecourse "" 
+    if { $entries($w,b0inhtime_yn) == 0 } {
+	set b0filetime ""
+	set b0filetimecourse ""
     } else {
 	set b0filetime $entries($w,b0ftime)
 	set b0filetimecourse $entries($w,b0ftimecourse)
     }
-    if { $entries($w,motion_yn) == 0 } { 
-	set motfile "${FSLDIR}/data/possum/zeromotion" 
+    if { $entries($w,motion_yn) == 0 } {
+	set motfile "${FSLDIR}/data/possum/zeromotion"
     } else {
 	set motfile $entries($w,mot)
     }
-    if { $entries($w,activ_yn) == 0 } { 
-	set act1file "" 
-	set act2file "" 
+    if { $entries($w,activ_yn) == 0 } {
+	set act1file ""
+	set act2file ""
     } else {
 	set act1file $entries($w,act1)
 	set act2file $entries($w,act2)
     }
     set filename "$entries($w,out)/noise"
     set log [open "$filename" w]
-    if { $entries($w,noiseunits) == "snr" && $entries($w,noise_yn) == 1 } { 
+    if { $entries($w,noiseunits) == "snr" && $entries($w,noise_yn) == 1 } {
 	puts $log "snr $entries($w,noisesnr) "
     } else {
 	puts $log "sigma $entries($w,noisesigma) "
@@ -701,7 +701,7 @@ proc possum:previewimage { w } {
     }
     if { $validim == 1 } {
 	$w.objim.label configure -image $graphpic
-    } else { 
+    } else {
 	$w.objim.label configure -image "" -text "Could not generate preview"
     }
     $w.nb compute_size
@@ -730,7 +730,7 @@ proc possum:previewimage_steve { w } {
     }
     if { $validim == 1 } {
 	$w.objim.label configure -image $graphpic
-    } else { 
+    } else {
 	$w.objim.label configure -image "" -text "Could not generate preview"
     }
     $w.nb compute_size
@@ -754,7 +754,7 @@ proc possum:updateTRSLC {w} {
     global entries
     if { $entries($w,autotrslc) == 1 } {
 	set tmp [ expr $entries($w,tr)*1.0/$entries($w,outsize_nz) ]
-        set entries($w,trslc)  [ possum:twosigfigs $tmp ]  
+        set entries($w,trslc)  [ possum:twosigfigs $tmp ]
     }
 }
 
@@ -763,10 +763,10 @@ proc possum:updateb0field { w } {
     pack forget $w.b0test.b0spin
     if { $entries($w,b0strength) == 2 } {
         pack $w.b0test.b0spin -in $w.b0test  -side left -anchor w -padx 3 -pady 3
-    } 
+    }
     if { $entries($w,b0strength) == 1 } {
 	set entries($w,b0fieldstrength) 3.0
-    } 
+    }
     if { $entries($w,b0strength) == 0 } {
 	set entries($w,b0fieldstrength) 1.5
     }
@@ -776,10 +776,10 @@ proc possum:updateMRpar { w } {
     global entries guivars FSLDIR
     if { $entries($w,b0strength) == 2 } {
 	set entries($w,mrpar) ""
-    } 
+    }
     if { $entries($w,b0strength) == 1 } {
 	set entries($w,mrpar) "${FSLDIR}/data/possum/MRpar_3T"
-    } 
+    }
     if { $entries($w,b0strength) == 0 } {
 	set entries($w,mrpar) "${FSLDIR}/data/possum/MRpar_1.5T"
     }
@@ -853,7 +853,7 @@ proc possum:previewb0 { w } {
     }
     if { $validim == 1 } {
 	$w.b0main.b0im.label configure -image $graphpic
-    } else { 
+    } else {
 	$w.b0main.b0im.label configure -image "" -text "Could not generate preview"
     }
     $w.nb compute_size
@@ -877,7 +877,7 @@ proc possum:previewb0time { w } {
     }
     if { $validim == 1 } {
 	$w.b0maintime.b0im.label configure -image $graphpic
-    } else { 
+    } else {
 	$w.b0maintime.b0im.label configure -image "" -text "Could not generate preview"
     }
     $w.nb compute_size
@@ -893,9 +893,9 @@ proc possum:previewactiv { w } {
 	catch { exec sh -c "${FSLDIR}/bin/tmpnam" } tmpnam
 	catch { exec sh -c "${FSLDIR}/bin/imtest $entries($w,obvol)" } oval
 	if { $oval == 1 } {
-	    catch { exec sh -c "${FSLDIR}/bin/slicer $filenm $entries($w,obvol) -a ${tmpnam}.png" } oval 
+	    catch { exec sh -c "${FSLDIR}/bin/slicer $filenm $entries($w,obvol) -a ${tmpnam}.png" } oval
 	} else {
-	    catch { exec sh -c "${FSLDIR}/bin/slicer $filenm -a ${tmpnam}.png" } oval 
+	    catch { exec sh -c "${FSLDIR}/bin/slicer $filenm -a ${tmpnam}.png" } oval
 	}
 	catch { exec sh -c "$convertcom ${tmpnam}.png ${tmpnam}.gif" } oval
 	if { [ file exists ${tmpnam}.gif ] } {
@@ -906,7 +906,7 @@ proc possum:previewactiv { w } {
     }
     if { $validim == 1 } {
 	$w.activim.label configure -image $graphpic
-    } else { 
+    } else {
 	$w.activim.label configure -image "" -text "Could not generate preview"
     }
     $w.nb compute_size
@@ -940,9 +940,9 @@ proc possum:previewslices { w } {
 	catch { exec sh -c "${FSLDIR}/bin/fslswapdim ${tmpnam}_sw $entries($w,readgrad) $entries($w,phencode) $slcselect ${tmpnam}_sw" } oval
 	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw dim1" } in_nx
 	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw dim2" } in_ny
-	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim1" } dx	
-	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim2" } dy	
-	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim3" } dz	
+	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim1" } dx
+	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim2" } dy
+	catch { exec sh -c "${FSLDIR}/bin/fslval ${tmpnam}_sw pixdim3" } dz
 	catch { exec sh -c "${FSLDIR}/bin/fslstats ${tmpnam}_sw -r | awk '{ print \$2 }'" } imax
 	set imax [ expr $imax*6 ]
 	set zstart [ expr round($entries($w,zstart)/$dz) ]
@@ -954,7 +954,7 @@ proc possum:previewslices { w } {
 	set ystart [ expr round(($in_ny-$ysize)/2.0) ]
 	if { $ystart < 0 } { set ystart 0 }
 	# puts "roi $xstart $xsize $ystart $ysize $zstart $zsize"
-	catch { exec sh -c "${FSLDIR}/bin/fslmaths ${tmpnam}_sw -roi $xstart $xsize $ystart $ysize $zstart $zsize 0 1 -mul 5 -add ${tmpnam}_sw ${tmpnam}_sw" } oval	
+	catch { exec sh -c "${FSLDIR}/bin/fslmaths ${tmpnam}_sw -roi $xstart $xsize $ystart $ysize $zstart $zsize 0 1 -mul 5 -add ${tmpnam}_sw ${tmpnam}_sw" } oval
 	catch { exec sh -c "${FSLDIR}/bin/slicer ${tmpnam}_sw -i 0 $imax -a ${tmpnam}.png" } oval
 	catch { exec sh -c "$convertcom ${tmpnam}.png ${tmpnam}.gif" } oval
 	if { [ file exists ${tmpnam}.gif ] } {
@@ -965,7 +965,7 @@ proc possum:previewslices { w } {
     }
     if { $validim == 1 } {
 	$w1.sprev.label configure -image $graphpic
-    } else { 
+    } else {
 	$w1.sprev.label configure -image "" -text "Could not generate preview"
     }
     pack forget $w1.sprev.label
@@ -1015,7 +1015,7 @@ proc possum:updatenoiseunits { w } {
         $w.noiseval2.sigma configure -state normal ; $w.noiseval1.snr configure -state disabled
     }
 }
- 
+
 
 proc possum:twosigfigs { num } {
     set pten [ expr log10($num) ]
@@ -1029,51 +1029,51 @@ proc possum:twosigfigs { num } {
 proc possum:updateOBprop { w { filename foo } } {
  global entries FSLDIR
     set filename $entries($w,obvol)
-    set entries($w,vcX) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]  
-    set entries($w,vcY) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]  
-    set entries($w,vcZ) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]  
-    set entries($w,inNx) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]  
-    set entries($w,inNy) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]  
-    set entries($w,inNz) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ] 
-    set entries($w,inNt) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ] 
+    set entries($w,vcX) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]
+    set entries($w,vcY) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]
+    set entries($w,vcZ) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]
+    set entries($w,inNx) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]
+    set entries($w,inNy) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]
+    set entries($w,inNz) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ]
+    set entries($w,inNt) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ]
     return 0
 }
 
 proc possum:updateB0prop { w { filename foo } } {
  global entries FSLDIR
     set filename "$entries($w,b0f)"
-    set entries($w,vcXb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]  
-    set entries($w,vcYb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]  
-    set entries($w,vcZb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]  
-    set entries($w,inNxb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]  
-    set entries($w,inNyb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]  
-    set entries($w,inNzb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ] 
-    set entries($w,inNtb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ] 
+    set entries($w,vcXb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]
+    set entries($w,vcYb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]
+    set entries($w,vcZb0) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]
+    set entries($w,inNxb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]
+    set entries($w,inNyb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]
+    set entries($w,inNzb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ]
+    set entries($w,inNtb0) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ]
     return 0
 }
 
 proc possum:updateB0timeprop { w { filename foo } } {
  global entries FSLDIR
     set filename "$entries($w,b0ftime)"
-    set entries($w,vcXb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]  
-    set entries($w,vcYb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]  
-    set entries($w,vcZb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]  
-    set entries($w,inNxb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]  
-    set entries($w,inNyb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]  
-    set entries($w,inNzb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ] 
+    set entries($w,vcXb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]
+    set entries($w,vcYb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]
+    set entries($w,vcZb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]
+    set entries($w,inNxb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]
+    set entries($w,inNyb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]
+    set entries($w,inNzb0time) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ]
     return 0
 }
 
 proc possum:updateACTprop { w { filename foo } } {
  global entries FSLDIR
     set filename $entries($w,act1)
-    set entries($w,vcXact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]  
-    set entries($w,vcYact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]  
-    set entries($w,vcZact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]  
-    set entries($w,inNxact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]  
-    set entries($w,inNyact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]  
-    set entries($w,inNzact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ] 
-    set entries($w,inNtact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ] 
+    set entries($w,vcXact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim1" ]
+    set entries($w,vcYact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim2" ]
+    set entries($w,vcZact) [ exec sh -c "$FSLDIR/bin/fslval $filename pixdim3" ]
+    set entries($w,inNxact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim1" ]
+    set entries($w,inNyact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim2" ]
+    set entries($w,inNzact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim3" ]
+    set entries($w,inNtact) [ exec sh -c "$FSLDIR/bin/fslval $filename dim4" ]
     return 0
 }
 
@@ -1081,7 +1081,7 @@ proc possum:updatecomptime { w { filename foo } } {
     global entries FSLDIR
     # number of voxels per 1mm3
     set Nvpv [ expr 1 / ( $entries($w,vcX) * $entries($w,vcY) * $entries($w,vcZ) )  ]
-    set dimX [ expr $entries($w,vcX) * $entries($w,inNx) ] 
+    set dimX [ expr $entries($w,vcX) * $entries($w,inNx) ]
     set dimY [ expr $entries($w,vcY) * $entries($w,inNy) ]
     set dimZ [ expr $entries($w,vcZ) * $entries($w,inNz) ]
     if { $entries($w,motion_yn) == 0 } {
@@ -1104,7 +1104,7 @@ proc possum:updatecomptime { w { filename foo } } {
     set P 0.4
     set Nvoxel [ expr $Nvpv * $dimX * $dimY * ( $entries($w,outsize_nz) * $entries($w,outsize_dz) + $Zmaxm + $SlcP + $gap ) * $entries($w,inNt) ]
     # number of flops per event and per voxel
-    # total number of flops 
+    # total number of flops
     set Nflops [ expr $Nevent * $Nvoxel * $Nfev ]
     # time for N computer proc capable of 1 Giga Flop (in seconds)
     set tottime [ expr $Nflops * 0.000000001 / $entries($w,numproc) ]
@@ -1127,7 +1127,7 @@ proc possum:updatecomptime { w { filename foo } } {
 }
 
 proc possum:updateechosp { w } {
-global entries 
+global entries
     set dx [ expr $entries($w,outsize_dx) * 0.001 ]
     set dy [ expr $entries($w,outsize_dy) * 0.001 ]
     set dz [ expr $entries($w,outsize_dz)* 0.001 ]
@@ -1167,7 +1167,7 @@ proc possum:pulsecheck { w obvol mrpar te tr trslc outsize_nx outsize_ny outsize
     set dt  [ expr ${Gx}/$tana]
     set dty [ expr sqrt(4*${dky}/(${gammabar}*${tana}))]
     set Gy  [expr ${dty}*${tana}/2]
-    set dtx1 [expr sqrt(${Gx}*($dt+${outsize_nx}*$dtx)*2/$tana)] 
+    set dtx1 [expr sqrt(${Gx}*($dt+${outsize_nx}*$dtx)*2/$tana)]
     set Gx1 [ expr $dtx1*$tana/2]
     set dty1 [expr sqrt(${outsize_ny}/2)*$dty]
     set Gy1 [expr $dty1*$tana/2]
@@ -1187,13 +1187,13 @@ proc possum:pulsecheck { w obvol mrpar te tr trslc outsize_nx outsize_ny outsize
     }
     #making sure that the scan FOV does not exceed the given FOV in slcseldir
     set maxFOV [expr $zstart + $fov_z]
-    set dimX [ expr $entries($w,vcX) * $entries($w,inNx) ] 
+    set dimX [ expr $entries($w,vcX) * $entries($w,inNx) ]
     set dimY [ expr $entries($w,vcY) * $entries($w,inNy) ]
     set dimZ [ expr $entries($w,vcZ) * $entries($w,inNz) ]
     set dim $dimZ
     if { $slcdir == "x" } {
 	set dimm $dimX
-    } elseif { $slcdir == "y" } { 
+    } elseif { $slcdir == "y" } {
 	set dim $dimY
     } else {
 	set dim $dimZ
@@ -1210,20 +1210,20 @@ proc possum:pulsecheck { w obvol mrpar te tr trslc outsize_nx outsize_ny outsize
 	    set newZstart 0
 	    set newFOV $dim
 	    set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-	    set entries($w,pulsechecktest) 0 
+	    set entries($w,pulsechecktest) 0
 	    set chkmessage "$chkmessage The selected slices do not fit within the input object. Try changing the starting slice position to $newZstart and the field of view (Z) to less or equal to $newFOV.\n"
 	} else {
 	    set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-	    set entries($w,pulsechecktest) 0 
+	    set entries($w,pulsechecktest) 0
 	    set chkmessage "$chkmessage The selected slices do not fit within the input object. Try changing the starting slice position to $newZstart.\n"
-	}  
+	}
     } elseif {$tr < $tmpSLC} {
 	set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-        set entries($w,pulsechecktest) 0 
+        set entries($w,pulsechecktest) 0
 	set chkmessage "$chkmessage Try changing the TR to $tmpSLC.\n"
     } elseif { $TB < 0 } {
 	set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-	set entries($w,pulsechecktest) 0 
+	set entries($w,pulsechecktest) 0
 	set tmpB [expr $te -$TA]
 	set tmpC [expr ($outsize_ny*($outsize_nx-1)+$outsize_nx)/2]
 	set tmpA [expr $dkx*($outsize_ny+1)/($tana*$gammabar)]
@@ -1242,7 +1242,7 @@ proc possum:pulsecheck { w obvol mrpar te tr trslc outsize_nx outsize_ny outsize
 	}
     } elseif { $TG > $trslc } {
 	set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-	set entries($w,pulsechecktest) 0 
+	set entries($w,pulsechecktest) 0
 	set tmpB [expr $trslc-$te-2*$riseT-$tcrush]
 	set tmpC [expr ($outsize_ny/2-1)*($outsize_nx-1)+$outsize_nx/2-1]
 	set tmpA [expr $dkx*($outsize_ny-1)/($tana*$gammabar)]
@@ -1263,7 +1263,7 @@ proc possum:pulsecheck { w obvol mrpar te tr trslc outsize_nx outsize_ny outsize
     } else {
 	if { $readdir == $phasedir || $readdir == $slcdir || $phasedir == $slcdir } {
 	    set chkwarning "$chkwarning WARNING: Pulse sequence parameters did not pass the consistency check.\n\n"
-	    set entries($w,pulsechecktest) 0 
+	    set entries($w,pulsechecktest) 0
 	    set chkmessage "$chkmessage Read-, phase-, and slice- directions must be different.\n"
 	} else {
 	    set chkmessage "$chkmessage All is well with the pulse sequence set up.\n"
@@ -1376,7 +1376,7 @@ proc possum:load { w filename } {
     possum:updateactivation $w
     possum:updatenoise $w
     possum:updatenoiseunits $w
-    possum:updatecomptime $w 
+    possum:updatecomptime $w
     possum:updateechosp $w
 }
 
@@ -1387,7 +1387,7 @@ proc possum:proc { w comptime obvol mrpar te tr trslc outsize_nx outsize_ny outs
     set dz [ expr $outsize_dz * 0.001 ]
     set zs [ expr $zstart * 0.001 ]
     set gap [ expr $gap * 0.001 ]
-  
+
     catch { exec sh -c "${FSLDIR}/bin/imcp $obvol $out/brain" } oval
     catch { exec sh -c "cp $mrpar $out/MRpar" } oval
     catch { exec sh -c "cp $slcprof $out/slcprof" } oval
@@ -1442,10 +1442,10 @@ proc possum:proc { w comptime obvol mrpar te tr trslc outsize_nx outsize_ny outs
     Possum:pulsecheck $w
     if { $entries($w,pulsechecktest) == 0 } {
 	return
-    } 
-    fsl:exec "$pulsecom >> $out/possum.log 2>&1" 
-    
-    # Execute possum 
+    }
+    fsl:exec "$pulsecom >> $out/possum.log 2>&1"
+
+    # Execute possum
     puts "Submitting the job..."
     set possumcom  "${POSSUMDIR}/bin/possumX $out -n $numproc -t $comptime"
     catch { exec sh -c "echo $possumcom >> $out/possum.log" } oval

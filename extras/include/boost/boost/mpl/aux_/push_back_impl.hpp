@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -22,7 +22,7 @@
 
 namespace boost { namespace mpl {
 
-// agurt 05/feb/04: no default implementation; the stub definition is needed 
+// agurt 05/feb/04: no default implementation; the stub definition is needed
 // to enable the default 'has_push_back' implementation below
 template< typename Tag >
 struct push_back_impl
@@ -40,7 +40,7 @@ struct has_push_back_impl
 #else
     {
         typedef aux::has_type< push_back<Seq,int> > type;
-        BOOST_STATIC_CONSTANT(bool, value = 
+        BOOST_STATIC_CONSTANT(bool, value =
               (aux::has_type< push_back<Seq,int> >::value)
             );
 #endif

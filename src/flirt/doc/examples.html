@@ -51,11 +51,11 @@ To perform a 6 DOF 2D registration:
 <p><code>
 flirt -in inslice -ref refslice -out outslice -omat i2r.mat -2D -schedule ${FSLDIR}/etc/flirtsch/sch2D_6dof
 </code><p>
- 
+
 The schedule file specifies what transformations/DOF are allowed and how the
 optimisation is performed.
-Note that several other schedule files could be used - including 3D 
-translation only schedules etc.  These are all stored in 
+Note that several other schedule files could be used - including 3D
+translation only schedules etc.  These are all stored in
 <code>${FSLDIR}/etc/flirtsch</code>
 
 </ol>

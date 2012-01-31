@@ -32,10 +32,10 @@ namespace boost {
     typedef const value_type* pointer;
     typedef void difference_type;
 
-    plod_iterator() 
+    plod_iterator()
       : gen(0), out_degrees(), degrees_left(0), allow_self_loops(false) { }
 
-    plod_iterator(RandomGenerator& gen, std::size_t n,  
+    plod_iterator(RandomGenerator& gen, std::size_t n,
                   double alpha, double beta, bool allow_self_loops = false)
       : gen(&gen), n(n), out_degrees(new out_degrees_t(n)),
         degrees_left(0), allow_self_loops(allow_self_loops)
@@ -56,9 +56,9 @@ namespace boost {
 
     reference operator*() const { return current; }
     pointer operator->() const { return &current; }
-    
+
     plod_iterator& operator++()
-    { 
+    {
       next(directed_category());
       return *this;
     }
@@ -71,8 +71,8 @@ namespace boost {
     }
 
     bool operator==(const plod_iterator& other) const
-    { 
-      return degrees_left == other.degrees_left; 
+    {
+      return degrees_left == other.degrees_left;
     }
 
     bool operator!=(const plod_iterator& other) const
@@ -121,7 +121,7 @@ namespace boost {
           (*out_degrees)[source] = out_degrees->back();
           out_degrees->pop_back();
           continue;
-        } 
+        }
 
         // Select target vertex
         target = x(*gen);
@@ -129,7 +129,7 @@ namespace boost {
           (*out_degrees)[target] = out_degrees->back();
           out_degrees->pop_back();
           continue;
-        } else if (source != target 
+        } else if (source != target
                    || (allow_self_loops && (*out_degrees)[source].second > 2)) {
           break;
         }

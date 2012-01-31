@@ -25,8 +25,8 @@
 namespace boost {
 
   namespace detail {
-    
-   // This implementation is based on Goldberg's 
+
+   // This implementation is based on Goldberg's
    // "On Implementing Push-Relabel Method for the Maximum Flow Problem"
    // by B.V. Cherkassky and A.V. Goldberg, IPCO '95, pp. 157--171
    // and on the h_prf.c and hi_pr.c code written by the above authors.
@@ -47,7 +47,7 @@ namespace boost {
       std::list<Vertex> inactive_vertices;
     };
 
-    template <class Graph, 
+    template <class Graph,
               class EdgeCapacityMap,    // integer value type
               class ResidualCapacityEdgeMap,
               class ReverseEdgeMap,
@@ -98,7 +98,7 @@ namespace boost {
         layer_list_ptr[u] = layer.active_vertices.begin();
       }
       void remove_from_active_list(vertex_descriptor u) {
-        layers[distance[u]].active_vertices.erase(layer_list_ptr[u]);    
+        layers[distance[u]].active_vertices.erase(layer_list_ptr[u]);
       }
 
       void add_to_inactive_list(vertex_descriptor u, Layer& layer) {
@@ -106,19 +106,19 @@ namespace boost {
         layer_list_ptr[u] = layer.inactive_vertices.begin();
       }
       void remove_from_inactive_list(vertex_descriptor u) {
-        layers[distance[u]].inactive_vertices.erase(layer_list_ptr[u]);    
+        layers[distance[u]].inactive_vertices.erase(layer_list_ptr[u]);
       }
 
       //=======================================================================
       // initialization
-      push_relabel(Graph& g_, 
+      push_relabel(Graph& g_,
                    EdgeCapacityMap cap,
                    ResidualCapacityEdgeMap res,
                    ReverseEdgeMap rev,
-                   vertex_descriptor src_, 
+                   vertex_descriptor src_,
                    vertex_descriptor sink_,
                    VertexIndexMap idx)
-        : g(g_), n(num_vertices(g_)), capacity(cap), src(src_), sink(sink_), 
+        : g(g_), n(num_vertices(g_)), capacity(cap), src(src_), sink(sink_),
           index(idx),
           excess_flow(num_vertices(g_)),
           current(num_vertices(g_), out_edges(*vertices(g_).first, g_).second),
@@ -127,9 +127,9 @@ namespace boost {
           reverse_edge(rev),
           residual_capacity(res),
           layers(num_vertices(g_)),
-          layer_list_ptr(num_vertices(g_), 
+          layer_list_ptr(num_vertices(g_),
                          layers.front().inactive_vertices.end()),
-          push_count(0), update_count(0), relabel_count(0), 
+          push_count(0), update_count(0), relabel_count(0),
           gap_count(0), gap_node_count(0),
           work_since_last_update(0)
       {
@@ -166,7 +166,7 @@ namespace boost {
           excess_flow[src] = (std::numeric_limits<FlowValue>::max)();
         else {
           excess_flow[src] = 0;
-          for (tie(a_iter, a_end) = out_edges(src, g); 
+          for (tie(a_iter, a_end) = out_edges(src, g);
                a_iter != a_end; ++a_iter) {
             edge_descriptor a = *a_iter;
             if (target(a, g) != src) {
@@ -196,7 +196,7 @@ namespace boost {
             add_to_active_list(u, layers[1]);
           else if (distance[u] < n)
             add_to_inactive_list(u, layers[1]);
-        }       
+        }
 
       } // push_relabel constructor
 
@@ -217,12 +217,12 @@ namespace boost {
         }
         color[sink] = ColorTraits::gray();
         distance[sink] = 0;
-        
+
         for (distance_size_type l = 0; l <= max_distance; ++l) {
           layers[l].active_vertices.clear();
           layers[l].inactive_vertices.clear();
         }
-        
+
         max_distance = max_active = 0;
         min_active = n;
 
@@ -276,8 +276,8 @@ namespace boost {
                 push_flow(a);
                 if (excess_flow[u] == 0)
                   break;
-              } 
-            } 
+              }
+            }
           } // for out_edges of i starting from current
 
           Layer& layer = layers[distance[u]];
@@ -307,7 +307,7 @@ namespace boost {
         vertex_descriptor
           u = source(u_v, g),
           v = target(u_v, g);
-        
+
         BOOST_USING_STD_MIN();
         FlowValue flow_delta
           = min BOOST_PREVENT_MACRO_SUBSTITUTION(excess_flow[u], residual_capacity[u_v]);
@@ -369,7 +369,7 @@ namespace boost {
         for (layer_iterator l = layers.begin() + empty_distance + 1;
              l < layers.begin() + max_distance; ++l) {
           list_iterator i;
-          for (i = l->inactive_vertices.begin(); 
+          for (i = l->inactive_vertices.begin();
                i != l->inactive_vertices.end(); ++i) {
             distance[*i] = n;
             ++gap_node_count;
@@ -396,7 +396,7 @@ namespace boost {
           else {
             vertex_descriptor u = *u_iter;
             remove_from_active_list(u);
-            
+
             discharge(u);
 
             if (work_since_last_update * global_update_frequency() > nm) {
@@ -429,7 +429,7 @@ namespace boost {
         std::vector<vertex_descriptor> parent(n);
         std::vector<vertex_descriptor> topo_next(n);
 
-        vertex_descriptor tos(parent[0]), 
+        vertex_descriptor tos(parent[0]),
           bos(parent[0]); // bogus initialization, just to avoid warning
         bool bos_null = true;
 
@@ -449,7 +449,7 @@ namespace boost {
         // eliminate flow cycles and topologically order the vertices
         for (tie(u_iter, u_end) = vertices(g); u_iter != u_end; ++u_iter) {
           u = *u_iter;
-          if (color[u] == ColorTraits::white() 
+          if (color[u] == ColorTraits::white()
               && excess_flow[u] > 0
               && u != src && u != sink ) {
             r = u;
@@ -490,7 +490,7 @@ namespace boost {
                     restart = u;
                     for (v = target(*current[u], g); v != u; v = target(a, g)){
                       a = *current[v];
-                      if (color[v] == ColorTraits::white() 
+                      if (color[v] == ColorTraits::white()
                           || is_saturated(a)) {
                         color[target(*current[v], g)] = ColorTraits::white();
                         if (color[v] != ColorTraits::white())
@@ -505,7 +505,7 @@ namespace boost {
                   } // else if (color[v] == ColorTraits::gray())
                 } // if (capacity[a] == 0 ...
               } // for out_edges(u, g)  (though "u" changes during loop)
-              
+
               if (current[u] == out_edges(u, g).second) {
                 // scan of i is complete
                 color[u] = ColorTraits::black();
@@ -549,7 +549,7 @@ namespace boost {
             ++ai;
           }
         }
-        
+
       } // convert_preflow_to_flow()
 
       //=======================================================================
@@ -570,16 +570,16 @@ namespace boost {
               return false;
           }
         }
-        
+
         // check conservation
-        FlowValue sum;  
+        FlowValue sum;
         for (tie(u_iter, u_end) = vertices(g); u_iter != u_end; ++u_iter) {
           vertex_descriptor u = *u_iter;
           if (u != src && u != sink) {
             if (excess_flow[u] != 0)
               return false;
             sum = 0;
-            for (tie(ai, a_end) = out_edges(u, g); ai != a_end; ++ai) 
+            for (tie(ai, a_end) = out_edges(u, g); ai != a_end; ++ai)
               if (capacity[*ai] > 0)
                 sum -= capacity[*ai] - residual_capacity[*ai];
               else
@@ -615,7 +615,7 @@ namespace boost {
         for (tie(u_iter, u_end) = vertices(g); u_iter != u_end; ++u_iter)
           for (tie(ei, e_end) = out_edges(*u_iter, g); ei != e_end; ++ei)
             if (capacity[*ei] > 0)
-              os << *u_iter << " " << target(*ei, g) << " " 
+              os << *u_iter << " " << target(*ei, g) << " "
                  << (capacity[*ei] - residual_capacity[*ei]) << std::endl;
         os << std::endl;
       }
@@ -662,38 +662,38 @@ namespace boost {
     };
 
   } // namespace detail
-  
-  template <class Graph, 
+
+  template <class Graph,
             class CapacityEdgeMap, class ResidualCapacityEdgeMap,
             class ReverseEdgeMap, class VertexIndexMap>
   typename property_traits<CapacityEdgeMap>::value_type
   push_relabel_max_flow
-    (Graph& g, 
+    (Graph& g,
      typename graph_traits<Graph>::vertex_descriptor src,
      typename graph_traits<Graph>::vertex_descriptor sink,
      CapacityEdgeMap cap, ResidualCapacityEdgeMap res,
      ReverseEdgeMap rev, VertexIndexMap index_map)
   {
     typedef typename property_traits<CapacityEdgeMap>::value_type FlowValue;
-    
-    detail::push_relabel<Graph, CapacityEdgeMap, ResidualCapacityEdgeMap, 
+
+    detail::push_relabel<Graph, CapacityEdgeMap, ResidualCapacityEdgeMap,
       ReverseEdgeMap, VertexIndexMap, FlowValue>
       algo(g, cap, res, rev, src, sink, index_map);
-    
+
     FlowValue flow = algo.maximum_preflow();
-    
+
     algo.convert_preflow_to_flow();
-    
+
     assert(algo.is_flow());
     assert(algo.is_optimal());
-    
+
     return flow;
   } // push_relabel_max_flow()
-  
+
   template <class Graph, class P, class T, class R>
   typename detail::edge_capacity_value<Graph, P, T, R>::type
   push_relabel_max_flow
-    (Graph& g, 
+    (Graph& g,
      typename graph_traits<Graph>::vertex_descriptor src,
      typename graph_traits<Graph>::vertex_descriptor sink,
      const bgl_named_params<P, T, R>& params)
@@ -701,7 +701,7 @@ namespace boost {
     return push_relabel_max_flow
       (g, src, sink,
        choose_const_pmap(get_param(params, edge_capacity), g, edge_capacity),
-       choose_pmap(get_param(params, edge_residual_capacity), 
+       choose_pmap(get_param(params, edge_residual_capacity),
                    g, edge_residual_capacity),
        choose_const_pmap(get_param(params, edge_reverse), g, edge_reverse),
        choose_const_pmap(get_param(params, vertex_index), g, vertex_index)
@@ -713,7 +713,7 @@ namespace boost {
     typename property_map<Graph, edge_capacity_t>::const_type
   >::value_type
   push_relabel_max_flow
-    (Graph& g, 
+    (Graph& g,
      typename graph_traits<Graph>::vertex_descriptor src,
      typename graph_traits<Graph>::vertex_descriptor sink)
   {

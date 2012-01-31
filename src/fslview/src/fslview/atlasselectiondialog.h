@@ -1,6 +1,6 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
-    Authors:    David Flitney 
+    Authors:    David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -13,7 +13,7 @@
 #if !defined(_ATLASSELECTIONDIALOG_H)
 #define _ATLASSELECTIONDIALOG_H
 
-#include "atlasselectiondialogbase.h" 
+#include "atlasselectiondialogbase.h"
 
 #include "atlas.h"
 
@@ -26,7 +26,7 @@ Q_OBJECT
 public:
   AtlasSelectionDialog(QWidget*, AtlasGroup::Handle);
   virtual ~AtlasSelectionDialog();
-  
+
   QStringList getSelectionList();
   void populateAtlasList(AtlasGroup::Handle);
 

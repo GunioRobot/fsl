@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     fprintf(stderr,"Usage: testprog [filename]\n");
     return 1;
   }
-  
+
   b = 2;
   c = (char *)calloc(1,10);
   strcpy(c,"Three");

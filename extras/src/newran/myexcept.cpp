@@ -377,7 +377,7 @@ void FreeCheck::Status()
    else std::cout << "\nNo objects remain undeleted\n\n";
    if (BadDelete)
    {
-      std::cout << "\nThere were " << BadDelete << 
+      std::cout << "\nThere were " << BadDelete <<
          " requests to delete non-existent items\n\n";
    }
 }

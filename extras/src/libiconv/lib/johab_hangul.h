@@ -33,7 +33,7 @@
  *   bit 14..10 = initial jamo, only 19+1 out of 32 possible values are used
  *   bit 9..5 = medial jamo, only 21+1 out of 32 possible values are used
  *   bit 4..0 = final jamo, only 27+1 out of 32 possible values are used
- * 
+ *
  * Structure of the Unicode encoding:
  * grep '^0x\([8-C]...\|D[0-7]..\)' unicode.org-mappings/EASTASIA/KSC/JOHAB.TXT
  * You see that all characters there are marked "HANGUL LETTER" or "HANGUL

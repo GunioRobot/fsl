@@ -33,7 +33,7 @@
 class QTimer;
 class QImage;
 
-//! 
+//!
 //! @author Dave Flitney <flitney@fmrib.ox.ac.uk>
 //! @author James Saunders
 //!
@@ -59,7 +59,7 @@ public:
   typedef enum {Sagittal, Axial, Coronal} Orientation;
   typedef enum {None, Cursing, Pan, Zoom, TimeSeries, Masking} Mode;
 
-  SliceWidget(QWidget* parent, const char* name, 
+  SliceWidget(QWidget* parent, const char* name,
               Orientation orient, Cursor::Handle c, OverlayList::Handle l,
 	      DrawSettings::Handle d, std::list<Shape::Handle>& u,
 	      const ViewOptions& vo);
@@ -67,18 +67,18 @@ public:
   virtual void polish();
 
   //! @brief Returns the current display mode
-  //! @return The current SliceWidget::Mode 
+  //! @return The current SliceWidget::Mode
   int inqMode()const {return m_mode;}
-  
+
 
   //! @brief Returns the current display orientation
-  //! @return the current SliceWidget::Orientation 
+  //! @return the current SliceWidget::Orientation
   int inqOrient() const {return m_orient;}
 
   void renderBuffer();
   void setToZero(ColorRGBAHandle buffer);
   void reorderBytes(ColorRGBAHandle buffer);
-  virtual void update(const Cursor::Handle& c);  
+  virtual void update(const Cursor::Handle& c);
   virtual void update(const BriCon* b);
   virtual void update(const OverlayList* l, OverlayListMsg msg);
   virtual void update(const DrawSettings* d);
@@ -93,12 +93,12 @@ public:
     Volume::Handle vR(i->getVolume(0));
     Volume::Handle vG(i->getVolume(1));
     Volume::Handle vB(i->getVolume(2));
-    
+
     int r = int(fabs(vR->value(x, y, z)) * 255);
     int g = int(fabs(vG->value(x, y, z)) * 255);
     int b = int(fabs(vB->value(x, y, z)) * 255);
 
-    return QColor(r, g, b);  
+    return QColor(r, g, b);
   }
 
   void setNorthText(const std::string& s);
@@ -117,7 +117,7 @@ public slots:
   virtual void setImageCursor(int, int, int, int) = 0;
 
   virtual void setZoom(int) = 0;
-  void zoomOut(int,int);  
+  void zoomOut(int,int);
   void setViewRect(int,int,int,int);
   void resetZoom();
   void setMode(SliceWidget::Mode);
@@ -129,7 +129,7 @@ public slots:
   void crossHairMode(bool);
 
 protected:
-  virtual void resizeEvent( QResizeEvent* );  
+  virtual void resizeEvent( QResizeEvent* );
   virtual void paintEvent( QPaintEvent* );
   virtual void mousePressEvent(QMouseEvent*);
   virtual void mouseMoveEvent(QMouseEvent*);
@@ -138,49 +138,49 @@ protected:
   virtual void keyReleaseEvent(QKeyEvent*);
 
   virtual void enterEvent(QEvent*);
-  virtual void leaveEvent(QEvent*);  
+  virtual void leaveEvent(QEvent*);
   inline unsigned char briConAdjust(float) const;
- 
+
 
   bool               m_sliceIsFixed;
   bool               m_updatesEnabled;
   bool               m_crossHairsOn;
   bool               m_imagesEnabled;
-  int                m_slice;  
+  int                m_slice;
   bool               m_noSliceSet;
-  int                m_volume;  
+  int                m_volume;
   int                m_startX, m_startY;
   Cursor::Handle     m_cursor;
   Cursor::Handle     m_prevCursor;
-  int                m_prevSlice; 
-  float              m_zoom; 
+  int                m_prevSlice;
+  float              m_zoom;
   int                m_origX,m_origY;
   float              m_scaleX,m_scaleY;
   Rect::Handle       m_viewRect, m_dataRect, m_zoomRect, m_winRect;
 
   ColorRGBAHandle        m_displayPixels;
   OverlayList::Handle    m_overlayList;
-  DrawSettings::Handle   m_drawSettings;  
+  DrawSettings::Handle   m_drawSettings;
   QPainter               m_paint;
   ImageDataStore::Handle m_store;
 
   std::list<BriCon::Handle> m_briconList;
   std::stack<ZoomParams>    m_zoomHistory;
-  std::vector<QColor>       m_dtiColors; 
+  std::vector<QColor>       m_dtiColors;
 
   const ViewOptions& m_opts;
 
 protected:
   void drawSimpleCrossHairLines(int, int);
   void drawBrokenCrossHairLines(int, int);
-  
+
 private slots:
 
   void showSlice();
-  void setEraseMode(bool state);  
+  void setEraseMode(bool state);
   void setFillMode(bool state);
   void pageUpPressed();
-  void pageDownPressed(); 
+  void pageDownPressed();
 
 private:
   virtual int inqDepth() const = 0;
@@ -188,8 +188,8 @@ private:
   virtual float inqRatio() const = 0;
   void drawZoomRectangle();
   void paintImages();
-  void paintGraphics();  
-  void drawCrossHairs(); 
+  void paintGraphics();
+  void drawCrossHairs();
   virtual void moveCursor(short dx, short dy) = 0;
   virtual void setCursorSlice(short) = 0;
   virtual void drawDtiLines() = 0;
@@ -198,11 +198,11 @@ private:
   //! @brief Renders the cross hairs.
   //! @param c the Cursor::Handle for the location at which the cross hairs will
   //!        be drawn
-  //! @param slice the highlighted slice (rendered brighter than the 
+  //! @param slice the highlighted slice (rendered brighter than the
   //! crosshairs of the other slices)
   virtual void drawCrossHairLines(const Cursor::Handle c,int slice) = 0;
 
-  virtual void cursorEvent(int x, int y) = 0; 
+  virtual void cursorEvent(int x, int y) = 0;
   virtual void drawEvent(int x, int y);
   virtual void floodEvent(int x, int y);
   virtual void commitGraphics();
@@ -220,11 +220,11 @@ private:
 
   const QPoint  convMouseToWorld(const QPoint &) const;
   const QPoint  convWorldToViewport(const QPoint &) const;
- 
+
   inline void invalidateImageBuffers()  const { m_imageBuffersValid  = false;invalidateDisplayBuffer();}
   inline bool imageBuffersValid()       const { return m_imageBuffersValid; }
   inline void validateImageBuffers()    const { m_imageBuffersValid = true; }
-  
+
   inline void invalidateDisplayPixmap() const { m_displayPixmapValid = false;}
   inline void validateDisplayPixmap()   const { m_displayPixmapValid = true;}
   inline bool displayPixmapValid()      const { return m_displayPixmapValid;}
@@ -236,17 +236,17 @@ private:
   static QCursor    *m_crossCursor;
   static QCursor    *m_zoomCursor;
   static QCursor    *m_panCursor;
-  static QCursor    *m_penCursor; 
+  static QCursor    *m_penCursor;
   static QCursor    *m_eraserCursor;
   static QCursor    *m_fillCursor;
   std::list<Shape::Handle>     &m_undoList;
-  Orientation        m_orient;  
+  Orientation        m_orient;
   SliceWidget::Mode  m_mode;
   //  int                m_maskMode;
-  bool               m_zooming; 
+  bool               m_zooming;
   bool               m_trueScale;
   bool               m_forceRender;
-  mutable bool       m_imageBuffersValid; 
+  mutable bool       m_imageBuffersValid;
   mutable bool       m_displayPixmapValid;
   mutable bool       m_displayBufferValid;
   Shape::Handle      m_shape;
@@ -260,27 +260,27 @@ private:
 class SagittalWidget : public SliceWidget
 {
 public:
-  SagittalWidget(QWidget* parent, const char* name, 
+  SagittalWidget(QWidget* parent, const char* name,
 		 Cursor::Handle c, OverlayList::Handle l,
 		 DrawSettings::Handle d,
 		 std::list<Shape::Handle>& u,
 		 const ViewOptions& vo):
-    SliceWidget(parent, name, SliceWidget::Sagittal, c, l, d, u, vo) 
+    SliceWidget(parent, name, SliceWidget::Sagittal, c, l, d, u, vo)
     {};
 
   virtual void setImageCursor(int, int, int, int);
   virtual void setZoom(int);
-private:  
+private:
   virtual int inqWidth() const;
   virtual int inqHeight() const;
   virtual int inqDepth() const;
   virtual float depthRatio() const;
-  virtual float inqRatio() const;  
-  virtual void setCursorSlice(short);  
+  virtual float inqRatio() const;
+  virtual void setCursorSlice(short);
   virtual void moveCursor(short dx, short dy);
   virtual void drawCrossHairLines(const Cursor::Handle c, int slice);
-  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle);  
-  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);  
+  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle);
+  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);
   virtual void drawDtiLines();
   virtual void cursorEvent(int x, int y);
   virtual QString inqLocationText() const;
@@ -292,26 +292,26 @@ private:
 class CoronalWidget : public SliceWidget
 {
 public:
-  CoronalWidget(QWidget* parent, const char* name, 
+  CoronalWidget(QWidget* parent, const char* name,
 		Cursor::Handle c, OverlayList::Handle l,
 		DrawSettings::Handle d,
 		std::list<Shape::Handle>& u,
 		const ViewOptions& vo):
-    SliceWidget(parent, name, SliceWidget::Coronal, c, l, d, u, vo) 
+    SliceWidget(parent, name, SliceWidget::Coronal, c, l, d, u, vo)
     {};
-  virtual void setImageCursor(int, int, int, int);  
+  virtual void setImageCursor(int, int, int, int);
   virtual void setZoom(int);
-private:  
+private:
   virtual int inqWidth() const;
   virtual int inqHeight() const;
   virtual int inqDepth() const;
   virtual float depthRatio() const;
-  virtual float inqRatio() const;  
-  virtual void setCursorSlice(short);  
+  virtual float inqRatio() const;
+  virtual void setCursorSlice(short);
   virtual void moveCursor(short dx, short dy);
   virtual void drawCrossHairLines(const Cursor::Handle c,int slice);
-  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle);  
-  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);  
+  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle);
+  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);
   virtual void drawDtiLines();
   virtual void cursorEvent(int x, int y);
   virtual QString inqLocationText() const;
@@ -323,26 +323,26 @@ private:
 class AxialWidget : public SliceWidget
 {
 public:
-  AxialWidget(QWidget* parent, const char* name, 
-	      Cursor::Handle c, OverlayList::Handle l, 
+  AxialWidget(QWidget* parent, const char* name,
+	      Cursor::Handle c, OverlayList::Handle l,
 	      DrawSettings::Handle d,std::list<Shape::Handle>& u,
 	      const ViewOptions& vo):
-    SliceWidget(parent, name, SliceWidget::Axial, c, l, d, u, vo) 
+    SliceWidget(parent, name, SliceWidget::Axial, c, l, d, u, vo)
     {};
-  virtual void setImageCursor(int, int, int, int);  
+  virtual void setImageCursor(int, int, int, int);
   virtual void setZoom(int);
 private:
-    
+
   virtual int inqWidth() const;
   virtual int inqHeight() const;
   virtual int inqDepth() const;
   virtual float depthRatio() const;
   virtual float inqRatio() const;
-  virtual void setCursorSlice(short);  
+  virtual void setCursorSlice(short);
   virtual void moveCursor(short dx, short dy);
   virtual void drawCrossHairLines(const Cursor::Handle c, int slice);
-  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle); 
-  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);  
+  virtual ColorRGBAHandle bufferVolume(MetaImage::Handle);
+  virtual ColorRGBAHandle dtiVolume(MetaImage::Handle);
   virtual void drawDtiLines();
   virtual void cursorEvent(int x, int y);
   virtual QString inqLocationText() const;
@@ -361,8 +361,8 @@ class SetImageCursor {
 public:
   SetImageCursor(const Cursor::Handle c) : m_c(c) {}
   void operator()(SliceList::value_type& e) const
-  { 
-    e->setImageCursor(m_c->inqX(), m_c->inqY(), m_c->inqZ(), m_c->inqV()); 
+  {
+    e->setImageCursor(m_c->inqX(), m_c->inqY(), m_c->inqZ(), m_c->inqV());
   }
 private:
   const Cursor::Handle m_c;

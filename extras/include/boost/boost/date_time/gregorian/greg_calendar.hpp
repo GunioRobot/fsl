@@ -2,10 +2,10 @@
 #define GREGORIAN_GREGORIAN_CALENDAR_HPP__
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland 
+ * Author: Jeff Garland
  * $Date: 2007/06/12 15:03:23 $
  */
 
@@ -17,12 +17,12 @@
 
 namespace boost {
 namespace gregorian {
-    
+
   //!An internal date representation that includes infinities, not a date
   typedef date_time::int_adapter<unsigned long> fancy_date_rep;
 
   //! Gregorian calendar for this implementation, hard work in the base
-  class gregorian_calendar : 
+  class gregorian_calendar :
     public date_time::gregorian_calendar_base<greg_year_month_day, fancy_date_rep::int_type> {
   public:
     //! Type to hold a weekday (eg: Sunday, Monday,...)
@@ -34,14 +34,14 @@ namespace gregorian {
     //! Date rep implements the traits stuff as well
     typedef fancy_date_rep       date_traits_type;
 
-    
+
   private:
   };
 
 } } //namespace gregorian
-  
+
 
 
 
 #endif
-  
+

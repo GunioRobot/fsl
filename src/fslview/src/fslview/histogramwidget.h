@@ -27,19 +27,19 @@ public:
 
   void Swap(HistogramOptions& other);
 
-  unsigned int inqBins() const   { return m_bins; } 
-  bool inqIntensityRange() const { return m_intensityRange; } 
-  bool inqLogScale() const       { return m_logScale; } 
-  bool inqIgnoreZeros() const    { return m_ignoreZeros; } 
-  bool inqSpecifyBins() const    { return m_specifyBins; } 
+  unsigned int inqBins() const   { return m_bins; }
+  bool inqIntensityRange() const { return m_intensityRange; }
+  bool inqLogScale() const       { return m_logScale; }
+  bool inqIgnoreZeros() const    { return m_ignoreZeros; }
+  bool inqSpecifyBins() const    { return m_specifyBins; }
   double inqMin() const          { return m_min; }
   double inqMax() const          { return m_max; }
 
-  void setBins(unsigned int i)    { m_bins = i; } 
-  void setIntensityRange(bool on) { m_intensityRange = on; } 
-  void setLogScale(bool on)       { m_logScale = on; } 
-  void setIgnoreZeros(bool on)    { m_ignoreZeros = on; } 
-  void setSpecifyBins(bool on)    { m_specifyBins = on; } 
+  void setBins(unsigned int i)    { m_bins = i; }
+  void setIntensityRange(bool on) { m_intensityRange = on; }
+  void setLogScale(bool on)       { m_logScale = on; }
+  void setIgnoreZeros(bool on)    { m_ignoreZeros = on; }
+  void setSpecifyBins(bool on)    { m_specifyBins = on; }
   void setMin(double v)           { m_min = v; }
   void setMax(double v)           { m_max = v; }
 
@@ -56,9 +56,9 @@ private:
 /**
  * @author David Flitney <flitney@fmrib.ox.ac.uk>
  * @date   Thu Jan  2 14:36:21 2003
- * 
+ *
  * @brief  Customises @ref ViewWidget for displaying a @ref Histogram graph.
- * 
+ *
  */
 class HistogramWidget : public ViewWidget
 {
@@ -72,7 +72,7 @@ private slots:
   void options();
 
   void toggleZoom(bool);
-  
+
   void plotMousePressed(const QMouseEvent &e);
   void plotMouseReleased(const QMouseEvent &e);
   void plotMouseMoved(const QMouseEvent &e);

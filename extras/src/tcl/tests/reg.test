@@ -48,9 +48,9 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 # Cases involving nonparticipating subexpressions, checking where empty
 # substrings are located, etc. should be done using i and p.
 
-# The flag characters are complex and a bit eclectic.  Generally speaking, 
+# The flag characters are complex and a bit eclectic.  Generally speaking,
 # lowercase letters are compile options, uppercase are expected re_info
-# bits, and nonalphabetics are match options, controls for how the test is 
+# bits, and nonalphabetics are match options, controls for how the test is
 # run, or testing options.  The one small surprise is that AREs are the
 # default, and you must explicitly request lesser flavors of RE.  The flags
 # are as follows.  It is admitted that some are not very mnemonic.
@@ -1007,7 +1007,7 @@ test reg-32.2 {canmatch functionality -- at end} testregexp {
     set pat {s%$}
     set line "asd asd"
     # can only match after the end of the string
-    set res [testregexp -xflags -- c $pat $line resvar] 
+    set res [testregexp -xflags -- c $pat $line resvar]
     lappend res $resvar
 } {0 7}
 

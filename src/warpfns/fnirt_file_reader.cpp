@@ -4,10 +4,10 @@
 // are valid displacement-field files.
 //
 // fnirt_file_reader.cpp
-// 
+//
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #include <string>
@@ -39,7 +39,7 @@ namespace NEWIMAGE {
 //
 /////////////////////////////////////////////////////////////////////
 
-FnirtFileReader::FnirtFileReader(const FnirtFileReader& src) 
+FnirtFileReader::FnirtFileReader(const FnirtFileReader& src)
 : _fname(src._fname), _type(src._type), _aff(src._aff), _coef_rep(3)
 {
   for (unsigned int i=0; i<src._coef_rep.size(); i++) {
@@ -71,12 +71,12 @@ vector<unsigned int> FnirtFileReader::FieldSize() const
 
   switch (_type) {
   case FnirtFieldDispType: case UnknownDispType:
-    ret[0] = static_cast<unsigned int>(_vol_rep->xsize()); 
-    ret[1] = static_cast<unsigned int>(_vol_rep->ysize()); 
-    ret[2] = static_cast<unsigned int>(_vol_rep->zsize()); 
+    ret[0] = static_cast<unsigned int>(_vol_rep->xsize());
+    ret[1] = static_cast<unsigned int>(_vol_rep->ysize());
+    ret[2] = static_cast<unsigned int>(_vol_rep->zsize());
     break;
  case FnirtSplineDispType: case FnirtDCTDispType:
-   ret[0] = _coef_rep[0]->FieldSz_x(); ret[1] = _coef_rep[0]->FieldSz_y(); ret[2] = _coef_rep[0]->FieldSz_z(); 
+   ret[0] = _coef_rep[0]->FieldSz_x(); ret[1] = _coef_rep[0]->FieldSz_y(); ret[2] = _coef_rep[0]->FieldSz_z();
    break;
   default:
     throw FnirtFileReaderException("FieldSize: Invalid _type");
@@ -99,7 +99,7 @@ vector<double> FnirtFileReader::VoxelSize() const
     ret[0] = _vol_rep->xdim(); ret[1] = _vol_rep->ydim(); ret[2] = _vol_rep->zdim();
     break;
  case FnirtSplineDispType: case FnirtDCTDispType:
-   ret[0] = _coef_rep[0]->Vxs_x(); ret[1] = _coef_rep[0]->Vxs_y(); ret[2] = _coef_rep[0]->Vxs_z(); 
+   ret[0] = _coef_rep[0]->Vxs_x(); ret[1] = _coef_rep[0]->Vxs_y(); ret[2] = _coef_rep[0]->Vxs_z();
    break;
   default:
     throw FnirtFileReaderException("VoxelSize: Invalid _type");
@@ -118,7 +118,7 @@ vector<unsigned int> FnirtFileReader::KnotSpacing() const
   if (_type == FnirtSplineDispType) {
     vector<unsigned int>  ret(3,0);
     const splinefield&    tmp = dynamic_cast<const splinefield&>(*(_coef_rep[0]));
-    ret[0] = tmp.Ksp_x(); ret[1] = tmp.Ksp_y(); ret[2] = tmp.Ksp_z(); 
+    ret[0] = tmp.Ksp_x(); ret[1] = tmp.Ksp_y(); ret[2] = tmp.Ksp_z();
     return(ret);
   }
   else {
@@ -158,7 +158,7 @@ vector<unsigned int> FnirtFileReader::DCTOrder() const
     throw FnirtFileReaderException("DCTOrder: Field not a dctfield");
     break;
   case FnirtDCTDispType:
-   ret[0] = _coef_rep[0]->CoefSz_x(); ret[1] = _coef_rep[0]->CoefSz_y(); ret[2] = _coef_rep[0]->CoefSz_z(); 
+   ret[0] = _coef_rep[0]->CoefSz_x(); ret[1] = _coef_rep[0]->CoefSz_y(); ret[2] = _coef_rep[0]->CoefSz_z();
    break;
   default:
     throw FnirtFileReaderException("DCTOrder: Invalid _type");
@@ -168,7 +168,7 @@ vector<unsigned int> FnirtFileReader::DCTOrder() const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Return field as a NEWMAT matrix/vector. Optionally with the affine 
+// Return field as a NEWMAT matrix/vector. Optionally with the affine
 // part of the transform included in the field.
 //
 /////////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ ReturnMatrix FnirtFileReader::FieldAsNewmatMatrix(int indx, bool inc_aff) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Return one of the three "fields" as NEWIMAGE volume. 
+// Return one of the three "fields" as NEWIMAGE volume.
 // Optionally with the affine part of the transform included in the field.
 //
 /////////////////////////////////////////////////////////////////////
@@ -205,7 +205,7 @@ volume<float> FnirtFileReader::FieldAsNewimageVolume(unsigned int indx, bool inc
   volume<float> vol(FieldSize()[0],FieldSize()[1],FieldSize()[2]);
   switch (_type) {
   case FnirtFieldDispType: case UnknownDispType:
-    return((*_vol_rep)[indx]); 
+    return((*_vol_rep)[indx]);
     break;
   case FnirtSplineDispType: case FnirtDCTDispType:
     vol.setdims(VoxelSize()[0],VoxelSize()[1],VoxelSize()[2]);
@@ -216,11 +216,11 @@ volume<float> FnirtFileReader::FieldAsNewimageVolume(unsigned int indx, bool inc
   default:
     throw FnirtFileReaderException("FieldAsNewimageVolume: Invalid _type");
   }
-} 
+}
 
 /////////////////////////////////////////////////////////////////////
 //
-// Return field as 4D volume. Optionally with the affine 
+// Return field as 4D volume. Optionally with the affine
 // part of the transform included in the field.
 //
 /////////////////////////////////////////////////////////////////////
@@ -230,7 +230,7 @@ volume4D<float> FnirtFileReader::FieldAsNewimageVolume4D(bool inc_aff) const
   volume4D<float> vol(FieldSize()[0],FieldSize()[1],FieldSize()[2],3);
   switch (_type) {
   case FnirtFieldDispType: case UnknownDispType:
-    return(*_vol_rep); 
+    return(*_vol_rep);
     break;
   case FnirtSplineDispType: case FnirtDCTDispType:
     vol.setdims(VoxelSize()[0],VoxelSize()[1],VoxelSize()[2],1.0);
@@ -243,7 +243,7 @@ volume4D<float> FnirtFileReader::FieldAsNewimageVolume4D(bool inc_aff) const
   default:
     throw FnirtFileReaderException("FieldAsNewimageVolume4D: Invalid _type");
   }
-} 
+}
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -263,7 +263,7 @@ volume<float> FnirtFileReader::Jacobian(bool inc_aff) const
     else deffield2jacobian(*(_coef_rep[0]),*(_coef_rep[1]),*(_coef_rep[2]),jac);
     return(jac);
   }
-  else throw FnirtFileReaderException("Jacobian: Invalid _type");  
+  else throw FnirtFileReaderException("Jacobian: Invalid _type");
 }
 /////////////////////////////////////////////////////////////////////
 //
@@ -360,14 +360,14 @@ void deffield2jacobian(const BASISFIELD::basisfield&   dx,
                        const NEWMAT::Matrix&           aff,
                        volume<float>&                  jac)
 {
-  const boost::shared_ptr<ColumnVector>  dxdx = dx.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dxdy = dx.Get(BASISFIELD::FieldIndex(2));  
-  const boost::shared_ptr<ColumnVector>  dxdz = dx.Get(BASISFIELD::FieldIndex(3));  
-  const boost::shared_ptr<ColumnVector>  dydx = dy.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dydy = dy.Get(BASISFIELD::FieldIndex(2));  
-  const boost::shared_ptr<ColumnVector>  dydz = dy.Get(BASISFIELD::FieldIndex(3));  
-  const boost::shared_ptr<ColumnVector>  dzdx = dz.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dzdy = dz.Get(BASISFIELD::FieldIndex(2));  
+  const boost::shared_ptr<ColumnVector>  dxdx = dx.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dxdy = dx.Get(BASISFIELD::FieldIndex(2));
+  const boost::shared_ptr<ColumnVector>  dxdz = dx.Get(BASISFIELD::FieldIndex(3));
+  const boost::shared_ptr<ColumnVector>  dydx = dy.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dydy = dy.Get(BASISFIELD::FieldIndex(2));
+  const boost::shared_ptr<ColumnVector>  dydz = dy.Get(BASISFIELD::FieldIndex(3));
+  const boost::shared_ptr<ColumnVector>  dzdx = dz.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dzdy = dz.Get(BASISFIELD::FieldIndex(2));
   const boost::shared_ptr<ColumnVector>  dzdz = dz.Get(BASISFIELD::FieldIndex(3));
 
   NEWMAT::Matrix iaff = aff.i();
@@ -395,14 +395,14 @@ void deffield2jacobian(const BASISFIELD::basisfield&   dx,
                        const BASISFIELD::basisfield&   dz,
                        volume<float>&                  jac)
 {
-  const boost::shared_ptr<ColumnVector>  dxdx = dx.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dxdy = dx.Get(BASISFIELD::FieldIndex(2));  
-  const boost::shared_ptr<ColumnVector>  dxdz = dx.Get(BASISFIELD::FieldIndex(3));  
-  const boost::shared_ptr<ColumnVector>  dydx = dy.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dydy = dy.Get(BASISFIELD::FieldIndex(2));  
-  const boost::shared_ptr<ColumnVector>  dydz = dy.Get(BASISFIELD::FieldIndex(3));  
-  const boost::shared_ptr<ColumnVector>  dzdx = dz.Get(BASISFIELD::FieldIndex(1));  
-  const boost::shared_ptr<ColumnVector>  dzdy = dz.Get(BASISFIELD::FieldIndex(2));  
+  const boost::shared_ptr<ColumnVector>  dxdx = dx.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dxdy = dx.Get(BASISFIELD::FieldIndex(2));
+  const boost::shared_ptr<ColumnVector>  dxdz = dx.Get(BASISFIELD::FieldIndex(3));
+  const boost::shared_ptr<ColumnVector>  dydx = dy.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dydy = dy.Get(BASISFIELD::FieldIndex(2));
+  const boost::shared_ptr<ColumnVector>  dydz = dy.Get(BASISFIELD::FieldIndex(3));
+  const boost::shared_ptr<ColumnVector>  dzdx = dz.Get(BASISFIELD::FieldIndex(1));
+  const boost::shared_ptr<ColumnVector>  dzdy = dz.Get(BASISFIELD::FieldIndex(2));
   const boost::shared_ptr<ColumnVector>  dzdz = dz.Get(BASISFIELD::FieldIndex(3));
 
   for (unsigned int indx=0, k=0; k<dx.FieldSz_z(); k++) {
@@ -439,7 +439,7 @@ void add_or_remove_affine_part(const NEWMAT::Matrix&     aff,
       for (int y=0; y<ys; y++) {
         xv(2) = double(y);
         for (int x=0; x<xs; x++) {
-          xv(1) = double(x); 
+          xv(1) = double(x);
           if (add) warps(x,y,z) += DotProduct(mr,xv);
           else warps(x,y,z) -= DotProduct(mr,xv);
 	}
@@ -473,20 +473,20 @@ void FnirtFileReader::common_read(const string& fname, AbsOrRelWarps wt, bool ve
   // Read volume indicated by fname
   volume4D<float>   vol;
   read_volume4D(vol,fname);
-  if (vol.tsize() != 3) throw FnirtFileReaderException("FnirtFileReader: Displacement fields must contain 3 volumes");  
+  if (vol.tsize() != 3) throw FnirtFileReaderException("FnirtFileReader: Displacement fields must contain 3 volumes");
 
   Matrix qform;
-  
+
   // Take appropriate action depending on intent code of volume
   switch (vol.intent_code()) {
   case FSL_CUBIC_SPLINE_COEFFICIENTS:
-  case FSL_QUADRATIC_SPLINE_COEFFICIENTS: 
+  case FSL_QUADRATIC_SPLINE_COEFFICIENTS:
   case FSL_DCT_COEFFICIENTS:                                 // Coefficients generated by FSL application (e.g. fnirt)
     read_orig_volume4D(vol,fname);                           // Re-read coefficients "raw"
     _aff = vol.sform_mat();                                  // Affine part of transform
     _aor = RelativeWarps;                                    // Relative warps
     _coef_rep = read_coef_file(vol,verbose);
-    if (vol.intent_code() == FSL_CUBIC_SPLINE_COEFFICIENTS || 
+    if (vol.intent_code() == FSL_CUBIC_SPLINE_COEFFICIENTS ||
         vol.intent_code() == FSL_QUADRATIC_SPLINE_COEFFICIENTS) _type = FnirtSplineDispType;
     else if (vol.intent_code() == FSL_DCT_COEFFICIENTS) _type = FnirtDCTDispType;
     break;
@@ -512,7 +512,7 @@ void FnirtFileReader::common_read(const string& fname, AbsOrRelWarps wt, bool ve
       if (stddev0>stddev1) {
         // the initial one (greater stddev) was absolute
         if (verbose) cout << "Assuming warps was absolute" << endl;
-      } 
+      }
       else {
         // the initial one was relative
         if (verbose) cout << "Assuming warps was relative" << endl;
@@ -533,7 +533,7 @@ vector<shared_ptr<basisfield> > FnirtFileReader::read_coef_file(const volume4D<f
   vector<double>         vxs(3,0.0);
   for (int i=0; i<3; i++) {
     sz[i] = static_cast<unsigned int>(qform(i+1,4));
-    vxs[i] = static_cast<double>(vcoef.intent_param(i+1));  
+    vxs[i] = static_cast<double>(vcoef.intent_param(i+1));
   }
   if (verbose) cout << "Matrix size: " << sz[0] << "  " << sz[1] << "  " << sz[2] << endl;
   if (verbose) cout << "Voxel size: " << vxs[0] << "  " << vxs[1] << "  " << vxs[2] << endl;
@@ -579,7 +579,7 @@ vector<shared_ptr<basisfield> > FnirtFileReader::read_coef_file(const volume4D<f
   }
 
   // Return vector of fields
-  
+
   return(fields);
 }
 
@@ -599,7 +599,7 @@ void FnirtFileReader::add_affine_part(Matrix aff, unsigned int indx, volume<floa
       for (int y=0; y<ys; y++) {
         xv(2) = double(y);
         for (int x=0; x<xs; x++) {
-          xv(1) = double(x); 
+          xv(1) = double(x);
           warps(x,y,z) += DotProduct(mr,xv);
 	}
       }

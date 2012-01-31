@@ -64,7 +64,7 @@ namespace boost
     {
         return r.GetBuffer(0);
     }
-        
+
     const TCHAR* boost_range_begin( const CString& r )
     {
         return (LPCTSTR)r;
@@ -74,12 +74,12 @@ namespace boost
     {
         return r.GetLength();
     }
-    
+
     TCHAR* boost_range_end( CString& r )
     {
         return boost_range_begin( r ) + boost_range_size( r );
     }
-        
+
     const TCHAR* range_adl_end( const CString& r )
     {
         return boost_range_begin( r ) + boost_range_size( r );

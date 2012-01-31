@@ -18,7 +18,7 @@
 #include <boost/range/detail/remove_extent.hpp>
 #include <iterator>
 
-namespace boost 
+namespace boost
 {
     namespace range_detail
     {
@@ -28,7 +28,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_size_<std_container_>
         {
@@ -40,24 +40,24 @@ namespace boost
                 };
             };
         };
-                    
+
         //////////////////////////////////////////////////////////////////////
         // pair
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_size_<std_pair_>
         {
             template< typename P >
             struct inner {
-                static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type 
+                static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type
                 fun( const P& p )
                 {
                     return std::distance( p.first, p.second );
                 }
             };
         };
- 
+
         //////////////////////////////////////////////////////////////////////
         // array
         //////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ namespace boost
                 }
             };
         };
-        
+
         template<>
         struct range_size_<char_array_>
         {
@@ -85,7 +85,7 @@ namespace boost
                 }
             };
         };
-        
+
         template<>
         struct range_size_<wchar_t_array_>
         {
@@ -125,7 +125,7 @@ namespace boost
                 }
             };
         };
-        
+
         template<>
         struct range_size_<wchar_t_ptr_>
         {
@@ -149,17 +149,17 @@ namespace boost
                 }
             };
         };
-  
+
     } // namespace 'range_detail'
-    
+
 
     template< typename C >
-    BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type 
+    BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type
     size( const C& c )
     {
         return range_detail::range_size_<range_detail::range<C>::type>::inner<C>::fun( c );
     }
-    
+
 } // namespace 'boost'
 
 

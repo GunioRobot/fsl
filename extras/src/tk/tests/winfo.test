@@ -85,7 +85,7 @@ test winfo-2.7 {"winfo atom" command} {
 } SECONDARY
 
 # Some tests require the "pseudocolor" visual class.
-testConstraint pseudocolor [expr { ([winfo depth .] == 8) 
+testConstraint pseudocolor [expr { ([winfo depth .] == 8)
 				&& ([winfo visual .] == "pseudocolor")}]
 
 test winfo-3.1 {"winfo colormapfull" command} {pseudocolor} {
@@ -299,7 +299,7 @@ test winfo-12.2 {GetDisplayOf procedure} {
 } {1 {bad window path name "bad_window"}}
 
 # Some embedding tests
-# 
+#
 
 proc MakeEmbed {} {
     frame .con -container 1

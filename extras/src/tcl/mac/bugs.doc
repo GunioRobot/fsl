@@ -22,7 +22,7 @@ Known bugs in the current release.
 
 * With the socket code you can't use the "localhost" host name.  This
   is actually a known bug in Apple's MacTcp stack.  However, you can
-  use [info hostname] whereever you would have used "localhost" to 
+  use [info hostname] whereever you would have used "localhost" to
   achive the same effect.
 
 * Most socket bugs have been fixed.  We do have a couple of test cases
@@ -33,7 +33,7 @@ Known bugs in the current release.
 * In Tcl 8.2, the new Regexp code seems to be more deeply recursive than
 the older version in Tcl8.0.  As a result, I have had to increase the Stack
 size of Tcl to 1Meg.  If you are not doing regexps with many subexpressions,
-this is probably more stack than you will need.  You can relink with the 
+this is probably more stack than you will need.  You can relink with the
 stack set to 512K, and you will be fine for most purposes.
 * This regexp problem is fixed in Tcl8.3.  If you are going to do complex
 regexp's, it is probably a good idea to keep the stack size big.  But normal

@@ -10,7 +10,7 @@
 // on runtime typing (rtti - typeid) but uses a user specified string
 // as the portable class identifier.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -37,9 +37,9 @@ namespace detail {
 // define a special type_info that doesn't depend on rtti which is not
 // available in all situations.
 
-// common base class to share type_info_key.  This is used to 
+// common base class to share type_info_key.  This is used to
 // identify the method used to keep track of the extended type
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_no_rtti_0 : 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_no_rtti_0 :
     public extended_type_info
 {
     virtual bool
@@ -60,7 +60,7 @@ public:
 };
 
 template<class T>
-class extended_type_info_no_rtti_1 : 
+class extended_type_info_no_rtti_1 :
     public extended_type_info_no_rtti_0
 {
 protected:
@@ -74,7 +74,7 @@ public:
         // this implementation doesn't depend on typeid() but assumes
         // that the specified type has a function of the following signature.
         // A common implemention of such a function is to define as a virtual
-        // function. 
+        // function.
         const char * derived_key = t.get_key();
         assert(NULL != derived_key);
         return boost::serialization::extended_type_info::find(derived_key);
@@ -95,10 +95,10 @@ public:
 } // namespace detail
 
 template<class T>
-class extended_type_info_no_rtti : 
+class extended_type_info_no_rtti :
     public detail::extended_type_info_no_rtti_1<const T>
 {
-    // private constructor to inhibit any existence other than the 
+    // private constructor to inhibit any existence other than the
     // static one
     extended_type_info_no_rtti(){}
     ~extended_type_info_no_rtti(){};
@@ -108,7 +108,7 @@ class extended_type_info_no_rtti :
 } // namespace boost
 
 ///////////////////////////////////////////////////////////////////////////////
-// If no other implementation has been designated as default, 
+// If no other implementation has been designated as default,
 // use this one.  To use this implementation as the default, specify it
 // before any of the other headers.
 

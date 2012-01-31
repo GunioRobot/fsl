@@ -1,7 +1,7 @@
 #include "histogramfns.h"
 
 template <class T>
-int find_histogram(const std::valarray<T>& vol, std::valarray<int>& hist, unsigned int bins, 
+int find_histogram(const std::valarray<T>& vol, std::valarray<int>& hist, unsigned int bins,
 		   T& min, T& max)
 {
   // size and zero the histogram
@@ -14,21 +14,21 @@ int find_histogram(const std::valarray<T>& vol, std::valarray<int>& hist, unsign
   if(min != max) {
     double fA = bins / double(max - min);
     double fB = (bins * -min) / double(max - min);
-    
+
     validsize = 0;
 
     for(unsigned int i = 0; i < vol.size(); ++i) {
       unsigned int idx = unsigned(fA * vol[i] + fB);
       ++hist[ std::max(unsigned(0), std::min(idx, bins - 1)) ];
       ++validsize;
-    }      
+    }
   }
 
   return validsize;
 }
 
 template <class T>
-void find_thresholds(const std::valarray<T>& vol, std::valarray<int>& hist, unsigned int bins, 
+void find_thresholds(const std::valarray<T>& vol, std::valarray<int>& hist, unsigned int bins,
 		     T& minval, T& maxval)
 {
   const unsigned int max_passes(10);
@@ -82,7 +82,7 @@ void find_thresholds(const std::valarray<T>& vol, std::valarray<int>& hist, unsi
     thresh2 =  min + (bottom_bin*fA);
 
     for(count=0, top_bin=highest_bin; count<validsize/50; --top_bin)
-      count += hist[top_bin]; 
+      count += hist[top_bin];
     ++top_bin;
     thresh98 = min + ((top_bin+1)*fA);
 

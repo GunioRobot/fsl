@@ -7,11 +7,11 @@ Registration of EPI and Structural Images (with undistortion)
 <!-- No Table of Contents -->
 
 <A NAME="section1"></A><H2>INTRODUCTION</H2>
- 
+
 This page aims to explain how to get a good registration between
 EPI and structural images using FLIRT, PRELUDE and FUGUE.  It
 covers both the acquisitions and the analysis steps required and
-also includes details on how to deal with partial brain 
+also includes details on how to deal with partial brain
 (partial field of view) acquisitions.
 
 <P>
@@ -27,7 +27,7 @@ difficult in the case of EPI.
 
 
 <A NAME="section2"></A><HR><H2>ACQUISITION</H2>
- 
+
 <b>Case 1:</b> Whole brain imaging
 
 <p>
@@ -35,7 +35,7 @@ In this kind of experiment the following should be collected:
 <ul>
 <li> Structural image (T1-weighted, MP-RAGE, T2-weighted, etc)
 <li> Functional series (EPI)
-<li> One single fieldmap image - with same slices as the EPI images 
+<li> One single fieldmap image - with same slices as the EPI images
 (easiest to have
 the same field of view and voxel sizes as the EPI)
 </ul>
@@ -79,7 +79,7 @@ the fieldmap and EPI must also be registered.
 
 <p>
 Initial processing of the fieldmap acquisition
-<br>1 - generate the magnitude (absolute) fieldmap image - which is undistorted 
+<br>1 - generate the magnitude (absolute) fieldmap image - which is undistorted
 (using FSLCOMPLEX).
 <br>2 - remove non-brain structures from the magnitude fieldmap image (using BET)
 	and save the mask used
@@ -98,7 +98,7 @@ Undistort the EPI
 
 <p>
 Register the EPI and structural
-<br>9 - register the undistorted EPI to the structural image (using FLIRT with 
+<br>9 - register the undistorted EPI to the structural image (using FLIRT with
 6 or 7 dof)
 <br> &nbsp; &nbsp; &nbsp; NB: make sure the transformation matrix is saved
 
@@ -154,7 +154,7 @@ directories to take account of undistortion:
 	the ones in <tt>.feat/stats/distorted</tt> as these are your originals).
 <br>C - in the <tt>.feat/reg</tt> directory, replace the <tt>example_func2highres.mat</tt>
 	and <tt>example_func2initial_highres.mat</tt> (if it exists).
-<br>D - Also replace the <tt>example_func</tt> and 
+<br>D - Also replace the <tt>example_func</tt> and
 	<tt>initial_highres</tt> images with the undistorted EPIs.
 <br>E - Then regenerate all the appropriate matrices and images for the
 	FEAT report page.  This can be done using the script <tt>updatefeatreg</tt>
@@ -206,8 +206,8 @@ stages (a default one is always used but it can be poor sometimes, and
 the BET mask used in the examples below might also be suboptimal).
 <li> "Undistorted" image is worse than original
 <p> <b>Solution:</b> try changing the unwarping direction in FUGUE
-as the default is sometimes wrong.  Firstly, try 
-<tt>--unwarpdir=y-</tt> which uses the same axis 
+as the default is sometimes wrong.  Firstly, try
+<tt>--unwarpdir=y-</tt> which uses the same axis
 but applies the correction in the opposite sense.  If this is still
 wrong, or the axis of the distortion is clearly different then
 try the <tt>--unwarpdir=</tt> option with either <tt>x, x-, z, z-</tt>.

@@ -6,9 +6,9 @@ using namespace std;
 
 int atlastst(int argc, char **argv)
 {
-  ProbabalisticAtlas::Handle a = 
+  ProbabalisticAtlas::Handle a =
     ProbabalisticAtlas::create(Image::load("/usr/people/flitney/atlases/mnispm/SPMaps.int.2mm"), "SP Maps");
-  
+
   cout << a->getLabelText(-20.0,   8.0,   8.0) << endl;
   cout << a->getLabelText(-22.0,   1.0,   9.2) << endl;
   cout << a->getLabelText(-24.0,  -6.0,  10.4) << endl;

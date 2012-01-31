@@ -1,27 +1,27 @@
-//  
+//
 //  fsl_splines.h
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -102,7 +102,7 @@ class Spline1D;
 // Class Spline3D:
 // This class is used by class splinefield to calculate field,
 // derivative of field w.r.t. coefficients etc. It is implemented
-// through Spline1D, containing a vector of three of those.  
+// through Spline1D, containing a vector of three of those.
 //
 // Its interface includes
 // Operator (i,j,k) :
@@ -122,7 +122,7 @@ template<class T>
 class Spline3D
 {
 public:
-  // Constructors 
+  // Constructors
   Spline3D(unsigned int order, unsigned int ksp, std::vector<unsigned int> deriv = std::vector<unsigned int>(3,0)) : _vsp1D(3), _premul(false)
   {
     std::vector<unsigned int> vksp(3,ksp);
@@ -155,7 +155,7 @@ public:
       }
     }
     return(*this);
-  }  
+  }
 
   // Functions for enquiring about properties of spline
   unsigned int Order() const {return(_vsp1D[0].Order());}
@@ -169,7 +169,7 @@ public:
   unsigned int FullFOV(unsigned int dir, unsigned int csz) const {return(_vsp1D[dir].FullFOV(csz));}
   unsigned int TotalFullFOV(const std::vector<unsigned int>& csz) const {return(_vsp1D[0].FullFOV(csz[0])*_vsp1D[1].FullFOV(csz[1])*_vsp1D[2].FullFOV(csz[2]));}
   bool IsPremul() const {return(_premul);}
- 
+
   // Functions for read access to individual element when sampled on
   // a regular grid corresponding to voxels where knot-spacing is an
   // integer number of voxels
@@ -225,15 +225,15 @@ public:
   bool RangeOfOverlappingSplines(const std::vector<unsigned int>&  cindx,
                                  const std::vector<unsigned int>&  isz,
                                  std::vector<unsigned int>&        first,
-                                 std::vector<unsigned int>&        last) const;  
+                                 std::vector<unsigned int>&        last) const;
 
   bool RangeOfOverlappingSplines(const std::vector<unsigned int>&  cindx,
                                  const std::vector<unsigned int>&  isz,
                                  const Spline3D<T>&                sp2,
                                  std::vector<unsigned int>&        first,
-                                 std::vector<unsigned int>&        last) const;  
+                                 std::vector<unsigned int>&        last) const;
 
-  // The range functions will return the first and last index (zero-offset) 
+  // The range functions will return the first and last index (zero-offset)
   // into a field in which the spline is the cindx'th (zero-offset) spline.
   // Note that the range is really first -- (last-1).
 
@@ -243,14 +243,14 @@ public:
                     std::vector<unsigned int>&       last) const   // Last index in x-, y- and direction
   {
     for (unsigned int i=0; i<3; i++) _vsp1D[i].Range(cindx[i],isz[i],first[i],last[i]);
-  }         
+  }
   void XRangeInField(unsigned int cindx, unsigned int isz, unsigned int& first, unsigned int& last) const { _vsp1D[0].Range(cindx,isz,first,last); }
   void YRangeInField(unsigned int cindx, unsigned int isz, unsigned int& first, unsigned int& last) const { _vsp1D[1].Range(cindx,isz,first,last); }
   void ZRangeInField(unsigned int cindx, unsigned int isz, unsigned int& first, unsigned int& last) const { _vsp1D[2].Range(cindx,isz,first,last); }
 
-  // The RangeOfSplines functions will return the first and (one past) last indicies 
+  // The RangeOfSplines functions will return the first and (one past) last indicies
   // of spline kernels that have a support (non-zero) value at a voxel location.
-  
+
   void RangeOfSplines(const std::vector<double>&        vox,         // Voxel index (does not need to be integer)
                       const std::vector<unsigned int>&  csz,         // Coefficient matrix size
                       std::vector<unsigned int>&        first,       // Index of first spline with support for vox
@@ -286,12 +286,12 @@ public:
   {
     for (unsigned int i=0; i<3; i++) offs[i] = _vsp1D[i].Offset(indx[i],isz[i]);
   }
-  unsigned int XOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[0].Offset(indx,isz)); } 
-  unsigned int YOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[1].Offset(indx,isz)); } 
-  unsigned int ZOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[2].Offset(indx,isz)); } 
+  unsigned int XOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[0].Offset(indx,isz)); }
+  unsigned int YOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[1].Offset(indx,isz)); }
+  unsigned int ZOffsetIntoKernel(unsigned int indx, unsigned int isz) const { return(_vsp1D[2].Offset(indx,isz)); }
 
   // The premul function is useful for multiplying a spline with a field once and for all
-  // before multiplying it with other splines. Note that all the read-access methods 
+  // before multiplying it with other splines. Note that all the read-access methods
   // returns the pre-multiplied values after a call to this function.
 
   template <class S>
@@ -300,7 +300,7 @@ public:
               const S                           *ima);      // Well.
 
   // The NzMax routines calculates the maximum # of non-zero elements of A'*B where
-  // A and B are matrices with one column per spline and each column containing a 
+  // A and B are matrices with one column per spline and each column containing a
   // spline kernel. The first form assume identical splines in A and B.
 
   unsigned int NzMax(const std::vector<unsigned int>&  isz) const;
@@ -325,7 +325,7 @@ private:
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // Class Spline1D:
-// This is for all purposes a helper class for Spline3D. 
+// This is for all purposes a helper class for Spline3D.
 // It implements some basic characteristics of 1D splines.
 // Its interface includes
 //
@@ -342,7 +342,7 @@ private:
 // GetAMatrix:
 // Returns A such that A*coef gives 1D field, where coef ColumnVector of coefficients
 // GetMMatrix:
-// Returns M that can be used to zoom up and down between knot-spacings. 
+// Returns M that can be used to zoom up and down between knot-spacings.
 //
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -350,19 +350,19 @@ template<class T>
 class Spline1D
 {
 public:
-  Spline1D(unsigned int order, unsigned int ksp, unsigned int deriv=0) : _order(order), _ksp(ksp), _deriv(deriv), _n(spline_size()), _sp(spline_kernel()) 
+  Spline1D(unsigned int order, unsigned int ksp, unsigned int deriv=0) : _order(order), _ksp(ksp), _deriv(deriv), _n(spline_size()), _sp(spline_kernel())
   {
     if (_order < 2 || _order > 3) throw FslSplinesException("Spline1D::Spline1D: only orders 2 and 3 implemented");
     if (_ksp < 1) throw FslSplinesException("Spline1D::Spline1D: knot-spacing has to be > 0");
     if (_deriv > (_order)) throw FslSplinesException("Spline1D::Spline1D: only differentiable order times");
   }
-  Spline1D(const Spline1D& insp) : _order(insp._order), _ksp(insp._ksp), _deriv(insp._deriv), _n(insp._n), _sp(spline_kernel()) {}    
+  Spline1D(const Spline1D& insp) : _order(insp._order), _ksp(insp._ksp), _deriv(insp._deriv), _n(insp._n), _sp(spline_kernel()) {}
   Spline1D() : _order(3), _ksp(1), _deriv(0), _n(spline_size()), _sp(spline_kernel()) {}
   ~Spline1D() {delete[] _sp;}
-  
+
   Spline1D<T>& operator=(const Spline1D<T>& insp)
   {
-    if (this != &insp) { 
+    if (this != &insp) {
       _order = insp._order; _ksp = insp._ksp; _deriv = insp._deriv; _n = insp._n;
       delete[] _sp; _sp = spline_kernel();
     }
@@ -382,14 +382,14 @@ public:
   // of the specified spline (default is first spline).
   int OffsetIntoField(unsigned int cindx=0) const;
 
-  // Returns the range of voxels for which cindx has 
+  // Returns the range of voxels for which cindx has
   // support (i.e. non-zero value).
   // Note that range is really first -- (last-1).
   void Range(// Input
              unsigned int   cindx,       // Index of coefficient
              unsigned int   isz,         // Size of image/field
              // Output
-             unsigned int&  first,       // First index (into field) of spline 
+             unsigned int&  first,       // First index (into field) of spline
              unsigned int&  last) const; // Last index (into field) of spline
 
   // Returns the range of splines that has support
@@ -401,8 +401,8 @@ public:
                       unsigned int&  last) const;   // Index of last spline with support for vox
 
   // Returns first index (into spline-kernel that falls within field/image
-  unsigned int Offset(unsigned int   cindx,       // Index of coefficient 
-		      unsigned int   isz) const;  // Image/field-size 
+  unsigned int Offset(unsigned int   cindx,       // Index of coefficient
+		      unsigned int   isz) const;  // Image/field-size
 
   // Returns the rance of spline/coefficient indicies that overlap with *this
   // Note that range is really first -- (last-1)
@@ -410,7 +410,7 @@ public:
                                  unsigned int   cindx,       // Index of coefficient/spline
                                  unsigned int   isz,         // Size of image/field
                                  // Output
-                                 unsigned int&  first,       // First coefficient/spline with overlap 
+                                 unsigned int&  first,       // First coefficient/spline with overlap
                                  unsigned int&  last) const; // Last coefficient/spline with overlap
 
   bool RangeOfOverlappingSplines(// Input
@@ -418,7 +418,7 @@ public:
                                  unsigned int          isz,         // Size of image/field
                                  const Spline1D<T>&    sp2,         // Type of spline that we want to know overlap with
                                  // Output
-                                 unsigned int&         first,       // First coefficient/spline with overlap 
+                                 unsigned int&         first,       // First coefficient/spline with overlap
                                  unsigned int&         last) const; // Last coefficient/spline with overlap
 
   // Returns the value of spline given by cindx at voxel vox
@@ -448,7 +448,7 @@ public:
   const T* Kernel() const {return(_sp);}
   NEWMAT::ReturnMatrix AsNewmat() const;
 
-  // Functions for generating/zooming 1D fields 
+  // Functions for generating/zooming 1D fields
   NEWMAT::ReturnMatrix GetAMatrix(unsigned int isz,                    // Image/field size
                                   unsigned int csz=0) const;           // # of splines/coefficients
 
@@ -462,17 +462,17 @@ private:
   unsigned int                 _ksp;
   unsigned int                 _deriv;
   unsigned int                 _n;
-  T                            *_sp;  
+  T                            *_sp;
 
-  unsigned int spline_size(unsigned int order=0, unsigned int ksp=0) 
+  unsigned int spline_size(unsigned int order=0, unsigned int ksp=0)
   {
     if (!order) order = _order;
     if (!ksp) ksp = _ksp;
     if (!(order%2) && ksp%2) {   // If even order (e.g. quadratic splines) and odd knot-spacing
       return((order+1)*ksp);
     }
-    else { 
-      return((order+1)*ksp-1); 
+    else {
+      return((order+1)*ksp-1);
     }
   }
 
@@ -592,7 +592,7 @@ T Spline3D<T>::MulByOther(const std::vector<unsigned int>&  cindx1,
   unsigned int il1 = 0, il2 = 0;            // Last index given cindx1[i] and cindx2[i] in (some) ima of size isz[i]
   unsigned int o1 = 0, o2 = 0;              // Offset into spline kernel for cindx1[i] and cindx2[i] respectively
   T            prod  = static_cast<T>(0.0); // Product
-  
+
   for (unsigned int d=0; d<3; d++) {
     _vsp1D[d].Range(cindx1[d],isz[d],if1,il1);
     o1 = _vsp1D[d].Offset(cindx1[d],isz[d]);
@@ -604,8 +604,8 @@ T Spline3D<T>::MulByOther(const std::vector<unsigned int>&  cindx1,
   }
 
   for (unsigned int k1=f1[2], k2=f2[2]; k1<l1[2]; k1++, k2++) {
-    unsigned int bi1 = k1*KernelSize(1)*KernelSize(0); 
-    unsigned int bi2 = k2*sp2.KernelSize(1)*sp2.KernelSize(0); 
+    unsigned int bi1 = k1*KernelSize(1)*KernelSize(0);
+    unsigned int bi2 = k2*sp2.KernelSize(1)*sp2.KernelSize(0);
     for (unsigned int j1=f1[1], j2=f2[1]; j1<l1[1]; j1++, j2++) {
       unsigned int bi12 = bi1 + j1*KernelSize(0);
       unsigned int bi22 = bi2 + j2*sp2.KernelSize(0);
@@ -641,7 +641,7 @@ unsigned int Spline3D<T>::NzMax(const std::vector<unsigned int>&  isz) const
       }
     }
   }
-  return(nzmax);    
+  return(nzmax);
 }
 
 template<class T>
@@ -663,7 +663,7 @@ unsigned int Spline3D<T>::NzMax(const std::vector<unsigned int>&  isz,
       }
     }
   }
-  return(nzmax);    
+  return(nzmax);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -678,7 +678,7 @@ bool Spline3D<T>::RangeOfOverlappingSplines(const std::vector<unsigned int>&  ci
                                             std::vector<unsigned int>&        first,
                                             std::vector<unsigned int>&        last) const
 {
-  for (unsigned int i=0; i<3; i++) { 
+  for (unsigned int i=0; i<3; i++) {
     if (!_vsp1D[i].RangeOfOverlappingSplines(cindx[i],isz[i],first[i],last[i])) return(false);
   }
   return(true);
@@ -689,9 +689,9 @@ bool Spline3D<T>::RangeOfOverlappingSplines(const std::vector<unsigned int>&  ci
                                             const std::vector<unsigned int>&  isz,
                                             const Spline3D<T>&                sp2,
                                             std::vector<unsigned int>&        first,
-                                            std::vector<unsigned int>&        last) const  
+                                            std::vector<unsigned int>&        last) const
 {
-  for (unsigned int i=0; i<3; i++) { 
+  for (unsigned int i=0; i<3; i++) {
     if (!_vsp1D[i].RangeOfOverlappingSplines(cindx[i],isz[i],sp2._vsp1D[i],first[i],last[i])) return(false);
   }
   return(true);
@@ -726,7 +726,7 @@ void Spline3D<T>::Premul(const std::vector<unsigned int>&  cindx,      // Index 
       }
     }
   }
-  _premul = true;         
+  _premul = true;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -753,7 +753,7 @@ void Spline3D<T>::common_construction(unsigned int order, const std::vector<unsi
     }
   }
   _sp3D = new T[size];
-  memcpy(_sp3D,_osp3D,TotalKernelSize()*sizeof(T)); 
+  memcpy(_sp3D,_osp3D,TotalKernelSize()*sizeof(T));
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -774,7 +774,7 @@ inline bool Spline1D<T>::RangeOfOverlappingSplines(// Input
                                                    unsigned int   cindx,       // Index of coefficient/spline
                                                    unsigned int   isz,         // Size of image/field
                                                    // Output
-                                                   unsigned int&  first,       // First coefficient/spline with overlap 
+                                                   unsigned int&  first,       // First coefficient/spline with overlap
                                                    unsigned int&  last) const  // One past last coefficient/spline with overlap
 {
   if (_ksp==1) {
@@ -795,7 +795,7 @@ bool Spline1D<T>::RangeOfOverlappingSplines(// Input
                                             unsigned int          isz,         // Size of image/field
                                             const Spline1D<T>&    sp2,         // Type of spline that we want to know overlap with
                                             // Output
-                                            unsigned int&         first,       // First coefficient/spline with overlap 
+                                            unsigned int&         first,       // First coefficient/spline with overlap
                                             unsigned int&         last) const  // Last coefficient/spline with overlap
 {
   unsigned int fme, lme;       // First and last index of *this into ima of size isz
@@ -804,7 +804,7 @@ bool Spline1D<T>::RangeOfOverlappingSplines(// Input
 
   Range(cindx,isz,fme,lme);
   // cout << "Range is " << fme << " -- " << lme << endl;
-  ifirst = -1; 
+  ifirst = -1;
   for (unsigned int i=0; i<sp2.NCoef(isz); i++) {
     sp2.Range(i,isz,fsp2,lsp2);
     // cout << "sp2.Range is " << fsp2 << " -- " << lsp2 << endl;
@@ -823,14 +823,14 @@ bool Spline1D<T>::RangeOfOverlappingSplines(// Input
     return(false);
   }
   else {
-    first = static_cast<unsigned int>(ifirst);   
+    first = static_cast<unsigned int>(ifirst);
     return(true);
   }
 }
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the first and (one past) last index into a zero-offset 
+// Returns the first and (one past) last index into a zero-offset
 // field for the spline with index cindx.
 //
 /////////////////////////////////////////////////////////////////////
@@ -840,7 +840,7 @@ inline void Spline1D<T>::Range(// Input
                                unsigned int   cindx,       // Index of coefficient
                                unsigned int   isz,         // Size of image/field
                                // Output
-                               unsigned int&  first,       // First index (into field) of spline 
+                               unsigned int&  first,       // First index (into field) of spline
                                unsigned int&  last) const  // One past last index (into field) of spline
 {
   switch(_order) {
@@ -861,13 +861,13 @@ inline void Spline1D<T>::Range(// Input
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the first and (one past) last coefficient/spline index 
+// Returns the first and (one past) last coefficient/spline index
 // that has support for voxel vox.
 //
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-inline void Spline1D<T>::RangeOfSplines(// Input 
+inline void Spline1D<T>::RangeOfSplines(// Input
                                         double         vox,           // Voxel index (can be non-integer)
                                         unsigned int   csz,           // Coefficient matrix size
                                         // Output
@@ -882,13 +882,13 @@ inline void Spline1D<T>::RangeOfSplines(// Input
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the offset (in the field, zero-offset) for the center 
-// (middle) element of the specified spline. 
+// Returns the offset (in the field, zero-offset) for the center
+// (middle) element of the specified spline.
 //
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-inline int Spline1D<T>::OffsetIntoField(unsigned int cindx) const   
+inline int Spline1D<T>::OffsetIntoField(unsigned int cindx) const
 {
   int oif = 0;
   if (_ksp == 1) oif = cindx*_ksp;
@@ -898,14 +898,14 @@ inline int Spline1D<T>::OffsetIntoField(unsigned int cindx) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the offset (in the spline) for the first 
+// Returns the offset (in the spline) for the first
 // element of the spline that falls within the field.
 //
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-inline unsigned int Spline1D<T>::Offset(unsigned int   cindx,       // Index of coefficient 
-					unsigned int   isz) const   // Image/field-size 
+inline unsigned int Spline1D<T>::Offset(unsigned int   cindx,       // Index of coefficient
+					unsigned int   isz) const   // Image/field-size
 {
   unsigned int os=0;
   switch(_order) {
@@ -942,7 +942,7 @@ NEWMAT::ReturnMatrix Spline1D<T>::AsNewmat() const
 //
 // Returns the "full" FOV (int # of voxels) for csz # of splines.
 // With "full" I mean all those voxels for which there is a non-zero
-// representation of any spline. 
+// representation of any spline.
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -954,7 +954,7 @@ unsigned int Spline1D<T>::FullFOV(unsigned int csz) const
   }
   else {  // If kernel size even # of voxels
     return((csz-1) * KnotSpacing() + 1 + KernelSize());
-  } 
+  }
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -962,7 +962,7 @@ unsigned int Spline1D<T>::FullFOV(unsigned int csz) const
 // Returns the smallest number of coefficients/splines neccesary
 // to completely specify a 1D spline function over the range 1-isz
 // (or 0-(isz-1) if you prefer).
-// Quite infuriatingly I am using a value that is sometimes 
+// Quite infuriatingly I am using a value that is sometimes
 // non-optimal for _order=3. This is in order to ensure backwards
 // compatibilty of some applications. The "correct" value is that
 // which is given in the else branch.
@@ -988,22 +988,22 @@ unsigned int Spline1D<T>::NCoef(unsigned int isz) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns matrix M that allows you to map the coefficients for a 
+// Returns matrix M that allows you to map the coefficients for a
 // 1D spline function from one knot-spacing to another. It is intended
 // for use in zooming (in and out) splinefields. Let us say we have
 // a spline sp1 and a set of coefficients c1 giving a 1D function
 // over a range 1-64 through f = sp1.A(64)*c1; Let us further say
 // that we have another spline (with a different knot-spacing) sp2
-// and that we want to find the coefficients c2 such that 
+// and that we want to find the coefficients c2 such that
 // f = sp2.A(64)*c2; We can then find c2 from c2 = sp2.M(sp1,64)*c1;
 // If sp2.KnotSpacing()<=sp1.KnotSpacing() the result will be "exact",
-// i.e. f is identical. If sp2.KnotSpacing()>sp1.KnotSpacing() the 
+// i.e. f is identical. If sp2.KnotSpacing()>sp1.KnotSpacing() the
 // result is optimal in a least-squares sense.
 //
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-NEWMAT::ReturnMatrix Spline1D<T>::GetMMatrix(const Spline1D<T>&  s, 
+NEWMAT::ReturnMatrix Spline1D<T>::GetMMatrix(const Spline1D<T>&  s,
                                              unsigned int        isz,
                                              unsigned int        csz1,
                                              unsigned int        csz2) const
@@ -1045,13 +1045,13 @@ NEWMAT::ReturnMatrix Spline1D<T>::GetAMatrix(unsigned int isz,
     }
   }
   A.Release();
-  return(A); 
+  return(A);
 }
 
 
 /*
 template<class T>
-NEWMAT::ReturnMatrix Spline1D<T>::GetAMatrix(unsigned int isz, 
+NEWMAT::ReturnMatrix Spline1D<T>::GetAMatrix(unsigned int isz,
                                              unsigned int csz) const
 {
   if (!csz) csz = NCoef(isz);
@@ -1076,7 +1076,7 @@ NEWMAT::ReturnMatrix Spline1D<T>::GetAMatrix(unsigned int isz,
     }
   }
   A.Release();
-  return(A);    
+  return(A);
 }
 */
 
@@ -1084,7 +1084,7 @@ NEWMAT::ReturnMatrix Spline1D<T>::GetAMatrix(unsigned int isz,
 //
 // Internal (private) function that returns the value of a spline
 // for the abscissa x. x should be in units of knot-spacings from
-// the centre of the spline. 
+// the centre of the spline.
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -1162,7 +1162,7 @@ T Spline1D<T>::kernel_value(double x, unsigned int order, unsigned int ksp, unsi
 
 /////////////////////////////////////////////////////////////////////
 //
-// Internal (private) function that is used to calculate and 
+// Internal (private) function that is used to calculate and
 // store the spline function on a regular grid.
 //
 /////////////////////////////////////////////////////////////////////
@@ -1181,12 +1181,12 @@ T* Spline1D<T>::spline_kernel(unsigned int order, unsigned int ksp, unsigned int
     double x = static_cast<double>(i-coa)/static_cast<double>(ksp);
     tsp[i] = kernel_value(x,order,ksp,deriv);
   }
-  return(tsp);    
+  return(tsp);
 }
 
 /////////////////////////////////////////////////////////////////////
 //
-// Obsolete Internal (private) function that used to calculate 
+// Obsolete Internal (private) function that used to calculate
 // and store the spline function on a regular grid.
 //
 /////////////////////////////////////////////////////////////////////
@@ -1210,9 +1210,9 @@ T* Spline1D<T>::spline_kernel(unsigned int order, unsigned int ksp, unsigned int
       unsigned int coffs = spline_size(order,ksp) / 2;  // Deliberate truncation
       for (unsigned int i=0; i<coffs+1; i++) {
 	double tmp = double(i) / double(ksp);
-	switch (deriv) { 
+	switch (deriv) {
 	case 0:
-	  if (tmp <= 0.5) tsp[coffs+i] = 0.75 - tmp*tmp; 
+	  if (tmp <= 0.5) tsp[coffs+i] = 0.75 - tmp*tmp;
 	  else if (tmp < 1.5) tsp[coffs+i] = 0.5 * (1.5-tmp) * (1.5-tmp);
 	  if (i) tsp[coffs-i] = tsp[coffs+i];
 	  break;
@@ -1222,7 +1222,7 @@ T* Spline1D<T>::spline_kernel(unsigned int order, unsigned int ksp, unsigned int
 	  if (i) tsp[coffs-i] = -tsp[coffs+i];
 	  break;
 	case 2:
-          if (fabs(tmp-1.5) < 1e-6) tsp[coffs+1] = 0.5 / double(ksp*ksp);    // If smack on "edge" discontinuity 
+          if (fabs(tmp-1.5) < 1e-6) tsp[coffs+1] = 0.5 / double(ksp*ksp);    // If smack on "edge" discontinuity
 	  else if (fabs(tmp-0.5) < 1e-6) tsp[coffs+i] = -0.5 / double(ksp*ksp);   // If smack on "inner" discontinuity
 	  else if (tmp < 0.5) tsp[coffs+i] = - 2.0 / double(ksp*ksp);
 	  else if (tmp < 1.5) tsp[coffs+i] = 1.0 / double(ksp*ksp);

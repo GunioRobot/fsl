@@ -25,7 +25,7 @@ namespace MISCMATHS {
   using std::exp;
   using std::log;
 
-  bool estquadmin(float &xnew, float x1, float xmid, float x2, 
+  bool estquadmin(float &xnew, float x1, float xmid, float x2,
 		   float y1, float ymid, float y2)
   {
     // Finds the estimated quadratic minimum's position
@@ -61,7 +61,7 @@ namespace MISCMATHS {
     }
     return xnew;
   }
-  
+
 
 
   float nextpt(float x1, float xmid, float x2, float y1, float ymid, float y2)
@@ -79,10 +79,10 @@ namespace MISCMATHS {
     return xnew;
   }
 
-      
 
-  void findinitialbound(float &x1, float &xmid, float &x2, 
-			float &y1, float &ymid, float &y2, 
+
+  void findinitialbound(float &x1, float &xmid, float &x2,
+			float &y1, float &ymid, float &y2,
 			float (*func)(const ColumnVector &),
 			const ColumnVector &unitdir, const ColumnVector &pt)
   {
@@ -106,15 +106,15 @@ namespace MISCMATHS {
     y2 = (*func)(x2*unitdir + pt);
 
     while (ymid > y2) {  // note: must maintain y1 >= ymid
-	
-      // cout << "    <" << Min(x1,x2) << "," << xmid 
+
+      // cout << "    <" << Min(x1,x2) << "," << xmid
       //   << "," << Max(x1,x2) << ">" << endl;
       maxx2 = xmid + maxextrap*(x2 - xmid);
       quadok = estquadmin(newx2,x1,xmid,x2,y1,ymid,y2);
       if ((!quadok) || ((newx2 - x1)*dir<0) || ((newx2 - maxx2)*dir>0)) {
 	newx2 = xmid + extrapolationfactor*(x2-x1);
       }
-      
+
       newy2 = (*func)(newx2*unitdir + pt);
 
       if ((newx2 - xmid)*(newx2 - x1)<0) {  // newx2 is between x1 and xmid
@@ -138,19 +138,19 @@ namespace MISCMATHS {
 	  x2 = newx2;  y2 = newy2;
 	}
       }
-	
+
     }
 
     if ( (y2<ymid) || (y1<ymid) ) {
       cerr << "findinitialbound failed to bracket: current triplet is" << endl;
     }
   }
-  
 
-  float optimise1d(ColumnVector &pt, const ColumnVector dir, 
-		  const ColumnVector tol, int &iterations_done, 
+
+  float optimise1d(ColumnVector &pt, const ColumnVector dir,
+		  const ColumnVector tol, int &iterations_done,
 		  float (*func)(const ColumnVector &), int max_iter,
-		  float init_value, float boundguess) 
+		  float init_value, float boundguess)
   {
     // Golden Search Routine
     // Must pass in the direction vector in N-space (dir), the initial
@@ -244,9 +244,9 @@ namespace MISCMATHS {
 
 
 
-  
-  float optimise(ColumnVector &pt, int numopt, const ColumnVector &tol, 
-		 float (*func)(const ColumnVector &), int &iterations_done, 
+
+  float optimise(ColumnVector &pt, int numopt, const ColumnVector &tol,
+		 float (*func)(const ColumnVector &), int &iterations_done,
 		 int max_iter, const ColumnVector& boundguess)
   {
     // Calculate dot product of dir by tol

@@ -1,10 +1,10 @@
-# This file is a Tcl script to test out the procedures in tkMacFont.c. 
+# This file is a Tcl script to test out the procedures in tkMacFont.c.
 # It is organized in the standard fashion for Tcl tests.
 #
 # Some of these tests are visually oriented and cannot be checked
 # programmatically (such as "does an underlined font appear to be
 # underlined?"); these tests attempt to exercise the code in question,
-# but there are no results that can be checked.  
+# but there are no results that can be checked.
 #
 # Copyright (c) 1996 Sun Microsystems, Inc.
 # Copyright (c) 1998-1999 by Scriptics Corporation.
@@ -90,7 +90,7 @@ test macFont-3.6 {TkpGetFontFromAttributes: Helvetica fonts} {macOnly} {
 } {Geneva Helvetica Helvetica}
 test macFont-3.7 {TkpGetFontFromAttributes: try aliases} {macOnly} {
     font actual {arial 10} -family
-} {Helvetica}    
+} {Helvetica}
 test macFont-3.8 {TkpGetFontFromAttributes: try fallbacks} {macOnly} {
     font actual {{ms sans serif} 10} -family
 } {Chicago}
@@ -129,10 +129,10 @@ test macFont-5.1 {TkpGetFontFamilies} {macOnly} {
 } {1}
 
 test macFont-6.1 {TkpGetSubFonts} {testfont gothic macOnly} {
-    .b.l config -text "abc\u4e4e" 
+    .b.l config -text "abc\u4e4e"
     update
     set x [testfont subfonts $fixed]
-} "Monaco [font actual $gothic -family]"    
+} "Monaco [font actual $gothic -family]"
 
 test macFont-7.1 {Tk_MeasureChars: unbounded right margin} {macOnly} {
     .b.l config -wrap 0 -text "000000"
@@ -235,7 +235,7 @@ test macFont-7.27 {Tk_MeasureChars: rest != NULL in first segment} {gothic macOn
     getsize
 } "[expr $ax*5] [expr $ay*3]"
 test macFont-7.28 {Tk_MeasureChars: rest != NULL in next segment} {gothic macOnly} {
-    # even some of the "0"s would fit after \u4e4d, they should all wrap to next line.  
+    # even some of the "0"s would fit after \u4e4d, they should all wrap to next line.
     .b.l config -wrap [expr $ax*8] -text "\u4e4d\u4e4d000000\u4e4e\u4e4f00"
     getsize
 } "[expr $ax*6+$mx] [expr $ay*3]"

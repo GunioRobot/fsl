@@ -1,4 +1,4 @@
-/* 
+/*
  * tkTextTag.c --
  *
  *	This module implements the "tag" subcommand of the widget command
@@ -246,11 +246,11 @@ TkTextTagCmd(textPtr, interp, argc, argv)
 	    }
 	} else if (argc == 5) {
 	    CONST char *command;
-    
+
 	    command = Tk_GetBinding(interp, textPtr->bindingTable,
 		    (ClientData) tagPtr, argv[4]);
 	    if (command == NULL) {
-		CONST char *string = Tcl_GetStringResult(interp); 
+		CONST char *string = Tcl_GetStringResult(interp);
 
 		/*
 		 * Ignore missing binding errors.  This is a special hack
@@ -502,7 +502,7 @@ TkTextTagCmd(textPtr, interp, argc, argv)
 		Tk_DeleteAllBindings(textPtr->bindingTable,
 			(ClientData) tagPtr);
 	    }
-	
+
 	    /*
 	     * Update the tag priorities to reflect the deletion of this tag.
 	     */
@@ -627,7 +627,7 @@ TkTextTagCmd(textPtr, interp, argc, argv)
 	     * skip to the end of this tagged range.
 	     */
 
-	    for (segPtr = index1.linePtr->segPtr, offset = index1.byteIndex; 
+	    for (segPtr = index1.linePtr->segPtr, offset = index1.byteIndex;
 		    offset >= 0;
 		    offset -= segPtr->size, segPtr = segPtr->nextPtr) {
 		if ((offset == 0) && (segPtr->typePtr == &tkTextToggleOnType)

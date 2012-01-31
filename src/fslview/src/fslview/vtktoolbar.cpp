@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -17,8 +17,8 @@
 
 #include <qspinbox.h>
 
-VTKToolbar::VTKToolbar(QWidget *parent, VTKProperties& p): 
-  VTKToolbarBase(parent), m_props(p) 
+VTKToolbar::VTKToolbar(QWidget *parent, VTKProperties& p):
+  VTKToolbarBase(parent), m_props(p)
 {
   m_threshold->setValue(m_props.inqLowerThreshold());
 }
@@ -26,7 +26,7 @@ VTKToolbar::VTKToolbar(QWidget *parent, VTKProperties& p):
 void VTKToolbar::thresholdValueChanged(int v)
 {
   m_props.setLowerThreshold(v);
-}  
+}
 
 void VTKToolbar::clippingStateChanged(int state)
 {

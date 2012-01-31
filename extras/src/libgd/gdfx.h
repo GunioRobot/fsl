@@ -7,7 +7,7 @@ extern "C" {
 
 #include "gd.h"
 
-/* im MUST be square, but can have any size. Returns a new image 
+/* im MUST be square, but can have any size. Returns a new image
 	of width and height radius * 2, in which the X axis of
 	the original has been remapped to theta (angle) and the Y axis
 	of the original has been remapped to rho (distance from center).
@@ -32,11 +32,11 @@ extern "C" {
 	the size of the text is determined by radius, textRadius,
 	and fillPortion, you should pass a point size that
 	'hints' appropriately -- if you know the text will be
-	large, pass a large point size such as 24.0 to get the 
+	large, pass a large point size such as 24.0 to get the
 	best results. 'fgcolor' can be any color, and may have
-	an alpha component, do blending, etc. 
+	an alpha component, do blending, etc.
 
-	Returns 0 on success, or an error string. */	
+	Returns 0 on success, or an error string. */
 
 BGD_DECLARE(char *) gdImageStringFTCircle(
 	gdImagePtr im,
@@ -51,7 +51,7 @@ BGD_DECLARE(char *) gdImageStringFTCircle(
 	char *bottom,
 	int fgcolor);
 
- /* 2.0.16: 
+ /* 2.0.16:
   * Sharpen function added on 2003-11-19
   * by Paul Troughton (paul<dot>troughton<at>ieee<dot>org)
   * Simple 3x3 convolution kernel

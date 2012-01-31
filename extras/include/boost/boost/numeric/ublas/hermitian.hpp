@@ -110,7 +110,7 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        
+
         // Comparison
         template<class D>
         BOOST_UBLAS_INLINE

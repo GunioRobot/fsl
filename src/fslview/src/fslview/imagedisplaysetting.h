@@ -18,19 +18,19 @@
 #include "storage/image.h"
 #include "lookuptable.h"
 #include "bricon.h"
-  
+
 typedef enum {None, Lines, RGB, LinesRGB} DtiDisplay;
 
-class ImageDisplaySetting  
+class ImageDisplaySetting
 {
 public:
   typedef boost::shared_ptr< ImageDisplaySetting > Handle;
   static Handle create(Image::Handle image, LookUpTable::Handle lut,float trans = 0.5, bool visible = true);
-  
+
   void  setTransparency(float trans);
   float inqTransparency() const;
 
-  void setVisibility(bool visible); 
+  void setVisibility(bool visible);
   bool inqVisibility() const;
 
   void                setLookUpTable(LookUpTable::Handle);
@@ -64,13 +64,13 @@ public:
 private:
   ImageDisplaySetting(Image::Handle image, LookUpTable::Handle lut,
                       float trans, bool visible);
-  ImageDisplaySetting(BriCon::Handle bricon, 
+  ImageDisplaySetting(BriCon::Handle bricon,
 		      LookUpTable::Handle lut, LookUpTable::Handle slut,
                       float trans, bool visible,
                       int dti, Image::Handle mod,
                       bool transMod, float modTransVal, int vol=0);
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

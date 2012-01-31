@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -78,8 +78,8 @@ using namespace Utilities;
 string title="dwifit\nCopyright(c) 2002, FSL";
 string examples="dwifit -i <dwivolumes> -m <brainmask> -o <diffusionvol> -b <bmatrix> [options]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -138,7 +138,7 @@ int do_dwifit()
     cerr << "WARNING:: near zero noise estimate - using 1 instead" << endl;
     invnoise2est = 1.0;
   }
-  if (verbose.value()) { 
+  if (verbose.value()) {
     cout << "Inverse noise is " << invnoise2est.t() << endl;
   }
 
@@ -154,13 +154,13 @@ int do_dwifit()
       cerr << "Error in converting image series to matrix form!" << endl;
       exit(-1);
     }
-    
+
     // convert all values to log() and demean
     if (verbose.value()) { cout << "Taking logs of data" << endl; }
     logY=log(Y);
     // estimate noise for each input image
-    
-    
+
+
     // read in b value matrix and convert to design matrix, X
     Matrix X;
     if (!designmatrix.set()) {
@@ -177,7 +177,7 @@ int do_dwifit()
 	exit(-1);
       }
       X.ReSize(bvals.Nrows(),7);
-      // set up rows as: B_11 B_22 B_33 2*B_12 2*B_13 2*B_23 1 
+      // set up rows as: B_11 B_22 B_33 2*B_12 2*B_13 2*B_23 1
       //    where B_ij = b.g_i.g_j     st. log(S) = log(S0) - sum_ij B_ij D_ij
       // NB: last column models the constant log(S0) component
       for (int bv=1; bv<=bvals.Nrows(); bv++) {
@@ -202,10 +202,10 @@ int do_dwifit()
 	exit(-1);
       }
     }
-    
+
     if (verbose.value()) { cout << "Design matrix = " << endl << X << endl; }
     nparams=X.Ncols();
-    
+
     // set up the matrices
     Matrix W(ntime,ntime), XtW(ntime,ntime), beta(nparams,1);
     outmat.ReSize(nparams,nvox);
@@ -214,11 +214,11 @@ int do_dwifit()
     for (int n=1; n<=nvox; n++) {
       // set up weighting matrix
       W = 0.0;
-      for (int m=1; m<=ntime; m++) { 
+      for (int m=1; m<=ntime; m++) {
 	if (noweight.value()) {
 	  W(m,m) = 1.0;
 	} else {
-	  W(m,m) = Sqr(Y(m,n)) * invnoise2est(m); 
+	  W(m,m) = Sqr(Y(m,n)) * invnoise2est(m);
 	}
       }
       // calculate fit (pseudo-inverse method)
@@ -231,9 +231,9 @@ int do_dwifit()
       outmat.SubMatrix(1,nparams,n,n)=beta;
       if (verbose.value()) { cout << "."; }
     }
-    
+
   } // end scope for matrices
-  
+
   if (verbose.value()) { cout << endl << "Finished Calculations" << endl; }
 
   volume4D<float> outvol(invol.xsize(),invol.ysize(),invol.zsize(),nparams);
@@ -259,7 +259,7 @@ int main(int argc,char *argv[])
     options.add(noweight);
     options.add(verbose);
     options.add(help);
-    
+
     options.parse_command_line(argc, argv);
 
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -267,14 +267,14 @@ int main(int argc,char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   return do_dwifit();
 }

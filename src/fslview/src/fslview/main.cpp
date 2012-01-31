@@ -6,10 +6,10 @@
 
 /*  CCOPYRIGHT */
 
-#if defined(WIN32) 
+#if defined(WIN32)
 #pragma warning (disable:4786)
 #endif
- 
+
 //#include "qwindowsstyle.h"
 
 #include "version.h"
@@ -58,8 +58,8 @@ int main( int argc, char **argv )
 {
   using namespace Utilities;
 
-  Option<bool> verbose(string("-V,--verbose"), false, 
-		       string("switch on diagnostic messages"), 
+  Option<bool> verbose(string("-V,--verbose"), false,
+		       string("switch on diagnostic messages"),
 		       false, no_argument);
   Option<bool> help(string("-h,--help"), false,
 		    string("display this message"),
@@ -67,22 +67,22 @@ int main( int argc, char **argv )
   Option< std::vector<string> > mode(string("-m,--mode"), std::vector<string>(),
 				     string("Initial viewer mode. Comma separated list of: 3d; single, ortho; lightbox"), false,
 				     requires_argument);
-  
+
   string title("fslview ("+string(Version)+"."+string(Release)+")\n\nCopyright(c) 2005, University of Oxford\nDave Flitney");
   string usage("fslview [-m 3d|ortho|lightbox] <baseimage> [-l lutname] [-b low,hi]"
 	       "\n\t[ <overlay> [-l lutname] [-b low,hi] ] ..."
 	       "\nfslview -m ortho,lightbox filtered_func_data thresh_zstat1 -t 0.5 thresh_zstat2 -l \"Cool\" -t 0.5");
-  
+
   OptionParser options(title, usage);
   options.add(verbose);
   options.add(help);
   options.add(mode);
 
   OptionParser imageOptions("Per-image options", "image [-l GreyScale] [-t 0.1] [-b 2.3,6]");
-  
+
   try {
     QApplication::setColorSpec( QApplication::CustomColor );
-    QApplication app(argc,argv);			
+    QApplication app(argc,argv);
 
    //OverlayOptionList overlays;
     ApplicationOptions appOpts;
@@ -92,16 +92,16 @@ int main( int argc, char **argv )
       Option<string> lutname(string("-l,--lut"), string("Unset"),
 			     string("Lookup table name. As per GUI, one of: Greyscale;"
 				    "\n\t\t\t\"Red-Yellow\"; \"Blue-Lightblue\"; Red; Green;"
-				    "\n\t\t\tBlue; Yellow; Pink; Hot; Cool; Copper, etc."), 
+				    "\n\t\t\tBlue; Yellow; Pink; Hot; Cool; Copper, etc."),
 			     false, requires_argument);
-      Option<float> transparency(string("-t,--trans"), float(0.0), 
-				 string("Initial transparency, e.g., 0.2"), 
+      Option<float> transparency(string("-t,--trans"), float(0.0),
+				 string("Initial transparency, e.g., 0.2"),
 				 false, requires_argument);
-      Option< std::pair<float,float> > ibricon(string("-b,--bricon"), std::pair<float,float>(0.0,0.0), 
-					       string("Initial bricon range, e.g., 2.3,6"), 
+      Option< std::pair<float,float> > ibricon(string("-b,--bricon"), std::pair<float,float>(0.0,0.0),
+					       string("Initial bricon range, e.g., 2.3,6"),
 					       false, requires_argument);
-  
-  
+
+
       imageOptions.add(lutname);
       imageOptions.add(ibricon);
       imageOptions.add(transparency);
@@ -125,26 +125,26 @@ int main( int argc, char **argv )
     Option<string> lutname(string("-l,--lut"), string("Unset"),
 			   string("Lookup table name. As per GUI, one of: Greyscale;"
 				  "\n\t\t\t\"Red-Yellow\"; \"Blue-Lightblue\"; Red; Green;"
-				  "\n\t\t\tBlue; Yellow; Pink; Hot; Cool; Copper, etc."), 
+				  "\n\t\t\tBlue; Yellow; Pink; Hot; Cool; Copper, etc."),
 			   false, requires_argument);
-    Option<float> transparency(string("-t,--trans"), float(0.0), 
-			       string("Initial transparency, e.g., 0.2"), 
+    Option<float> transparency(string("-t,--trans"), float(0.0),
+			       string("Initial transparency, e.g., 0.2"),
 			       false, requires_argument);
-    Option< std::pair<float,float> > ibricon(string("-b,--bricon"), std::pair<float,float>(0.0,0.0), 
-					     string("Initial bricon range, e.g., 2.3,6"), 
+    Option< std::pair<float,float> > ibricon(string("-b,--bricon"), std::pair<float,float>(0.0,0.0),
+					     string("Initial bricon range, e.g., 2.3,6"),
 					     false, requires_argument);
-  
-  
+
+
     imageOptions.add(lutname);
     imageOptions.add(ibricon);
     imageOptions.add(transparency);
-    
+
     if(help.value() || !options.check_compulsory_arguments()) {
       options.usage();
       imageOptions.brief_usage();
     } else {
       app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
-  
+
       SplashScreen *s = new SplashScreen(0, appOpts);
       s->show();
 

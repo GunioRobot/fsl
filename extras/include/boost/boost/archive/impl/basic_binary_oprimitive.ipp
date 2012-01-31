@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_oprimitive.ipp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,8 +14,8 @@
 
 #include <cstring>
 #if defined(BOOST_NO_STDC_NAMESPACE) && ! defined(__LIBCOMO__)
-namespace std{ 
-    using ::strlen; 
+namespace std{
+    using ::strlen;
 } // namespace std
 #endif
 
@@ -97,9 +97,9 @@ basic_binary_oprimitive<Archive, OStream>::save(const std::wstring &ws)
 template<class Archive, class OStream>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_binary_oprimitive<Archive, OStream>::basic_binary_oprimitive(
-    OStream &os_, 
+    OStream &os_,
     bool no_codecvt
-) : 
+) :
     os(os_),
     archive_locale(NULL),
     locale_saver(os)
@@ -107,7 +107,7 @@ basic_binary_oprimitive<Archive, OStream>::basic_binary_oprimitive(
     if(! no_codecvt){
         archive_locale.reset(
             add_facet(
-                std::locale::classic(), 
+                std::locale::classic(),
                 new codecvt_null<BOOST_DEDUCED_TYPENAME OStream::char_type>
             )
         );

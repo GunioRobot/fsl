@@ -16,10 +16,10 @@ LIBS=-lnewimage -lmiscmaths -lfslio -lnewmat -lutils -lprob -lniftiio -lznz -lm 
 
 BOBJS=b0calc.o
 SOBJS=spharm_rm.o
-IOBJS=possum.o possumfns.o 
+IOBJS=possum.o possumfns.o
 SIOBJS=signal2image.o
 PSOBJS=test_possum.o
-AOBJS=pulse.o 
+AOBJS=pulse.o
 BSOBJS=b0sim.o
 SNOBJS=systemnoise.o
 PAROBJS=possum_sum.o
@@ -33,31 +33,31 @@ MFILES=read_pulse.m write_pulse.m
 all: ${XFILES} matlabfiles
 
 b0calc: ${BOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BOBJS} ${LIBS}
 
 spharm_rm: ${SOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SOBJS} ${LIBS}
 
 possum:   ${IOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${IOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${IOBJS} ${LIBS}
 
 signal2image:   ${SIOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SIOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SIOBJS} ${LIBS}
 
 test_possum:   ${PSOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PSOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PSOBJS} ${LIBS}
 
 pulse:   ${AOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${AOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${AOBJS} ${LIBS}
 
 b0sim:	${BSOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BSOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BSOBJS} ${LIBS}
 
 systemnoise:	${SNOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SNOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${SNOBJS} ${LIBS}
 
 possum_sum: ${PAROBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PAROBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PAROBJS} ${LIBS}
 
 matlabfiles:
 	@if [ ! -d ${DESTDIR}/etc/matlab ] ; then ${MKDIR} -p ${DESTDIR}/etc/matlab ; ${CHMOD} -R g+w ${DESTDIR}/etc ; fi

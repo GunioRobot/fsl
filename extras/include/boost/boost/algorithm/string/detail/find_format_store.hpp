@@ -19,11 +19,11 @@ namespace boost {
 
 //  temporary format and find result storage --------------------------------//
 
-            template< 
+            template<
                 typename ForwardIteratorT,
                 typename FormatterT,
                 typename FormatResultT >
-            class find_format_store : 
+            class find_format_store :
                 public iterator_range<ForwardIteratorT>
             {
             public:
@@ -31,10 +31,10 @@ namespace boost {
                 typedef iterator_range<ForwardIteratorT> base_type;
                 typedef FormatterT  formatter_type;
                 typedef FormatResultT format_result_type;
-                
+
             public:
                 // Construction
-                find_format_store( 
+                find_format_store(
                         const base_type& FindResult,
                         const format_result_type& FormatResult,
                         const formatter_type& Formatter ) :
@@ -48,13 +48,13 @@ namespace boost {
                 {
                     iterator_range<ForwardIteratorT>::operator=(FindResult);
                     m_FormatResult=m_Formatter(FindResult);
-                    
+
                     return *this;
                 }
 
                 // Retrieve format result
                 const format_result_type& format_result()
-                {   
+                {
                     return m_FormatResult;
                 }
 

@@ -21,7 +21,7 @@ public:
 
   int structure() { return m_structure; }
   void structure(int i) { m_structure = i; }
-  
+
   std::string structureName() { return m_structureName; }
   void structureName(std::string name) { m_structureName = name; }
 
@@ -65,7 +65,7 @@ public:
   virtual std::string getDescription(float, float, float) const = 0;
   virtual unsigned int getProbability(unsigned int, float, float, float) const = 0;
   virtual float getAverageProbability(Image::Handle, unsigned int) const = 0;
-  
+
   Cursor::Handle getCursor(const Image::Handle&, int) const;
 
   ConstLabelIterator begin();
@@ -73,11 +73,11 @@ public:
 
   static Handle create(const ImageStore&, const ImageStore&, const std::string&);
   virtual ~Atlas();
- 
+
 protected:
   Atlas(const ImageStore&, const ImageStore&, const std::string&);
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

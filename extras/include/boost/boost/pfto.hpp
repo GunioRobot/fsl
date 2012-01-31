@@ -10,14 +10,14 @@
 // pfto.hpp: workarounds for compilers which have problems supporting
 // Partial Function Template Ordering (PFTO).
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 // PFTO version is used to specify the last argument of certain functions
-// Function it is used to support  compilers that fail to support correct Partial 
+// Function it is used to support  compilers that fail to support correct Partial
 // Template Ordering
 #include <boost/config.hpp>
 
@@ -27,7 +27,7 @@
 // with an int argument.  This first attempts to match functions with an
 // int argument before the default one (with a long argument).  This is
 // known to function with VC 6.0. On other compilers this fails (Borland)
-// or causes other problems (GCC).  note: this 
+// or causes other problems (GCC).  note: this
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     #define BOOST_PFTO long

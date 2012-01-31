@@ -2,7 +2,7 @@
 
 #Frequently Changed Settings
 
-#Correct include directories for freetype, zlib, libpng, XPM, JPEG, etc. 
+#Correct include directories for freetype, zlib, libpng, XPM, JPEG, etc.
 #If your include directories are different, add them here. *Extra*
 #directories that don't happen to exist on your system shouldn't
 #cause an error (if they do, let me know).
@@ -12,12 +12,12 @@ $includeDirs = "-I/usr/include/freetype2 -I/usr/local/include/freetype2 " .
 
 #Typical install locations for freetype, zlib, Xpm and libpng libraries.
 #If yours are somewhere else, other than a standard location
-#such as /lib or /usr/lib, then change this. This line shouldn't hurt 
+#such as /lib or /usr/lib, then change this. This line shouldn't hurt
 #if you don't actually have some of the optional libraries and directories.
 $libDirs = "-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/local/lib";
 
-#If you don't have gcc, get it. If you really must, you can change this; 
-#but if you do, you must specify not only your compiler but options 
+#If you don't have gcc, get it. If you really must, you can change this;
+#but if you do, you must specify not only your compiler but options
 #appropriate for shared library object creation. Just get gcc.
 $compiler = "gcc -fPIC";
 
@@ -74,7 +74,7 @@ if ($os =~ /^(linux|irix|tru64|ultrix|openbsd|netbsd|freebsd)/i) {
 }
 
 print "Shared library link command: $sharedLinkHead $sharedLinkTail\n";
-	
+
 if (&testLibrary("png", "png_create_read_struct (0, 0, 0, 0)", "-lz")) {
 	push @options, "png";
 	print "png library found.\n";
@@ -88,7 +88,7 @@ if (&testLibrary("z", "deflate (0, 0)")) {
 	$zfound = 1;
 } else {
 	print "Warning: zlib library not found, png (which you might want a lot) and\n",
-		"gd2 (which you probably don't need) will not be supported.\n"; 
+		"gd2 (which you probably don't need) will not be supported.\n";
 }
 
 if (&testLibrary("jpeg", "jpeg_set_defaults (0)")) {
@@ -138,7 +138,7 @@ formats were found. This is not a good thing. The library can
 be compiled, but it will not be able to produce PNG or JPEG
 or XPM images. Only a few minor formats can be supported without
 libraries. "make test" will not succeed without libraries; this
-is to be expected. IF YOU ARE NOT SURE THIS IS OK, you should go 
+is to be expected. IF YOU ARE NOT SURE THIS IS OK, you should go
 get libpng, libjpeg and libz now, and install them. Then run
 configure again.
 
@@ -156,11 +156,11 @@ for $o (@options) {
 
 if ($options{"png"}) {
 	$safePrograms = "pngtogd pngtogd2 gdtopng gd2topng gd2copypal gdparttopng webpng";
-} 
- 
+}
+
 if ($options{"freetype"} && $options{"jpeg"}) {
 	$safePrograms .= " annotate";
-} 
+}
 
 @programs = split(/ /, $safePrograms);
 for $p (@programs) {
@@ -176,7 +176,7 @@ LINK_SHARED_HEAD=$sharedLinkHead
 LINK_SHARED_TAIL=$sharedLinkTail
 
 #If the ar command fails on your system, consult the ar manpage
-#for your system. 
+#for your system.
 AR=ar
 
 CFLAGS=-g $oflags
@@ -226,11 +226,11 @@ instructions:
 	\@echo which is required in order to use the included
 	\@echo utility programs, and also includes the utility
 	\@echo programs such as webpng, pngtogd, etc.
-	\@echo 
-	\@echo OPTIONAL third step: type \\'make test\\' to build 
+	\@echo
+	\@echo OPTIONAL third step: type \\'make test\\' to build
 	\@echo the optional test programs. Type \\'make install\\' FIRST.
 	\@echo
-	\@echo IF SHARED LIBRARIES WON\\'T WORK FOR YOU: 
+	\@echo IF SHARED LIBRARIES WON\\'T WORK FOR YOU:
 	\@echo Type \\'make libgd.a\\' to produce a static library,
 	\@echo which you can install manually in /usr/lib.
 
@@ -254,7 +254,7 @@ testac: testac.o
 	\$(CC) testac.o -o testac	\$(LIBDIRS) \$(LIBS)
 
 pngtogd: pngtogd.o
-	\$(CC) pngtogd.o -o pngtogd	\$(LIBDIRS) \$(LIBS) 
+	\$(CC) pngtogd.o -o pngtogd	\$(LIBDIRS) \$(LIBS)
 
 webpng: webpng.o
 	\$(CC) webpng.o -o webpng	\$(LIBDIRS) \$(LIBS)
@@ -296,7 +296,7 @@ LIBOBJS=gd.o gd_gd.o gd_gd2.o gd_io.o gd_io_dp.o \\
 		gd_io_file.o gd_ss.o gd_io_ss.o gd_png.o gd_jpeg.o gdxpm.o \\
 		gdfontt.o gdfonts.o gdfontmb.o gdfontl.o gdfontg.o \\
 		gdtables.o gdft.o gdcache.o gdkanji.o wbmp.o \\
-		gd_wbmp.o gdhelpers.o gd_topal.o 
+		gd_wbmp.o gdhelpers.o gd_topal.o
 
 #Shared library. This should work fine on any ELF platform (Linux, etc.) with
 #GNU ld or something similarly intelligent. To avoid the chicken-and-egg
@@ -310,10 +310,10 @@ libgd.so.\${VERSION}: \${LIBOBJS}
 		\$(INSTALL_LIB)/libgd.so.\${VERSION}
 	-rm \$(INSTALL_LIB)/libgd.so.\${MAJOR_VERSION} 2>/dev/null
 	ln -s \$(INSTALL_LIB)/libgd.so.\${VERSION} \\
-		\$(INSTALL_LIB)/libgd.so.\${MAJOR_VERSION}	
+		\$(INSTALL_LIB)/libgd.so.\${MAJOR_VERSION}
 	-rm \$(INSTALL_LIB)/libgd.so 2>/dev/null
 	ln -s \$(INSTALL_LIB)/libgd.so.\${VERSION} \\
-		\$(INSTALL_LIB)/libgd.so	
+		\$(INSTALL_LIB)/libgd.so
 
 #Static library, if you really need one for some reason.
 libgd.a: \${LIBOBJS}
@@ -395,4 +395,4 @@ EOM
 		return 1;
 	}
 }
-	
+

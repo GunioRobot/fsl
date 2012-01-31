@@ -21,16 +21,16 @@ public:
   static Handle create(OverlayList::Handle);
   bool isDtiLineOverlay();
   ImageData::Handle getDtiLineOverlay();
-  void resetPos();        
+  void resetPos();
   bool currentEmpty();
   void next();
   ImageData::Handle current();
   virtual ~ImageDataStore();
- 
+
 private:
   ImageDataStore(OverlayList::Handle);
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -82,14 +82,14 @@ using namespace NEWIMAGE;
 using namespace MISCMATHS;
 
 namespace Gs {
-    
+
   // Give this class a file containing
   class Gsmanager
     {
     public:
 
       // constructor
-      Gsmanager() : 
+      Gsmanager() :
 	opts(GsOptions::getInstance()),
 	nmaskvoxels(0)
 	{
@@ -108,11 +108,11 @@ namespace Gs {
 
       // Destructor
       virtual ~Gsmanager() {}
- 
+
     private:
 
-      const Gsmanager& operator=(Gsmanager& par);     
-      Gsmanager(Gsmanager& des);      
+      const Gsmanager& operator=(Gsmanager& par);
+      Gsmanager(Gsmanager& des);
 
       void multitfit(const Matrix& x, ColumnVector& m, SymmetricMatrix& covar, float& v, bool fixmean=false) const;
 
@@ -133,10 +133,10 @@ namespace Gs {
       void flame1_contrasts_with_outliers(const ColumnVector& mn, const SymmetricMatrix& covariance, int px, int py, int pz);
       void flame2_contrasts(const Matrix& gamsamples, int px, int py, int pz);
 
-      void t_ols_contrast(const ColumnVector& gammean, const SymmetricMatrix& gamS, const RowVector& tcontrast, float& cope, float& varcope, float& t, float& dof, float& z, int px, int py, int pz);	
+      void t_ols_contrast(const ColumnVector& gammean, const SymmetricMatrix& gamS, const RowVector& tcontrast, float& cope, float& varcope, float& t, float& dof, float& z, int px, int py, int pz);
       void f_ols_contrast(const ColumnVector& gammean, const SymmetricMatrix& gamS, const Matrix& fcontrast, float& f, float& dof1, float& dof2, float& z, int px, int py, int pz);
-	
-	
+
+
       void t_mcmc_contrast(const Matrix& gamsamples, const RowVector& tcontrast, float& cope, float& varcope, float& t, float& dof, float& z, int px, int py, int pz);
       void f_mcmc_contrast(const Matrix& gamsamples, const Matrix& fcontrast, float& f, float& dof1, float& dof2, float& z, int px, int py, int pz);
 
@@ -149,8 +149,8 @@ namespace Gs {
       void init_flame_stage1_inferoutliers();
 
       // functions to perform the different inference approaches
-      void fixed_effects(); 
-      void ols(); 
+      void fixed_effects();
+      void ols();
       void flame_stage1();
       void flame_stage2();
       void do_kmeans(const Matrix& data,vector<int>& z,const int k,Matrix& means);
@@ -158,9 +158,9 @@ namespace Gs {
       vector< pair<float,int> > randomise(const int n);
 
       void regularise_flame2_contrasts();
-     
+
       volume<float> mcmc_mask;
-     
+
       // intermediates
       Design design;
 
@@ -183,7 +183,7 @@ namespace Gs {
       vector<volume<float> > zflame1upperts;
       vector<volume<float> > zflame1lowerts;
       vector<volume<float> > tcopes;
-      vector<volume<float> > tvarcopes;      
+      vector<volume<float> > tvarcopes;
       vector<volume<float> > fs;
       vector<volume<float> > fdof1s;
       vector<volume<float> > fdof2s;
@@ -208,7 +208,7 @@ namespace Gs {
 
   bool compare(const pair<float,int> &r1,const pair<float,int> &r2);
 
-}   
+}
 #endif
 
 

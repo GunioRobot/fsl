@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,7 +91,7 @@ void biggest_from_volumes(vector<string> innames,string oname){
 	ColumnVector index;
 	for(unsigned int i=0;i<innames.size();i++ ){
 	    bum(i+1)=tmpvec[i](x,y,z);
-	} 
+	}
 	bugger=max(bum,index);
 	bool flag=true;
 	if(index.AsScalar()==1){
@@ -101,14 +101,14 @@ void biggest_from_volumes(vector<string> innames,string oname){
 	    if(bum(i)!=0){
 	      flag=true;break;
 	    }
-	      
+
 	  }
 	}
 	if(flag)
 	  output(x,y,z)=(int)index.AsScalar();
 	else
 	  output(x,y,z)=0;
-      }  
+      }
     }
   }
   save_volume(output,oname);
@@ -118,7 +118,7 @@ void biggest_from_volumes(vector<string> innames,string oname){
 ReturnMatrix read_label(const string& labelfile){
   Matrix L;
   ifstream fs(labelfile.c_str());
-  if (!fs) { 
+  if (!fs) {
     cerr << "Could not open label file " << labelfile << endl;
     L.Release();
     return L;
@@ -141,33 +141,33 @@ ReturnMatrix read_label(const string& labelfile){
 	L(r,c) = atof(ss.c_str());
       }
     }
-  
+
   L.Release();
   return L;
 }
 void write_label(const Matrix& L,const string& filename){
   ofstream fs(filename.c_str());
-  if (!fs) { 
+  if (!fs) {
     cerr << "Could not open file " << filename << " for writing" << endl;
     exit(1);
   }
   fs << "##!ascii label , written from FSL414" << endl;
   fs << L.Nrows() << endl;
 
-#ifdef PPC64	
+#ifdef PPC64
   int n=0;
 #endif
   for (int i=1; i<=L.Nrows(); i++) {
     for (int j=1; j<=L.Ncols(); j++) {
       fs << L(i,j) << "  ";
-#ifdef PPC64	
+#ifdef PPC64
       if ((n++ % 50) == 0) fs.flush();
 #endif
     }
     fs << endl;
   }
-  
- 
+
+
   fs.close();
 }
 
@@ -187,7 +187,7 @@ void biggest_from_matrix(vector<string> innames,string oname){
 
   cout << endl << "read label file" << endl;
   Matrix L = read_label(innames[1]);
-  
+
   cout << "number of vertices: " << L.Nrows() << endl;
   cout << "number of columns:  " << L.Ncols() << endl;
 
@@ -210,12 +210,12 @@ void biggest_from_matrix(vector<string> innames,string oname){
     if(Clusters[i].size()>0){
       Matrix C(Clusters[i].size(),5);
       for(unsigned int j=0;j<Clusters[i].size();j++){
-	C.Row(j+1) = L.Row(Clusters[i][j]); 
+	C.Row(j+1) = L.Row(Clusters[i][j]);
       }
       write_label(C,oname+"_"+num2str(i+1)+".label");
     }
   }
-  
+
 }
 
 int main ( int argc, char **argv ){

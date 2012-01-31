@@ -12,7 +12,7 @@ each voxel. This is a very slow process, so bedpost is very processor
 hungry (a typical bedpost run might take around 20hrs for 60
 direction 2.5mm isotropic data!). However, fortunately bedpost
 processes every voxel independently, so it is very easy to
-parallelise.  
+parallelise.
 
 <br><br> In order to parallelise bedpost you need
 multiple processors which can see the same data directory, and which
@@ -43,7 +43,7 @@ machine listed, in one of the following places.<br>
 in this file you need to set your <code>FSLDIR</code> in <code>sh</code> language. e.g.:<br>
 <code>FSLDIR=/usr/local/fsl</code><br>
 <code>export FSLDIR</code><br><br>
- 
+
 NB(1): you may already have this file, and it may set other config
 variables (e.g. <code>FSLMACHINELIST</code> and <code>FSLREMOTECALL</code>). This is absolutely fine, as long as it also sets FSLDIR<br><br>
 NB(2): If you are a <code>csh</code> or <code>tcsh</code> user you may

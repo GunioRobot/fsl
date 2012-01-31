@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -69,7 +69,7 @@ public:
 
     // Public r/w properties
     readwrite_property<std::string>     p_name;                 // name for this test unit
-    readwrite_property<unsigned>        p_timeout;              // timeout for the test unit execution 
+    readwrite_property<unsigned>        p_timeout;              // timeout for the test unit execution
     readwrite_property<counter_t>       p_expected_failures;    // number of expected failured in this test unit
 
 private:
@@ -230,7 +230,7 @@ make_test_case( void (UserTestCase::*test_method )(),
                   const_string tc_name,
                   boost::shared_ptr<UserTestCase> const& user_test_case )
 {
-    return new test_case( ut_detail::normalize_test_case_name( tc_name ), 
+    return new test_case( ut_detail::normalize_test_case_name( tc_name ),
                           ut_detail::user_tc_method_invoker<UserTestCase>( user_test_case, test_method ) );
 }
 
@@ -246,7 +246,7 @@ make_test_case( void (UserTestCase::*test_method )(),
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: unit_test_suite.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

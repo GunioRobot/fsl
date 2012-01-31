@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnix.c --
  *
  *	This file contains procedures that are UNIX/X-specific, and

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacTclCode.r --
  *
  *	This file creates resources from the Tcl code that is
@@ -17,7 +17,7 @@
 
 #define TCL_LIBRARY_RESOURCES 2000
 
-/* 
+/*
  * The mechanisim below loads Tcl source into the resource fork of the
  * application.  The example below creates a TEXT resource named
  * "Init" from the file "init.tcl".  This allows applications to use

@@ -4,11 +4,11 @@ PROJNAME = znzlib
 
 USRINCFLAGS = -I${INC_ZLIB} -DHAVE_ZLIB
 
-LIBS = -lznz -lm -lz 
+LIBS = -lznz -lm -lz
 
 OBJS=znzlib.o
 
-SCRIPTS = 
+SCRIPTS =
 TESTXFILES = testprog
 
 all: libznz.a

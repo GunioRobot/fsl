@@ -1,4 +1,4 @@
-/*  fsl_glm - 
+/*  fsl_glm -
 
     Christian F. Beckmann, FMRIB Image Analysis Group
 
@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -110,7 +110,7 @@ using namespace std;
 		false, requires_argument);
   Option<string> fnseeddata(string("--seeddata"), string(""),
 		string("file name of 4D data file for the seed"),
-		false, requires_argument);		
+		false, requires_argument);
   Option<bool> map_bin(string("--bin"), false,
 		string("        binarise spatial maps prior to calculation of time courses"),
 		false, no_argument);
@@ -122,10 +122,10 @@ using namespace std;
 		false, no_argument);
   Option<int> tc_order(string("--order"), 1,
 		string("        number of Eigenvariates (default 1)"),
-		false, requires_argument);	
+		false, requires_argument);
   Option<bool> abscc(string("--abscc"), false,
 		string("        use maximum absolute value instead of of maximum value of the cross-correlations"),
-		false, no_argument);			
+		false, no_argument);
   Option<bool> out_seeds(string("--out_seeds"), false,
 		string("output seed mask image as <basename>_seeds"),
 		false, no_argument);
@@ -153,11 +153,11 @@ using namespace std;
 //Globals {
 	Matrix data, confounds;
 	volume4D<float> orig_data;
-	volume<float> maskS, maskT; 
+	volume<float> maskS, maskT;
 	int voxels = 0;
 	Matrix seeds, coords;
 	vector<Matrix> ttcs;
-	
+
 	Matrix out1, out2;
 	 /*
 }
@@ -166,7 +166,7 @@ using namespace std;
 
 // Local functions
 void save4D(Matrix what, volume<float>& msk, string fname){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in save4D" << endl;
   volume4D<float> tempVol;
   tempVol.setmatrix(what,msk);
@@ -174,7 +174,7 @@ void save4D(Matrix what, volume<float>& msk, string fname){
 }
 
 void save4D(volume<float>& in, string fname){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in save4D" << endl;
   volume4D<float> tempVol;
   tempVol.addvolume(in);
@@ -182,15 +182,15 @@ void save4D(volume<float>& in, string fname){
 }
 
 ReturnMatrix create_coords(string what){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in create_coords" << endl;
   Matrix res;
   ifstream fs(what.c_str());
-  if (!fs) { 
+  if (!fs) {
 	Matrix tmp(1,3);
 	char *p;
 	char t[1024];
-	const char *discard = ", [];{(})abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*_-=+|\':><./?";	  
+	const char *discard = ", [];{(})abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*_-=+|\':><./?";
 	strcpy(t, what.c_str());
 	p=strtok(t,discard);
 	tmp(1,1) = atoi(p);
@@ -199,7 +199,7 @@ ReturnMatrix create_coords(string what){
 	p=strtok(NULL,discard);
 	tmp(1,3) = atoi(p);
 	res = tmp;
-	
+
 	do{
 	  p=strtok(NULL,discard);
 	  if(p){
@@ -208,9 +208,9 @@ ReturnMatrix create_coords(string what){
 		tmp(1,2) = atoi(p);
 		p=strtok(NULL,discard);
 		tmp(1,3) = atoi(p);
-		res &= tmp;   	
+		res &= tmp;
       }
-    }while(p);			
+    }while(p);
   }else{
     res = read_ascii_matrix(fs);
     fs.close();
@@ -224,23 +224,23 @@ ReturnMatrix create_coords(string what){
  // if(verbose.value())
 //	cout << " Created seed coordinates (size: " << res.Nrows() << " x " << res.Ncols() << ")" << endl;
   res.Release();
-	
-  return res;	
+
+  return res;
 }
 
 void create_mask(string what){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in create_mask" << endl;
-  
+
   coords = create_coords(what);
   maskS = orig_data[0] * 0.0;
   for(int ctr = 1; ctr <= coords.Nrows(); ctr++)
 	maskS(coords(ctr,1),coords(ctr,2),coords(ctr,3)) = 1.0;
   maskS.binarise(1e-8);
-}	
+}
 
 void create_seeds(string what){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in create_seeds" << endl;
 
 
@@ -252,18 +252,18 @@ void create_seeds(string what){
 	  cerr << "ERROR: Seed mask image does not match input image" << endl;
       exit(1);
     }
-  }  
+  }
   else
-    create_mask(what);	
+    create_mask(what);
 
   if(tmp_vol.tsize() > 1 && tmp_vol.tsize() == orig_data.tsize()){
 	maskS *= tmp_vol[0] / tmp_vol.tsize();
 	for(int ctr=1; ctr < tmp_vol.tsize(); ctr++)
-	  maskS += tmp_vol[ctr] * tmp_vol[ctr] / tmp_vol.tsize(); 
+	  maskS += tmp_vol[ctr] * tmp_vol[ctr] / tmp_vol.tsize();
     maskS.binarise(1e-8);
 	seeds = remmean(tmp_vol.matrix(maskS),1);
   }
-  else{    
+  else{
     volume4D<float> tmp_mask;
     tmp_mask.addvolume(maskS);
     maskS.binarise(1e-8);
@@ -275,14 +275,14 @@ void create_seeds(string what){
       read_volume4D(seed_data,fnseeddata.value());
       seeds = remmean(seed_data.matrix(maskS),1);
     }else{
-	  seeds = remmean(orig_data.matrix(maskS),1);	
+	  seeds = remmean(orig_data.matrix(maskS),1);
       if(!map_bin.value()){
-    	Matrix scales = tmp_mask.matrix(maskS);	
+    	Matrix scales = tmp_mask.matrix(maskS);
         seeds = SP(seeds, ones(seeds.Nrows(),1) * scales);
       }
     }
   }
-	
+
   voxels = seeds.Ncols();
 
   if(debug.value()){
@@ -296,10 +296,10 @@ void create_seeds(string what){
 }
 
 ReturnMatrix create_confs(string what){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in create_confs" << endl;
-  
-  Matrix res, tmp;    
+
+  Matrix res, tmp;
   char *p;
   char t[1024];
   const char *discard = ",";
@@ -315,7 +315,7 @@ ReturnMatrix create_confs(string what){
 			cerr << "ERROR: confound matrix" << string(p) << " is of wrong size "<< endl;
 			exit(1);
 		}
-    	res |= remmean(tmp,1);	
+    	res |= remmean(tmp,1);
     }
   }while(p);
 
@@ -326,47 +326,47 @@ ReturnMatrix create_confs(string what){
 }
 
 ReturnMatrix calc_ttc(volume<float>& in){
-	if(debug.value()) 
+	if(debug.value())
 	cerr << "DBG: in calc_ttc" << endl;
-  
+
 	Matrix res, tmp, scales;
-	
+
 	volume<float> tmp1;
 	volume4D<float> tmp2;
 
 	tmp1 = in;
 	tmp1.binarise(1e-8);
 	maskT += tmp1;
-	
-	tmp2.addvolume(in);	
+
+	tmp2.addvolume(in);
 	scales = tmp2.matrix(tmp1);
 	tmp = remmean(orig_data.matrix(tmp1),1);
-	
+
 	if(!map_bin.value())
 		tmp = SP(tmp, ones(tmp.Nrows(),1) * scales);
-	
+
 	if(tc_mean.value())
 		res = mean(tmp,2);
 	else{
 	   	SymmetricMatrix Corr;
 		Corr << tmp * tmp.t() / tmp.Ncols();
 		DiagonalMatrix tmpD;
-	    EigenValues(Corr,tmpD,res);	
-		res = fliplr(res.Columns(res.Ncols()-tc_order.value()+1 , res.Ncols())) * std::sqrt(tmp.Nrows());	
-		
+	    EigenValues(Corr,tmpD,res);
+		res = fliplr(res.Columns(res.Ncols()-tc_order.value()+1 , res.Ncols())) * std::sqrt(tmp.Nrows());
+
 		Matrix res2 = mean(tmp,2);
 
 		if(debug.value())
 			cerr << "DBG: mean size is " << res2.Nrows() << " x " << res2.Ncols() << endl;
 		res2 = res2.Column(1).t() * res.Column(1);
-		
+
 		if((float)res2.AsScalar() < 0){
 			res = -1.0 * res;
 			if(debug.value())
 				cerr << "DBG: flipping first eigenvariates" << endl;
 		}
 	}
-	
+
 	if(debug.value())
 		cerr << "DBG: size is " << res.Nrows() << " x " << res.Ncols() << endl;
 	res.Release();
@@ -374,27 +374,27 @@ ReturnMatrix calc_ttc(volume<float>& in){
 }
 
 void create_target_tcs(){
-	if(debug.value()) 
+	if(debug.value())
 	cerr << "DBG: in create_target_tcs" << endl;
-  
+
 	volume4D<float> tmptarg;
-	read_volume4D(tmptarg,fntarget.value());	
+	read_volume4D(tmptarg,fntarget.value());
     maskT = orig_data[0] * 0.0;
 
 	for(int ctr=0; ctr < tmptarg.tsize(); ctr++){
 	   ttcs.push_back(calc_ttc(tmptarg[ctr]));
-	}	
-	
+	}
+
 	if(debug.value()) {
 		cerr << "DBG: " << ttcs.size() << " target matrices created " << endl;
 	}
 	if(verbose.value())
 	  cout << " Created target mask time courses "  << endl;
-	
+
 }
 
 int setup(){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in setup" << endl;
   if(fsl_imageexists(fnin.value())){ //read data
 	if(verbose.value())
@@ -402,7 +402,7 @@ int setup(){
     read_volume4D(orig_data,fnin.value());
   }
   else{
-	cerr << "ERROR: Invalid input file " << fnin.value() << endl;       
+	cerr << "ERROR: Invalid input file " << fnin.value() << endl;
 	exit(1);
     }
 
@@ -412,7 +412,7 @@ int setup(){
     create_target_tcs();
   else{
    	volume4D<float> tmptarg;
-	read_volume4D(tmptarg,fntarget.value());	
+	read_volume4D(tmptarg,fntarget.value());
 	maskT = tmptarg[0];
 	maskT.binarise(1e-8);
 	data = orig_data.matrix(maskT);
@@ -422,20 +422,20 @@ int setup(){
   if(fnconf.value()>"")
     confounds = create_confs(fnconf.value());
 
-  return 0;	
+  return 0;
 }
 
 ReturnMatrix calc_tcorr(int in){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in calc_tcorr" << endl;
 
 	Matrix res = zeros(1,seeds.Ncols()), partial_conf, targetcol;
-	
+
 	for(int ctr = 0; ctr < (int)ttcs.size(); ctr++)
 	  if(ctr != in){
 	  	if(partial_conf.Storage() == 0)
 	    	partial_conf = ttcs.at(ctr);
-	  	else	
+	  	else
     		partial_conf |= ttcs.at(ctr);
       }
 
@@ -444,32 +444,32 @@ ReturnMatrix calc_tcorr(int in){
         partial_conf = ttcs.at(in).Columns(2,ttcs.at(in).Ncols()) | partial_conf;
       else
 		partial_conf = ttcs.at(in).Columns(2,ttcs.at(in).Ncols());
-		
+
  	if(confounds.Storage() > 0)
       if(partial_conf.Storage()>0)
-        partial_conf |= confounds;	
+        partial_conf |= confounds;
       else
-        partial_conf = confounds;	
+        partial_conf = confounds;
 
-    if(debug.value() && partial_conf.Storage()>0) 
+    if(debug.value() && partial_conf.Storage()>0)
       cerr << "DBG: partial_conf " << partial_conf.Nrows() << " x " << partial_conf.Ncols() << endl;
 
 	targetcol = ttcs.at(in).Column(1);
-    if(debug.value()) 
+    if(debug.value())
       cerr << "DBG: targetcol " << targetcol.Nrows() << " x " << targetcol.Ncols() << endl;
 
 	for(int ctr = 1; ctr <= seeds.Ncols(); ctr++)
       res(1,ctr) = Melodic::corrcoef(targetcol, seeds.Column(ctr), partial_conf).AsScalar();
-    
+
 	res.Release();
-	return res;	
+	return res;
 }
 
 void calc_res(){
-  if(debug.value()) 
+  if(debug.value())
 	cerr << "DBG: in calc_res" << endl;
 
-  out2 = zeros(1,seeds.Ncols());	
+  out2 = zeros(1,seeds.Ncols());
 
   if(!regress_only.value()){
 	//Target TCs exist
@@ -480,7 +480,7 @@ void calc_res(){
 	int tmp2;
 	out1=zeros(ttcs.size(),seeds.Ncols());
 	for(int ctr = 0 ;ctr < (int)ttcs.size(); ctr++)
-	  out1.Row(ctr+1) = calc_tcorr(ctr);					
+	  out1.Row(ctr+1) = calc_tcorr(ctr);
 
     for(int ctr = 1 ;ctr <= out1.Ncols(); ctr++){
 	  if(!abscc.value()){
@@ -489,11 +489,11 @@ void calc_res(){
 	  }else
 	  {
 	  	out1.Column(ctr).MaximumAbsoluteValue1(tmp2);
-      	out2(1,ctr) = tmp2;		
+      	out2(1,ctr) = tmp2;
 	  }
     }
-      
-	if(debug.value()){ 
+
+	if(debug.value()){
       cerr << "DBG: out1 " << out1.Nrows() << " x " << out1.Ncols() << endl;
       cerr << "DBG: out2 " << out2.Nrows() << " x " << out2.Ncols() << endl;
 	}
@@ -509,7 +509,7 @@ void calc_res(){
       seeds = seeds - confounds * pinv(confounds) * seeds;
     }
 
-	if(debug.value()){ 
+	if(debug.value()){
       cerr << "DBG: seeds " << seeds.Nrows() << " x " << seeds.Ncols() << endl;
       cerr << "DBG: data " << data.Nrows() << " x " << data.Ncols() << endl;
     }
@@ -520,8 +520,8 @@ void calc_res(){
 	    tmp = orig_data.voxelts(coords(ctr,1), coords(ctr,2), coords(ctr,3));
 		volume4D<float> tmpVol;
 		tmpVol.setmatrix(out2,maskS);
-		tmpVol( coords(ctr,1), coords(ctr,2), coords(ctr,3), 0) = ctr; 
-		out2 = tmpVol.matrix(maskS); 
+		tmpVol( coords(ctr,1), coords(ctr,2), coords(ctr,3), 0) = ctr;
+		out2 = tmpVol.matrix(maskS);
      	if(confounds.Storage()>0)
 		  tmp = tmp - confounds * pinv(confounds) * tmp;
 	  }
@@ -530,10 +530,10 @@ void calc_res(){
      	out2(1,ctr) = ctr;
 	  }
 	  for(int ctr2 =1; ctr2 <= data.Ncols(); ctr2++)
-        out1(ctr,ctr2) = Melodic::corrcoef(tmp,data.Column(ctr2)).AsScalar();      
+        out1(ctr,ctr2) = Melodic::corrcoef(tmp,data.Column(ctr2)).AsScalar();
     }
 
-	if(debug.value()){ 
+	if(debug.value()){
       cerr << "DBG: out1 " << out1.Nrows() << " x " << out1.Ncols() << endl;
       cerr << "DBG: out2 " << out2.Nrows() << " x " << out2.Ncols() << endl;
     }
@@ -543,10 +543,10 @@ void calc_res(){
 void write_res(){
   if(verbose.value())
     cout << " Saving results " << endl;
-		
-  if(debug.value()) 
+
+  if(debug.value())
 	cerr << "DBG: in write_res" << endl;
-    
+
   if(regress_only.value()){
 	save4D(out2,maskS, fnout.value()+"_index");
 	save4D(out1,maskT, fnout.value()+"_corr");
@@ -558,16 +558,16 @@ void write_res(){
 
   if(out_ttcs.value() && ttcs.size()>0)
     for(int ctr = 0 ;ctr < (int)ttcs.size(); ctr++)
-      write_ascii_matrix(ttcs.at(ctr),fnout.value()+"_ttc"+num2str(ctr+1)+".txt");	
-  
+      write_ascii_matrix(ttcs.at(ctr),fnout.value()+"_ttc"+num2str(ctr+1)+".txt");
+
   if(out_conf.value() && confounds.Storage()>0)
 	write_ascii_matrix(confounds, fnout.value()+"_confounds.tx");
-	
-  if(out_seeds.value())   	
+
+  if(out_seeds.value())
     save4D(seeds, maskS, fnout.value()+"_seeds");
-  if(out_seedmask.value())   
+  if(out_seedmask.value())
     save4D(maskS,fnout.value()+"_seedmask");
-  	
+
 }
 
 int do_work(int argc, char* argv[]) {
@@ -607,7 +607,7 @@ int main(int argc,char *argv[]){
 		options.add(debug);
 	    options.parse_command_line(argc, argv);
 
-	    // line below stops the program if the help was requested or 
+	    // line below stops the program if the help was requested or
 	    //  a compulsory option was not set
 	    if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
 			options.usage();
@@ -622,6 +622,6 @@ int main(int argc,char *argv[]){
 	    exit(EXIT_FAILURE);
 	  }catch(std::exception &e) {
 	    cerr << e.what() << endl;
-	  } 
+	  }
 }
 

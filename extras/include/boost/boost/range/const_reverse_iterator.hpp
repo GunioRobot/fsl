@@ -24,14 +24,14 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     // default
     //////////////////////////////////////////////////////////////////////////
-    
+
     template< typename C >
     struct range_const_reverse_iterator
     {
-        typedef reverse_iterator< 
+        typedef reverse_iterator<
             BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type > type;
     };
-    
+
 } // namespace boost
 
 #endif

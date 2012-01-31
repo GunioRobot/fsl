@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -97,7 +97,7 @@ frame $w.f
 set entries($w,$MC) ""
 
 #}}}
-    TitleFrame $w.f.input -text "Input" -relief groove 
+    TitleFrame $w.f.input -text "Input" -relief groove
     set lfinput [ $w.f.input getframe ]
     #{{{ input channels
 
@@ -123,7 +123,7 @@ while { $i < $MC } {
 	set entries($w,$MC) $entries($w,$i)
     }
 
-    FileEntry $lfinput.input$i -textvariable entries($w,$i) -label "Input image   " -title "Select the input image"  -width 40 -filedialog directory  -filetypes IMAGE -command "fast:select $w" 
+    FileEntry $lfinput.input$i -textvariable entries($w,$i) -label "Input image   " -title "Select the input image"  -width 40 -filedialog directory  -filetypes IMAGE -command "fast:select $w"
 
     incr i 1
 }
@@ -141,11 +141,11 @@ optionMenu2  $lfinput.inopts.type vars(type) 1 "T1-weighted" 2 "T2-weighted" 3 "
 pack $lfinput.inopts.typelabel $lfinput.inopts.type -in $lfinput.inopts -side left
 
 #}}}
-    TitleFrame $w.f.output -text "Output" -relief groove 
+    TitleFrame $w.f.output -text "Output" -relief groove
     set lfoutput [ $w.f.output getframe ]
     #{{{ output image (if not in medx)
 
-FileEntry $lfoutput.output -textvariable entries($w,$MC) -label "Output image(s) basename" -title "Select a basename for the output image(s)" -width 40 -filedialog directory  -filetypes * 
+FileEntry $lfoutput.output -textvariable entries($w,$MC) -label "Output image(s) basename" -title "Select a basename for the output image(s)" -width 40 -filedialog directory  -filetypes *
 
     pack $lfoutput.output -in $lfoutput -side top -padx 5 -pady 5 -anchor w
 
@@ -205,7 +205,7 @@ pack $lfoutput.outoptsA $lfoutput.outoptsB $lfoutput.outoptsC -in $lfoutput -sid
 
 collapsible frame $w.f.opts -title "Advanced options"
 
-TitleFrame $w.f.opts.b.f -text "Advanced" -relief groove 
+TitleFrame $w.f.opts.b.f -text "Advanced" -relief groove
 set advf [ $w.f.opts.b.f getframe ]
 
 #{{{ use a-priori probability map
@@ -231,7 +231,7 @@ pack $advf.apriori.label $advf.apriori.yn -side left
 
 set vars(manualSegment) ""
 
-FileEntry $advf.manualSegment -textvariable vars(manualSegment) -label "Use file of initial tissue-type means" -title "Select a file of initial tissue-type means" -width 30 -filedialog directory  -filetypes * 
+FileEntry $advf.manualSegment -textvariable vars(manualSegment) -label "Use file of initial tissue-type means" -title "Select a file of initial tissue-type means" -width 30 -filedialog directory  -filetypes *
 
 
 #
@@ -282,19 +282,19 @@ pack $w.f.opts.b.f -in $w.f.opts.b -anchor w
 
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
- 
+
     button $w.apply     -command "fast:apply $w" \
         -text "Go" -width 5
- 
+
     button $w.cancel    -command "destroy $w" \
         -text "Exit" -width 5
- 
+
     button $w.help -command "FmribWebHelp file: ${FSLDIR}/doc/fast4/index.html" \
             -text "Help" -width 5
 
     pack $w.btns.b -side bottom -fill x
     pack $w.apply $w.cancel $w.help -in $w.btns.b -side left -expand yes -padx 3 -pady 10 -fill y
- 
+
     pack $w.f $w.btns -expand yes -fill both -padx 5 -pady 5
 
 #}}}
@@ -323,7 +323,7 @@ proc fast:updateinputs { w } {
 	$lfinput.input0 configure -label "Input image"
 	pack $lfinput.input0 -in $lfinput -side top -padx 5 -pady 5 -anchor w -after $lfinput.channels
 
-	pack $advf.manualSegment -in $advf -side top -anchor w -padx 5 -pady 5 -after $advf.apriori 
+	pack $advf.manualSegment -in $advf -side top -anchor w -padx 5 -pady 5 -after $advf.apriori
 
     } else {
 
@@ -397,7 +397,7 @@ proc fast:apply { w } {
 
 proc fast:proc { channels inlist type output classes segall prob pv restored bias apriori apriori_final manualSegment biasiter biassmooth mrfbeta } {
 
-    #{{{ setup for running fast 
+    #{{{ setup for running fast
 
 global FSLDIR HOME vars
 
@@ -423,7 +423,7 @@ if { $segall } {
 }
 
 if { $prob } {
-    set thecommand "${thecommand} -p" 
+    set thecommand "${thecommand} -p"
 }
 
 if { ! $pv } {
@@ -431,7 +431,7 @@ if { ! $pv } {
 }
 
 if { $restored } {
-    set thecommand "${thecommand} -B" 
+    set thecommand "${thecommand} -B"
 }
 
 if { $bias } {
@@ -445,7 +445,7 @@ if { $apriori_final } {
 }
 
 if { $manualSegment != "" } {
-    set thecommand "${thecommand} -s $manualSegment" 
+    set thecommand "${thecommand} -s $manualSegment"
 }
 
 set thecommand "$thecommand -o $output $inlist"

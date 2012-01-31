@@ -142,7 +142,7 @@ if {$tcl_platform(platform) == "macintosh"} {
 test text-2.5 {Tk_TextCmd procedure} {
     catch {destroy .t2}
     text .t2
-    .t2 tag cget sel -relief 
+    .t2 tag cget sel -relief
 } $relief
 test text-2.6 {Tk_TextCmd procedure} {
     catch {destroy .t2}
@@ -1048,7 +1048,7 @@ test text-20.36 {TextSearchCmd procedure, regexp finds empty lines} {
     tk::TextSetCursor .t 4.0
     .t search -forward -regexp {^$} insert end
 } {4.0}
-    
+
 catch {destroy .t2}
 toplevel .t2
 wm geometry .t2 +0+0
@@ -1244,7 +1244,7 @@ test text-20.72 {TextSearchCmd, -regexp -nocase searches} {
     destroy .t
     set res
 } 1.0
-    
+
 deleteWindows
 text .t2 -highlightthickness 0 -bd 0 -relief flat -padx 0 -width 100
 pack .t2

@@ -11,20 +11,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -36,13 +36,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -53,7 +53,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -81,7 +81,7 @@ set VARS(history) {}
 proc susan { w } {
 
     global susanvars usanentries FSLDIR PWD argc argv TN HOME tempSpin
- 
+
     #{{{ setup main window
 
 toplevel $w
@@ -104,7 +104,7 @@ set susanvars(bt) 0
     #{{{ input and output images
 
 if { $argc > 0 && [ string length [ lindex $argv 0 ] ] > 0 } {
-    set inputname [ imglob [ lindex $argv 0 ] ] 
+    set inputname [ imglob [ lindex $argv 0 ] ]
     if { [ imtest $inputname ] } {
 	if { [ string first / $inputname ] == 0 || [ string first ~ $inputname ] == 0 } {
 	    set susanvars($w,input) $inputname
@@ -128,13 +128,13 @@ pack $w.f.input $w.f.output -in $w.f -side top -padx 5 -pady 5 -anchor w
 frame $w.f.top
 
 frame $w.f.op
-label $w.f.oplabel -text "Dimensionality" 
+label $w.f.oplabel -text "Dimensionality"
 optionMenu2 $w.f.opmenu susanvars(dim) 2 "2D" 3 "3D"
 pack $w.f.oplabel $w.f.opmenu -in $w.f.op -side top -side left
 
 LabelSpinBox   $w.f.bt -textvariable susanvars(bt) -label "Brightness threshold" -range {0.0 1e20 1} -width 8
 
-LabelSpinBox   $w.f.dt -textvariable susanvars(dt) -label "Mask SD" -range {0.0 10000 1} -width 5 
+LabelSpinBox   $w.f.dt -textvariable susanvars(dt) -label "Mask SD" -range {0.0 10000 1} -width 5
 
 pack $w.f.top -in $w.f -side top -padx 3 -pady 3 -expand yes -anchor w
 
@@ -179,9 +179,9 @@ while { $i <= $susanvars(maxusans) } {
     frame $w.f.usanentries($i)
 
 
-FileEntry $w.f.ue$i -textvariable usanentries($w,$i) -label "USAN image $i" -title "Select the USAN image" -width 40 -filedialog directory -filetypes IMAGE 
+FileEntry $w.f.ue$i -textvariable usanentries($w,$i) -label "USAN image $i" -title "Select the USAN image" -width 40 -filedialog directory -filetypes IMAGE
 #FSLFileEntry $w.f.ue$i -variable usanentries($w,$i) -pattern "IMAGE" -directory $PWD -label "USAN image $i" -title "Select the USAN image" -width 40 -filterhist VARS(history)
-	
+
     set susanvars(ubt,$i) 1
 
 LabelSpinBox $w.f.ubt$i -textvariable susanvars(ubt,$i) -label "Brightness threshold" -range {0.0 1e20 1} -width 5
@@ -200,12 +200,12 @@ pack $w.f.opts -in $w.f -side bottom -anchor w -pady 5
 
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
-    
+
     button $w.apply -command "susan:apply $w keep" -text "Go" -width 5
     bind $w.apply <Return> {
 	[winfo toplevel %W].apply invoke
     }
-	    
+
     button $w.cancel    -command "susan:destroy $w" \
 	    -text "Exit" -width 5
     bind $w.cancel <Return> {
@@ -223,7 +223,7 @@ pack $w.f.opts -in $w.f -side bottom -anchor w -pady 5
 	    -side left -expand yes -padx 3 -pady 3 -fill y
 
 #}}}
-		
+
     pack $w.f $w.btns -expand yes -fill both
 }
 
@@ -236,7 +236,7 @@ proc susan:setrange { w  {dummy "" }} {
 
     set susanvars(input)  [ remove_ext $susanvars(input) ]
     set susanvars(output) [ remove_ext $susanvars(input) ]_susan
-    
+
     if { ! [ catch { exec sh -c "${FSLDIR}/bin/fslstats $susanvars(input) -r" } minmax ] } {
 	set min [ lindex $minmax 0 ]
 	set max [ lindex $minmax 1 ]
@@ -268,9 +268,9 @@ while { $i <= $susanvars(usans) } {
 
 #}}}
     susan_proc $susanvars(input) $susanvars(bt) $susanvars(output) $susanvars(dt) $susanvars(dim) $susanvars(um) $susanvars(usans) $usanlist
-    
+
     update idletasks
-    
+
     if {$dialog == "destroy"} {
 	susan:destroy $w
     }
@@ -296,7 +296,7 @@ proc susan:updateusan { w } {
     }
 
      set i 1
-     while { $i <= $susanvars(maxusans) } { 
+     while { $i <= $susanvars(maxusans) } {
      pack forget $w.f.usanentries($i)
 	incr i 1
     }

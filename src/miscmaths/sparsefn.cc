@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -111,7 +111,7 @@ namespace MISCMATHS {
 	    if(c>=j) break;
 
 	    double val = (*it).second;
-	    sum += 2*val*m(j)*m(c); 
+	    sum += 2*val*m(j)*m(c);
 	  }
       }
     return sum;
@@ -136,7 +136,7 @@ namespace MISCMATHS {
 	    int c = (*it).first;
 	    double val = (*it).second;
 	    A[c] += val*S;
-	  }      
+	  }
       }
   }
 
@@ -168,11 +168,11 @@ namespace MISCMATHS {
 	for(int j = 1; j<=B.Nrows(); j++)
 	  {
 	    const SparseMatrix::Row& row = B.row(j);
-	    
+
 	    A.addto(j,j,B(j,j)*S);
 
 	    for(SparseMatrix::Row::const_iterator it=row.lower_bound(j);it!=row.end();it++)
-	      {		
+	      {
 		int c = (*it).first+1;
 		double val = (*it).second*S;
 
@@ -193,8 +193,8 @@ namespace MISCMATHS {
 	    A.addto(r,c,B(r,c));
 	}
   }
-  
-  
+
+
   void chol(const SparseMatrix& A, SparseMatrix& U, SparseMatrix& L)
   {
     Tracer_Plus trace("sparsefns::chol");
@@ -204,7 +204,7 @@ namespace MISCMATHS {
 
     for(int j = 1; j<=length; j++)
       {
-      
+
 	const SparseMatrix::Row& rowAj = A.row(j);
 	SparseMatrix::Row& rowUj = U.row(j);
 
@@ -221,8 +221,8 @@ namespace MISCMATHS {
 	    double Ukj = U(k,j);
 	    if(Ukj!=0)
 	      for(SparseMatrix::Row::iterator it=rowk.lower_bound(j-1);it!=rowk.end();it++)
-		{	  
-		  int c = (*it).first+1;      
+		{
+		  int c = (*it).first+1;
 		  double val = (*it).second*Ukj;
 		  U.addto(j,c,-val);
 		}
@@ -231,7 +231,7 @@ namespace MISCMATHS {
 	double sqrtUjj = std::sqrt(Max(U(j,j),1e-6));
 
 	for(SparseMatrix::Row::iterator it=rowUj.lower_bound(j-1);it!=rowUj.end();it++)
-	  {   	      	  
+	  {
 	    (*it).second /= sqrtUjj;
 	  }
       }
@@ -253,7 +253,7 @@ namespace MISCMATHS {
     speye(length,b);
 
     for(int bi=1;bi<=b.Ncols();bi++)
-      {      
+      {
 	// solve for y (L*y=b)
 	ColumnVector y(length);
 	y = 0;
@@ -265,7 +265,7 @@ namespace MISCMATHS {
 	for(int r = 2; r<=length; r++)
 	  {
 	    if(!compute && b(r,bi)!=0) compute = true;
-	  
+
 	    if(compute)
 	      {
 		float sum = 0.0;
@@ -273,9 +273,9 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    if(c > r-1) break;
-		  
+
 		    double val = (*it).second;
 		    sum += val*y(c);
 		  }
@@ -283,7 +283,7 @@ namespace MISCMATHS {
 		y(r) = (b(r,bi)-sum)/L(r,r);
 	      }
 	  }
-      
+
 	// solve for x(bi) (U*x=y)
 
 	ret.set(length,bi,y(length)/U(length,length));
@@ -295,7 +295,7 @@ namespace MISCMATHS {
 	for(int r = length; r>=bi; r--)
 	  {
 	    if(!compute && y(r)!=0) compute = true;
-	  
+
 	    if(compute)
 	      {
 		float sum = 0.0;
@@ -303,14 +303,14 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::const_iterator it=row.lower_bound(r);it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    double val = (*it).second;
 		    sum += val*ret(c,bi);
-		  }	
+		  }
 		ret.set(r,bi,(y(r)-sum)/U(r,r));
-		ret.set(bi,r,(y(r)-sum)/U(r,r));     
+		ret.set(bi,r,(y(r)-sum)/U(r,r));
 	      }
-	  }     
+	  }
       }
   }
 
@@ -322,7 +322,7 @@ namespace MISCMATHS {
 
     tr1 = 0.0;
     tr2 = 0.0;
-    
+
     for(int bi=1;bi<=b1.Ncols();bi++)
       {
 	// solve for y (L*y=b)
@@ -332,7 +332,7 @@ namespace MISCMATHS {
 	y2 = 0;
 	y1(1) = b1(1,bi)/L(1,1);
 	y2(1) = b2(1,bi)/L(1,1);
-      
+
 	bool compute1 = false;
 	if(b1(1,bi)!=0) compute1 = true;
 
@@ -343,7 +343,7 @@ namespace MISCMATHS {
 	  {
 	    if(!compute1 && b1(r,bi)!=0) compute1 = true;
 	    if(!compute2 && b2(r,bi)!=0) compute2 = true;
-	  
+
 	    if(compute1 || compute2)
 	      {
 		float sum1 = 0.0;
@@ -352,9 +352,9 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    if(c > r-1) break;
-		  
+
 		    double val = (*it).second;
 		    if(compute1) sum1 += val*y1(c);
 		    if(compute2) sum2 += val*y2(c);
@@ -364,7 +364,7 @@ namespace MISCMATHS {
 		if(compute2) y2(r) = (b2(r,bi)-sum2)/L(r,r);
 	      }
 	  }
-      
+
 	// solve for x(bi) (U*x=y)
 	ColumnVector x1(length);
 	ColumnVector x2(length);
@@ -383,7 +383,7 @@ namespace MISCMATHS {
 	  {
 	    if(!compute1 && y1(r)!=0) compute1 = true;
 	    if(!compute2 && y2(r)!=0) compute2 = true;
-	  
+
 	    if(compute1 || compute2)
 	      {
 		float sum1 = 0.0;
@@ -392,17 +392,17 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::const_iterator it=row.lower_bound(r);it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    double val = (*it).second;
 		    if(compute1) sum1 += val*x1(c);
 		    if(compute2) sum2 += val*x2(c);
 		  }
-	      
-		if(compute1) x1(r) = (y1(r)-sum1)/U(r,r);     
+
+		if(compute1) x1(r) = (y1(r)-sum1)/U(r,r);
 		if(compute2) x2(r) = (y2(r)-sum2)/U(r,r);
 	      }
 	  }
-      
+
 	tr1 += x1(bi);
 	tr2 += x2(bi);
       }
@@ -412,7 +412,7 @@ namespace MISCMATHS {
   float solvefortracex(const SparseMatrix& A, const SparseMatrix& b, SparseMatrix& x, int nsamps, float tol)
   {
     Tracer_Plus trace("sparsefns::solvefortracex");
-  
+
     int every = Max(1,A.Ncols()/nsamps);
     //    int every = 1;
     //    OUT(every);
@@ -422,14 +422,14 @@ namespace MISCMATHS {
     // assumes symmetric A and b
     for(int r = every; r<=A.Ncols();  r+=every)
       {
-//  	cout << float(r)/A.Ncols() << "\r"; 
-//  	cout.flush();	
+//  	cout << float(r)/A.Ncols() << "\r";
+//  	cout.flush();
 
-	ColumnVector br = b.RowAsColumn(r);      
+	ColumnVector br = b.RowAsColumn(r);
 	ColumnVector xr = x.RowAsColumn(r);
-      
+
 	solveforx(A,br,xr,tol);
-	
+
 	for(int c = 1; c<=b.Ncols(); c++)
 	  {
 	    if(xr(c)!=0)
@@ -451,16 +451,16 @@ namespace MISCMATHS {
   void solveforx(const SparseMatrix& A, const SparseMatrix& b, SparseMatrix& x)
   {
     Tracer_Plus trace("sparsefns::solveforx");
-  
+
     // assumes symmetric A and b
     for(int r = 1; r<=A.Ncols();  r++)
       {
-	cout << float(r)/A.Ncols() << "\r"; 
-	cout.flush();	
+	cout << float(r)/A.Ncols() << "\r";
+	cout.flush();
 
-	ColumnVector br = b.RowAsColumn(r);      
+	ColumnVector br = b.RowAsColumn(r);
 	ColumnVector xr = x.RowAsColumn(r);
-      
+
 	solveforx(A,br,xr);
 
 	for(int c = 1; c<=b.Ncols(); c++)
@@ -469,7 +469,7 @@ namespace MISCMATHS {
 	      {
 		x.set(r,c,xr(c));
 	      }
-	  }      
+	  }
       }
     cout << endl;
   }
@@ -489,7 +489,7 @@ namespace MISCMATHS {
       {
 	int k = 2;
 	kmax = Max(b.Nrows(),kmax);
-  
+
 	ColumnVector tmp;
 	multiply(A,x,tmp);
 
@@ -512,18 +512,18 @@ namespace MISCMATHS {
 	    // 	multiply(A,passparserow,w);
 
 	    multiply(A,p,w);
-   
+
 	    float alpha = 0.0;
 	    //if(k>1)
 	    alpha = rho(k-1)/(p.t()*w).AsScalar();
 	    //else
 	    //alpha = 1;
-   
+
 	    x += alpha*p;
 	    r -= alpha*w;
-	    rho(k) = Sqr(norm2(r));            
+	    rho(k) = Sqr(norm2(r));
 	  }
-    
+
 
 	if(k>kmax/2.0)
 	  {
@@ -557,7 +557,7 @@ namespace MISCMATHS {
     for(int r = 2; r<=length; r++)
       {
 	if(!compute && b(r)!=0) compute = true;
-	  
+
 	if(compute)
 	  {
 	    float sum = 0.0;
@@ -565,9 +565,9 @@ namespace MISCMATHS {
 	    for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 	      {
 		int c = (*it).first+1;
-		  
+
 		if(c > r-1) break;
-		  
+
 		double val = (*it).second;
 		sum += val*y(c);
 
@@ -576,7 +576,7 @@ namespace MISCMATHS {
 	    y(r) = (b(r)-sum)/L(r,r);
 	  }
       }
-      
+
     // solve for x (U*x=y)
     x(length) = y(length)/U(length,length);
     compute = false;
@@ -585,7 +585,7 @@ namespace MISCMATHS {
     for(int r = length; r>=1; r--)
       {
 	if(!compute && y(r)!=0) compute = true;
-	  
+
 	if(compute)
 	  {
 	    float sum = 0.0;
@@ -593,12 +593,12 @@ namespace MISCMATHS {
 	    for(SparseMatrix::Row::const_iterator it=row.lower_bound(r);it!=row.end();it++)
 	      {
 		int c = (*it).first+1;
-		  
+
 		double val = (*it).second;
 		sum += val*x(c);
 	      }
-	      
-	    x(r) = (y(r)-sum)/U(r,r);     
+
+	    x(r) = (y(r)-sum)/U(r,r);
 	  }
       }
 
@@ -607,15 +607,15 @@ namespace MISCMATHS {
   void solve(const SparseMatrix& A, const Matrix& b, SparseMatrix& x)
   {
     Tracer_Plus trace("sparsefns::solve");
-    
+
     int length = A.Nrows();
-    
+
     SparseMatrix U;
     SparseMatrix L;
     chol(A,U,L);
-    
+
     x.ReSize(length,b.Ncols());
-  
+
     for(int bi=1;bi<=b.Ncols();bi++)
       {
 	// solve for y (L*y=b)
@@ -628,7 +628,7 @@ namespace MISCMATHS {
 	for(int r = 2; r<=length; r++)
 	  {
 	    if(!compute && b(r,bi)!=0) compute = true;
-	  
+
 	    if(compute)
 	      {
 		float sum = 0.0;
@@ -636,9 +636,9 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::iterator it=row.begin();it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    if(c > r-1) break;
-		  
+
 		    double val = (*it).second;
 		    sum += val*y(c);
 
@@ -647,7 +647,7 @@ namespace MISCMATHS {
 		y(r) = (b(r,bi)-sum)/L(r,r);
 	      }
 	  }
-      
+
 	// solve for x (U*x=y)
 	x.set(length,bi,y(length)/U(length,length));
 	compute = false;
@@ -656,7 +656,7 @@ namespace MISCMATHS {
 	for(int r = length; r>=1; r--)
 	  {
 	    if(!compute && y(r)!=0) compute = true;
-	  
+
 	    if(compute)
 	      {
 		float sum = 0.0;
@@ -664,12 +664,12 @@ namespace MISCMATHS {
 		for(SparseMatrix::Row::iterator it=row.lower_bound(r);it!=row.end();it++)
 		  {
 		    int c = (*it).first+1;
-		  
+
 		    double val = (*it).second;
 		    sum += val*x(c,bi);
 		  }
-	      
-		x.set(r,bi,(y(r)-sum)/U(r,r));     
+
+		x.set(r,bi,(y(r)-sum)/U(r,r));
 	      }
 	  }
       }
@@ -679,7 +679,7 @@ namespace MISCMATHS {
   void cov(const ColumnVector& A, SparseMatrix& ret)
   {
     Tracer_Plus trace("sparsefns::cov");
-  
+
     ret.ReSize(A.Nrows(),A.Nrows());
 
     for(int r=1; r <= A.Nrows(); r++)
@@ -700,5 +700,5 @@ namespace MISCMATHS {
 	      }
 	  }
       }
-  }  
+  }
 }

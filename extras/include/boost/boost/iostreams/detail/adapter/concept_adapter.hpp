@@ -82,9 +82,9 @@ public:
 
     std::streampos seek( stream_offset off, BOOST_IOS::seekdir way,
                          BOOST_IOS::openmode which )
-    { 
-        return this->seek( off, way, which, 
-                           (basic_null_device<char_type, seekable>*) 0); 
+    {
+        return this->seek( off, way, which,
+                           (basic_null_device<char_type, seekable>*) 0);
     }
 
     template<typename Device>
@@ -101,7 +101,7 @@ public:
 
     bool flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
-    { 
+    {
         bool result = any_impl::flush(t_, sb);
         if (sb && sb->BOOST_IOSTREAMS_PUBSYNC() == -1)
             result = false;
@@ -122,29 +122,29 @@ public:
 template<>
 struct device_wrapper_impl<any_tag> {
     template<typename Device, typename Dummy>
-    static std::streampos 
-    seek( Device& dev, Dummy*, stream_offset off, 
+    static std::streampos
+    seek( Device& dev, Dummy*, stream_offset off,
           BOOST_IOS::seekdir way, BOOST_IOS::openmode which )
-    { 
+    {
         typedef typename category_of<Device>::type category;
-        return seek(dev, off, way, which, category()); 
+        return seek(dev, off, way, which, category());
     }
 
     template<typename Device>
-    static std::streampos 
-    seek( Device&, stream_offset, BOOST_IOS::seekdir, 
+    static std::streampos
+    seek( Device&, stream_offset, BOOST_IOS::seekdir,
           BOOST_IOS::openmode, any_tag )
-    { 
-        throw cant_seek(); 
+    {
+        throw cant_seek();
     }
 
     template<typename Device>
-    static std::streampos 
-    seek( Device& dev, stream_offset off, 
-          BOOST_IOS::seekdir way, BOOST_IOS::openmode which, 
+    static std::streampos
+    seek( Device& dev, stream_offset off,
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access )
-    { 
-        return iostreams::seek(dev, off, way, which); 
+    {
+        return iostreams::seek(dev, off, way, which);
     }
 
     template<typename Device, typename Dummy>
@@ -166,7 +166,7 @@ struct device_wrapper_impl<input> : device_wrapper_impl<any_tag>  {
     { return iostreams::read(dev, s, n); }
 
     template<typename Device, typename Dummy>
-    static std::streamsize 
+    static std::streamsize
     write( Device&, Dummy*, const typename char_type_of<Device>::type*,
            std::streamsize )
     { throw cant_write(); }
@@ -180,7 +180,7 @@ struct device_wrapper_impl<output> {
     { throw cant_read(); }
 
     template<typename Device, typename Dummy>
-    static std::streamsize 
+    static std::streamsize
     write( Device& dev, Dummy*, const typename char_type_of<Device>::type* s,
            std::streamsize n )
     { return iostreams::write(dev, s, n); }
@@ -247,8 +247,8 @@ struct flt_wrapper_impl<input> {
     { return iostreams::read(f, *src, s, n); }
 
     template<typename Filter, typename Sink>
-    static std::streamsize 
-    write( Filter&, Sink*, const typename char_type_of<Filter>::type*, 
+    static std::streamsize
+    write( Filter&, Sink*, const typename char_type_of<Filter>::type*,
            std::streamsize )
     { throw cant_write(); }
 };
@@ -261,7 +261,7 @@ struct flt_wrapper_impl<output> {
     { throw cant_read(); }
 
     template<typename Filter, typename Sink>
-    static std::streamsize 
+    static std::streamsize
     write( Filter& f, Sink* snk, const typename char_type_of<Filter>::type* s,
            std::streamsize n )
     { return iostreams::write(f, *snk, s, n); }

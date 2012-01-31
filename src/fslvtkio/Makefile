@@ -4,15 +4,15 @@ include ${FSLCONFDIR}/default.mk
 PROJNAME = fslvtkio
 
 USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB} -I${HOME}/fsldev/lib
-USRLDFLAGS = -L${LIB_NEWMAT}  -L${LIB_ZLIB} 
+USRLDFLAGS = -L${LIB_NEWMAT}  -L${LIB_ZLIB}
 
 LIBS= -lmeshclass -lnewimage -lmiscmaths -lfslio -lniftiio -lznz -lnewmat -lutils -lz
 
 SHAPEOBJS=fslvtkio.o
- 
+
 MODELOBJS=fslvtkio.o
 
-all: fslvtkio.a 
+all: fslvtkio.a
 
 fslvtkio.a: ${SHAPEOBJS}
 	${AR} -r libfslvtkio.a ${SHAPEOBJS}

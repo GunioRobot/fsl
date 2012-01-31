@@ -109,7 +109,7 @@ test compile-3.4 {TclCompileCatchCmd: bcc'ed [return] is caught} {
     proc foo {} {
 	set fail [catch {
 	    return 1
-	}] ; # {}	
+	}] ; # {}
 	return 2
     }
     foo
@@ -120,8 +120,8 @@ test compile-3.5 {TclCompileCatchCmd: recover from error, [Bug 705406]} {
 	catch {
 	    if {[a]} {
 		if b {}
-	    }   
-	}   
+	    }
+	}
     }
     list [catch foo msg] $msg
 } {0 1}
@@ -267,13 +267,13 @@ test compile-11.9 {Tcl_Append*: ensure Tcl_ResetResult is used properly} {
     list [catch {p} msg] $msg
 } {1 {unmatched open brace in list}}
 
-# 
+#
 # Special section for tests of tclLiteral.c
 # The following tests check for incorrect memory handling in
-# TclReleaseLiteral. They are only effective when tcl is compiled 
+# TclReleaseLiteral. They are only effective when tcl is compiled
 # with TCL_MEM_DEBUG
 #
-# Special test for leak on interp delete [Bug 467523]. 
+# Special test for leak on interp delete [Bug 467523].
 ::tcltest::testConstraint exec [llength [info commands exec]]
 ::tcltest::testConstraint memDebug [llength [info commands memory]]
 
@@ -282,21 +282,21 @@ test compile-12.1 {testing literal leak on interp delete} {memDebug} {
 	set lines [split [memory info] "\n"]
 	lindex [lindex $lines 3] 3
     }
-    
+
     set end [getbytes]
     for {set i 0} {$i < 5} {incr i} {
-	interp create foo 
-	foo eval { 
+	interp create foo
+	foo eval {
 	    namespace eval bar {}
-	} 
+	}
 	interp delete foo
 	set tmp $end
 	set end [getbytes]
-    }    
+    }
     rename getbytes {}
     set leak [expr {$end - $tmp}]
 } 0
-# Special test for a memory error in a preliminary fix of [Bug 467523]. 
+# Special test for a memory error in a preliminary fix of [Bug 467523].
 # It requires executing a helpfile.  Presumably the child process is
 # used because when this test fails, it crashes.
 test compile-12.2 {testing error on literal deletion} {memDebug exec} {
@@ -308,7 +308,7 @@ test compile-12.2 {testing error on literal deletion} {memDebug exec} {
 	puts 0
     } source.file
     set res [catch {
-	exec [interpreter] source.file 
+	exec [interpreter] source.file
     }]
     catch {removeFile source.file}
     set res
@@ -337,7 +337,7 @@ test compile-12.4 {TclCleanupLiteralTable segfault} {
     # its literals, this is difficult to achieve.  What we do is:
     #  (a) do a [namespace eval] of a string that's calculated to
     #      hash into the same bucket as a literal that it contains.
-    #      In this case, the script and the variable 'bugbug' 
+    #      In this case, the script and the variable 'bugbug'
     #      land in the same bucket.
     #  (b) do a [namespace eval] of a string that contains enough
     #      literals to force TclRegisterLiteral to rebuild the global
@@ -380,7 +380,7 @@ test compile-12.4 {TclCleanupLiteralTable segfault} {
 
 
 # Special test for underestimating the maxStackSize required for a
-# compiled command. A failure will cause a segfault in the child 
+# compiled command. A failure will cause a segfault in the child
 # process.
 test compile-13.1 {testing underestimate of maxStackSize in list cmd} {exec} {
     set body {set x [list}

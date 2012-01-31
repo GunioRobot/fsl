@@ -34,7 +34,7 @@ namespace MISCMATHS {
   string size(const Matrix& mat)
   {
     string str = num2str(mat.Nrows())+"*"+num2str(mat.Ncols());
-        
+
     return str;
   }
 
@@ -63,10 +63,10 @@ namespace MISCMATHS {
     char *pend;
     strtod(input.c_str(),&pend);
     if (*pend!='\0') return false;
-    return true; 
-  } 
+    return true;
+  }
 
-  string skip_alpha(ifstream& fs) 
+  string skip_alpha(ifstream& fs)
   {
     string cline;
     while (!fs.eof()) {
@@ -94,10 +94,10 @@ namespace MISCMATHS {
   {
     Matrix mat(nrows,ncols);
     mat = 0.0;
-  
+
     if ( filename.size()<1 ) return mat;
     ifstream fs(filename.c_str());
-    if (!fs) { 
+    if (!fs) {
       cerr << "Could not open matrix file " << filename << endl;
       return mat;
     }
@@ -117,7 +117,7 @@ namespace MISCMATHS {
     Matrix mat(nrows,ncols);
     mat = 0.0;
     string ss="";
-  
+
     ss = skip_alpha(fs);
     for (int r=1; r<=nrows; r++) {
       for (int c=1; c<=ncols; c++) {
@@ -134,13 +134,13 @@ namespace MISCMATHS {
     return mat;
   }
 
-  
+
   ReturnMatrix read_ascii_matrix(const string& filename)
   {
     Matrix mat;
     if ( filename.size()<1 ) return mat;
     ifstream fs(filename.c_str());
-    if (!fs) { 
+    if (!fs) {
       cerr << "Could not open matrix file " << filename << endl;
       mat.Release();
       return mat;
@@ -173,16 +173,16 @@ namespace MISCMATHS {
     do {
       getline(fs,currentLine);
       currentLine += " "; // force extra entry in parsing
-      istringstream ss(currentLine.c_str()); 
+      istringstream ss(currentLine.c_str());
       string firstToken("");
       ss >> firstToken; //Put first non-whitespace sequence into cc
       if (!isNumber(firstToken)) break;  // stop processing when non-numeric line found
       nRows++;  // add new row to matrix
     } while (!fs.eof());
-    
+
     // now know the size of matrix
     fs.clear();
-    fs.seekg(0,ios::beg);    
+    fs.seekg(0,ios::beg);
     return read_ascii_matrix(fs,nRows,nColumns);
 
   }
@@ -202,7 +202,7 @@ namespace MISCMATHS {
   {
     if ( filename.size()<1 ) return 1;
     ifstream fs(filename.c_str(), ios::in | ios::binary);
-    if (!fs) { 
+    if (!fs) {
       cerr << "Could not open matrix file " << filename << endl;
       return 2;
     }
@@ -228,7 +228,7 @@ namespace MISCMATHS {
     if (testval!=BINFLAG) {
       swapbytes = true;
       Swap_Nbytes(1,sizeof(testval),&testval);
-      if (testval!=BINFLAG) { 
+      if (testval!=BINFLAG) {
 	cerr << "Unrecognised binary matrix file format" << endl;
 	return 2;
       }
@@ -257,7 +257,7 @@ namespace MISCMATHS {
 	mres(x,y)=val;
       }
     }
-    
+
     return 0;
   }
 
@@ -265,19 +265,19 @@ namespace MISCMATHS {
   // WRITE FUNCTIONS //
 
 
-  int write_ascii_matrix(const string& filename, const Matrix& mat, 
+  int write_ascii_matrix(const string& filename, const Matrix& mat,
 			 int precision)
   {
     return write_ascii_matrix(mat, filename, precision);
   }
 
-  int write_ascii_matrix(const Matrix& mat, const string& filename, 
+  int write_ascii_matrix(const Matrix& mat, const string& filename,
 			 int precision)
   {
     Tracer tr("write_ascii_matrix");
     if ( (filename.size()<1) ) return -1;
     ofstream fs(filename.c_str());
-    if (!fs) { 
+    if (!fs) {
       cerr << "Could not open file " << filename << " for writing" << endl;
       return -1;
     }
@@ -286,25 +286,25 @@ namespace MISCMATHS {
     return retval;
   }
 
-  int write_ascii_matrix(ofstream& fs, const Matrix& mat, 
+  int write_ascii_matrix(ofstream& fs, const Matrix& mat,
 			 int precision)
   {
     return write_ascii_matrix(mat, fs, precision);
   }
-  
+
   int write_ascii_matrix(const Matrix& mat, ofstream& fs, int precision)
   {
-    if (precision>0)  { 
-      fs.setf(ios::scientific | ios::showpos); 
-      fs.precision(precision); 
-    } 
-#ifdef PPC64	
+    if (precision>0)  {
+      fs.setf(ios::scientific | ios::showpos);
+      fs.precision(precision);
+    }
+#ifdef PPC64
     int n=0;
 #endif
     for (int i=1; i<=mat.Nrows(); i++) {
       for (int j=1; j<=mat.Ncols(); j++) {
 	fs << mat(i,j) << "  ";
-#ifdef PPC64	
+#ifdef PPC64
 	if ((n++ % 50) == 0) fs.flush();
 #endif
       }
@@ -312,15 +312,15 @@ namespace MISCMATHS {
     }
     return 0;
   }
-  
+
   int write_vest(string p_fname, const Matrix& x, int precision)
-     { return write_vest(x,p_fname,precision); } 
+     { return write_vest(x,p_fname,precision); }
 
   int write_vest(const Matrix& x, string p_fname, int precision)
   {
     ofstream out;
     out.open(p_fname.c_str(), ios::out);
-    
+
     if(!out)
       {
 	cerr << "Unable to open " << p_fname << endl;
@@ -346,7 +346,7 @@ namespace MISCMATHS {
     Tracer tr("write_binary_matrix");
     if ( (filename.size()<1) ) return -1;
     ofstream fs(filename.c_str(), ios::out | ios::binary);
-    if (!fs) { 
+    if (!fs) {
       cerr << "Could not open file " << filename << " for writing" << endl;
       return -1;
     }
@@ -373,14 +373,14 @@ namespace MISCMATHS {
     ny = mat.Ncols();
 
     double val;
-#ifdef PPC64	
+#ifdef PPC64
     int n=0;
 #endif
     for (unsigned int y=1; y<=ny; y++) {
       for (unsigned int x=1; x<=nx; x++) {
 	val = mat(x,y);
 	fs.write((char*)&val,sizeof(val));
-#ifdef PPC64	
+#ifdef PPC64
 	if ((n++ % 50) == 0) fs.flush();
 #endif
       }
@@ -394,18 +394,18 @@ namespace MISCMATHS {
 
   int round(int x) { return x; }
 
-  int round(float x) 
-    { 
+  int round(float x)
+    {
       if (x>0.0) return ((int) (x+0.5));
       else       return ((int) (x-0.5));
     }
 
-   int round(double x) 
-   { 
+   int round(double x)
+   {
      if (x>0.0) return ((int) (x+0.5));
      else       return ((int) (x-0.5));
-   }  
-  
+   }
+
   double rounddouble(double x){
     return ( floor(x+0.5));
   }
@@ -483,7 +483,7 @@ namespace MISCMATHS {
   int diag(Matrix& m, const ColumnVector& diagvals)
     {
       Tracer tr("diag");
-      
+
       m.ReSize(diagvals.Nrows(),diagvals.Nrows());
       m=0.0;
       for (int j=1; j<=diagvals.Nrows(); j++)
@@ -566,7 +566,7 @@ namespace MISCMATHS {
       //  NB: t = theta/2
       decompose_aff(params,mat,centre,rotmat2quat);
       double sint;
-      sint = std::sqrt(params(1)*params(1) + params(2)*params(2) + 
+      sint = std::sqrt(params(1)*params(1) + params(2)*params(2) +
 		  params(3)*params(3));
       double t = asin(sint);
       double factor = 1.0/(2.0*cos(0.5*t));
@@ -584,7 +584,7 @@ namespace MISCMATHS {
       rot(1,4) = 0.0;
       rot(2,4) = 0.0;
       rot(3,4) = 0.0;
-      
+
       Matrix scale=IdentityMatrix(4);
       scale(1,1)=params(7);
       scale(2,2)=params(8);
@@ -601,11 +601,11 @@ namespace MISCMATHS {
       trans(4) = 1.0;
 
       // The translation, being independent of the 3x3 submatrix, is
-      //  calculated so that it will be equal for each of the two 
-      //  halves of the approximate square root 
+      //  calculated so that it will be equal for each of the two
+      //  halves of the approximate square root
       //  (i.e. matnew and mat*matnew.i() have exactly the same translation)
       ColumnVector th(4);
-      th = (mat*scale.i()*skew.i()*rot.i() + id4).SubMatrix(1,3,1,3).i() 
+      th = (mat*scale.i()*skew.i()*rot.i() + id4).SubMatrix(1,3,1,3).i()
 	* trans.SubMatrix(1,3,1,1);
 
       matnew = rot*skew*scale;
@@ -621,13 +621,13 @@ namespace MISCMATHS {
   //------------------------------------------------------------------------//
 
   // Handy MATLAB-like functions
-  
+
   void reshape(Matrix& r, const Matrix& m, int nrows, int ncols)
     {
       Tracer tr("reshape");
       if (nrows*ncols != m.Nrows() * m.Ncols() ) {
 	cerr << "WARNING: cannot reshape " << m.Nrows() << "x"
-	     << m.Ncols() << " matrix into " << nrows << "x" 
+	     << m.Ncols() << " matrix into " << nrows << "x"
 	     << ncols << endl;
 	cerr << " Returning original matrix instead" << endl;
 	r = m;
@@ -650,9 +650,9 @@ namespace MISCMATHS {
   ReturnMatrix reshape(const Matrix& m, int nrows, int ncols)
     {
       Tracer tr("reshape");
-     
-      Matrix r; 
-      
+
+      Matrix r;
+
       reshape(r,m,nrows,ncols);
 
       r.Release();
@@ -673,7 +673,7 @@ namespace MISCMATHS {
     }
     return 0;
   }
-  
+
   //------------------------------------------------------------------------//
 
 
@@ -690,7 +690,7 @@ namespace MISCMATHS {
 
       if (n<=0) return 0;
       // order of parameters is 3 rotation + 3 translation
-      // angles are in radians 
+      // angles are in radians
       //  order of parameters is (Rx,Ry,Rz) and R = Rx.Ry.Rz
       angl=0.0;
       angl(1)=params(1);
@@ -701,7 +701,7 @@ namespace MISCMATHS {
       angl=0.0;
       angl(2)=params(2);
       make_rot(angl,centre,newaff);
-      aff = aff * newaff; 
+      aff = aff * newaff;
       if (n==2) return 0;
 
       angl=0.0;
@@ -718,7 +718,7 @@ namespace MISCMATHS {
       if (n==6) return 0;
 
       return 1;
-    }  
+    }
 
   int construct_rotmat_euler(const ColumnVector& params, int n, Matrix& aff)
     {
@@ -736,7 +736,7 @@ namespace MISCMATHS {
       aff=IdentityMatrix(4);
 
       if (n<=0) return 0;
-      // order of parameters is 3 rotation (last 3 quaternion components) 
+      // order of parameters is 3 rotation (last 3 quaternion components)
       //  + 3 translation
 
       if ((n>=1) && (n<3)) { cerr<<"Can only do 3 or more, not "<< n <<endl; }
@@ -770,7 +770,7 @@ namespace MISCMATHS {
       if (n==6) return 0;
 
       return 1;
-    }  
+    }
 
   int construct_rotmat_quat(const ColumnVector& params, int n, Matrix& aff)
     {
@@ -780,7 +780,7 @@ namespace MISCMATHS {
       return construct_rotmat_quat(params,n,aff,centre);
     }
 
-  int make_rot(const ColumnVector& angl, const ColumnVector& centre, 
+  int make_rot(const ColumnVector& angl, const ColumnVector& centre,
 	       Matrix& rot)
     {
       // Matrix rot must be 4x4; angl and orig must be length 3
@@ -814,7 +814,7 @@ namespace MISCMATHS {
       rotcore(2,1)=-sin(theta);
 
       rot.SubMatrix(1,3,1,3) = basischange * rotcore * basischange.t();
-  
+
       Matrix ident3=IdentityMatrix(3);
       ColumnVector trans(3);
       trans = (ident3 - rot.SubMatrix(1,3,1,3))*centre;
@@ -838,8 +838,8 @@ namespace MISCMATHS {
 	if (fabs(d(i))<1e-4)  axis = v.SubMatrix(1,3,i,i);
       }
       return 0;
-    }  
-  
+    }
+
 
   int rotmat2euler(ColumnVector& angles, const Matrix& rotmat)
     {
@@ -877,7 +877,7 @@ namespace MISCMATHS {
       Tracer tr("rotmat2quat");
 
       float trace = rotmat.SubMatrix(1,3,1,3).Trace();
-	
+
       if (trace > 0) {
 	float w = std::sqrt((trace + 1.0)/4.0);
 	quaternion(1) = (rotmat(3,2) - rotmat(2,3))/(4.0*w);
@@ -906,7 +906,7 @@ namespace MISCMATHS {
     }
 
 
-  int decompose_aff(ColumnVector& params, const Matrix& affmat, 
+  int decompose_aff(ColumnVector& params, const Matrix& affmat,
 		    const ColumnVector& centre,
 		    int (*rotmat2params)(ColumnVector& , const Matrix& ))
     {
@@ -916,10 +916,10 @@ namespace MISCMATHS {
       Tracer tr("decompose_aff");
       if (params. Nrows() < 12)
 	params.ReSize(12);
-      if (rotmat2params==0)  
-	{ 
-	  cerr << "No rotmat2params function specified" << endl;  
-	  return -1; 
+      if (rotmat2params==0)
+	{
+	  cerr << "No rotmat2params function specified" << endl;
+	  return -1;
 	}
       ColumnVector x(3), y(3), z(3);
       Matrix aff3(3,3);
@@ -941,7 +941,7 @@ namespace MISCMATHS {
       Matrix scales(3,3);
       float diagvals[] = {sx,sy,sz};
       diag(scales,diagvals);
-      Real skewvals[] = {1,a,b,0 , 0,1,c,0 , 0,0,1,0 , 0,0,0,1}; 
+      Real skewvals[] = {1,a,b,0 , 0,1,c,0 , 0,0,1,0 , 0,0,0,1};
       Matrix skew(4,4);
       skew  << skewvals;
       params(10) = a;  params(11) = b;  params(12) = c;
@@ -957,7 +957,7 @@ namespace MISCMATHS {
       return 0;
     }
 
-  int decompose_aff(ColumnVector& params, const Matrix& affmat, 
+  int decompose_aff(ColumnVector& params, const Matrix& affmat,
 		    int (*rotmat2params)(ColumnVector& , const Matrix& ))
     {
       Tracer tr("decompose_aff");
@@ -969,7 +969,7 @@ namespace MISCMATHS {
 
 
   int compose_aff(const ColumnVector& params, int n, const ColumnVector& centre,
-		  Matrix& aff, 
+		  Matrix& aff,
 		  int (*params2rotmat)(const ColumnVector& , int , Matrix& ,
 			     const ColumnVector& ) )
     {
@@ -979,9 +979,9 @@ namespace MISCMATHS {
       // angles are in radians
 
       (*params2rotmat)(params,n,aff,centre);
-  
+
       if (n<=6)  return 0;
-  
+
       Matrix scale=IdentityMatrix(4);
       if (n>=7) {
 	scale(1,1)=params(7);
@@ -1012,8 +1012,8 @@ namespace MISCMATHS {
     }
 
 
-float rms_deviation(const Matrix& affmat1, const Matrix& affmat2, 
-		    const ColumnVector& centre, const float rmax) 
+float rms_deviation(const Matrix& affmat1, const Matrix& affmat2,
+		    const ColumnVector& centre, const float rmax)
 {
   Tracer trcr("rms_deviation");
   Matrix isodiff(4,4), a1(4,4), a2(4,4);
@@ -1029,21 +1029,21 @@ float rms_deviation(const Matrix& affmat1, const Matrix& affmat2,
   try {
     isodiff = a1*a2.i() - IdentityMatrix(4);
   } catch(...) {
-    cerr << "RMS_DEVIATION ERROR:: Could not invert matrix" << endl;  
-    exit(-5); 
+    cerr << "RMS_DEVIATION ERROR:: Could not invert matrix" << endl;
+    exit(-5);
   }
   Matrix adiff(3,3);
   adiff = isodiff.SubMatrix(1,3,1,3);
   ColumnVector tr(3);
   tr = isodiff.SubMatrix(1,3,4,4) + adiff*centre;
-  float rms = std::sqrt( (tr.t() * tr).AsScalar() + 
+  float rms = std::sqrt( (tr.t() * tr).AsScalar() +
 		    (rmax*rmax/5.0)*Trace(adiff.t()*adiff) );
   return rms;
 }
 
 
-float rms_deviation(const Matrix& affmat1, const Matrix& affmat2, 
-		    const float rmax) 
+float rms_deviation(const Matrix& affmat1, const Matrix& affmat2,
+		    const float rmax)
 {
   ColumnVector centre(3);
   centre = 0;
@@ -1060,7 +1060,7 @@ Matrix Mat44ToNewmat(mat44 m)
   for(unsigned short i = 0; i < 4; ++i)
     for(unsigned short j = 0; j < 4; ++j)
       r(i+1, j+1) = m.m[i][j];
-      
+
   return r;
 }
 
@@ -1096,7 +1096,7 @@ void get_axis_orientations(const Matrix& sform_mat, int sform_code,
   nifti_mat44_to_orientation(v2mm,&icode,&jcode,&kcode);
 }
 
- 
+
 Matrix mat44_to_newmat(mat44 inmat)
 {
   Matrix retmat(4,4);
@@ -1107,7 +1107,7 @@ Matrix mat44_to_newmat(mat44 inmat)
   }
   return retmat;
 }
- 	 
+
 mat44 newmat_to_mat44(const Matrix& inmat)
 {
   mat44 retmat;
@@ -1118,7 +1118,7 @@ mat44 newmat_to_mat44(const Matrix& inmat)
   }
   return retmat;
 }
- 	 
+
 // Matlab style functions for percentiles, quantiles and median
 // AUG 06 CB
 
@@ -1130,22 +1130,22 @@ ColumnVector seq(const int size)
   return outputVector;
 }
 
-float interp1(const ColumnVector& x, const ColumnVector& y, float xi) 
+float interp1(const ColumnVector& x, const ColumnVector& y, float xi)
 // Look-up function for data table defined by x, y
 // Returns the values yi at xi using linear interpolation
 // Assumes that x is sorted in ascending order
 {
-  
+
   float ans;
-  if(xi >= x.Maximum()) 
+  if(xi >= x.Maximum())
     ans = y(x.Nrows());
   else
-    if(xi <= x.Minimum()) 
-      ans = y(1); 
+    if(xi <= x.Minimum())
+      ans = y(1);
     else{
       int ind=1;
       while(xi >= x(ind))
-	ind++;      
+	ind++;
       float xa = x(ind-1), xb = x(ind), ya = y(ind-1), yb = y(ind);
       ans = ya + (xi - xa)/(xb - xa) * (yb - ya);
     }
@@ -1157,13 +1157,13 @@ float quantile(const ColumnVector& in, int which)
 {
   float p;
   switch (which)
-    {  
+    {
     case 0 : p =  0.0; break;
     case 1 : p = 25.0; break;
-    case 2 : p = 50.0; break; 
+    case 2 : p = 50.0; break;
     case 3 : p = 75.0; break;
     case 4 : p =100.0; break;
-    default: p =  0.0; 
+    default: p =  0.0;
     }
 
   return percentile(in,p);
@@ -1179,7 +1179,7 @@ float percentile(const ColumnVector& in, float p)
   sequence = 100*(seq(num)-0.5)/num; a << y(1); b << y(num); c = 0; d = 100;
   xx = (c & sequence & d);
   yy = (a & y & b);
-  
+
   return interp1(xx,yy,p);
 }
 
@@ -1223,7 +1223,7 @@ void cart2sph(const ColumnVector& dir, float& th, float& ph)
     else if(dir(1)>0) ph=atan(dir(2)/dir(1));
     else if(dir(2)>0) ph=atan(dir(2)/dir(1))+M_PI;
     else ph=atan(dir(2)/dir(1))-M_PI;
-    
+
     if(dir(3)==0) th=M_PI/2;
     else if(dir(3)>0) th=atan(sqrt(dir(1)*dir(1)+dir(2)*dir(2))/dir(3));
     else th=atan(sqrt(dir(1)*dir(1)+dir(2)*dir(2))/dir(3))+M_PI;
@@ -1295,7 +1295,7 @@ void cart2sph(const vector<ColumnVector>& dir,ColumnVector& th,ColumnVector& ph)
       if(dir[i](3)==0) th(j)=_pi2;
       else if(dir[i](3)>0) th(j)=std::atan(std::sqrt(dir[i](1)*dir[i](1)+dir[i](2)*dir[i](2))/dir[i](3));
       else th(j)=std::atan(std::sqrt(dir[i](1)*dir[i](1)+dir[i](2)*dir[i](2))/dir[i](3))+M_PI;
-      
+
       //th(j)=fmod(th(j),M_PI);
 
     }
@@ -1304,9 +1304,9 @@ void cart2sph(const vector<ColumnVector>& dir,ColumnVector& th,ColumnVector& ph)
 }
 
 // Added by CFB   --- Matlab style Matrix functions
- 
+
 ReturnMatrix ones(const int dim1, const int dim2)
-{ 
+{
   int tdim = dim2;
   if(tdim<0){tdim=dim1;}
   Matrix res(dim1,tdim); res = 1.0;
@@ -1315,7 +1315,7 @@ ReturnMatrix ones(const int dim1, const int dim2)
 }
 
 ReturnMatrix zeros(const int dim1, const int dim2)
-{ 
+{
   int tdim = dim2;
   if(tdim<0){tdim=dim1;}
   Matrix res(dim1,tdim); res = 0.0;
@@ -1402,7 +1402,7 @@ ReturnMatrix log(const Matrix& mat)
     //  cerr << " return log(abs(X)) instead" << endl;
   }
   res.Release();
-  return res; 
+  return res;
 }
 
 ReturnMatrix exp(const Matrix& mat)
@@ -1586,7 +1586,7 @@ ReturnMatrix min(const Matrix& mat)
   res.Release();
   return res;
 }
-  
+
 
 ReturnMatrix sum(const Matrix& mat, const int dim)
 {
@@ -1595,7 +1595,7 @@ ReturnMatrix sum(const Matrix& mat, const int dim)
   if (dim == 1) {tmp=mat;}
   else {tmp=mat.t();}
   Matrix res(1,tmp.Ncols());
-  res = 0.0;  
+  res = 0.0;
   for (int mc=1; mc<=tmp.Ncols(); mc++) {
     for (int mr=1; mr<=tmp.Nrows(); mr++) {
       res(1,mc) += tmp(mr,mc);
@@ -1615,7 +1615,7 @@ ReturnMatrix mean(const Matrix& mat, const int dim)
   int N = tmp.Nrows();
 
   Matrix res(1,tmp.Ncols());
-  res = 0.0;  
+  res = 0.0;
   for (int mc=1; mc<=tmp.Ncols(); mc++) {
     for (int mr=1; mr<=tmp.Nrows(); mr++) {
       res(1,mc) += tmp(mr,mc)/N;
@@ -1636,10 +1636,10 @@ ReturnMatrix var(const Matrix& mat, const int dim)
   Matrix res(1,tmp.Ncols());
   res = 0.0;
 
-  if(N>1){    
-    tmp -= ones(tmp.Nrows(),1)*mean(tmp,1);   
-    for (int mc=1; mc<=tmp.Ncols(); mc++) 
-      for (int mr=1; mr<=tmp.Nrows(); mr++) 
+  if(N>1){
+    tmp -= ones(tmp.Nrows(),1)*mean(tmp,1);
+    for (int mc=1; mc<=tmp.Ncols(); mc++)
+      for (int mr=1; mr<=tmp.Nrows(); mr++)
         res(1,mc) += tmp(mr,mc) / (N-1) * tmp(mr,mc);
   }
 
@@ -1693,7 +1693,7 @@ ReturnMatrix lt(const Matrix& mat1,const Matrix& mat2)
 }
 
 
-ReturnMatrix geqt(const Matrix& mat1,const Matrix& mat2) 
+ReturnMatrix geqt(const Matrix& mat1,const Matrix& mat2)
 {
   int ctrcol = std::min(mat1.Ncols(),mat2.Ncols());
   int ctrrow = std::min(mat1.Nrows(),mat2.Nrows());
@@ -1711,7 +1711,7 @@ ReturnMatrix geqt(const Matrix& mat1,const Matrix& mat2)
   res.Release();
   return res;
 }
-ReturnMatrix geqt(const Matrix& mat,const float a) 
+ReturnMatrix geqt(const Matrix& mat,const float a)
 {
   int ncols = mat.Ncols();
   int nrows = mat.Nrows();
@@ -1730,7 +1730,7 @@ ReturnMatrix geqt(const Matrix& mat,const float a)
   return res;
 }
 
-ReturnMatrix leqt(const Matrix& mat1,const Matrix& mat2) 
+ReturnMatrix leqt(const Matrix& mat1,const Matrix& mat2)
 {
   int ctrcol = std::min(mat1.Ncols(),mat2.Ncols());
   int ctrrow = std::min(mat1.Nrows(),mat2.Nrows());
@@ -1770,7 +1770,7 @@ ReturnMatrix eq(const Matrix& mat1,const Matrix& mat2)
 }
 
 
-ReturnMatrix neq(const Matrix& mat1,const Matrix& mat2) 
+ReturnMatrix neq(const Matrix& mat1,const Matrix& mat2)
 {
   int ctrcol = std::min(mat1.Ncols(),mat2.Ncols());
   int ctrrow = std::min(mat1.Nrows(),mat2.Nrows());
@@ -1789,7 +1789,7 @@ ReturnMatrix neq(const Matrix& mat1,const Matrix& mat2)
   return res;
 }
 
-ReturnMatrix SD(const Matrix& mat1,const Matrix& mat2) 
+ReturnMatrix SD(const Matrix& mat1,const Matrix& mat2)
 {
   if((mat1.Nrows() != mat2.Nrows()) ||
      (mat1.Ncols() != mat2.Ncols()) ){
@@ -1834,7 +1834,7 @@ ReturnMatrix mni_to_imgvox(const ColumnVector& mni,const ColumnVector& mni_origi
 
 
 ReturnMatrix remmean(const Matrix& mat, const int dim)
-{ 
+{
   Matrix res;
   if (dim == 1) {res=mat;}
   else {res=mat.t();}
@@ -1854,7 +1854,7 @@ ReturnMatrix remmean(const Matrix& mat, const int dim)
 
 
 void remmean(const Matrix& mat, Matrix& demeanedmat, Matrix& Mean,  const int dim)
-{ 
+{
   if (dim == 1) {demeanedmat=mat;}
   else {demeanedmat=mat.t();}
 
@@ -1869,22 +1869,22 @@ void remmean(const Matrix& mat, Matrix& demeanedmat, Matrix& Mean,  const int di
 }
 
 ReturnMatrix cov(const Matrix& mat, const int norm)
-{ 
+{
   SymmetricMatrix res;
   Matrix tmp;
   int N;
   tmp=remmean(mat);
   if (norm == 1) {N = mat.Nrows();}
-  else {N = mat.Nrows()-1;}  
+  else {N = mat.Nrows()-1;}
   res << tmp.t()*tmp;
   res = res/N;
 
   res.Release();
-  return res; 
+  return res;
 }
 
 ReturnMatrix corrcoef(const Matrix& mat, const int norm)
-{ 
+{
   SymmetricMatrix res;
   SymmetricMatrix C;
   C = cov(mat,norm);
@@ -1893,7 +1893,7 @@ ReturnMatrix corrcoef(const Matrix& mat, const int norm)
   D=pow(sqrt(D*D.t()),-1);
   res << SP(C,D);
   res.Release();
-  return res; 
+  return res;
 }
 
 ReturnMatrix flipud(const Matrix& mat)
@@ -1939,7 +1939,7 @@ void powerspectrum(const Matrix &Mat1, Matrix &Result, bool useLog)
       ColumnVector FtmpCol_real;
       ColumnVector FtmpCol_imag;
       ColumnVector tmpPow;
-      
+
       RealFFT(tmpCol,FtmpCol_real,FtmpCol_imag);
       tmpPow = pow(FtmpCol_real,2)+pow(FtmpCol_imag,2);
       tmpPow = tmpPow.Rows(2,tmpPow.Nrows());
@@ -1958,15 +1958,15 @@ void element_mod_n(Matrix& Mat,double n)
   for( int j=1;j<=Mat.Ncols();j++){
     for( int i=1;i<=Mat.Nrows();i++){
 
-      while( !( (Mat(i,j)>0) && (Mat(i,j)<n) ) ){ 
+      while( !( (Mat(i,j)>0) && (Mat(i,j)<n) ) ){
 	tmp = ( Mat(i,j) - rounddouble(Mat(i,j)/n)*n );
 	Mat(i,j)= tmp > 0 ? tmp : tmp + n;
-      }    
-      
+      }
+
     }
-    
+
   }
-  
+
 }
 
 int nextpow2(int n)
@@ -1980,7 +1980,7 @@ void xcorr(const Matrix& p_ts, Matrix& ret, int lag, int p_zeropad)
 
   int sizeTS = p_ts.Nrows();
   int numTS = p_ts.Ncols();
-  
+
   if(p_zeropad == 0)
     p_zeropad = sizeTS;
   if(lag == 0)
@@ -2001,31 +2001,31 @@ void xcorr(const Matrix& p_ts, Matrix& ret, int lag, int p_zeropad)
     {
       x.Rows(1,sizeTS) = p_ts.Column(i);
       FFT(x, dummy, fft_real, fft_im);
-      
+
       for(int j = 1; j <= p_zeropad; j++)
 	{
 	  // (x+iy)(x-iy) = x^2 + y^2
 	  fft_real(j) = fft_real(j)*fft_real(j) + fft_im(j)*fft_im(j);
 	  fft_im(j) = 0;
 	}
-      
+
       FFTI(fft_real, fft_im, realifft, dummy2);
-      
+
       float varx = var(x.Rows(1,sizeTS)).AsScalar();
       ret.Column(i) = realifft.Rows(1,lag);
-      
+
       for(int j = 1; j <= lag-1; j++)
 	{
 	  // Correction to make autocorr unbiased and normalised
 	  ret(j,i) = ret(j,i)/((sizeTS-j)*varx);
-	}  
+	}
     }
 }
 
 ReturnMatrix xcorr(const Matrix& p_ts, int lag, int p_zeropad )
 {
   Matrix r;
-  
+
   xcorr(p_ts,r,lag,p_zeropad);
   r.Release();
   return r;
@@ -2035,11 +2035,11 @@ void detrend(Matrix& p_ts, int p_level)
 {
   Tracer trace("MISCMATHS::detrend");
 
-  int sizeTS = p_ts.Nrows();     
+  int sizeTS = p_ts.Nrows();
 
   // p_ts = b*a + e (OLS regression)
   // e is detrended data
-  Matrix a(sizeTS, p_level+1);  
+  Matrix a(sizeTS, p_level+1);
 
   // Create a
   for(int t = 1; t <= sizeTS; t++)
@@ -2047,14 +2047,14 @@ void detrend(Matrix& p_ts, int p_level)
       for(int l = 0; l <= p_level; l++)
 	a(t,l+1) = pow((float)t/sizeTS,l);
     }
-          
+
   // Form residual forming matrix R:
   Matrix R = IdentityMatrix(sizeTS)-a*pinv(a);
 
   for(int t = 1; t <= sizeTS; t++)
     {
       p_ts.Column(t) = R*p_ts.Column(t);
-    }      
+    }
 }
 
 
@@ -2063,17 +2063,17 @@ ReturnMatrix read_vest(string p_fname)
 {
   ifstream in;
   in.open(p_fname.c_str(), ios::in);
-  
+
   if(!in) throw Exception(string("Unable to open "+p_fname).c_str());
-  
+
   int numWaves = 0;
   int numPoints = 0;
-  
+
   string str;
-  
+
   while(true)
     {
-      if(!in.good()) throw Exception(string(p_fname+" is not a valid vest file").c_str());	
+      if(!in.good()) throw Exception(string(p_fname+" is not a valid vest file").c_str());
       in >> str;
       if(str == "/Matrix")
 	break;
@@ -2086,18 +2086,18 @@ ReturnMatrix read_vest(string p_fname)
 	  in >> numPoints;
 	}
     }
-  
+
   Matrix p_mat(numPoints, numWaves);
-  
+
   for(int i = 1; i <= numPoints; i++)
     {
-      for(int j = 1; j <= numWaves; j++)    
+      for(int j = 1; j <= numWaves; j++)
 	{
 	  if (!in.eof()) in >> p_mat(i,j);
 	  else throw Exception(string(p_fname+" has insufficient data points").c_str());
 	}
     }
-  
+
   in.close();
 
   p_mat.Release();
@@ -2120,7 +2120,7 @@ void ols(const Matrix& data,const Matrix& des,const Matrix& tc, Matrix& cope,Mat
   if(des.Ncols() != tc.Ncols()){
     cerr <<"MISCMATHS::ols - design and contrast matrix have different number of EVs"<<endl;
     exit(-1);
-  }  
+  }
   Matrix pdes = pinv(des);
   Matrix prevar=diag(tc*pdes*pdes.t()*tc.t());
   Matrix R=IdentityMatrix(des.Nrows())-des*pdes;
@@ -2130,8 +2130,8 @@ void ols(const Matrix& data,const Matrix& des,const Matrix& tc, Matrix& cope,Mat
   Matrix res=data-des*pe;
   Matrix sigsq=sum(SP(res,res))/tR;
   varcope=prevar*sigsq;
-  
-  
+
+
 }
 
 float ols_dof(const Matrix& des){
@@ -2159,26 +2159,26 @@ int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b, int maxit,
       rk2rk2 = rk1rk1;  // from before
       rk1rk1 = (rk1.t() * rk1).AsScalar();
       if (rk2rk2<1e-10*rk1rk1) {
-	cerr << "WARNING:: Conj Grad - low demoninator (rk2rk2)" << endl; 
+	cerr << "WARNING:: Conj Grad - low demoninator (rk2rk2)" << endl;
 	if (rk2rk2<=0) {
 	  cerr << "Aborting conj grad ..." << endl;
-	  return 1;  
+	  return 1;
 	}
       }
       betak = rk1rk1 / rk2rk2;
       pk = rk1 + betak * pk;  // note RHS pk is p(k-1) in algorithm
-    }  
+    }
     // stop if sufficient accuracy is achieved
     if (rk1rk1<reltol*reltol*r00) return 0;
 
     apk = A * pk;  // the *big* calculation in this algorithm
 
     ColumnVector pap = pk.t() * apk;
-    if (pap.AsScalar()<0) { 
-      cerr << "ERROR:: Conj Grad - negative eigenvector found (matrix must be symmetric and positive-definite)\nAborting ... " << endl; 
+    if (pap.AsScalar()<0) {
+      cerr << "ERROR:: Conj Grad - negative eigenvector found (matrix must be symmetric and positive-definite)\nAborting ... " << endl;
       return 2;
-    } else if (pap.AsScalar()<1e-10) { 
-      cerr << "WARNING:: Conj Grad - nearly null eigenvector found (terminating early)" << endl; 
+    } else if (pap.AsScalar()<1e-10) {
+      cerr << "WARNING:: Conj Grad - nearly null eigenvector found (terminating early)" << endl;
       return 1;
     } else {
       alphak = rk1rk1 / pap.AsScalar();
@@ -2191,30 +2191,30 @@ int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b, int maxit,
 }
 
 int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b, int maxit)
-{ 
+{
   return conjgrad(x,A,b,maxit,1e-10);
 }
 
 float csevl(const float x, const ColumnVector& cs, const int n)
   {
- 
+
     float b0 = 0;
     float b1 = 0;
     float b2 = 0;
     const float twox=2*x;
-    
+
     for(int i=1; i<=n; i++)
       {
 	b2=b1;
 	b1=b0;
 	b0=twox*b1-b2+cs(n+1-i);
       }
-    
+
     return 0.5*(b0-b2);
   }
 
   float digamma(const float x)
-  { 
+  {
     int ntapsi(16);
     int ntpsi(23);
     ColumnVector psics(ntpsi);
@@ -2243,7 +2243,7 @@ float csevl(const float x, const ColumnVector& cs, const int n)
       -.000000000000000691E0<<
       .000000000000000118E0<<
       -.000000000000000020E0;
-	  
+
     apsics <<-.0204749044678185E0<<
       -.0101801271534859E0<<
       .0000559718725387E0<<
@@ -2283,7 +2283,7 @@ float csevl(const float x, const ColumnVector& cs, const int n)
 	const float aux = csevl(8/(Sqr(y))-1, apsics, ntapsi);
 	psi = log(x) - 0.5/x + aux;
       }
-    
+
     return psi;
   }
 
@@ -2366,9 +2366,9 @@ float csevl(const float x, const ColumnVector& cs, const int n)
 	    float b_m0 = 1e10;
 	    float c_m0 = 2;
 
-	    float c_m = 1.0/2.0 + c_m0;	    
+	    float c_m = 1.0/2.0 + c_m0;
 	    float b_m = 1.0/(0.5*(Sqr(B(l))+lambdaB(l))+1.0/b_m0);
-	    gam_m(l) = b_m*c_m;	    
+	    gam_m(l) = b_m*c_m;
 	  }
 
 // 	OUT(gam_m(1));
@@ -2397,17 +2397,17 @@ float csevl(const float x, const ColumnVector& cs, const int n)
 	  {
 	    lambdaB(l)=ilambda_B(l,l);
 	  }
-	
+
 	////////////////////
 	// compute trace for noise precision phiy update
-	
+
 	SymmetricMatrix tmp3;
 	tmp3 << ilambda_B;
-	
+
 	SymmetricMatrix tmp2;
 	tmp2 << tmp3*ZZ;
-	
-	trace_ilambdaZZ=tmp2.Trace();	
+
+	trace_ilambdaZZ=tmp2.Trace();
 // 	OUT(trace_ilambdaZZ);
 
 
@@ -2419,12 +2419,12 @@ float csevl(const float x, const ColumnVector& cs, const int n)
 	float c_y = (ntpts-1)/2.0 + c_y0;
 
 	float sum = YY + (B.t()*ZZ*B).AsScalar() - 2*(B.t()*ZY).AsScalar();
-	
+
 	float b_y = 1.0/(0.5*(sum + trace_ilambdaZZ)+1/b_y0);
-	
+
 	gam_y = b_y*c_y;
 
-// 	OUT(gam_y);	     
+// 	OUT(gam_y);
 
       }
 
@@ -2434,10 +2434,10 @@ float csevl(const float x, const ColumnVector& cs, const int n)
 vector<float> ColumnVector2vector(const ColumnVector& col)
 {
   vector<float> vec(col.Nrows());
-  
+
   for(int c = 0; c < col.Nrows(); c++)
     vec[c] = col(c+1);
-  
+
   return vec;
 }
 

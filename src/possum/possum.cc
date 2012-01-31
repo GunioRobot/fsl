@@ -6,20 +6,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -31,13 +31,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -48,7 +48,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -98,8 +98,8 @@ using namespace Utilities;
 string title="possum (Version 2.0)\nCopyright(c) 2007, University of Oxford (Ivana Drobnjak)";
 string examples="possum -i <input phantom volume> -x <MR parameters matrix> -p <pulse> -f <RF slice profile> -m <motion file> -o <output signal matrix> [optional arguments]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -154,12 +154,12 @@ Option<string> opt_slcprof(string("-f,--slcprof"), string(""),
 		  string("<inputmatrix-filename> (RF slice profile)"),
 		  true, requires_argument);
 
-//INPUT for the computational efficiency 
+//INPUT for the computational efficiency
 Option<int>    opt_level(string("-l,--lev"), 1,
 		  string("{1,2,3,4} (Levels: 1.no motion//basic B0 2.motion//basic B0, 3.motion//full B0, 4.no motion//time changing B0)"),
 		  false,requires_argument);
-Option<bool> opt_nospeedup(string("--nospeedup"), false, 
-		     string("If this option is ON it will NOT do the speedup but will do signal for all the slices for each voxel."), 
+Option<bool> opt_nospeedup(string("--nospeedup"), false,
+		     string("If this option is ON it will NOT do the speedup but will do signal for all the slices for each voxel."),
 		     false, no_argument);
 
 //INPUT for the manual paralelisation -- used with sge_possum
@@ -193,11 +193,11 @@ int compute_volume(int argc, char *argv[])
   cout<<"Starting POSSUM..."<<endl;
   cout<<""<<endl;
   /////////////////////////////////////////////////////////////////////////////
-  // SET UP COORDINATE SYSTEM with the CENTER IN THE CENTER OF THE OBJECT    
+  // SET UP COORDINATE SYSTEM with the CENTER IN THE CENTER OF THE OBJECT
   /////////////////////////////////////////////////////////////////////////////
   cout<<"Setting up the coordinate system..."<<endl;
-  RowVector posx; 
-  RowVector posy; 
+  RowVector posx;
+  RowVector posy;
   RowVector posz;
   posx=read_ascii_matrix(opt_pulse.value()+".posx");//in SI already
   posy=read_ascii_matrix(opt_pulse.value()+".posy");//in SI already
@@ -219,21 +219,21 @@ int compute_volume(int argc, char *argv[])
     //lo=myid*(hi/numprocs);
     //if (myid<numprocs-1) hi=(myid+1)*(hi/numprocs);
     //cout<<" Process "<<myid<<" does from "<<lo<<" to "<<hi<<".\n";
-  #else 
+  #else
     myid=opt_procid.value();
     numprocs=opt_nproc.value();
   #endif //USE_MPI
   cout<<"Number of processors is "<<numprocs<<".; My ID is "<<myid<<"."<<endl;
   cout<<""<<endl;
   //////////////////////////////////////////////////////////////////////////
-  // READ IN THE OBJECT (BRAIN) and TISSUE PROPERTIES                                       
+  // READ IN THE OBJECT (BRAIN) and TISSUE PROPERTIES
   //////////////////////////////////////////////////////////////////////////
   sleep(myid*10);
   cout<<"Reading the object for ID "<<myid<<"..."<<endl;
   volume4D<double> phantom;//consists of gry,wht,csf,fat,mus,con,gli,skn (in that order)
   read_volume4DROI(phantom,opt_object.value(),myid,0,0,0,Nxx,-1,-1,-1,numprocs,1,1,1);
   //read_volume4D(phantom,opt_object.value());
-  int Nx=phantom.xsize();double xdim=phantom.xdim()*0.001; 
+  int Nx=phantom.xsize();double xdim=phantom.xdim()*0.001;
   int Ny=phantom.ysize();double ydim=phantom.ydim()*0.001;
   int Nz=phantom.zsize();double zdim=phantom.zdim()*0.001;
   int Nt=phantom.tsize();
@@ -264,7 +264,7 @@ int compute_volume(int argc, char *argv[])
   /////////////////////////////////////////////////////////////////////////
   cout<<"Creating table for the slice profile..."<<endl;
   double* table_slcprof;
-  //slcprof has two columns: first one is normalised frequency (f-fc)/df -user defined, second is the normalised strength (0 1)- amount of the flip angle 
+  //slcprof has two columns: first one is normalised frequency (f-fc)/df -user defined, second is the normalised strength (0 1)- amount of the flip angle
   Matrix slcprof=read_ascii_matrix(opt_slcprof.value());
   int Nslc=slcprof.Nrows();
   table_slcprof = new double[Nslc];
@@ -288,9 +288,9 @@ int compute_volume(int argc, char *argv[])
   int resX=(int) (pulseinfo(5));
   int resY=(int) (pulseinfo(6));
   int kspacestart=(int) (pulseinfo(22));
-  int nrf=numslc*numvol;//number of rf pulses 
+  int nrf=numslc*numvol;//number of rf pulses
   int motionsize=motion.Nrows();
-  double tzmax, tzmin, txmax, txmin, tymax,tymin, rxmaxabs, rymaxabs, rzmaxabs; 
+  double tzmax, tzmin, txmax, txmin, tymax,tymin, rxmaxabs, rymaxabs, rzmaxabs;
   tzmax=0;tzmin=0; txmax=0;txmin=0; tymax=0; tymin=0; rxmaxabs=0;  rymaxabs=0; rzmaxabs=0;
   int level;
   for (int k=1;k<=motionsize;k++){
@@ -347,14 +347,14 @@ int compute_volume(int argc, char *argv[])
   double motion_add_up=fabs(sstzmin);
   double nvox=1/sszdim;//number of voxels per 1m in slice selection direction
   double sszstart_in=pulseinfo(17);// starting point in the volume in the direction of the slice selection (used to be just z)
-  int sszstart_p=(int) (sszstart_in*nvox+0.0001);//zstart in vox, 0.0001 is just a fix so that it rounds it properly 
+  int sszstart_p=(int) (sszstart_in*nvox+0.0001);//zstart in vox, 0.0001 is just a fix so that it rounds it properly
   int extra_down_vox=(int)((motion_add_down+slcpr_add)*nvox);
   int extra_down_slc=(int)(ceil((motion_add_down+slcpr_add)/slcthk));
   int sszstart=sszstart_p-extra_down_vox;
-  if (sszstart<0) sszstart=0; 
+  if (sszstart<0) sszstart=0;
   int extra_up_vox=(int)((motion_add_up+slcpr_add)*nvox);
   int extra_up_slc=(int)(ceil((motion_add_up+slcpr_add)/slcthk));
-  int sszend=sszstart_p+ (int)((numslc*slcthk+(numslc-1)*gap)*nvox) + extra_up_vox;  
+  int sszend=sszstart_p+ (int)((numslc*slcthk+(numslc-1)*gap)*nvox) + extra_up_vox;
   if (sszend>(ssNz-1)) sszend=ssNz-1;
   cout<<"Begining of the object is "<<sszstart<<" and the end is "<<sszend<<" (in vox, in slice select direction)."<<endl;
   cout<<"Motion add on - side (mm):"<<motion_add_down<<"; Motion add on + side (mm):"<<motion_add_up<<"; Slice profile add:"<<slcpr_add<<endl;
@@ -370,7 +370,7 @@ int compute_volume(int argc, char *argv[])
   int zstart=0;
   int zend=Nz;
   int sszz;
-  int sszz_slc=1; 
+  int sszz_slc=1;
   if (fabs((float)slcdir)==1){
        zstart=sszstart;
        zend=sszend+1;
@@ -385,7 +385,7 @@ int compute_volume(int argc, char *argv[])
     }
   cout<<""<<endl;
   /////////////////////////////////////////////////////////////////////
-  // ACTIVATION (T2*)                
+  // ACTIVATION (T2*)
   /////////////////////////////////////////////////////////////////////
   cout<<"Creating activation4D volume and timecourse vector..."<<endl;
   volume4D<double> activation4D;
@@ -399,7 +399,7 @@ int compute_volume(int argc, char *argv[])
     read_volumeROI(activation,opt_activation.value(),myid,0,0,Nxx,-1,-1,numprocs,1,1);
     //read_volume(activation,opt_activation.value());
     Matrix timecourse_tmp;
-    timecourse_tmp=read_ascii_matrix(opt_timecourse.value());//multiply with the activation file. 
+    timecourse_tmp=read_ascii_matrix(opt_timecourse.value());//multiply with the activation file.
     //cout<<"Timecourse_matrix is "<<timecourse_tmp<<endl;
     Nact=timecourse_tmp.Nrows();
     timecourse=new double[Nact];
@@ -451,9 +451,9 @@ int compute_volume(int argc, char *argv[])
 	  }
 	}
       }
-    }             
+    }
   }
-  else { 
+  else {
     cout<<"No activation mode"<<endl;
     Nact=1;
     activation4D_voxel=new double[Nact];
@@ -505,20 +505,20 @@ int compute_volume(int argc, char *argv[])
   //K-SPACE COORDINATES
   ///////////////////////////////////////////////////////////////////////
   int save_kcoord=0;
-  if (opt_kcoord.value()){ 
+  if (opt_kcoord.value()){
     save_kcoord=1;
     cout<<"k-space coordinates will be saved"<<endl;
-  } 
+  }
   cout<<""<<endl;
   /////////////////////////////////////////////////////////////////////////
-  // SIGNAL                                                             
+  // SIGNAL
   /////////////////////////////////////////////////////////////////////////
   cout<<"Calculating the signal..."<<endl;
   int nreadp=resX*(resY-kspacestart+1)*numslc*numvol;
   cout<<"Number of read out points is "<<nreadp<<endl;
   Matrix signal(2,nreadp);//two rows, one real and one complex for the signal in sum
   signal=0;
-  double* sreal; 
+  double* sreal;
   double* simag;
   sreal= new double[nreadp];
   simag= new double[nreadp];
@@ -535,7 +535,7 @@ int compute_volume(int argc, char *argv[])
   ///////////////////////////////////////////////////////////
   if (level==1){
     ////////////////////////
-    // B0 PERTURBATION 
+    // B0 PERTURBATION
     ////////////////////////
     cout<<"LEVEL1"<<endl;
     cout<<"Creating 1 B0file together with 3 gradient files..."<<endl;
@@ -552,7 +552,7 @@ int compute_volume(int argc, char *argv[])
       b0x=b0;
       b0y=b0;
       b0z=b0;
-    }  
+    }
     print_volume_info(b0,"b0");
     cout<<""<<endl;
     //save_volume(b0z,"b0ztest");
@@ -588,17 +588,17 @@ int compute_volume(int argc, char *argv[])
 	      }
 	     else if (opt_activation4D.set()){
                for (int n=0;n<=Nact-1;n++){
-		 double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts 
+		 double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts
                  double b=tissue(tt+1,2);
                  activation4D_voxel[n]=a*b/(a+b);
-	       }              
+	       }
 	     }
 	      voxel1(posx(xxx+1),posy(yy+1),posz(zz+1),tissue.Row(tt+1),
                      pulse,nreadp,voxelcounter,xdim,ydim,zdim,
                      b0(xx,yy,zz),b0x(xx,yy,zz),b0y(xx,yy,zz),b0z(xx,yy,zz),
                      timecourse,activation4D_voxel,Nact,outputname,
                      table_slcprof,dslcp,dslcp_first,Nslc,den,RFtrans(xx,yy,zz),
-                     opt_test,nospeedup,save_kcoord,sreal,simag);              
+                     opt_test,nospeedup,save_kcoord,sreal,simag);
 	    }
           xxx=xxx+numprocs;
 	  }
@@ -618,7 +618,7 @@ int compute_volume(int argc, char *argv[])
     pulse=sorter(pulse,motion);
     if (opt_mainmatrix.set()) write_binary_matrix(pulse,opt_mainmatrix.value());
     ////////////////////////
-    // B0 PERTURBATION 
+    // B0 PERTURBATION
     ////////////////////////
     cout<<"Creating 1 B0file together with 3 gradient files..."<<endl;
     volume<double> b0(Nxx,Ny,Nz);
@@ -634,7 +634,7 @@ int compute_volume(int argc, char *argv[])
       b0x=b0;
       b0y=b0;
       b0z=b0;
-    }  
+    }
     print_volume_info(b0,"b0");
     ////////////////
     //MAIN LOOP
@@ -669,7 +669,7 @@ int compute_volume(int argc, char *argv[])
 	      }
 	      else if (opt_activation4D.set()){
                 for (int n=0;n<=Nact-1;n++){
-                  double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts 
+                  double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts
                   double b=tissue(tt+1,2);
                   activation4D_voxel[n]=a*b/(a+b);
                 }
@@ -699,7 +699,7 @@ int compute_volume(int argc, char *argv[])
     pulse=sorter(pulse,motion);
     if (opt_mainmatrix.set()) write_binary_matrix(pulse,opt_mainmatrix.value());
     ////////////////////////////////////////////
-    // B0 PERTURBATION 
+    // B0 PERTURBATION
     ////////////////////////////////////////////
     cout<<"Creating 9 B0file together with 27 gradient files..."<<endl;
     volume<double> b0x_dx, b0x_dy, b0x_dz, b0y_dx, b0y_dy, b0y_dz, b0z_dx, b0z_dy, b0z_dz;//read in
@@ -771,9 +771,9 @@ int compute_volume(int argc, char *argv[])
 	        }
 	        else if (opt_activation4D.set()){
                   for (int n=0;n<=Nact-1;n++){
-                    double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts 
+                    double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts
                     double b=tissue(tt+1,2);
-                    activation4D_voxel[n]=a*b/(a+b); 
+                    activation4D_voxel[n]=a*b/(a+b);
 		  }
 		}
 		voxel3(posx(xxx+1),posy(yy+1),posz(zz+1),tissue.Row(tt+1),
@@ -806,7 +806,7 @@ int compute_volume(int argc, char *argv[])
   if (level==4){
     cout<<"LEVEL4"<<endl;
     ////////////////////////
-    // B0 PERTURBATION 
+    // B0 PERTURBATION
     ////////////////////////
     cout<<"Creating 1 B0extra file together with 3 gradient files all changing in time..."<<endl;
     Matrix b0timecourse_tmp;
@@ -814,7 +814,7 @@ int compute_volume(int argc, char *argv[])
     double* b0timecourse_2;
     double* b0time;
     double* b0xtime;
-    double* b0ytime; 
+    double* b0ytime;
     double* b0ztime;
     b0timecourse_tmp=read_ascii_matrix(opt_b0timecourse4D.value());
     int Nb0=b0timecourse_tmp.Nrows();
@@ -849,7 +849,7 @@ int compute_volume(int argc, char *argv[])
       b0x=b0;
       b0y=b0;
       b0z=b0;
-    }  
+    }
     print_volume_info(b0,"b0");
     cout<<""<<endl;
     /////////////
@@ -884,10 +884,10 @@ int compute_volume(int argc, char *argv[])
 		}
 	        else if (opt_activation4D.set()){
                   for (int n=0;n<=Nact-1;n++){
-                    double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts 
+                    double a=activation4D(xx,yy,zz,n);//zz-zstart_p when having only a pieace of the activation volume so we start from where the phantom starts
                     double b=tissue(tt+1,2);
-                    activation4D_voxel[n]=a*b/(a+b); 
-		  }              
+                    activation4D_voxel[n]=a*b/(a+b);
+		  }
 		}
                 for (int n=0;n<=Nb0-1;n++){
                   b0time[n]=b0extra(xx,yy,zz)*b0timecourse_2[n];
@@ -897,14 +897,14 @@ int compute_volume(int argc, char *argv[])
 		  if (voxelcounter==1){
 		    cout<<"b0time[n]="<<b0time[n]<<"b0xtime[n]="<<b0xtime[n]<<"b0ytime[n]="<<b0ytime[n]<<"b0ztime[n]="<<b0ztime[n]<<endl;
 		  }
-		} 
+		}
             	voxel4(posx(xxx+1),posy(yy+1),posz(zz+1),tissue.Row(tt+1),
                        pulse,nreadp,voxelcounter,xdim,ydim,zdim,
                        b0time,b0xtime,b0ytime,b0ztime, b0timecourse, Nb0,
                        b0(xx,yy,zz),b0x(xx,yy,zz),b0y(xx,yy,zz),b0z(xx,yy,zz),
                        timecourse,activation4D_voxel,Nact,outputname,table_slcprof,
                        dslcp,dslcp_first,Nslc,den,RFtrans(xx,yy,zz),opt_test,
-                       nospeedup,save_kcoord,sreal,simag);  
+                       nospeedup,save_kcoord,sreal,simag);
 	    }
 	    xxx=xxx+numprocs;
 	  }
@@ -921,9 +921,9 @@ int compute_volume(int argc, char *argv[])
     simag_total= new double[nreadp];
     MPI_Reduce(sreal, sreal_total, nreadp, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);//MPI::COMM_WORLD.Reduce(sreal,sreal_total,nreadp,MPI::DOUBLE,MPI::SUM,0);
     MPI_Reduce(simag, simag_total, nreadp, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);//MPI::COMM_WORLD.Reduce(simag,simag_total,nreadp,MPI::DOUBLE,MPI::SUM,0);
-    cout<<"Element nmb 1091 on  "<<myid<<" is <"<<sreal[1091]<<", "<<simag[1091]<<">.\n"; 
+    cout<<"Element nmb 1091 on  "<<myid<<" is <"<<sreal[1091]<<", "<<simag[1091]<<">.\n";
     if (myid==0){
-      cout<<"Element nmb 1091 on "<<myid<<" is <"<<sreal_total[1091]<<", "<<simag_total[1091]<<">.\n"; 
+      cout<<"Element nmb 1091 on "<<myid<<" is <"<<sreal_total[1091]<<", "<<simag_total[1091]<<">.\n";
       for (int i=1;i<=nreadp;i++) {
         signal(1,i)=sreal_total[i-1]*1e06; //1e06 we need to make signal have larger values so that it more resembles the scanner
         signal(2,i)=simag_total[i-1]*1e06; //1e06 we need to make signal have larger values so that it more resembles the scanner
@@ -977,7 +977,7 @@ int main (int argc, char *argv[])
     options.add(opt_slcprof);
     options.add(opt_mainmatrix);
     options.add(opt_nospeedup);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
     // line below stops the program if there are less than 2 non-optional args
@@ -987,14 +987,14 @@ int main (int argc, char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
   compute_volume(argc, argv);

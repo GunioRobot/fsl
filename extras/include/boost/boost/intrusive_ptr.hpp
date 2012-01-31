@@ -36,7 +36,7 @@ namespace boost
 //  A smart pointer that uses intrusive reference counting.
 //
 //  Relies on unqualified calls to
-//  
+//
 //      void intrusive_ptr_add_ref(T * p);
 //      void intrusive_ptr_release(T * p);
 //
@@ -129,13 +129,13 @@ public:
 
 #elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
     typedef T * (this_type::*unspecified_bool_type)() const;
-    
+
     operator unspecified_bool_type() const // never throws
     {
         return p_ == 0? 0: &this_type::get;
     }
 
-#else 
+#else
 
     typedef T * this_type::*unspecified_bool_type;
 
@@ -255,7 +255,7 @@ using std::basic_ostream;
 template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
 # else
 template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
-# endif 
+# endif
 {
     os << p.get();
     return os;
@@ -267,6 +267,6 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)
-#endif    
+#endif
 
 #endif  // #ifndef BOOST_INTRUSIVE_PTR_HPP_INCLUDED

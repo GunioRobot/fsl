@@ -5,8 +5,8 @@
 // Copyright Aleksey Gurtovoy 2003-2004
 // Copyright David Abrahams 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -36,19 +36,19 @@ template< typename Set, typename Tail > struct s_iter_impl
     typedef typename Tail::item_::type  type;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    typedef typename eval_if< 
+    typedef typename eval_if<
           has_key< Set,typename Tail::next_::type >
         , identity< s_iter<Set,typename Tail::next_> >
         , next< s_iter<Set,typename Tail::next_> >
-        >::type next;        
+        >::type next;
 #endif
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-template< typename Set, typename Tail > 
+template< typename Set, typename Tail >
 struct next< s_iter<Set,Tail> >
-    : eval_if< 
+    : eval_if<
           has_key< Set,typename Tail::next_::type >
         , identity< s_iter<Set,typename Tail::next_> >
         , next< s_iter<Set,typename Tail::next_> >
@@ -56,7 +56,7 @@ struct next< s_iter<Set,Tail> >
 {
 };
 
-template< typename Set > 
+template< typename Set >
 struct next< s_iter<Set,set0<> > >
 {
     typedef s_iter<Set,set0<> > type;
@@ -82,7 +82,7 @@ struct s_end_iter
 };
 
 template< typename Set, typename Tail > struct s_iter
-    : if_< 
+    : if_<
           is_same< Tail,set0<> >
         , s_end_iter<Set>
         , s_iter_impl<Set,Tail>

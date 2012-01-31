@@ -91,7 +91,7 @@ proc ::tk::ConsoleInit {} {
     } else {
 	.menubar.edit add command -label [mc "Delete"] -underline 0 \
 		-command { event generate .console <<Clear>> } -accel "Del"
-	
+
 	.menubar add cascade -label Help -menu .menubar.help -underline 0
 	menu .menubar.help -tearoff 0
 	.menubar.help add command -label [mc "About..."] \
@@ -270,7 +270,7 @@ proc ::tk::ConsoleHistory {cmd} {
 
 # ::tk::ConsolePrompt --
 # This procedure draws the prompt.  If tcl_prompt1 or tcl_prompt2
-# exists in the main interpreter it will be called to generate the 
+# exists in the main interpreter it will be called to generate the
 # prompt.  Otherwise, a hard coded default prompt is printed.
 #
 # Arguments:
@@ -316,7 +316,7 @@ proc ::tk::ConsoleBind {w} {
     bindtags $w [list $w Console PostConsole [winfo toplevel $w] all]
 
     ## Get all Text bindings into Console
-    foreach ev [bind Text] { bind Console $ev [bind Text $ev] }	
+    foreach ev [bind Text] { bind Console $ev [bind Text $ev] }
     ## We really didn't want the newline insertion...
     bind Console <Control-Key-o> {}
     ## ...or any Control-v binding (would block <<Paste>>)
@@ -653,7 +653,7 @@ proc ::tk::console::TagProc w {
 # 	c2	- second char of pair
 #
 # Calls:	::tk::console::Blink
- 
+
 proc ::tk::console::MatchPair {w c1 c2 {lim 1.0}} {
     if {!$::tk::console::magicKeys} { return }
     if {[set ix [$w search -back $c1 insert $lim]] ne ""} {
@@ -696,7 +696,7 @@ proc ::tk::console::MatchPair {w c1 c2 {lim 1.0}} {
 #	w	- console text widget
 #
 # Calls:	::tk::console::Blink
- 
+
 proc ::tk::console::MatchQuote {w {lim 1.0}} {
     if {!$::tk::console::magicKeys} { return }
     set i insert-1c
@@ -809,7 +809,7 @@ proc ::tk::console::Expand {w {type ""}} {
 #
 # Returns:	list containing longest unique match followed by all the
 #		possible further matches
- 
+
 proc ::tk::console::ExpandPathname str {
     set pwd [EvalAttached pwd]
     if {[catch {EvalAttached [list cd [file dirname $str]]} err]} {
@@ -955,4 +955,4 @@ proc ::tk::console::ExpandBestMatch {l {e {}}} {
 }
 
 # now initialize the console
-::tk::ConsoleInit 
+::tk::ConsoleInit

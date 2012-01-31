@@ -64,13 +64,13 @@ struct const_identity_base
   }
 
   Type& operator()(const reference_wrapper<Type>& x)const
-  { 
+  {
     return x.get();
   }
 
   Type& operator()(
     const reference_wrapper<typename remove_const<Type>::type>& x,int=0)const
-  { 
+  {
     return x.get();
   }
 };
@@ -81,7 +81,7 @@ struct non_const_identity_base
   typedef Type result_type;
 
   /* templatized for pointer-like types */
-  
+
   template<typename ChainedPtr>
   Type& operator()(const ChainedPtr& x)const
   {
@@ -99,12 +99,12 @@ struct non_const_identity_base
   }
 
   const Type& operator()(const reference_wrapper<const Type>& x,int=0)const
-  { 
+  {
     return x.get();
   }
 
   Type& operator()(const reference_wrapper<Type>& x)const
-  { 
+  {
     return x.get();
   }
 };

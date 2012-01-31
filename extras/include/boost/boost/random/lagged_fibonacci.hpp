@@ -138,7 +138,7 @@ public:
   {
     return x == val;
   }
-  
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -163,7 +163,7 @@ public:
       for(unsigned int i = 0; i < f.long_lag; ++i)
           is >> f.x[i] >> std::ws;
       return is;
-# endif 
+# endif
   }
 #endif
 
@@ -349,7 +349,7 @@ public:
     // return abs(x - v) < 5 * epsilon
     return x > v - epsilon && x < v + epsilon;
   }
-  
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -362,7 +362,7 @@ public:
     using std::pow;
 #endif
     os << f.i << " ";
-    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
+    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left);
     for(unsigned int i = 0; i < f.long_lag; ++i)
       os << f.x[i] * f._modulus << " ";
     os.flags(oldflags);
@@ -383,7 +383,7 @@ public:
             f.x[i] = value / f._modulus;
         }
         return is;
-# endif 
+# endif
     }
 #endif
 

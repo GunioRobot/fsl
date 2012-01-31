@@ -32,17 +32,17 @@ struct caller_py_function_impl : py_function_impl_base
     caller_py_function_impl(Caller const& caller)
         : m_caller(caller)
     {}
-    
+
     PyObject* operator()(PyObject* args, PyObject* kw)
     {
         return m_caller(args, kw);
     }
-    
+
     virtual unsigned min_arity() const
     {
         return m_caller.min_arity();
     }
-    
+
     virtual python::detail::signature_element const* signature() const
     {
         return m_caller.signature();
@@ -58,17 +58,17 @@ struct signature_py_function_impl : py_function_impl_base
     signature_py_function_impl(Caller const& caller)
         : m_caller(caller)
     {}
-    
+
     PyObject* operator()(PyObject* args, PyObject* kw)
     {
         return m_caller(args, kw);
     }
-    
+
     virtual unsigned min_arity() const
     {
         return mpl::size<Sig>::value - 1;
     }
-    
+
     virtual python::detail::signature_element const* signature() const
     {
         return python::detail::signature<Sig>::elements();
@@ -86,22 +86,22 @@ struct full_py_function_impl : py_function_impl_base
       , m_min_arity(min_arity)
       , m_max_arity(max_arity > min_arity ? max_arity : min_arity)
     {}
-    
+
     PyObject* operator()(PyObject* args, PyObject* kw)
     {
         return m_caller(args, kw);
     }
-    
+
     virtual unsigned min_arity() const
     {
         return m_min_arity;
     }
-    
+
     virtual unsigned max_arity() const
     {
         return m_max_arity;
     }
-    
+
     virtual python::detail::signature_element const* signature() const
     {
         return python::detail::signature<Sig>::elements();
@@ -143,7 +143,7 @@ struct py_function
     {
         return m_impl->min_arity();
     }
-    
+
     unsigned max_arity() const
     {
         return m_impl->max_arity();
@@ -153,7 +153,7 @@ struct py_function
     {
         return m_impl->signature();
     }
-    
+
  private:
     mutable std::auto_ptr<py_function_impl_base> m_impl;
 };

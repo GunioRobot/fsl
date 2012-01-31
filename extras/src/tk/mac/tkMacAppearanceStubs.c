@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacAppearanceStubs.c --
  *
  *	This file contains stubs for some MacOS8.6+ Toolbox calls that
@@ -13,7 +13,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * 
+ *
  */
 
 #include <MacWindows.h>
@@ -22,11 +22,11 @@
 /* Export these calls from the Tk library, since we may need to use
  * them in shell calls.
  */
-  
+
 pascal OSStatus
 MoveWindowStructure(
-    WindowPtr window, 
-    short hGlobal, 
+    WindowPtr window,
+    short hGlobal,
     short vGlobal)
 {
     panic("Error: Running stub for PPC-Only routine");
@@ -36,9 +36,9 @@ MoveWindowStructure(
 
 pascal OSStatus
 CreateNewWindow(
-    WindowClass windowClass, 
-    WindowAttributes attributes, 
-    const Rect *bounds, 
+    WindowClass windowClass,
+    WindowAttributes attributes,
+    const Rect *bounds,
     WindowPtr *outWindow)
 {
     panic("Error: Running stub for PPC-Only routine");

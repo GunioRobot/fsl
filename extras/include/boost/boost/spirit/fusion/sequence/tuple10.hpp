@@ -162,7 +162,7 @@ namespace boost { namespace fusion
             , m1(*_1)
             , m2(*_2)
         {}
-        
+
         T0 m0;
         T1 m1;
         T2 m2;

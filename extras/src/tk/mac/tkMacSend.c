@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacSend.c --
  *
  *	This file provides procedures that implement the "send"
@@ -10,7 +10,7 @@
  *	for the first Wish app to create a gestalt of type 'WIsH'.
  *	This gestalt will point to a table, in system memory, of
  *	Tk apps.  Each Tk app, when it starts up, will register their
- *	name, and process ID, in this table.  This will allow us to 
+ *	name, and process ID, in this table.  This will allow us to
  *	implement "tk appname".
  *
  *	Then the send command will look up the process id of the target
@@ -21,7 +21,7 @@
  *	right one.
  *
  *	Implementing this has been on our list of things to do, but what
- *	with the demise of Tcl at Sun, and the lack of resources at 
+ *	with the demise of Tcl at Sun, and the lack of resources at
  *	Scriptics it may not get done for awhile.  So this sketch is
  *	offered for the brave to attempt if they need the functionality...
  *
@@ -41,7 +41,7 @@
 EXTERN int		Tk_SendObjCmd _ANSI_ARGS_((ClientData clientData,
 			    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
 
-     /* 
+     /*
       * The following structure is used to keep track of the
       * interpreters registered by this process.
       */
@@ -264,7 +264,7 @@ Tk_SetAppName(
      * will take care of disposing of this entry.
      */
 
-    for (riPtr = interpListPtr, prevPtr = NULL; riPtr != NULL; 
+    for (riPtr = interpListPtr, prevPtr = NULL; riPtr != NULL;
 	    prevPtr = riPtr, riPtr = riPtr->nextPtr) {
 	if (riPtr->interp == interp) {
 	    if (prevPtr == NULL) {
@@ -327,7 +327,7 @@ Tk_SetAppName(
     interpListPtr = riPtr;
     strcpy(riPtr->name, actualName);
 
-    Tcl_CreateObjCommand(interp, "send", Tk_SendObjCmd, 
+    Tcl_CreateObjCommand(interp, "send", Tk_SendObjCmd,
 	    (ClientData) riPtr, NULL /* TODO: DeleteProc */);
     if (Tcl_IsSafe(interp)) {
 	Tcl_HideCommand(interp, "send", "send");
@@ -388,7 +388,7 @@ Tk_SendObjCmd(
 	    break;
 	}
     }
-	
+
     if (objc < (i + 2)) {
 	Tcl_WrongNumArgs(interp, 1, objv,
 		"?options? interpName arg ?arg ...?");
@@ -408,12 +408,12 @@ Tk_SendObjCmd(
      * could be the same!
      */
 
-    for (riPtr = interpListPtr; (riPtr != NULL) 
+    for (riPtr = interpListPtr; (riPtr != NULL)
 	    && (strcmp(destName, riPtr->name)); riPtr = riPtr->nextPtr) {
 	/*
 	 * Empty loop body.
 	 */
-    
+
     }
 
     if (riPtr != NULL) {
@@ -511,11 +511,11 @@ TkGetInterpNames(
     listObjPtr = Tcl_NewListObj(0, (Tcl_Obj **) NULL);
     riPtr = interpListPtr;
     while (riPtr != NULL) {
-	Tcl_ListObjAppendElement(interp, listObjPtr, 
+	Tcl_ListObjAppendElement(interp, listObjPtr,
 		Tcl_NewStringObj(riPtr->name, -1));
 	riPtr = riPtr->nextPtr;
     }
-    
+
     Tcl_SetObjResult(interp, listObjPtr);
     return TCL_OK;
 }

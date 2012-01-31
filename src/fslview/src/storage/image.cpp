@@ -19,7 +19,7 @@ Image::Image(const std::string& filename):
 {
   if(!(m_avw = FslOpen(filename.c_str(), "r")))
     throw Exception("Failed to open file " + filename);
-  m_imageInfo = ImageInfo::init(m_avw,filename); 
+  m_imageInfo = ImageInfo::init(m_avw,filename);
   m_cachedVolumes.clear();
   m_cachedVolumes.resize(m_imageInfo->inqNumVolumes());
 }
@@ -28,7 +28,7 @@ Image::Image(ImageInfo::Handle info):
   m_avw(NULL), m_imageInfo(info)
 {
   m_cachedVolumes.resize(info->inqNumVolumes());
- 
+
   int x = m_imageInfo->inqX();
   int y = m_imageInfo->inqY();
   int z = m_imageInfo->inqZ();
@@ -39,7 +39,7 @@ Image::Image(ImageInfo::Handle info):
 
   for(int n = 0; n < v; ++n)
     {
-      switch(m_imageInfo->inqDt()) 
+      switch(m_imageInfo->inqDt())
       {
        case DT_UNSIGNED_CHAR: m_cachedVolumes[n] = VolumeB::createBlank(x,y,z); break;
        case DT_SIGNED_SHORT:  m_cachedVolumes[n] = VolumeS::createBlank(x,y,z); break;
@@ -51,7 +51,7 @@ Image::Image(ImageInfo::Handle info):
 }
 
 Image::~Image()
-{  
+{
   if(m_avw != NULL){FslClose(m_avw);}
 }
 
@@ -65,9 +65,9 @@ Image::Handle Image::load(const std::string& filename, bool calc)
 
   float min(im->getInfo()->inqMin());
   float max(im->getInfo()->inqMax());
-  
+
   if((min == max) && calc) {
-    switch(im->getInfo()->inqDt()) 
+    switch(im->getInfo()->inqDt())
       {
       case DT_UNSIGNED_CHAR:
       case DT_SIGNED_SHORT:
@@ -152,19 +152,19 @@ Volume::Handle Image::getVolume(short n, bool cache) const
   if(!v)
     {
       std::string name;
-      
-      switch(m_imageInfo->inqDt()) 
+
+      switch(m_imageInfo->inqDt())
       {
-      case DT_UNSIGNED_CHAR: 
-	name="unsigned char"; 
+      case DT_UNSIGNED_CHAR:
+	name="unsigned char";
 	v = VolumeB::getVolume(m_avw, min, max, n);
 	break;
       case DT_SIGNED_SHORT:
-	name="signed short"; 
+	name="signed short";
 	v = VolumeS::getVolume(m_avw, min, max, n);
 	break;
-      case DT_SIGNED_INT: 
-	name="signed int"; 
+      case DT_SIGNED_INT:
+	name="signed int";
 	v = VolumeI::getVolume(m_avw, min, max, n);
 	break;
       case DT_FLOAT:
@@ -179,7 +179,7 @@ Volume::Handle Image::getVolume(short n, bool cache) const
 	throw FileError(m_imageInfo->inqFileName(),"Data type not supported.");
       }
     }
-  if(cache) 
+  if(cache)
     m_cachedVolumes[n] = v;
   return v;
 }
@@ -189,7 +189,7 @@ TimeSeries::Handle Image::getTimeSeries(short x, short y, short z) const
   short xDim,yDim,zDim;
   long  voxel;
   TimeSeriesMap::iterator i;
-  
+
   xDim = m_imageInfo->inqX();
   yDim = m_imageInfo->inqY();
   zDim = m_imageInfo->inqZ();
@@ -198,8 +198,8 @@ TimeSeries::Handle Image::getTimeSeries(short x, short y, short z) const
   i =  m_cachedTimeSeries.find(voxel);
 
   if(m_cachedTimeSeries.end() == i)
-  {     
-      switch(m_imageInfo->inqDt()) 
+  {
+      switch(m_imageInfo->inqDt())
       {
        case DT_UNSIGNED_CHAR: m_cachedTimeSeries.insert(TimeSeriesMap::value_type(voxel, TimeSeriesB::getTimeSeries(m_avw,x,y,z))); break;
        case DT_SIGNED_SHORT:  m_cachedTimeSeries.insert(TimeSeriesMap::value_type(voxel, TimeSeriesS::getTimeSeries(m_avw,x,y,z))); break;
@@ -221,22 +221,22 @@ Volume::Handle Image::blankDraw()
                                                 m_imageInfo->inqZ()]);
   v->setMin(0);
   v->setMax(255);
-  
+
 
   unsigned int width  = v->inqX();
   unsigned int height = v->inqY();
   unsigned int depth  = v->inqZ();
 
-  for(unsigned int z = 0; z< depth; ++z)    
+  for(unsigned int z = 0; z< depth; ++z)
   {
     for(unsigned int y = 0; y < height; ++y)
-    {      
+    {
       for(unsigned int x = 0; x < width; ++x)
         {
           (*v)(x,y,z) = 0;
         }
     }
   }
-  
+
   return v;
 }

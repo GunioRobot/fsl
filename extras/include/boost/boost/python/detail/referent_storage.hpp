@@ -41,9 +41,9 @@ union aligned_storage
   // Compute the size of T's referent. We wouldn't need this at all,
   // but sizeof() is broken in CodeWarriors <= 8.0
   template <class T> struct referent_size;
-  
+
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  
+
   template <class T>
   struct referent_size<T&>
   {
@@ -58,7 +58,7 @@ union aligned_storage
       static T f();
       BOOST_STATIC_CONSTANT(std::size_t, value = sizeof(f()));
   };
-  
+
 # endif
 
 // A metafunction returning a POD type which can store U, where T ==

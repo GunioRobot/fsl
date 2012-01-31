@@ -50,7 +50,7 @@ inline int xtime_cmp(const xtime& xt1, const xtime& xt2)
 {
     if (xt1.sec == xt2.sec)
         return (int)(xt1.nsec - xt2.nsec);
-    else 
+    else
         return (xt1.sec > xt2.sec) ? 1 : -1;
 }
 

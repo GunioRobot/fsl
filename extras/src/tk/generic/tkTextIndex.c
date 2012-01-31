@@ -1,4 +1,4 @@
-/* 
+/*
  * tkTextIndex.c --
  *
  *	This module provides procedures that manipulate indices for
@@ -87,7 +87,7 @@ TkTextMakeByteIndex(tree, lineIndex, byteIndex, indexPtr)
 
     /*
      * Verify that the index is within the range of the line and points
-     * to a valid character boundary.  
+     * to a valid character boundary.
      */
 
     index = 0;
@@ -98,7 +98,7 @@ TkTextMakeByteIndex(tree, lineIndex, byteIndex, indexPtr)
 	     * the last character on the line is guaranteed to be a '\n',
 	     * we can back up a constant sizeof(char) bytes.
 	     */
-	     
+
 	    indexPtr->byteIndex = index - sizeof(char);
 	    break;
 	}
@@ -185,7 +185,7 @@ TkTextMakeCharIndex(tree, lineIndex, charIndex, indexPtr)
 	     * the last character on the line is guaranteed to be a '\n',
 	     * we can back up a constant sizeof(char) bytes.
 	     */
-	     
+
 	    indexPtr->byteIndex = index - sizeof(char);
 	    break;
 	}
@@ -417,7 +417,7 @@ TkTextGetIndex(interp, textPtr, string, indexPtr)
 	}
 	TkTextPixelIndex(textPtr, x, y, indexPtr);
 	endOfBase = end;
-	goto gotBase; 
+	goto gotBase;
     }
 
     if (isdigit(UCHAR(string[0])) || (string[0] == '-')) {
@@ -521,7 +521,7 @@ TkTextGetIndex(interp, textPtr, string, indexPtr)
 	if (*cp == 0) {
 	    break;
 	}
-    
+
 	if ((*cp == '+') || (*cp == '-')) {
 	    cp = ForwBack(cp, indexPtr);
 	} else {
@@ -546,7 +546,7 @@ TkTextGetIndex(interp, textPtr, string, indexPtr)
  *---------------------------------------------------------------------------
  *
  * TkTextPrintIndex --
- *	
+ *
  *	This procedure generates a string description of an index, suitable
  *	for reading in again later.
  *
@@ -658,7 +658,7 @@ TkTextIndexCmp(index1Ptr, index2Ptr)
 static CONST char *
 ForwBack(string, indexPtr)
     CONST char *string;		/* String to parse for additional info
-				 * about modifier (count and units). 
+				 * about modifier (count and units).
 				 * Points to "+" or "-" that starts
 				 * modifier. */
     TkTextIndex *indexPtr;	/* Index to update as specified in string. */
@@ -691,7 +691,7 @@ ForwBack(string, indexPtr)
      * accordingly.
      */
 
-    units = p; 
+    units = p;
     while ((*p != '\0') && !isspace(UCHAR(*p)) && (*p != '+') && (*p != '-')) {
 	p++;
     }
@@ -883,7 +883,7 @@ TkTextIndexForwChars(srcPtr, charCount, dstPtr)
 	 * back up one byte (for the terminal '\n' character) and return
 	 * that index.
 	 */
-	 
+
 	linePtr = TkBTreeNextLine(dstPtr->linePtr);
 	if (linePtr == NULL) {
 	    dstPtr->byteIndex -= sizeof(char);
@@ -1002,7 +1002,7 @@ TkTextIndexBackChars(srcPtr, charCount, dstPtr)
      */
 
     lineIndex = -1;
-    
+
     segSize = dstPtr->byteIndex;
     for (segPtr = dstPtr->linePtr->segPtr; ; segPtr = segPtr->nextPtr) {
 	if (segSize <= segPtr->size) {
@@ -1098,7 +1098,7 @@ TkTextIndexBackChars(srcPtr, charCount, dstPtr)
 static CONST char *
 StartEnd(string, indexPtr)
     CONST char *string;		/* String to parse for additional info
-				 * about modifier (count and units). 
+				 * about modifier (count and units).
 				 * Points to first character of modifer
 				 * word. */
     TkTextIndex *indexPtr;	/* Index to mdoify based on string. */

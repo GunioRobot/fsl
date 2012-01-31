@@ -119,7 +119,7 @@ XDestroyWindow(
 
 		    while (i > 0) {
 			WindowRef macWin;
-			
+
 			ChkErr(GetIndexedWindow, group, i--, 0, &macWin);
 			if (macWin) {
 			    WindowGroupRef newGroup = NULL;
@@ -1062,7 +1062,7 @@ TkMacOSXGetDrawablePort(
 #endif
 			);
 	    }
-	    resultPort = macWin->grafPtr;	
+	    resultPort = macWin->grafPtr;
 	}
     }
 

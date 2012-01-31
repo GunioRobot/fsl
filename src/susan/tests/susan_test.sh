@@ -121,6 +121,6 @@ echo ""
 if [ $flag -ne 0 ]
 then
 echo "non-zero comparison; possible problem with susan"
-else 
+else
 echo "All comparisons zero. No problems detected with susan"
 fi

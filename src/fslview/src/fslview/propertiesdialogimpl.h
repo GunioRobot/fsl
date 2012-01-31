@@ -16,5 +16,5 @@ private:
   PropertiesDialogImpl(QWidget *);
   ~PropertiesDialogImpl();
 };
-  
+
 #endif

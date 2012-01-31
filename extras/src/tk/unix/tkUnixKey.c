@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixKey.c --
  *
  *	This file contains routines for dealing with international keyboard
@@ -171,9 +171,9 @@ TkpSetKeycodeAndState(tkwin, keySym, eventPtr)
     Display *display;
     int state;
     KeyCode keycode;
-    
+
     display = Tk_Display(tkwin);
-    
+
     if (keySym == NoSymbol) {
 	keycode = 0;
     } else {

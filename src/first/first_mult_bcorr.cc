@@ -5,20 +5,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -30,13 +30,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -47,7 +47,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -87,8 +87,8 @@ string title="first_mult_bcorr (Version 1.0) University of Oxford (Mark Jenkinso
 string examples="first_mult_bcorr [options] -i <T1_image> -c <4D_corrected_labels> -u <4D_uncorrected_labels> -o <output_image>";
 
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("output F-stats to standard out"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("output F-stats to standard out"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -151,7 +151,7 @@ int set_up_globals(const volume<float>& t1im, const volume4D<int>& ucorrim)
 
 
 
-int labelval(const volume<int>& lvol) 
+int labelval(const volume<int>& lvol)
 {
   int val=200;
   for (int z=lvol.minz(); z<=lvol.maxz(); z++) {
@@ -185,7 +185,7 @@ float scoreval(float fval, int ulab, int clab, int shapenum)
   return score;
 }
 
-int do_work() 
+int do_work()
 {
   volume<float> t1im;
   volume4D<int> ucorrim, corrim;
@@ -204,7 +204,7 @@ int do_work()
     cerr << "ERROR: T1 image and uncorrected image must be the same size"<<endl;
     exit(EXIT_FAILURE);
   }
-  
+
   volume<int> outim(corrim[0]);
   outim*=0;
 
@@ -249,10 +249,10 @@ int do_work()
 
 int main(int argc,char *argv[])
 {
-	
+
   Tracer tr("main");
   OptionParser options(title, examples);
-	
+
   try {
     // must include all wanted options here (the order determines how
     //  the help message is printed)
@@ -263,18 +263,18 @@ int main(int argc,char *argv[])
     options.add(verbose);
     options.add(help);
     nonoptarg = options.parse_command_line(argc, argv);
-		
-    // line below stops the program if the help was requested or 
+
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-		
+
     // Call the local functions
     do_work();
-		
+
   } catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
@@ -283,8 +283,8 @@ int main(int argc,char *argv[])
     cerr << e.what() << endl;
   } catch(...) {
     cerr << "Aborted" << endl;
-  } 
-	
+  }
+
   return 0;// do_work(argc,argv);
 }
 

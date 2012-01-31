@@ -17,5 +17,5 @@
 
 /* Return a malloc'd string containing the canonical absolute name of the
    named file.  The last file name component need not exist, and may be a
-   symlink to a nonexistent file.  */ 
+   symlink to a nonexistent file.  */
 extern char *canonicalize_file_name (const char *name);

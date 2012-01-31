@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -128,7 +128,7 @@ grid $w.f.g.cmax -in $w.f.g -column 1 -row 4
 set flobsvars(nflobs) 3
 LabelSpinBox  $w.f.nflobs -textvariable flobsvars(nflobs) -label "Number of basis functions" -range " 1 100000 1 "
 
-FileEntry $w.f.featdir -textvariable entries($w,1) -label "Output directory" -title "Output directory" -width 20 -filedialog directory  -filetypes *.flobs 
+FileEntry $w.f.featdir -textvariable entries($w,1) -label "Output directory" -title "Output directory" -width 20 -filedialog directory  -filetypes *.flobs
 
 pack $w.f.pic $w.f.g $w.f.nflobs $w.f.featdir -in $w.f -padx 5 -pady 5 -anchor w
 
@@ -136,7 +136,7 @@ pack $w.f.pic $w.f.g $w.f.nflobs $w.f.featdir -in $w.f -padx 5 -pady 5 -anchor w
     #{{{ Button Frame
 
 frame $w.f.btns
-    
+
 button $w.f.btns.preview -command "make_flobs:apply $w 0" -text "Preview"
 
 button $w.f.btns.go -command "make_flobs:apply $w 1" -text "Go"
@@ -144,7 +144,7 @@ button $w.f.btns.go -command "make_flobs:apply $w 1" -text "Go"
 button $w.f.btns.cancel -command "destroy $w" -text "Exit"
 
 button $w.f.btns.help -command "FmribWebHelp file: ${FSLDIR}/doc/filmbabe/index.html" -text "Help" -width 5
- 
+
 pack $w.f.btns.preview $w.f.btns.go $w.f.btns.cancel $w.f.btns.help -in $w.f.btns -side left -expand yes -padx 3 -pady 3 -fill y
 
 pack $w.f.btns -in $w.f -side bottom -fill x -padx 3 -pady 3

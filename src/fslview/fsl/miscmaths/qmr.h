@@ -18,7 +18,7 @@
 //        6             ep
 //        7             xi
 //   -------------------------------------------------------------
-//   
+//
 // Upon successful return, output arguments have the following values:
 //
 //        x  --  approximate solution to Ax=b
@@ -42,8 +42,8 @@ namespace MISCMATHS {
 
 template < class Matrix, class Vector, class Preconditioner1,
            class Preconditioner2, class Real >
-int 
-QMR(const Matrix &A, Vector &x, const Vector &b, const Preconditioner1 &M1, 
+int
+QMR(const Matrix &A, Vector &x, const Vector &b, const Preconditioner1 &M1,
     const Preconditioner2 &M2, int &max_iter, Real &tol)
 {
   Real resid;
@@ -137,7 +137,7 @@ QMR(const Matrix &A, Vector &x, const Vector &b, const Preconditioner1 &M1,
     if (gamma(1) == 0.0)
       return 4;                        // return on breakdown
 
-    eta(1) = -eta(1) * rho_1(1) * gamma(1) * gamma(1) / 
+    eta(1) = -eta(1) * rho_1(1) * gamma(1) * gamma(1) /
       (beta(1) * gamma_1(1) * gamma_1(1));
 
     if (i > 1) {

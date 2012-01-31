@@ -70,14 +70,14 @@ namespace boost_concepts {
     }
     Iterator i;
   };
-  
+
   template <
       typename Iterator
     , typename ValueType = BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type
   >
   class WritableIteratorConcept {
   public:
-      
+
     void constraints() {
       boost::function_requires< boost::CopyConstructibleConcept<Iterator> >();
       *i = v;
@@ -85,7 +85,7 @@ namespace boost_concepts {
     ValueType v;
     Iterator i;
   };
-  
+
   template <typename Iterator>
   class SwappableIteratorConcept {
   public:
@@ -110,7 +110,7 @@ namespace boost_concepts {
     Iterator i;
   };
 
-  
+
   //===========================================================================
   // Iterator Traversal Concepts
 
@@ -163,7 +163,7 @@ namespace boost_concepts {
 
     void constraints() {
       boost::function_requires< SinglePassIteratorConcept<Iterator> >();
-      boost::function_requires< 
+      boost::function_requires<
         boost::DefaultConstructibleConcept<Iterator> >();
 
       typedef boost::mpl::and_<
@@ -180,7 +180,7 @@ namespace boost_concepts {
           ));
     }
   };
-  
+
   template <typename Iterator>
   class BidirectionalTraversalConcept {
   public:
@@ -188,7 +188,7 @@ namespace boost_concepts {
 
     void constraints() {
       boost::function_requires< ForwardTraversalConcept<Iterator> >();
-      
+
       BOOST_STATIC_ASSERT(
           (boost::is_convertible<
                 traversal_category
@@ -218,7 +218,7 @@ namespace boost_concepts {
               , boost::random_access_traversal_tag
            >::value
           ));
-      
+
       i += n;
       i = i + n;
       i = n + i;
@@ -242,11 +242,11 @@ namespace boost_concepts {
       bool b;
       b = i1 == i2;
       b = i1 != i2;
-      
+
       b = i2 == i1;
       b = i2 != i1;
     }
-    
+
     template <typename Iterator1, typename Iterator2>
     void interop_rand_access_constraints(Iterator1 const& i1, Iterator2 const& i2,
                                          boost::random_access_traversal_tag, boost::random_access_traversal_tag)
@@ -258,7 +258,7 @@ namespace boost_concepts {
       b = i1 >  i2;
       b = i1 >= i2;
       n = i1 -  i2;
-      
+
       b = i2 <  i1;
       b = i2 <= i1;
       b = i2 >  i1;

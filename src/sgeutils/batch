@@ -20,7 +20,7 @@ batch gzip *.img *.hdr
 batch -q short.q gzip *.img *.hdr
 batch -a darwin regscript rawdata outputdir ...
 
-  -q <queuename>        Possible values for <queuename> are "verylong.q", "long.q" 
+  -q <queuename>        Possible values for <queuename> are "verylong.q", "long.q"
                         and "short.q". See below for details
                         Default is "long.q".
   -N <jobname>          The string <jobname> will be used for the output files
@@ -28,8 +28,8 @@ batch -a darwin regscript rawdata outputdir ...
   -j <jid>		Job hold. Run this job after <jid> has completed.
   -h			Display this help text.
   -a <arch-name>        Architecture [darwin only at present]
-  -p <job-priority>     Lower priority [0:-1024] default = 0                 
-  -M <email-address>    Who to email. default = `whoami`@fmrib.ox.ac.uk 
+  -p <job-priority>     Lower priority [0:-1024] default = 0
+  -M <email-address>    Who to email. default = `whoami`@fmrib.ox.ac.uk
   -v                    Verbose mode.
 
 Queues:
@@ -37,7 +37,7 @@ Queues:
 There are three batch queues configured on the cluster, each with defined CPU
 time limits.
 
-short.q:    This queue is for jobs which last less then 2h. There are two slots 
+short.q:    This queue is for jobs which last less then 2h. There are two slots
             per node.
 long.q:     This queue is for jobs which last less than 24h. There are two slots
             per node.

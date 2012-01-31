@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMessage.c --
  *
  *	This module implements a message widgets for the Tk
@@ -318,7 +318,7 @@ MessageWidgetObjCmd(clientData, interp, objc, objv)
     int index;
     int result = TCL_OK;
     Tcl_Obj *objPtr;
-    
+
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "option ?arg arg ...?");
 	return TCL_ERROR;
@@ -330,7 +330,7 @@ MessageWidgetObjCmd(clientData, interp, objc, objv)
     }
 
     Tcl_Preserve((ClientData) msgPtr);
-    
+
     switch ((enum options) index) {
 	case MESSAGE_CGET: {
 	    if (objc != 3) {
@@ -366,7 +366,7 @@ MessageWidgetObjCmd(clientData, interp, objc, objv)
 	    break;
 	}
     }
-    
+
     Tcl_Release((ClientData) msgPtr);
     return result;
 }
@@ -401,7 +401,7 @@ DestroyMessage(memPtr)
     if (msgPtr->flags & REDRAW_PENDING) {
 	Tcl_CancelIdleCall(DisplayMessage, (ClientData) msgPtr);
     }
-   
+
     /*
      * Free up all the stuff that requires special handling, then
      * let Tk_FreeConfigOptions handle all the standard option-related
@@ -461,7 +461,7 @@ ConfigureMessage(interp, msgPtr, objc, objv, flags)
      */
 
     if (msgPtr->textVarName != NULL) {
-	Tcl_UntraceVar(interp, msgPtr->textVarName, 
+	Tcl_UntraceVar(interp, msgPtr->textVarName,
 		TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 		MessageTextVarProc, (ClientData) msgPtr);
     }
@@ -471,8 +471,8 @@ ConfigureMessage(interp, msgPtr, objc, objv, flags)
 	Tk_RestoreSavedOptions(&savedOptions);
 	return TCL_ERROR;
     }
-	    
-    
+
+
     /*
      * If the message is to display the value of a variable, then set up
      * a trace on the variable's value, create the variable if it doesn't
@@ -531,7 +531,7 @@ ConfigureMessage(interp, msgPtr, objc, objv, flags)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 static void
 MessageWorldChanged(instanceData)
     ClientData instanceData;	/* Information about widget. */

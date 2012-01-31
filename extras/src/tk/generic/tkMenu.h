@@ -73,7 +73,7 @@ typedef struct TkMenuEntry {
 				 * textVarName are ignored. */
     Tk_Image image;		/* Image to display in menu entry, or NULL if
 				 * none. */
-    Tcl_Obj *selectImagePtr;	/* Name of image to display when selected, or 
+    Tcl_Obj *selectImagePtr;	/* Name of image to display when selected, or
 				 * NULL. */
     Tk_Image selectImage;	/* Image to display in entry when selected,
 				 * or NULL if none.  Ignored if image is
@@ -143,11 +143,11 @@ typedef struct TkMenuEntry {
     Tcl_Obj *offValuePtr;	/* Value to store in variable when not
 				 * selected (only for check buttons).
 				 * Malloc'ed. */
-    
+
     /*
      * Information used for drawing this menu entry.
      */
-     
+
     int width;			/* Number of pixels occupied by entry in
 				 * horizontal dimension. Not used except
 				 * in menubars. The width of norma menus
@@ -173,17 +173,17 @@ typedef struct TkMenuEntry {
     /*
      * Miscellaneous fields.
      */
- 
+
     int entryFlags;		/* Various flags.  See below for
 				   definitions. */
     int index;			/* Need to know which index we are. This
     				 * is zero-based. This is the top-left entry
     				 * of the menu. */
-				 
+
     /*
      * Bookeeping for master menus and cascade menus.
      */
-     
+
     struct TkMenuReferences *childMenuRefPtr;
     				/* A pointer to the hash table entry for
     				 * the child menu. Stored here when the menu
@@ -313,10 +313,10 @@ typedef struct TkMenu {
     /*
      * Information about geometry of menu.
      */
-    
+
     int totalWidth;		/* Width of entire menu */
     int totalHeight;		/* Height of entire menu */
-   
+
     /*
      * Miscellaneous information:
      */
@@ -350,7 +350,7 @@ typedef struct TkMenu {
     TkMenuEntry *postedCascade;	/* Points to menu entry for cascaded submenu
 				 * that is currently posted or NULL if no
 				 * submenu posted. */
-    struct TkMenu *nextInstancePtr;	
+    struct TkMenu *nextInstancePtr;
     				/* The next instance of this menu in the
     				 * chain. */
     struct TkMenu *masterMenuPtr;
@@ -364,7 +364,7 @@ typedef struct TkMenu {
     				 * toplevel that owns the menu. Only applicable
     				 * for menubar clones.
     				 */
-    struct TkMenuReferences *menuRefPtr;	
+    struct TkMenuReferences *menuRefPtr;
     				/* Each menu is hashed into a table with the
     				 * name of the menu's window as the key.
     				 * The information in this hash table includes
@@ -373,7 +373,7 @@ typedef struct TkMenu {
     				 * list of toplevel widgets that have this
     				 * menu as its menubar, and a list of menu
     				 * entries that have this menu specified
-    				 * as a cascade. */    
+    				 * as a cascade. */
     TkMenuPlatformData platformData;
 				/* The data for the specific type of menu.
   				 * Depends on platform and menu type what
@@ -419,11 +419,11 @@ typedef struct TkMenuReferences {
     struct TkMenu *menuPtr;	/* The menu data structure. This is NULL
     				 * if the menu does not exist. */
     TkMenuTopLevelList *topLevelListPtr;
-    				/* First in the list of all toplevels that 
-    				 * have this menu as its menubar. NULL if no 
+    				/* First in the list of all toplevels that
+    				 * have this menu as its menubar. NULL if no
     				 * toplevel widgets have this menu as its
     				 * menubar. */
-    TkMenuEntry *parentEntryPtr;/* First in the list of all cascade menu 
+    TkMenuEntry *parentEntryPtr;/* First in the list of all cascade menu
     				 * entries that have this menu as their child.
     				 * NULL means no cascade entries. */
     Tcl_HashEntry *hashEntryPtr;/* This is needed because the pathname of the
@@ -451,12 +451,12 @@ typedef struct TkMenuOptionTables {
  * RESIZE_PENDING:		Non-zero means a call to ComputeMenuGeometry
  *				has already been scheduled.
  * MENU_DELETION_PENDING	Non-zero means that we are currently destroying
- *				this menu's internal structures. This is useful 
+ *				this menu's internal structures. This is useful
  *				when we are in the middle of cleaning
  *				this master menu's chain of menus up when
  *				TkDestroyMenu was called again on this
  *				menu (via a destroy binding or somesuch).
- * MENU_WIN_DESTRUCTION_PENDING Non-zero means we are in the middle of 
+ * MENU_WIN_DESTRUCTION_PENDING Non-zero means we are in the middle of
  *                              destroying this menu's Tk_Window.
  * MENU_PLATFORM_FLAG1...	Reserved for use by the platform-specific menu
  *				code.
@@ -478,7 +478,7 @@ typedef struct TkMenuOptionTables {
  * are deleted. If one of the other instances is deleted, only that instance
  * is deleted.
  */
- 
+
 #define UNKNOWN_TYPE		-1
 #define MASTER_MENU 		0
 #define TEAROFF_MENU 		1
@@ -544,7 +544,7 @@ EXTERN void		TkMenuSelectImageProc _ANSI_ARGS_
 			    ((ClientData clientData, int x, int y,
 			    int width, int height, int imgWidth,
 			    int imgHeight));
-EXTERN Tcl_Obj *	TkNewMenuName _ANSI_ARGS_((Tcl_Interp *interp, 
+EXTERN Tcl_Obj *	TkNewMenuName _ANSI_ARGS_((Tcl_Interp *interp,
 			    Tcl_Obj *parentNamePtr, TkMenu *menuPtr));
 EXTERN int		TkPostCommand _ANSI_ARGS_((TkMenu *menuPtr));
 EXTERN int		TkPostSubmenu _ANSI_ARGS_((Tcl_Interp *interp,
@@ -569,7 +569,7 @@ EXTERN void		TkpDestroyMenu _ANSI_ARGS_((TkMenu *menuPtr));
 EXTERN void		TkpDestroyMenuEntry
 			    _ANSI_ARGS_((TkMenuEntry *mEntryPtr));
 EXTERN void		TkpDrawMenuEntry _ANSI_ARGS_((TkMenuEntry *mePtr,
-			    Drawable d, Tk_Font tkfont, 
+			    Drawable d, Tk_Font tkfont,
 			    CONST Tk_FontMetrics *menuMetricsPtr, int x,
 			    int y, int width, int height, int strictMotif,
 			    int drawArrow));

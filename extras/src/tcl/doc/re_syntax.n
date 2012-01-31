@@ -4,7 +4,7 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: re_syntax.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
 '\"
 .so man.macros
@@ -260,7 +260,7 @@ are all synonymous.
 An equivalence class may not be an endpoint
 of a range.
 .VS 8.2
-(\fINote:\fR 
+(\fINote:\fR
 Tcl currently implements only the Unicode locale.
 It doesn't define any equivalence classes.
 The examples above are just illustrations.)
@@ -281,18 +281,18 @@ Standard character classes are:
 .ne 5
 .ta 3c
 .nf
-\fBalpha\fR	A letter. 
-\fBupper\fR	An upper-case letter. 
-\fBlower\fR	A lower-case letter. 
-\fBdigit\fR	A decimal digit. 
-\fBxdigit\fR	A hexadecimal digit. 
-\fBalnum\fR	An alphanumeric (letter or digit). 
+\fBalpha\fR	A letter.
+\fBupper\fR	An upper-case letter.
+\fBlower\fR	A lower-case letter.
+\fBdigit\fR	A decimal digit.
+\fBxdigit\fR	A hexadecimal digit.
+\fBalnum\fR	An alphanumeric (letter or digit).
 \fBprint\fR	An alphanumeric (same as alnum).
 \fBblank\fR	A space or tab character.
-\fBspace\fR	A character producing white space in displayed text. 
-\fBpunct\fR	A punctuation character. 
-\fBgraph\fR	A character with a visible representation. 
-\fBcntrl\fR	A control character. 
+\fBspace\fR	A character producing white space in displayed text.
+\fBpunct\fR	A punctuation character.
+\fBgraph\fR	A character with a visible representation.
+\fBcntrl\fR	A control character.
 .fi
 .RE
 .PP
@@ -444,7 +444,7 @@ in ASCII,
 but
 \fB\e135\fR
 does not terminate a bracket expression.
-Beware, however, that some applications (e.g., C compilers) interpret 
+Beware, however, that some applications (e.g., C compilers) interpret
 such sequences themselves before the regular-expression package
 gets to see them, which may require doubling (quadrupling, etc.) the `\fB\e\fR'.
 .PP
@@ -546,13 +546,13 @@ The subexpression must entirely precede the back reference in the RE.
 Subexpressions are numbered in the order of their leading parentheses.
 Non-capturing parentheses do not define subexpressions.
 .PP
-There is an inherent historical ambiguity between octal character-entry 
+There is an inherent historical ambiguity between octal character-entry
 escapes and back references, which is resolved by heuristics,
 as hinted at above.
 A leading zero always indicates an octal escape.
 A single non-zero digit, not followed by another digit,
 is always taken as a back reference.
-A multi-digit sequence not starting with a zero is taken as a back 
+A multi-digit sequence not starting with a zero is taken as a back
 reference if it comes after a suitable subexpression
 (i.e. the number is in the legal range for a back reference),
 and otherwise is taken as octal.
@@ -838,7 +838,7 @@ In AREs,
 \fB\e\fR
 followed by an alphanumeric character is either an
 escape or an error,
-while in RREs, it was just another way of writing the 
+while in RREs, it was just another way of writing the
 alphanumeric.
 This should not be a problem because there was no reason to write
 such a sequence in RREs.
@@ -875,7 +875,7 @@ the first match would be reported.
 (The careful crafting of RREs to optimize the search order for fast
 matching is obsolete (AREs examine all possible matches
 in parallel, and their performance is largely insensitive to their
-complexity) but cases where the search order was exploited to deliberately 
+complexity) but cases where the search order was exploited to deliberately
 find a match which was \fInot\fR the longest/shortest will need rewriting.)
 .RE
 

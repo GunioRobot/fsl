@@ -1,6 +1,6 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
-    Authors:    David Flitney 
+    Authors:    David Flitney
 
     FMRIB Image Analysis Group
 

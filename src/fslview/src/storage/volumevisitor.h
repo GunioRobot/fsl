@@ -14,9 +14,9 @@
 class VolumeVisitor
 {
 public:
-  VolumeVisitor() {} 
+  VolumeVisitor() {}
   virtual ~VolumeVisitor() {}
-  
+
   virtual void visit(VolumeB::WeakHandle target) = 0;
   virtual void visit(VolumeS::WeakHandle target) = 0;
   virtual void visit(VolumeF::WeakHandle target) = 0;

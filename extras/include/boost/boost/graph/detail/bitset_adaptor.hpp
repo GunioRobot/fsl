@@ -13,8 +13,8 @@
     template <class T, class Derived>
     struct bitset_adaptor {
       Derived& derived() { return static_cast<Derived&>(*this); }
-      const Derived& derived() const { 
-        return static_cast<const Derived&>(*this); 
+      const Derived& derived() const {
+        return static_cast<const Derived&>(*this);
       }
     };
 
@@ -22,7 +22,7 @@
     bool set_contains(const bitset_adaptor<T,D>& s, const V& x) {
       return s.derived().test(x);
     }
-    
+
     template <class T, class D>
     bool set_equal(const bitset_adaptor<T,D>& x,
                    const bitset_adaptor<T,D>& y) {
@@ -54,8 +54,8 @@
     void set_remove(bitset_adaptor<T,D>& x, const V& a) {
       x.derived().set(a, false);
     }
-    
-    template <class T, class D>    
+
+    template <class T, class D>
     void set_intersect(const bitset_adaptor<T,D>& x,
                        const bitset_adaptor<T,D>& y,
                        bitset_adaptor<T,D>& z)
@@ -63,7 +63,7 @@
       z.derived() = x.derived() & y.derived();
     }
 
-    template <class T, class D>    
+    template <class T, class D>
     void set_union(const bitset_adaptor<T,D>& x,
                    const bitset_adaptor<T,D>& y,
                    bitset_adaptor<T,D>& z)
@@ -71,7 +71,7 @@
       z.derived() = x.derived() | y.derived();
     }
 
-    template <class T, class D>    
+    template <class T, class D>
     void set_difference(const bitset_adaptor<T,D>& x,
                         const bitset_adaptor<T,D>& y,
                         bitset_adaptor<T,D>& z)
@@ -79,12 +79,12 @@
       z.derived() = x.derived() - y.derived();
     }
 
-    template <class T, class D>    
+    template <class T, class D>
     void set_compliment(const bitset_adaptor<T,D>& x,
                         bitset_adaptor<T,D>& z)
     {
       z.derived() = x.derived();
       z.derived().flip();
     }
-    
+
 #endif // BOOST_BITSET_ADAPTOR_HPP

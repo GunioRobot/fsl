@@ -20,7 +20,7 @@ namespace eval ::tcl::test::fileSystem {
 	namespace import ::tcltest::removeFile
 	namespace import ::tcltest::test
     }
-    
+
     catch {
 	file delete -force link.file
 	file delete -force dir.link
@@ -33,7 +33,7 @@ makeDirectory dir.file
 makeFile "test file in directory" [file join dir.file inside.file]
 
 if {[catch {
-    file link link.file gorp.file 
+    file link link.file gorp.file
     file link \
       [file join dir.file linkinside.file] \
       [file join dir.file inside.file]
@@ -438,7 +438,7 @@ test filesystem-8.1 {relative path objects and caching of pwd} {
     lappend res [file exists $f]
     cd ..
     cd def
-    # If we haven't cleared the object's cwd cache, Tcl 
+    # If we haven't cleared the object's cwd cache, Tcl
     # will think it still exists.
     lappend res [file exists $f]
     lappend res [file exists $f]
@@ -550,7 +550,7 @@ test filesystem-9.5 {path objects and file tail and object rep} {
 	set absolute [file join [pwd] $relative]
 	set res [list [file tail $absolute] "test"]
     }
-    file delete -force dgp 
+    file delete -force dgp
     cd $origdir
     set res
 } {test test}

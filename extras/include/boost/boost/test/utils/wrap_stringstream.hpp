@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2002-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -81,7 +81,7 @@ basic_wrap_stringstream<CharT>::stream()
 template <typename CharT>
 inline basic_wrap_stringstream<CharT>&
 basic_wrap_stringstream<CharT>::ref()
-{ 
+{
     return *this;
 }
 
@@ -165,7 +165,7 @@ typedef basic_wrap_stringstream<wchar_t>    wrap_wstringstream;
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: wrap_stringstream.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

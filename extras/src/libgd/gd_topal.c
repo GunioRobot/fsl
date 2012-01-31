@@ -43,7 +43,7 @@
  * If it is not working, it's not Thomas G. Lane's fault.
  */
 
-/* 
+/*
   SETTING THIS ONE CAUSES STRIPED IMAGE
   to be done: solve this
   #define ORIGINAL_LIB_JPEG_REVERSE_ODD_ROWS
@@ -152,7 +152,7 @@
  * color space, and repeatedly splits the "largest" remaining box until we
  * have as many boxes as desired colors.  Then the mean color in each
  * remaining box becomes one of the possible output colors.
- * 
+ *
  * The second pass over the image maps each input pixel to the closest output
  * color (optionally after applying a Floyd-Steinberg dithering correction).
  * This mapping is logically trivial, but making it go fast enough requires
@@ -793,7 +793,7 @@ select_colors (gdImagePtr oim, gdImagePtr nim, my_cquantize_ptr cquantize, int d
   boxlist = (boxptr) (*cinfo->mem->alloc_small)
     ((j_common_ptr) cinfo, JPOOL_IMAGE, desired_colors * SIZEOF (box));
 #else
-  /* This can't happen because we clamp desired_colors at gdMaxColors, 
+  /* This can't happen because we clamp desired_colors at gdMaxColors,
     but anyway */
   if (overflow2(desired_colors, sizeof (box))) {
     return;
@@ -1324,9 +1324,9 @@ pass2_no_dither (j_decompress_ptr cinfo,
 #else
 	  r = gdTrueColorGetRed (*inptr);
 	  g = gdTrueColorGetGreen (*inptr);
-	  /* 
+	  /*
 	     2.0.24: inptr must not be incremented until after
-	     transparency check, if any. Thanks to "Super Pikeman." 
+	     transparency check, if any. Thanks to "Super Pikeman."
 	   */
 	  b = gdTrueColorGetBlue (*inptr);
 
@@ -1799,7 +1799,7 @@ static void gdImageTrueColorToPaletteBody (gdImagePtr oim, int dither, int color
     }
   } else {
     nim = oim;
-  }     
+  }
   if (!oim->trueColor)
     {
       /* (Almost) nothing to do! */
@@ -2007,7 +2007,7 @@ static void gdImageTrueColorToPaletteBody (gdImagePtr oim, int dither, int color
     }
 
   /* Success! Get rid of the truecolor image data. */
-  if (!cimP) { 
+  if (!cimP) {
     oim->trueColor = 0;
     /* Junk the truecolor pixels */
     for (i = 0; i < oim->sy; i++)

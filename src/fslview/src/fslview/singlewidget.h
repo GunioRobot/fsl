@@ -14,18 +14,18 @@
 
 class QTimer;
 
-class SingleWidget : public ImageWidget  
+class SingleWidget : public ImageWidget
 {
   Q_OBJECT
 public:
-  SingleWidget(QWidget *parent, ImageGroup::Handle i, 
+  SingleWidget(QWidget *parent, ImageGroup::Handle i,
               OverlayList::Handle ol,
               Cursor::Handle& c);
   virtual ~SingleWidget();
   //  virtual void update(const Cursor::Handle& c);
 
 signals:
- 
+
   void  volChanged(int);
 
 private slots:
@@ -39,7 +39,7 @@ private:
   void newSlice(int orient, int mode);
   SliceWidget::Handle  m_slice;
   ImageGroup::Handle   m_image;
-  QTimer              *m_sliceRollTimer;  
+  QTimer              *m_sliceRollTimer;
   QToolButton         *m_cursorModeButton;
   int                  m_viewNumber;
 };

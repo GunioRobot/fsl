@@ -23,10 +23,10 @@ SliceStore<VoxelType>::~SliceStore()
 	delete [] m_buffer;
 }
 
-template <class VoxelType> 
+template <class VoxelType>
 void SliceStore<VoxelType>::accept(SliceVisitor& v)
 {
-	v.visit(m_handle); 
+	v.visit(m_handle);
 }
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacFCmd.c --
  *
  * Implements the Macintosh specific portions of the file manipulation
@@ -75,31 +75,31 @@ static long startSeed = 248923489;
  * Prototypes for procedure only used in this file
  */
 
-static pascal Boolean 	CopyErrHandler _ANSI_ARGS_((OSErr error, 
+static pascal Boolean 	CopyErrHandler _ANSI_ARGS_((OSErr error,
 			    short failedOperation,
 			    short srcVRefNum, long srcDirID,
 			    ConstStr255Param srcName, short dstVRefNum,
 			    long dstDirID,ConstStr255Param dstName));
 static int		DoCopyDirectory _ANSI_ARGS_((CONST char *src,
 			    CONST char *dst, Tcl_DString *errorPtr));
-static int		DoCopyFile _ANSI_ARGS_((CONST char *src, 
+static int		DoCopyFile _ANSI_ARGS_((CONST char *src,
 			    CONST char *dst));
 static int		DoCreateDirectory _ANSI_ARGS_((CONST char *path));
-static int		DoRemoveDirectory _ANSI_ARGS_((CONST char *path, 
+static int		DoRemoveDirectory _ANSI_ARGS_((CONST char *path,
 			    int recursive, Tcl_DString *errorPtr));
 static int		DoRenameFile _ANSI_ARGS_((CONST char *src,
 			    CONST char *dst));
-OSErr			FSpGetFLockCompat _ANSI_ARGS_((const FSSpec *specPtr, 
+OSErr			FSpGetFLockCompat _ANSI_ARGS_((const FSSpec *specPtr,
 			    Boolean *lockedPtr));
-static OSErr		GetFileSpecs _ANSI_ARGS_((CONST char *path, 
-			    FSSpec *pathSpecPtr, FSSpec *dirSpecPtr,	
-			    Boolean *pathExistsPtr, 
+static OSErr		GetFileSpecs _ANSI_ARGS_((CONST char *path,
+			    FSSpec *pathSpecPtr, FSSpec *dirSpecPtr,
+			    Boolean *pathExistsPtr,
 			    Boolean *pathIsDirectoryPtr));
-static OSErr		MoveRename _ANSI_ARGS_((const FSSpec *srcSpecPtr, 
+static OSErr		MoveRename _ANSI_ARGS_((const FSSpec *srcSpecPtr,
 			    const FSSpec *dstSpecPtr, StringPtr copyName));
-static int		Pstrequal _ANSI_ARGS_((ConstStr255Param stringA, 
+static int		Pstrequal _ANSI_ARGS_((ConstStr255Param stringA,
 			    ConstStr255Param stringB));
-                 
+
 /*
  *---------------------------------------------------------------------------
  *
@@ -112,7 +112,7 @@ static int		Pstrequal _ANSI_ARGS_((ConstStr255Param stringA,
  *	    If src is a directory, dst may be an empty directory.
  *	    If src is a file, dst may be a file.
  *	In any other situation where dst already exists, the rename will
- *	fail.  
+ *	fail.
  *
  * Results:
  *	If the directory was successfully created, returns TCL_OK.
@@ -124,9 +124,9 @@ static int		Pstrequal _ANSI_ARGS_((ConstStr255Param stringA,
  *	EINVAL:	    src is a root directory or dst is a subdirectory of src.
  *	EISDIR:	    dst is a directory, but src is not.
  *	ENOENT:	    src doesn't exist.  src or dst is "".
- *	ENOTDIR:    src is a directory, but dst is not.  
+ *	ENOTDIR:    src is a directory, but dst is not.
  *	EXDEV:	    src and dst are on different filesystems.
- *	
+ *
  * Side effects:
  *	The implementation of rename may allow cross-filesystem renames,
  *	but the caller should be prepared to emulate it with copy and
@@ -135,7 +135,7 @@ static int		Pstrequal _ANSI_ARGS_((ConstStr255Param stringA,
  *---------------------------------------------------------------------------
  */
 
-int 
+int
 TclpObjRenameFile(srcPathPtr, destPathPtr)
     Tcl_Obj *srcPathPtr;
     Tcl_Obj *destPathPtr;
@@ -152,7 +152,7 @@ DoRenameFile(
 				 * (native). */
 {
     FSSpec srcFileSpec, dstFileSpec, dstDirSpec;
-    OSErr err; 
+    OSErr err;
     long srcID, dummy;
     Boolean srcIsDirectory, dstIsDirectory, dstExists, dstLocked;
 
@@ -161,7 +161,7 @@ DoRenameFile(
 	FSpGetDirectoryID(&srcFileSpec, &srcID, &srcIsDirectory);
     }
     if (err == noErr) {
-        err = GetFileSpecs(dst, &dstFileSpec, &dstDirSpec, &dstExists, 
+        err = GetFileSpecs(dst, &dstFileSpec, &dstDirSpec, &dstExists,
         	&dstIsDirectory);
     }
     if (err == noErr) {
@@ -181,11 +181,11 @@ DoRenameFile(
 		 * The following call will remove an empty directory.  If it
 		 * fails, it's because it wasn't empty.
 		 */
-		 
+
                 if (DoRemoveDirectory(dst, 0, NULL) != TCL_OK) {
                     return TCL_ERROR;
                 }
-                
+
                 /*
 		 * Now that that empty directory is gone, we can try
 		 * renaming src.  If that fails, we'll put this empty
@@ -203,14 +203,14 @@ DoRenameFile(
 	        errno = ENOTDIR;
 	        return TCL_ERROR;
 	    }
-	} else {   
+	} else {
 	    if (dstIsDirectory) {
 		errno = EISDIR;
 		return TCL_ERROR;
-	    } else {                                
+	    } else {
 		/*
 		 * Overwrite existing file by:
-		 * 
+		 *
 		 * 1. Rename existing file to temp name.
 		 * 2. Rename old file to new name.
 		 * 3. If success, delete temp file.  If failure,
@@ -230,7 +230,7 @@ DoRenameFile(
 	            	    dstFileSpec.parID, tmpName, &tmpFileSpec);
 	        }
 	        if (err == noErr) {
-	            err = MoveRename(&srcFileSpec, &dstDirSpec, 
+	            err = MoveRename(&srcFileSpec, &dstDirSpec,
 	            	    dstFileSpec.name);
 	        }
 	        if (err == noErr) {
@@ -244,9 +244,9 @@ DoRenameFile(
 	        }
 	    }
    	}
-    }    
+    }
 
-    end:    
+    end:
     if (err != noErr) {
 	errno = TclMacOSErrorToPosixError(err);
 	return TCL_ERROR;
@@ -264,7 +264,7 @@ DoRenameFile(
  * 	must not already exist in the destination directory.
  *
  *	Don't use FSpMoveRenameCompat because it doesn't work with
- *	directories or with locked files. 
+ *	directories or with locked files.
  *
  * Results:
  *	Returns a mac error indicating the cause of the failure.
@@ -275,12 +275,12 @@ DoRenameFile(
  *
  *--------------------------------------------------------------------------
  */
-  
-static OSErr		
+
+static OSErr
 MoveRename(
     const FSSpec *srcFileSpecPtr,   /* Source object. */
     const FSSpec *dstDirSpecPtr,    /* Destination directory. */
-    StringPtr copyName)		    /* New name for object in destination 
+    StringPtr copyName)		    /* New name for object in destination
     				     * directory. */
 {
     OSErr err;
@@ -289,19 +289,19 @@ MoveRename(
     Str31 tmpName;
     FSSpec dstFileSpec, srcDirSpec, tmpSrcFileSpec, tmpDstFileSpec;
     Boolean locked;
-    
+
     if (srcFileSpecPtr->parID == 1) {
         /*
          * Trying to rename a volume.
          */
-          
+
         return badMovErr;
     }
     if (srcFileSpecPtr->vRefNum != dstDirSpecPtr->vRefNum) {
 	/*
 	 * Renaming across volumes.
 	 */
-	 
+
         return diffVolErr;
     }
     err = FSpGetFLockCompat(srcFileSpecPtr, &locked);
@@ -314,28 +314,28 @@ MoveRename(
     if (err == noErr) {
         if (srcFileSpecPtr->parID == dstID) {
             /*
-             * Renaming object within directory. 
+             * Renaming object within directory.
              */
-            
+
             err = FSpRenameCompat(srcFileSpecPtr, copyName);
-            goto done; 
+            goto done;
         }
         if (Pstrequal(srcFileSpecPtr->name, copyName)) {
 	    /*
-	     * Moving object to another directory (under same name). 
+	     * Moving object to another directory (under same name).
 	     */
-	 
+
 	    err = FSpCatMoveCompat(srcFileSpecPtr, dstDirSpecPtr);
-	    goto done; 
-        } 
+	    goto done;
+        }
         err = FSpGetDirectoryID(srcFileSpecPtr, &srcID, &srcIsDir);
-    } 
+    }
     if (err == noErr) {
         /*
          * Fullblown: rename source object to temp name, move temp to
          * dest directory, and rename temp to target.
          */
-          
+
         err = GenerateUniqueName(srcFileSpecPtr->vRefNum, &startSeed,
        		srcFileSpecPtr->parID, dstID, tmpName);
         FSMakeFSSpecCompat(srcFileSpecPtr->vRefNum, srcFileSpecPtr->parID,
@@ -356,14 +356,14 @@ MoveRename(
             FSMakeFSSpecCompat(srcFileSpecPtr->vRefNum, srcFileSpecPtr->parID,
              	    NULL, &srcDirSpec);
             FSpCatMoveCompat(&tmpDstFileSpec, &srcDirSpec);
-        }                 
+        }
         FSpRenameCompat(&tmpSrcFileSpec, srcFileSpecPtr->name);
     }
-    
+
     done:
     if (locked != false) {
     	if (err == noErr) {
-	    FSMakeFSSpecCompat(dstDirSpecPtr->vRefNum, 
+	    FSMakeFSSpecCompat(dstDirSpecPtr->vRefNum,
 	    	    dstID, copyName, &dstFileSpec);
             FSpSetFLockCompat(&dstFileSpec);
         } else {
@@ -371,7 +371,7 @@ MoveRename(
         }
     }
     return err;
-}     
+}
 
 /*
  *---------------------------------------------------------------------------
@@ -392,15 +392,15 @@ MoveRename(
  *
  * Side effects:
  *      This procedure will also copy symbolic links, block, and
- *      character devices, and fifos.  For symbolic links, the links 
+ *      character devices, and fifos.  For symbolic links, the links
  *      themselves will be copied and not what they point to.  For the
  *	other special file types, the directory entry will be copied and
  *	not the contents of the device that it refers to.
  *
  *---------------------------------------------------------------------------
  */
- 
-int 
+
+int
 TclpObjCopyFile(srcPathPtr, destPathPtr)
     Tcl_Obj *srcPathPtr;
     Tcl_Obj *destPathPtr;
@@ -418,7 +418,7 @@ DoCopyFile(
     Boolean dstExists, dstIsDirectory, dstLocked;
     FSSpec srcFileSpec, dstFileSpec, dstDirSpec, tmpFileSpec;
     Str31 tmpName;
-	
+
     err = FSpLLocationFromPath(strlen(src), src, &srcFileSpec);
     if (err == noErr) {
         err = GetFileSpecs(dst, &dstFileSpec, &dstDirSpec, &dstExists,
@@ -433,36 +433,36 @@ DoCopyFile(
         if (dstLocked) {
             FSpRstFLockCompat(&dstFileSpec);
         }
-        
+
         /*
          * Backup dest file.
          */
-         
-        dstErr = GenerateUniqueName(dstFileSpec.vRefNum, &startSeed, dstFileSpec.parID, 
+
+        dstErr = GenerateUniqueName(dstFileSpec.vRefNum, &startSeed, dstFileSpec.parID,
     	        dstFileSpec.parID, tmpName);
         if (dstErr == noErr) {
             dstErr = FSpRenameCompat(&dstFileSpec, tmpName);
-        }   
+        }
     }
     if (err == noErr) {
-    	err = FSpFileCopy(&srcFileSpec, &dstDirSpec, 
+    	err = FSpFileCopy(&srcFileSpec, &dstDirSpec,
     		(StringPtr) dstFileSpec.name, NULL, 0, true);
     }
     if ((dstExists != false) && (dstErr == noErr)) {
         FSMakeFSSpecCompat(dstFileSpec.vRefNum, dstFileSpec.parID,
         	tmpName, &tmpFileSpec);
 	if (err == noErr) {
-	    /* 
-	     * Delete backup file. 
+	    /*
+	     * Delete backup file.
 	     */
-	     
+
 	    FSpDeleteCompat(&tmpFileSpec);
 	} else {
-	
-	    /* 
+
+	    /*
 	     * Restore backup file.
 	     */
-	     
+
 	    FSpDeleteCompat(&dstFileSpec);
 	    FSpRenameCompat(&tmpFileSpec, dstFileSpec.name);
 	    if (dstLocked) {
@@ -470,7 +470,7 @@ DoCopyFile(
 	    }
 	}
     }
-    
+
     if (err != noErr) {
 	errno = TclMacOSErrorToPosixError(err);
 	return TCL_ERROR;
@@ -500,7 +500,7 @@ DoCopyFile(
  *---------------------------------------------------------------------------
  */
 
-int 
+int
 TclpObjDeleteFile(pathPtr)
     Tcl_Obj *pathPtr;
 {
@@ -515,14 +515,14 @@ TclpDeleteFile(
     FSSpec fileSpec;
     Boolean isDirectory;
     long dirID;
-    
+
     err = FSpLLocationFromPath(strlen(path), path, &fileSpec);
     if (err == noErr) {
 	/*
      	 * Since FSpDeleteCompat will delete an empty directory, make sure
      	 * that this isn't a directory first.
          */
-        
+
         FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
 	if (isDirectory == true) {
             errno = EISDIR;
@@ -570,7 +570,7 @@ TclpDeleteFile(
  *---------------------------------------------------------------------------
  */
 
-int 
+int
 TclpObjCreateDirectory(pathPtr)
     Tcl_Obj *pathPtr;
 {
@@ -584,14 +584,14 @@ DoCreateDirectory(
     OSErr err;
     FSSpec dirSpec;
     long outDirID;
-	
+
     err = FSpLocationFromPath(strlen(path), path, &dirSpec);
     if (err == noErr) {
         err = dupFNErr;		/* EEXIST. */
     } else if (err == fnfErr) {
         err = FSpDirCreateCompat(&dirSpec, smSystemScript, &outDirID);
-    } 
-    
+    }
+
     if (err != noErr) {
 	errno = TclMacOSErrorToPosixError(err);
 	return TCL_ERROR;
@@ -625,7 +625,7 @@ DoCreateDirectory(
  *---------------------------------------------------------------------------
  */
 
-int 
+int
 TclpObjCopyDirectory(srcPathPtr, destPathPtr, errorPtr)
     Tcl_Obj *srcPathPtr;
     Tcl_Obj *destPathPtr;
@@ -681,14 +681,14 @@ DoCopyDirectory(
     }
     if (err != noErr) {
         goto done;
-    }        
+    }
     if ((srcFileSpec.vRefNum == dstFileSpec.vRefNum) &&
     	    (srcFileSpec.parID == dstFileSpec.parID) &&
             (Pstrequal(srcFileSpec.name, dstFileSpec.name) != 0)) {
         /*
          * Copying on top of self.  No-op.
          */
-                    
+
         goto done;
     }
 
@@ -703,13 +703,13 @@ DoCopyDirectory(
      * 4. CatMove dstDir/tmpDir/dst to dstDir/dst.
      * 5. Remove dstDir/tmpDir.
      */
-                
+
     err = FSpGetFLockCompat(&srcFileSpec, &srcLocked);
     if (srcLocked) {
         FSpRstFLockCompat(&srcFileSpec);
     }
     if (err == noErr) {
-        err = GenerateUniqueName(dstFileSpec.vRefNum, &startSeed, dstFileSpec.parID, 
+        err = GenerateUniqueName(dstFileSpec.vRefNum, &startSeed, dstFileSpec.parID,
     	        dstFileSpec.parID, tmpName);
     }
     if (err == noErr) {
@@ -721,16 +721,16 @@ DoCopyDirectory(
 	err = FSpDirectoryCopy(&srcFileSpec, &tmpDirSpec, NULL, NULL, 0, true,
 	    	CopyErrHandler);
     }
-    
-    /* 
+
+    /*
      * Even if the Copy failed, Rename/Move whatever did get copied to the
-     * appropriate final destination, if possible.  
+     * appropriate final destination, if possible.
      */
-     
+
     saveErr = err;
     err = noErr;
     if (Pstrequal(srcFileSpec.name, dstFileSpec.name) == 0) {
-        err = FSMakeFSSpecCompat(tmpDirSpec.vRefNum, tmpDirID, 
+        err = FSMakeFSSpecCompat(tmpDirSpec.vRefNum, tmpDirID,
         	srcFileSpec.name, &tmpFileSpec);
         if (err == noErr) {
             err = FSpRenameCompat(&tmpFileSpec, dstFileSpec.name);
@@ -748,13 +748,13 @@ DoCopyDirectory(
             FSpSetFLockCompat(&dstFileSpec);
         }
     }
-    
+
     FSpDeleteCompat(&tmpDirSpec);
-    
+
     if (saveErr != noErr) {
         err = saveErr;
     }
-    
+
     done:
     if (err != noErr) {
         errno = TclMacOSErrorToPosixError(err);
@@ -771,7 +771,7 @@ DoCopyDirectory(
  *
  * CopyErrHandler --
  *
- *      This procedure is called from the MoreFiles procedure 
+ *      This procedure is called from the MoreFiles procedure
  *      FSpDirectoryCopy whenever an error occurs.
  *
  * Results:
@@ -779,13 +779,13 @@ DoCopyDirectory(
  *      otherwise.
  *
  * Side effects:
- *      Since FSpDirectoryCopy() is called only after removing any 
+ *      Since FSpDirectoryCopy() is called only after removing any
  *      existing target directories, there shouldn't be any errors.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
-static pascal Boolean 
+static pascal Boolean
 CopyErrHandler(
     OSErr error,		/* Error that occured */
     short failedOperation,	/* operation that caused the error */
@@ -824,8 +824,8 @@ CopyErrHandler(
  *
  *---------------------------------------------------------------------------
  */
- 
-int 
+
+int
 TclpObjRemoveDirectory(pathPtr, recursive, errorPtr)
     Tcl_Obj *pathPtr;
     int recursive;
@@ -866,20 +866,20 @@ DoRemoveDirectory(
     err = FSpLocationFromPath(strlen(path), path, &fileSpec);
     if (err != noErr) {
         goto done;
-    }   
+    }
 
     /*
      * Since FSpDeleteCompat will delete a file, make sure this isn't
      * a file first.
      */
-         
+
     isDirectory = 1;
     FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
     if (isDirectory == 0) {
         errno = ENOTDIR;
         return TCL_ERROR;
     }
-    
+
     err = FSpDeleteCompat(&fileSpec);
     if (err == fLckdErr) {
         locked = 1;
@@ -892,10 +892,10 @@ DoRemoveDirectory(
     if (err != fBsyErr) {
         goto done;
     }
-     
+
     if (recursive == 0) {
 	/*
-	 * fBsyErr means one of three things: file busy, directory not empty, 
+	 * fBsyErr means one of three things: file busy, directory not empty,
 	 * or working directory control block open.  Determine if directory
 	 * is empty. If directory is not empty, return EEXIST.
 	 */
@@ -909,14 +909,14 @@ DoRemoveDirectory(
 	    goto done;
 	}
     }
-	
+
     /*
      * DeleteDirectory removes a directory and all its contents, including
-     * any locked files.  There is no interface to get the name of the 
+     * any locked files.  There is no interface to get the name of the
      * file that caused the error, if an error occurs deleting this tree,
      * unless we rewrite DeleteDirectory ourselves.
      */
-	 
+
     err = DeleteDirectory(fileSpec.vRefNum, dirID, NULL);
 
     done:
@@ -932,7 +932,7 @@ DoRemoveDirectory(
     }
     return TCL_OK;
 }
-			    
+
 /*
  *---------------------------------------------------------------------------
  *
@@ -942,8 +942,8 @@ DoRemoveDirectory(
  *
  * Results:
  *	The return value is noErr if there was no error getting FSSpecs,
- *	otherwise it is an error describing the problem.  Fills buffers 
- *	with information, as above.  
+ *	otherwise it is an error describing the problem.  Fills buffers
+ *	with information, as above.
  *
  * Side effects:
  *	None.
@@ -957,8 +957,8 @@ GetFileSpecs(
     FSSpec *pathSpecPtr,	/* Filled with information about path. */
     FSSpec *dirSpecPtr,		/* Filled with information about path's
     				 * parent directory. */
-    Boolean *pathExistsPtr,	/* Set to true if path actually exists, 
-    				 * false if it doesn't or there was an 
+    Boolean *pathExistsPtr,	/* Set to true if path actually exists,
+    				 * false if it doesn't or there was an
     				 * error reading the specified path. */
     Boolean *pathIsDirectoryPtr)/* Set to true if path is itself a directory,
     				 * otherwise false. */
@@ -969,10 +969,10 @@ GetFileSpecs(
     CONST char **argv;
     long d;
     Tcl_DString buffer;
-        
+
     *pathExistsPtr = false;
     *pathIsDirectoryPtr = false;
-    
+
     Tcl_DStringInit(&buffer);
     Tcl_SplitPath(path, &argc, &argv);
     if (argc == 1) {
@@ -1002,11 +1002,11 @@ GetFileSpecs(
  * FSpGetFLockCompat --
  *
  *	Determines if there exists a software lock on the specified
- *	file.  The software lock could prevent the file from being 
+ *	file.  The software lock could prevent the file from being
  *	renamed or moved.
  *
  * Results:
- *	Standard macintosh error code.  
+ *	Standard macintosh error code.
  *
  * Side effects:
  *	None.
@@ -1014,7 +1014,7 @@ GetFileSpecs(
  *
  *-------------------------------------------------------------------------
  */
- 
+
 OSErr
 FSpGetFLockCompat(
     const FSSpec *specPtr,	/* File to query. */
@@ -1024,12 +1024,12 @@ FSpGetFLockCompat(
 {
     CInfoPBRec pb;
     OSErr err;
-    
+
     pb.hFileInfo.ioVRefNum = specPtr->vRefNum;
     pb.hFileInfo.ioDirID = specPtr->parID;
     pb.hFileInfo.ioNamePtr = (StringPtr) specPtr->name;
     pb.hFileInfo.ioFDirIndex = 0;
-    
+
     err = PBGetCatInfoSync(&pb);
     if ((err == noErr) && (pb.hFileInfo.ioFlAttrib & 0x01)) {
         *lockedPtr = true;
@@ -1038,30 +1038,30 @@ FSpGetFLockCompat(
     }
     return err;
 }
-    
+
 /*
  *----------------------------------------------------------------------
  *
  * Pstrequal --
  *
- *      Pascal string compare. 
+ *      Pascal string compare.
  *
  * Results:
  *      Returns 1 if strings equal, 0 otherwise.
  *
  * Side effects:
  *      None.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 Pstrequal (
     ConstStr255Param stringA,	/* Pascal string A */
     ConstStr255Param stringB)   /* Pascal string B */
 {
     int i, len;
-    
+
     len = *stringA;
     for (i = 0; i <= len; i++) {
         if (*stringA++ != *stringB++) {
@@ -1070,7 +1070,7 @@ Pstrequal (
     }
     return 1;
 }
-    
+
 /*
  *----------------------------------------------------------------------
  *
@@ -1088,7 +1088,7 @@ Pstrequal (
  *
  * Side effects:
  *      A new object is allocated if the file is valid.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
@@ -1111,7 +1111,7 @@ GetFileFinderAttributes(
     if (err == noErr) {
     	err = FSpGetFInfo(&fileSpec, &finfo);
     }
-    
+
     if (err == noErr) {
     	switch (objIndex) {
     	    case MAC_CREATOR_ATTRIBUTE:
@@ -1128,7 +1128,7 @@ GetFileFinderAttributes(
     } else if (err == fnfErr) {
     	long dirID;
     	Boolean isDirectory = 0;
-    	
+
     	err = FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
     	if ((err == noErr) && isDirectory) {
     	    if (objIndex == MAC_HIDDEN_ATTRIBUTE) {
@@ -1138,10 +1138,10 @@ GetFileFinderAttributes(
     	    }
     	}
     }
-    
+
     if (err != noErr) {
     	errno = TclMacOSErrorToPosixError(err);
-    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp), 
+    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
     		"could not read \"", Tcl_GetString(fileName), "\": ",
     		Tcl_PosixError(interp), (char *) NULL);
     	return TCL_ERROR;
@@ -1166,7 +1166,7 @@ GetFileFinderAttributes(
  *
  * Side effects:
  *      A new object is allocated if the file is valid.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
@@ -1185,7 +1185,7 @@ GetFileReadOnly(
     native=Tcl_FSGetNativePath(fileName);
     err = FSpLLocationFromPath(strlen(native),
 	    native, &fileSpec);
-    
+
     if (err == noErr) {
     	if (err == noErr) {
     	    paramBlock.hFileInfo.ioCompletion = NULL;
@@ -1195,13 +1195,13 @@ GetFileReadOnly(
     	    paramBlock.hFileInfo.ioDirID = fileSpec.parID;
     	    err = PBGetCatInfo(&paramBlock, 0);
     	    if (err == noErr) {
-    	    
+
     	    	/*
     	    	 * For some unknown reason, the Mac does not give
     	    	 * symbols for the bits in the ioFlAttrib field.
     	    	 * 1 -> locked.
     	    	 */
-    	    
+
     	    	*readOnlyPtrPtr = Tcl_NewBooleanObj(
     	    		paramBlock.hFileInfo.ioFlAttrib & 1);
     	    }
@@ -1209,7 +1209,7 @@ GetFileReadOnly(
     }
     if (err != noErr) {
     	errno = TclMacOSErrorToPosixError(err);
-    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp), 
+    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
     		"could not read \"", Tcl_GetString(fileName), "\": ",
     		Tcl_PosixError(interp), (char *) NULL);
     	return TCL_ERROR;
@@ -1230,7 +1230,7 @@ GetFileReadOnly(
  *
  * Side effects:
  *      The file's attribute is set.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
@@ -1249,11 +1249,11 @@ SetFileFinderAttributes(
     native=Tcl_FSGetNativePath(fileName);
     err = FSpLLocationFromPath(strlen(native),
 	    native, &fileSpec);
-    
+
     if (err == noErr) {
     	err = FSpGetFInfo(&fileSpec, &finfo);
     }
-    
+
     if (err == noErr) {
     	switch (objIndex) {
     	    case MAC_CREATOR_ATTRIBUTE:
@@ -1264,7 +1264,7 @@ SetFileFinderAttributes(
     	    	break;
     	    case MAC_HIDDEN_ATTRIBUTE: {
     	    	int hidden;
-    	    	
+
     	    	if (Tcl_GetBooleanFromObj(interp, attributePtr, &hidden)
     	    		!= TCL_OK) {
     	    	    return TCL_ERROR;
@@ -1287,7 +1287,7 @@ SetFileFinderAttributes(
     } else if (err == fnfErr) {
     	long dirID;
     	Boolean isDirectory = 0;
-    	
+
     	err = FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
     	if ((err == noErr) && isDirectory) {
     	    Tcl_Obj *resultPtr = Tcl_GetObjResult(interp);
@@ -1297,10 +1297,10 @@ SetFileFinderAttributes(
     	    return TCL_ERROR;
     	}
     }
-    
+
     if (err != noErr) {
     	errno = TclMacOSErrorToPosixError(err);
-    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp), 
+    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
     		"could not read \"", Tcl_GetString(fileName), "\": ",
     		Tcl_PosixError(interp), (char *) NULL);
     	return TCL_ERROR;
@@ -1321,7 +1321,7 @@ SetFileFinderAttributes(
  *
  * Side effects:
  *      The file's attribute is set.
- *      
+ *
  *----------------------------------------------------------------------
  */
 
@@ -1341,12 +1341,12 @@ SetFileReadOnly(
     native=Tcl_FSGetNativePath(fileName);
     err = FSpLLocationFromPath(strlen(native),
 	    native, &fileSpec);
-    
+
     if (err == noErr) {
     	if (Tcl_GetBooleanFromObj(interp, readOnlyPtr, &hidden) != TCL_OK) {
     	    return TCL_ERROR;
     	}
-    
+
     	paramBlock.fileParam.ioCompletion = NULL;
     	paramBlock.fileParam.ioNamePtr = fileSpec.name;
     	paramBlock.fileParam.ioVRefNum = fileSpec.vRefNum;
@@ -1357,7 +1357,7 @@ SetFileReadOnly(
     	    err = PBHRstFLock(&paramBlock, 0);
     	}
     }
-    
+
     if (err == fnfErr) {
     	long dirID;
     	Boolean isDirectory = 0;
@@ -1371,10 +1371,10 @@ SetFileReadOnly(
     	    err = fnfErr;
     	}
     }
-    
+
     if (err != noErr) {
     	errno = TclMacOSErrorToPosixError(err);
-    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp), 
+    	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
     		"could not read \"", Tcl_GetString(fileName), "\": ",
     		Tcl_PosixError(interp), (char *) NULL);
     	return TCL_ERROR;
@@ -1408,36 +1408,36 @@ TclpObjListVolumes(void)
     Tcl_DString dstr;
 
     resultPtr = Tcl_NewObj();
-        
+
     /*
      * We use two facts:
      * 1) The Mac volumes are enumerated by the ioVolIndex parameter of
-     * the HParamBlockRec.  They run through the integers contiguously, 
-     * starting at 1.  
+     * the HParamBlockRec.  They run through the integers contiguously,
+     * starting at 1.
      * 2) PBHGetVInfoSync returns an error when you ask for a volume index
      * that does not exist.
-     * 
+     *
      */
-        
+
     while ( 1 ) {
         pb.volumeParam.ioNamePtr = (StringPtr) &name;
         pb.volumeParam.ioVolIndex = volIndex;
-                
+
         theError = PBHGetVInfoSync(&pb);
 
         if ( theError != noErr ) {
             break;
         }
-        
+
         Tcl_ExternalToUtfDString(NULL, (CONST char *)&name[1], name[0], &dstr);
         elemPtr = Tcl_NewStringObj(Tcl_DStringValue(&dstr),
 		Tcl_DStringLength(&dstr));
         Tcl_AppendToObj(elemPtr, ":", 1);
         Tcl_ListObjAppendElement(NULL, resultPtr, elemPtr);
-        
+
         Tcl_DStringFree(&dstr);
-                
-        volIndex++;             
+
+        volIndex++;
     }
 
     Tcl_IncrRefCount(resultPtr);
@@ -1473,7 +1473,7 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
     int nextCheckpoint;
 {
     #define MAXMACFILENAMELEN 31  /* assumed to be < sizeof(StrFileName) */
- 
+
     StrFileName fileName;
     StringPtr fileNamePtr;
     int fileNameLen,newPathLen;
@@ -1484,38 +1484,38 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
     Boolean isDirectory;
     Boolean wasAlias=FALSE;
     FSSpec fileSpec, lastFileSpec;
-    
+
     Tcl_DString nativeds;
 
     char cur;
     int firstCheckpoint=nextCheckpoint, lastCheckpoint;
     int origPathLen;
     char *path = Tcl_GetStringFromObj(pathPtr,&origPathLen);
-    
+
     {
-	int currDirValid=0;    
+	int currDirValid=0;
 	/*
 	 * check if substring to first ':' after initial
 	 * nextCheckpoint is a valid relative or absolute
 	 * path to a directory, if not we return without
 	 * normalizing anything
 	 */
-	
+
 	while (1) {
 	    cur = path[nextCheckpoint];
 	    if (cur == ':' || cur == 0) {
-		if (cur == ':') { 
+		if (cur == ':') {
 		    /* jump over separator */
-		    nextCheckpoint++; cur = path[nextCheckpoint]; 
-		} 
+		    nextCheckpoint++; cur = path[nextCheckpoint];
+		}
 		Tcl_UtfToExternalDString(NULL,path,nextCheckpoint,&nativeds);
-		err = FSpLLocationFromPath(Tcl_DStringLength(&nativeds), 
-					  Tcl_DStringValue(&nativeds), 
+		err = FSpLLocationFromPath(Tcl_DStringLength(&nativeds),
+					  Tcl_DStringValue(&nativeds),
 					  &fileSpec);
 		Tcl_DStringFree(&nativeds);
 		if (err == noErr) {
 			lastFileSpec=fileSpec;
-			err = ResolveAliasFile(&fileSpec, true, &isDirectory, 
+			err = ResolveAliasFile(&fileSpec, true, &isDirectory,
 				       &wasAlias);
 			if (err == noErr) {
 		    err = FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
@@ -1527,13 +1527,13 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
 	    }
 	    nextCheckpoint++;
 	}
-	
+
 	if(!currDirValid) {
 	    /* can't determine root dir, bail out */
-	    return firstCheckpoint; 
+	    return firstCheckpoint;
 	}
     }
-	
+
     /*
      * Now vRefNum and dirID point to a valid
      * directory, so walk the rest of the path
@@ -1565,11 +1565,11 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
 		Tcl_UtfToExternalDString(NULL,&path[lastCheckpoint],
 					 fileNameLen,&nativeds);
 		fileNameLen=Tcl_DStringLength(&nativeds);
-		if(fileNameLen > MAXMACFILENAMELEN) { 
+		if(fileNameLen > MAXMACFILENAMELEN) {
 		    err = bdNamErr;
 		} else {
 		fileName[0]=fileNameLen;
-		strncpy((char *) fileName + 1, Tcl_DStringValue(&nativeds), 
+		strncpy((char *) fileName + 1, Tcl_DStringValue(&nativeds),
 			fileNameLen);
 		}
 		Tcl_DStringFree(&nativeds);
@@ -1587,7 +1587,7 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
 		    err=FSMakeFSSpecCompat(vRefNum, dirID, NULL, &fileSpec);
 		    if(err != noErr) {
 			/* should never happen, bail out */
-			return firstCheckpoint; 
+			return firstCheckpoint;
 		    }
 		    nextCheckpoint=lastCheckpoint;
 		    cur = path[lastCheckpoint];
@@ -1596,41 +1596,41 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
 	    } else {
 		/* fileSpec could point to an alias, resolve it */
 		lastFileSpec=fileSpec;
-		err = ResolveAliasFile(&fileSpec, true, &isDirectory, 
+		err = ResolveAliasFile(&fileSpec, true, &isDirectory,
 				       &wasAlias);
 		if (err != noErr || !isDirectory) {
 		    break; /* fileSpec doesn't point to a dir */
 		}
 	    }
 	    if (cur == 0) break; /* arrived at end of path */
-	    
+
 	    /* fileSpec points to possibly nonexisting subdirectory; validate */
 	    err = FSpGetDirectoryID(&fileSpec, &dirID, &isDirectory);
 	    if (err != noErr || !isDirectory) {
 	        break; /* fileSpec doesn't point to existing dir */
 	    }
 	    vRefNum = fileSpec.vRefNum;
-    	
+
 	    /* found a new valid subdir in path, continue processing path */
 	    lastCheckpoint=nextCheckpoint+1;
 	}
 	wasAlias=FALSE;
 	nextCheckpoint++;
     }
-    
+
     if (wasAlias)
     	fileSpec=lastFileSpec;
-    
+
     /*
      * fileSpec now points to a possibly nonexisting file or dir
      *  inside a valid dir; get full path name to it
      */
-    
+
     err=FSpPathFromLocation(&fileSpec, &newPathLen, &newPathHandle);
     if(err != noErr) {
 	return firstCheckpoint; /* should not see any errors here, bail out */
     }
-    
+
     HLock(newPathHandle);
     Tcl_ExternalToUtfDString(NULL,*newPathHandle,newPathLen,&nativeds);
     if (cur != 0) {
@@ -1638,15 +1638,15 @@ TclpObjNormalizePath(interp, pathPtr, nextCheckpoint)
     	if ( newPathLen==0 || (*(*newPathHandle+(newPathLen-1))!=':' && path[nextCheckpoint] !=':')) {
 	    Tcl_DStringAppend(&nativeds, ":" , 1);
 	}
-	Tcl_DStringAppend(&nativeds, &path[nextCheckpoint], 
+	Tcl_DStringAppend(&nativeds, &path[nextCheckpoint],
 			  strlen(&path[nextCheckpoint]));
     }
     DisposeHandle(newPathHandle);
-    
+
     fileNameLen=Tcl_DStringLength(&nativeds);
     Tcl_SetStringObj(pathPtr,Tcl_DStringValue(&nativeds),fileNameLen);
     Tcl_DStringFree(&nativeds);
-    
+
     return nextCheckpoint+(fileNameLen-origPathLen);
 }
 

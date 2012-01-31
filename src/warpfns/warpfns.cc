@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -148,7 +148,7 @@ int calc_dir(const string& shiftdir, int& dir, int& sign)
 }
 
 
-int shift2warp(const volume<float>& shiftmap, 
+int shift2warp(const volume<float>& shiftmap,
 	       volume4D<float>& warp, const string& shiftdir)
 {
   affine2warp(IdentityMatrix(4),warp,shiftmap);  // use shiftmap as refvol (set size)
@@ -251,7 +251,7 @@ Matrix best_fit_aff(const volume4D<float>& warp)
 	zt += z0;
 	n++;
 	if (n>nlim) {
-	  ntot+=n; xxtot+=xx; yytot+=yy; zztot+=zz; xytot+=xy; xztot+=xz; yztot+=yz; 
+	  ntot+=n; xxtot+=xx; yytot+=yy; zztot+=zz; xytot+=xy; xztot+=xz; yztot+=yz;
 	  xtot+=xt; ytot+=yt; ztot+=zt;
 	  n=0; xx=0; yy=0; zz=0; xy=0; xz=0; yz=0; xt=0; yt=0; zt=0;
 	}
@@ -301,7 +301,7 @@ Matrix best_fit_aff(const volume4D<float>& warp)
     XY(3,m+1)=vztot/ntot;
     XY(4,m+1)=vtot/ntot;
   }
-  
+
   Matrix Beta;
   Beta = pinv(XX) * XY;
   Matrix aff(4,4);
@@ -316,7 +316,7 @@ Matrix best_fit_aff(const volume4D<float>& warp)
 }
 
 
-int concat_warps(const volume4D<float>& prewarp, 
+int concat_warps(const volume4D<float>& prewarp,
                  const volume4D<float>& postwarp,
 		 volume4D<float>& totalwarp)
 {
@@ -379,18 +379,18 @@ volume<float> calc_sigloss(volume4D<float>& lrgrad, float te, float gammabar)
 // topology preservation code
 
 void jacobian_check(volume4D<float>& jvol,
-		    ColumnVector& jacobian_stats, 
+		    ColumnVector& jacobian_stats,
 		    const volume4D<float>& warp,
 		    float minJ, float maxJ, bool use_vol)
 {
   // set up jacobian stats to contain: min, max, num < minJ, num > maxJ
   if (jacobian_stats.Nrows()!=4) { jacobian_stats.ReSize(4); }
   jacobian_stats = 0.0;
-  jacobian_stats(1)=1.0; jacobian_stats(2)=1.0; 
+  jacobian_stats(1)=1.0; jacobian_stats(2)=1.0;
   if (use_vol) {
     if ((jvol.tsize()!=8) || !samesize(jvol[0],warp[0])) {
       jvol = warp;  // set up all the right properties
-      jvol = 0.0f; 
+      jvol = 0.0f;
       for (int n=1; n<=5; n++) { jvol.addvolume(jvol[0]); }
     }
   }
@@ -409,9 +409,9 @@ void jacobian_check(volume4D<float>& jvol,
 	warp[2].getneighbours(x,y,z,wz000,wz001,wz010,wz011,
 			      wz100,wz101,wz110,wz111);
 	Jfff = (wx100-wx000) *
-	  ((wy010-wy000) * (wz001-wz000) - (wy001-wy000) * (wz010-wz000)) 
+	  ((wy010-wy000) * (wz001-wz000) - (wy001-wy000) * (wz010-wz000))
 	  - (wx010-wx000) *
-	  ((wy100-wy000) * (wz001-wz000) - (wy001-wy000) * (wz100-wz000)) 
+	  ((wy100-wy000) * (wz001-wz000) - (wy001-wy000) * (wz100-wz000))
 	  + (wx001-wx000) *
 	  ((wy100-wy000) * (wz010-wz000) - (wy010-wy000) * (wz100-wz000));
 	Jfff *= volscale;
@@ -420,9 +420,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jfff<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jfff>maxJ) { jacobian_stats(4)+=1.0; }
 	Jbff = (wx100-wx000) *
-	  ((wy110-wy100) * (wz101-wz100) - (wy101-wy100) * (wz110-wz100)) 
+	  ((wy110-wy100) * (wz101-wz100) - (wy101-wy100) * (wz110-wz100))
 	  - (wx110-wx100) *
-	  ((wy100-wy000) * (wz101-wz100) - (wy101-wy100) * (wz100-wz000)) 
+	  ((wy100-wy000) * (wz101-wz100) - (wy101-wy100) * (wz100-wz000))
 	  + (wx101-wx100) *
 	  ((wy100-wy000) * (wz110-wz100) - (wy110-wy100) * (wz100-wz000));
 	Jbff *= volscale;
@@ -431,9 +431,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jbff<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jbff>maxJ) { jacobian_stats(4)+=1.0; }
 	Jfbf = (wx110-wx010) *
-	  ((wy010-wy000) * (wz011-wz010) - (wy011-wy010) * (wz010-wz000)) 
+	  ((wy010-wy000) * (wz011-wz010) - (wy011-wy010) * (wz010-wz000))
 	  - (wx010-wx000) *
-	  ((wy110-wy010) * (wz011-wz010) - (wy011-wy010) * (wz110-wz010)) 
+	  ((wy110-wy010) * (wz011-wz010) - (wy011-wy010) * (wz110-wz010))
 	  + (wx011-wx010) *
 	  ((wy110-wy010) * (wz010-wz000) - (wy010-wy000) * (wz110-wz010));
 	Jfbf *= volscale;
@@ -442,9 +442,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jfbf<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jfbf>maxJ) { jacobian_stats(4)+=1.0; }
 	Jffb = (wx101-wx001) *
-	  ((wy011-wy001) * (wz001-wz000) - (wy001-wy000) * (wz011-wz001)) 
+	  ((wy011-wy001) * (wz001-wz000) - (wy001-wy000) * (wz011-wz001))
 	  - (wx011-wx001) *
-	  ((wy101-wy001) * (wz001-wz000) - (wy001-wy000) * (wz101-wz001)) 
+	  ((wy101-wy001) * (wz001-wz000) - (wy001-wy000) * (wz101-wz001))
 	  + (wx001-wx000) *
 	  ((wy101-wy001) * (wz011-wz001) - (wy011-wy001) * (wz101-wz001));
 	Jffb *= volscale;
@@ -453,9 +453,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jffb<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jffb>maxJ) { jacobian_stats(4)+=1.0; }
 	Jfbb = (wx111-wx011) *
-	  ((wy011-wy001) * (wz011-wz010) - (wy011-wy010) * (wz011-wz001)) 
+	  ((wy011-wy001) * (wz011-wz010) - (wy011-wy010) * (wz011-wz001))
 	  - (wx011-wx001) *
-	  ((wy111-wy011) * (wz011-wz010) - (wy011-wy010) * (wz111-wz011)) 
+	  ((wy111-wy011) * (wz011-wz010) - (wy011-wy010) * (wz111-wz011))
 	  + (wx011-wx010) *
 	  ((wy111-wy011) * (wz011-wz001) - (wy011-wy001) * (wz111-wz011));
 	Jfbb *= volscale;
@@ -464,9 +464,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jfbb<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jfbb>maxJ) { jacobian_stats(4)+=1.0; }
 	Jbfb = (wx101-wx001) *
-	  ((wy111-wy101) * (wz101-wz100) - (wy101-wy100) * (wz111-wz101)) 
+	  ((wy111-wy101) * (wz101-wz100) - (wy101-wy100) * (wz111-wz101))
 	  - (wx111-wx101) *
-	  ((wy101-wy001) * (wz101-wz100) - (wy101-wy100) * (wz101-wz001)) 
+	  ((wy101-wy001) * (wz101-wz100) - (wy101-wy100) * (wz101-wz001))
 	  + (wx101-wx100) *
 	  ((wy101-wy001) * (wz111-wz101) - (wy111-wy101) * (wz101-wz001));
 	Jbfb *= volscale;
@@ -475,9 +475,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jbfb<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jbfb>maxJ) { jacobian_stats(4)+=1.0; }
 	Jbbf = (wx110-wx010) *
-	  ((wy110-wy100) * (wz111-wz110) - (wy111-wy110) * (wz110-wz100)) 
+	  ((wy110-wy100) * (wz111-wz110) - (wy111-wy110) * (wz110-wz100))
 	  - (wx110-wx100) *
-	  ((wy110-wy010) * (wz111-wz110) - (wy111-wy110) * (wz110-wz010)) 
+	  ((wy110-wy010) * (wz111-wz110) - (wy111-wy110) * (wz110-wz010))
 	  + (wx111-wx110) *
 	  ((wy110-wy010) * (wz110-wz100) - (wy110-wy100) * (wz110-wz010));
 	Jbbf *= volscale;
@@ -486,9 +486,9 @@ void jacobian_check(volume4D<float>& jvol,
 	if (Jbbf<minJ) { jacobian_stats(3)+=1.0; }
 	if (Jbbf>maxJ) { jacobian_stats(4)+=1.0; }
 	Jbbb = (wx111-wx011) *
-	  ((wy111-wy101) * (wz111-wz110) - (wy111-wy110) * (wz111-wz101)) 
+	  ((wy111-wy101) * (wz111-wz110) - (wy111-wy110) * (wz111-wz101))
 	  - (wx111-wx101) *
-	  ((wy111-wy011) * (wz111-wz110) - (wy111-wy110) * (wz111-wz011)) 
+	  ((wy111-wy011) * (wz111-wz110) - (wy111-wy110) * (wz111-wz011))
 	  + (wx111-wx110) *
 	  ((wy111-wy011) * (wz111-wz101) - (wy111-wy101) * (wz111-wz011));
 	Jbbb *= volscale;
@@ -513,7 +513,7 @@ void jacobian_check(volume4D<float>& jvol,
 }
 
 
-volume4D<float> jacobian_check(ColumnVector& jacobian_stats, 
+volume4D<float> jacobian_check(ColumnVector& jacobian_stats,
 			       const volume4D<float>& warp,
 			       float minJ, float maxJ)
 {
@@ -537,7 +537,7 @@ void grad_calc(volume4D<float>& gradvols, const volume4D<float>& warp)
   // returns gradients in the order: dx'/dx, dx'/dy, dx'/dz, dy'/dx, etc
   if ((gradvols.tsize()!=9) || !samesize(gradvols[0],warp[0])) {
     gradvols = warp;  // set up all the right properties
-    gradvols=0.0f; 
+    gradvols=0.0f;
     for (int n=1; n<=6; n++) { gradvols.addvolume(gradvols[0]); }
   }
   float dx=warp.xdim(), dy=warp.ydim(), dz=warp.zdim();
@@ -612,7 +612,7 @@ void grad_calc(volume4D<float>& gradvols, const volume4D<float>& warp)
 // make them ~30% faster, which I considered worth it since they are potentially called many
 // times as part of projecting a deformation field onto a "Jacobian-limited surface".
 //
-// Note also that I have already tried _lots_ of ways to speed them up further by e.g. 
+// Note also that I have already tried _lots_ of ways to speed them up further by e.g.
 // using pointers into NEWMAT and NEWIMAGE data and by using NEWMAT::RealFFT and
 // NEWMAT::RealFFTI for the first and last dimension transforms respectively. In neither
 // case was the speed up sufficient to motivate the increased complexity of the code.
@@ -754,14 +754,14 @@ void warpfns_fft3(const NEWIMAGE::volume<float>&    in,
   return;
 }
 
-void integrate_gradient_field(volume4D<float>& newwarp, 
+void integrate_gradient_field(volume4D<float>& newwarp,
 			      const volume4D<float>& grad,
 			      float warpmeanx, float warpmeany, float warpmeanz)
 {
   // enforces integrability constraints and returns the integrated grad field
   // Note that the mean of the newwarp will be equal to warpmean{x,y,z}
   //  pass in: oldwarp[0].mean(), oldwarp[1].mean(), oldwarp[2].mean()
-  
+
   int Nx, Ny, Nz;
   Nx = grad.xsize();
   Ny = grad.ysize();
@@ -829,53 +829,53 @@ void integrate_gradient_field(volume4D<float>& newwarp,
 
 void get_jac_offset(int jacnum, int* xoff, int* yoff, int* zoff)
 {
-  xoff[1]=0; yoff[1]=0; zoff[1]=0; 
-  xoff[2]=0; yoff[2]=0; zoff[2]=0; 
-  xoff[3]=0; yoff[3]=0; zoff[3]=0; 
+  xoff[1]=0; yoff[1]=0; zoff[1]=0;
+  xoff[2]=0; yoff[2]=0; zoff[2]=0;
+  xoff[3]=0; yoff[3]=0; zoff[3]=0;
 
   if (jacnum==0) {  // Jfff
-    xoff[1]=0; yoff[1]=0; zoff[1]=0; 
-    xoff[2]=0; yoff[2]=0; zoff[2]=0; 
-    xoff[3]=0; yoff[3]=0; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=0; zoff[1]=0;
+    xoff[2]=0; yoff[2]=0; zoff[2]=0;
+    xoff[3]=0; yoff[3]=0; zoff[3]=0;
   }
   if (jacnum==1) { // Jbff
-    xoff[1]=0; yoff[1]=0; zoff[1]=0; 
-    xoff[2]=1; yoff[2]=0; zoff[2]=0; 
-    xoff[3]=1; yoff[3]=0; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=0; zoff[1]=0;
+    xoff[2]=1; yoff[2]=0; zoff[2]=0;
+    xoff[3]=1; yoff[3]=0; zoff[3]=0;
   }
   if (jacnum==2) { // Jfbf
-    xoff[1]=0; yoff[1]=1; zoff[1]=0; 
-    xoff[2]=0; yoff[2]=0; zoff[2]=0; 
-    xoff[3]=0; yoff[3]=1; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=1; zoff[1]=0;
+    xoff[2]=0; yoff[2]=0; zoff[2]=0;
+    xoff[3]=0; yoff[3]=1; zoff[3]=0;
   }
   if (jacnum==3) { // Jffb
-    xoff[1]=0; yoff[1]=0; zoff[1]=1; 
-    xoff[2]=0; yoff[2]=0; zoff[2]=1; 
-    xoff[3]=0; yoff[3]=0; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=0; zoff[1]=1;
+    xoff[2]=0; yoff[2]=0; zoff[2]=1;
+    xoff[3]=0; yoff[3]=0; zoff[3]=0;
   }
   if (jacnum==4) { // Jfbb
-    xoff[1]=0; yoff[1]=1; zoff[1]=1; 
-    xoff[2]=0; yoff[2]=0; zoff[2]=1; 
-    xoff[3]=0; yoff[3]=1; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=1; zoff[1]=1;
+    xoff[2]=0; yoff[2]=0; zoff[2]=1;
+    xoff[3]=0; yoff[3]=1; zoff[3]=0;
   }
   if (jacnum==5) { // Jbfb
-    xoff[1]=0; yoff[1]=0; zoff[1]=1; 
-    xoff[2]=1; yoff[2]=0; zoff[2]=1; 
-    xoff[3]=1; yoff[3]=0; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=0; zoff[1]=1;
+    xoff[2]=1; yoff[2]=0; zoff[2]=1;
+    xoff[3]=1; yoff[3]=0; zoff[3]=0;
   }
   if (jacnum==6) { // Jbbf
-    xoff[1]=0; yoff[1]=1; zoff[1]=0; 
-    xoff[2]=1; yoff[2]=0; zoff[2]=0; 
-    xoff[3]=1; yoff[3]=1; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=1; zoff[1]=0;
+    xoff[2]=1; yoff[2]=0; zoff[2]=0;
+    xoff[3]=1; yoff[3]=1; zoff[3]=0;
   }
   if (jacnum==7) { // Jbbb
-    xoff[1]=0; yoff[1]=1; zoff[1]=1; 
-    xoff[2]=1; yoff[2]=0; zoff[2]=1; 
-    xoff[3]=1; yoff[3]=1; zoff[3]=0; 
+    xoff[1]=0; yoff[1]=1; zoff[1]=1;
+    xoff[2]=1; yoff[2]=0; zoff[2]=1;
+    xoff[3]=1; yoff[3]=1; zoff[3]=0;
   }
 }
 
-void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol, 
+void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol,
 		float minJ, float maxJ, const Matrix& p_initaffmat)
 {
   Matrix J(3,3), Jnew(3,3), J0(3,3), initaffmat;
@@ -914,10 +914,10 @@ void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol,
 	    if (alpha>1.0) alpha=1.0;
 	    // rescale gradients as required
 	    for (int n1=1; n1<=3; n1++) { for (int n2=1; n2<=3; n2++) {
-		grad[3*n1+n2-4](x+xoff[n2],y+yoff[n2],z+zoff[n2]) = 
+		grad[3*n1+n2-4](x+xoff[n2],y+yoff[n2],z+zoff[n2]) =
 		(1 - alpha) * J(n1,n2) + alpha * J0(n1,n2);
 	    } }
-// 	      cout << "Rescaling with alpha = " << alpha << endl; 
+// 	      cout << "Rescaling with alpha = " << alpha << endl;
 // 	      if (alpha>0.05) {
 // 		cout << "New J = " << Jnew << endl;
 // 	      }
@@ -929,7 +929,7 @@ void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol,
 }
 
 
-void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol, 
+void limit_grad(volume4D<float>& grad, const volume4D<float>& jvol,
 		float minJ, float maxJ)
 {
   Matrix initaffmat;

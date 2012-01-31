@@ -21,71 +21,71 @@
 
 namespace boost
 {
-    
+
     template
-    < 
-        class Key, 
-        class T, 
+    <
+        class Key,
+        class T,
         class Compare        = std::less<Key>,
         class CloneAllocator = heap_clone_allocator,
         class Allocator      = std::allocator< std::pair<const Key,void*> >
     >
-    class ptr_map : 
+    class ptr_map :
         public ptr_map_adapter<T,std::map<Key,void*,Compare,Allocator>,CloneAllocator>
     {
         typedef ptr_map_adapter<T,std::map<Key,void*,Compare,Allocator>,CloneAllocator>
             base_type;
 
         typedef ptr_map<Key,T,Compare,CloneAllocator,Allocator> this_type;
-        
+
     public:
         explicit ptr_map( const Compare& comp = Compare(),
-                          const Allocator& a  = Allocator() ) 
+                          const Allocator& a  = Allocator() )
           : base_type( comp, a ) { }
 
         template< class InputIterator >
-        ptr_map( InputIterator first, InputIterator last, 
+        ptr_map( InputIterator first, InputIterator last,
                  const Compare& comp = Compare(),
                  const Allocator& a  = Allocator() )
-          : base_type( first, last, comp, a ) 
+          : base_type( first, last, comp, a )
         { }
 
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type, 
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type,
                                                       this_type );
 
     };
-    
+
 
 
     template
-    < 
-        class Key, 
-        class T, 
-        class Compare        = std::less<Key>, 
+    <
+        class Key,
+        class T,
+        class Compare        = std::less<Key>,
         class CloneAllocator = heap_clone_allocator,
         class Allocator      = std::allocator< std::pair<const Key,void*> >
     >
-    class ptr_multimap : 
+    class ptr_multimap :
         public ptr_multimap_adapter<T,std::multimap<Key,void*,Compare,Allocator>,CloneAllocator>
     {
         typedef ptr_multimap_adapter<T,std::multimap<Key,void*,Compare,Allocator>,CloneAllocator>
              base_type;
 
         typedef ptr_multimap<Key,T,Compare,CloneAllocator,Allocator> this_type;
-        
+
     public:
         explicit ptr_multimap( const Compare& comp = Compare(),
-                               const Allocator& a  = Allocator() ) 
+                               const Allocator& a  = Allocator() )
           : base_type( comp, a ) { }
-        
+
         template< class InputIterator >
         ptr_multimap( InputIterator first, InputIterator last,
                       const Compare& comp = Compare(),
                       const Allocator& a  = Allocator() )
-          : base_type( first, last, comp, a ) 
+          : base_type( first, last, comp, a )
         { }
 
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap, 
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap,
                                                       base_type,
                                                       this_type );
 

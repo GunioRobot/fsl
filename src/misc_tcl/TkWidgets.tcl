@@ -162,7 +162,7 @@ proc YesNoWidget {Question yes no} {
 	pack .main.buttons -side top
 	pack .main.buttons.yes .main.buttons.no -side left \
 		-padx 1m -pady 2m
- 
+
 	#
 	# Wait until something happens to the YesNoWidget(reply) variable
 	#
@@ -217,7 +217,7 @@ proc MxPause { string } {
     button $b.ok -text OK -command "MxPause:done $w" -width 5
     pack $b.ok -side top
     focus $b.ok
- 
+
     tkwait visibility $w
     tkwait window $w
 

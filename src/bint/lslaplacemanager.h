@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -84,9 +84,9 @@ namespace Bint {
   class SumSquaresEvalFunction : public EvalFunction
   {
   public:
-    
+
     SumSquaresEvalFunction(ForwardModel& pmodel, const ColumnVector& pdata, int pdebuglevel, bool pupdateprec, float pprec, bool panalmargprec) : EvalFunction(), model(pmodel),data(pdata),ntpts(data.Nrows()),updateprec(pupdateprec), prec(pprec), debuglevel(pdebuglevel), analmargprec(panalmargprec){}
-    
+
     float evaluate(const ColumnVector& x) const;
 
     virtual ~SumSquaresEvalFunction(){};
@@ -111,9 +111,9 @@ namespace Bint {
 class SumSquaresgEvalFunction : public gEvalFunction
   {
   public:
-    
+
     SumSquaresgEvalFunction(gForwardModel& pmodel, const ColumnVector& pdata, int pdebuglevel, bool pupdateprec, float pprec, bool panalmargprec) : gEvalFunction(),model(pmodel),data(pdata),ntpts(data.Nrows()),updateprec(pupdateprec), prec(pprec), debuglevel(pdebuglevel), analmargprec(panalmargprec){}
-    
+
     float evaluate(const ColumnVector& x) const;
     ReturnMatrix g_evaluate(const ColumnVector& x) const;
 
@@ -140,24 +140,24 @@ class SumSquaresgEvalFunction : public gEvalFunction
   {
   public:
 
-    LSLaplaceVoxelManager(ForwardModel& pmodel,int pdebuglevel, bool panalmargprec) : model(pmodel), nparams(0), debuglevel(pdebuglevel), analmargprec(panalmargprec) 
+    LSLaplaceVoxelManager(ForwardModel& pmodel,int pdebuglevel, bool panalmargprec) : model(pmodel), nparams(0), debuglevel(pdebuglevel), analmargprec(panalmargprec)
     {
       evalfunction = new SumSquaresEvalFunction(model,data,debuglevel,updateprec,prec,analmargprec);
     }
 
-    LSLaplaceVoxelManager(gForwardModel& pmodel,int pdebuglevel, bool panalmargprec) : model(pmodel), nparams(0), debuglevel(pdebuglevel), analmargprec(panalmargprec) 
+    LSLaplaceVoxelManager(gForwardModel& pmodel,int pdebuglevel, bool panalmargprec) : model(pmodel), nparams(0), debuglevel(pdebuglevel), analmargprec(panalmargprec)
     {
       evalfunction = new SumSquaresgEvalFunction(pmodel,data,debuglevel,updateprec,prec,analmargprec);
     }
 
-    virtual ~LSLaplaceVoxelManager(){delete evalfunction;}    
+    virtual ~LSLaplaceVoxelManager(){delete evalfunction;}
 
     void run();
     void setupparams(float prec);
     virtual void setdata(const ColumnVector& pdata);
-    float geterrorprecisionmean() const { 
+    float geterrorprecisionmean() const {
       if(updateprec)
-	return parammeans(nparams); 
+	return parammeans(nparams);
       else
 	return prec;
     }
@@ -169,10 +169,10 @@ class SumSquaresgEvalFunction : public gEvalFunction
     int getnparams() const {return nparams;}
     int getnvaryingparams() const {return nvaryingparams;}
     int getntpts() const {return ntpts;}
- 
+
   protected:
 
-    ForwardModel& model;    
+    ForwardModel& model;
 
     int ntpts;
     int nparams;
@@ -188,11 +188,11 @@ class SumSquaresgEvalFunction : public gEvalFunction
     bool updateprec;
     float prec;
     EvalFunction* evalfunction;
-    
+
   private:
 
     LSLaplaceVoxelManager();
-    const LSLaplaceVoxelManager& operator=(LSLaplaceVoxelManager& par);     
+    const LSLaplaceVoxelManager& operator=(LSLaplaceVoxelManager& par);
     LSLaplaceVoxelManager(LSLaplaceVoxelManager& des);
   };
 
@@ -200,9 +200,9 @@ class SumSquaresgEvalFunction : public gEvalFunction
   {
   public:
 
-      LSLaplaceManager(int pdebuglevel, float pprecin, bool panalmargprec, ForwardModel& pmodel, const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) : 
+      LSLaplaceManager(int pdebuglevel, float pprecin, bool panalmargprec, ForwardModel& pmodel, const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(pdebuglevel),
       precin(pprecin),
       analmargprec(panalmargprec)
@@ -210,9 +210,9 @@ class SumSquaresgEvalFunction : public gEvalFunction
 	voxelmanager = new LSLaplaceVoxelManager(pmodel,debuglevel,analmargprec);
     }
 
-      LSLaplaceManager(BintOptions& opts, ForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) : 
+      LSLaplaceManager(BintOptions& opts, ForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(opts.debuglevel.value()),
       precin(opts.prec.value()),
       analmargprec(opts.analmargprec.value())
@@ -220,9 +220,9 @@ class SumSquaresgEvalFunction : public gEvalFunction
 	voxelmanager = new LSLaplaceVoxelManager(pmodel,debuglevel,analmargprec);
     }
 
-      LSLaplaceManager(int pdebuglevel, float pprecin, bool panalmargprec, gForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) : 
+      LSLaplaceManager(int pdebuglevel, float pprecin, bool panalmargprec, gForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(pdebuglevel),
       precin(pprecin),
       analmargprec(panalmargprec)
@@ -230,9 +230,9 @@ class SumSquaresgEvalFunction : public gEvalFunction
 	voxelmanager = new LSLaplaceVoxelManager(pmodel,debuglevel,analmargprec);
     }
 
-      LSLaplaceManager(BintOptions& opts, gForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) : 
+      LSLaplaceManager(BintOptions& opts, gForwardModel& pmodel,const Matrix& pdata, const NEWIMAGE::volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(opts.debuglevel.value()),
       precin(opts.prec.value()),
       analmargprec(opts.analmargprec.value())
@@ -248,17 +248,17 @@ class SumSquaresgEvalFunction : public gEvalFunction
     void run();
 
     // saves results in logging directory
-    void save();     
+    void save();
 
     // Destructor
     virtual ~LSLaplaceManager() {}
- 
-  protected:     
+
+  protected:
 
     Matrix data;
     NEWIMAGE::volume4D<float> mask;
 
-    int ntpts;    
+    int ntpts;
     int nvoxels;
     int nparams;
 
@@ -272,15 +272,15 @@ class SumSquaresgEvalFunction : public gEvalFunction
     bool analmargprec;
 
     LSLaplaceVoxelManager* voxelmanager;
-    
+
   private:
 
     LSLaplaceManager();
-    const LSLaplaceManager& operator=(LSLaplaceManager& par);     
+    const LSLaplaceManager& operator=(LSLaplaceManager& par);
     LSLaplaceManager(LSLaplaceManager& des);
 
   };
-}   
+}
 #endif
 
 

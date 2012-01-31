@@ -1,6 +1,6 @@
-// Copyright David Abrahams, Daniel Wallin 2003. Use, modification and 
-// distribution is subject to the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Copyright David Abrahams, Daniel Wallin 2003. Use, modification and
+// distribution is subject to the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_PARAMETERS_031014_HPP
@@ -104,7 +104,7 @@ namespace aux
   // a ParameterSpec is a specialization of either keyword<...>,
   // required<...> or optional<...>.
   //
-  
+
   // helper for key_type<...>, below.
   template <class T>
   struct get_key_type
@@ -189,7 +189,7 @@ namespace aux
         , tag<typename key_type<DefaultTag>::type, Arg const>
       >
   {};
-  
+
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // ETI workaround
   template <>
   struct as_tagged_argument<int,int>
@@ -289,7 +289,7 @@ namespace aux
           BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(2,names), n),
 
 #define BOOST_PARAMETER_right_angle(z, n, text)    >
-    
+
 #define BOOST_PARAMETER_build_arg_list(n, make, parameter_spec, argument_type)      \
   BOOST_PP_REPEAT(                                                                  \
       n, BOOST_PARAMETER_make_arg_list, (make)(parameter_spec)(argument_type))      \
@@ -316,7 +316,7 @@ struct parameters
 
 #ifndef BOOST_NO_SFINAE
     // If NamedList satisfies the PS0, PS1, ..., this is a
-    // metafunction returning parameters.  Otherwise it 
+    // metafunction returning parameters.  Otherwise it
     // has no nested ::type.
     template <class NamedList>
     struct match_base
@@ -327,11 +327,11 @@ struct parameters
             //       aux::satisfies_requirements_of<NamedList,PS1>...
             //           ..., mpl::true_
             // ...> >
-            
+
 # define BOOST_PARAMETER_satisfies(z, n, text)                                   \
             mpl::and_<                                                              \
                 aux::satisfies_requirements_of<NamedList, BOOST_PP_CAT(PS, n)> ,
-      
+
             BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_satisfies, _)
             mpl::true_
             BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_right_angle, _)
@@ -343,7 +343,7 @@ struct parameters
         >
     {};
 #endif
-    
+
     // Specializations are to be used as an optional argument to
     // eliminate overloads via SFINAE
     template<
@@ -352,11 +352,11 @@ struct parameters
         // class templates.  People wishing to write portable code can
         // explicitly specify BOOST_PARAMETER_MAX_ARITY arguments
         BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
-#else 
+#else
         BOOST_PP_ENUM_BINARY_PARAMS(
             BOOST_PARAMETER_MAX_ARITY, class A, = aux::void_ BOOST_PP_INTERCEPT
         )
-#endif            
+#endif
     >
     struct match
 # ifndef BOOST_NO_SFINAE
@@ -367,10 +367,10 @@ struct parameters
         >::type
     {};
 # else
-    { 
+    {
         typedef parameters<
             BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, PS)
-        > type; 
+        > type;
     };
 # endif
 
@@ -440,7 +440,7 @@ struct parameters
         3,BOOST_PARAMETER_MAX_ARITY,<boost/parameter/aux_/overloads.hpp> \
     ))
 #include BOOST_PP_ITERATE()
-    
+
 #undef BOOST_PARAMETER_build_arg_list
 #undef BOOST_PARAMETER_make_arg_list
 #undef BOOST_PARAMETER_right_angle

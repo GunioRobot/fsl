@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -93,8 +93,8 @@ string examples="fslmeants -i filtered_func_data -o meants.txt -m my_mask\nfslme
 // Note that they must also be included in the main() function or they
 //  will not be active.
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -115,7 +115,7 @@ Option<string> outmat(string("-o"), string(""),
 		  string("~<filename>\toutput text matrix"),
 		  false, requires_argument);
 Option<float> coordval(string("-c"), 0.0,
-		  string("~<x y z>\trequested spatial coordinate (instead of mask)"), 
+		  string("~<x y z>\trequested spatial coordinate (instead of mask)"),
 		  false, requires_3_arguments);
 Option<bool> eig(string("--eig"), false,
 		  string("        calculate Eigenvariate(s) instead of mean (output will have 0 mean)"),
@@ -152,17 +152,17 @@ int main(int argc,char *argv[])
   options.add(transpose);
   options.add(verbose);
   options.add(help);
-  
+
   nonoptarg = options.parse_command_line(argc, argv);
-  
-  // line below stops the program if the help was requested or 
+
+  // line below stops the program if the help was requested or
   //  a compulsory option was not set
   if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
     {
       options.usage();
       exit(EXIT_FAILURE);
     }
-  
+
 
   // OK, now do the job ...
 
@@ -201,7 +201,7 @@ int main(int argc,char *argv[])
   }
 
   if (!samesize(vin[0],mask)) {
-    cerr << "ERROR: Mask and Input volumes have different (x,y,z) size." 
+    cerr << "ERROR: Mask and Input volumes have different (x,y,z) size."
 	 << endl;
     return -1;
   }
@@ -216,23 +216,23 @@ int main(int argc,char *argv[])
     if(!bin_mask.value())
       dat = SP (dat, ones(dat.Nrows(),1) * scales);
     dat = remmean(dat,1);
-    
+
     if (verbose.value()) {
       cout << "Number of voxels used = " << dat.Ncols() << endl;
     }
-    
+
     SymmetricMatrix Corr;
     Corr << dat * dat.t() / dat.Ncols();
     DiagonalMatrix tmpD;
-    EigenValues(Corr,tmpD,evecs);	
+    EigenValues(Corr,tmpD,evecs);
     evecs = fliplr(evecs.Columns(evecs.Ncols()-order.value()+1 , evecs.Ncols())) * std::sqrt(dat.Nrows());
-    
+
     Matrix res2 = mean(dat,2);
     res2 = res2.Column(1).t() * evecs.Column(1);
-    
-    if((float)res2.AsScalar()<0)  
+
+    if((float)res2.AsScalar()<0)
       evecs = -1.0 * evecs;
-    
+
     if (transpose.value()) { evecs=evecs.t(); }
     if (outmat.set()) {
       write_ascii_matrix(evecs,outmat.value());
@@ -241,7 +241,7 @@ int main(int argc,char *argv[])
     }
     if (transpose.value()) { evecs=evecs.t(); }
   }
-  else{	
+  else{
     int nt = vin.tsize();
     int nvox = 1;
     if (showall.value()) {
@@ -251,7 +251,7 @@ int main(int argc,char *argv[])
     Matrix meants(nt,nvox);
     meants = 0;
     long int num=0;
-    
+
     for (int z=mask.minz(); z<=mask.maxz(); z++) {
       for (int y=mask.miny(); y<=mask.maxy(); y++) {
         for (int x=mask.minx(); x<=mask.maxx(); x++) {
@@ -272,16 +272,16 @@ int main(int argc,char *argv[])
         }
       }
     }
-    
+
     if (verbose.value()) {
       cout << "Number of voxels used = " << num << endl;
     }
-    
+
     // normalise for number of valid entries if averaging
     if (!showall.value()) {
       if (num>0) meants /= (float) num;
     }
-    
+
     // save the result
     if (transpose.value()) { meants=meants.t(); }
     if (outmat.set()) {

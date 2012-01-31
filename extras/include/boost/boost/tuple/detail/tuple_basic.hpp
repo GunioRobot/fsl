@@ -213,7 +213,7 @@ struct element_impl<0, T, true /* IsConst */>
 
 
 template<int N, class T>
-struct element: 
+struct element:
   public detail::element_impl<N, T, ::boost::is_const<T>::value>
 {
 };

@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------------
-// internals.hpp :  internal structs : stream_format_state, format_item. 
+// internals.hpp :  internal structs : stream_format_state, format_item.
 //                  included by format.hpp
 // ----------------------------------------------------------------------------
 
@@ -30,8 +30,8 @@ namespace detail {
 //---- stream_format_state --------------------------------------------------//
 
 //   set of params that define the format state of a stream
-    template<class Ch, class Tr> 
-    struct stream_format_state 
+    template<class Ch, class Tr>
+    struct stream_format_state
     {
         typedef BOOST_IO_STD basic_ios<Ch, Tr>   basic_ios;
 
@@ -42,45 +42,45 @@ namespace detail {
         void set_by_stream(const basic_ios& os); //- sets to os's state.
         void apply_on(basic_ios & os,            //- applies format_state to the stream
                       boost::io::detail::locale_t * loc_default = 0) const;
-        template<class T> 
+        template<class T>
         void apply_manip(T manipulator)          //- modifies state by applying manipulator
             { apply_manip_body<Ch, Tr, T>( *this, manipulator) ; }
 
         // --- data ---
         std::streamsize width_;
         std::streamsize precision_;
-        Ch fill_; 
+        Ch fill_;
         std::ios_base::fmtflags flags_;
         std::ios_base::iostate  rdstate_;
         std::ios_base::iostate  exceptions_;
         boost::optional<boost::io::detail::locale_t>  loc_;
-    };  
+    };
 
 
 //---- format_item  ---------------------------------------------------------//
 
 //   stores all parameters that can be specified in format strings
-    template<class Ch, class Tr, class Alloc>  
-    struct format_item 
-    {     
+    template<class Ch, class Tr, class Alloc>
+    struct format_item
+    {
         enum pad_values { zeropad = 1, spacepad =2, centered=4, tabulation = 8 };
-                         // 1. if zeropad is set, all other bits are not, 
+                         // 1. if zeropad is set, all other bits are not,
                          // 2. if tabulation is set, all others are not.
                          // centered and spacepad can be mixed freely.
         enum arg_values { argN_no_posit   = -1, // non-positional directive. will set argN later
-                          argN_tabulation = -2, // tabulation directive. (no argument read) 
+                          argN_tabulation = -2, // tabulation directive. (no argument read)
                           argN_ignored    = -3  // ignored directive. (no argument read)
         };
         typedef BOOST_IO_STD basic_ios<Ch, Tr>                    basic_ios;
         typedef detail::stream_format_state<Ch, Tr>               stream_format_state;
         typedef ::std::basic_string<Ch, Tr, Alloc>                string_type;
 
-        format_item(Ch fill) :argN_(argN_no_posit), fmtstate_(fill), 
+        format_item(Ch fill) :argN_(argN_no_posit), fmtstate_(fill),
                               truncate_(max_streamsize()), pad_scheme_(0)  {}
         void reset(Ch fill);
         void compute_states(); // sets states  according to truncate and pad_scheme.
 
-        static std::streamsize max_streamsize() { 
+        static std::streamsize max_streamsize() {
             return (std::numeric_limits<std::streamsize>::max)();
         }
 
@@ -94,7 +94,7 @@ namespace detail {
 
         std::streamsize truncate_;//- is set for directives like %.5s that ask truncation
         unsigned int pad_scheme_;//- several possible padding schemes can mix. see pad_values
-    }; 
+    };
 
 
 
@@ -119,7 +119,7 @@ namespace detail {
             os.imbue(loc_.get());
         else if(loc_default)
             os.imbue(*loc_default);
-#endif        
+#endif
     }
 
     template<class Ch, class Tr>
@@ -147,9 +147,9 @@ namespace detail {
     template<class Ch, class Tr> inline
     void stream_format_state<Ch,Tr>:: reset(Ch fill) {
         // set our params to standard's default state.   cf § 27.4.4.1 of the C++ norm
-        width_=0; precision_=6; 
+        width_=0; precision_=6;
         fill_=fill; // default is widen(' '), but we cant compute it without the locale
-        flags_ = std::ios_base::dec | std::ios_base::skipws; 
+        flags_ = std::ios_base::dec | std::ios_base::skipws;
         // the adjust_field part is left equal to 0, which means right.
         exceptions_ = std::ios_base::goodbit;
         rdstate_ = std::ios_base::goodbit;
@@ -158,16 +158,16 @@ namespace detail {
 
 // ---   format_item:: --------------------------------------------------------
 
-    template<class Ch, class Tr, class Alloc> 
-    void format_item<Ch, Tr, Alloc>:: 
-    reset (Ch fill) { 
-        argN_=argN_no_posit; truncate_ = max_streamsize(); pad_scheme_ =0; 
+    template<class Ch, class Tr, class Alloc>
+    void format_item<Ch, Tr, Alloc>::
+    reset (Ch fill) {
+        argN_=argN_no_posit; truncate_ = max_streamsize(); pad_scheme_ =0;
         res_.resize(0); appendix_.resize(0);
         fmtstate_.reset(fill);
     }
 
-    template<class Ch, class Tr, class Alloc> 
-    void format_item<Ch, Tr, Alloc>:: 
+    template<class Ch, class Tr, class Alloc>
+    void format_item<Ch, Tr, Alloc>::
     compute_states() {
         // reflect pad_scheme_   on  fmt_state_
         //   because some pad_schemes has complex consequences on several state params.
@@ -176,12 +176,12 @@ namespace detail {
             if(fmtstate_.flags_ & std::ios_base::left) {
               BOOST_ASSERT(!(fmtstate_.flags_ &(std::ios_base::adjustfield ^std::ios_base::left)));
               // only left bit might be set. (not right, nor internal)
-              pad_scheme_ = pad_scheme_ & (~zeropad); 
+              pad_scheme_ = pad_scheme_ & (~zeropad);
             }
-            else { 
+            else {
                 pad_scheme_ &= ~spacepad; // printf ignores spacepad when zeropadding
-                fmtstate_.fill_='0'; 
-                fmtstate_.flags_ = (fmtstate_.flags_ & ~std::ios_base::adjustfield) 
+                fmtstate_.fill_='0';
+                fmtstate_.flags_ = (fmtstate_.flags_ & ~std::ios_base::adjustfield)
                     | std::ios_base::internal;
                 // removes all adjustfield bits, and adds internal.
             }

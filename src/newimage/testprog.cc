@@ -40,7 +40,7 @@ float dumbinterp(const volume<int>& vol, float x, float y, float z)
 }
 
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
 
   try {
@@ -100,8 +100,8 @@ int main(int argc, char *argv[])
 //      vol1 += vol1;
     save_volume4D(vol1, "vol1");
 
-//   if (argc<6) { 
-//     cerr << "Usage: " << argv[0] << " <input-file> <output-file> dim1 dim2 dim3" << endl; exit(1); 
+//   if (argc<6) {
+//     cerr << "Usage: " << argv[0] << " <input-file> <output-file> dim1 dim2 dim3" << endl; exit(1);
 //   }
 
 //   volume<int> v1;
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 //   vmask(2,2,3) = 1;
 //   {
 //     Matrix tmat = tnew.matrix();
-//     cout << "MATRIX SIZE IS : " << endl << tmat.Ncols() << " by " 
+//     cout << "MATRIX SIZE IS : " << endl << tmat.Ncols() << " by "
 // 	 << tmat.Nrows() << endl;
 //     tmat(2,2)=57000;
 //     tnew.setmatrix(tmat);
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 // //      }
 // //      cout << endl << endl;
 // //    }
-  
+
 // //    cout << endl << "PERIODIC" << endl;
 
 // //    v2.setextrapolationmethod(periodic);
@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
 // //    MJIMAGE::volume v4(200,250,200);
 // //    v4 = 2;
 
-// //    for (int n=0; n<20; n++) 
+// //    for (int n=0; n<20; n++)
 // //    for (int k=0; k<v4.zsize(); k++) {
 // //      for (int j=0; j<v4.ysize(); j++) {
 // //        for (int i=0; i<v4.xsize(); i++) {
@@ -262,9 +262,9 @@ int main(int argc, char *argv[])
 
 // //    float *v5 = new float[200*250*200];
 // //    float *pend = v5 + 200*250*200;
-// //    for (float *it=v5; it!=pend; ++it) {  *it=2.0; } 
+// //    for (float *it=v5; it!=pend; ++it) {  *it=2.0; }
 // //    for (int n=0; n<20; n++) {
-// //      for (float *it=v5; it!=pend; ++it) {  sum1+= *it; } 
+// //      for (float *it=v5; it!=pend; ++it) {  sum1+= *it; }
 // //    }
 
 //   time(&t0);
@@ -273,12 +273,12 @@ int main(int argc, char *argv[])
 // //    const volume<float>& v3c(v3);
 // //    v3 = 2;
 
-// //    for (int n=0; n<20; n++) 
+// //    for (int n=0; n<20; n++)
 // //    sum2 += v3.sum();
 
-// //    for (int n=0; n<20; n++) 
-// //    for (volume<float>::fast_const_iterator it=v3c.fbegin(), 
-// //  	 pend=v3c.fend();   it!=pend; ++it) 
+// //    for (int n=0; n<20; n++)
+// //    for (volume<float>::fast_const_iterator it=v3c.fbegin(),
+// //  	 pend=v3c.fend();   it!=pend; ++it)
 // //      {  sum1+= *it; }
 
 // //    cout << endl << "ABOUT TO SET ROI" << endl;
@@ -286,18 +286,18 @@ int main(int argc, char *argv[])
 // //    int rx=0, ry=0, rz=0;
 //   //v3.setROIlimits(1,1,1,100,100,100);
 //   //v3.activateROI();
-// //    for (int n=0; n<20; n++) 
-// //    for (volume<float>::iterator it=v3.begin(), 
-// //  	 pend=v3.end();   it!=pend; ++it) 
-// //      {  
-// //        sum1+= *it; 
+// //    for (int n=0; n<20; n++)
+// //    for (volume<float>::iterator it=v3.begin(),
+// //  	 pend=v3.end();   it!=pend; ++it)
+// //      {
+// //        sum1+= *it;
 // //        //it.getposition(rx,ry,rz);
 // //        // if (n==1) cout << "Position is ("<<rx<<","<<ry<<","<<rz<<")"<<endl;
 // //      }
 
 // //    volume<float>::fast_const_iterator pend = v3.fend();
-// //    for (int n=0; n<20; n++) 
-// //    for (volume<float>::fast_const_iterator it=v3.fbegin(); it.iter!=pend.iter; ++it) 
+// //    for (int n=0; n<20; n++)
+// //    for (volume<float>::fast_const_iterator it=v3.fbegin(); it.iter!=pend.iter; ++it)
 // //      {  sum1+= *it; }
 
 //   time(&t1);
@@ -305,11 +305,11 @@ int main(int argc, char *argv[])
 
 // //    float *pend = &v3(199,249,199);
 // //    for (int n=0; n<20; n++) {
-// //      for (float *it=&v3(0,0,0); it!=pend; ++it) {  sum1+= *it; } 
+// //      for (float *it=&v3(0,0,0); it!=pend; ++it) {  sum1+= *it; }
 // //    }
 
 //   time(&t2);
-// //    for (int n=0; n<20; n++) 
+// //    for (int n=0; n<20; n++)
 // //    for (int k=v3.limits(2); k<=v3.limits(5); k++) {
 // //      for (int j=v3.limits(1); j<=v3.limits(4); j++) {
 // //        for (int i=v3.limits(0); i<=v3.limits(3); i++) {
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 // //        }
 // //      }
 // //    }
-// //    for (int n=0; n<20; n++) 
+// //    for (int n=0; n<20; n++)
 // //      for (int i=v3.ROIlimits()[0]; i<=v3.ROIlimits()[3]; i++) {
 // //        for (int j=v3.ROIlimits()[1]; j<=v3.ROIlimits()[4]; j++) {
 // //  	for (int k=v3.ROIlimits()[2]; k<=v3.ROIlimits()[5]; k++) {
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
 // //      }
 
 //   time(&t3);
-// //    for (int n=0; n<20; n++) 
+// //    for (int n=0; n<20; n++)
 // //    for (int k=v3.ROIlimits()[2]; k<=v3.ROIlimits()[5]; k++) {
 // //      for (int j=v3.ROIlimits()[1]; j<=v3.ROIlimits()[4]; j++) {
 // //        for (int i=v3.ROIlimits()[0]; i<=v3.ROIlimits()[3]; i++) {
@@ -363,8 +363,8 @@ int main(int argc, char *argv[])
 
 //   time(&t8);
 
-//   cout << "Timings are : " << t1-t0 << " " << t2-t1 << " " << t3-t2 
-//        << " " << t4-t3 << " " << t5-t4 << " " << t6-t5 << " " << t7-t6 
+//   cout << "Timings are : " << t1-t0 << " " << t2-t1 << " " << t3-t2
+//        << " " << t4-t3 << " " << t5-t4 << " " << t6-t5 << " " << t7-t6
 //        << " " << t8-t7 << endl;
 //   cout << "Sums are : " << sum1 << " " << sum2 << " " << sum3 << " "
 //        << sum4 << " " << sum5 << " " << sum6 << " " << sum7 << " " << sum8
@@ -374,10 +374,10 @@ int main(int argc, char *argv[])
 //   for (int n=0; n<6; n++) { cout << v2.ROIlimits()[n] << " , "; }
 //   cout << endl;
 
-  } 
+  }
   catch (string msg)
         { cerr << "Exception message::" << msg << endl; throw; }
-    
+
 }
 
 

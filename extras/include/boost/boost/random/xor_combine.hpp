@@ -28,7 +28,7 @@ namespace random {
 
 template<class URNG1, int s1, class URNG2, int s2,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename URNG1::result_type 
+  typename URNG1::result_type
 #else
   uint32_t
 #endif
@@ -116,7 +116,7 @@ private:
 //  A definition is required even for integral static constants
 template<class URNG1, int s1, class URNG2, int s2,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename URNG1::result_type 
+  typename URNG1::result_type
 #else
   uint32_t
 #endif

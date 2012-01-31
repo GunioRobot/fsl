@@ -55,7 +55,7 @@ resource 'vers' (2) {
  * The -16397 string will be displayed by Finder when a user
  * tries to open the shared library. The string should
  * give the user a little detail about the library's capabilities
- * and enough information to install the library in the correct location.  
+ * and enough information to install the library in the correct location.
  * A similar string should be placed in all shared libraries.
  */
 resource 'STR ' (-16397, purgeable) {
@@ -67,12 +67,12 @@ resource 'STR ' (-16397, purgeable) {
 };
 
 
-/* 
+/*
  * We now load the Tk library into the resource fork of the library.
  */
 
 data 'TEXT' (4000,"pkgIndex",purgeable, preload) {
 	"# Tcl package index file, version 1.0\n"
-	"package ifneeded Tclapplescript 1.1 [list tclPkgSetup $dir Tclapplescript 1.1 {{Tclapplescript" 
+	"package ifneeded Tclapplescript 1.1 [list tclPkgSetup $dir Tclapplescript 1.1 {{Tclapplescript"
 	".shlb load AppleScript}}]\n"
 };

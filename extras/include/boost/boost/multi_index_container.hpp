@@ -46,7 +46,7 @@
 #include <boost/multi_index/detail/archive_constructed.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
-#include <boost/throw_exception.hpp> 
+#include <boost/throw_exception.hpp>
 #endif
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
@@ -112,7 +112,7 @@ public:
    */
 
 #if defined(BOOST_MSVC)
-  typedef 
+  typedef
     detail::default_constructible_tuple_cons<
       typename super::ctor_args_list>              ctor_args_list;
 #else
@@ -160,7 +160,7 @@ public:
     node_count(0)
   {
     BOOST_MULTI_INDEX_CHECK_INVARIANT;
-  }    
+  }
 
   template<typename InputIterator>
   multi_index_container(
@@ -561,7 +561,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   {
     BOOST_MULTI_INDEX_CHECK_INVARIANT;
 
-    clear_(); 
+    clear_();
 
     std::size_t s;
     ar>>serialization::make_nvp("count",s);

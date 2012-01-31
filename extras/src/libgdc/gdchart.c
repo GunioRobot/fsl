@@ -778,7 +778,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 	  1.0,      2.0,      3.0,      5.0,     10.0,    25.0,
 	  50.0,     100.0,    250.0,    500.0,   1000.0,  2500,    5000.0,
 	    10000.0,  25000.0,  50000.0,  100000.0,500000.0,1000000, 5000000 , 1e7,2.5e7, 5e7, 1e8, 1e9 },
-	  *ypoints = do_ylbl_fractions? ypoints_2f: ypoints_dec; 
+	  *ypoints = do_ylbl_fractions? ypoints_2f: ypoints_dec;
 
 	  int		max_num_ylbls;
 	  int		longest_ylblen = 0;
@@ -854,11 +854,11 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 	    {
 	      float	num_yintrvls = (highest-lowest) / ylbl_interval;
 	      /*no skyscrapers  CFB*/
-	      if( vhighest != 0.0 ) 
+	      if( vhighest != 0.0 )
 		vhighest += (vhighest-vlowest) / (num_yintrvls*2.0);
-	      if( vlowest != 0.0 ) 
-		vlowest -= (vhighest-vlowest) / (num_yintrvls*2.0); 
-	      
+	      if( vlowest != 0.0 )
+		vlowest -= (vhighest-vlowest) / (num_yintrvls*2.0);
+
 	      if( GDC_yaxis2 )
 		{
 		  char	svlongest[32];
@@ -1007,7 +1007,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 	  if( threeD )
 	    ExtColorShd[j][i] = clrshdallocate( im, GDC_PlotColor );
 	}
-			
+
 
   if( GDC_transparent_bg )
     gdImageColorTransparent( im, BGColor );
@@ -1072,9 +1072,9 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
   if( GDC_grid || GDC_ticks || GDC_yaxis )
     {	/* grid lines & y label(s) */
       float	tmp_y = lowest;
-      int		labelcolor = GDC_YLabelColor==GDC_DFLTCOLOR? 
+      int		labelcolor = GDC_YLabelColor==GDC_DFLTCOLOR?
 	LineColor: clrallocate( im, GDC_YLabelColor );
-      int		label2color = GDC_YLabel2Color==GDC_DFLTCOLOR? 
+      int		label2color = GDC_YLabel2Color==GDC_DFLTCOLOR?
 	VolColor: clrallocate( im, GDC_YLabel2Color );
 
       /* step from lowest to highest puting in labels and grid at interval points */
@@ -1082,26 +1082,26 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
       /* if lowest < 0 < highest                                                  */
       for( i=-1; i<=1; i+=2 )		        /* -1, 1 */
 	{
-	  if( i == -1 ){	
+	  if( i == -1 ){
 	    if( lowest >= 0.0 )	/*	all pos plotting */
 	      continue;
 	    else
 	      tmp_y = MIN( 0, highest );        /*	step down to lowest */
 	  }
-	  if( i == 1 ){	
+	  if( i == 1 ){
 	    if( highest <= 0.0 )    /*	all neg plotting */
 	      continue;
 	    else
 	      tmp_y = MAX( 0, lowest );		/*	step up to highest */
 	  }
-	  
+
 	  do	/* while( (tmp_y (+-)= ylbl_interval) < [highest,lowest] ) */
 	    {
 	      int		n, d, w;
 	      char	*price_to_str( float, int*, int*, int*, char* );
 	      char	nmrtr[3+1], dmntr[3+1], whole[8];
 	      char	all_whole = ylbl_interval<1.0? FALSE: TRUE;
-	      
+
 	      char	*ylbl_str = price_to_str( tmp_y,&n,&d,&w,
 						  do_ylbl_fractions? NULL: GDC_ylabel_fmt );
 	      if( do_ylbl_fractions )
@@ -1110,7 +1110,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 		  sprintf( dmntr, "%d", d );
 		  sprintf( whole, "%d", w );
 		}
-	      
+
 	      if( GDC_grid || GDC_ticks )
 		{
 		  int	x1, x2, y1, y2;
@@ -1175,7 +1175,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 				 PY(tmp_y)-GDC_fontc[GDC_yaxisfont_size].h/2,
 				 (unsigned char*)ylbl_str,
 				 labelcolor );
-		
+
 	      }
 	      if( do_vol && GDC_yaxis2 )
 		{
@@ -1184,7 +1184,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 		  sprintf( vylbl,
 			   GDC_ylabel2_fmt? GDC_ylabel2_fmt: "%.0f",
 			   ((float)(PY(tmp_y)+(setno*ydepth_3D)-vyorig))/vyscl );
-		  
+
 		  setno = set_depth;
 		  if( GDC_ticks )
 		    gdImageLine( im, PX(num_points-1+(do_bar?2:0)), PY(tmp_y),
@@ -1203,7 +1203,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 	  while( ((i>0) && ((tmp_y += ylbl_interval) < highest)) ||
 		 ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
 	}
-      
+
       /* catch last (bottom) grid line - specific to an "off" requested interval */
       if( GDC_grid && threeD )
 	{
@@ -1211,7 +1211,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 	  gdImageLine( im, PX(0), PY(lowest), PX(num_points-1+(do_bar?2:0)), PY(lowest), GridColor );
 	  setno = 0;											/* set back to foremost */
 	}
-      
+
       /* vy axis title */
       if( do_vol && GDC_ytitle2 )
 	{
@@ -1654,7 +1654,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 
 		      draw_3d_line( im,
 				    PY(0),
-				    PX(i-1), PX(i), 
+				    PX(i-1), PX(i),
 				    &(y1[j]), &(y2[j]),
 				    xdepth_3D, ydepth_3D,
 				    1,
@@ -1692,7 +1692,7 @@ GDC_out_graph( short		IMGWIDTH,		/* no check for a img that's too small to fit *
 		      }
 		  draw_3d_line( im,
 				PY(0),
-				PX(i-1), PX(i), 
+				PX(i-1), PX(i),
 				y1, y2,
 				xdepth_3D, ydepth_3D,
 				set,

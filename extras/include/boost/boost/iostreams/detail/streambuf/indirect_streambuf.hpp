@@ -20,7 +20,7 @@
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
-#include <boost/iostreams/detail/double_object.hpp> 
+#include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/optional.hpp>
 #include <boost/iostreams/detail/push.hpp>
@@ -328,9 +328,9 @@ template<typename T, typename Tr, typename Alloc, typename Mode>
 inline typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seekpos
     (pos_type sp, BOOST_IOS::openmode)
-{ 
-    return seek_impl( position_to_offset(sp), BOOST_IOS::beg, 
-                      BOOST_IOS::in | BOOST_IOS::out ); 
+{
+    return seek_impl( position_to_offset(sp), BOOST_IOS::beg,
+                      BOOST_IOS::in | BOOST_IOS::out );
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -338,7 +338,7 @@ typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
     (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
-    if (pptr() != 0) 
+    if (pptr() != 0)
         this->BOOST_IOSTREAMS_PUBSYNC(); // sync() confuses VisualAge 6.
     if (way == BOOST_IOS::cur && gptr())
         off -= static_cast<off_type>(egptr() - gptr());

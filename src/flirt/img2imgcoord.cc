@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -165,7 +165,7 @@ void parse_command_line(int argc, char* argv[])
       n++;
       continue;
     }
-    
+
     // put options without arguments here
     if ( arg == "-help" ) {
       print_usage(argc,argv);
@@ -188,10 +188,10 @@ void parse_command_line(int argc, char* argv[])
       continue;
     }
 
-    if (n+1>=argc) 
-      { 
+    if (n+1>=argc)
+      {
 	cerr << "Lacking argument to option " << arg << endl;
-	break; 
+	break;
       }
 
     // put options with 1 argument here
@@ -211,10 +211,10 @@ void parse_command_line(int argc, char* argv[])
       globalopts.warpfname = argv[n+1];
       n+=2;
       continue;
-    } else { 
+    } else {
       cerr << "Unrecognised option " << arg << endl;
       exit(-1);
-    } 
+    }
 
   }  // while (n<argc)
 
@@ -229,11 +229,11 @@ void parse_command_line(int argc, char* argv[])
 ////////////////////////////////////////////////////////////////////////////
 
 void print_info(const volume<float>& vol, const string& name) {
-  cout << name << ":: SIZE = " << vol.xsize() << " x " << vol.ysize() 
+  cout << name << ":: SIZE = " << vol.xsize() << " x " << vol.ysize()
        << " x " << vol.zsize() << endl;
-  cout << name << ":: DIMS = " << vol.xdim() << " x " << vol.ydim() 
+  cout << name << ":: DIMS = " << vol.xdim() << " x " << vol.ydim()
        << " x " << vol.zdim() << " mm" << endl << endl;
-}  
+}
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -269,7 +269,7 @@ int main(int argc,char *argv[])
     cerr << "Cannot read Destination volume" << endl;
     return -1;
   }
-    
+
   if (globalopts.verbose>3) {
     print_info(destvol,"Destination Volume");
     print_info(srcvol,"Source Volume");
@@ -286,7 +286,7 @@ int main(int argc,char *argv[])
     cerr << "Cannot read transform file" << endl;
     return -2;
   }
-    
+
   if (globalopts.verbose>3) {
     cout << " affmat =" << endl << affmat << endl << endl;
   }
@@ -307,47 +307,47 @@ int main(int argc,char *argv[])
 
   // Let Volume 2 be Source and Volume 1 be Destination
   //  notate variables as (v=vox, w=world, f=flirt, t=dest)
-  
+
   ColumnVector srccoord(4), destcoord(4), oldsrc(4);
   srccoord = 0;
   destcoord = 0;
   srccoord(4)=1;
   destcoord(4)=1;
   oldsrc = 0;  // 4th component set to 0, so that initially oldsrc -ne srccoord
-  
+
   cout << "Coordinates in Destination volume";
-  if (globalopts.mm) { 
+  if (globalopts.mm) {
     cout << " (in mm)" << endl;
-  } else { 
-    cout << " (in voxels)" << endl; 
+  } else {
+    cout << " (in voxels)" << endl;
   }
-  
+
   if (globalopts.coordfname.size()>1) {
     ifstream matfile(globalopts.coordfname.c_str());
-    if (!matfile) { 
+    if (!matfile) {
       cerr << "Could not open matrix file " << globalopts.coordfname << endl;
       return -1;
     }
-    
+
     while (!matfile.eof()) {
       for (int j=1; j<=3; j++) {
 	matfile >> srccoord(j);
       }
       if (globalopts.mm) {  // in mm
-	destcoord = destvol.newimagevox2mm_mat() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.newimagevox2mm_mat().i() * srccoord); 
+	destcoord = destvol.newimagevox2mm_mat() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.newimagevox2mm_mat().i() * srccoord);
       } else { // in voxels
-	destcoord = destvol.niftivox2newimagevox_mat().i() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.niftivox2newimagevox_mat() * srccoord); 
+	destcoord = destvol.niftivox2newimagevox_mat().i() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.niftivox2newimagevox_mat() * srccoord);
       }
       cout << destcoord(1) << "  " << destcoord(2) << "  " << destcoord(3) << endl;
     }
-    
+
     matfile.close();
   } else {
     cout << "Please type in Source coordinates";
-    if (globalopts.mm) { 
+    if (globalopts.mm) {
       cout << " (in mm) :" << endl;
-    } else { 
-      cout << " (in voxels) :" << endl; 
+    } else {
+      cout << " (in voxels) :" << endl;
     }
     while (!cin.eof()) {
       for (int j=1; j<=3; j++) {
@@ -356,7 +356,7 @@ int main(int argc,char *argv[])
       if (oldsrc == srccoord)  return 0;
       oldsrc = srccoord;
       if (globalopts.mm) {  // in mm
-	destcoord = destvol.newimagevox2mm_mat() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.newimagevox2mm_mat().i() * srccoord); 
+	destcoord = destvol.newimagevox2mm_mat() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.newimagevox2mm_mat().i() * srccoord);
       } else { // in voxels
 	destcoord = destvol.niftivox2newimagevox_mat().i() * NewimageCoord2NewimageCoord(fnirtfile,affmat,srcvol,destvol,srcvol.niftivox2newimagevox_mat() * srccoord);
       }

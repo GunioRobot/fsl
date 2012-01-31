@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : 
+//  Description :
 // ***************************************************************************
 
 #ifndef BOOST_TEST_CALLBACK_020505GER
@@ -109,7 +109,7 @@ public:
     template<typename Functor>
     callback0( Functor f )
     : m_impl( new ut_detail::callback0_impl_t<R,Functor>( f ) ) {}
-    
+
     void        operator=( callback0 const& rhs ) { m_impl = rhs.m_impl; }
 
     template<typename Functor>

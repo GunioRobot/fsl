@@ -29,34 +29,34 @@ namespace boost
 #if defined(__GNUC__) && (__GNUC__ < 3)
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
-        
+
         using    ::std::abs;
         using    ::std::sqrt;
         using    ::std::log;
-        
+
         using    ::std::numeric_limits;
 #endif
-        
+
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         // This is the main fare
-        
+
         template<typename T>
         inline T    acosh(const T x)
         {
             using    ::std::abs;
             using    ::std::sqrt;
             using    ::std::log;
-            
+
             using    ::std::numeric_limits;
-            
-            
+
+
             T const    one = static_cast<T>(1);
             T const    two = static_cast<T>(2);
-            
+
             static T const    taylor_2_bound = sqrt(numeric_limits<T>::epsilon());
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
             static T const    upper_taylor_2_bound = one/taylor_2_bound;
-            
+
             if        (x < one)
             {
                 if    (numeric_limits<T>::has_quiet_NaN)
@@ -67,7 +67,7 @@ namespace boost
                 {
                     ::std::string        error_reporting("Argument to atanh is strictly greater than +1 or strictly smaller than -1!");
                     ::std::domain_error  bad_argument(error_reporting);
-                    
+
                     throw(bad_argument);
                 }
             }
@@ -86,24 +86,24 @@ namespace boost
             else
             {
                 T    y = sqrt(x-one);
-                
+
                 // approximation by taylor series in y at 0 up to order 2
                 T    result = y;
-                
+
                 if    (y >= taylor_2_bound)
                 {
                     T    y3 = y*y*y;
-                    
+
                     // approximation by taylor series in y at 0 up to order 4
                     result -= y3/static_cast<T>(12);
                 }
-                
+
                 return(sqrt(static_cast<T>(2))*result);
             }
         }
 #else
         // These are implementation details (for main fare see below)
-        
+
         namespace detail
         {
             template    <
@@ -117,8 +117,8 @@ namespace boost
                     return(::std::numeric_limits<T>::quiet_NaN());
                 }
             };  // boost::detail::acosh_helper2_t
-            
-            
+
+
             template<typename T>
             struct    acosh_helper2_t<T, false>
             {
@@ -126,35 +126,35 @@ namespace boost
                 {
                     ::std::string        error_reporting("Argument to acosh is greater than or equal to +1!");
                     ::std::domain_error  bad_argument(error_reporting);
-                    
+
                     throw(bad_argument);
                 }
             };  // boost::detail::acosh_helper2_t
-        
+
         }  // boost::detail
-        
-        
+
+
         // This is the main fare
-        
+
         template<typename T>
         inline T    acosh(const T x)
         {
             using    ::std::abs;
             using    ::std::sqrt;
             using    ::std::log;
-            
+
             using    ::std::numeric_limits;
-            
+
             typedef    detail::acosh_helper2_t<T, std::numeric_limits<T>::has_quiet_NaN>    helper2_type;
-            
-            
+
+
             T const    one = static_cast<T>(1);
             T const    two = static_cast<T>(2);
-            
+
             static T const    taylor_2_bound = sqrt(numeric_limits<T>::epsilon());
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
             static T const    upper_taylor_2_bound = one/taylor_2_bound;
-            
+
             if        (x < one)
             {
                 return(helper2_type::get_NaN());
@@ -174,18 +174,18 @@ namespace boost
             else
             {
                 T    y = sqrt(x-one);
-                
+
                 // approximation by taylor series in y at 0 up to order 2
                 T    result = y;
-                
+
                 if    (y >= taylor_2_bound)
                 {
                     T    y3 = y*y*y;
-                    
+
                     // approximation by taylor series in y at 0 up to order 4
                     result -= y3/static_cast<T>(12);
                 }
-                
+
                 return(sqrt(static_cast<T>(2))*result);
             }
         }

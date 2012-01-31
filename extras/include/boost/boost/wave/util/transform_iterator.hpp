@@ -20,29 +20,29 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
-namespace wave { 
+namespace wave {
 namespace impl {
 
 #if BOOST_ITERATOR_ADAPTORS_VERSION < 0x0200
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Transform Iterator Adaptor
 //
 //  Upon deference, apply some unary function object and return the
 //  result by reference.
 //
-//  This class is adapted from the Boost.Iterator library, where a similar 
+//  This class is adapted from the Boost.Iterator library, where a similar
 //  class exists, which returns the next item by value
 //
 ///////////////////////////////////////////////////////////////////////////////
     template <class AdaptableUnaryFunctionT>
-    struct ref_transform_iterator_policies 
+    struct ref_transform_iterator_policies
     :   public boost::default_iterator_policies
     {
-        ref_transform_iterator_policies() 
+        ref_transform_iterator_policies()
         {}
-        ref_transform_iterator_policies(const AdaptableUnaryFunctionT &f) 
+        ref_transform_iterator_policies(const AdaptableUnaryFunctionT &f)
         : m_f(f) {}
 
         template <class IteratorAdaptorT>
@@ -57,18 +57,18 @@ namespace impl {
     class ref_transform_iterator_generator
     {
         typedef typename AdaptableUnaryFunctionT::result_type value_type;
-        
+
     public:
         typedef boost::iterator_adaptor<
                 IteratorT,
                 ref_transform_iterator_policies<AdaptableUnaryFunctionT>,
-                value_type, value_type const &, value_type const *, 
+                value_type, value_type const &, value_type const *,
                 std::input_iterator_tag>
             type;
     };
 
     template <class AdaptableUnaryFunctionT, class IteratorT>
-    inline 
+    inline
     typename ref_transform_iterator_generator<
         AdaptableUnaryFunctionT, IteratorT>::type
     make_ref_transform_iterator(
@@ -76,7 +76,7 @@ namespace impl {
         const AdaptableUnaryFunctionT &f = AdaptableUnaryFunctionT())
     {
         typedef typename ref_transform_iterator_generator<
-                    AdaptableUnaryFunctionT, IteratorT>::type 
+                    AdaptableUnaryFunctionT, IteratorT>::type
             result_t;
         return result_t(base, f);
     }
@@ -88,10 +88,10 @@ namespace impl {
     struct get_token_value {
 
         typedef TokenT result_type;
-        
+
         TokenT const &operator()(ParseTreeNodeT const &node) const
         {
-            BOOST_ASSERT(1 == std::distance(node.value.begin(), 
+            BOOST_ASSERT(1 == std::distance(node.value.begin(),
                 node.value.end()));
             return *node.value.begin();
         }
@@ -101,7 +101,7 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The new Boost.Iterator library already conatins a transform_iterator usable 
+//  The new Boost.Iterator library already conatins a transform_iterator usable
 //  for our needs. The code below wraps this up.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ namespace impl {
     {
         typedef typename AdaptableUnaryFunctionT::result_type   return_type;
         typedef typename AdaptableUnaryFunctionT::argument_type argument_type;
-        
+
     public:
         typedef boost::transform_iterator<
                 return_type (*)(argument_type), IteratorT, return_type>
@@ -118,7 +118,7 @@ namespace impl {
     };
 
     template <class AdaptableUnaryFunctionT, class IteratorT>
-    inline 
+    inline
     typename ref_transform_iterator_generator<
         AdaptableUnaryFunctionT, IteratorT>::type
     make_ref_transform_iterator(
@@ -138,18 +138,18 @@ namespace impl {
 
         typedef TokenT const &result_type;
         typedef ParseTreeNodeT const &argument_type;
-        
+
         static result_type
-        transform (argument_type node) 
+        transform (argument_type node)
         {
-            BOOST_ASSERT(1 == std::distance(node.value.begin(), 
+            BOOST_ASSERT(1 == std::distance(node.value.begin(),
                 node.value.end()));
             return *node.value.begin();
         }
     };
 
 #endif // BOOST_ITERATOR_ADAPTORS_VERSION < 0x0200
-    
+
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
 }   // namespace wave

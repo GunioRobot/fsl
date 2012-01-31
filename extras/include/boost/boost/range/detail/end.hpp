@@ -25,7 +25,7 @@
 #  include <boost/range/detail/remove_extent.hpp>
 # endif
 
-namespace boost 
+namespace boost
 {
     namespace range_detail
     {
@@ -35,39 +35,39 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<std_container_>
         {
             template< typename C >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type 
+            static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type
             fun( C& c )
             {
                 return c.end();
             };
         };
-                    
+
         //////////////////////////////////////////////////////////////////////
         // pair
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<std_pair_>
         {
             template< typename P >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<P>::type 
+            static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<P>::type
             fun( const P& p )
             {
                 return p.second;
             }
         };
- 
+
         //////////////////////////////////////////////////////////////////////
         // array
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
-        struct range_end<array_>  
+        struct range_end<array_>
         {
         #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
             template< typename T, std::size_t sz >
@@ -84,7 +84,7 @@ namespace boost
         #endif
         };
 
-                
+
         template<>
         struct range_end<char_array_>
         {
@@ -94,7 +94,7 @@ namespace boost
                 return boost::range_detail::array_end( boost_range_array );
             }
         };
-        
+
         template<>
         struct range_end<wchar_t_array_>
         {
@@ -108,7 +108,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // string
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<char_ptr_>
         {
@@ -145,16 +145,16 @@ namespace boost
                 return boost::range_detail::str_end( s );
             }
         };
-        
+
     } // namespace 'range_detail'
-    
+
     template< typename C >
-    inline BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type 
+    inline BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type
     end( C& c )
     {
         return range_detail::range_end< BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
-    
+
 } // namespace 'boost'
 
 # endif // VC6

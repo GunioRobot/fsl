@@ -56,12 +56,12 @@ for projname in $PROJECTS; do
 	    cd unix ;
 	fi
         ${MAKE} distclean ;
-	
+
 	if [ -x fslconfigure ] ; then
 	  echo "Running configure with FSL options" ;
 	  ./fslconfigure ;
 	fi
-	if ${MAKE} ${MAKEOPTIONS} ; then 
+	if ${MAKE} ${MAKEOPTIONS} ; then
 	    if ${MAKE} install ; then
 		${MAKE} distclean ;
 	    else
@@ -70,8 +70,8 @@ for projname in $PROJECTS; do
 	    if [ X"$projname" = "Xtcl" -o X"$projname" = "Xtk" ] ; then
 		cd $FSLESRCDIR/$projname ;
 		${MAKE} install
-	    fi	    
-	    
+	    fi
+
 	    echo " "
 	    echo " ------------------------- "
 	    echo "Successfully made $projname";

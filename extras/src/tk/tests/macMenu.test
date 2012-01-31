@@ -878,7 +878,7 @@ test macMenu-21.6 {TkpSetMainMenubar - old menu different} {macOnly} {
 test macMenu-21.7 {TkpSetMainMenubar - child window NULL - parent window now} {macOnly} {
     catch {destroy .m1}
     catch {destroy .t2}
-    toplevel .t2 
+    toplevel .t2
     menu .m1
     .m1 add cascade -label Foo -menu .m1.foo
     menu .m1.foo
@@ -968,7 +968,7 @@ test macMenu-25.9 {GetMenuAccelGeometry - extra text} {macOnly} {
     .m1 add command -label foo -accel "Command+Delete"
     list [catch {tk::TearOffMenu .m1 40 40}] [destroy .m1]
 } {0 {}}
-    
+
 test macMenu-26.1 {GetTearoffEntryGeometry} {macOnly} {
     # can't call this on power mac.
 } {}
@@ -1415,7 +1415,7 @@ test macMenu-41.18 {TkpComputeStandardMenuGeometry - three columns} {macOnly} {
     .m1 add command -label four
     .m1 add command -label five -columnbreak 1
     .m1 add command -label six
-    list [update idletasks] [destroy .m1]    
+    list [update idletasks] [destroy .m1]
 } {{} {}}
 test macMenu-41.19 {TkpComputeStandardMenuGeometry - entry without accel long} {macOnly} {
     catch {destroy .m1}
@@ -1437,7 +1437,7 @@ test macMenu-42.1 {DrawMenuEntryLabel - setting indicatorSpace} {macOnly} {
     menu .m1
     .m1 add command -label "foo"
     set tearoff [tk::TearOffMenu .m1]
-    list [update idletasks] [destroy .m1]    
+    list [update idletasks] [destroy .m1]
 } {{} {}}
 test macMenu-42.2 {DrawMenuEntryLabel - drawing image} {macOnly testImageType} {
     catch {destroy .m1}

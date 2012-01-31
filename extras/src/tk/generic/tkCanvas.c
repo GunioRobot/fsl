@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvas.c --
  *
  *	This module implements canvas widgets for the Tk toolkit.
@@ -56,7 +56,7 @@ typedef struct TagSearch {
  * The structure defined below is used to keep track of a tag search
  * in progress.  No field should be accessed by anyone other than
  * TagSearchScan, TagSearchFirst, TagSearchNext,
- * TagSearchScanExpr, TagSearchEvalExpr, 
+ * TagSearchScanExpr, TagSearchEvalExpr,
  * TagSearchExprInit, TagSearchExprDestroy,
  * TagSearchDestroy.
  * (
@@ -637,7 +637,7 @@ CanvasWidgetCmd(clientData, interp, objc, objv)
 	}
 	if (gotAny) {
 	    char buf[TCL_INTEGER_SPACE * 4];
-	    
+
 	    sprintf(buf, "%d %d %d %d", x1, y1, x2, y2);
 	    Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	}
@@ -782,13 +782,13 @@ CanvasWidgetCmd(clientData, interp, objc, objv)
 	    }
 	} else if (objc == 4) {
 	    CONST char *command;
-    
+
 	    command = Tk_GetBinding(interp, canvasPtr->bindingTable,
 		    object, Tcl_GetStringFromObj(objv[3], NULL));
 	    if (command == NULL) {
 		CONST char *string;
 
-		string = Tcl_GetStringResult(interp); 
+		string = Tcl_GetStringResult(interp);
 		/*
 		 * Ignore missing binding errors.  This is a special hack
 		 * that relies on the error message returned by FindSequence
@@ -1208,7 +1208,7 @@ CanvasWidgetCmd(clientData, interp, objc, objv)
 	if (objc == 2) {
 	    if (itemPtr != NULL) {
 		char buf[TCL_INTEGER_SPACE];
-		
+
 		sprintf(buf, "%d", itemPtr->id);
 		Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	    }
@@ -1796,7 +1796,7 @@ CanvasWidgetCmd(clientData, interp, objc, objv)
 	    }
 	    if (canvasPtr->textInfo.selItemPtr != NULL) {
 		char buf[TCL_INTEGER_SPACE];
-		
+
 		sprintf(buf, "%d", canvasPtr->textInfo.selItemPtr->id);
 		Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	    }
@@ -2166,7 +2166,7 @@ ConfigureCanvas(interp, canvasPtr, objc, objv, flags)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 static void
 CanvasWorldChanged(instanceData)
     ClientData instanceData;	/* Information about widget. */
@@ -2284,7 +2284,7 @@ DisplayCanvas(clientData)
 	if ((screenX1 >= screenX2) || (screenY1 >= screenY2)) {
 	    goto borders;
 	}
-    
+
 	width = screenX2 - screenX1;
 	height = screenY2 - screenY1;
 
@@ -2320,7 +2320,7 @@ DisplayCanvas(clientData)
 	 *    the edge of the pixmap will be outside the area we care
 	 *    about.
 	 */
-    
+
 	canvasPtr->drawableXOrigin = screenX1 - 30;
 	canvasPtr->drawableYOrigin = screenY1 - 30;
 	pixmap = Tk_GetPixmap(Tk_Display(tkwin), Tk_WindowId(tkwin),
@@ -2335,16 +2335,16 @@ DisplayCanvas(clientData)
 		screenX1 - canvasPtr->xOrigin, screenY1 - canvasPtr->yOrigin,
 		width, height);
 #endif /* TK_NO_DOUBLE_BUFFERING */
-    
+
 	/*
 	 * Clear the area to be redrawn.
 	 */
-    
+
 	XFillRectangle(Tk_Display(tkwin), pixmap, canvasPtr->pixmapGC,
 		screenX1 - canvasPtr->drawableXOrigin,
 		screenY1 - canvasPtr->drawableYOrigin, (unsigned int) width,
 		(unsigned int) height);
-    
+
 	/*
 	 * Scan through the item list, redrawing those items that need it.
 	 * An item must be redraw if either (a) it intersects the smaller
@@ -2352,7 +2352,7 @@ DisplayCanvas(clientData)
 	 * type requests that it be redrawn always (e.g. so subwindows can
 	 * be unmapped when they move off-screen).
 	 */
-    
+
 	for (itemPtr = canvasPtr->firstItemPtr; itemPtr != NULL;
 		itemPtr = itemPtr->nextPtr) {
 	    if ((itemPtr->x1 >= screenX2)
@@ -2376,13 +2376,13 @@ DisplayCanvas(clientData)
 		    canvasPtr->display, pixmap, screenX1, screenY1, width,
 		    height);
 	}
-    
+
 #ifndef TK_NO_DOUBLE_BUFFERING
 	/*
 	 * Copy from the temporary pixmap to the screen, then free up
 	 * the temporary pixmap.
 	 */
-    
+
 	XCopyArea(Tk_Display(tkwin), pixmap, Tk_WindowId(tkwin),
 		canvasPtr->pixmapGC,
 		screenX1 - canvasPtr->drawableXOrigin,
@@ -3097,7 +3097,7 @@ TagSearchExprInit(exprPtrPtr)
     expr->length = 0;
     *exprPtrPtr = expr;
 }
- 
+
 /*
  *--------------------------------------------------------------
  *
@@ -3345,7 +3345,7 @@ TagSearchScanExpr(interp, searchPtr, expr)
     char c;
     SearchUids *searchUids;	/* Collection of uids for basic search
 				 * expression terms. */
- 
+
     searchUids = GetStaticUids();
     negate_result = 0;
     found_tag = 0;
@@ -3664,7 +3664,7 @@ TagSearchEvalExpr(expr, itemPtr)
 			    uid == searchUids->negparenUid) {
 			parendepth++;
 			continue;
-		    } 
+		    }
 		    if (uid == searchUids->endparenUid) {
 			parendepth--;
 			if (parendepth < 0) {
@@ -4739,7 +4739,7 @@ PickCurrentItem(canvasPtr, eventPtr)
     if (!buttonDown) {
 	canvasPtr->flags &= ~LEFT_GRABBED_ITEM;
     }
-    
+
     /*
      * Simulate a LeaveNotify event on the previous current item and
      * an EnterNotify event on the new current item.  Remove the "current"
@@ -4786,7 +4786,7 @@ PickCurrentItem(canvasPtr, eventPtr)
 		}
 	    }
 	}
-    
+
 	/*
 	 * Note:  during CanvasDoEvent above, it's possible that
 	 * canvasPtr->newCurrentPtr got reset to NULL because the
@@ -4818,7 +4818,7 @@ PickCurrentItem(canvasPtr, eventPtr)
 	XEvent event;
 
 #ifdef USE_OLD_TAG_SEARCH
-	DoItem((Tcl_Interp *) NULL, canvasPtr->currentItemPtr, 
+	DoItem((Tcl_Interp *) NULL, canvasPtr->currentItemPtr,
                 Tk_GetUid("current"));
 #else /* USE_OLD_TAG_SEARCH */
 	DoItem((Tcl_Interp *) NULL, canvasPtr->currentItemPtr,
@@ -4958,9 +4958,9 @@ CanvasDoEvent(canvasPtr, eventPtr)
      * Set up an array with all the relevant objects for processing
      * this event.  The relevant objects are:
      * (a) the event's item,
-     * (b) the tags associated with the event's item, 
+     * (b) the tags associated with the event's item,
      * (c) the expressions that are true for the event's item's tags, and
-     * (d) the tag "all". 
+     * (d) the tag "all".
      *
      * If there are a lot of tags then malloc an array to hold all of
      * the objects.
@@ -5379,7 +5379,7 @@ CanvasUpdateScrollbars(canvasPtr)
      * Save all the relevant values from the canvasPtr, because it might be
      * deleted as part of either of the two calls to Tcl_VarEval below.
      */
-    
+
     interp = canvasPtr->interp;
     Tcl_Preserve((ClientData) interp);
     xScrollCmd = canvasPtr->xScrollCmd;
@@ -5403,7 +5403,7 @@ CanvasUpdateScrollbars(canvasPtr)
     if (canvasPtr->xScrollCmd != NULL) {
 	Tcl_Obj *fractions = ScrollFractions(xOrigin + inset,
 		xOrigin + width - inset, scrollX1, scrollX2);
-	result = Tcl_VarEval(interp, xScrollCmd, " ", 
+	result = Tcl_VarEval(interp, xScrollCmd, " ",
 		Tcl_GetString(fractions), (char *) NULL);
 	Tcl_DecrRefCount(fractions);
 	if (result != TCL_OK) {
@@ -5416,7 +5416,7 @@ CanvasUpdateScrollbars(canvasPtr)
     if (yScrollCmd != NULL) {
 	Tcl_Obj *fractions = ScrollFractions(yOrigin + inset,
 		yOrigin + height - inset, scrollY1, scrollY2);
-	result = Tcl_VarEval(interp, yScrollCmd, " ", 
+	result = Tcl_VarEval(interp, yScrollCmd, " ",
 		Tcl_GetString(fractions), (char *) NULL);
 	Tcl_DecrRefCount(fractions);
 	if (result != TCL_OK) {

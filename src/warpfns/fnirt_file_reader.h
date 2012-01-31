@@ -7,7 +7,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #ifndef fnirt_file_reader_h
@@ -76,17 +76,17 @@ void remove_affine_part(const NEWMAT::Matrix&     aff,
 //
 // The FnirtFileReader is a class that reads, checks and decodes a displacement-field file.
 // This can be a file created by fnirt, but it could also have been created for example
-// from a fieldmap. For files created by other applications than fnirt it only reads 
+// from a fieldmap. For files created by other applications than fnirt it only reads
 // "proper" displacement fields. For fnirt-files it also reads coefficient-files.
 //
-// The ultimate purpose of FnirtFileReader and FnirtFileWriter is to provide an 
+// The ultimate purpose of FnirtFileReader and FnirtFileWriter is to provide an
 // interface that makes it easy and transparent not only to read and write displacement
 // files, buat also to convert between the different representations. For example we
-// want it to be easy to take a file with a direct representation of the field 
+// want it to be easy to take a file with a direct representation of the field
 // (no basis-set) and write that out as a spline-coefficient file. Therefore we
 // have internal space for all representations. When a file is read in it is stored
 // in its "native" representation. When/if asked for another representation that
-// representation is calculated and returned. 
+// representation is calculated and returned.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -136,7 +136,7 @@ private:
   AbsOrRelWarps                                                       _aor;
   NEWMAT::Matrix                                                      _aff;
   mutable std::vector<boost::shared_ptr<BASISFIELD::basisfield> >     _coef_rep;
-  mutable boost::shared_ptr<NEWIMAGE::volume4D<float> >               _vol_rep;  
+  mutable boost::shared_ptr<NEWIMAGE::volume4D<float> >               _vol_rep;
 };
 
 } // End namespace NEWIMAGE

@@ -5,7 +5,7 @@ PROJNAME = meshUtils
 
 LD_LIBRARY_PATH=${FSLDIR}/lib
 
-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB} -I${INC_PROB} -I${INC_BOOST} 
+USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB} -I${INC_PROB} -I${INC_BOOST}
 USRLDFLAGS =  -L${LIB_PROB} -L${LIB_NEWMAT} -L${LIB_ZLIB}
 
 ifneq ($(strip $(VTKDIR_INC)),)
@@ -19,7 +19,7 @@ endif
 LIBS+=-lwarpfns -lbasisfield -lfslvtkio -lMVdisc
 
 ifneq ($(strip $(VTKDIR_LIB)),)
-        LIBS+=-lfslvtkconv 
+        LIBS+=-lfslvtkconv
 endif
 
 LIBS+=-lfirst_lib -lmeshclass -lnewimage -lmiscmaths -lprob -lfslio -lniftiio -lznz -lutils -lnewmat  -lz
@@ -30,7 +30,7 @@ XFILES=run_mesh_utils
 
 all: meshUtils.a ${XFILES}
 
-meshUtils.a: ${SWOBJS} 
+meshUtils.a: ${SWOBJS}
 	${AR} -r libmeshUtils.a  ${SWOBJS}
 	@${MAKE} libinstall
 

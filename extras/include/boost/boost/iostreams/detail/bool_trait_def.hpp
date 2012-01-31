@@ -5,7 +5,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_BOOL_TRAIT_DEF_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_BOOL_TRAIT_DEF_HPP_INCLUDED     
+#define BOOST_IOSTREAMS_DETAIL_BOOL_TRAIT_DEF_HPP_INCLUDED
 
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/detail/template_params.hpp>
@@ -14,8 +14,8 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
- 
-// 
+
+//
 // Macro name: BOOST_IOSTREAMS_BOOL_TRAIT_DEF
 // Description: Used to generate the traits classes is_istream, is_ostream,
 //      etc.
@@ -23,7 +23,7 @@
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
 # define BOOST_IOSTREAMS_TRAIT_NAMESPACE(trait)
 #else
-# define BOOST_IOSTREAMS_TRAIT_NAMESPACE(trait) BOOST_PP_CAT(trait, _impl_):: 
+# define BOOST_IOSTREAMS_TRAIT_NAMESPACE(trait) BOOST_PP_CAT(trait, _impl_)::
 #endif
 #define BOOST_IOSTREAMS_BOOL_TRAIT_DEF(trait, type, arity) \
     namespace BOOST_PP_CAT(trait, _impl_) { \

@@ -2,7 +2,7 @@
 #define DATE_TIME_C_LOCAL_TIME_ADJUSTOR_HPP__
 
 /* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -50,7 +50,7 @@ namespace date_time {
                              tms_ptr->tm_min,
                              tms_ptr->tm_sec,
                              t.time_of_day().fractional_seconds());
-      
+
       return time_type(d,td2);
     }
   };

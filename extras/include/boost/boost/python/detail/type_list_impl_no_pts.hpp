@@ -16,7 +16,7 @@
 #  include <boost/preprocessor/iterate.hpp>
 #  include <boost/mpl/void.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost { namespace python { namespace detail {
 
 template< typename T >
 struct is_list_arg
@@ -43,7 +43,7 @@ template<int> struct type_list_impl_chooser;
 #  define BOOST_PYTHON_IS_LIST_ARG(z, n, data)          \
     BOOST_PP_IF(n, BOOST_PYTHON_PLUS, BOOST_PP_EMPTY)() \
     is_list_arg< BOOST_PP_CAT(T,n) >::value
-    
+
 template<
     BOOST_PYTHON_LIST_FORMAL_PARAMS
     >
@@ -104,4 +104,4 @@ struct type_list_impl_chooser<N>
 
 # undef N
 
-#endif // BOOST_PP_IS_ITERATING 
+#endif // BOOST_PP_IS_ITERATING

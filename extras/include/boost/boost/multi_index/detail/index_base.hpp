@@ -52,7 +52,7 @@ protected:
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>       final_type;
   typedef tuples::null_type                   ctor_args_list;
-  typedef typename 
+  typedef typename
     boost::detail::allocator::rebind_to<
       Allocator,
       typename Allocator::value_type>::type   final_allocator_type;

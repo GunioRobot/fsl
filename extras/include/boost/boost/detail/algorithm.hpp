@@ -99,7 +99,7 @@ namespace boost {
   typename std::vector<T>::size_type
   size(const std::vector<T>& c) { return c.size(); }
 #endif
-  
+
   template <class ForwardIterator, class T>
   void iota(ForwardIterator first, ForwardIterator last, T value)
   {
@@ -111,7 +111,7 @@ namespace boost {
   {
     iota(begin(c), end(c), value);
   }
- 
+
   // Also do version with 2nd container?
   template <typename Container, typename OutIter>
   OutIter copy(const Container& c, OutIter result) {
@@ -130,7 +130,7 @@ namespace boost {
   void sort(Container& c) { std::sort(begin(c), end(c)); }
 
   template <typename Container, typename Predicate>
-  void sort(Container& c, const Predicate& p) { 
+  void sort(Container& c, const Predicate& p) {
     std::sort(begin(c), end(c), p);
   }
 
@@ -138,7 +138,7 @@ namespace boost {
   void stable_sort(Container& c) { std::stable_sort(begin(c), end(c)); }
 
   template <typename Container, typename Predicate>
-  void stable_sort(Container& c, const Predicate& p) { 
+  void stable_sort(Container& c, const Predicate& p) {
     std::stable_sort(begin(c), end(c), p);
   }
 

@@ -26,7 +26,7 @@
 #include <iosfwd>
 
 /** Boost namespace */
-namespace boost { 
+namespace boost {
 /** Namespace for the library. */
 namespace program_options {
 
@@ -61,7 +61,7 @@ namespace program_options {
             So, we have to use plain old pointers. Besides, users are not
             expected to use the constructor directly.
 
-            
+
             The 'name' parameter is interpreted by the following rules:
             - if there's no "," character in 'name', it specifies long name
             - otherwise, the part before "," specifies long name and the part
@@ -70,7 +70,7 @@ namespace program_options {
         option_description(const char* name,
                            const value_semantic* s);
 
-        /** Initializes the class with the passed data. 
+        /** Initializes the class with the passed data.
          */
         option_description(const char* name,
                            const value_semantic* s,
@@ -100,8 +100,8 @@ namespace program_options {
 
         /// Semantic of option's value
         shared_ptr<const value_semantic> semantic() const;
-        
-        /// Returns the option name, formatted suitably for usage message. 
+
+        /// Returns the option name, formatted suitably for usage message.
         std::string format_name() const;
 
         /** Return the parameter name and properties, formatted suitably for
@@ -109,7 +109,7 @@ namespace program_options {
         std::string format_parameter() const;
 
     private:
-    
+
         option_description& set_name(const char* name);
 
         std::string m_short_name, m_long_name, m_description;
@@ -120,8 +120,8 @@ namespace program_options {
 
     class options_description;
 
-    /** Class which provides convenient creation syntax to option_description. 
-     */        
+    /** Class which provides convenient creation syntax to option_description.
+     */
     class BOOST_PROGRAM_OPTIONS_DECL options_description_easy_init {
     public:
         options_description_easy_init(options_description* owner);
@@ -133,12 +133,12 @@ namespace program_options {
         options_description_easy_init&
         operator()(const char* name,
                    const value_semantic* s);
-        
+
         options_description_easy_init&
         operator()(const char* name,
                    const value_semantic* s,
                    const char* description);
-       
+
     private:
         options_description* owner;
     };
@@ -147,14 +147,14 @@ namespace program_options {
     /** A set of option descriptions. This provides convenient interface for
         adding new option (the add_options) method, and facilities to search
         for options by name.
-        
+
         See @ref a_adding_options "here" for option adding interface discussion.
         @sa option_description
     */
     class BOOST_PROGRAM_OPTIONS_DECL options_description {
     public:
         static const unsigned m_default_line_length = 80;
-        
+
         /** Creates the instance. */
         options_description(unsigned line_length = m_default_line_length);
         /** Creates the instance. The 'caption' parameter gives the name of
@@ -163,11 +163,11 @@ namespace program_options {
         options_description(const std::string& caption,
                             unsigned line_length = m_default_line_length);
         /** Adds new variable description. Throws duplicate_variable_error if
-            either short or long name matches that of already present one. 
+            either short or long name matches that of already present one.
         */
         void add(shared_ptr<option_description> desc);
         /** Adds a group of option description. This has the same
-            effect as adding all option_descriptions in 'desc' 
+            effect as adding all option_descriptions in 'desc'
             individually, except that output operator will show
             a separate group.
             Returns *this.
@@ -177,16 +177,16 @@ namespace program_options {
     public:
         /** Returns an object of implementation-defined type suitable for adding
             options to options_description. The returned object will
-            have overloaded operator() with parameter type matching 
+            have overloaded operator() with parameter type matching
             'option_description' constructors. Calling the operator will create
             new option_description instance and add it.
         */
         options_description_easy_init add_options();
 
-        const option_description& find(const std::string& name, bool approx) 
+        const option_description& find(const std::string& name, bool approx)
             const;
 
-        const option_description* find_nothrow(const std::string& name, 
+        const option_description* find_nothrow(const std::string& name,
                                                bool approx) const;
 
 
@@ -195,7 +195,7 @@ namespace program_options {
         /** Produces a human readable output of 'desc', listing options,
             their descriptions and allowed parameters. Other options_description
             instances previously passed to add will be output separately. */
-        friend BOOST_PROGRAM_OPTIONS_DECL std::ostream& operator<<(std::ostream& os, 
+        friend BOOST_PROGRAM_OPTIONS_DECL std::ostream& operator<<(std::ostream& os,
                                              const options_description& desc);
 
         /** Output 'desc' to the specified stream, calling 'f' to output each
@@ -204,7 +204,7 @@ namespace program_options {
 
     private:
         typedef std::map<std::string, int>::const_iterator name2index_iterator;
-        typedef std::pair<name2index_iterator, name2index_iterator> 
+        typedef std::pair<name2index_iterator, name2index_iterator>
             approximation_range;
 
         //approximation_range find_approximation(const std::string& prefix) const;

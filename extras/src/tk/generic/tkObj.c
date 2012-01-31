@@ -1,4 +1,4 @@
-/* 
+/*
  * tkObj.c --
  *
  *	This file contains procedures that implement the common Tk object
@@ -17,7 +17,7 @@
 /*
  * The following structure is the internal representation for pixel objects.
  */
- 
+
 typedef struct PixelRep {
     double value;
     int units;
@@ -46,7 +46,7 @@ typedef struct PixelRep {
 /*
  * The following structure is the internal representation for mm objects.
  */
- 
+
 typedef struct MMRep {
     double value;
     int units;
@@ -146,7 +146,7 @@ static Tcl_ObjType windowObjType = {
  *
  * Side effects:
  *	If the object is not already a pixel, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -217,7 +217,7 @@ FreePixelInternalRep(objPtr)
     Tcl_Obj *objPtr;		/* Pixel object with internal rep to free. */
 {
     PixelRep *pixelPtr;
-    
+
     if (!SIMPLE_PIXELREP(objPtr)) {
 	pixelPtr = GET_COMPLEXPIXEL(objPtr);
 	ckfree((char *) pixelPtr);
@@ -232,7 +232,7 @@ FreePixelInternalRep(objPtr)
  * DupPixelInternalRep --
  *
  *	Initialize the internal representation of a pixel Tcl_Obj to a
- *	copy of the internal representation of an existing pixel object. 
+ *	copy of the internal representation of an existing pixel object.
  *
  * Results:
  *	None.
@@ -250,7 +250,7 @@ DupPixelInternalRep(srcPtr, copyPtr)
     register Tcl_Obj *copyPtr;	/* Object with internal rep to set. */
 {
     PixelRep *oldPtr, *newPtr;
-    
+
     copyPtr->typePtr = srcPtr->typePtr;
 
     if (SIMPLE_PIXELREP(srcPtr)) {
@@ -343,7 +343,7 @@ SetPixelFromAny(interp, objPtr)
     }
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     typePtr = objPtr->typePtr;
@@ -383,7 +383,7 @@ SetPixelFromAny(interp, objPtr)
  *
  * Side effects:
  *	If the object is not already a pixel, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -459,7 +459,7 @@ FreeMMInternalRep(objPtr)
  * DupMMInternalRep --
  *
  *	Initialize the internal representation of a pixel Tcl_Obj to a
- *	copy of the internal representation of an existing pixel object. 
+ *	copy of the internal representation of an existing pixel object.
  *
  * Results:
  *	None.
@@ -477,7 +477,7 @@ DupMMInternalRep(srcPtr, copyPtr)
     register Tcl_Obj *copyPtr;	/* Object with internal rep to set. */
 {
     MMRep *oldPtr, *newPtr;
-    
+
     copyPtr->typePtr = srcPtr->typePtr;
     oldPtr = (MMRep *) srcPtr->internalRep.otherValuePtr;
     newPtr = (MMRep *) ckalloc(sizeof(MMRep));
@@ -637,7 +637,7 @@ SetMMFromAny(interp, objPtr)
     }
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     typePtr = objPtr->typePtr;
@@ -674,7 +674,7 @@ SetMMFromAny(interp, objPtr)
  *
  * Side effects:
  *	If the object is not already a Tk_Window, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -698,8 +698,8 @@ TkGetWindowFromObj(interp, tkwin, objPtr, windowPtr)
     winPtr = (WindowRep *) objPtr->internalRep.otherValuePtr;
     if (    winPtr->tkwin == NULL
 	 || winPtr->mainPtr == NULL
-	 || winPtr->mainPtr != mainPtr 
-	 || winPtr->epoch != mainPtr->deletionEpoch) 
+	 || winPtr->mainPtr != mainPtr
+	 || winPtr->epoch != mainPtr->deletionEpoch)
     {
 	/* Cache is invalid.
 	 */
@@ -725,7 +725,7 @@ TkGetWindowFromObj(interp, tkwin, objPtr, windowPtr)
  *	Generate a windowObj internal form for the Tcl object "objPtr".
  *
  * Results:
- *	Always returns TCL_OK. 
+ *	Always returns TCL_OK.
  *
  * Side effects:
  *	Sets objPtr's internal representation to an uninitialized
@@ -746,7 +746,7 @@ SetWindowFromAny(interp, objPtr)
     WindowRep *winPtr;
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     Tcl_GetStringFromObj(objPtr, NULL);
@@ -772,7 +772,7 @@ SetWindowFromAny(interp, objPtr)
  * DupWindowInternalRep --
  *
  *	Initialize the internal representation of a window Tcl_Obj to a
- *	copy of the internal representation of an existing window object. 
+ *	copy of the internal representation of an existing window object.
  *
  * Results:
  *	None.
@@ -835,7 +835,7 @@ FreeWindowInternalRep(objPtr)
  *	This procedure parses a padding specification and returns
  *	the appropriate padding values.  A padding specification can
  *	be either a single pixel width, or a list of two pixel widths.
- *	If a single pixel width, the amount specified is used for 
+ *	If a single pixel width, the amount specified is used for
  *	padding on both sides.  If two amounts are specified, then
  *	they specify the left/right or top/bottom padding.
  *

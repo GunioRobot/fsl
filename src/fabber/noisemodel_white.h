@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -76,21 +76,21 @@ public:
     virtual const WhiteParams& operator=(const NoiseParams& in)
       { const WhiteParams& from = dynamic_cast<const WhiteParams&>(in);
 	assert(nPhis == from.nPhis); phis = from.phis; return *this; }
-    
+
     virtual const MVNDist OutputAsMVN() const;
     virtual void InputFromMVN(const MVNDist& mvn);
-    
+
     virtual void Dump(const string indent = "") const;
-    
+
     WhiteParams(int N) : nPhis(N), phis(N) { return; }
-    WhiteParams(const WhiteParams& from) 
+    WhiteParams(const WhiteParams& from)
         : nPhis(from.nPhis), phis(from.phis) { return; }
-    
+
 private:
     friend class WhiteNoiseModel;
     const int nPhis;
     vector<GammaDist> phis;
-};    
+};
 
 class WhiteNoiseModel : public NoiseModel {
  public:
@@ -98,15 +98,15 @@ class WhiteNoiseModel : public NoiseModel {
     virtual WhiteParams* NewParams() const
         { return new WhiteParams( Qis.size() ); }
 
-    virtual void HardcodedInitialDists(NoiseParams& prior, 
-        NoiseParams& posterior) const; 
+    virtual void HardcodedInitialDists(NoiseParams& prior,
+        NoiseParams& posterior) const;
 
 
   // Constructor/destructor
     //  WhiteNoiseModel(const string& pattern);
     WhiteNoiseModel(ArgsType& args);
   // pattern says which phi distribution to use for each data points; this
-  // string is repeated as necessary to make up the data length. e.g. for 
+  // string is repeated as necessary to make up the data length. e.g. for
   // dual-echo data, pattern = "12".  after 9, use letters (A=10, ...)
   // Simplest case: pattern = "1".
 
@@ -115,7 +115,7 @@ class WhiteNoiseModel : public NoiseModel {
   // Do all the calculations
   virtual void UpdateNoise(
     NoiseParams& noise,
-    const NoiseParams& noisePrior,  
+    const NoiseParams& noisePrior,
   	const MVNDist& theta,
   	const LinearFwdModel& model,
   	const ColumnVector& data) const;

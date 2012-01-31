@@ -62,7 +62,7 @@ namespace boost { namespace fusion
           , type_sequence<T const>
         >::type
         convert_const(T const& x);
-        
+
         static typename
         mpl::if_<
             fusion::is_sequence<T>

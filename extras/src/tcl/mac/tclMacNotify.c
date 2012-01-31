@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacNotify.c --
  *
  *	This file contains Macintosh-specific procedures for the notifier,
@@ -29,7 +29,7 @@
 #include <Threads.h>
 
 
-/* 
+/*
  * This is necessary to work around a bug in Apple's Universal header files
  * for the CFM68K libraries.
  */
@@ -43,10 +43,10 @@ extern pascal QHdrPtr GetEventQueue(void)
 #endif
 
 /*
- * Need this for replacing Tcl_SetTimer and Tcl_WaitForEvent defined 
+ * Need this for replacing Tcl_SetTimer and Tcl_WaitForEvent defined
  * in THIS file with ones defined in the stub table.
  */
- 
+
 extern TclStubs tclStubs;
 extern Tcl_NotifierProcs tclOriginalNotifier;
 
@@ -68,7 +68,7 @@ static struct {
     Point lastMousePosition;	/* Last known mouse location. */
     RgnHandle utilityRgn;	/* Region used as the mouse region for
 				 * WaitNextEvent and the update region when
-				 * checking for events. */   
+				 * checking for events. */
     Tcl_MacConvertEventPtr eventProcPtr;
 				/* This pointer holds the address of the
 				 * function that will handle all incoming
@@ -97,12 +97,12 @@ static void		NotifierExitHandler _ANSI_ARGS_((
  * Tcl_InitNotifier --
  *
  *	Initializes the platform specific notifier state.  There is no thread
- *	specific platform notifier on the Mac, so this really doesn't do 
+ *	specific platform notifier on the Mac, so this really doesn't do
  *	anything.  However, we need to return the ThreadID, since the generic
  *	notifier hands this back to us in AlertThread.
  *
  * Results:
- *	Returns the threadID for this thread.  
+ *	Returns the threadID for this thread.
  *
  * Side effects:
  *	None.
@@ -113,7 +113,7 @@ static void		NotifierExitHandler _ANSI_ARGS_((
 ClientData
 Tcl_InitNotifier()
 {
-    
+
 #ifdef TCL_THREADS
     ThreadID curThread;
     if (TclMacHaveThreads()) {
@@ -291,7 +291,7 @@ HandleMacEvents(void)
 	    break;
 	}
     }
-    
+
     /*
      * Process events from the OS event queue.
      */
@@ -301,7 +301,7 @@ HandleMacEvents(void)
 	SetRect(&mouseRect, currentMouse.h, currentMouse.v,
 		currentMouse.h + 1, currentMouse.v + 1);
 	RectRgn(notifier.utilityRgn, &mouseRect);
-	
+
 	WaitNextEvent(everyEvent, &theEvent, 5, notifier.utilityRgn);
 	needsUpdate = 0;
 	if ((notifier.eventProcPtr != NULL)
@@ -309,7 +309,7 @@ HandleMacEvents(void)
 	    eventFound = 1;
 	}
     }
-    
+
     return eventFound;
 }
 
@@ -351,7 +351,7 @@ Tcl_SetTimer(
 	/*
 	 * Compute when the timer should fire.
 	 */
-	
+
 	Tcl_GetTime(&notifier.timer);
 	notifier.timer.sec += timePtr->sec;
 	notifier.timer.usec += timePtr->usec;
@@ -435,7 +435,7 @@ Tcl_WaitForEvent(
 	ms = (timePtr->sec * 1000) + (timePtr->usec / 1000);
     }
     timerToken = TclMacStartTimer((long) ms);
-   
+
     /*
      * Poll the Mac event sources.  This loop repeats until something
      * happens: a timeout, a socket event, mouse motion, or some other
@@ -486,7 +486,7 @@ Tcl_WaitForEvent(
 	    SetRect(&mouseRect, currentMouse.h, currentMouse.v,
 		    currentMouse.h + 1, currentMouse.v + 1);
 	    RectRgn(notifier.utilityRgn, &mouseRect);
-	
+
 	    WaitNextEvent(everyEvent, &macEvent, sleepTime,
 		    notifier.utilityRgn);
 
@@ -498,17 +498,17 @@ Tcl_WaitForEvent(
 	}
     }
     TclMacRemoveTimer(timerToken);
-    
+
     /*
      * Yield time to nay other thread at this point.  If we find that the
      * apps thrash too switching between threads, we can put a timer here,
      * and only yield when the timer fires.
      */
-     
+
     if (TclMacHaveThreads()) {
         YieldToAnyThread();
     }
-    
+
     return 0;
 }
 
@@ -536,11 +536,11 @@ Tcl_Sleep(
 {
     EventRecord dummy;
     void *timerToken;
-    
+
     if (ms <= 0) {
 	return;
     }
-    
+
     timerToken = TclMacStartTimer((long) ms);
     while (1) {
 	WaitNextEvent(0, &dummy, (ms / 16.66) + 1, NULL);
@@ -559,7 +559,7 @@ Tcl_Sleep(
  *
  * Tcl_MacSetEventProc --
  *
- *	This function sets the event handling procedure for the 
+ *	This function sets the event handling procedure for the
  *	application.  This function will be passed all incoming Mac
  *	events.  This function usually controls the console or some
  *	other entity like Tk.

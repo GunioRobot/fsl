@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -28,7 +28,7 @@ struct Logger::Implementation
     m_logfile(filename.c_str())
   {
   }
- 
+
   void message(const string& facility, const string& message, const Logger::Level level)
   {
 #if defined(HAS_SYSLOG)

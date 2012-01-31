@@ -72,7 +72,7 @@ allocate_array_float( int	nr,		/* number of pointer array elements */
 		exit( 2 );
 		}
 #endif
-	
+
 	/* Now allocate memory for the data array, 'nr * nc' floats: */
 	arr[0] = (float*)malloc( nr * nc * sizeof(float) );
 #ifdef DBUG
@@ -86,7 +86,7 @@ allocate_array_float( int	nr,		/* number of pointer array elements */
 	/* Don't need to do the first (zeroth) one, because it was set up by the data malloc. */
 	/* Note that adding 1 to (float*)a.arr[0] adds sizeof(float*) automatically. */
 
-	for (i = 1; i < nr; i++) 
+	for (i = 1; i < nr; i++)
 		arr[i] = arr[0] + i*nc;
 
 	return arr;
@@ -115,7 +115,7 @@ allocate_array_char( int	nr,
 		exit( 2 );
 		}
 #endif
-	
+
 	/* Now allocate memory for the data array, 'nr * nc' char: */
 	arr[0] = (char*)malloc( nr * nc * sizeof(char) );
 #ifdef DBUG
@@ -129,7 +129,7 @@ allocate_array_char( int	nr,
 	/* Don't need to do the first (zeroth) one, because it was set up by the data malloc. */
 	/* Note that adding 1 to (char*)a.arr[0] adds sizeof(char*) automatically. */
 
-	for (i = 1; i < nr; i++) 
+	for (i = 1; i < nr; i++)
 		arr[i] = arr[0] + i*nc;
 
 	return arr;
@@ -159,7 +159,7 @@ allocate_array_int( int	nr,
 		exit( 2 );
 		}
 #endif
-	
+
 	/* Now allocate memory for the data array, 'nr * nc' int: */
 	arr[0] = (int*)malloc( nr * nc * sizeof(int) );
 #ifdef DBUG
@@ -173,7 +173,7 @@ allocate_array_int( int	nr,
 	/* Don't need to do the first (zeroth) one, because it was set up by the data malloc. */
 	/* Note that adding 1 to (int*)a.arr[0] adds sizeof(int*) automatically. */
 
-	for (i = 1; i < nr; i++) 
+	for (i = 1; i < nr; i++)
 		arr[i] = arr[0] + i*nc;
 
 	return arr;

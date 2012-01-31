@@ -41,7 +41,7 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit cauchy_distribution(result_type median = result_type(0), 
+  explicit cauchy_distribution(result_type median = result_type(0),
                                result_type sigma = result_type(1))
     : _median(median), _sigma(sigma) { }
 

@@ -12,8 +12,8 @@
 
 #include <cstring>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::memcpy; 
+namespace std{
+    using ::memcpy;
 } //std
 #endif
 
@@ -56,10 +56,10 @@ void copy_to_ptr(char * s, const std::wstring & ws){
     std::copy(
         iterators::mb_from_wchar<std::wstring::const_iterator>(
             BOOST_MAKE_PFTO_WRAPPER(ws.begin())
-        ), 
+        ),
         iterators::mb_from_wchar<std::wstring::const_iterator>(
             BOOST_MAKE_PFTO_WRAPPER(ws.end())
-        ), 
+        ),
         s
     );
     s[ws.size()] = 0;
@@ -84,10 +84,10 @@ xml_wiarchive_impl<Archive>::load(std::string & s){
     std::copy(
         iterators::mb_from_wchar<std::wstring::iterator>(
             BOOST_MAKE_PFTO_WRAPPER(ws.begin())
-        ), 
+        ),
         iterators::mb_from_wchar<std::wstring::iterator>(
             BOOST_MAKE_PFTO_WRAPPER(ws.end())
-        ), 
+        ),
         std::back_inserter(s)
     );
 }
@@ -153,7 +153,7 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
     unsigned int flags
 ) :
     basic_text_iprimitive<std::wistream>(
-        is_, 
+        is_,
         true // don't change the codecvt - use the one below
     ),
     basic_xml_iarchive<Archive>(flags),

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixFocus.c --
  *
  *	This file contains platform specific procedures that manage
@@ -48,8 +48,8 @@ TkpChangeFocus(winPtr, force)
 {
     TkDisplay *dispPtr = winPtr->dispPtr;
     Tk_ErrorHandler errHandler;
-    Window window, root, parent, *children; 
-    unsigned int numChildren, serial; 
+    Window window, root, parent, *children;
+    unsigned int numChildren, serial;
     TkWindow *winPtr2;
     int dummy;
 

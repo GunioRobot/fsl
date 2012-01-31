@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacDraw.c --
  *
  *	This file contains functions that preform drawing to
@@ -60,7 +60,7 @@ static unsigned char    InvertByte _ANSI_ARGS_((unsigned char data));
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XCopyArea(
     Display* display,		/* Display. */
     Drawable src,		/* Source drawable. */
@@ -99,15 +99,15 @@ XCopyArea(
     blackColor.blue = 0xFFFF;
     blackColor.green = 0xFFFF;
     RGBBackColor(&blackColor);
-    
+
 
     TkMacSetUpClippingRgn(dest);
-    
+
     /*
-     *  We will change the clip rgn in this routine, so we need to 
+     *  We will change the clip rgn in this routine, so we need to
      *  be able to restore it when we exit.
      */
-     
+
     if (tmpRgn2 == NULL) {
         tmpRgn2 = NewRgn();
     }
@@ -116,36 +116,36 @@ XCopyArea(
     if (((TkpClipMask*)gc->clip_mask)->type == TKP_CLIP_REGION) {
 	RgnHandle clipRgn = (RgnHandle)
 	        ((TkpClipMask*)gc->clip_mask)->value.region;
-	
+
 	int xOffset, yOffset;
-	
+
 	if (tmpRgn == NULL) {
 	    tmpRgn = NewRgn();
 	}
-	
+
 	xOffset = destDraw->xOff + gc->clip_x_origin;
 	yOffset = destDraw->yOff + gc->clip_y_origin;
-	
+
 	OffsetRgn(clipRgn, xOffset, yOffset);
-	
+
 	GetClip(tmpRgn);
 	SectRgn(tmpRgn, clipRgn, tmpRgn);
-	
+
 	SetClip(tmpRgn);
-	
+
 	OffsetRgn(clipRgn, -xOffset, -yOffset);
     }
-    
+
     srcBit = &((GrafPtr) srcPort)->portBits;
     destBit = &((GrafPtr) destPort)->portBits;
     SetRect(&srcRect, (short) (srcDraw->xOff + src_x),
 	    (short) (srcDraw->yOff + src_y),
 	    (short) (srcDraw->xOff + src_x + width),
-	    (short) (srcDraw->yOff + src_y + height));	
+	    (short) (srcDraw->yOff + src_y + height));
     SetRect(&destRect, (short) (destDraw->xOff + dest_x),
-	    (short) (destDraw->yOff + dest_y), 
+	    (short) (destDraw->yOff + dest_y),
 	    (short) (destDraw->xOff + dest_x + width),
-	    (short) (destDraw->yOff + dest_y + height));	
+	    (short) (destDraw->yOff + dest_y + height));
     tmode = srcCopy;
 
     CopyBits(srcBit, destBit, &srcRect, &destRect, tmode, NULL);
@@ -195,13 +195,13 @@ XCopyPlane(
     GWorldPtr srcPort, destPort, maskPort;
     CGrafPtr saveWorld;
     GDHandle saveDevice;
-    RGBColor macColor; 
+    RGBColor macColor;
     TkpClipMask *clipPtr = (TkpClipMask*)gc->clip_mask;
     short tmode;
 
     destPort = TkMacGetDrawablePort(dest);
     srcPort = TkMacGetDrawablePort(src);
-    
+
     display->request++;
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(destPort, NULL);
@@ -215,7 +215,7 @@ XCopyPlane(
 	    (short) (srcDraw->xOff + src_x + width),
 	    (short) (srcDraw->yOff + src_y + height));
     SetRect(&destRect, (short) (destDraw->xOff + dest_x),
-	    (short) (destDraw->yOff + dest_y), 
+	    (short) (destDraw->yOff + dest_y),
 	    (short) (destDraw->xOff + dest_x + width),
 	    (short) (destDraw->yOff + dest_y + height));
     tmode = srcOr;
@@ -249,7 +249,7 @@ XCopyPlane(
 	    CopyBits(srcBit, destBit, &srcRect, &destRect, tmode, NULL);
 	} else {
 	    /*
-	     * Case 3: two arbitrary bitmaps.	 
+	     * Case 3: two arbitrary bitmaps.
 	     */
 	    tmode = srcCopy;
 	    maskPort = TkMacGetDrawablePort(clipPtr->value.pixmap);
@@ -278,7 +278,7 @@ XCopyPlane(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkPutImage(
     unsigned long *colors,	/* Unused on Macintosh. */
     int ncolors,		/* Unused on Macintosh. */
@@ -314,8 +314,8 @@ TkPutImage(
 
     if (image->depth == 1) {
 
-	/* 
-	 * This code assumes a pixel depth of 1 
+	/*
+	 * This code assumes a pixel depth of 1
 	 */
 
 	bitmap.bounds.top = bitmap.bounds.left = 0;
@@ -341,18 +341,18 @@ TkPutImage(
 	    newData = (char *) ckalloc(image->height * image->bytes_per_line);
 	    for (i = 0; i < image->height * image->bytes_per_line; i++) {
 		newData[i] = InvertByte((unsigned char) image->data[i]);
-	    }		
+	    }
 	    bitmap.baseAddr = newData;
 	    bitmap.rowBytes = image->bytes_per_line;
 	}
 
-	CopyBits(&bitmap, &((GrafPtr) destPort)->portBits, 
+	CopyBits(&bitmap, &((GrafPtr) destPort)->portBits,
 		&srcRect, &destRect, srcCopy, NULL);
 
     } else {
     	/* Color image */
     	PixMap pixmap;
-    	
+
 	pixmap.bounds.left = 0;
 	pixmap.bounds.top = 0;
 	pixmap.bounds.right = (short) image->width;
@@ -374,11 +374,11 @@ TkPutImage(
     	panic("TkImage too wide!");
     }
 	pixmap.rowBytes = image->bytes_per_line | 0x8000;
-	
-	CopyBits((BitMap *) &pixmap, &((GrafPtr) destPort)->portBits, 
+
+	CopyBits((BitMap *) &pixmap, &((GrafPtr) destPort)->portBits,
 	    &srcRect, &destRect, srcCopy, NULL);
     }
-    
+
     if (newData != NULL) {
 	ckfree(newData);
     }
@@ -401,7 +401,7 @@ TkPutImage(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XFillRectangles(
     Display* display,		/* Display. */
     Drawable d,			/* Draw on this. */
@@ -453,7 +453,7 @@ XFillRectangles(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XDrawLines(
     Display* display,		/* Display. */
     Drawable d,			/* Draw on this. */
@@ -476,7 +476,7 @@ XDrawLines(
     }
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(destPort, NULL);
-    
+
     TkMacSetUpClippingRgn(d);
 
     TkMacSetUpGraphicsPort(gc);
@@ -534,7 +534,7 @@ void XDrawSegments(
 
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(destPort, NULL);
-    
+
     TkMacSetUpClippingRgn(d);
 
     TkMacSetUpGraphicsPort(gc);
@@ -568,7 +568,7 @@ void XDrawSegments(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XFillPolygon(
     Display* display,		/* Display. */
     Drawable d,			/* Draw on this. */
@@ -592,7 +592,7 @@ XFillPolygon(
     SetGWorld(destPort, NULL);
 
     TkMacSetUpClippingRgn(d);
-    
+
     TkMacSetUpGraphicsPort(gc);
 
     PenNormal();
@@ -634,7 +634,7 @@ XFillPolygon(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XDrawRectangle(
     Display* display,		/* Display. */
     Drawable d,			/* Draw on this. */
@@ -664,7 +664,7 @@ XDrawRectangle(
     theRect.top = (short) (macWin->yOff + y);
     theRect.right = (short) (theRect.left + width);
     theRect.bottom = (short) (theRect.top + height);
-	
+
     ShowPen();
     PenPixPat(gPenPat);
     FrameRect(&theRect);
@@ -688,7 +688,7 @@ XDrawRectangle(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 XDrawArc(
     Display* display,		/* Display. */
     Drawable d,			/* Draw on this. */
@@ -806,7 +806,7 @@ XFillArc(
 	polygon = OpenPoly();
 	MoveTo((short) ((theRect.left + theRect.right)/2),
 		(short) ((theRect.top + theRect.bottom)/2));
-	
+
 	LineTo((short) (center1[0] + 0.5), (short) (center1[1] + 0.5));
 	LineTo((short) (center2[0] + 0.5), (short) (center2[1] + 0.5));
 	ClosePoly();
@@ -861,7 +861,7 @@ TkScrollWindow(
     GDHandle saveDevice;
     GWorldPtr destPort;
     Rect srcRect, scrollRect;
-    
+
     destPort = TkMacGetDrawablePort(Tk_WindowId(tkwin));
 
     GetGWorld(&saveWorld, &saveDevice);
@@ -871,14 +871,14 @@ TkScrollWindow(
 
     /*
      * Due to the implementation below the behavior may be differnt
-     * than X in certain cases that should never occur in Tk.  The 
-     * scrollRect is the source rect extended by the offset (the union 
+     * than X in certain cases that should never occur in Tk.  The
+     * scrollRect is the source rect extended by the offset (the union
      * of the source rect and the offset rect).  Everything
      * in the extended scrollRect is scrolled.  On X, it's possible
      * to "skip" over an area if the offset makes the source and
      * destination rects disjoint and non-aligned.
      */
-       
+
     SetRect(&srcRect, (short) (destDraw->xOff + x),
 	    (short) (destDraw->yOff + y),
 	    (short) (destDraw->xOff + x + width),
@@ -904,7 +904,7 @@ TkScrollWindow(
     OffsetRgn(rgn, dx, dy);
     DiffRgn(destPort->clipRgn, rgn, destPort->clipRgn);
     SetEmptyRgn(rgn);
-    
+
     /*
      * When a menu is up, the Mac does not expect drawing to occur and
      * does not clip out the menu. We have to do it ourselves. This
@@ -922,11 +922,11 @@ TkScrollWindow(
 	SetEmptyRgn(rgn);
 	macDraw->toplevel->flags |= TK_DRAWN_UNDER_MENU;
     }
-	
+
     ScrollRect(&scrollRect, dx, dy, rgn);
-    
+
     SetGWorld(saveWorld, saveDevice);
-    
+
     /*
      * Fortunantly, the region returned by ScrollRect is symanticlly
      * the same as what we need to return in this function.  If the
@@ -965,12 +965,12 @@ TkMacSetUpGraphicsPort(
     if (gPenPat == NULL) {
 	gPenPat = NewPixPat();
     }
-    
+
     if (TkSetMacColor(gc->foreground, &macColor) == true) {
         /* TODO: cache RGBPats for preformace - measure gains...  */
 	MakeRGBPat(gPenPat, &macColor);
     }
-    
+
     PenNormal();
     if(gc->function == GXxor) {
 	PenMode(patXor);
@@ -1039,7 +1039,7 @@ TkMacSetUpClippingRgn(
 	    	Point scratch = {0, 0};
 	    	GDHandle saveDevice;
 	    	GWorldPtr saveWorld;
-	    	
+
 	    	GetGWorld(&saveWorld, &saveDevice);
 	    	SetGWorld(TkMacGetDrawablePort(drawable), NULL);
 	    	LocalToGlobal(&scratch);
@@ -1094,7 +1094,7 @@ TkMacMakeStippleMap(
     destPort = TkMacGetDrawablePort(drawable);
     width = destPort->portRect.right - destPort->portRect.left;
     height = destPort->portRect.bottom - destPort->portRect.top;
-    
+
     bitmapPtr = (BitMap *) ckalloc(sizeof(BitMap));
     data = (char *) ckalloc(height * ((width / 8) + 1));
     bitmapPtr->bounds.top = bitmapPtr->bounds.left = 0;
@@ -1113,8 +1113,8 @@ TkMacMakeStippleMap(
 	    bounds.top = i;
 	    bounds.right = j + stippleWidth;
 	    bounds.bottom = i + stippleHeight;
-	    
-	    CopyBits(&((GrafPtr) destPort)->portBits, bitmapPtr, 
+
+	    CopyBits(&((GrafPtr) destPort)->portBits, bitmapPtr,
 		&((GrafPtr) destPort)->portRect, &bounds, srcCopy, NULL);
 	}
     }
@@ -1143,7 +1143,7 @@ InvertByte(
 {
     unsigned char i;
     unsigned char mask = 1, result = 0;
- 
+
     for (i = (1 << 7); i != 0; i /= 2) {
         if (data & mask) {
             result |= i;
@@ -1162,7 +1162,7 @@ InvertByte(
  *	a widget to indicate that it has received the input focus.
  *
  *      On the Macintosh, this puts a 1 pixel border in the bgGC color
- *      between the widget and the focus ring, except in the case where 
+ *      between the widget and the focus ring, except in the case where
  *      highlightWidth is 1, in which case the border is left out.
  *
  *      For proper Mac L&F, use highlightWidth of 3.
@@ -1177,11 +1177,11 @@ InvertByte(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkpDrawHighlightBorder (
-        Tk_Window tkwin, 
-        GC fgGC, 
-        GC bgGC, 
+        Tk_Window tkwin,
+        GC fgGC,
+        GC bgGC,
         int highlightWidth,
         Drawable drawable)
 {

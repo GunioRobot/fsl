@@ -58,7 +58,7 @@ main (int argc, char *argv[])
 			 "top text",
 			 "bottom text",
 			 gdTrueColorAlpha (192, 100, 255, 32));
-  if (error) 
+  if (error)
     {
       fprintf(stderr, "gdImageStringFTEx error: %s\n", error);
     }

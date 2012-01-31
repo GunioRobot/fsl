@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -37,7 +37,7 @@ template<typename T, typename IdPolicy>
 class basic_parameter : public typed_parameter<T> {
 public:
     // Constructors
-    explicit    basic_parameter( cstring n ) 
+    explicit    basic_parameter( cstring n )
     : typed_parameter<T>( m_id_policy )
     {
         this->accept_modifier( name = n );

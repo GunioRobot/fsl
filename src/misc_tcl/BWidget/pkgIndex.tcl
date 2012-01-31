@@ -47,5 +47,5 @@ package ifneeded BWidget 1.8 "\
 "
 
 package ifneeded BWFileEntry 1.0.0 [list source [file join $dir BWExtras-1.0.0 fileentry.tcl]]
-package ifneeded BWLabelComboBox 1.0.0 [list source [file join $dir  BWExtras-1.0.0 labelcombobox.tcl]] 
+package ifneeded BWLabelComboBox 1.0.0 [list source [file join $dir  BWExtras-1.0.0 labelcombobox.tcl]]
 package ifneeded BWLabelSpinBox 1.0.0 [list source [file join $dir  BWExtras-1.0.0 labelspinbox.tcl]]

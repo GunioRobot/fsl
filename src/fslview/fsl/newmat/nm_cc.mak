@@ -10,11 +10,11 @@ PRE = ./
 
 .cpp.o:
 		rm -f $*.cxx
-		ln $*.cpp $*.cxx  
+		ln $*.cpp $*.cxx
 		$(CXX) $(CXXFLAGS) -c $*.cxx
-		rm $*.cxx  
+		rm $*.cxx
 
-everything:    	tmt example test_exc nl_ex sl_ex garch 
+everything:    	tmt example test_exc nl_ex sl_ex garch
 
 newmat_lobj = newmat1.o newmat2.o newmat3.o newmat4.o newmat5.o newmat6.o newmat7.o newmat8.o newmatex.o bandmat.o submat.o myexcept.o cholesky.o evalue.o fft.o hholder.o jacobi.o newfft.o sort.o svd.o newmatrm.o newmat9.o
 

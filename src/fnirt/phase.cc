@@ -41,7 +41,7 @@ Monogenic::Monogenic(const volume<float>& img) :
   f_type = DEFAULT_FILTER;
   f_parm1 = DEFAULT_PRM_1;
   f_parm2 = DEFAULT_PRM_2;
-	
+
   // perform the transform
   transform_est();
 }
@@ -66,7 +66,7 @@ Monogenic::Monogenic(const volume<float>& img, string& filter_type) :
         f_parm1 = DEFAULT_PRM_1;
         f_parm2 = DEFAULT_PRM_2;
   }
- 
+
 
   // perform the transform
   transform_est();
@@ -74,12 +74,12 @@ Monogenic::Monogenic(const volume<float>& img, string& filter_type) :
 
 // initialising image, filter type and parameters
 Monogenic::Monogenic(const volume<float>& img, string& filter_type, float parameter_1, float parameter_2) :
-  image(img), f_parm1(parameter_1), f_parm2(parameter_2), f_type(filter_type) 
+  image(img), f_parm1(parameter_1), f_parm2(parameter_2), f_type(filter_type)
 {
   // initialise the trasnform and the filter
   transform = complexvolume(image,image*0);
 
-	
+
   // perform the transform
   transform_est();
 }
@@ -125,7 +125,7 @@ int Monogenic::range(float alpha, float beta){
   double filt_val, temp_val;
   complexvolume filter(this->xsize(),this->ysize(),this->zsize());
   complexvolume tempfilt(this->xsize(),this->ysize(),this->zsize());
- 
+
   width_x = transform.xsize();
   width_y = transform.ysize();
   width_z = transform.zsize();
@@ -136,7 +136,7 @@ int Monogenic::range(float alpha, float beta){
   for(int y=0; y<width_y/2; y++){
   for(int z=0; z<width_z/2; z++){
 
-    
+
     xo = x; // we don't shift by 0.5 -- Ben
     yo = y; // we don't shift by 0.5 -- Ben
     zo = z; // we don't shift by 0.5 -- Ben
@@ -150,7 +150,7 @@ int Monogenic::range(float alpha, float beta){
 
       filt_val = 1/pow(r,alpha+beta);
       temp_val = 1/pow(r,alpha-beta);
-    
+
       filter(x,y,z) = filt_val;
       filter(width_x-x, y, z) = filt_val;
       filter(x, width_y-y, z) = filt_val;
@@ -173,14 +173,14 @@ int Monogenic::range(float alpha, float beta){
       tempsum += 8 * tempfilt.re(x,y,z);
       num_den += 8;
     }
-    
+
   }}}
 
   // we treat filter(0, 0, 0)
     filter(0, 0, 0) = filtsum / num_den;
     filtsum += filter.re(0, 0, 0);
     tempsum += tempfilt.re(0, 0, 0);
-  
+
   // this should be done inside the previous loop really
 /*
   for(int x=0; x<width_x; x++){
@@ -191,14 +191,14 @@ int Monogenic::range(float alpha, float beta){
     tempsum += tempfilt.re(x,y,z);
   }}}
 */
- 
+
   // normalise the filters to guarantee zero DC
   filter = filter/filtsum;
   tempfilt = tempfilt/tempsum;
 
   // the filter is actually the difference of the two
   filter -= tempfilt;
-  
+
   // take the FT and apply to the transform
   fft3(filter);
   transform = transform*filter;
@@ -208,8 +208,8 @@ int Monogenic::range(float alpha, float beta){
 
 
 // difference of Gausian filtering
-// This would be alot more efficient if the 
-// filters were implemented directly in the 
+// This would be alot more efficient if the
+// filters were implemented directly in the
 // Fourier domain.
 int Monogenic::gau_diff(float sigma1, float sigma2){
 
@@ -220,7 +220,7 @@ int Monogenic::gau_diff(float sigma1, float sigma2){
   double filt_val, temp_val;
   complexvolume filter(this->xsize(),this->ysize(),this->zsize());
   complexvolume tempfilt(this->xsize(),this->ysize(),this->zsize());
- 
+
   width_x = transform.xsize();
   width_y = transform.ysize();
   width_z = transform.zsize();
@@ -238,7 +238,7 @@ int Monogenic::gau_diff(float sigma1, float sigma2){
     // I added a cast in the pow function -- Ben
     filt_val = exp(-r_sq/(pow((double) sigma1, (double) 2)));
     temp_val = exp(-r_sq/(pow((double) sigma2, (double) 2)));
-    
+
     filter(x,y,z) = filt_val;
     filter(width_x-x, y, z) = filt_val;
     filter(x, width_y-y, z) = filt_val;
@@ -270,14 +270,14 @@ int Monogenic::gau_diff(float sigma1, float sigma2){
     tempsum += tempfilt.re(x,y,z);
 
   }}}
- 
+
   // normalise the filters to guarantee zero DC
   filter = filter/filtsum;
   tempfilt = tempfilt/tempsum;
 
   // the filter is actually the difference of the two
   filter -= tempfilt;
-  
+
   // take the FT and apply to the transform
   fft3(filter);
   transform = transform*filter;
@@ -289,7 +289,7 @@ int Monogenic::gau_diff(float sigma1, float sigma2){
 //-------- COMPUTE MONOGENIC SIGNAL ------------//
 //////////////////////////////////////////////////
 
-// compute the monogenic signal, assuming that the complex 
+// compute the monogenic signal, assuming that the complex
 // volume 'transform' presently contains the image.
 // The image is first filtered with a bandpass.
 
@@ -297,7 +297,7 @@ int Monogenic::transform_est(void){
 
   int xo,yo,zo;
   int rx,ry,rz;
-  complexpoint h1l,h2l,h3l,tl; 
+  complexpoint h1l,h2l,h3l,tl;
   float r,odd;
   complexvolume h1(transform.xsize(),transform.ysize(),transform.zsize());
   complexvolume h2(transform.xsize(),transform.ysize(),transform.zsize());
@@ -308,9 +308,9 @@ int Monogenic::transform_est(void){
 
   // apply filter
   apply_filter();
- 
+
   // calculate the three oriented monogenic components
-  
+
   rx = transform.xsize()/2;
   ry = transform.ysize()/2;
   rz = transform.zsize()/2;
@@ -326,33 +326,33 @@ int Monogenic::transform_est(void){
     // Be careful I (Ben) added transtyping in the next line ("sqrt"
     // function).
     r = (float) sqrt((double) (xo*xo + yo*yo + zo*zo));
-    
-    tl = transform(x,y,z); 
+
+    tl = transform(x,y,z);
 
     h1(x,y,z) = tl*float(xo)/(r+0.001);
     h2(x,y,z) = tl*float(yo)/(r+0.001);
     h3(x,y,z) = tl*float(zo)/(r+0.001);
 
   }}}
-   
+
   ifft3(h1);
   ifft3(h2);
   ifft3(h3);
   ifft3(transform);
- 
+
   for(int x=0; x<transform.xsize(); x++){
   for(int y=0; y<transform.ysize(); y++){
   for(int z=0; z<transform.zsize(); z++){
 
-    h1l = h1(x,y,z); 
-    h2l = h2(x,y,z); 
+    h1l = h1(x,y,z);
+    h2l = h2(x,y,z);
     h3l = h3(x,y,z);
- 
+
     odd = sqrt(h1l.im()*h1l.im() + h2l.im()*h2l.im() + h3l.im()*h3l.im());
- 
+
     transform(x,y,z) = complexpoint(transform.re(x,y,z),odd);
 
-  }}} 
+  }}}
 
   return 1;
 

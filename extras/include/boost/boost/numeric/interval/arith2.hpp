@@ -116,7 +116,7 @@ interval<T, Policies> multiplicative_inverse(const interval<T, Policies>& x)
         return I(rnd.div_down(one, x.upper()), checking::pos_inf(), true);
       else
         return I::empty();
-  } else 
+  } else
     return I(rnd.div_down(one, x.upper()), rnd.div_up(one, x.lower()), true);
 }
 
@@ -159,7 +159,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
     return interval_lib::multiplicative_inverse(pow(x, -pwr));
 
   typename Policies::rounding rnd;
-  
+
   if (interval_lib::user::is_neg(x.upper())) {        // [-2,-1]
     T yl = pow_aux(-x.upper(), pwr, rnd);
     T yu = pow_aux(-x.lower(), pwr, rnd);

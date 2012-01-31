@@ -303,8 +303,8 @@ Tree has a command wrapper for <I>drag-init</I> events. This command refused the
 if no node is designated. In other cases:
 <BR>If <B>draginitcmd</B> is empty, it returns:
 <UL>
-<LI>the value of option <B>dragtype</B> or <I>TREE_NODE</I> if empty as the data type, 
-<LI><I>{copy move link}</I> as the operations, 
+<LI>the value of option <B>dragtype</B> or <I>TREE_NODE</I> if empty as the data type,
+<LI><I>{copy move link}</I> as the operations,
 <LI>the node identifier as the data.
 </UL>
 If <B>draginitcmd</B> is not empty, it is called with the following arguments:
@@ -366,7 +366,7 @@ If <B>dropovercmd</B> is not empty, the command is called with the following agu
 <UL>
 <LI>the string <I>widget</I> if <B>dropovertype</B> option contains <I>w</I>, else empty string.
 <LI>the targeted node if drag icon points a node and <B>dropovertype</B> option contains <I>n</I>, else empty string.
-<LI>a list containing a node and the position within the children of the node where drag 
+<LI>a list containing a node and the position within the children of the node where drag
 icon points to if <B>dropovertype</B> option contains <I>p</I>, else empty string.
 <LI>optionally, the preferred method if drop can occur both inside a node and between two
 nodes. The value is <I>position</I> or <I>node</I>.
@@ -679,7 +679,7 @@ node will be drawn with the deltax for the entire tree.
 <DD>
 
 Specifies how the cross used to expand or collapse the children of a node
-should be drawn. 
+should be drawn.
 Must be one of <B>auto</B>, <B>always</B> or <B>never</B>.
 <BR>If <B>auto</B>, the cross is drawn only if the node has children.
 If <B>always</B>, the cross is always drawn.
@@ -782,7 +782,7 @@ Returns the current value of a configuration option for the item.
 
 This command is similar to the <B>configure</B> command, except that it applies to the
 options for an individual item, whereas <B>configure</B> applies to the options for
-the widget as a whole. <B>Options</B> may have any of the values accepted by the 
+the widget as a whole. <B>Options</B> may have any of the values accepted by the
 item creation widget command. If options are specified, options are modified as indicated
 in the command and the command returns an empty string. If no options are specified,
 returns a list describing the current options for the item.

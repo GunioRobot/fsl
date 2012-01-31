@@ -1,17 +1,17 @@
 function save_avw_hdr(img,fname,vtype,vsize)
-% SAVE_AVW_HDR(img,fname,vtype,vsize) 
+% SAVE_AVW_HDR(img,fname,vtype,vsize)
 %
 %  Create and save an analyse header file
 %   for either a 2D or 3D or 4D array (automatically determined).
 %
-%  vtype is 1 character: 'b' unsigned byte, 's' short, 'i' int, 
+%  vtype is 1 character: 'b' unsigned byte, 's' short, 'i' int,
 %                        'f' float, 'd' double
 %  vsize is a vector [x y z tr] containing the voxel sizes in mm and
 %  the tr in seconds  (defaults: [1 1 1 3])
 %
 %  The filename (fname) must be a basename (no extensions)
 %
-%  See also: SAVE_AVW, SAVE_AVW_IMG, READ_AVW, READ_AVW_HDR, READ_AVW_IMG 
+%  See also: SAVE_AVW, SAVE_AVW_IMG, READ_AVW, READ_AVW_HDR, READ_AVW_IMG
 %            SAVE_AVW_COMPLEX
 
 % swap first and second argument in case save_avw_img convention is

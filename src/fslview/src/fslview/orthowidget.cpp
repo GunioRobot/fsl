@@ -31,12 +31,12 @@
 using namespace std;
 
 OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
-                         OverlayList::Handle ol, Cursor::Handle& c): 
+                         OverlayList::Handle ol, Cursor::Handle& c):
   ImageWidget(parent, i, ol, c), m_image(i), m_layout(Traditional)
 {
   TRACKER("OrthoWidget::OrthoWidget(QWidget *, Cursor*, ImageGroup::Handle&)");
 
-  m_centralWidget = new QWidget(this); 
+  m_centralWidget = new QWidget(this);
 
   m_grid = new QGridLayout(m_centralWidget, 2, 2, 6, -1);
   m_centralWidget->setBackgroundColor(QColor(128, 128, 128));
@@ -46,18 +46,18 @@ OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
   //m_overlayList->attach(this);
 
   //m_slices = SliceListHandle(new SliceList);
- 
 
-//   SliceWidget::Handle m_coronal = 
+
+//   SliceWidget::Handle m_coronal =
 //     SliceWidget::Handle(new CoronalWidget(m_centralWidget, "coronal", m_cursor,
 // 					  m_overlayList, m_drawSettings, m_undoList));
 
-//   SliceWidget::Handle m_axial = 
-//     SliceWidget::Handle(new AxialWidget(m_centralWidget, "axial", m_cursor, 
+//   SliceWidget::Handle m_axial =
+//     SliceWidget::Handle(new AxialWidget(m_centralWidget, "axial", m_cursor,
 // 					m_overlayList, m_drawSettings, m_undoList));
 
-//   SliceWidget::Handle m_sagittal = 
-//     SliceWidget::Handle(new SagittalWidget(m_centralWidget, "sagittal", m_cursor, 
+//   SliceWidget::Handle m_sagittal =
+//     SliceWidget::Handle(new SagittalWidget(m_centralWidget, "sagittal", m_cursor,
 // 					   m_overlayList, m_drawSettings, m_undoList));
 
   m_coronal  = new SliceView(m_centralWidget, "corornal");
@@ -66,11 +66,11 @@ OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
 
   SliceWidget* coronal =  new CoronalWidget(m_coronal, "coronal", m_cursor,
 					    m_overlayList, m_drawSettings, m_undoList, m_opts);
-  
-  SliceWidget* axial =    new AxialWidget(m_axial, "axial", m_cursor, 
+
+  SliceWidget* axial =    new AxialWidget(m_axial, "axial", m_cursor,
 					  m_overlayList, m_drawSettings, m_undoList, m_opts);
-  
-  SliceWidget* sagittal = new SagittalWidget(m_sagittal, "sagittal", m_cursor, 
+
+  SliceWidget* sagittal = new SagittalWidget(m_sagittal, "sagittal", m_cursor,
 					     m_overlayList, m_drawSettings, m_undoList, m_opts);
   m_coronal->setSliceWidget(coronal);
   m_axial->setSliceWidget(axial);
@@ -80,9 +80,9 @@ OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
 
   setLayout();
 
-  connect(this,           SIGNAL(modeChanged(SliceWidget::Mode)), 
+  connect(this,           SIGNAL(modeChanged(SliceWidget::Mode)),
 	  coronal,  SLOT(setMode(SliceWidget::Mode)));
-  connect(this,           SIGNAL(modeChanged(SliceWidget::Mode)), 
+  connect(this,           SIGNAL(modeChanged(SliceWidget::Mode)),
 	  sagittal, SLOT(setMode(SliceWidget::Mode)));
   connect(this,           SIGNAL(modeChanged(SliceWidget::Mode)),
 	  axial,    SLOT(setMode(SliceWidget::Mode)));
@@ -90,11 +90,11 @@ OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
   connect(this, SIGNAL(zoomValueChanged(int)), coronal, SLOT(setZoom(int)));
   connect(this, SIGNAL(zoomValueChanged(int)), sagittal,SLOT(setZoom(int)));
   connect(this, SIGNAL(zoomValueChanged(int)), axial,   SLOT(setZoom(int)));
- 
+
   connect(this, SIGNAL(resetZoom()), coronal, SLOT(resetZoom()));
   connect(this, SIGNAL(resetZoom()), sagittal,SLOT(resetZoom()));
   connect(this, SIGNAL(resetZoom()), axial,   SLOT(resetZoom()));
-  
+
   connect(coronal,  SIGNAL(message(const QString&, int )), SIGNAL(message(const QString&, int )));
   connect(sagittal, SIGNAL(message(const QString&, int )), SIGNAL(message(const QString&, int )));
   connect(axial,    SIGNAL(message(const QString&, int )), SIGNAL(message(const QString&, int )));
@@ -122,7 +122,7 @@ OrthoWidget::OrthoWidget(QWidget *parent, ImageGroup::Handle& i,
 
 OrthoWidget::~OrthoWidget()
 {
-  TRACKER("OrthoWidget::~OrthoWidget");  
+  TRACKER("OrthoWidget::~OrthoWidget");
   m_cursor->detach(this);
 }
 
@@ -145,19 +145,19 @@ std::string axisCodeToString(int code, bool lower)
 
 void OrthoWidget::print()
 {
-  QString fn = QFileDialog::getSaveFileName("screenshot.png", 
+  QString fn = QFileDialog::getSaveFileName("screenshot.png",
 					    "PNG files (*.png)", this,
 					    "Screenshot dialog",
 					    "Select a filename for saving");
-  if(!fn.isNull()) 
+  if(!fn.isNull())
     {
 //       QPixmap axial(m_axial->getPixmap());
 //       QPixmap coronal(m_coronal->getPixmap());
 //       QPixmap sagittal(m_sagittal->getPixmap());
-  
+
 //       int width  = sagittal.width() + coronal.width();
 //       int height = axial.height() + coronal.height();
-      
+
 //       QPixmap composite(width, height );
 //       composite.fill(QColor(128,128,128));
 
@@ -230,7 +230,7 @@ void OrthoWidget::setLabels(const OverlayList* o)
   int icode(0), jcode(0), kcode(0);
 
   ImageInfo::Handle i(o->getActiveMetaImage()->getImage()->getInfo());
-  
+
   i->inqAxisOrientations(icode, jcode, kcode);
 
   m_sagittal->setWestText(axisCodeToString(jcode, true));

@@ -33,7 +33,7 @@ ImageDataStore::ImageDataStore(OverlayList::Handle ol):
   std::transform(ol->begin(),
                  ol->end(),
                  std::back_inserter(m_impl->m_imgDataList),
-                 createImageData);  
+                 createImageData);
 }
 
 ImageDataStore::~ImageDataStore(){}
@@ -42,7 +42,7 @@ ImageDataStore::Handle ImageDataStore::create(OverlayList::Handle ol)
 {
   Handle dst(new ImageDataStore(ol));
   return dst;
-}  
+}
 
 
 void ImageDataStore::resetPos()
@@ -58,7 +58,7 @@ bool ImageDataStore::currentEmpty()
     result = true;
   else if (m_impl->m_imgDataList[m_impl->m_listPos]->getBuffer())
     result = false;
-  
+
   return result;
 }
 
@@ -75,7 +75,7 @@ void ImageDataStore::next()
 class ImageDataSearch {
 public:
   ImageDataSearch() : m_dtiLinesFound(false) {}
-  void operator()(ImageData::Handle i) 
+  void operator()(ImageData::Handle i)
   {
     if(i->inqDtiDisplay()== DtiDisplay(Lines))
       {

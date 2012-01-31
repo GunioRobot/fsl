@@ -144,7 +144,7 @@ CHANGES FROM 1.1 TO 1.2
     - added option -leavecmd on pages
     - option -image implemented
     - new command: move
-    - delete command now accept an optionnal argument specifying 
+    - delete command now accept an optionnal argument specifying
       whether the frame of the page should be destroyed or not.
       If not, this frame is reused by insert command for the same page.
 

@@ -16,13 +16,13 @@ void print_mat(float stdmat[4][4])
 }
 
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
   int b, withgz=0;
   znzFile fp;
   char msg[500];
 
-/*  
+/*
   int i,j;
   float stdmat[4][4];
   for (i=0; i<4; i++) {
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   if (argc>=3) {
     if (strcmp("gz",argv[2])==0) {
       withgz=1;
-    }  
+    }
   }
 
   printf("withgz = %d\n",withgz);

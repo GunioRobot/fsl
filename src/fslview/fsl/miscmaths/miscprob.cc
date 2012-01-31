@@ -26,7 +26,7 @@ namespace MISCMATHS {
 
 //     if(tdim<0){tdim=dim1;}
 
-    
+
 //     Matrix g1=gammarnd(dim1, tdim, a, 1);
 //     Matrix g2=gammarnd(dim1, tdim, b, 1);
 
@@ -36,7 +36,7 @@ namespace MISCMATHS {
 // 	res(mr,mc)=g1(mr,mc)/(g1(mr,mc)+g2(mr,mc));
 //       }
 //     }
-    
+
 //     res.Release();
 //     return res;
 //   }
@@ -63,10 +63,10 @@ ReturnMatrix betapdf(const RowVector& vals, const float a, const float b)
 	  float logkerna=(a-1)*std::log(x);
 	  float logkernb=(b-1)*std::log(1-x);
 	  float betaln_ab=lgam(a)+lgam(b)-lgam(a+b);
-	  res(mc)=std::exp(logkerna+logkernb-betaln_ab);	 
+	  res(mc)=std::exp(logkerna+logkernb-betaln_ab);
 	}
     }
-  
+
   res.Release();
   return res;
 }
@@ -141,7 +141,7 @@ ReturnMatrix gammacdf(const RowVector& vals, const float mu, const float var)
   res=0;
   if((mu>0)&&(var>0)){
     float b = std::pow(mu,2)/var;
-    float a = mu/var;  
+    float a = mu/var;
     for (int mc=1; mc<=res.Ncols(); mc++){
       if(vals(mc)>0)
 	res(mc) = gdtr(a,b,vals(mc));
@@ -162,8 +162,8 @@ ReturnMatrix gammapdf(const RowVector& vals, const float mu, const float var)
     if(std::abs(c) < 150){
       for (int mc=1; mc<=res.Ncols(); mc++){
 	if(vals(mc)>0.000001){
-	  res(mc) = std::exp(a*std::log(b) + 
-			     (a-1) * std::log(vals(mc)) 
+	  res(mc) = std::exp(a*std::log(b) +
+			     (a-1) * std::log(vals(mc))
 			     - b*vals(mc) - c);
 	}
       }
@@ -181,7 +181,7 @@ ReturnMatrix gammapdf(const RowVector& vals, const float mu, const float var)
   {
     return -0.5*(std::pow(val-mu,2)/var+std::log(2*M_PI*var));
   }
-    
+
 ReturnMatrix normpdf(const RowVector& vals, const RowVector& mu, const RowVector& var)
 {
   Matrix res(mu.Ncols(),vals.Ncols());
@@ -196,9 +196,9 @@ ReturnMatrix normpdf(const RowVector& vals, const RowVector& mu, const RowVector
 }
 
 
-ReturnMatrix mvnrnd(const RowVector& mu, const SymmetricMatrix& covar, int nsamp) 
-{     
-//   Matrix eig_vec; 
+ReturnMatrix mvnrnd(const RowVector& mu, const SymmetricMatrix& covar, int nsamp)
+{
+//   Matrix eig_vec;
 //   DiagonalMatrix eig_val;
 //   EigenValues(covar,eig_val,eig_vec);
 
@@ -227,7 +227,7 @@ ReturnMatrix mvnrnd(const RowVector& mu, const SymmetricMatrix& covar, int nsamp
    return std::exp(-0.5*ss)/(std::pow(det,0.5)*std::pow(2*M_PI,vals.Ncols()/2.0));
  }
 
-// ReturnMatrix gammarnd(const int dim1, const int dim2, 
+// ReturnMatrix gammarnd(const int dim1, const int dim2,
 // 			const float a, const float b)
 // {
 //   // Marsaglia, G. and Tsang, W.W. (2000) "A Simple Method for Generating Gamma Variables", Acm Trans. Math. Soft. 26(3):363-372.
@@ -271,7 +271,7 @@ ReturnMatrix perms(const int n){
 	P(j,k+1)= (Q(jj,k)==i) ? n : Q(jj,k);
       }
       jj++;
-    } 
+    }
   }
   P.Release();
   return P;

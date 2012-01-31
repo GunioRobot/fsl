@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,7 +91,7 @@ namespace Bint {
   public:
 
     LSMCMCVoxelManager(ForwardModel& pmodel,int pburnin, int pnjumps, int psampleevery, int pupdateproposalevery, float pacceptancerate, int pdebuglevel, bool panalmargprec, int pnsamples) : model(pmodel), burnin(pburnin), njumps(pnjumps), sampleevery(psampleevery), updateproposalevery(pupdateproposalevery), acceptancerate(pacceptancerate), nsamples(pnsamples), nparams(0), sumsquares(0), likelihood(0), debuglevel(pdebuglevel), analmargprec(panalmargprec) {}
-  
+
     virtual ~LSMCMCVoxelManager();
 
     void run();
@@ -132,7 +132,7 @@ namespace Bint {
     int burnin;
     int njumps;
     int sampleevery;
-    int updateproposalevery; 
+    int updateproposalevery;
     float acceptancerate;
 
     int nsamples;
@@ -147,20 +147,20 @@ namespace Bint {
     float sumsquares_old;
     float likelihood_old;
     bool updateprec;
-    ColumnVector data;    
+    ColumnVector data;
 
   private:
 
     LSMCMCVoxelManager();
-    const LSMCMCVoxelManager& operator=(LSMCMCVoxelManager& par);     
+    const LSMCMCVoxelManager& operator=(LSMCMCVoxelManager& par);
     LSMCMCVoxelManager(LSMCMCVoxelManager& des);
   };
 
 class McmcParameter
   {
   public:
-    
-    McmcParameter(Parameter& pparam, int pnsamples, int pupdateproposalevery, float pacceptancerate, int pdebuglevel) :       
+
+    McmcParameter(Parameter& pparam, int pnsamples, int pupdateproposalevery, float pacceptancerate, int pdebuglevel) :
       param(pparam),
       val(pparam.getinitvalue()),
       naccepted(0),
@@ -173,7 +173,7 @@ class McmcParameter
     {
       samples.reserve(pnsamples);
     }
-    
+
     // get new energy taking into account that this parameter's value has changed
     virtual float new_energy() = 0;
 
@@ -204,7 +204,7 @@ class McmcParameter
 //      }
 
     void jump();
-    void sample(){samples.push_back(val);}    
+    void sample(){samples.push_back(val);}
 
     virtual ~McmcParameter(){}
 
@@ -232,7 +232,7 @@ class McmcParameter
   private:
 
     McmcParameter();
-    const McmcParameter& operator=(McmcParameter& par);     
+    const McmcParameter& operator=(McmcParameter& par);
     McmcParameter(McmcParameter& des);
   };
 
@@ -240,34 +240,34 @@ class McmcParameter
   class LSMCMCParameter : public McmcParameter
   {
   public:
-    LSMCMCParameter(Parameter& pparam,int pnsamples, int pupdateproposalevery, float pacceptancerate,LSMCMCVoxelManager& plsmcmc) : 
+    LSMCMCParameter(Parameter& pparam,int pnsamples, int pupdateproposalevery, float pacceptancerate,LSMCMCVoxelManager& plsmcmc) :
       McmcParameter(pparam,pnsamples,pupdateproposalevery,pacceptancerate,plsmcmc.getdebuglevel()), lsmcmc(plsmcmc), prior_energy(0.0), prior_old_energy(0.0)
     {}
 
     ~LSMCMCParameter(){}
-    
+
     void setup()
     {
       calc_prior();
     }
 
-    float new_energy() 
-    {      
+    float new_energy()
+    {
       float energy = calc_prior();
-      if(energy != float(MAX_EN)) 
+      if(energy != float(MAX_EN))
 	{
 	  lsmcmc.calcsumsquares();
 	  energy += lsmcmc.calclikelihood();
 	}
-	
+
       return energy;
     }
 
-    float old_energy() 
+    float old_energy()
     {
       float energy = prior_energy;
-      
-      if(energy != float(MAX_EN)) 
+
+      if(energy != float(MAX_EN))
 	{
 	  energy += lsmcmc.getlikelihood();
 	}
@@ -282,10 +282,10 @@ class McmcParameter
       lsmcmc.restorelikelihood();
     }
 
-    float calc_prior() { 
+    float calc_prior() {
 
-      prior_old_energy = prior_energy; 
-      prior_energy = param.getprior().calc_energy(val); 
+      prior_old_energy = prior_energy;
+      prior_energy = param.getprior().calc_energy(val);
 
       if(debuglevel==2)
 	{
@@ -293,8 +293,8 @@ class McmcParameter
 	  cout << "prior_energy=" << prior_energy << endl;
 	}
 
-      return prior_energy; 
-    }  
+      return prior_energy;
+    }
 
     void restoreprior() { prior_energy = prior_old_energy; }
 
@@ -306,7 +306,7 @@ class McmcParameter
   private:
 
     LSMCMCParameter();
-    const LSMCMCParameter& operator=(LSMCMCParameter& par);     
+    const LSMCMCParameter& operator=(LSMCMCParameter& par);
     LSMCMCParameter(LSMCMCParameter& des);
 
   };
@@ -314,38 +314,38 @@ class McmcParameter
   class LSMCMCPrecParameter : public McmcParameter
   {
   public:
-    LSMCMCPrecParameter(Parameter& pparam,int pnsamples, int pupdateproposalevery, float pacceptancerate,LSMCMCVoxelManager& plsmcmc) : 
+    LSMCMCPrecParameter(Parameter& pparam,int pnsamples, int pupdateproposalevery, float pacceptancerate,LSMCMCVoxelManager& plsmcmc) :
       McmcParameter(pparam,pnsamples,pupdateproposalevery,pacceptancerate,plsmcmc.getdebuglevel()), lsmcmc(plsmcmc), extra_energy(0.0), extra_old_energy(0.0), N(plsmcmc.getntpts()), priormean(pparam.getinitvalue()), impropercount(0)
     {}
 
     ~LSMCMCPrecParameter(){}
-    
+
     void setup()
-    {      
+    {
       calc_extra();
     }
 
 //     void reset(float pvalue, float pproposal_std)
-//     { 
+//     {
 //       McmcParameter::reset(pvalue,pproposal_std);
 //       extra_energy = 0.0;
 //       impropercount = 0;
 //       calc_extra();
 //     }
 
-    float new_energy() 
-    {      
+    float new_energy()
+    {
       return calc_extra() + lsmcmc.calclikelihood();
     }
 
-    float old_energy() 
+    float old_energy()
     {
       return extra_energy + lsmcmc.getlikelihood();
     }
 
     void restore_energy()
     {
-      restoreextra();      
+      restoreextra();
       lsmcmc.restorelikelihood();
     }
 
@@ -369,30 +369,30 @@ class McmcParameter
  private:
 
     LSMCMCPrecParameter();
-    const LSMCMCPrecParameter& operator=(LSMCMCPrecParameter& par);     
+    const LSMCMCPrecParameter& operator=(LSMCMCPrecParameter& par);
     LSMCMCPrecParameter(LSMCMCPrecParameter& des);
 
   };
 
-  inline LSMCMCVoxelManager::~LSMCMCVoxelManager() { 
+  inline LSMCMCVoxelManager::~LSMCMCVoxelManager() {
     mcmcparams.clear();
     if(!analmargprec) {
       delete precparam; delete precmcmcparam; delete precparamprior;
     }
   }
-  
+
   inline const vector<float>& LSMCMCVoxelManager::getsamples(int p) {return mcmcparams[p]->getsamples();}
   inline const vector<float>& LSMCMCVoxelManager::getprecsamples() {return precmcmcparam->getsamples();}
   inline const string& LSMCMCVoxelManager::getparamname(int p) {return model.getparam(p).getname();}
-  
-  inline float LSMCMCVoxelManager::calclikelihood() 
-  { 
+
+  inline float LSMCMCVoxelManager::calclikelihood()
+  {
     // calculates -log(likelihood):
 
     likelihood_old = likelihood;
 
     if(!analmargprec)
-      {               
+      {
 	likelihood = precmcmcparam->value()*sumsquares/2.0;
       }
     else
@@ -402,20 +402,20 @@ class McmcParameter
 
     if(debuglevel==2)
       {
-	cout << "likelihood_old="<< likelihood_old << endl; 
-	cout << "likelihood="<< likelihood << endl; 
+	cout << "likelihood_old="<< likelihood_old << endl;
+	cout << "likelihood="<< likelihood << endl;
       }
-    
-    return likelihood;   
+
+    return likelihood;
   }
 
   class LSMCMCManager
   {
   public:
     // constructor
-    LSMCMCManager(int pnjumps, int pnburnin, int psampleevery, int pupdateproposalevery, int pacceptancerate, int pdebuglevel, float pprecin, bool panalmargprec, ForwardModel& pmodel, const Matrix& pdata, const volume4D<float>& pmask) : 
+    LSMCMCManager(int pnjumps, int pnburnin, int psampleevery, int pupdateproposalevery, int pacceptancerate, int pdebuglevel, float pprecin, bool panalmargprec, ForwardModel& pmodel, const Matrix& pdata, const volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(pdebuglevel),
       precin(pprecin),
       analmargprec(panalmargprec),
@@ -425,16 +425,16 @@ class McmcParameter
     {
     }
 
-    LSMCMCManager(BintOptions& opts, ForwardModel& pmodel,const Matrix& pdata, const volume4D<float>& pmask) : 
+    LSMCMCManager(BintOptions& opts, ForwardModel& pmodel,const Matrix& pdata, const volume4D<float>& pmask) :
       data(pdata),
-      mask(pmask),      
+      mask(pmask),
       debuglevel(opts.debuglevel.value()),
       precin(opts.prec.value()),
       analmargprec(opts.analmargprec.value()),
       nsamples((opts.njumps.value()-opts.burnin.value())/opts.sampleevery.value()),
       voxelmanager(pmodel,opts.burnin.value(),opts.njumps.value(),opts.sampleevery.value(),opts.updateproposalevery.value(),opts.acceptancerate.value(),opts.debuglevel.value(),opts.analmargprec.value(),nsamples),
-      model(pmodel)      
-    {       
+      model(pmodel)
+    {
     }
 
     // load data from file in from file and set up starting values
@@ -443,23 +443,23 @@ class McmcParameter
     void run();
 
     // saves results in logging directory
-    void save();     
+    void save();
 
     int getntpts() const {return ntpts;}
     int getnvoxels() const {return nvoxels;}
-    
+
     const Matrix& getsamples(int paramnum) const {return samples[paramnum];}
     Matrix& getsamples(int paramnum) {return samples[paramnum];}
-   
+
     // Destructor
     virtual ~LSMCMCManager() {}
- 
-  protected:     
+
+  protected:
 
     Matrix data;
     volume4D<float> mask;
 
-    int ntpts;    
+    int ntpts;
     int nvoxels;
     int nparams;
 
@@ -476,13 +476,13 @@ class McmcParameter
     int nsamples;
 
     LSMCMCVoxelManager voxelmanager;
-    
+
     ForwardModel& model;
 
   private:
 
     LSMCMCManager();
-    const LSMCMCManager& operator=(LSMCMCManager& par);     
+    const LSMCMCManager& operator=(LSMCMCManager& par);
     LSMCMCManager(LSMCMCManager& des);
 
   };

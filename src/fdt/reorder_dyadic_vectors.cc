@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -162,20 +162,20 @@ class FM{
     //    OUT(P);
 
     neighbours.ReSize(3,26);
-    neighbours << 1 << 0 << 0 << -1 << 0 << 0 << 1 << 1 <<-1 <<-1 << 1 <<-1 << 1 <<-1 << 0 << 0 << 0 << 0 << 1 <<-1 << 1 << 1 <<-1 <<-1 << 1 <<-1 
+    neighbours << 1 << 0 << 0 << -1 << 0 << 0 << 1 << 1 <<-1 <<-1 << 1 <<-1 << 1 <<-1 << 0 << 0 << 0 << 0 << 1 <<-1 << 1 << 1 <<-1 <<-1 << 1 <<-1
 	       << 0 << 1 << 0 << 0  <<-1 << 0 << 1 <<-1 << 1 <<-1 << 0 << 0 << 0 << 0 << 1 <<-1 << 1 <<-1 << 1 << 1 <<-1 << 1 <<-1 << 1 <<-1 <<-1
 	       << 0 << 0 << 1 << 0  << 0 <<-1 << 0 << 0 << 0 << 0 << 1 << 1 <<-1 <<-1 << 1 << 1 <<-1 <<-1 << 1 << 1 << 1 <<-1 << 1 <<-1 <<-1 <<-1;
   }
-  
+
   ////////////////////// functions
   void do_fast_marching(){
     int i0,j0,k0;                      /* current point coords */
-    float tval; 
-    
+    float tval;
+
     /********************************/
     /*** performing fmt algorithm ***/
     /********************************/
-    
+
     /*** initialization ***/
     cout<<"initialise"<<endl;
     /* look for bigger f1+f2 point as a seed */
@@ -198,7 +198,7 @@ class FM{
 	}
     state(i0,j0,k0)=AP;
     tmap(i0,j0,k0)=0;
-    
+
      /* create heap sort structure */
     Heap h(nx,ny,nz);
 
@@ -217,30 +217,30 @@ class FM{
       /*break;*/
       counter++;
       //OUT(counter);
-      
+
       /*** uses the heap sort structure to find the NB point with the smallest T-value ***/
       h.heapRemove(tval,i0,j0,k0);
       //cout << i0 << " " << j0 << " " << k0 << endl;
-      
+
       /*** add this point to the set of alive points ***/
       state(i0,j0,k0)=AP;
-      
+
       if(h.get_N()==0)
 	break;
-      
+
       /*** update narrow band's T-value ***/
       updateNBvalue(i0,j0,k0,h);
-      
+
     }
-    
+
   }
   bool isInside(int i,int j,int k){
     //cout<<"je suis dans isInside"<<endl;
     //OUT(i);OUT(j);OUT(k);
     //OUT(mask(i,j,k));
     return((i>=0) && (i<nx)
-	   && (j>=0) && (j<ny) 
-	   && (k>=0) && (k<nz) 
+	   && (j>=0) && (j<ny)
+	   && (k>=0) && (k<nz)
 	   && (mask(i,j,k)!=0));
   }
   void computeT(int x,int y,int z){
@@ -268,7 +268,7 @@ class FM{
 	if(state(nbx,nby,nbz)==AP){
 	  //cout<<"this neighbour is an AP"<<endl;
 	  nV=get_vector(nbx,nby,nbz);
-	  
+
 	  float opt_s=0,s;
 	  for(int f=1;f<=V.Nrows();f++){
 	    s=abs(dot(nV.Row(f).t(),V.Row(P(per,f)).t()));
@@ -279,12 +279,12 @@ class FM{
 	  opt_nb+=opt_s;
 	  nnb++;
 	}//endif
-	
+
       }//nb
 
       opt_nb/=nnb;
       //OUT(opt_nb);
-	
+
       if(opt_nb>opt_sperm){
 	opt_sperm=opt_nb;
 	opt_perm=per;
@@ -322,11 +322,11 @@ class FM{
     return V;
   }
 
-  void updateNBvalue(int i,int j,int k,Heap& h){    
+  void updateNBvalue(int i,int j,int k,Heap& h){
     int ni,nj,nk;
     int pos;
     double val;
-   
+
     for(int nb=1;nb<=neighbours.Ncols();nb++){
       ni=i+neighbours(1,nb);nj=j+neighbours(2,nb);nk=k+neighbours(3,nb);
       if(isInside(ni,nj,nk)){
@@ -345,10 +345,10 @@ class FM{
 	  h.heapInsert(val,ni,nj,nk);
 	}
       }
-      
+
     }
   }
-  
+
   void save_results(){
     int fib=1;
     for(unsigned int f=0;f<dyads.size();f++){
@@ -376,7 +376,7 @@ int main(int argc,char *argv[]){
 
     options.parse_command_line(argc,argv);
 
-    
+
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
       options.usage();
       exit(EXIT_FAILURE);
@@ -385,7 +385,7 @@ int main(int argc,char *argv[]){
     if(verbose.value())
       cout<<"Call for fast marching"<<endl;
     FM fm(basename,mask);
-  
+
     if(verbose.value())
       cout<<"perform fast marching"<<endl;
     fm.do_fast_marching();
@@ -401,12 +401,12 @@ int main(int argc,char *argv[]){
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
-  } 
+  }
   catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   return 0;
-  
-  
+
+
 }

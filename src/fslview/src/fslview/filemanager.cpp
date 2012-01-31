@@ -30,7 +30,7 @@
 using namespace std;
 
 FileManager::FileManager()
-{ 
+{
 }
 
 FileManager::~FileManager()
@@ -141,7 +141,7 @@ void FileManager::readTalairachClusters(const std::string& filename, ClusterList
 //   vector<double>::const_iterator r = red.begin();
 //   vector<double>::const_iterator g = green.begin();
 //   vector<double>::const_iterator b = blue.begin();
-	
+
 //   lut->allocateMemory(red.size());
 
 //   for(;r != red.end();)
@@ -156,7 +156,7 @@ void  FileManager::readLutFile(const std::string& filename, LookUpTable* lut)
   float red, blue, green;
   char chLine[64] = "";
   int linenumber = 0,count = 0;
-  
+
   FILE* fp = fopen(filename.c_str(),"r");
   // FILE* out = fopen("render3t.ldt","w");
   if(!fp)
@@ -173,7 +173,7 @@ void  FileManager::readLutFile(const std::string& filename, LookUpTable* lut)
       throw std::ios::failure("File is not a valid lut file! Should start: %!VEST-LUT");
     }
 
-  while(fgets(chLine,64,fp)){if(strncmp(chLine,"<-color{",8) == 0) ++count;} 
+  while(fgets(chLine,64,fp)){if(strncmp(chLine,"<-color{",8) == 0) ++count;}
 
   lut->allocateMemory(count);
 
@@ -188,11 +188,11 @@ void  FileManager::readLutFile(const std::string& filename, LookUpTable* lut)
                      linenumber);
       //    fprintf(out,"\"%f,%f,%f\",\n",red,green,blue);
       ++linenumber;
-      }    
+      }
   }
   fclose(fp);
   // fclose(out);
-}  
+}
 
 //! @brief Read an RGB style LookUpTable from file
 //!
@@ -226,7 +226,7 @@ void  FileManager::readRgbFile(const std::string& filename, LookUpTable* lut)
       sscanf(chLine," %c",&firstChar);
 
       if(isdigit(firstChar))
-        {      
+        {
           sscanf(chLine," %s",idxStr);
           idxVal = atoi(idxStr);
           if (idxVal > idxValMax)idxValMax = idxVal;
@@ -249,12 +249,12 @@ void  FileManager::readRgbFile(const std::string& filename, LookUpTable* lut)
   }
 
   fclose(fp);
-}  
+}
 
 LutElement readColourNode( QDomNode &node )
 {
   QStringList colours( QStringList::split(",", node.firstChild().nodeValue()) );
-  
+
   LutElement elem( node.toElement().attribute( "index", "-1" ).toUInt(),
 		   node.toElement().attribute( "label", "Unknown" ) );
   switch( colours.size() )
@@ -317,7 +317,7 @@ void FileManager::readLMLFile(const std::string& filename, LookUpTable* lut)
 	      QDomText textChild = currentNode.firstChild().toText();
 	      if ( !textChild.isNull() ) {
 				// Process header->name here
-		if(textChild.data() == "Indexed") 
+		if(textChild.data() == "Indexed")
 		  lut->isIndexLut(true);
 	      }
 	    } else if ( currentNode.nodeName() == "colour_type" ) {
@@ -378,19 +378,19 @@ Image::Handle readImage(const string& atlasdir, QDomNode& imagesNode, const stri
   return im;
 }
 
-Atlas::Handle FileManager::readXMLAtlas(const string& atlasdir, 
+Atlas::Handle FileManager::readXMLAtlas(const string& atlasdir,
 					const string& filename)
 {
   string fullpath(atlasdir + "/" + filename);
   QFile opmlFile( fullpath );
   if ( !opmlFile.open( IO_ReadOnly ) )
-    throw 
+    throw
       std::ios::failure( QObject::tr("Couldn't open file %1").arg(fullpath) );
   QString errorMsg, errorLine;
   QDomDocument domTree;
   if ( !domTree.setContent( &opmlFile, &errorMsg, &errorLine ) ) {
     opmlFile.close();
-    throw 
+    throw
       std::ios::failure( QObject::tr("Parsing error for file %1\n%2\nLine:%3")
 			 .arg(filename).arg(errorMsg).arg(errorLine) );
   }
@@ -400,7 +400,7 @@ Atlas::Handle FileManager::readXMLAtlas(const string& atlasdir,
   // get the header information from the DOM
   QDomElement root = domTree.documentElement();
   QDomNode node;
-  
+
   string atlasname("Unset");
   Atlas::Type type(Atlas::Unknown);
 
@@ -421,7 +421,7 @@ Atlas::Handle FileManager::readXMLAtlas(const string& atlasdir,
 	  } else if ( currentNode.nodeName() == "type" ) {
 	    QDomText textChild = currentNode.firstChild().toText();
 	    if ( !textChild.isNull() ) {
-	      if(textChild.data() == "Label") 
+	      if(textChild.data() == "Label")
 		type = Atlas::Label;
 	      else
 		type = Atlas::Probabilistic;
@@ -438,11 +438,11 @@ Atlas::Handle FileManager::readXMLAtlas(const string& atlasdir,
   }
 
   Atlas::Handle atlas;
-      
+
   switch(type)
     {
     case Atlas::Probabilistic:
-      atlas = ProbabilisticAtlas::create(images, summaries, atlasname); 
+      atlas = ProbabilisticAtlas::create(images, summaries, atlasname);
       break;
     case Atlas::Label:
       atlas = LabelAtlas::create(images, summaries, atlasname);

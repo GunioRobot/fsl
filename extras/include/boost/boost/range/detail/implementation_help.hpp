@@ -21,11 +21,11 @@
 #include <wchar.h>
 #endif
 
-namespace boost 
+namespace boost
 {
     namespace range_detail
     {
-        
+
         /////////////////////////////////////////////////////////////////////
         // end() help
         /////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ namespace boost
         {
             return s + strlen( s );
         }
-        
+
 #ifndef BOOST_NO_CWCHAR
         inline const wchar_t* str_end( const wchar_t* s, const wchar_t* )
         {
@@ -49,7 +49,7 @@ namespace boost
                 ;
             return s;
         }
-#endif         
+#endif
 
         template< class Char >
         inline Char* str_end( Char* s )
@@ -62,7 +62,7 @@ namespace boost
         {
             return boost_range_array + sz;
         }
-        
+
         template< class T, std::size_t sz >
         inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
@@ -74,7 +74,7 @@ namespace boost
         {
             return boost_range_array + sz - 1;
         }
-        
+
         template< class T, std::size_t sz >
         inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
@@ -90,33 +90,33 @@ namespace boost
 
             return array_end<T,sz>( boost_range_array, tag() );
         }
-        
+
         template< class T, std::size_t sz >
         inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz] )
         {
             typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
-        
+
             return array_end<T,sz>( boost_range_array, tag() );
         }
 
         /////////////////////////////////////////////////////////////////////
         // size() help
         /////////////////////////////////////////////////////////////////////
-        
+
         template< class Char >
         inline std::size_t str_size( const Char* const& s )
         {
             return str_end( s ) - s;
         }
-         
+
         template< class T, std::size_t sz >
         inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return sz;
         }
-       
+
         template< class T, std::size_t sz >
         inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
@@ -128,7 +128,7 @@ namespace boost
         {
             return sz - 1;
         }
-                 
+
         template< class T, std::size_t sz >
         inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
@@ -155,7 +155,7 @@ namespace boost
         }
 
     } // namespace 'range_detail'
-    
+
 } // namespace 'boost'
 
 

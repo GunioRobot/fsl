@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // extended_type_info.hpp: interface for portable version of type_info
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -30,17 +30,17 @@
 
 #define BOOST_SERIALIZATION_MAX_KEY_SIZE 128
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info : 
-    private boost::noncopyable 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info :
+    private boost::noncopyable
 {
 private:
     virtual bool
     less_than(const extended_type_info &rhs) const = 0;
     int type_info_key_cmp(const extended_type_info & rhs) const;
-    
+
     // used to uniquely identify the type of class derived from this one
     // so that different derivations of this class can be simultaneously
     // included in implementation of sets and maps.
@@ -82,7 +82,7 @@ public:
     static const extended_type_info * find(const extended_type_info * t);
 };
 
-} // namespace serialization 
+} // namespace serialization
 } // namespace boost
 
 #ifdef BOOST_MSVC

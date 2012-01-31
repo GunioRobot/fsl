@@ -120,7 +120,7 @@ plain_report_formatter::test_unit_report_start( test_unit const& tu, std::ostrea
         m_indent += 2;
         return;
     }
-    
+
     counter_t total_assertions  = tr.p_assertions_passed + tr.p_assertions_failed;
     counter_t total_tc          = tr.p_test_cases_passed + tr.p_test_cases_failed + tr.p_test_cases_skipped;
 
@@ -136,7 +136,7 @@ plain_report_formatter::test_unit_report_start( test_unit const& tu, std::ostrea
     print_stat_value( ostr, tr.p_test_cases_passed, m_indent, total_tc        , "test case", "passed" );
     print_stat_value( ostr, tr.p_test_cases_failed, m_indent, total_tc        , "test case", "failed" );
     print_stat_value( ostr, tr.p_test_cases_skipped, m_indent, total_tc       , "test case", "skipped" );
-    
+
     ostr << '\n';
 }
 
@@ -154,12 +154,12 @@ void
 plain_report_formatter::do_confirmation_report( test_unit const& tu, std::ostream& ostr )
 {
     test_results const& tr = results_collector.results( tu.p_id );
-    
+
     if( tr.passed() ) {
         ostr << "*** No errors detected\n";
         return;
     }
-        
+
     if( tr.p_skipped ) {
         ostr << "*** Test " << tu.p_type_name << " skipped \n";
         return;
@@ -173,10 +173,10 @@ plain_report_formatter::do_confirmation_report( test_unit const& tu, std::ostrea
 
 
     ostr << "*** " << tr.p_assertions_failed << " failure" << ( tr.p_assertions_failed != 1 ? "s" : "" ) << " detected";
-    
+
     if( tr.p_expected_failures > 0 )
         ostr << " (" << tr.p_expected_failures << " failure" << ( tr.p_expected_failures != 1 ? "s" : "" ) << " expected)";
-    
+
     ostr << " in test " << tu.p_type_name << " " << quote() << tu.p_name << "\n";
 }
 

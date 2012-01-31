@@ -46,7 +46,7 @@ typedef long int          count_int;
 #define maxmaxcode ((code_int)1 << GIFBITS)
 
 #define HSIZE  5003            /* 80% occupancy */
-#define hsize HSIZE            /* Apparently invariant, left over from 
+#define hsize HSIZE            /* Apparently invariant, left over from
 					compress */
 
 typedef struct {
@@ -130,7 +130,7 @@ BGD_DECLARE(void) gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out)
 		if (!pim) {
 			return;
 		}
-		tim = pim; 
+		tim = pim;
 	}
 	BitsPerPixel = colorstobpp(tim->colorsTotal);
 	/* All set, let's do it. */
@@ -284,7 +284,7 @@ BGD_DECLARE(void) gdImageGifAnimAddCtx(gdImagePtr im, gdIOCtxPtr out, int LocalC
 		if (!pim) {
 			return;
 		}
-		tim = pim; 
+		tim = pim;
 	}
 	if (previm) {
 		/* create optimized animation.  Compare this image to
@@ -298,7 +298,7 @@ BGD_DECLARE(void) gdImageGifAnimAddCtx(gdImagePtr im, gdIOCtxPtr out, int LocalC
 
 		   Images should be of same size.  If not, a temporary
 		   copy is made with the same size as previous image.
-		   
+
 		*/
 		gdImagePtr prev_pim = 0, prev_tim = previm;
 		int x, y;
@@ -313,7 +313,7 @@ BGD_DECLARE(void) gdImageGifAnimAddCtx(gdImagePtr im, gdIOCtxPtr out, int LocalC
 			if (!prev_pim) {
 				return;
 			}
-			prev_tim = prev_pim; 
+			prev_tim = prev_pim;
 		}
 		for (x = 0; x < 256; ++x)
 			colorMap[x] = -2;
@@ -1109,7 +1109,7 @@ cl_block (GifCtx *ctx)             /* table clear for block compress */
 
 static void
 cl_hash(register count_int chsize, GifCtx *ctx)          /* reset code table */
-                         
+
 {
 
         register count_int *htab_p = ctx->htab+chsize;

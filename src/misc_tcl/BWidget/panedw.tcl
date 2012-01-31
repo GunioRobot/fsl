@@ -150,7 +150,7 @@ proc PanedWindow::add { path args } {
 			    -anchor c
 		}
 	    }
-            $activator configure -cursor sb_h_double_arrow 
+            $activator configure -cursor sb_h_double_arrow
             grid $frame -column [expr {2*$num-1}] -row 0 -sticky ns
             grid columnconfigure $path [expr {2*$num-1}] -weight 0
         } else {
@@ -163,7 +163,7 @@ proc PanedWindow::add { path args } {
 			    -anchor c
 		}
 	    }
-            $activator configure -cursor sb_v_double_arrow 
+            $activator configure -cursor sb_v_double_arrow
             grid $frame -row [expr {2*$num-1}] -column 0 -sticky ew
             grid rowconfigure $path [expr {2*$num-1}] -weight 0
         }
@@ -207,7 +207,7 @@ proc PanedWindow::getframe { path index } {
         return $path.f$index.frame
     }
 }
-    
+
 
 # ----------------------------------------------------------------------------
 #  Command PanedWindow::_beg_move_sash
@@ -352,9 +352,9 @@ proc PanedWindow::_apply_weights { path } {
     set wsash [expr {[Widget::getoption $path -width] + 2*[Widget::getoption $path -pad]}]
     set rs [winfo $size $path]
     set s [expr {$rs - ($_panedw($path,nbpanes) - 1) * $wsash}]
-    
+
     set tw 0.0
-    foreach w $_panedw($path,weights) { 
+    foreach w $_panedw($path,weights) {
 	set tw [expr {$tw + $w}]
     }
 
@@ -362,7 +362,7 @@ proc PanedWindow::_apply_weights { path } {
 	set rw [lindex $_panedw($path,weights) $i]
 	set ps [expr {int($rw / $tw * $s)}]
 	$path.f$i configure -$size $ps
-    }    
+    }
     return
 }
 

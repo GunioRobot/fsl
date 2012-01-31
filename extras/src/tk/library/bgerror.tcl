@@ -8,7 +8,7 @@
 #
 # Copyright (c) 1998-2000 by Ajuba Solutions.
 # Copyright (c) 2007 Daniel A. Steffen <das@users.sourceforge.net>
-# 
+#
 # RCS: @(#) $Id: bgerror.tcl,v 1.1.1.2 2009/03/24 10:20:23 duncan Exp $
 # $Id: bgerror.tcl,v 1.1.1.2 2009/03/24 10:20:23 duncan Exp $
 

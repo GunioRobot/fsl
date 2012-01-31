@@ -399,8 +399,8 @@
 
 /*
  *---------------------------------------------------------------------------
- * The following macros and declarations represent the interface between 
- * generic and windows-specific parts of Tcl.  Some of the macros may 
+ * The following macros and declarations represent the interface between
+ * generic and windows-specific parts of Tcl.  Some of the macros may
  * override functions declared in tclInt.h.
  *---------------------------------------------------------------------------
  */
@@ -467,14 +467,14 @@
 
 
 /*
- * The following macros have trivial definitions, allowing generic code to 
+ * The following macros have trivial definitions, allowing generic code to
  * address platform-specific issues.
  */
 
 #define TclpReleaseFile(file)	ckfree((char *) file)
 
 /*
- * The following macros and declarations wrap the C runtime library 
+ * The following macros and declarations wrap the C runtime library
  * functions.
  */
 
@@ -489,7 +489,7 @@ EXTERN HANDLE	    TclWinSerialReopen _ANSI_ARGS_(( HANDLE handle,
 
 EXTERN Tcl_Channel  TclWinOpenSerialChannel _ANSI_ARGS_((HANDLE handle,
                         char *channelName, int permissions));
-					 
+
 EXTERN Tcl_Channel  TclWinOpenConsoleChannel _ANSI_ARGS_((HANDLE handle,
                         char *channelName, int permissions));
 

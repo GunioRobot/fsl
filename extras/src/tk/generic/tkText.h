@@ -641,24 +641,24 @@ typedef struct TkText {
     /*
      * Information related to the undo/redo functonality
      */
-     
+
     TkUndoRedoStack * undoStack; /* The undo/redo stack */
-    
-    int undo;			/* non zero means the undo/redo behaviour is 
+
+    int undo;			/* non zero means the undo/redo behaviour is
 				 * enabled */
-    
+
     int maxUndo;		/* The maximum depth of the undo stack expressed
              * as the maximum number of compound statements */
 
-    int autoSeparators;		/* non zero means the separatorss will be 
+    int autoSeparators;		/* non zero means the separatorss will be
 				 * inserted automatically */
-    
+
     int modifiedSet;		/* Flag indicating that the 'dirtynesss' of
 				 * the text widget has been expplicitly set.
 				 */
 
     int isDirty;		/* Flag indicating the 'dirtynesss' of the text
-				 * widget. If the flag is not zero, unsaved 
+				 * widget. If the flag is not zero, unsaved
 				 * modifications have been applied to the
 				 * text widget */
 

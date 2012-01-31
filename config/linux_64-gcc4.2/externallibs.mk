@@ -60,7 +60,7 @@ INC_QT = ${QTDIR}/include
 QWTDIR = /usr/local/qwt
 LIB_QWT = ${QWTDIR}/lib
 INC_QWT = ${QWTDIR}/include
- 
+
 # FFTW3 library
 LIB_FFTW3 = ${FSLEXTLIB}
 INC_FFTW3 = ${FSLEXTINC}/fftw3

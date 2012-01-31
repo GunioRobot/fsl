@@ -7,7 +7,7 @@
 PropertiesDialogImpl::PropertiesDialogImpl(QWidget *parent)
 {
   Preferences prefs;
-  
+
   m_fslDir->setText(prefs.inqFSLDir());
   m_mniImage->setText(prefs.inqMni152());
   m_atlasPath->setText(prefs.inqAtlasPath());
@@ -17,7 +17,7 @@ PropertiesDialogImpl::PropertiesDialogImpl(QWidget *parent)
 void PropertiesDialogImpl::commit()
 {
   Preferences prefs;
-  
+
   prefs.setFSLDir(m_fslDir->text());
   prefs.setMni152(m_mniImage->text());
   prefs.setAssistantPath(m_assistantPath->text());

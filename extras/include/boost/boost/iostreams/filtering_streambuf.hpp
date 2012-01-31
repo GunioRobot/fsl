@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <exception>
 #include <memory>                               // allocator.
@@ -19,7 +19,7 @@
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf.hpp> // pubsync.
 #include <boost/iostreams/detail/streambuf/chainbuf.hpp>
-#include <boost/mpl/if.hpp>                    
+#include <boost/mpl/if.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -50,7 +50,7 @@ namespace boost { namespace iostreams {
         BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(name_, mode, Ch, push_impl) \
         ~name_() { if (this->is_complete()) this->BOOST_IOSTREAMS_PUBSYNC(); } \
     }; \
-    /**/ 
+    /**/
 BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_streambuf, boost::iostreams::chain, char)
 BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_wstreambuf, boost::iostreams::chain, wchar_t)
 

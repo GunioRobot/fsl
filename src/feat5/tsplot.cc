@@ -9,20 +9,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -106,12 +106,12 @@ the Hansen projection c'*pinv(X) with Y instead.
 #include <math.h>
 #include "utils/fsl_isfinite.h"
 #include <vector>
- 
+
 using namespace NEWMAT;
 using namespace NEWIMAGE;
 using namespace MISCPLOT;
 using namespace std;
- 
+
 /*
 void setupq (ColumnVector &x,ColumnVector &dx,ColumnVector &y,int npoint,Matrix &v,Matrix &a )
 {
@@ -138,15 +138,15 @@ double diff,prev;
 //construct  q-transp. * y  in  qty.
    prev = (y(2) - y(1))/v(1,4);
    for(int i=2;i<npoint;i++)
-   {  
+   {
       diff = (y(i+1)-y(i))/v(i,4);
       a(i,4) = diff - prev;
       prev = diff;
    }
 }
 
-//  from  * a practical guide to splines *  by c. de boor    
-//  from  * a practical guide to splines *  by c. de boor    
+//  from  * a practical guide to splines *  by c. de boor
+//  from  * a practical guide to splines *  by c. de boor
 // to be called in  s m o o t h constructs the upper three diags. in v(i,j), i=2,,npoint-1, j=1,3, of
 //  the matrix  6*(1-p)*q-transp.*(d**2)*q + p*r, then computes its
 //  l*l-transp. decomposition and stores it also in v, then applies
@@ -165,7 +165,7 @@ double prev,ratio,six1mp,twop;
       v(i,3) = six1mp*v(i,7);
    }
    if (npoint < 4)
-   {     
+   {
      a(1,3) = 0;
      a(2,3) = a(2,4)/v(2,1);
      a(3,3) = 0;
@@ -214,9 +214,9 @@ void smooth(ColumnVector &x,ColumnVector &y,ColumnVector &dy,int npoint,double s
   double change,ooss,oosf,p,prevsf,prevq,q=0,sfq,sixp,six1mp,utru;
   setupq(x,dy,y,npoint,v,a);
 
-  if ( s > 0 )                    
+  if ( s > 0 )
   {
-   p = 0;                     
+   p = 0;
    chol1d(p,v,a,npoint);
    sfq = 0;
    for (int i=1;i<=npoint;i++) sfq = sfq + pow(a(i,1)*dy(i),2.0);
@@ -243,29 +243,29 @@ void smooth(ColumnVector &x,ColumnVector &y,ColumnVector &dy,int npoint,double s
    prevsf = oosf;
    goto thirty;
   }
-  else 
+  else
   {
-    p = 1;                     
+    p = 1;
     chol1d(p,v,a,npoint);
     sfq = 0;
-    goto sixty;             
+    goto sixty;
    }
 
 
-   fiftynine: 
+   fiftynine:
    p = q/(1.0+q);
 //correct value of p has been found.
 //compute pol.coefficients from  Q*u (in a(.,1)).
-   sixty: 
+   sixty:
    six1mp = 6./(1.+q);
    for(int i=1;i<=npoint;i++) a(i,1) = y(i) - six1mp*pow(dy(i),2.0)*a(i,1);
    sixp = 6*p;
-   for(int i=1;i<=npoint;i++) 
+   for(int i=1;i<=npoint;i++)
    {
      a(i,3)*=sixp;
-     y(i)=a(i,1); 
+     y(i)=a(i,1);
    }
-   for(int i=1;i<npoint;i++)  
+   for(int i=1;i<npoint;i++)
    {
      a(i,4) = (a(i+1,3)-a(i,3))/v(i,4);
      a(i,2) = (a(i+1,1)-a(i,1))/v(i,4)- (a(i,3)+a(i,4)/3.*v(i,4))/2.*v(i,4);
@@ -291,7 +291,7 @@ void usage(const string& message)
 int main(int argc, char **argv)
 {
 ofstream     outputFile;
-int          numEVs, npts, numContrasts=1, nftests=0, GRPHSIZE(600), PSSIZE(600); 
+int          numEVs, npts, numContrasts=1, nftests=0, GRPHSIZE(600), PSSIZE(600);
 vector<double> normalisedContrasts, model, triggers;
  string       fmriFileName, fslPath, featdir, vType, indexText;
 ColumnVector NewimageVoxCoord(4),NiftiVoxCoord(4);
@@ -338,19 +338,19 @@ volume<float> immask;
     {
       customMask=true;
       if (argc<argi+2)
-	usage("Error: no mask image given following -m");    
+	usage("Error: no mask image given following -m");
       if ( read_volume(immask,argv[++argi]) )
-	usage("Error: mask image chosen doesn't exist");      
+	usage("Error: mask image chosen doesn't exist");
     }
     else if (!strcmp(argv[argi], "-o")) /* output dir */
     {
       if (argc<argi+2)
-	usage("Error: no value given following -o"); 
+	usage("Error: no value given following -o");
       outputName=string(argv[++argi]);
     }
     else if (!strcmp(argv[argi], "-d")) outputText=false;
-    else if (!strcmp(argv[argi], "-n")) zWeightClusters=false;   
-    else if (!strcmp(argv[argi], "-p")) prewhiten=true; 
+    else if (!strcmp(argv[argi], "-n")) zWeightClusters=false;
+    else if (!strcmp(argv[argi], "-p")) prewhiten=true;
   }
 
   /* read filtered_func_data */
@@ -374,7 +374,7 @@ volume<float> immask;
   }
 
   model=read_model(featdir+"/design.mat",&numEVs,&npts);
-  
+
   if (npts==0)
   {
     modelFree=true;
@@ -414,7 +414,7 @@ volume4D<float> acs;
     for(int i=1; i<=numContrasts; i++)
       for(int ev=1; ev<=numEVs; ev++)
 	normalisedContrasts[(i-1)*numEVs+(ev-1)] = contrasts(i,ev) / sqrt(contrasts.Row(i).SumSquare());
-    
+
     for(int i=1;i<=numEVs;i++)
       read_volume(impe[i-1],featdir+"/stats/pe"+num2str(i));
   }
@@ -443,14 +443,14 @@ volume4D<float> acs;
       string peristimulusText("");
       /* read COPE and derived stats; test for f-test output */
       /* load zstat or zfstat */
-      if (fsl_imageexists(featdir+"/stats/"+statType+num2str(i))) 
+      if (fsl_imageexists(featdir+"/stats/"+statType+num2str(i)))
 	read_volume(imz,featdir+"/stats/"+statType+num2str(i));
-      else 
+      else
 	continue; /* f-test i wasn't valid - no zfstat image */
       /* load cope */
       if ( (type==0) && (!modelFree) )
 	read_volume(imcope,featdir+"/stats/cope"+num2str(i));
-      
+
       /* load cluster mask */
       if (!useCoordinate) {
 	if (!customMask) {
@@ -485,7 +485,7 @@ volume4D<float> acs;
 	int maskedVoxels=0;
 	if (v==0) vType.clear();
 	else vType="c";
-	 
+
 	/* {{{ create model and data time series */
 	TS_model=0;
 	TS_residuals=0;
@@ -493,8 +493,8 @@ volume4D<float> acs;
 	TS_data=0;
 	TS_pemodel=0;
 	ColumnVector prewhitenedTS;
-	for(int x=0; x<im.xsize(); x++) 
-	  for(int y=0; y<im.ysize(); y++) 
+	for(int x=0; x<im.xsize(); x++)
+	  for(int y=0; y<im.ysize(); y++)
 	    for(int z=0; z<im.zsize(); z++)
 	      if ( ((v==0 && x==(int)NewimageVoxCoord(1) && y==(int)NewimageVoxCoord(2) && z==(int)NewimageVoxCoord(3)) || (v==1 && immask(x,y,z)>0)) && (!prewhiten || acs(x,y,z,1)!=0 || acs(x,y,z,2)!=0)) {
 		maskedVoxels++;
@@ -525,7 +525,7 @@ volume4D<float> acs;
 
 	TS_data/=wtotal;
 	double tsmean(TS_data.Sum()/npts);
-	  
+
 	if (isHigherLevel) tsmean=0;
 	if (!modelFree)
 	  for(int t=1; t<=npts; t++)
@@ -537,35 +537,35 @@ volume4D<float> acs;
 	      TS_pemodel(ev*npts+t) = TS_pemodel(ev*npts+t)/wtotal + tsmean;
 	  }
 	/* output data text files */
-	if (outputText) 
+	if (outputText)
 	  outputFile.open((outputName+"/tsplot"+vType+"_"+statType+num2str(i)+".txt").c_str());
 	double ymin(TS_data(1)),ymax(TS_data(1));
 	for(int t=1; t<=npts; t++)
 	{
 	  if (outputText) outputFile << scientific << TS_data(t);
-	  ymin=MISCMATHS::Min(TS_data(t),ymin); 
+	  ymin=MISCMATHS::Min(TS_data(t),ymin);
 	  ymax=MISCMATHS::Max(TS_data(t),ymax);
 	  if (!modelFree)
 	  {
 	    if (type==0)
 	    {
-	      if (outputText) outputFile << " " << TS_copemodel(t); 
-	      ymin=MISCMATHS::Min(TS_copemodel(t),ymin); 
+	      if (outputText) outputFile << " " << TS_copemodel(t);
+	      ymin=MISCMATHS::Min(TS_copemodel(t),ymin);
 	      ymax=MISCMATHS::Max(TS_copemodel(t),ymax);
 	    }
-	    if (outputText) outputFile << " " << TS_model(t); 
-	    ymin=MISCMATHS::Min(TS_model(t),ymin); 
+	    if (outputText) outputFile << " " << TS_model(t);
+	    ymin=MISCMATHS::Min(TS_model(t),ymin);
 	    ymax=MISCMATHS::Max(TS_model(t),ymax);
 	    if (type==0) outputFile << " " << TS_residuals(t)+TS_copemodel(t);
 	  }
 	  if (outputText) outputFile << endl;
 	}
-	if (outputText) 
+	if (outputText)
 	  outputFile.close();
 	ymax+=(ymax-ymin)/5;
 	ymin-=(ymax-ymin)/20;
-	if (ymin==ymax) 
-	  ymin-=1; 	
+	if (ymin==ymax)
+	  ymin-=1;
 	/* create graphs */
 	string graphName="tsplot"+vType+"_"+statType+num2str(i);
 	string graphFileName(outputName+"/"+graphName);
@@ -574,14 +574,14 @@ volume4D<float> acs;
 	newplot.set_xysize(GRPHSIZE,192);
 	newplot.set_yrange(ymin,ymax);
 	string title=statType+num2str(i);
-	if (v==0) 
+	if (v==0)
 	{
 	  NiftiVoxCoord = im.niftivox2newimagevox_mat().i()*NewimageVoxCoord;
 	  if (!useCoordinate) title+= ": max Z stat of "+num2str(maxz)+" at ";
 	  else title+= ": Z stat of "+num2str(maxz)+" at selected ";
 	  title+="voxel ("+num2str((int)NiftiVoxCoord(1))+" "+num2str((int)NiftiVoxCoord(2))+" "+num2str((int)NiftiVoxCoord(3))+")";
-	} 
-	else 
+	}
+	else
 	  title+= ": averaged over "+num2str(maskedVoxels)+" voxels";
 	Matrix blank=TS_data;
 	blank=log(-1.0);
@@ -612,7 +612,7 @@ volume4D<float> acs;
 	  }
 	}
 	else
-	{    
+	{
 	  newplot.add_label("");
 	  newplot.add_label("");
 	  newplot.add_label("data");
@@ -621,14 +621,14 @@ volume4D<float> acs;
 	  graphText+="Data plot - <a href=\""+graphName+".txt\">Raw data</a>\n<IMG BORDER=0 SRC=\""+graphName+".png\"><br><br>\n";
 	}
 	/* picture for main web index page */
-	if (v==0) 
+	if (v==0)
 	  indexText+="<a href=\"" + graphName + ".html\"><IMG BORDER=0 SRC=\"" + graphName + ".png\"></a><br><br>\n";
   	/* peri-stimulus: output text and graphs */
 	if (useTriggers)
 	{
 	  if (!modelFree)
 	    peristimulusText+="<table><tr>\n";
-	  for(int ev=0; ev<numEVs; ev++) 
+	  for(int ev=0; ev<numEVs; ev++)
 	    if (triggers[ev]>0.5) {
 	      float ps_period=triggers[((int)triggers[ev]+1)*numEVs+ev];
 	      Matrix ps_compact((int)(10*ps_period)+1,3);
@@ -638,13 +638,13 @@ volume4D<float> acs;
 	      for(int which_event=1;which_event<=triggers[ev];which_event++)
 	      {
 		double min_t=triggers[which_event*numEVs+ev];
-		int int_min_t=(int)ceil(min_t-(1e-10*min_t)),max_t=MISCMATHS::Min(npts-1,int_min_t+(int)ps_period);		
+		int int_min_t=(int)ceil(min_t-(1e-10*min_t)),max_t=MISCMATHS::Min(npts-1,int_min_t+(int)ps_period);
 		for(int t=int_min_t+1;t<=max_t;t++)
 		{
 		  RowVector input(ps_compact.Ncols());
 		  if (!modelFree) input << (ceil((t-min_t-1)*10))/10.0 << TS_residuals(t)+TS_model(t) << TS_model(t) << TS_pemodel(ev*npts+t) << TS_residuals(t)+TS_pemodel(ev*npts+t) << 1;  //(restricted temporal accuraccy (0.1*TR) must be at least 0.1 ( scatter can not take 0 )
 		  else input << t-min_t-1 << TS_residuals(t)+TS_model(t) << 1;
-		  ps_compact.Row(((int)((t-min_t-1)*10))+1)+=input; 
+		  ps_compact.Row(((int)((t-min_t-1)*10))+1)+=input;
 		  ps_full &= input.Columns(1,input.Ncols()-1);
 		}
 	      }
@@ -653,7 +653,7 @@ volume4D<float> acs;
 	      if (outputText) {
 		outputFile.open((graphFileName+".txt").c_str());
 		for(int k=1;k<=ps_full.Nrows();k++)
-		{ 
+		{
 		  outputFile << setprecision(1) << fixed << ps_full(k,1) << setprecision(6) << scientific;
 		  for (int j=2;j<=ps_full.Ncols();j++) outputFile << " " << ps_full(k,j);
 		  outputFile << endl;
@@ -661,7 +661,7 @@ volume4D<float> acs;
 		outputFile.close();
 	      }
 	      title=statType+num2str(i)+" ev"+num2str(ev+1);
-	      for(int j=1;j<=ps_compact.Nrows();j++) 
+	      for(int j=1;j<=ps_compact.Nrows();j++)
 	      {
 		if (isfinite(ps_compact(j,6))) ps_compact.Row(j)/=ps_compact(j,6);
 		else  ps_compact.Row(j)=log10(-1.0); //deliberately set to nan
@@ -676,8 +676,8 @@ volume4D<float> acs;
 		NiftiVoxCoord = im.niftivox2newimagevox_mat().i()*NewimageVoxCoord;
 		if (!useCoordinate) title+= ": max Z stat of "+num2str(maxz)+" at ";
 		else title+= ": Z stat of "+num2str(maxz)+" at selected ";
-		title+="voxel ("+num2str((int)NiftiVoxCoord(1))+" "+num2str((int)NiftiVoxCoord(2))+" "+num2str((int)NiftiVoxCoord(3))+")"; 
-	      } 
+		title+="voxel ("+num2str((int)NiftiVoxCoord(1))+" "+num2str((int)NiftiVoxCoord(2))+" "+num2str((int)NiftiVoxCoord(3))+")";
+	      }
 	      else title+= ": averaged over "+num2str(maskedVoxels)+" voxels";
 	      if (!modelFree)
 	      {

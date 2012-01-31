@@ -16,7 +16,7 @@
 
 class Histogram
 {
-public: 
+public:
   typedef boost::shared_ptr< Histogram > Handle;
 
   static Handle getHistogram(Volume::Handle v);

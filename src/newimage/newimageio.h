@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -99,7 +99,7 @@ int read_volumeROI(volume<T>& target, const string& filename,
 		   int x0, int y0, int z0, int x1, int y1, int z1);
 template <class T>
 int read_volumeROI(volume<T>& target, const string& filename,
-		   int x0, int y0, int z0, int x1, int y1, int z1, 
+		   int x0, int y0, int z0, int x1, int y1, int z1,
 		   int xskip, int yskip, int zskip);
 template <class T>
 int read_volume_hdr_only(volume<T>& target, const string& filename);
@@ -112,12 +112,12 @@ int read_complexvolume(complexvolume& vol, const string& filename);
 template <class T>
 int read_volume4D(volume4D<T>& target, const string& filename);
 template <class T>
-int read_volume4DROI(volume4D<T>& target, const string& filename, 
-		     int x0, int y0, int z0, int t0, 
+int read_volume4DROI(volume4D<T>& target, const string& filename,
+		     int x0, int y0, int z0, int t0,
 		     int x1, int y1, int z1, int t1);
 template <class T>
-int read_volume4DROI(volume4D<T>& target, const string& filename, 
-		     int x0, int y0, int z0, int t0, 
+int read_volume4DROI(volume4D<T>& target, const string& filename,
+		     int x0, int y0, int z0, int t0,
 		     int x1, int y1, int z1, int t1,
 		     int xskip, int yskip, int zskip, int tskip);
 template <class T>
@@ -131,15 +131,15 @@ int read_complexvolume4D(complexvolume& vol, const string& filename);
 
 template <class T>
 int save_volume(const volume<T>& source, const string& filename);
-int save_complexvolume(const volume<float>& realvol, 
+int save_complexvolume(const volume<float>& realvol,
 		       const volume<float>& imagvol, const string& filename);
 int save_complexvolume(const complexvolume& vol, const string& filename);
 
 
 template <class T>
 int save_volume4D(const volume4D<T>& source, const string& filename);
-int save_complexvolume4D(const volume4D<float>& realvol, 
-			 const volume4D<float>& imagvol, 
+int save_complexvolume4D(const volume4D<float>& realvol,
+			 const volume4D<float>& imagvol,
 			 const string& filename);
 int save_complexvolume4D(const complexvolume& vol, const string& filename);
 
@@ -206,14 +206,14 @@ int load_complexvolume4D(volume4D<float>& realvol, volume4D<float>& imagvol,
 
 template <class T>
 int write_volume(const volume<T>& source, const string& filename);
-int write_complexvolume(const volume<float>& realvol, 
+int write_complexvolume(const volume<float>& realvol,
 		       const volume<float>& imagvol, const string& filename);
 int write_complexvolume(const complexvolume& vol, const string& filename);
 
 template <class T>
 int write_volume4D(const volume4D<T>& source, const string& filename);
-int write_complexvolume4D(const volume4D<float>& realvol, 
-			 const volume4D<float>& imagvol, 
+int write_complexvolume4D(const volume4D<float>& realvol,
+			 const volume4D<float>& imagvol,
 			 const string& filename);
 
 template <class T>
@@ -237,7 +237,7 @@ int write_volume4D_filetype(const volume4D<T>& source, const string& filename,
 ////////////////////////////////////////////////////////////////////////
 
 template <class T>
-void FslReadBuffer(FSLIO* IP, T* tbuffer) 
+void FslReadBuffer(FSLIO* IP, T* tbuffer)
 {
   short sx,sy,sz,st;
   FslGetDim(IP,&sx,&sy,&sz,&st);
@@ -396,7 +396,7 @@ void FslReadBuffer(FSLIO* IP, T* tbuffer)
 
 void check_filename(const string& basename);
 
-FSLIO* NewFslOpen(const string& filename, const string& permissions, 
+FSLIO* NewFslOpen(const string& filename, const string& permissions,
 		  int filetype);
 
 FSLIO* NewFslOpen(const string& filename, const string& permissions);
@@ -412,13 +412,13 @@ template <class T>
 
 
 template <class T>
-int read_volumeROI(volume<T>& target, const string& filename, 
+int read_volumeROI(volume<T>& target, const string& filename,
 		   int x0, int y0, int z0, int x1, int y1, int z1,
 		   int xskip, int yskip, int zskip)
 {
   int retval=read_volumeROI(target,filename,x0,y0,z0,x1,y1,z1);
   if (retval==0) {
-    if (xskip<1) xskip=1;    
+    if (xskip<1) xskip=1;
     if (yskip<1) yskip=1;
     if (zskip<1) zskip=1;
     int sx=(target.maxx()-target.minx())/xskip + 1;
@@ -443,15 +443,15 @@ int read_volumeROI(volume<T>& target, const string& filename,
 
 
 template <class T>
-int read_volumeROI(volume<T>& target, const string& filename, 
+int read_volumeROI(volume<T>& target, const string& filename,
 		   short& dtype, bool read_img_data,
 		   int x0, int y0, int z0, int x1, int y1, int z1,
 		   bool swap2radiological=true);
 
 
 template <class T>
-int read_volumeROI(volume<T>& target, const string& filename, 
-		     int x0, int y0, int z0, 
+int read_volumeROI(volume<T>& target, const string& filename,
+		     int x0, int y0, int z0,
 		     int x1, int y1, int z1)
 {
   short dtype;
@@ -483,14 +483,14 @@ int read_volume_hdr_only(volume<T>& target, const string& filename)
 }
 
 template <class T>
-int read_volume4DROI(volume4D<T>& target, const string& filename, 
-		     int x0, int y0, int z0, int t0, 
+int read_volume4DROI(volume4D<T>& target, const string& filename,
+		     int x0, int y0, int z0, int t0,
 		     int x1, int y1, int z1, int t1,
 		     int xskip, int yskip, int zskip, int tskip)
 {
   int retval=read_volume4DROI(target,filename,x0,y0,z0,t0,x1,y1,z1,t1);
   if (retval==0) {
-    if (xskip<1) xskip=1;    
+    if (xskip<1) xskip=1;
     if (yskip<1) yskip=1;
     if (zskip<1) zskip=1;
     if (tskip<1) tskip=1;
@@ -517,15 +517,15 @@ int read_volume4DROI(volume4D<T>& target, const string& filename,
 
 
 template <class T>
-int read_volume4DROI(volume4D<T>& target, const string& filename, 
+int read_volume4DROI(volume4D<T>& target, const string& filename,
 		     short& dtype, bool read_img_data,
-		     int x0, int y0, int z0, int t0, 
+		     int x0, int y0, int z0, int t0,
 		     int x1, int y1, int z1, int t1,
 		     bool swap2radiological=true);
 
 template <class T>
-int read_volume4DROI(volume4D<T>& target, const string& filename, 
-		     int x0, int y0, int z0, int t0, 
+int read_volume4DROI(volume4D<T>& target, const string& filename,
+		     int x0, int y0, int z0, int t0,
 		     int x1, int y1, int z1, int t1)
 {
   short dtype;
@@ -534,7 +534,7 @@ int read_volume4DROI(volume4D<T>& target, const string& filename,
 }
 
 template <class T>
-int read_volume4D(volume4D<T>& target, const string& filename, 
+int read_volume4D(volume4D<T>& target, const string& filename,
 		  short& dtype, bool read_img_data)
 {
   return read_volume4DROI(target,filename,dtype,read_img_data,
@@ -569,14 +569,14 @@ template <class T>
 int set_fsl_hdr(const volume<T>& source, FSLIO *OP, int tsize, float tdim, float scalingSlope=1.0) //temp bool while converting
 {
   Tracer tr("set_fsl_hdr");
-    
+
   FslSetDim(OP,source.xsize(),source.ysize(),source.zsize(),tsize);
   FslSetDataType(OP, dtype(source));
   FslSetVoxDim(OP,source.xdim(), source.ydim(), source.zdim(), tdim);
 
   FslSetStdXform(OP,source.sform_code(),newmat2mat44(source.sform_mat()));
   FslSetRigidXform(OP,source.qform_code(),newmat2mat44(source.qform_mat()));
-  
+
   FslSetIntent(OP,source.intent_code(),source.intent_param(1),
 	       source.intent_param(2),source.intent_param(3));
   FslSetIntensityScaling(OP,scalingSlope,0.0);
@@ -586,7 +586,7 @@ int set_fsl_hdr(const volume<T>& source, FSLIO *OP, int tsize, float tdim, float
 }
 
 template <class T>
-int save_basic_volume(const volume<T>& source, const string& filename, 
+int save_basic_volume(const volume<T>& source, const string& filename,
 		      int filetype, bool save_orig=false);
 
 template <class T>
@@ -657,7 +657,7 @@ int save_volume_datatype(const volume<T>& source, const string& filename,short d
   }
   return -1;  // should never get here
 }
-  
+
 
 template <class T>
 int save_volume4D_datatype(const volume4D<T>& source, const string& filename,short datatype)
@@ -804,7 +804,7 @@ int write_volume4D_filetype(const volume4D<T>& source, const string& filename,
   { return save_volume4D_filetype(source,filename,filetype); }
 
 
-  // Basic I/O functions 
+  // Basic I/O functions
     // read original storage order - do not swap to radiological
 
 template <class T>
@@ -814,14 +814,14 @@ int read_orig_volume4D(volume4D<T>& target, const string& filename);
 template <class T>
 int load_orig_volume(volume<T>& target, const string& filename)
 { return read_orig_volume(target,filename); }
- 	 
+
 template <class T>
 int load_orig_volume(volume<T>& target, const string& filename);
 template <class T>
 int load_orig_volume4D(volume4D<T>& target, const string& filename)
 { return read_orig_volume4D(target,filename); }
- 	 
- 	 
+
+
 template <class T>
 int read_orig_volume(volume<T>& target, const string& filename)
 {
@@ -836,7 +836,7 @@ int read_orig_volume4D(volume4D<T>& target, const string& filename)
   return read_volume4DROI(target,filename,dtype,true,0,0,0,0,-1,-1,-1,-1,false);
 }
 
- 	 
+
 }
 
 #endif

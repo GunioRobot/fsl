@@ -24,19 +24,19 @@
 
 namespace boost
 {
-    
+
     template< class T >
     struct nullable
     {
         typedef T type;
-    };   
+    };
 
     namespace ptr_container_detail
     {
         template< class T >
         type_traits::yes_type is_nullable( const nullable<T>* );
 
-        type_traits::no_type is_nullable( ... );        
+        type_traits::no_type is_nullable( ... );
     }
 
     template< class T >
@@ -45,10 +45,10 @@ namespace boost
     private:
             BOOST_STATIC_CONSTANT( T*, var );
     public:
-            BOOST_STATIC_CONSTANT(bool, value = sizeof( ptr_container_detail::is_nullable( var ) ) 
+            BOOST_STATIC_CONSTANT(bool, value = sizeof( ptr_container_detail::is_nullable( var ) )
                                                 == sizeof( type_traits::yes_type ) );
     };
-    
+
     template< class T >
     struct remove_nullable
     {

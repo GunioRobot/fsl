@@ -16,7 +16,7 @@
 SingleSeriesWidget::SingleSeriesWidget(QWidget *parent,
                                        Image::Handle i,
                                        Cursor::Handle c,
-                                       PlotOptions::Handle p): 
+                                       PlotOptions::Handle p):
   TimeSeriesDisplay(parent),m_image(i),m_cursor(c),
   m_options(p),m_enabled(true),
   m_percent(false),m_axisDisplay(true),m_demean(false),
@@ -29,7 +29,7 @@ SingleSeriesWidget::SingleSeriesWidget(QWidget *parent,
                                        Image::Handle i,
                                        Cursor::Handle c,
                                        GraphManager::Handle g,
-                                       PlotOptions::Handle p): 
+                                       PlotOptions::Handle p):
   TimeSeriesDisplay(parent),m_image(i),m_cursor(c),m_graphManager(g),
   m_options(p),m_enabled(true),
   m_percent(false),m_axisDisplay(true),m_demean(false),
@@ -44,20 +44,20 @@ QSizePolicy SingleSeriesWidget::sizePolicy()
 }
 
 void SingleSeriesWidget::constructor()
-{ 
+{
   TRACKER("SingleSeriesWidget::constructor");
 
   if(m_graphManager){m_graphManager->attach(this);}
-  
+
   m_curveDataList = CurveDataList::create();
-  
+
   setMinimumSize(50, 50);
   setMargin(10);
 
   m_cursor->attach(this);
   if(m_options->getModelFit())
     m_options->getModelFit()->attach(this);
-  
+
   setGraphOptions();
 
   connect(this, SIGNAL(plotMousePressed(const QMouseEvent &)),
@@ -69,7 +69,7 @@ void SingleSeriesWidget::constructor()
 }
 
 SingleSeriesWidget::~SingleSeriesWidget()
-{  
+{
   TRACKER("SingleSeriesWidget::~SingleSeriesWidget");
   m_cursor->detach(this);
   if(m_options->getModelFit()) m_options->getModelFit()->detach(this);
@@ -79,27 +79,27 @@ SingleSeriesWidget::~SingleSeriesWidget()
 
 bool SingleSeriesWidget::addTimeSeries(const TimeSeries::Handle &timeSeries,
                                        bool browse)
-{  
+{
   TRACKER("SingleSeriesWidget::addTimeSeries");
   CurveData::Handle curveData = CurveData::create(timeSeries,browse);
   return m_curveDataList->push_back(curveData);
 }
 
 void SingleSeriesWidget::setLastCurveActive(bool setCursor)
-{   
-  TRACKER("SingleSeriesWidget::setLastCurveActive"); 
+{
+  TRACKER("SingleSeriesWidget::setLastCurveActive");
   m_curveDataList->setAllInActive();
   setActiveCurve(m_curveDataList->back(),setCursor);
 }
 
 void SingleSeriesWidget::setAllInActive()
-{  
+{
   TRACKER("SingleSeriesWidget::setAllInActive");
   m_curveDataList->setAllInActive();
 }
 
 void SingleSeriesWidget::remTimeSeries(bool browse)
-{ 
+{
   TRACKER("SingleSeriesWidget::remTimeSeries");
   if(browse){ m_curveDataList->removeBrowse();}
   else      { m_curveDataList->removeActive();}
@@ -111,13 +111,13 @@ void SingleSeriesWidget::remAllTimeSeries()
 }
 
 void SingleSeriesWidget::setEnabled(bool state)
-{  
+{
   TRACKER("SingleSeriesWidget::setEnabled");
   m_enabled = state;
 }
 
 void SingleSeriesWidget::axisDisplay(bool y)
-{ 
+{
   TRACKER("SingleSeriesWidget::axisDisplay");
   if(m_enabled)
     {
@@ -127,11 +127,11 @@ void SingleSeriesWidget::axisDisplay(bool y)
       setGraphOptions();
       redraw();
     }
-  
+
 }
 
 void SingleSeriesWidget::startPlotProcess()
-{  
+{
   TRACKER("SingleSeriesWidget::startPlotProcess");
   if(m_graphManager)
     {
@@ -146,45 +146,45 @@ void SingleSeriesWidget::startPlotProcess()
 }
 
 void SingleSeriesWidget::update(const GraphManager::Handle& gm)
-{  
+{
   TRACKER("SingleSeriesWidget::update GraphManager");
-  setAxisScale(QwtPlot::yLeft,gm->inqMin(),gm->inqMax()); 
+  setAxisScale(QwtPlot::yLeft,gm->inqMin(),gm->inqMax());
   plotAllTimeSeries();
 }
 
 void SingleSeriesWidget::plotAllTimeSeries()
-{   
+{
   TRACKER("SingleSeriesWidget::plotAllTimeSeries");
     clear();
-    
+
     for(CurveDataList::It i = m_curveDataList->begin();
         i != m_curveDataList->end();
         i++)
       {
         plotTimeSeries(*i);
-      }   
+      }
     replot();
 }
 
 void SingleSeriesWidget::plotTimeSeries(CurveData::Handle cd)
-{  
+{
   TRACKER("SingleSeriesWidget::plotTimeSeries");
-    TimeSeries::Handle ts = cd->inqTimeSeries();  
+    TimeSeries::Handle ts = cd->inqTimeSeries();
 
     int volCount = ts->inqVolCount();
     long curve = insertCurve("Timeseries");
     cd->setCurve(curve);
     if(cd->inqIsActive()){    setCurvePen(curve, QPen(green));}
     else                 {    setCurvePen(curve, QPen(blue));}
-    
+
     switch(cd->inqIndex())
       {
       case CurveData::Null:                                            break;
-      case CurveData::FiltFunc:  setCurvePen(curve,QPen(red));         break;      
+      case CurveData::FiltFunc:  setCurvePen(curve,QPen(red));         break;
       case CurveData::Full:      setCurvePen(curve,QPen(blue));        break;
       case CurveData::Cope1:     setCurvePen(curve,QPen(green));       break;
-      case CurveData::Cope2:     setCurvePen(curve,QPen(cyan));        break;      
-      case CurveData::Cope3:     setCurvePen(curve,QPen(darkMagenta)); break;      
+      case CurveData::Cope2:     setCurvePen(curve,QPen(cyan));        break;
+      case CurveData::Cope3:     setCurvePen(curve,QPen(darkMagenta)); break;
       case CurveData::Cope4:     setCurvePen(curve,QPen(darkGreen));   break;
       case CurveData::PE:        setCurvePen(curve,QPen(green));       break;
       }
@@ -192,12 +192,12 @@ void SingleSeriesWidget::plotTimeSeries(CurveData::Handle cd)
     double *x = new double[volCount];
     double *y = new double[volCount];
     double mean = ts->mean();
-    
+
     if(m_graphManager.get())
       {
         setAxisScale(QwtPlot::yLeft,
                      mean - (m_graphManager->inqRange()/2.0),
-                     mean + (m_graphManager->inqRange()/2.0)); 
+                     mean + (m_graphManager->inqRange()/2.0));
       }
     else
       {
@@ -221,7 +221,7 @@ void SingleSeriesWidget::plotTimeSeries(CurveData::Handle cd)
 	      *(y + n) = ts->value(n) - mean;
 	    else
 	      *(y + n) = ((ts->value(n) - mean) / mean) * 100.0;
-	  } 
+	  }
       }
 
     setCurveData(curve, x, y, volCount);
@@ -231,7 +231,7 @@ void SingleSeriesWidget::plotTimeSeries(CurveData::Handle cd)
 }
 
 void SingleSeriesWidget::drawMarker(int mouseXPos, int mouseYPos)
-{ 
+{
   TRACKER("SingleSeriesWidget::drawMarker");
   CurveData::Handle activeCurve = m_curveDataList->getActiveData();
   if(isValidCurveData(activeCurve))
@@ -254,7 +254,7 @@ void SingleSeriesWidget::drawMarker(int mouseXPos, int mouseYPos)
       QwtSymbol s;
       s.setStyle(QwtSymbol::Cross);
       s.setSize(30);
-      
+
       setMarkerSymbol(m, s);
       setMarkerXPos(m, short(x));
       setMarkerYPos(m, y);
@@ -264,8 +264,8 @@ void SingleSeriesWidget::drawMarker(int mouseXPos, int mouseYPos)
 }
 
 void SingleSeriesWidget::mouseMoved(const QMouseEvent & e)
-{   
-  TRACKER("SingleSeriesWidget::mouseMoved");  
+{
+  TRACKER("SingleSeriesWidget::mouseMoved");
   if(m_options->inqFeedback())
     {
       drawMarker(e.x(),e.y());
@@ -274,7 +274,7 @@ void SingleSeriesWidget::mouseMoved(const QMouseEvent & e)
 }
 
 void SingleSeriesWidget::mouseReleased(const QMouseEvent & e)
-{   
+{
   TRACKER("SingleSeriesWidget::mouseReleased");
   if(m_options->inqFeedback())
     {
@@ -284,7 +284,7 @@ void SingleSeriesWidget::mouseReleased(const QMouseEvent & e)
 }
 
 void SingleSeriesWidget::mousePressed(const QMouseEvent & e)
-{  
+{
   TRACKER("SingleSeriesWidget::mousePressed");
   if(m_options->inqFeedback())
     {
@@ -307,7 +307,7 @@ void SingleSeriesWidget::mousePressed(const QMouseEvent & e)
 }
 
 void SingleSeriesWidget::setActiveCurve(CurveData::Handle curve,bool setCursor)
-{  
+{
   TRACKER("SingleSeriesWidget::setActiveCurve");
  if(isValidCurveData(curve))
     {
@@ -320,17 +320,17 @@ void SingleSeriesWidget::setActiveCurve(CurveData::Handle curve,bool setCursor)
                               ts->inqY()-m_options->inqYOffset(),
                               ts->inqZ()-m_options->inqZOffset());
 
-                  
+
           m_causedCursorUpdate = false;
         }
     }
 }
 
 void SingleSeriesWidget::setCursorVolume(short vol)
-{   
-  TRACKER("SingleSeriesWidget::setCursorVolume"); 
-  CurveData::Handle active = m_curveDataList->getActiveData();      
-  
+{
+  TRACKER("SingleSeriesWidget::setCursorVolume");
+  CurveData::Handle active = m_curveDataList->getActiveData();
+
   if(isValidCurveData(active))
     {
       TimeSeries::Handle ts = active->inqTimeSeries();
@@ -344,15 +344,15 @@ void SingleSeriesWidget::setCursorVolume(short vol)
 }
 
 void SingleSeriesWidget::redraw()
-{  
+{
   TRACKER("SingleSeriesWidget::redraw");
   startPlotProcess();
 }
 
 void SingleSeriesWidget::addTimeSeries()
-{ 
+{
   TRACKER("SingleSeriesWidget::addTimeSeries");
- 
+
   if(m_enabled)
     {
       if (m_image->getInfo()->isValidCoordinate(
@@ -363,7 +363,7 @@ void SingleSeriesWidget::addTimeSeries()
 
           if(!m_options->inqFeatMode())
            {
-              TimeSeries::Handle timeSeries =  
+              TimeSeries::Handle timeSeries =
                 m_image->getTimeSeries(m_cursor->inqX() + m_options->inqXOffset(),
                                        m_cursor->inqY() + m_options->inqYOffset(),
                                        m_cursor->inqZ() + m_options->inqZOffset());
@@ -377,8 +377,8 @@ void SingleSeriesWidget::addTimeSeries()
 }
 
 void SingleSeriesWidget::remTimeSeries()
-{  
-  TRACKER("SingleSeriesWidget::remTimeSeries");  
+{
+  TRACKER("SingleSeriesWidget::remTimeSeries");
   if(m_enabled)
     {
       remTimeSeries(false);
@@ -388,13 +388,13 @@ void SingleSeriesWidget::remTimeSeries()
 }
 
 void SingleSeriesWidget::setGraphOptions()
-{  
+{
   TRACKER("SingleSeriesWidget::setGraphOptions");
 
   std::string title =  m_image->getInfo()->inqImageName();
   if(m_options->inqTitle())
     {
-      QString preTitle("Timeseries - "); 
+      QString preTitle("Timeseries - ");
       setTitle(preTitle + title.c_str());
     }
   else
@@ -406,10 +406,10 @@ void SingleSeriesWidget::setGraphOptions()
   else                      {setAxisTitle(xBottom,"");}
   if(m_options->inqYLabel()){setAxisTitle(yLeft,   "Value");}
   else                      {setAxisTitle(yLeft,"");}
-    
+
   setCanvasBackground(QColor(white));
 
-  setAxisMargins(QwtPlot::yLeft, 0, 0);  
+  setAxisMargins(QwtPlot::yLeft, 0, 0);
 
   enableAxis(xBottom,m_options->inqXNums());
   enableAxis(yLeft,m_options->inqYNums());
@@ -433,8 +433,8 @@ void SingleSeriesWidget::update(ModelFit *m)
 }
 
 void SingleSeriesWidget::update(const Cursor::Handle& c)
-{  
-  TRACKER("SingleSeriesWidget::update Cursor");   
+{
+  TRACKER("SingleSeriesWidget::update Cursor");
   if(m_enabled)
     {
       unsigned short x(m_cursor->inqX() + m_options->inqXOffset());
@@ -444,27 +444,27 @@ void SingleSeriesWidget::update(const Cursor::Handle& c)
       MESSAGE(QString("Location x(%1) y(%2) z(%3)").arg(x).arg(y).arg(z));
 
       bool validTimeSeries = m_image->getInfo()->isValidCoordinate(x, y, z);
-      
+
       if(!inqCausedCursorUpdate())
         {
           if(validTimeSeries)
-            { 
+            {
               if(m_options->inqFeatMode())
-                {          
+                {
                   remTimeSeries(true);
                   remTimeSeries(true);
 		  remTimeSeries(true);
 		  //remTimeSeries(true);
 		  //remTimeSeries(true);
- 
+
 		  ModelFit::Handle model(m_options->getModelFit());
 
 		  TimeSeries::Handle timeSeries(m_image->getTimeSeries(x, y, z));
                   addFeatSeries(timeSeries, CurveData::FiltFunc);
-		  
+
 		  if(m_options->showFull())
 		    addFeatSeries(model->fullModel(x, y, z, timeSeries->mean()), CurveData::Full);
-		  
+
 		  if(m_options->showPartial())
 		    if(model->copePe())
 		      addFeatSeries(model->CopeCurve(x, y, z, timeSeries->mean()), CurveData::Cope1);
@@ -474,21 +474,21 @@ void SingleSeriesWidget::update(const Cursor::Handle& c)
 // 		  addFeatSeries(model->perCentChange(x, y, z, timeSeries->mean()), CurveData::Cope3);
                 }
               else
-                {          
+                {
                   remTimeSeries(true);
                   if(addTimeSeries(m_image->getTimeSeries(x, y, z), true))
                     setLastCurveActive(false);
-                }     
+                }
             }
           redraw();
-        }   
+        }
     }
 }
 
-bool SingleSeriesWidget::addFeatSeries(const TimeSeries::Handle & ts, 
+bool SingleSeriesWidget::addFeatSeries(const TimeSeries::Handle & ts,
                                        int index)
-{  
-  TRACKER("SingleSeriesWidget::addFeatSeries");  
+{
+  TRACKER("SingleSeriesWidget::addFeatSeries");
   bool browse(true);
   CurveData::Handle curveData = CurveData::create(ts,browse,index);
   return m_curveDataList->push_back(curveData);
@@ -511,7 +511,7 @@ struct PlotOptions::Implementation
     m_feedback = true;
     m_addRemEnabled = true;
     m_modelEnabled = true;
-  };  
+  };
 
   bool m_title;
   bool m_xGrid;
@@ -530,7 +530,7 @@ struct PlotOptions::Implementation
   bool m_showFull;
   bool m_showPartial;
 };
-  
+
 bool PlotOptions::inqTitle() {return m_impl->m_title;}
 bool PlotOptions::inqXGrid() {return m_impl->m_xGrid;}
 bool PlotOptions::inqYGrid() {return m_impl->m_yGrid;}
@@ -544,7 +544,7 @@ int  PlotOptions::inqZOffset() {return m_impl->m_zOffset;}
 bool PlotOptions::inqFeedback() {return m_impl->m_feedback;}
 bool PlotOptions::inqFeatMode() {return m_impl->m_modelFit && m_impl->m_modelEnabled;}
 bool PlotOptions::inqAddRemEnabled(){return m_impl->m_addRemEnabled;}
-  
+
 ModelFit::Handle& PlotOptions::getModelFit(){return m_impl->m_modelFit;}
 
 void PlotOptions::showFull(bool y) {  m_impl->m_showFull=y; /*notify();*/ }
@@ -553,7 +553,7 @@ bool PlotOptions::showFull(void) const { return m_impl->m_showFull; }
 void PlotOptions::showPartial(bool y) {  m_impl->m_showPartial=y; /*notify();*/ }
 bool PlotOptions::showPartial(void) const { return m_impl->m_showPartial; }
 
-void PlotOptions::setTitle(bool state)    
+void PlotOptions::setTitle(bool state)
 {
   m_impl->m_title = state;
 }
@@ -563,7 +563,7 @@ void PlotOptions::setGrids(bool x, bool y)
   m_impl->m_xGrid = x;
   m_impl->m_yGrid = y;
 }
-void PlotOptions::setNums(bool x, bool y) 
+void PlotOptions::setNums(bool x, bool y)
 {
   m_impl->m_xNums = x;
   m_impl->m_yNums = y;
@@ -598,8 +598,8 @@ void PlotOptions::setModelFit(ModelFit::Handle& model)
 
 PlotOptions::PlotOptions():
   m_impl(new Implementation)
-{ 
- 
+{
+
 }
 
 PlotOptions::~PlotOptions(){}

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -68,7 +68,7 @@
 
 #include "inference.h"
 #include "newimage/newimageall.h"
- 
+
 using namespace NEWIMAGE;
 using namespace std;
 using namespace MISCMATHS;
@@ -80,7 +80,7 @@ void InferenceTechnique::Setup(ArgsType& args)
   // Pick models
   model = FwdModel::NewFromName(args.Read("model"), args);
   assert( model->NumParams() > 0 );
-  LOG_ERR("    Forward Model version:\n      " 
+  LOG_ERR("    Forward Model version:\n      "
 	  << model->ModelVersion() << endl);
 
   noise = NoiseModel::NewFromName(args.Read("noise"), args);
@@ -98,10 +98,10 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
   Tracer_Plus tr("InferenceTechnique::SaveResults");
     LOG << "    Preparing to save results..." << endl;
 
-  
+
     // Save the resultMVNs as two NIFTI files
     // Note: I should probably use a single NIFTI file with
-    // NIFTI_INTENT_NORMAL -- but I can't find the detailed 
+    // NIFTI_INTENT_NORMAL -- but I can't find the detailed
     // documentation!  (Ordering for a multivariate norm).
 
     const volume<float>& mask  = data.GetMask();
@@ -116,16 +116,16 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
 	MVNDist::Save(resultMVNsWithoutPrior, outputDir + "/finalMVNwithoutPrior", mask);
       }
 
-    /* Some validation code -- checked, Save then Load 
+    /* Some validation code -- checked, Save then Load
        produced identical results (to single precision)
-       cout << "Creating!\n";    
+       cout << "Creating!\n";
        vector<MVNDist*> test(resultMVNs.size(), NULL);
-       cout << "Loading!\n";    
+       cout << "Loading!\n";
        MVNDist::Load(test, outputDir + "/finalMVN", mask);
 
        assert(test[0] != NULL);
 
-       cout << "Verifying MVNDists are identical!!!";    
+       cout << "Verifying MVNDists are identical!!!";
        // won't be identical because they're written as floats.
        for (unsigned i = 1; i <= test.size(); i++)
        {
@@ -145,7 +145,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
     */
 
     // Write the parameter names into paramnames.txt
-    
+
     LOG << "    Writing paramnames.txt..." << endl;
     ofstream paramFile((outputDir + "/paramnames.txt").c_str());
     vector<string> paramNames;
@@ -156,7 +156,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
         paramFile << paramNames[i] << endl;
     }
     paramFile.close();
-    
+
     LOG << "    Same information using DumpParameters:" << endl;
     ColumnVector indices(model->NumParams());
     for (int i = 1; i <= indices.Nrows(); i++)
@@ -175,7 +175,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
         {
 	    paramMean(1,vox) = resultMVNs[vox-1]->means(i);
             paramZstat(1,vox) =
-              paramMean(1,vox) / 
+              paramMean(1,vox) /
               sqrt(resultMVNs[vox-1]->GetCovariance()(i,i));
         }
     	LOG << "    Writing means..." << endl;
@@ -191,7 +191,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
         output.set_intent(NIFTI_INTENT_ZSCORE,0,0,0);
 	output.setDisplayMaximumMinimum(output.max(),output.min());
 	save_volume4D(output,outputDir + "/zstat_" + paramNames.at(i-1));
-    }        
+    }
 
     // Save the Free Energy estimates
     if (!resultFs.empty())
@@ -203,7 +203,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
 	  {
 	    freeEnergy(1,vox) = resultFs.at(vox-1);
 	  }
-	
+
 	volume4D<float> output(mask.xsize(),mask.ysize(),mask.zsize(),1);
 	output.setmatrix(freeEnergy,mask);
 	output.set_intent(NIFTI_INTENT_NONE,0,0,0);
@@ -214,12 +214,12 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
       {
 	LOG_ERR("Free energy wasn't recorded, so no freeEnergy.nii.gz created.\n");
       }
-    
+
     if (saveModelFit || saveResiduals)
       {
         LOG << "    Writing model fit/residuals..." << endl;
         // Produce the model fit and residual volumeserieses
-	
+
         Matrix modelFit, residuals;
         modelFit.ReSize(model->NumOutputs(), nVoxels);
 	ColumnVector tmp;
@@ -230,7 +230,7 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
         }
 
 	volume4D<float> output(mask.xsize(),mask.ysize(),mask.zsize(),model->NumOutputs());
-	
+
         if (saveResiduals)
         {
 	  residuals = data.GetVoxelData() - modelFit;
@@ -253,8 +253,8 @@ void InferenceTechnique::SaveResults(const DataSet& data) const
 }
 
 
-InferenceTechnique::~InferenceTechnique() 
-{ 
+InferenceTechnique::~InferenceTechnique()
+{
   delete model;
   delete noise;
   while (!resultMVNs.empty())
@@ -294,7 +294,7 @@ InferenceTechnique* InferenceTechnique::NewFromName(const string& method)
     {
       throw Invalid_option("Must include the --method=vb or --method=spatialvb option");
     }
-  else 
+  else
     {
       throw Invalid_option("Unrecognized --method: " + method);
     }

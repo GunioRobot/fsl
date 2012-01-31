@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinSend.c --
  *
  *	This file provides procedures that implement the "send"

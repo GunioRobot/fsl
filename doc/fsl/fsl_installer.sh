@@ -65,16 +65,16 @@ fsl_installer.sh [-f <fsl tar ball> [-d <install folder>] [-x] [-e] [-p] [-h] [-
  Example usage:
  =============
  fsl_installer.sh
-    Fully automatic mode. Tests the downloaded FSL tar file located in the current 
-directory for compatability with the running operating system. Then it downloads a 
+    Fully automatic mode. Tests the downloaded FSL tar file located in the current
+directory for compatability with the running operating system. Then it downloads a
 checksum for the FSL distribution file (requires an internet connection) and checks
 the download prior to installation of the FSL suite.
-Finally, it sets up the operating system environment in a manner appropriate for 
+Finally, it sets up the operating system environment in a manner appropriate for
 running FSL on your platform.
 Will request your password if you need Administrator priviledges to install.
 
  fsl_installer.sh -f fsl-4.0-linux_64.tar.gz
-    Will install the FSL package fsl-4.0-linux_64.tar.gz in the current folder. 
+    Will install the FSL package fsl-4.0-linux_64.tar.gz in the current folder.
 Script will ask for install location, hit return to accept the default location
  of /usr/local. On a Mac OS X machine it will add code to configure the Mac OS X
  Terminal.app program to enable launching of X11 applications.
@@ -98,8 +98,8 @@ Script will ask for install location, hit return to accept the default location
 to the currently recommended settings.
 
 fsl_installer.sh -E
-    [Linux only] Will setup the computer to automatically configure FSL for all users 
-on the system. You should not do this if you are installing FSL on a network share as 
+    [Linux only] Will setup the computer to automatically configure FSL for all users
+on the system. You should not do this if you are installing FSL on a network share as
 it may prevent you from logging in as a local user if there are network issues.
 
  In all cases the script will attempt to modify your environment to setup the FSLDIR
@@ -135,7 +135,7 @@ fix_fsldir () {
     fi
     cp ${user_profile} ${user_profile}.bk
     cat ${user_profile} | sed -e "s#${search_string}.*#${search_string}${fsldir}#g" > ${user_profile}.bk
- 
+
    if [ $? -eq 0 ]; then
 	rm -f ${user_profile}
 	mv ${user_profile}.bk ${user_profile}
@@ -254,7 +254,7 @@ patch_for_terminal () {
 	fi
     else
 	echo "Setting up Apple terminal..."
-	
+
 	if [ -f ${apple_profile} ]; then
 	    if [ `grep DISPLAY ${apple_profile} | wc -l` -gt 0 ]; then
 		echo "DISPLAY is already being configured in your '${apple_profile}' - not changing"
@@ -276,7 +276,7 @@ if ( \$?TERM_PROGRAM ) then
       else
         echo "Warning: DISPLAY not configured as X11 is not running"
       endif
-    endif 
+    endif
   endif
 endif
 CSH_TERM
@@ -341,7 +341,7 @@ patch_systemprofile () {
 	    sudo rm -f "${sysprofile_dir}/.testfile"
 	    fsl_sh "${tmp}/fsl.sh.$$" "${install_location}/fsl" 1
 	    fsl_csh "${tmp}/fsl.csh.$$" "${install_location}/fsl" 1
-	    
+
 	    sudo mv "${tmp}/fsl.sh.$$" "${sysprofile_dir}/fsl.sh"
 	    if [ $? -ne 0 ]; then
 		failed "Can't setup for /bin/sh users"
@@ -385,7 +385,7 @@ patch_environment () {
 	csh )
 	    my_profile=".cshrc"
 	    source_cmd="source"
-	    ;;	    
+	    ;;
 	tcsh )
 	    my_profile=".tcshrc .cshrc"
 	    source_cmd="source"
@@ -397,7 +397,7 @@ patch_environment () {
 	    my_profile="-UNKNOWN-"
 	    ;;
     esac
-    
+
     for profile in ${my_profile}; do
 	if [ "Z${profile}" = "Z-UNKNOWN-" ]; then
 	    echo "I don't know how to setup this shell, you will need to
@@ -409,7 +409,7 @@ set FSLDIR and modify the PATH environment variable yourself."
 	if [ -f ${my_home}/${profile} ]; then
 	    if [ `is_csh ${my_home}/${profile}` ]; then
 		search_string="setenv FSLDIR ${install_location}/fsl\$"
-	    else 
+	    else
 		search_string="FSLDIR=${install_location}/fsl\$"
 	    fi
 	    fsldir_defs=`cat ${my_home}/${profile} | grep "FSLDIR" | wc -l`
@@ -548,7 +548,7 @@ verify_tarball () {
 	if [ -z "${test_tarball}" ]; then
 	    echo "${tarball} doesn't appear to be a GZIP or tar file."
 	    tarok=1
-	fi 
+	fi
 	if [ "X${no_mdfive}" = "X-NO-" ]; then
 	    get_digest ${fsl_server} ${fsl_dir} ${tarball} ${digest_dir}
 	    if [ $? = 0 ]; then
@@ -557,7 +557,7 @@ verify_tarball () {
 		if [ $status = 1 ]; then
 		    echo "${tarball} appears to be corrupt. Aborting install"
 		    tarok=1
-		elif [ $status = 2 ]; then 
+		elif [ $status = 2 ]; then
 		    tarok=3
 		else
 		    tarok=0
@@ -578,7 +578,7 @@ check_platform () {
     expect_bits=$1
     status=0
     hosttype=`os`
-    
+
     # Darwin (Mac OS X) is bit-depth agnostic
     if [ "X${hosttype}" != 'XDarwin' ]; then
 	if [ "X${expect_bits}" != "X32" -a "X${expect_bits}" != "X64" ]; then
@@ -602,7 +602,7 @@ check_platform () {
 	    fi
 	else
 	    # This is a 32 bit platform
-	    if [ "X${expect_bits}" = 'X64' ]; then 
+	    if [ "X${expect_bits}" = 'X64' ]; then
 		echo "You are attempting to install the 64 bit ditribution on a 32 bit host!"
 		status=1
 	    fi
@@ -628,7 +628,7 @@ check_glibc () {
     # release we support and the version number of this Centos release
     highest_glibc_v=25
     highest_centos=5
- 
+
     # This is a Linux installer so check the version of glibc
     my_LD='/lib'
     if [ "X$my_bitdepth}" = "X64" ]; then
@@ -731,7 +731,7 @@ install_tarball () {
     if [ $? = 0 ]; then
 	tar_opts="z${tar_opts}"
     fi
- 
+
     $my_sudo tar ${tar_opts} ${from}/${tarball}
     if [ $? -ne 0 ]; then
 	echo "Unable to install"
@@ -746,13 +746,13 @@ check_patch_version () {
     tarb=$1
     installed_dir=$2
     patchok=0
-    
+
     my_patches=`echo $tarb | sed -n 's/fsl-.*-patch-[0-9.]*_from_\([0-9x.]*\).tar\(.gz\)/\1/p'`
     my_to=`echo $tarb | sed -n 's/fsl-.*-patch-\([0-9.]*\)_from_[0-9x.]*.tar\(.gz\)/\1/p'`
     my_major=`echo $my_patches | sed -n 's/\([0-9]*\).[0-9]*.[0-9x]*/\1/p'`
     my_minor=`echo $my_patches | sed -n 's/[0-9]*.\([0-9]*\).[0-9x]*/\1/p'`
     my_patch=`echo $my_patches | sed -n 's/[0-9]*.[0-9]*.\([0-9x]*\)/\1/p'`
-    
+
     if [ ! -f ${installed_dir}/fsl/etc/fslversion ]; then
 	echo "The folder ${installed_dir}/fsl doesn't seem to contain a valid FSL install"
 	patchok=1
@@ -932,11 +932,11 @@ fsl_install () {
     echo "Checking install file...(this may take several minutes)"
     message=`verify_tarball ${tarball} "${install_from}" ${fsl_server} ${fsl_dir} "${temp_dir}" ${no_md5}`
     ok_or_exit $? "$message"
-    
+
     echo "Installing FSL from ${install_from}/${tarball} into ${install_location}..."
     message=`install_tarball ${tarball} "${install_from}" "${install_location}" ${need_sudo}`
     ok_or_exit $? "$message"
-    
+
     if [ "X`os`" = "XDarwin" -a "X${is_patch}" = 'X-NO-' ]; then
 	read -p "Would you like to install FSLView.app into /Applications (requires Administrator priviledges)? [yes] " >&2 choice
 
@@ -999,7 +999,7 @@ get_fsldir () {
     message=$3
     install_location='-NONE-'
     while [ "X${install_location}" = 'X-NONE-' ];  do
-	read -p "${message}" >&2 choice	
+	read -p "${message}" >&2 choice
 	if [ -z "${choice}" ]; then
 	    choice=${default_location}
 	fi
@@ -1093,14 +1093,14 @@ done
 
 echo "FSL install script
 ==================
-"  
+"
 # Split up the tarball location and set install_from to current directory
 # if no path is specified
 if [ "X${no_install}" = 'X-NO-' ]; then
     if [ -z "${fsl_tarball}" ]; then
 	echo "Looking for FSL tarball in the current directory..."
 	tarballs=`ls ${here} | grep '^fsl-.*.tar\(.gz\)*$' | wc -l`
-	
+
 	if [ ${tarballs} -gt 1 ]; then
 	    failed "Too many FSL tarballs found in the current directory!"
 	    exit 1
@@ -1109,10 +1109,10 @@ if [ "X${no_install}" = 'X-NO-' ]; then
 	    Usage
 	else
 	    fsl_tarball="${here}/`ls ${here} | grep '^fsl-.*.tar\(.gz\)*$'`"
-	    cat <<EOF 
+	    cat <<EOF
 ***************************************************************
-No FSL tarball specified, assuming you want me to install 
-${fsl_tarball} 
+No FSL tarball specified, assuming you want me to install
+${fsl_tarball}
 from the current directory.
 ***************************************************************
 
@@ -1126,14 +1126,14 @@ EOF
     else
 	fsl_tarball=`basename ${fsl_tarball}`
     fi
-    
+
   # Check if it is a patch file
     test_patchfile=`echo ${fsl_tarball} | grep patch`
     if [ -n "${test_patchfile}" ]; then
 	echo "${fsl_tarball} appears to be a FSL patch..."
 	is_patch="-YES-"
     fi
-    
+
   # Ask the user where to install (if necessary)
     if [ "X${install_location}" = "X-NONE-" ]; then
 	install_location=`get_fsldir ${default_location} 0 "Where would you like to install FSL to? [${default_location}] "`
@@ -1144,7 +1144,7 @@ EOF
 	failed "'${install_location}' doesn't appear to be a directory."
 	Usage
     fi
-    
+
   # Check it is writeable, and if not request Sudo
     writeable=`touch ${install_location}/.fsl-test 2>&1 | grep "Permission denied"`
     if [ -z "${writeable}" ]; then
@@ -1186,7 +1186,7 @@ EOF
 	    echo "Patching ${install_location}/fsl with contents of ${install_from}/${fsl_tarball}"
 	fi
     fi
-    
+
     # Install FSL
     fsl_install ${fsl_tarball} ${install_from} ${install_location} ${n_sudo} ${no_md5_check} ${fsl_server} ${fsl_dir} ${is_patch} ${tempdir}
 fi
@@ -1200,7 +1200,7 @@ if [ "X${is_patch}" = "X-NO-" ]; then
 	fi
 	patch_environment ${install_location} ${setup_terminal}
     fi
-    
+
     # Ask if we want it configured system wide (Linux only at present)
     if [ "X`os`" = "XLinux" ]; then
 	if [ "X${system_profile}" != "X-YES-" ]; then

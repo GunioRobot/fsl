@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -79,24 +79,24 @@
 using namespace NEWMAT;
 using namespace std;
 
-namespace MISCMATHS {  
-  
+namespace MISCMATHS {
+
   class SparseMatrix
     {
     public:
 
       typedef map<int,double> Row;
- 
+
       SparseMatrix() : nrows(0), ncols(0) {}
 
       SparseMatrix(int pnrows, int pncols);
 
-      SparseMatrix(const SparseMatrix& psm) 
+      SparseMatrix(const SparseMatrix& psm)
 	{
 	  operator=(psm);
 	}
 
-      const SparseMatrix& operator=(const SparseMatrix& psm) 
+      const SparseMatrix& operator=(const SparseMatrix& psm)
 	{
 	  nrows = psm.nrows;
 	  ncols = psm.ncols;
@@ -105,7 +105,7 @@ namespace MISCMATHS {
 	  return *this;
 	}
 
-      SparseMatrix(const Matrix& pmatin) 
+      SparseMatrix(const Matrix& pmatin)
 	{
 	  operator=(pmatin);
 	}
@@ -119,10 +119,10 @@ namespace MISCMATHS {
 	{
 	  ReSize(0,0);
 	}
-      
+
       void transpose(SparseMatrix& ret);
-      
-      ReturnMatrix RowAsColumn(int r) const;      
+
+      ReturnMatrix RowAsColumn(int r) const;
 
       int maxnonzerosinrow() const;
 
@@ -137,35 +137,35 @@ namespace MISCMATHS {
 
 	  return ret;
 	}
-      
-      void set(int x, int y, double val) 
+
+      void set(int x, int y, double val)
 	{
 	  data[x-1][y-1] = val;
 	}
 
-      void update(int x, int y, double val) 
+      void update(int x, int y, double val)
 	{
 	  data[x-1][y-1] = val;
 	}
 
-      void insert(int x, int y, double val) 
+      void insert(int x, int y, double val)
 	{
 	  data[x-1].insert(Row::value_type(y-1,val));
 	}
 
-      void addto(int x, int y, double val) 
+      void addto(int x, int y, double val)
 	{
 	  if(val!=0)
 	    data[x-1][y-1] += val;
 	}
 
-      void multiplyby(int x, int y, double val) 
+      void multiplyby(int x, int y, double val)
 	{
 	  if((*this)(x,y)!=0)
 	    data[x-1][y-1] *= val;
 	}
-            
-      float trace() const;      
+
+      float trace() const;
 
       Row& row(int r) { return data[r-1]; }
 
@@ -184,13 +184,13 @@ namespace MISCMATHS {
       void horconcat2myleft(const SparseMatrix& A);  // me -> [A me]
 
     private:
-      
+
       int nrows;
       int ncols;
 
       vector<map<int,double> > data;
 
-    };   
+    };
 
   void multiply(const SparseMatrix& lm, const SparseMatrix& rm, SparseMatrix& ret);
   void multiply(const DiagonalMatrix& lm, const SparseMatrix& rm, SparseMatrix& ret);

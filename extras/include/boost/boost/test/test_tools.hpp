@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -28,7 +28,7 @@
 // Boost
 #include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/size.hpp>
-#include <boost/preprocessor/seq/enum.hpp> 
+#include <boost/preprocessor/seq/enum.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
@@ -243,14 +243,14 @@ namespace tt_detail {
 // ************************************************************************** //
 
 enum check_type {
-    CHECK_PRED, 
+    CHECK_PRED,
     CHECK_MSG,
     CHECK_EQUAL,
     CHECK_CLOSE,
     CHECK_SMALL,
     CHECK_BITWISE_EQUAL,
     MSG_ONLY,
-    SET_CHECKPOINT, 
+    SET_CHECKPOINT,
     CHECK_PRED_WITH_ARGS,
     CHECK_EQUAL_COLL
 };
@@ -277,7 +277,7 @@ struct print_log_value {
     void set_precision( std::ostream& ostr, mpl::false_ )
     {
         if( std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix == 2 )
-            ostr.precision( 2 + std::numeric_limits<T>::digits * 301/1000 ); 
+            ostr.precision( 2 + std::numeric_limits<T>::digits * 301/1000 );
     }
 
     void set_precision( std::ostream&, mpl::true_ ) {}
@@ -300,7 +300,7 @@ struct print_log_value<the_type > {                                 \
 template<typename T, std::size_t N >
 struct print_log_value< T[N] > {
     void    operator()( std::ostream& ostr, T const* t )
-    {   
+    {
         ostr << t;
     }
 };
@@ -366,7 +366,7 @@ inline print_helper_t<T> print_helper( T const& t )
 //____________________________________________________________________________//
 
 template<typename T>
-inline std::ostream& 
+inline std::ostream&
 operator<<( std::ostream& ostr, print_helper_t<T> const& ph )
 {
     print_log_value<T>()( ostr, ph.m_t );
@@ -393,7 +393,7 @@ void check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
     , char const* BOOST_JOIN( BOOST_JOIN( arg, m ), _descr )                        \
 /**/
 
-#define PRED_PARAMS( z, m, dummy ) BOOST_PP_COMMA_IF( m ) BOOST_JOIN( arg, m ) 
+#define PRED_PARAMS( z, m, dummy ) BOOST_PP_COMMA_IF( m ) BOOST_JOIN( arg, m )
 
 #define ARG_INFO( z, m, dummy )                                                     \
     , BOOST_JOIN( BOOST_JOIN( arg, m ), _descr )                                    \

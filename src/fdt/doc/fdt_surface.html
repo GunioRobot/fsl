@@ -22,7 +22,7 @@ We will assume that you have already ran <code>recon_all</code> on a subject (th
 Finally, you will need to create a directory in $SUBJECTS_DIR/john/mri called nifti, and convert the conformed FreeSurfer-type structural image into a nifti file:<br><br>
 <code>
 mkdir $SUBJECTS_DIR/john/mri/nifti <br>
-mri_convert $SUBJECTS_DIR/john/mri/brain.mgz $SUBJECTS_DIR/john/mri/nifti/brain.nii.gz 
+mri_convert $SUBJECTS_DIR/john/mri/brain.mgz $SUBJECTS_DIR/john/mri/nifti/brain.nii.gz
 </code>
 <br><br>
 You also need to convert the grey/white boundary surface file into ascii format (assuming you want to use the recommended option of tracking from this surface). For example, if you are tracking from the left hemisphere:<br><br>
@@ -63,7 +63,7 @@ convert_xfm -omat freesurfer2fa.mat -inverse fa2freesurfer.mat
 And if you have used FNIRT for fa<-->struct:<br><br>
 <code>
 convertwarp -o fa2freesurfer_warp -r $SUBJECTS_DIR/john/mri/nifti/brain -w fa2struct_warp --postmat=struct2freesurfer.mat <br>
-convertwarp -o freesurfer2fa_warp -r dti_FA -m freesurfer2struct.mat -w struct2fa_warp 
+convertwarp -o freesurfer2fa_warp -r dti_FA -m freesurfer2struct.mat -w struct2fa_warp
 </code>
 
 <h4>2. Creating a label file from FreeSurfer</h4>
@@ -110,7 +110,7 @@ Note: in this last case, we need both forward and backward transforms fa<-->free
 When using classification targets in probtrackx, together with a surface-based seed, you may use the probtrackx option <code>--s2tastext</code>, in which case an output is created in the form of a matrix called matrix_seeds_to_all_targets. You can use this file to run find_the_biggest and produce label files for each of the hard-classified clusters. You can also use it to produce overlay files containing connectivity scores to each target.<br><br>
 Running find_the_biggest using matrix_seeds_to_all_targets:<br><br>
 <code>
-find_the_biggest matrix_seeds_to_all_targets myroilabel.label myclusters  
+find_the_biggest matrix_seeds_to_all_targets myroilabel.label myclusters
 </code>
 <br><br>
 The output of this command will be a set of files called myclusters&lt;i&gt;.label, i.e. one label file per cluster. You can combine these to produce a single annotation file:
@@ -121,7 +121,7 @@ mris_label2annot --s john --h lh --ctab $FSLDIR/etc/luts/fsrandlut.txt --a myann
 <br><br>
 Once this is done, you can load the result myannot.annot onto <code>tksurfer</code>. Simply type:<br><br>
 <code>
-tksurfer john lh pial 
+tksurfer john lh pial
 </code>
 <br><br>
 And then load the annotation file using File->Load label->Import annotation.<br><br>

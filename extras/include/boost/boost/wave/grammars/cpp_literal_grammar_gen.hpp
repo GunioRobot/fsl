@@ -17,11 +17,11 @@ namespace wave {
 namespace grammars {
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  cpp_intlit_grammar_gen template class
 //
-//      This template helps separating the compilation of the intlit_grammar 
-//      class from the compilation of the expression_grammar. This is done 
+//      This template helps separating the compilation of the intlit_grammar
+//      class from the compilation of the expression_grammar. This is done
 //      to safe compilation time.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,11 +32,11 @@ struct intlit_grammar_gen {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  cpp_chlit_grammar_gen template class
 //
-//      This template helps separating the compilation of the chlit_grammar 
-//      class from the compilation of the expression_grammar. This is done 
+//      This template helps separating the compilation of the chlit_grammar
+//      class from the compilation of the expression_grammar. This is done
 //      to safe compilation time.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ struct chlit_grammar_gen {
 
 ///////////////////////////////////////////////////////////////////////////////
 }   //  namespace grammars
-}   //  namespace wave 
+}   //  namespace wave
 }   //  namespace boost
 
 #endif // !defined(CPP_LITERAL_GRAMMAR_GEN_HPP_67794A6C_468A_4AAB_A757_DEDDB182F5A0_INCLUDED)

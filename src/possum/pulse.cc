@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -92,8 +92,8 @@ const double gammabar=42.58*1e06;//(in Hz/T)
 string title="pulse (Version 2.0)\nCopyright(c) 2003, University of Oxford (Ivana Drobnjak and Mark Jenkinson)";
 string examples="pulse -i <input digital brain> -o <output base name> [optional arguments]";
 
-Option<bool>   verbose(string("-v,--verbose"), false, 
-		  string("switch on diagnostic messages"), 
+Option<bool>   verbose(string("-v,--verbose"), false,
+		  string("switch on diagnostic messages"),
 		  false, no_argument);
 Option<bool>   help(string("-h,--help"), false,
 		  string("display this message"),
@@ -102,7 +102,7 @@ Option<string> opt_object(string("-i,--inp"), string(""),
 		  string("4D digital brain, resolution can be any."),
 		  true, requires_argument);
 
-//INPUT pulse sequence properties 
+//INPUT pulse sequence properties
 Option<string> opt_seq(string("--seq"), string("epi"),
 		  string("default=epi (epi OR ge)"),
 		  false, requires_argument);
@@ -215,7 +215,7 @@ Matrix episequence(const int n,const RowVector zc,const int ns,const double ddz,
  if (abs(readdir_int)==1) aa=8;
  if (abs(readdir_int)==2) aa=7;
  if (abs(readdir_int)==3) aa=6;
- 
+
  int bhelp=0;
  int simdir=1;
  int phdir=1;
@@ -299,7 +299,7 @@ Matrix episequence(const int n,const RowVector zc,const int ns,const double ddz,
  cout<<"end of the crushers TG="<<TG<<endl;
  cout<<"end of the acquisition of one slice TRslc="<<TRslc<<endl;
  if (TD<0 || TB<0 || TA<0 || TC<0 || TF>TRslc || TG>TRslc){
-   cout<<"WARNING:TE is not long enough to accomodate for the resX, resY, and the BW"<<endl; 
+   cout<<"WARNING:TE is not long enough to accomodate for the resX, resY, and the BW"<<endl;
    exit(EXIT_FAILURE);
  }
  cout.precision(20);
@@ -340,11 +340,11 @@ Matrix episequence(const int n,const RowVector zc,const int ns,const double ddz,
      for (int c=1;c<=bottom+1+top;c++){
        if (c==1){
 	 t+=dt;step=step+1;M(step,1)=t;M(step,5)=1;M(step,aa)=redir*Gx;kx=kx+M(step,aa)*dt/2; readstep=readstep+1;
-	 //  cout<<"The first point in the k-space for the VolNum "<<a<<" and the SlcNum "<<b<<" is (kx,ky)="<<"("<<kx*gammabar<<","<<ky*gammabar<<")"<<endl; 
+	 //  cout<<"The first point in the k-space for the VolNum "<<a<<" and the SlcNum "<<b<<" is (kx,ky)="<<"("<<kx*gammabar<<","<<ky*gammabar<<")"<<endl;
          coord(1,readstep)=kx*gammabar;
          coord(2,readstep)=ky*gammabar;
-       }      
-       else { 
+       }
+       else {
          t+=dty/2;step=step+1;M(step,1)=t;M(step,aa)=MISCMATHS::pow(-1.0f,(double) c+1)*dty*tana/2;ky=ky+dty*M(step-1,bb)/4;kx=kx+M(step,aa)*dty/4;
          t+=dt-dty/2;step=step+1;M(step,1)=t;M(step,5)=1;M(step,aa)=MISCMATHS::pow(-1.0f,(double) c+1)*redir*Gx; kx=kx+(M(step,aa)+M(step-1,aa))*(dt-dty/2)/2;readstep=readstep+1;
          coord(1,readstep)=kx*gammabar;
@@ -380,7 +380,7 @@ Matrix episequence(const int n,const RowVector zc,const int ns,const double ddz,
  }
 
  if (opt_kcoord.set()) write_binary_matrix(coord,"kcoord_"+opt_pulse.value());
- 
+
  M=M.Rows(1,step);
  return M;
 }
@@ -408,7 +408,7 @@ Matrix gradecho(const int n,const RowVector zc,const int ns,const double ddz,con
  if (abs(readdir_int)==1) aa=8;
  if (abs(readdir_int)==2) aa=7;
  if (abs(readdir_int)==3) aa=6;
- 
+
  int bhelp=0;
  int simdir=1;
  int phdir=1;
@@ -501,7 +501,7 @@ Matrix gradecho(const int n,const RowVector zc,const int ns,const double ddz,con
  ///////////////////////////
  int nreadp=n*ns*resX*resY;
  int readstep=0;
- Matrix M=zeros(n*ns*resX*resY*2,8);//main matrix: 
+ Matrix M=zeros(n*ns*resX*resY*2,8);//main matrix:
  Matrix coord(2,nreadp); //matrix for the kspace coordinates, 1st raw for kx and 2nd for ky
  for (int a=1;a<=n;a++){
    for (int b=1;b<=ns;b++){
@@ -529,7 +529,7 @@ Matrix gradecho(const int n,const RowVector zc,const int ns,const double ddz,con
        t=t+dtx1/2;step=step+1;M(step,1)=t; kx=kx+M(step-1,aa)*dtx1/4;//TD
        ////////////////readout
        t=t+dt;step=step+1;M(step,1)=t;M(step,5)=1;M(step,aa)=redir*Gx;kx=kx+redir*Gx*dt/2; readstep=readstep+1;
-       //cout<<"The first point in the k-space for the VolNum "<<a<<" and the SlcNum "<<b<<" is (kx,ky)="<<"("<<kx*gammabar<<","<<ky*gammabar<<")"<<endl; 
+       //cout<<"The first point in the k-space for the VolNum "<<a<<" and the SlcNum "<<b<<" is (kx,ky)="<<"("<<kx*gammabar<<","<<ky*gammabar<<")"<<endl;
        coord(1,readstep)=kx*gammabar;
        coord(2,readstep)=ky*gammabar;
        for (int d=1;d<=resX-1;d++){
@@ -559,20 +559,20 @@ Matrix gradecho(const int n,const RowVector zc,const int ns,const double ddz,con
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int compute_volume(){
-  cout<<"Generating the pulse sequence..."<<endl; 
+  cout<<"Generating the pulse sequence..."<<endl;
   //////////////////////////////////////////////////////////////////////////
   // READ IN THE OBJECT (BRAIN)                                           //
   //////////////////////////////////////////////////////////////////////////
   volume4D<double> phantom;//consists of gry,wht,csf,fat,mus,con,gli,skn (in that order)
   read_volume4D(phantom,opt_object.value());
-  int Nx=phantom.xsize();double xdim=phantom.xdim()*1e-03; 
+  int Nx=phantom.xsize();double xdim=phantom.xdim()*1e-03;
   int Ny=phantom.ysize();double ydim=phantom.ydim()*1e-03;
   int Nz=phantom.zsize();double zdim=phantom.zdim()*1e-03;
   int Nzz=Nz;double zzdim=zdim;
   print_volume_info(phantom,"object");
   //////////////////////////////////////////////////////////////////
-  RowVector posx(Nx); 
-  RowVector posy(Ny); 
+  RowVector posx(Nx);
+  RowVector posy(Ny);
   RowVector posz(Nz);
   /////////////////////////////////////////////////////////////////////////////
   // SET UP COORDINATE SYSTEM WITH THE CENTER IN THE CENTER OF THE OBJECT    //
@@ -595,7 +595,7 @@ int compute_volume(){
   write_ascii_matrix(posx,opt_pulse.value()+".posx");
   write_ascii_matrix(posy,opt_pulse.value()+".posy");
   write_ascii_matrix(posz,opt_pulse.value()+".posz");
-  
+
   ////////////////////////////////////////////////////////////////////////
   // PULSE SEQUENCE                                                     //
   ////////////////////////////////////////////////////////////////////////
@@ -664,7 +664,7 @@ int compute_volume(){
   RowVector zc(ns);//the vector of centers of slices
   double ss=poszz(zstart+1)-zzdim/2+slcthk/2;
   cout<<"poszz"<<poszz<<endl;
-  if (ss>poszz(Nzz)){ 
+  if (ss>poszz(Nzz)){
       cout<<"WARNING: the center of your slice excides the size of the object, i.e. ss>poszz(Nzz)"<<endl;
       cout.precision(10);
       cout<<"ss= "<<ss<<"; poszz(Nzz)= "<<poszz(Nzz)<<endl;
@@ -710,7 +710,7 @@ int compute_volume(){
     seqnum=2;
     pulse=gradecho(n,zc,ns,slcthk,slcdir_int,phasedir_int,readdir_int,resX,resY);
     write_binary_matrix(pulse,opt_pulse.value());
-  } 
+  }
   RowVector pulseinfo(22);
   pulseinfo(1)=seqnum;// 1 for epi, 2 for ge
   pulseinfo(2)=opt_TE.value();
@@ -737,11 +737,11 @@ int compute_volume(){
   write_ascii_matrix(pulseinfo,opt_pulse.value()+".info");
   string filename=opt_pulse.value()+".readme";
   ofstream pulsetext(filename.c_str());
-    if (!pulsetext) { 
+    if (!pulsetext) {
       cerr << "Could not open file " << filename << " for writing" << endl;
       return -1;
     }
-  pulsetext.setf(ios::scientific | ios::showpos); 
+  pulsetext.setf(ios::scientific | ios::showpos);
   pulsetext << "1. SeqType = " << opt_seq.value() << endl;
   pulsetext << "2. TE = " << opt_TE.value() <<"(s)"<< endl;
   pulsetext << "3. TR = " << opt_TR.value() <<"(s)"<< endl;
@@ -801,7 +801,7 @@ int main (int argc, char *argv[]){
     options.add(help);
     options.add(opt_kcoord);
     options.add(opt_cover);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
     // line below stops the program if there are less than 2 non-optional args
@@ -811,14 +811,14 @@ int main (int argc, char *argv[]){
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
 

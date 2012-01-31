@@ -1,23 +1,23 @@
 //     fslcreatehd.cc - Copy certain parts of an AVW header
 //     Mark Jenkinson, Steve Smith and Matthew Webster, FMRIB Image Analysis Group
-//     Copyright (C) 2001-2005 University of Oxford  
+//     Copyright (C) 2001-2005 University of Oxford
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -29,13 +29,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -46,7 +46,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -69,7 +69,7 @@
 
 using namespace NEWIMAGE;
 
-void print_usage(const string& progname) 
+void print_usage(const string& progname)
 {
   cout << endl;
   cout << "Usage: fslcreatehd <xsize> <ysize> <zsize> <tsize> <xvoxsize> <yvoxsize> <zvoxsize> <tr> <xorigin> <yorigin> <zorigin> <datatype> <headername>" << endl;
@@ -89,7 +89,7 @@ int fslcreatehd_main(int argc, char *argv[])
   int fileread=1, filetype=-1, existingimage=0;
   size_t bufsize=0;
   short x,y,z,v, dt=-1;
-  
+
   if (argc==3) {
       /* use the XML form of header specification */
       filename = argv[2];
@@ -98,7 +98,7 @@ int fslcreatehd_main(int argc, char *argv[])
   }
 
   /* check if file already exists and if so, read the image contents */
-  /* also store the size of this buffer for later in case it is wrong */ 
+  /* also store the size of this buffer for later in case it is wrong */
   if (FslFileExists(filename)) {
     /* buffer = FslReadAllVolumes(fslio,filename); */
     existingimage = 1;
@@ -110,7 +110,7 @@ int fslcreatehd_main(int argc, char *argv[])
     FslReadVolumes(fslio,buffer,v);
     FslClose(fslio);
   }
-  
+
   if (existingimage) {
     fslio = FslXOpen(filename,"wb",filetype);
   } else {
@@ -130,9 +130,9 @@ int fslcreatehd_main(int argc, char *argv[])
     } else {
       FslSetDataType(fslio,atoi(argv[12]));
     }
-    FslSetDim(fslio,atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4])); 
-    FslSetVoxDim(fslio,atof(argv[5]),atof(argv[6]),atof(argv[7]),atof(argv[8])); 
-    
+    FslSetDim(fslio,atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]));
+    FslSetVoxDim(fslio,atof(argv[5]),atof(argv[6]),atof(argv[7]),atof(argv[8]));
+
     {
       short short_array[100];
       short_array[0]=atoi(argv[9]);
@@ -144,36 +144,36 @@ int fslcreatehd_main(int argc, char *argv[])
 			 atof(argv[5]),atof(argv[6]),atof(argv[7]));
  	}
     }
-    
+
   } else {
       /* read XML form */
       char *newstr, *oldfname, *oldiname;
       ifstream inputfile;
-      
-  
+
+
       if (strcmp(argv[1],"-")==0) {fileread=0;}
       newstr = (char *)calloc(10000,1);
       oldfname = (char *)calloc(10000,1);
       oldiname = (char *)calloc(10000,1);
       //hdrxml = (char *)calloc(65534,1);  /* too long, to be safe */
       hdrxml = new char[65534];
-      if (fileread) 
+      if (fileread)
       {
 	inputfile.open (argv[1], ifstream::in | ifstream::binary);
         if (!inputfile.is_open())
-        {      
+        {
 	      cerr << "Cannot open file " << argv[1] << endl;
 	      return EXIT_FAILURE;
 	}
       }
-       
-      do 
+
+      do
       {
-	  if (fileread) 
+	  if (fileread)
           {
 	    inputfile.getline(newstr,9999);  // maybe use > for delimiting character remove while increase size
-	  } 
-          else 
+	  }
+          else
           {
 	      if (fgets(newstr,9999,stdin)==NULL) break;
 	  }
@@ -185,7 +185,7 @@ int fslcreatehd_main(int argc, char *argv[])
       int bytes_read=1; //dummy for function call
       fslio->niftiptr = nifti_image_from_ascii(hdrxml, &bytes_read);
 
-      if (fslio->niftiptr == NULL) 
+      if (fslio->niftiptr == NULL)
       {
 	  cerr << "Incomplete or incorrect text: could not form header info" << endl;
 	  return EXIT_FAILURE;
@@ -200,22 +200,22 @@ int fslcreatehd_main(int argc, char *argv[])
   }
 
   /* reset filetype and datatype in case it has been overwritten */
-  
+
   FslSetFileType(fslio,filetype);
   if (existingimage) {
-    /* dt is only set if an image was previously read */ 
+    /* dt is only set if an image was previously read */
     FslSetDataType(fslio,dt);
   }
 
   fslio->niftiptr->byteorder = nifti_short_order();
-//   if (strcmp(argv[argc-1],"-r")==0) { 
+//   if (strcmp(argv[argc-1],"-r")==0) {
 //       /* swap */
 //       if (nifit_short_order()==MSB_FIRST) fslio->niftiptr->byteorder = LSB_FIRST;
 //       else fslio->niftiptr->byteorder = MSB_FIRST;
 //   }
-  
+
   /* write header */
-  
+
   FslWriteHeader(fslio);
 
   /* if previously read buffer is wrong size then make a zero image here */
@@ -227,7 +227,7 @@ int fslcreatehd_main(int argc, char *argv[])
 
   /* write the data out - either from previous read or zeros */
   FslWriteVolumes(fslio,buffer,fslio->niftiptr->dim[4]);
-  
+
   FslClose(fslio);
   return 0;
 }
@@ -235,12 +235,12 @@ int fslcreatehd_main(int argc, char *argv[])
 
 int main(int argc,char *argv[])
 {
-  if (argc != 14 && argc != 3) 
+  if (argc != 14 && argc != 3)
   {
     print_usage(string(argv[0]));
-    return 1; 
+    return 1;
   }
-  return fslcreatehd_main(argc,argv); 
+  return fslcreatehd_main(argc,argv);
 }
 
 

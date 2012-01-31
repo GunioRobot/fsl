@@ -20,7 +20,7 @@ namespace MISCMATHS {
       Tracer ts("Histogram::generate");
 
       int size = sourceData.Nrows();
-      
+
       if(calcRange)
 	{
 	  // calculate range automatically
@@ -33,11 +33,11 @@ namespace MISCMATHS {
 		histMin=sourceData(i);
 	    }
 	}
-      
+
       // zero histogram
       histogram.ReSize(bins);
       histogram=0;
-      
+
       // create histogram; the MIN is so that the maximum value falls in the
       // last valid bin, not the (last+1) bin
       for(int i=1; i<=size; i++)
@@ -54,19 +54,19 @@ namespace MISCMATHS {
 
       // smooth in i direction
       newhist=0;
-      ColumnVector kernel(3); 
+      ColumnVector kernel(3);
       // corresponds to Gaussian with sigma=0.8 voxels
       //       kernel(1)=0.5;
-      //       kernel(2)=0.2283;      
+      //       kernel(2)=0.2283;
       //       kernel(3)=0.0219;
       // corresponds to Gaussian with sigma=0.6 voxels
       //       kernel(1)=0.6638;
-      //       kernel(2)=0.1655;      
+      //       kernel(2)=0.1655;
       //       kernel(3)=0.0026;
 
       //gauss(0.5,5,1)
       kernel(1)=0.7866;
-      kernel(2)=0.1065;      
+      kernel(2)=0.1065;
       kernel(3)=0.0003;
 
       for(int i=1; i<=bins; i++)
@@ -82,7 +82,7 @@ namespace MISCMATHS {
 	    if(i>2)
 	      {
 		val+=kernel(3)*(histogram(i-2));
-		norm+=kernel(3);		
+		norm+=kernel(3);
 	      }
 	    if(i<bins)
 	      {
@@ -92,7 +92,7 @@ namespace MISCMATHS {
 	    if(i<bins-1)
 	      {
 		val+=kernel(3)*(histogram(i+2));
-		norm+=kernel(3);		
+		norm+=kernel(3);
 	      }
 	    val/=norm;
 

@@ -10,7 +10,7 @@
  */
 
 /*! @file filetime_functions.hpp
- * Function(s) for converting between a FILETIME structure and a 
+ * Function(s) for converting between a FILETIME structure and a
  * time object. This file is only available on systems that have
  * BOOST_HAS_FTIME defined.
  */
@@ -28,8 +28,8 @@ namespace date_time {
 
   //! Create a time object from an initialized FILETIME struct.
   /*! Create a time object from an initialized FILETIME struct.
-   * A FILETIME struct holds 100-nanosecond units (0.0000001). When 
-   * built with microsecond resolution the FILETIME's sub second value 
+   * A FILETIME struct holds 100-nanosecond units (0.0000001). When
+   * built with microsecond resolution the FILETIME's sub second value
    * will be truncated. Nanosecond resolution has no truncation. */
   template<class time_type>
   inline
@@ -38,9 +38,9 @@ namespace date_time {
     typedef typename time_type::date_duration_type date_duration_type;
     typedef typename time_type::time_duration_type time_duration_type;
 
-    /* OFFSET is difference between 1970-Jan-01 & 1601-Jan-01 
+    /* OFFSET is difference between 1970-Jan-01 & 1601-Jan-01
      * in 100-nanosecond intervals */
-    uint64_t c1 = 27111902UL; 
+    uint64_t c1 = 27111902UL;
     uint64_t c2 = 3577643008UL; // issues warning without 'UL'
     const uint64_t OFFSET = (c1 << 32) + c2;
     const long sec_pr_day = 86400; // seconds per day

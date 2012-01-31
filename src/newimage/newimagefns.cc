@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,7 +81,7 @@ namespace NEWIMAGE {
 
   // BASIC IMAGE SUPPORT FUNCTIONS
   template <class T>
-  void pad(const volume<T>& vol, volume<T>& paddedvol, 
+  void pad(const volume<T>& vol, volume<T>& paddedvol,
 	     int offsetx, int offsety, int offsetz)
     {
       // Note: the voxel at (offsetx,offsety,offsetz) in PADDEDVOL
@@ -91,7 +91,7 @@ namespace NEWIMAGE {
       paddedvol.setROIlimits(roilim); // keep the old ROI (can be deactive)
 
       extrapolation oldex = vol.getextrapolationmethod();
-      if ((oldex==boundsassert) || (oldex==boundsexception)) 
+      if ((oldex==boundsassert) || (oldex==boundsexception))
 	{ vol.setextrapolationmethod(constpad); }
       for (int z=paddedvol.minz(); z<=paddedvol.maxz(); z++) {
 	for (int y=paddedvol.miny(); y<=paddedvol.maxy(); y++) {
@@ -142,7 +142,7 @@ template void pad(const volume<double>& vol, volume<double>& paddedvol, int offs
 
       // The sform/qform is unchanged if it is set in the output
       // The qform and sform are made equal if one is unset in the output
-      // If both are unset in the output, then the sform is set to a 
+      // If both are unset in the output, then the sform is set to a
       //   transformed input sform (or qform if sform is unset) and the
       //   output qform is made equal to the output sform
 
@@ -151,7 +151,7 @@ template void pad(const volume<double>& vol, volume<double>& paddedvol, int offs
       }
 
       extrapolation oldex = vin.getextrapolationmethod();
-      if ((oldex==boundsassert) || (oldex==boundsexception)) 
+      if ((oldex==boundsassert) || (oldex==boundsexception))
 	{ vin.setextrapolationmethod(constpad); }
 
       // iaffbig goes from output mm coords to input (reference) mm coords
@@ -171,11 +171,11 @@ template void pad(const volume<double>& vol, volume<double>& paddedvol, int offs
       float a11=iaff(1,1), a12=iaff(1,2), a13=iaff(1,3), a14=iaffbig(1,4),
 	a21=iaff(2,1), a22=iaff(2,2), a23=iaff(2,3), a24=iaffbig(2,4),
 	a31=iaff(3,1), a32=iaff(3,2), a33=iaff(3,3), a34=iaffbig(3,4), o1,o2,o3;
-  
+
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
-      for (int z=0; z<vout.zsize(); z++) { 
-	for (int x=0; x<vout.xsize(); x++) { 
+      for (int z=0; z<vout.zsize(); z++) {
+	for (int x=0; x<vout.xsize(); x++) {
 	  o1=x*a11 + z*a13 + a14;  // y=0
 	  o2=x*a21 + z*a23 + a24;  // y=0
 	  o3=x*a31 + z*a33 + a34;  // y=0
@@ -235,13 +235,13 @@ template void raw_affine_transform(const volume<double>& vin, volume<double>& vo
 	imthrow("Attempted to use affine transform with no voxels in vout",8);
       }
       Matrix iaffbig = vin.sampling_mat().i() * aff.i() *
-	                     vout.sampling_mat();  
+	                     vout.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
 
       float a11=iaff(1,1), a12=iaff(1,2), a13=iaff(1,3), a14=iaffbig(1,4),
 	a21=iaff(2,1), a22=iaff(2,2), a23=iaff(2,3), a24=iaffbig(2,4),
 	a31=iaff(3,1), a32=iaff(3,2), a33=iaff(3,3), a34=iaffbig(3,4), o1,o2,o3;
-  
+
       int xb=vin.xsize()-1, yb=vin.ysize()-1, zb=vin.zsize()-1;
       float xb0=-padding, yb0=-padding, zb0=-padding;
       float xb1=xb+padding, yb1=yb+padding, zb1=zb+padding;
@@ -249,13 +249,13 @@ template void raw_affine_transform(const volume<double>& vin, volume<double>& vo
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (int z=0; z<vout.zsize(); z++) { 
-	for (int x=0; x<vout.xsize(); x++) { 
+      for (int z=0; z<vout.zsize(); z++) {
+	for (int x=0; x<vout.xsize(); x++) {
 	  o1=x*a11 + z*a13 + a14;  // y=0
 	  o2=x*a21 + z*a23 + a24;  // y=0
 	  o3=x*a31 + z*a33 + a34;  // y=0
 	  for (int y=0; y<vout.ysize(); y++) {
-	    if ( (o1>=xb0) && (o2>=yb0) && (o3>=zb0) && 
+	    if ( (o1>=xb0) && (o2>=yb0) && (o3>=zb0) &&
 		 (o1<=xb1) && (o2<=yb1) && (o3<=zb1) ) {
 	      // do nothing
 	    } else {
@@ -270,19 +270,19 @@ template void raw_affine_transform(const volume<double>& vin, volume<double>& vo
     }
 
 
- template void 
+ template void
  affine_transform_mask(const volume<char>& vin, volume<char>& vout,
 		       const Matrix& aff, float padding, const char padval);
- template void 
+ template void
  affine_transform_mask(const volume<short int>& vin, volume<short int>& vout,
 		       const Matrix& aff, float padding, const short int padval);
- template void 
+ template void
  affine_transform_mask(const volume<int>& vin, volume<int>& vout,
 		       const Matrix& aff, float padding, const int padval);
- template void 
+ template void
  affine_transform_mask(const volume<float>& vin, volume<float>& vout,
 		       const Matrix& aff, float padding, const float padval);
- template void 
+ template void
  affine_transform_mask(const volume<double>& vin, volume<double>& vout,
 		       const Matrix& aff, float padding, const double padval);
 
@@ -299,7 +299,7 @@ template void raw_affine_transform(const volume<double>& vin, volume<double>& vo
       scale = fabs(scale);
     }
     extrapolation oldex = aniso.getextrapolationmethod();
-    if ((oldex==boundsassert) || (oldex==boundsexception)) 
+    if ((oldex==boundsassert) || (oldex==boundsexception))
       { aniso.setextrapolationmethod(constpad); }
     float stepx, stepy, stepz;
     stepx = scale / aniso.xdim();
@@ -355,15 +355,15 @@ template volume<double>isotropic_resample(const volume<double>& aniso, float sca
       sz=refvol.zsize();
       sy=refvol.ysize();
       sx=refvol.xsize();
- 
+
       extrapolation oldex = refvol.getextrapolationmethod();
-      if ((oldex==boundsassert) || (oldex==boundsexception)) 
+      if ((oldex==boundsassert) || (oldex==boundsexception))
 	{ refvol.setextrapolationmethod(constpad); }
 
       volume<T> halfvol((sx+1)/2,(sy+1)/2,(sz+1)/2);
       halfvol.copyproperties(refvol);
       halfvol = refvol.backgroundval();
-      halfvol.setdims(refvol.xdim() * 2.0, 
+      halfvol.setdims(refvol.xdim() * 2.0,
 		      refvol.ydim() * 2.0,
 		      refvol.zdim() * 2.0);
       // set sform and qform appropriately (if set)
@@ -393,31 +393,31 @@ template volume<double>isotropic_resample(const volume<double>& aniso, float sca
 	    // The following includes a hand-coded smoothing kernel
 	    if (centred) {
 	      halfvol(x,y,z) = (T) (0.125 * (refvol(bx,by,bz))
-		+ 0.0625 * (refvol(bx+1,by,bz) + 
+		+ 0.0625 * (refvol(bx+1,by,bz) +
 			    refvol(bx-1,by,bz) +
-			    refvol(bx,by+1,bz) + 
+			    refvol(bx,by+1,bz) +
 			    refvol(bx,by-1,bz) +
-			    refvol(bx,by,bz+1) + 
+			    refvol(bx,by,bz+1) +
 			    refvol(bx,by,bz-1))
-		+ 0.0312 * (refvol(bx+1,by+1,bz) + 
+		+ 0.0312 * (refvol(bx+1,by+1,bz) +
 			    refvol(bx+1,by-1,bz) +
-			    refvol(bx-1,by+1,bz) + 
+			    refvol(bx-1,by+1,bz) +
 			    refvol(bx-1,by-1,bz) +
-			    refvol(bx+1,by,bz+1) + 
+			    refvol(bx+1,by,bz+1) +
 			    refvol(bx+1,by,bz-1) +
-			    refvol(bx-1,by,bz+1) + 
+			    refvol(bx-1,by,bz+1) +
 			    refvol(bx-1,by,bz-1) +
-			    refvol(bx,by+1,bz+1) + 
+			    refvol(bx,by+1,bz+1) +
 			    refvol(bx,by+1,bz-1) +
-			    refvol(bx,by-1,bz+1) + 
+			    refvol(bx,by-1,bz+1) +
 			    refvol(bx,by-1,bz-1))
-		+ 0.0156 * (refvol(bx+1,by+1,bz+1) + 
+		+ 0.0156 * (refvol(bx+1,by+1,bz+1) +
 			    refvol(bx+1,by+1,bz-1) +
-			    refvol(bx+1,by-1,bz+1) + 
+			    refvol(bx+1,by-1,bz+1) +
 			    refvol(bx+1,by-1,bz-1) +
-			    refvol(bx-1,by+1,bz+1) + 
+			    refvol(bx-1,by+1,bz+1) +
 			    refvol(bx-1,by+1,bz-1) +
-			    refvol(bx-1,by-1,bz+1) + 
+			    refvol(bx-1,by-1,bz+1) +
 			    refvol(bx-1,by-1,bz-1)) );
 	    } else {
 	      if (refvol.in_bounds(bx+1,by+1,bz+1)) {
@@ -448,7 +448,7 @@ template volume<double>subsample_by_2(const volume<double>& refvol, bool centred
 
 
   template <class T>
-  void get_axis_orientations(const volume<T>& inp1, 
+  void get_axis_orientations(const volume<T>& inp1,
 			     int& icode, int& jcode, int& kcode)
   {
     MISCMATHS::get_axis_orientations(inp1.sform_mat(),inp1.sform_code(),
@@ -456,15 +456,15 @@ template volume<double>subsample_by_2(const volume<double>& refvol, bool centred
 				     icode, jcode, kcode);
   }
 
-  template void get_axis_orientations(const volume<char>& inp1, 
+  template void get_axis_orientations(const volume<char>& inp1,
 				      int& icode, int& jcode, int& kcode);
-  template void get_axis_orientations(const volume<short int>& inp1, 
+  template void get_axis_orientations(const volume<short int>& inp1,
 				      int& icode, int& jcode, int& kcode);
-  template void get_axis_orientations(const volume<int>& inp1, 
+  template void get_axis_orientations(const volume<int>& inp1,
 				      int& icode, int& jcode, int& kcode);
-  template void get_axis_orientations(const volume<float>& inp1, 
+  template void get_axis_orientations(const volume<float>& inp1,
 				      int& icode, int& jcode, int& kcode);
-  template void get_axis_orientations(const volume<double>& inp1, 
+  template void get_axis_orientations(const volume<double>& inp1,
 				      int& icode, int& jcode, int& kcode);
 
 
@@ -583,8 +583,8 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
       }
       return absmap;
     }
-  
-  volume<float> phase(const volume<float>& realvol, 
+
+  volume<float> phase(const volume<float>& realvol,
 		      const volume<float>& imagvol)
     {
       volume<float> phasemap;
@@ -600,7 +600,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
     }
 
 
-  volume<float> real(const volume<float>& absvol, 
+  volume<float> real(const volume<float>& absvol,
 		      const volume<float>& phasevol)
     {
       volume<float> realmap;
@@ -616,7 +616,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
     }
 
 
-  volume<float> imag(const volume<float>& absvol, 
+  volume<float> imag(const volume<float>& absvol,
 		      const volume<float>& phasevol)
     {
       volume<float> imagmap;
@@ -635,7 +635,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 
   // IMAGE PROCESSING ROUTINES
 
-  void make_grad_masks(volume<float>& maskx, volume<float>& masky, 
+  void make_grad_masks(volume<float>& maskx, volume<float>& masky,
 		       volume<float>& maskz)
     {
       maskx.reinitialize(3,3,3);
@@ -653,7 +653,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
       return;
     }
 
-  void make_blur_mask(ColumnVector& bmask, const float final_vox_dim, 
+  void make_blur_mask(ColumnVector& bmask, const float final_vox_dim,
 		     const float init_vox_dim)
     {
       // construct the default output
@@ -682,7 +682,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
     {
       ColumnVector kern(2*radius+1);
       float sum=0.0, val=0.0;
-      
+
       for(int j=-radius; j<=radius; j++) {
 	if (sigma>1e-6) {
 	  val = exp(-(j*j)/(2.0*sigma*sigma));
@@ -692,7 +692,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 	kern(j+radius+1) = val;
 	sum += val;
       }
-      
+
       kern *= (1.0/sum);
       return kern;
     }
@@ -700,9 +700,9 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 
   volume<float> gaussian_kernel2D(float sigma, int radius)
     {
-      volume<float> new_kernel((2*radius+1),(2*radius+1),1); 
+      volume<float> new_kernel((2*radius+1),(2*radius+1),1);
       float sum=0.0, val=0.0;
-      
+
       for(int i=-radius; i<=radius; i++) {
 	for(int j=-radius; j<=radius; j++) {
 	  if (sigma>1e-6) {
@@ -714,7 +714,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 	  sum += val;
 	}
       }
-      
+
       new_kernel *= (1.0/sum);
       return new_kernel;
     }
@@ -722,9 +722,9 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 
   volume<float> gaussian_kernel3D(float sigma, int radius)
     {
-      volume<float> new_kernel((2*radius+1),(2*radius+1),(2*radius+1)); 
+      volume<float> new_kernel((2*radius+1),(2*radius+1),(2*radius+1));
       float sum=0.0, sum2=0.0, val=0.0;
-      
+
       for(int i=-radius; i<=radius; i++) {
 	for(int j=-radius; j<=radius; j++) {
 	  for(int k=-radius; k<=radius; k++) {
@@ -739,7 +739,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
 	}
 	sum2 += sum; sum=0.0;
       }
-      
+
       new_kernel *= (1.0/sum2);
       return new_kernel;
     }
@@ -779,8 +779,8 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
   for (int z=-sz/2; z<=sz/2; z++) {
     for (int y=-sy/2; y<=sy/2; y++) {
       for (int x=-sx/2; x<=sx/2; x++) {
-	if ((x*x*dx2+y*y*dy2+z*z*dz2)<=Sqr(radius)) { 
-	  vker(x+sx/2,y+sy/2,z+sz/2)=1.0; 
+	if ((x*x*dx2+y*y*dy2+z*z*dz2)<=Sqr(radius)) {
+	  vker(x+sx/2,y+sy/2,z+sz/2)=1.0;
 	}
       }
     }
@@ -795,7 +795,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
       int z = ((int) floor(length/zdim/2))*2 + 1;
       volume<float> new_kernel(x,y,z);
       new_kernel=1.0;
-      return new_kernel;          
+      return new_kernel;
   }
 
 
@@ -805,7 +805,7 @@ volume4D<float> sqrt(const volume4D<char>& vol4)
   {
       volume<float> new_kernel(x,y,z);
       new_kernel=1.0;
-      return new_kernel;          
+      return new_kernel;
   }
 
 
@@ -844,15 +844,15 @@ float fsllog2(float x)
     }
 
 
-  inline void get_parent_label(int& idx, const Matrix& idxmap) 
+  inline void get_parent_label(int& idx, const Matrix& idxmap)
   {
     while (idxmap(idx,1)>0.0) { idx = MISCMATHS::round(float(idxmap(idx,1))); }
   }
 
 
-  void relabel_components_uniquely(volume<int>& labelvol, 
+  void relabel_components_uniquely(volume<int>& labelvol,
 				   const std::vector<int>& equivlista,
-				   const std::vector<int>& equivlistb, ColumnVector& clustersizes) 
+				   const std::vector<int>& equivlistb, ColumnVector& clustersizes)
   {
     int labelnum = labelvol.max();
     Matrix emap(labelnum,1);
@@ -879,13 +879,13 @@ float fsllog2(float x)
 	newlabel++;
       }
     }
-    
+
     int numclusts=newlabel-1;
     clustersizes.ReSize(numclusts);
     clustersizes=0;
-    
+
     // Change the old labels to new ones
-    
+
     for (int z=labelvol.minz(); z<=labelvol.maxz(); z++) {
       for (int y=labelvol.miny(); y<=labelvol.maxy(); y++) {
 	for (int x=labelvol.minx(); x<=labelvol.maxx(); x++) {
@@ -894,20 +894,20 @@ float fsllog2(float x)
 	    int tmp = MISCMATHS::round(-float(emap(labelvol(x,y,z),1)));
 	    labelvol(x,y,z)=tmp;
 	    clustersizes(tmp)+=1;
-	    
+
 	  }
 	}
       }
     }
   }
 
-  void relabel_components_uniquely(volume<int>& labelvol, 
+  void relabel_components_uniquely(volume<int>& labelvol,
 				   const std::vector<int>& equivlista,
 				   const std::vector<int>& equivlistb){
     ColumnVector clustersize;
-    relabel_components_uniquely(labelvol, equivlista, equivlistb,clustersize); 
-    
-    
+    relabel_components_uniquely(labelvol, equivlista, equivlistb,clustersize);
+
+
   }
 
 
@@ -922,10 +922,10 @@ bool rowentry_lessthan(const rowentry& r1, const rowentry& r2)
 
   ///////////////////////////////////////////////////////////////////////////
 
- 	 
+
 template <class T>
 Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-				     const volume<T>& invol, 
+				     const volume<T>& invol,
 				     const volume<T>& refvol)
 {
   Matrix v2vmat, in2mm, ref2mm;
@@ -943,19 +943,19 @@ Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
 
 
 template Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-					      const volume<char>& invol, 
+					      const volume<char>& invol,
 					      const volume<char>& refvol);
 template Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-					      const volume<short int>& invol, 
+					      const volume<short int>& invol,
 					      const volume<short int>& refvol);
 template Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-					      const volume<int>& invol, 
+					      const volume<int>& invol,
 					      const volume<int>& refvol);
 template Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-					      const volume<float>& invol, 
+					      const volume<float>& invol,
 					      const volume<float>& refvol);
 template Matrix NewimageVox2NewimageVoxMatrix(const Matrix& flirt_in2ref,
-					      const volume<double>& invol, 
+					      const volume<double>& invol,
 					      const volume<double>& refvol);
 
   ///////////////////////////////////////////////////////////////////////////

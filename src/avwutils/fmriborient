@@ -21,31 +21,31 @@ for fm in $@ ; do
 		ftmp=${fn}_niifix
 	    fi
 	    /bin/cp -p $fn ${ftmp}
-	    if [ `$FSLDIR/bin/imtest ${ftmp}` != 1 ] ; then 
+	    if [ `$FSLDIR/bin/imtest ${ftmp}` != 1 ] ; then
 		echo "FAIL 1"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
             statsA=`$FSLDIR/bin/fslstats ${fb} -R -V`
             statsB=`$FSLDIR/bin/fslstats ${ftmp} -R -V`
 	    min=`echo $statsA | awk '{ print $1 }'`
 	    mint=`echo $statsB | awk '{ print $1 }'`
-	    if [ $min != $mint ] ; then 
+	    if [ $min != $mint ] ; then
 		echo "FAIL 2: $min $mint"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
 	    max=`echo $statsA | awk '{ print $2 }'`
 	    maxt=`echo $statsB | awk '{ print $2 }'`
-	    if [ $max != $maxt ] ; then 
+	    if [ $max != $maxt ] ; then
 		echo "FAIL 3: $max $maxt"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
 	    mvv=`echo $statsA | awk '{ print $3 }'`
 	    mvvt=`echo $statsB | awk '{ print $3 }'`
-	    if [ $mvv != $mvvt ] ; then 
+	    if [ $mvv != $mvvt ] ; then
 		echo "FAIL 4: $mvv $mvvt"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
-	    
+
 	    # OK, now remove orientation information
 	    $FSLDIR/bin/fslorient -deleteorient $fb
 
@@ -70,10 +70,10 @@ for fm in $@ ; do
 	    fi
 
 	    # check if stats are still OK, if not then restore copy
-	    if [ `$FSLDIR/bin/imtest ${fb}` != 1 ] ; then 
+	    if [ `$FSLDIR/bin/imtest ${fb}` != 1 ] ; then
 		/bin/cp -p ${ftmp} ${fn}
 		echo "FAIL 5: ${fb}"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
 	    statsA=`$FSLDIR/bin/fslstats ${fb} -R -V`;
 	    statsB=`$FSLDIR/bin/fslstats ${ftmp} -R -V`;
@@ -82,26 +82,26 @@ for fm in $@ ; do
 	    if [ $min != $mint ] ; then
 		/bin/cp -p ${ftmp} ${fn}
 		echo "FAIL 6: $min $mint"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
 	    max=`echo $statsA | awk '{ print $2 }'`
 	    maxt=`echo $statsB | awk '{ print $2 }'`
-	    if [ $max != $maxt ] ; then 
+	    if [ $max != $maxt ] ; then
 		/bin/cp -p ${ftmp} ${fn}
 		echo "FAIL 7: $max $maxt"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
 	    mvv=`echo $statsA | awk '{ print $3 }'`
 	    mvvt=`echo $statsB | awk '{ print $3 }'`
-	    if [ $mvv != $mvvt ] ; then 
+	    if [ $mvv != $mvvt ] ; then
 		/bin/cp -p ${ftmp} ${fn}
 		echo "FAIL 8: $mvv $mvvt"
-		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ; 
+		echo ${fb} >> /tmp/NIIFIXFAILS ; exit 2 ;
 	    fi
-	    
+
 	    # if all checks are fine then remove the backup
 	    $FSLDIR/bin/imrm ${ftmp}
-	    
+
 	fi
     fi
 done

@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -50,8 +50,8 @@ void kmp_free(kmp_info<charT>* pinfo, const Allocator& a)
 }
 
 template <class iterator, class charT, class Trans, class Allocator>
-kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a) 
-{    
+kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a)
+{
    typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
    int i, j, m;
    i = 0;
@@ -79,15 +79,15 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    // finally do regular kmp compile:
    //
    j = pinfo->kmp_next[0] = -1;
-   while (i < m) 
+   while (i < m)
    {
-      while ((j > -1) && (pinfo->pstr[i] != pinfo->pstr[j])) 
+      while ((j > -1) && (pinfo->pstr[i] != pinfo->pstr[j]))
          j = pinfo->kmp_next[j];
       ++i;
       ++j;
-      if (pinfo->pstr[i] == pinfo->pstr[j]) 
+      if (pinfo->pstr[i] == pinfo->pstr[j])
          pinfo->kmp_next[i] = pinfo->kmp_next[j];
-      else 
+      else
          pinfo->kmp_next[i] = j;
    }
 

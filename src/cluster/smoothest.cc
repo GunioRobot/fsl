@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,8 +81,8 @@
 using namespace Utilities;
 using namespace NEWIMAGE;
 
-Option<bool> verbose(string("-V,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-V,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -131,11 +131,11 @@ public:
 
 	retval = (j->second - i->second)/(j->first - i->first)*(v - i->first)
 	  + j->second;
-      } 
+      }
     } else {
       retval = 1.0321/v + 1;
     }
-    
+
     retval = pow(retval, 0.5);
 
     return retval;
@@ -151,7 +151,7 @@ Interpolate interpolate;
 
 //////////////////////////////////////////////////////////////////////////////
 // Standardise the residual field (assuming gaussianity)
-unsigned long standardise(volume<float>& mask, 
+unsigned long standardise(volume<float>& mask,
 			  volume4D<float>& R)
 {
   unsigned long count = 0;
@@ -162,25 +162,25 @@ unsigned long standardise(volume<float>& mask,
       for (int x=mask.minx(); x<=mask.maxx(); x++) {
 
 	if( mask(x,y,z) > 0.5) {
-	  
+
 	  count ++;
-	  
+
 	  if( M > 2 ) {
-	    
-	    // For each voxel 
+
+	    // For each voxel
 	    //    calculate mean and standard deviation...
 	    double Sx = 0.0, SSx = 0.0;
-	    
+
 	    for ( int t = 0; t < M; t++ ) {
 	      float R_it = R(x,y,z,t);
-	      
+
 	      Sx += R_it;
 	      SSx += Sqr(R_it);
 	    }
-	    
+
 	    float mean = Sx / M;
 	    float sdsq = (SSx - (Sqr(Sx) / M)) / (M - 1) ;
-	    
+
 	    if (sdsq<=0) {
 	      // trap for differences between mask and invalid data
 	      mask(x,y,z)=0;
@@ -190,12 +190,12 @@ unsigned long standardise(volume<float>& mask,
 	      for ( unsigned short t = 0; t < M; t++ ) {
 		R(x,y,z,t) = (R(x,y,z,t) - mean) / sqrt(sdsq);
 	      }
-	    } 
+	    }
 	  }
 	}
       }
     }
-  }  
+  }
   return count;
 }
 
@@ -228,19 +228,19 @@ int main(int argc, char **argv) {
   }
 
   if( !((zstatname.set() && residname.unset()) || (residname.set() && zstatname.unset())) ||
-      (zstatname.set() && (residname.set() || dof.set())) || 
+      (zstatname.set() && (residname.set() || dof.set())) ||
       (residname.set() && dof.unset()) ||
       (maskname.unset()) ) {
     options.usage();
     cerr << endl;
     cerr << "***************************************************************************" << endl;
     cerr << "You must specify either a zstat image OR a 4d residual image." << endl;
-    cerr << "If processing a zstat image then you should not set degrees of freedom." << endl; 
-    cerr << "You must specify a mask volume image filename" << endl; 
-    cerr << "You must specify the degrees of freedom for processing a 4d residual image." << endl; 
+    cerr << "If processing a zstat image then you should not set degrees of freedom." << endl;
+    cerr << "You must specify a mask volume image filename" << endl;
+    cerr << "You must specify the degrees of freedom for processing a 4d residual image." << endl;
     cerr << "***************************************************************************" << endl;
     cerr << endl;
-    exit(EXIT_FAILURE);    
+    exit(EXIT_FAILURE);
   }
 
   if(verbose.value()) {
@@ -269,7 +269,7 @@ int main(int argc, char **argv) {
     datafilename = zstatname.value();
   }
   if(verbose.value()) cerr << "done" << endl;
-  
+
 
   volume4D<float> R;
   read_volume4D(R,datafilename);
@@ -284,7 +284,7 @@ int main(int argc, char **argv) {
   if(verbose.value()) cerr << "Standardising....";
   unsigned long mask_volume = standardise(mask, R);
   if(verbose.value()) cerr << "done" << endl;
-  
+
   if(verbose.value()) cerr << "Masked-in voxels = " << mask_volume << endl;
 
   unsigned long N = 0;
@@ -308,12 +308,12 @@ int main(int argc, char **argv) {
       for ( unsigned short x = 1; x < R.xsize() ; x++ )
 	// Sum over N
 	if( (mask(x, y, z)>0.5) &&
-	    (mask(x-1, y, z)>0.5) && 
-	    (mask(x, y-1, z)>0.5) && 
+	    (mask(x-1, y, z)>0.5) &&
+	    (mask(x, y-1, z)>0.5) &&
 	    ( (!usez) || (mask(x, y, z-1)>0.5) ) ) {
-	  
+
 	  N++;
-	  
+
 	  for ( unsigned short t = 0; t < R.tsize(); t++ ) {
 	    // Sum over M
 	    SSminus[X] += R(x, y, z, t) * R(x-1, y, z, t);
@@ -327,7 +327,7 @@ int main(int argc, char **argv) {
 	}
 
   float norm = 1.0/(float) N;
-  float v = dof.value();	// v - degrees of freedom (nu)  
+  float v = dof.value();	// v - degrees of freedom (nu)
   if(R.tsize() > 1) {
     if(verbose.value()) {
       cerr << "Non-edge voxels = " << N << endl;
@@ -335,35 +335,35 @@ int main(int argc, char **argv) {
     }
     norm = (v - 2) / ((v - 1) * N * R.tsize());
   }
- 
+
 //    SSminus[X] *= norm;
 //    SSminus[Y] *= norm;
 //    SSminus[Z] *= norm;
-  
+
 //    S2[X] *= norm;
 //    S2[Y] *= norm;
 //    S2[Z] *= norm;
 
   if(verbose.value()) {
-    cout << "SSminus[X] = " << SSminus[X] << ", SSminus[Y] = " << SSminus[Y] << ", SSminus[Z] = " << SSminus[Z] 
+    cout << "SSminus[X] = " << SSminus[X] << ", SSminus[Y] = " << SSminus[Y] << ", SSminus[Z] = " << SSminus[Z]
 	 << ", S2[X] = " << S2[X] << ", S2[Y] = " << S2[Y] << ", S2[Z] = " << S2[Z]
 	 << endl;
   }
 
-  // for extreme smoothness 
+  // for extreme smoothness
   if (SSminus[X]>=0.99999999*S2[X]) {
-    SSminus[X]=0.99999*S2[X];  
+    SSminus[X]=0.99999*S2[X];
     cerr << "WARNING: Extreme smoothness detected in X - possibly biased"
-	 << " global estimate." << endl; } 
+	 << " global estimate." << endl; }
   if (SSminus[Y]>=0.99999999*S2[Y]) {
     SSminus[Y]=0.99999*S2[Y];
     cerr << "WARNING: Extreme smoothness detected in Y - possibly biased"
-	 << " global estimate." << endl; } 
+	 << " global estimate." << endl; }
   if (usez) {
     if (SSminus[Z]>=0.99999999*S2[Z]) {
       SSminus[Z]=0.99999*S2[Z];
       cerr << "WARNING: Extreme smoothness detected in Z - possibly biased"
-	   << " global estimate." << endl; } 
+	   << " global estimate." << endl; }
   }
 
   // Convert to sigma squared
@@ -373,9 +373,9 @@ int main(int argc, char **argv) {
   sigmasq[Y] = -1.0 / (4 * log(fabs(SSminus[Y]/S2[Y])));
   if (usez) { sigmasq[Z] = -1.0 / (4 * log(fabs(SSminus[Z]/S2[Z]))); }
   else { sigmasq[Z]=0; }
-  // the following is determininant of Lambda to the half 
+  // the following is determininant of Lambda to the half
   //   i.e. dLh = | Lambda |^(1/2)
-  // Furthermore, W_i = 1/(2.lambda_i) = sigma_i^2 => 
+  // Furthermore, W_i = 1/(2.lambda_i) = sigma_i^2 =>
   //   det(Lambda) = det( lambda_i ) = det ( (2 W_i)^-1 ) = (2^D det(W))^-1
   //   where D = number of dimensions (2 or 3)
   float dLh;
@@ -397,13 +397,13 @@ int main(int argc, char **argv) {
   if (usez) resels *= FWHM[Z];
 
   if(verbose.value()) {
-    cout << "FWHMx = " << FWHM[X] << " voxels, " 
-	 << "FWHMy = " << FWHM[Y] << " voxels"; 
+    cout << "FWHMx = " << FWHM[X] << " voxels, "
+	 << "FWHMy = " << FWHM[Y] << " voxels";
     if (usez) cout << ", FWHMz = " << FWHM[Z] << " voxels";
     cout << endl;
   }
-  
-  FWHM[X] *= R.xdim(); FWHM[Y] *= R.ydim(); if (usez) FWHM[Z] *= R.zdim(); 
+
+  FWHM[X] *= R.xdim(); FWHM[Y] *= R.ydim(); if (usez) FWHM[Z] *= R.zdim();
 
   if(verbose.value()) {
     cout << "FWHMx = " << FWHM[X] << " mm, "
@@ -414,7 +414,7 @@ int main(int argc, char **argv) {
     cout << "VOLUME " << mask_volume << " voxels" << endl;
     cout << "RESELS " << resels << " voxels per resel" << endl;
   }
-  
+
   cout << "DLH " << dLh << endl;
   cout << "VOLUME " << mask_volume << endl;
   cout << "RESELS " << resels << endl;

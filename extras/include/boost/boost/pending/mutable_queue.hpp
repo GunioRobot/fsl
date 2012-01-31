@@ -23,20 +23,20 @@
 namespace boost {
 
   // The mutable queue whose elements are indexed
-  // 
+  //
   // This adaptor provides a special kind of priority queue that has
   // and update operation. This allows the ordering of the items to
   // change. After the ordering criteria for item x changes, one must
   // call the Q.update(x)
-  // 
+  //
   // In order to efficiently find x in the queue, a functor must be
   // provided to map value_type to a unique ID, which the
   // mutable_queue will then use to map to the location of the
   // item. The ID's generated must be between 0 and N, where N is the
   // value passed to the constructor of mutable_queue
 
-  template <class IndexedType, 
-            class RandomAccessContainer = std::vector<IndexedType>, 
+  template <class IndexedType,
+            class RandomAccessContainer = std::vector<IndexedType>,
             class Comp = std::less<typename RandomAccessContainer::value_type>,
             class ID = identity_property_map >
   class mutable_queue {
@@ -56,13 +56,13 @@ namespace boost {
     typedef Compare value_compare;
     typedef ID id_generator;
 
-    mutable_queue(size_type n, const Comp& x, const ID& _id) 
+    mutable_queue(size_type n, const Comp& x, const ID& _id)
       : index_array(n), comp(x), id(_id) {
-      c.reserve(n); 
+      c.reserve(n);
     }
     template <class ForwardIterator>
-    mutable_queue(ForwardIterator first, ForwardIterator last, 
-                  const Comp& x, const ID& _id) 
+    mutable_queue(ForwardIterator first, ForwardIterator last,
+                  const Comp& x, const ID& _id)
       : index_array(std::distance(first, last)), comp(x), id(_id)
     {
       while( first != last ) {
@@ -72,7 +72,7 @@ namespace boost {
     }
 
     bool empty() const { return c.empty(); }
-    
+
     void pop() {
       value_type tmp = c.back();
       c.back() = c.front();
@@ -86,7 +86,7 @@ namespace boost {
 
       c.pop_back();
       Node node(c.begin(), c.end(), c.begin(), id);
-      down_heap(node, comp, index_array);       
+      down_heap(node, comp, index_array);
     }
     void push(const IndexedType& x) {
       c.push_back(x);
@@ -120,7 +120,7 @@ namespace boost {
     bool test() {
       return std::is_heap(c.begin(), c.end(), Comp());
     }
-#endif 
+#endif
 
    protected:
     IndexArray index_array;

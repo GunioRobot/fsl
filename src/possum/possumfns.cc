@@ -6,20 +6,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -31,13 +31,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -48,7 +48,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -76,10 +76,10 @@
 #include "newmatap.h"//including NEWMAT library
 #include "newmatio.h"//
 #include "newimage/newimageall.h"//including NEW IMAGE library
-#include "possumfns.h"//including possum functions I made 
+#include "possumfns.h"//including possum functions I made
 #include "libprob.h"
 #include "miscmaths/miscprob.h"
-#include "newimage/costfns.h" 
+#include "newimage/costfns.h"
 
 #define _GNU_SOURCE 1
 #define POSIX_SOURCE 1
@@ -146,7 +146,7 @@ double glo_itwopi=1/glo_twopi;
 double glo_cx;
 double glo_cy;
 double glo_cz;
-    
+
 //SOME CONSTANTS
 const double gammabar=42.58*1e06;//(in Hz/T)
 const double gama=2*M_PI*gammabar;
@@ -226,11 +226,11 @@ RowVector mult_quaternions(const RowVector a,const RowVector b){//the order of t
 }
 ////////////////////////////////////////////////////////////////////////////////
 RowVector euler_to_quaternion(const double a,const double b,const double c){//ok
-  //constructed by having one basic quaternion for each rotation Rz(c), Ry(b) and Rx(a) and then multiplying them in order qz*qy*qx 
+  //constructed by having one basic quaternion for each rotation Rz(c), Ry(b) and Rx(a) and then multiplying them in order qz*qy*qx
   //RowVector qx(4),qy(4),qz(4),q(4);
   //qx<<cos(a/2)<<sin(a/2)<<0.0<<0.0; //the norm is one
   //qy<<cos(b/2)<<0.0<<sin(b/2)<<0.0; //the norm is one
-  //qz<<cos(c/2)<<0.0<<0.0<<sin(c/2); //the norm is one 
+  //qz<<cos(c/2)<<0.0<<0.0<<sin(c/2); //the norm is one
   //RowVector tmp(4);
   //tmp=mult_quaternions(qy,qx);
   //q=mult_quaternions(qz,tmp);// the norm of qz*qy*qx has to be also one as the norm(q1*q2)=norm(q1)*norm(q2)
@@ -244,7 +244,7 @@ RowVector euler_to_quaternion(const double a,const double b,const double c){//ok
   q<<cz*cy*cx+sz*sy*sx<<cz*cy*sx-sz*sy*cx<<cz*sy*cx+sz*cy*sx<<sz*cy*cx-cz*sy*sx;
   double norm_q=norm(q);//has to be one from the way we constructed q
   if (fabs(norm_q-1)>1e-12) {
-      cout<<"Warning, euler_to_quat is producing quaternions with the norm different from 1!"<<"Norm difference from one is "<<norm_q-1<<"Quat is "<<q<<endl; 
+      cout<<"Warning, euler_to_quat is producing quaternions with the norm different from 1!"<<"Norm difference from one is "<<norm_q-1<<"Quat is "<<q<<endl;
   }
   return q;
 }
@@ -265,7 +265,7 @@ RowVector quaternion_to_angleaxis(const RowVector q){//ok, but be carefull when 
   }
   double angle;
   RowVector axis(3);
-  if ((q_n(1)-1)>0) q_n(1)=1; //the difference can be really small i.e. 1e-16, but acos gives nan for it (for 1+1e-16) 
+  if ((q_n(1)-1)>0) q_n(1)=1; //the difference can be really small i.e. 1e-16, but acos gives nan for it (for 1+1e-16)
   if ((q_n(1)+1)<0) q_n(1)=-1;
   angle=acos(q_n(1))*2;
   //cout<<q_n(1)-1<<"  angle  "<<angle<<endl;
@@ -276,13 +276,13 @@ RowVector quaternion_to_angleaxis(const RowVector q){//ok, but be carefull when 
   //cout<<"s  "<<s<<endl;
   if (fabs(s)<1e-12){
     angle=0;
-    axis(1)=0; 
-    axis(2)=0; 
+    axis(1)=0;
+    axis(2)=0;
     axis(3)=1; //taken so that the axis is always normalised but has no real meaning as the angle iz zero
   } else {
       axis(1)=q_n(2)/s;
       axis(2)=q_n(3)/s;
-      axis(3)=q_n(4)/s;    
+      axis(3)=q_n(4)/s;
   }
   double norm_axis=norm(axis);//has to be one if the quaternion is normalised, easily proved that normalised quaternion iff normalised axis
   if (fabs(norm_axis)<1e-12){
@@ -293,8 +293,8 @@ RowVector quaternion_to_angleaxis(const RowVector q){//ok, but be carefull when 
   angleaxis(2)=axis(1);
   angleaxis(3)=axis(2);
   angleaxis(4)=axis(3);
-  return angleaxis; 
-} 
+  return angleaxis;
+}
 ////////////////////////////////////////////////////////////////////////
 RowVector angleaxis_to_quaternion(const RowVector angleaxis){
   //angleaxis is of the form (angle,x,y,z)
@@ -346,7 +346,7 @@ RowVector matrix_to_quaternion(const Matrix M){//not using
     x = (M(3,2) - M(2,3))*s;
     y = (M(1,3) - M(3,1))*s;
     z = (M(2,1) - M(1,2))*s;
-  }  
+  }
   else {
     if ( M(1,1) > M(2,2) && M(1,1) > M(3,3) ) {
       double s = 2 * sqrt( 1 + M(1,1) - M(2,2) - M(3,3));
@@ -354,14 +354,14 @@ RowVector matrix_to_quaternion(const Matrix M){//not using
       y = (M(1,2)+M(2,1))/s;
       z = (M(1,3)+M(3,1))/s;
       w = (M(2,3)-M(3,2))/s;
-    } 
+    }
     else if (M(2,2) > M(3,3)) {
       double s = 2 * sqrt( 1 + M(2,2) - M(1,1) - M(3,3));
       x = (M(1,2) + M(2,1) ) / s;
       y = 0.25f * s;
       z = (M(2,3) + M(3,2) ) / s;
       w = (M(1,3) - M(3,1) ) / s;
-    } 
+    }
     else {
       double s = 2 * sqrt( 1 + M(3,3) - M(1,1) - M(2,2) );
       x = (M(1,3) + M(3,1) ) / s;
@@ -410,7 +410,7 @@ ReturnMatrix axismat(const RowVector angleaxis){//look more into it!
   m <<0.0<<-axis(3)<<axis(2)
     <<axis(3)<<0.0<<-axis(1)
     <<-axis(2)<<axis(1)<<0.0;
-  m.Release(); 
+  m.Release();
   return m;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -432,7 +432,7 @@ ColumnVector free(const ColumnVector m,const double time_i,const RowVector tissu
  // m is the magnetization vector just after the last rf pulse. this modul calculates the magnetization vector after the free precession, just before the next rf pulse
  // tissue:T1,T2,rho
  // time_i=time-rftime where time is time from the bigining of the acquisition and rftime is the time of the last rf pulse
- // phase_i=phase-rfphase the same logic as the time 
+ // phase_i=phase-rfphase the same logic as the time
   Matrix W(3,3);
   ColumnVector Q(3);
   double e2=exp(-time_i/tissue(2)+actinttt);
@@ -451,7 +451,7 @@ ColumnVector free_cout(const ColumnVector m,const double time_i,const RowVector 
  // m is the magnetization vector just after the last rf pulse. this modul calculates the magnetization vector after the free precession, just before the next rf pulse
  // tissue:T1,T2,rho
  // time_i=time-rftime where time is time from the bigining of the acquisition and rftime is the time of the last rf pulse
- // phase_i=phase-rfphase the same logic as the time 
+ // phase_i=phase-rfphase the same logic as the time
   Matrix W(3,3);
   ColumnVector Q(3);
   double e2=exp(-time_i/tissue(2)+actinttt);
@@ -601,9 +601,9 @@ double i4(const double gold,const double gnew,const double trold,const double tr
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 double i4new(const double gold,const double gnew,const double trold,const double trnew, const double told,const double tnew){
-  //Used ONLY when -v option for testing is on to see soome of the variables. 
+  //Used ONLY when -v option for testing is on to see soome of the variables.
   //Matrix M=rotmat(r2);
-  
+
 // integral: i4 = \int T(t) G(t) dt    : T(t) is translation
   double i44;
   double g1,g2;
@@ -633,7 +633,7 @@ double I(const int h,const RowVector& r1,const RowVector& r2, const Matrix& g){
 }
 ///////////////////////////////
 double Inew(const int h,const RowVector& r1,const RowVector& r2, const Matrix& g){
-  //Used ONLY when -v option for testing is on to see soome of the variables. 
+  //Used ONLY when -v option for testing is on to see soome of the variables.
   //Matrix M=rotmat(r2);
   Matrix M=rotmat(r2);
   cout<<"M matrix "<<M<<endl;
@@ -658,9 +658,9 @@ Matrix intertranslation(const double tx1,const double ty1,const double tz1,
   int d=vectortime.Nrows();
   double dtt=0;
   Matrix inttra(d,3);
-  double dt=vectortime(d)-vectortime(1);  
+  double dt=vectortime(d)-vectortime(1);
   for (int k=1;k<=d-1;k++){
-    dtt=dtt+vectortime(k+1)-vectortime(k); 
+    dtt=dtt+vectortime(k+1)-vectortime(k);
     inttra(k,1)=dtt*(tx2-tx1)/dt+tx1;
     inttra(k,2)=dtt*(ty2-ty1)/dt+ty1;
     inttra(k,3)=dtt*(tz2-tz1)/dt+tz1;
@@ -678,20 +678,20 @@ Matrix interrotation(const double a1,const double b1,const double c1,
   int d=vectortime.Nrows();
   Matrix introt(d,8);
   RowVector aa(8);
-  RowVector q1=euler_to_quaternion(a1,b1,c1); 
-  RowVector q2=euler_to_quaternion(a2,b2,c2);  
+  RowVector q1=euler_to_quaternion(a1,b1,c1);
+  RowVector q2=euler_to_quaternion(a2,b2,c2);
   RowVector q1c(4); //conjugate of q1
   q1c <<q1(1)<<-q1(2)<<-q1(3)<<-q1(4);
-  RowVector q=mult_quaternions(q2,q1c); 
-  RowVector qa=quaternion_to_angleaxis(q);  
+  RowVector q=mult_quaternions(q2,q1c);
+  RowVector qa=quaternion_to_angleaxis(q);
   RowVector q1a=quaternion_to_angleaxis(q1);
-  RowVector q2a=quaternion_to_angleaxis(q2); 
+  RowVector q2a=quaternion_to_angleaxis(q2);
   if (d>2){
     double dtt=0;
     double dt=vectortime(d)-vectortime(1);
     RowVector angle(d-2);
-    for (int k=1;k<=d-2;k++){ 
-      dtt=dtt+vectortime(k+1)-vectortime(k); 
+    for (int k=1;k<=d-2;k++){
+      dtt=dtt+vectortime(k+1)-vectortime(k);
       angle(k)=dtt*qa(1)/dt;
       aa<<angle(k)<<qa(2)<<qa(3)<<qa(4)<<q1a(1)<<q1a(2)<<q1a(3)<<q1a(4);
       introt.Row(k)=aa;
@@ -726,19 +726,19 @@ Matrix sorter(const Matrix& epi,const Matrix& motion){//ok
   //(2)=rf angle(rad),(3)=rf frequency bandwidth df(Hz),(4)=rf center frequecy fc(Hz),
   //(5)=readout (1/0),
   //(6)=x gradient (T/m),(7)=y gradient (T/m),(8)=z gradient (T/m),
-  //(9)=Tx translation (m),(10)=Ty translation (m), (11)=Tz translation (m), 
-  //(12)=b angle of rotation (rad),(13)=Bx,(14)=By,(15)=Bz rotation axis (m)---rotation of the interpolated motion point between A(k) and A(k+1)--relative to A(m)  
+  //(9)=Tx translation (m),(10)=Ty translation (m), (11)=Tz translation (m),
+  //(12)=b angle of rotation (rad),(13)=Bx,(14)=By,(15)=Bz rotation axis (m)---rotation of the interpolated motion point between A(k) and A(k+1)--relative to A(m)
   //(16)=a angle of rotation (rad),(17)=Ax,(18)=Ay,(19)=Az rotation axis (m)---rotation at the control motion point A(k)
-  
+
   int dim1=epi.Nrows();//EPI
   int t1=2;
   int dim2=motion.Nrows();//MOTION
   Matrix mainmatrix(dim1+dim2*2,19);//MAINMATRIX
   mainmatrix=0;
   int t=1;
-  
+
   for (int t2=1;t2<=dim2-1;t2++){
-    cout<<"Motion counter= "<<t2<<" till "<<dim2-1<<endl;  
+    cout<<"Motion counter= "<<t2<<" till "<<dim2-1<<endl;
     ColumnVector timevector(dim1+dim2);
     timevector=0;
     int l=1;
@@ -758,10 +758,10 @@ Matrix sorter(const Matrix& epi,const Matrix& motion){//ok
       tmp6=0;
     }
     else{
-      G=interpolation_gradients(epi.Row(t1-1),epi.Row(t1),motion(t2+1,1)); 
+      G=interpolation_gradients(epi.Row(t1-1),epi.Row(t1),motion(t2+1,1));
       tmp6=1;
     }
-    Matrix R=interrotation(motion(t2,5),motion(t2,6),motion(t2,7),motion(t2+1,5),motion(t2+1,6),motion(t2+1,7),timevector.Rows(1,l)); 
+    Matrix R=interrotation(motion(t2,5),motion(t2,6),motion(t2,7),motion(t2+1,5),motion(t2+1,6),motion(t2+1,7),timevector.Rows(1,l));
     Matrix T=intertranslation(motion(t2,2),motion(t2,3),motion(t2,4),motion(t2+1,2),motion(t2+1,3),motion(t2+1,4),timevector.Rows(1,l));
     for (int tt=1;tt<=l-2;tt++){
       t=t+1;
@@ -791,12 +791,12 @@ Matrix sorter(const Matrix& epi,const Matrix& motion){//ok
     t=t+1;
   }
   Matrix tmp2(1,11);
-  tmp2=mainmatrix.SubMatrix(t,t,9,19); 
+  tmp2=mainmatrix.SubMatrix(t,t,9,19);
   for (int a=1;a<=dim1-t1+1;a++){
     mainmatrix.SubMatrix(t+a,t+a,9,19)=tmp2;
   }
   mainmatrix.SubMatrix(t+1,dim1-t1+t+1,1,8)=epi.SubMatrix(t1,dim1,1,8);
-  mainmatrix=mainmatrix.Rows(1,dim1-t1+t+1); 
+  mainmatrix=mainmatrix.Rows(1,dim1-t1+t+1);
   cout<<"main matrix dim"<<dim1-t1+t+1<<"  .  "<<"epi matrix dim"<<dim1<<"....."<<endl;
   return mainmatrix;
 }
@@ -804,7 +804,7 @@ Matrix sorter(const Matrix& epi,const Matrix& motion){//ok
 //B0 FIELD STUFF
 ///////////////////////////////////////////////////////////////////////////////
 int calc_gradients(const volume<double>& b, volume<double>& b0gx, volume<double>& b0gy, volume<double>& b0gz){
-  // b is in mT, and dimensions of voxels are in mm 
+  // b is in mT, and dimensions of voxels are in mm
   b0gx = b*0;
   b0gy = b0gx;
   b0gz = b0gx;
@@ -820,11 +820,11 @@ int calc_gradients(const volume<double>& b, volume<double>& b0gx, volume<double>
   b0gx /= (128.0*b.xdim()*1e-3);  // in mT/m
   b0gy /= (128.0*b.ydim()*1e-3);
   b0gz /= (128.0*b.zdim()*1e-3);
-  
+
   return 0;
 }
 ///////////////////////////////////////////////////////////////
-int calc_gradientsROI(volume<double>& b0, volume<double>& b0x, 
+int calc_gradientsROI(volume<double>& b0, volume<double>& b0x,
                       volume<double>& b0y, volume<double>& b0z,
                       const int myid, const int Nxx,const int numprocs){
   calc_gradients(b0,b0x,b0y,b0z);
@@ -860,7 +860,7 @@ int calc_gradientsROI(volume<double>& b0, volume<double>& b0x,
 }
 ///////////////////////////////////////////////////////////////////////////////
 int calc_gradients4D(const volume4D<double>& b, volume4D<double>& b0gx, volume4D<double>& b0gy, volume4D<double>& b0gz){
-  // b is in mT, and dimensions of voxels are in mm 
+  // b is in mT, and dimensions of voxels are in mm
   b0gx = b*0;
   b0gy = b0gx;
   b0gz = b0gx;
@@ -878,11 +878,11 @@ int calc_gradients4D(const volume4D<double>& b, volume4D<double>& b0gx, volume4D
   b0gx /= (128.0*b.xdim()*1e-3);  // in mT/m
   b0gy /= (128.0*b.ydim()*1e-3);
   b0gz /= (128.0*b.zdim()*1e-3);
-  
+
   return 0;
 }
 ///////////////////////////////////////////////////////////////
-int calc_gradients4DROI(volume4D<double>& b0, volume4D<double>& b0x, 
+int calc_gradients4DROI(volume4D<double>& b0, volume4D<double>& b0x,
                       volume4D<double>& b0y, volume4D<double>& b0z,
 			const int myid, const int Nxx, const int numprocs){
   calc_gradients4D(b0,b0x,b0y,b0z);
@@ -957,29 +957,29 @@ double b0freq(const double v1i,const double v1j,const double v2i, const double v
 /////////////////
 //MAIN FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void voxel1(const double x,const double y,double z, 
+void voxel1(const double x,const double y,double z,
             const RowVector& tissue,const Matrix& H,
             const int nreadp,const int v,
             const double xdim,const double ydim,const double zdim,
             const double b0, const double b0x,const double b0y,const double b0z,
             const double* timecourse, const double* activation,const int Nact,
-	    const string outputname,  
+	    const string outputname,
 	    const double* table_slcprof, const double dslcp, const double dslcp_first, const int Nslc,
             const double den,const double RFtrans,const int opt_test,
             const int nospeedup,
             const int save_kcoord,
             double* sreal, double* simag){
-  //  Returns a signal (one rowvector for the real part and one for the 
+  //  Returns a signal (one rowvector for the real part and one for the
   //  imaginary part) for one voxel at place x,y,z(m) of the phantom through time
   // - x,y,z are the corrdinates at the center of the voxel
   // - tissue = (T_1(s),T_2(s),\rho) ; H = event matrix (pulse sequence)
-  // - nreadp = number of readoutpoints !!! pay attention as you are not using this at all here;  
+  // - nreadp = number of readoutpoints !!! pay attention as you are not using this at all here;
   // - v = internal voxel index number (used to check if it is the first voxel)
   // - xdim, ydim and zdim are dimensions of the voxel
   // - b0 is inhomogeneity in the field that can be due to either b0sus or chemical shift, it is in T
-  // - b0x,b0y,b0z are values of gradients of b0 inhomogeneity field for each voxel (T/m) 
-  // - timecourse (time when happens), activation (amount of change)and Nact (number of changes) define change in T2*  
-  // - outputname is the name of the result once the programm finishes 
+  // - b0x,b0y,b0z are values of gradients of b0 inhomogeneity field for each voxel (T/m)
+  // - timecourse (time when happens), activation (amount of change)and Nact (number of changes) define change in T2*
+  // - outputname is the name of the result once the programm finishes
   // - table_slcprof is the vector specifying the sclive profile for the RF excitation
   // - dslcp is the timestep in the the slice profile
   // - dslcp_first is the first element in the slice profile
@@ -994,14 +994,14 @@ void voxel1(const double x,const double y,double z,
   // - save_kcoord is yes or no option if we want to save the coordinates of the k-space as an additonal output
   // - sreal and simag are two channels of the signal ouput
   ///////////////////////////////////////////////////////////////////////////
-  //INITIALIZATION OF THE MAGNETIZATION VECTOR 
+  //INITIALIZATION OF THE MAGNETIZATION VECTOR
   ///////////////////////////////////////////////////////////////////////////
   ColumnVector m(3);//magnetization vector
   m(1)=0;
   m(2)=0;
   m(3)=tissue(3);
   double m00=0;//the magnitude of the transverse magnetization vector
-  /////////////////////////////////////////////////////////////////////////// 
+  ///////////////////////////////////////////////////////////////////////////
   //PHASE,GRADIENTS,COUNTERS,CONSTANTS
   ///////////////////////////////////////////////////////////////////////////
   double chshift=tissue(4);//chemical shift
@@ -1012,9 +1012,9 @@ void voxel1(const double x,const double y,double z,
   double T2=tissue(2);
   double iT2=1/T2;
   int rftest=0;
-  double g1,g2,g3,grf1,grf2,grf3; 
+  double g1,g2,g3,grf1,grf2,grf3;
   g1=0.0; g2=0.0; g3=0.0; grf1=0.0; grf2=0.0; grf3=0.0;
-  Matrix coord(3,nreadp); 
+  Matrix coord(3,nreadp);
   if (v==1) {
      g1static=new double[numpoints];
      g2static=new double[numpoints];
@@ -1040,7 +1040,7 @@ void voxel1(const double x,const double y,double z,
      glo_cy=gammabar*ydim;
      glo_cz=gammabar*zdim;
      ////////////////////////////////////////////////////////////////////////
-  } 
+  }
   ///////////////////////////////////////////////////////////////////////////
   //  ACTIVATION PARAMETERS
   ///////////////////////////////////////////////////////////////////////////
@@ -1050,7 +1050,7 @@ void voxel1(const double x,const double y,double z,
   double dT2_2=0.0;
   ///////////////////////////////////////////////////////////////////////////
   //SIGNAL
-  /////////////////////////////////////////////////////////////////////////// 
+  ///////////////////////////////////////////////////////////////////////////
   for (int step=2;step<=numpoints;step++){
     double tnew=H(step,1);
     double told=H(step-1,1);
@@ -1067,24 +1067,24 @@ void voxel1(const double x,const double y,double z,
       if (gynew!=0 || gyold!=0){
         g2+=i1(gyold,gynew,told, tnew);
       }
-      if (gznew!=0 || gzold!=0){ 
+      if (gznew!=0 || gzold!=0){
         g3+=i1(gzold,gznew,told, tnew);
       }
       g1static[step-2]=g1;
       g2static[step-2]=g2;
       g3static[step-2]=g3;
-    }  
+    }
     else{
 	g1=g1static[step-2];
 	g2=g2static[step-2];
 	g3=g3static[step-2];
-    } 
+    }
     double gg1=g1-grf1;
     double gg2=g2-grf2;
     double gg3=g3-grf3;
     double tt=tnew-trf;//time since the last rf pulse
     cout.precision(20);
-    //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"tnew "<<tnew<<";told "<<told<<";trf "<<trf<<";tt=tnew-trf "<<tt<<";tnew-told "<<tnew-told<<endl; 
+    //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"tnew "<<tnew<<";told "<<told<<";trf "<<trf<<";tt=tnew-trf "<<tt<<";tnew-told "<<tnew-told<<endl;
     //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"g1 "<<g1<<";grf1 "<<grf1<<";gg1 "<<gg1<<endl;
      if (told>=timecourse[actstep] && actstep<=(Nact-2)){
       coeff(activation[actstep],activation[actstep+1],timecourse[actstep],timecourse[actstep+1],dT2_1,dT2_2);
@@ -1095,7 +1095,7 @@ void voxel1(const double x,const double y,double z,
     actint+=(dT2_1+dT2_2*(tnew+told)/2)*(tnew-told);
     //if (dT2_2<1e-12) actint+=(tnew-told)/(dT2_1+T2);
     // else actint+=log(1+(tnew-told)/(told+dT2_1/dT2_2))/dT2_2
-    double phase=gama*gg1*x+gama*gg2*y+gama*gg3*z+gama*b0*tt+gama*chshift*tt; 
+    double phase=gama*gg1*x+gama*gg2*y+gama*gg3*z+gama*b0*tt+gama*chshift*tt;
     if (rfangle!=0){
       excitation=0;
       double df=H(step,3);
@@ -1107,7 +1107,7 @@ void voxel1(const double x,const double y,double z,
       double off=(fval-dslcp_first)/dslcp;
       int nf=(int) off;
       if (opt_test==1)cout<<"fc="<<fc<<"; f"<<f<<"; df"<<df<<"; fval"<<fval<<"; dslcp_first"<<dslcp_first<<"; dslcp"<<dslcp<<"; off="<<off<<"nf"<<nf<<endl;
-      if (nf>=0 && nf<=(Nslc-2)) { 
+      if (nf>=0 && nf<=(Nslc-2)) {
         off-=nf;
         double ts=table_slcprof[nf];
         double sx=(table_slcprof[nf+1]-ts)*off + ts;
@@ -1122,7 +1122,7 @@ void voxel1(const double x,const double y,double z,
 	  excitation=1;
           m=free(m,tt,tissue,phase,actint);
 	  //new stuff mon dec 19
-	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel  
+	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel
           double xvalrf=fabs(glo_cx*(gg1+b0x*tt));
           double yvalrf=fabs(glo_cy*(gg2+b0y*tt));
           double zvalrf=fabs(glo_cz*(gg3+b0z*tt));
@@ -1132,7 +1132,7 @@ void voxel1(const double x,const double y,double z,
           m=rot(rfangle_f,"x")*m;
           //new stuff
           m00=sqrt(m(1)*m(1)+m(2)*m(2));
-          if (opt_test==1 && readstep%4096==0 && v==1 ){ 
+          if (opt_test==1 && readstep%4096==0 && v==1 ){
             cout<<"Projection of the magnetisation vector into the xy plane after flipping is "<<m00<<endl;
 	  }
           trf=tnew;
@@ -1178,7 +1178,7 @@ void voxel1(const double x,const double y,double z,
 	  off-=nbin;
 	  ts=table_sinc[nbin];
 	  double sy=(table_sinc[nbin+1]-ts)*off + ts;
-	  //z        
+	  //z
 	  off=zval*glo_idsinc;
 	  nbin=(int) off;
 	  off-=nbin;
@@ -1186,7 +1186,7 @@ void voxel1(const double x,const double y,double z,
 	  double sz=(table_sinc[nbin+1]-ts)*off + ts;
 	  //CALCULATING TMP
 	  tmp=m00*exp(-tt*iT2+actint)*sx*sy*sz;
-	  //TESTING 
+	  //TESTING
 	  if (opt_test==1 && v==1 && readstep%4096==2081){
 	    cout.precision(20);
 	    cout<<"table_sinc(xval)= "<<sx<<"; table_sinc(yval)= "<<sy<<"; table_sinc(zval)= "<<sz<<endl;
@@ -1209,7 +1209,7 @@ void voxel1(const double x,const double y,double z,
 	//SIGNAL CALCULATION
 	sreal[readstep-1]+=den*tmp*wanted_cos;
 	simag[readstep-1]+=den*tmp*wanted_sin;
-	//TESTING  
+	//TESTING
 	if(opt_test==1 && v==1 && readstep%4096==2081){
           cout.precision(20);
           cout<<"readstep= "<<readstep<<endl;
@@ -1219,7 +1219,7 @@ void voxel1(const double x,const double y,double z,
           cout<<"b0= "<<b0<<"; chshift= "<<chshift<<endl;
           cout<<"tnew= "<<tnew<<"; trf= "<<trf<<endl;
           cout<<"tt=tnew-trf= "<<tt<<endl;
-          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+(b0+chshift)*tt)= "<<phase<<endl; 
+          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+(b0+chshift)*tt)= "<<phase<<endl;
 	  cout<<"phase_2pi= "<<phase_2pi<<endl;
 	  cout<<"table_cos(phase)= "<<wanted_cos<<"; cos-table(phase)= "<<cos(phase)-wanted_cos<<endl;
           cout<<"table_sin(phase)= "<<wanted_sin<<"; sin-table(phase)= "<<sin(phase)-wanted_sin<<endl;
@@ -1244,13 +1244,13 @@ void voxel1(const double x,const double y,double z,
   }
 }
 /////////////////////////////////////////////////////////////////////////////
-void voxel2(const double x,const double y,const double z, 
+void voxel2(const double x,const double y,const double z,
 		      const RowVector& tissue,const Matrix& H,
-               	      const int nrf,const int nreadp,const int v,                               
+               	      const int nrf,const int nreadp,const int v,
 		      const double xdim,const double ydim,const double zdim,
                       const double b0, const double b0x,const double b0y,const double b0z,
 	              const double* timecourse, const double* activation,const int Nact,
-	              const string outputname, 
+	              const string outputname,
 	              const double* table_slcprof,const double dslcp, const double dslcp_first, const int Nslc,
                       const double den,const double RFtrans,const int opt_test,
 	              const int nospeedup,
@@ -1261,7 +1261,7 @@ void voxel2(const double x,const double y,const double z,
   // nrf=number of rf pulses ; v = internal voxel index number (used to check if this is the first voxel)
   // xdim, ydim and zdim are dimensions of the voxel
   // timecourse is a 2-column matrix where time is in first and multiplicative factor for the activation const "activation" in the second
-  // sreal and simag are the outputs 
+  // sreal and simag are the outputs
   //////////////////////////////////////////////////////////////////////////
   //INITIALIZATION OF THE MAGNETIZATION VECTOR
   //////////////////////////////////////////////////////////////////////////
@@ -1328,7 +1328,7 @@ void voxel2(const double x,const double y,const double z,
      glo_cx=gammabar*xdim; //(Hz*m/T)
      glo_cy=gammabar*ydim;
      glo_cz=gammabar*zdim;
-  } 
+  }
   //we assume that for the step=1 all the values in the mainmatrix H are zero
   //////////////////////////////////////////////////////////////////////////
   //TESTING
@@ -1354,7 +1354,7 @@ void voxel2(const double x,const double y,const double z,
     if (v==1){
       rnew=H.SubMatrix(step,step,12,15);//rotation betwen given motion points at tnew (angle & axis)
       rmnew=H.SubMatrix(step,step,16,19);//rotation at control motion point at tnew (angle & axis)
-      double gxold=H(step-1,6);//gradients at told 
+      double gxold=H(step-1,6);//gradients at told
       double gyold=H(step-1,7);//
       double gzold=H(step-1,8);//
       gxnew=H(step,6);// gradients at tnew
@@ -1372,7 +1372,7 @@ void voxel2(const double x,const double y,const double z,
         double a2=0.0;
         coeff(aold,anew,told,tnew,a1,a2);
         g(3,1)+=i1(gxold,gxnew,told, tnew)- i3(gxold,gxnew,aold,anew,told,tnew);
-	
+
         g(4,1)+=i4(gxold,gxnew,trold1,trnew1,told,tnew);
         if(opt_test==1 && readstep%4096==2081 && v==1){
 	  cout<<"i4(gxold,gxnew,trold1,trnew1,told,tnew)"<<i4new(gxold,gxnew,trold1,trnew1,told,tnew)<<endl;
@@ -1396,7 +1396,7 @@ void voxel2(const double x,const double y,const double z,
       }
       //Matrix R(3,3);
       //Matrix A(3,3);
-      //R=rotmat(rmnew);//control matrix, changes only when the axis changes 
+      //R=rotmat(rmnew);//control matrix, changes only when the axis changes
       //A=axismat(rnew);//moving matrix, controls rotation between control matrices
       g1=I(1,rnew,rmnew,g);
       if(opt_test==1 && readstep%4096==2081 && v==1){
@@ -1404,7 +1404,7 @@ void voxel2(const double x,const double y,const double z,
 	cout<<"Inew(1,rnew,rmnew,g)= "<<Inew(1,rnew,rmnew,g)<<endl;
         cout<<"rnew= "<<rnew<<endl;
         cout<<"rmnew= "<<rmnew<<endl;
-        cout<<"g matrix "<<g<<endl;   
+        cout<<"g matrix "<<g<<endl;
       }
       g2=I(2,rnew,rmnew,g);
       g3=I(3,rnew,rmnew,g);
@@ -1484,7 +1484,7 @@ void voxel2(const double x,const double y,const double z,
 	cout<<"fc_vox=rr1*x+rr2*y+rr3*z+trr+(b0+chshift)*gammabar= "<<f<<endl;
 	cout<<"f in the table  nf= (int)((f-fc)*321/df+400+0.5)= "<<nf<<endl;
       }
-       if (nf>=0 && nf<=(Nslc-2)) { 
+       if (nf>=0 && nf<=(Nslc-2)) {
         off-=nf;
         double ts=table_slcprof[nf];
         double sx=(table_slcprof[nf+1]-ts)*off + ts;
@@ -1496,12 +1496,12 @@ void voxel2(const double x,const double y,const double z,
         // if (fc-df/2<=f && f<=fc+df/2) {
         if (rfangle_f>0){//new stuff mon dec 19
 	  excitation=1;
-         if (opt_test==1 && readstep%4096==0 && readstep>7*4096){ 
+         if (opt_test==1 && readstep%4096==0 && readstep>7*4096){
           cout<<free_cout(m,tt,tissue,phase,actint)<<endl;
 	 }
           m=free(m,tt,tissue,phase,actint);
 	  //new stuff mon dec 19
-	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel  
+	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel
           double xvalrf=fabs(glo_cx*(gg1+b0x*tt));
           double yvalrf=fabs(glo_cy*(gg2+b0y*tt));
           double zvalrf=fabs(glo_cz*(gg3+b0z*tt));
@@ -1511,7 +1511,7 @@ void voxel2(const double x,const double y,const double z,
           m=rot(rfangle_f,"x")*m;
           //new stuff
           m00=sqrt(m(1)*m(1)+m(2)*m(2));
-          if (opt_test==1 && readstep%4096==0 && v==1){ 
+          if (opt_test==1 && readstep%4096==0 && v==1){
             cout<<"Projection of the magnetisation vector into the xy plane after flipping is "<<m00<<endl;
 	  }
           trf=tnew;
@@ -1555,7 +1555,7 @@ void voxel2(const double x,const double y,const double z,
 	  off-=nbin;
 	  ts=table_sinc[nbin];
 	  double sy=(table_sinc[nbin+1]-ts)*off + ts;
-	  //z        
+	  //z
           off=zval*glo_idsinc;
 	  nbin=(int) off;
 	  off-=nbin;
@@ -1594,7 +1594,7 @@ void voxel2(const double x,const double y,const double z,
           cout<<"b0= "<<b0<<"; chshift= "<<chshift<<endl;
           cout<<"tnew= "<<tnew<<"; trf= "<<trf<<endl;
           cout<<"tt=tnew-trf= "<<tt<<endl;
-          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+gg4+(b0+chshift)*tt)= "<<phase<<endl; 
+          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+gg4+(b0+chshift)*tt)= "<<phase<<endl;
 	  cout<<"phase_2pi= "<<phase_2pi<<endl;
 	  cout<<"table_cos(phase)= "<<wanted_cos<<"; cos-table(phase)= "<<cos(phase)-wanted_cos<<endl;
           cout<<"table_sin(phase)= "<<wanted_sin<<"; sin-table(phase)= "<<sin(phase)-wanted_sin<<endl;
@@ -1614,8 +1614,8 @@ void voxel2(const double x,const double y,const double z,
 	  cout<<"-------------------------------------------------------------------------------"<<endl;
 	}
 #endif
-      }         
-    }//end of if read    
+      }
+    }//end of if read
   }//end of main loop
  if (v==1 && save_kcoord==1){
     write_binary_matrix(coord,outputname+"_kcoord" );
@@ -1623,11 +1623,11 @@ void voxel2(const double x,const double y,const double z,
   }
 
 /////////////////////////////////////////////////////////////////////////////
-void voxel3(const double x,const double y,const double z, 
+void voxel3(const double x,const double y,const double z,
 	    const RowVector& tissue,const Matrix& H,
 	    const int nrf,const int nreadp, const int v,
 	    const double xdim,const double ydim,const double zdim,
-            const double b11,const double b12,const double b13,const double b21,const double b22,const double b23,const double b31,const double b32,const double b33, 
+            const double b11,const double b12,const double b13,const double b21,const double b22,const double b23,const double b31,const double b32,const double b33,
 	    const double bx11,const double bx12,const double bx13,const double bx21,const double bx22,const double bx23,const double bx31,const double bx32,const double bx33,
 	    const double by11,const double by12,const double by13,const double by21,const double by22,const double by23,const double by31,const double by32,const double by33,
             const double bz11,const double bz12,const double bz13,const double bz21,const double bz22,const double bz23,const double bz31,const double bz32,const double bz33,
@@ -1641,10 +1641,10 @@ void voxel3(const double x,const double y,const double z,
   // tissue = (T_1,T_2,\rho) ; H = event matrix (pulse sequence + motion)
   // nrf=number of rf pulses ; v = internal voxel index number (used to check if this is the first voxel)
   // xdim, ydim and zdim are dimensions of the voxel
-  // b1-9 are values of base of the perturbed field in the center of the voxel(calculated from Maxwell's equations)  
+  // b1-9 are values of base of the perturbed field in the center of the voxel(calculated from Maxwell's equations)
   // bx1-9, by1-9 and bz1-9 are spatial gradients of the perturbed field (calculated with trilinear interpolation)
   // timecourse is a 2-column matrix where time is in first and multiplicative factor for the activation const "activation" in the second
-  // sreal and simag are the outputs 
+  // sreal and simag are the outputs
   //////////////////////////////////////////////////////////////////////////
   //INITIALIZATION OF THE MAGNETIZATION VECTOR
   //////////////////////////////////////////////////////////////////////////
@@ -1725,7 +1725,7 @@ void voxel3(const double x,const double y,const double z,
      glo_cx=gammabar*xdim; //(Hz*m/T)
      glo_cy=gammabar*ydim;
      glo_cz=gammabar*zdim;
-  } 
+  }
   //we assume that for the step=1 all the values in the mainmatrix H are zero
   /////////////////////////////////////////////////////////////////////////
   // MOTION PARAMETERS, MAGNETIC SUSCEPTIBILITY PARAMETERS
@@ -1746,24 +1746,24 @@ void voxel3(const double x,const double y,const double z,
   RowVector b0tmp1(3);//[0 0 1]*R
   RowVector b0tmp2(3);//[0 0 1]*A*R
   RowVector b0tmp3(3);//[0 0 1]*A*A*R
-  double b0tmp11=0.0; 
-  double b0tmp12=0.0; 
-  double b0tmp13=0.0; 
-  double b0tmp21=0.0; 
-  double b0tmp22=0.0; 
-  double b0tmp23=0.0; 
-  double b0tmp31=0.0; 
-  double b0tmp32=0.0; 
-  double b0tmp33=0.0; 
-  double b0tmp11freq=0.0; 
-  double b0tmp12freq=0.0; 
-  double b0tmp13freq=0.0; 
-  double b0tmp21freq=0.0; 
-  double b0tmp22freq=0.0; 
-  double b0tmp23freq=0.0; 
-  double b0tmp31freq=0.0; 
-  double b0tmp32freq=0.0; 
-  double b0tmp33freq=0.0; 
+  double b0tmp11=0.0;
+  double b0tmp12=0.0;
+  double b0tmp13=0.0;
+  double b0tmp21=0.0;
+  double b0tmp22=0.0;
+  double b0tmp23=0.0;
+  double b0tmp31=0.0;
+  double b0tmp32=0.0;
+  double b0tmp33=0.0;
+  double b0tmp11freq=0.0;
+  double b0tmp12freq=0.0;
+  double b0tmp13freq=0.0;
+  double b0tmp21freq=0.0;
+  double b0tmp22freq=0.0;
+  double b0tmp23freq=0.0;
+  double b0tmp31freq=0.0;
+  double b0tmp32freq=0.0;
+  double b0tmp33freq=0.0;
   //////////////////////////////////////////////////////////////////////////
   //  ACTIVATION PARAMETERS
   //////////////////////////////////////////////////////////////////////////
@@ -1785,7 +1785,7 @@ void voxel3(const double x,const double y,const double z,
     if (v==1){
       rnew=H.SubMatrix(step,step,12,15);//rotation betwen given motion points at tnew (angle & axis)
       rmnew=H.SubMatrix(step,step,16,19);//rotation at control motion point at tnew (angle & axis)
-      double gxold=H(step-1,6);//gradients at told 
+      double gxold=H(step-1,6);//gradients at told
       double gyold=H(step-1,7);//
       double gzold=H(step-1,8);//
       double gxnew=H(step,6);// gradients at tnew
@@ -1816,7 +1816,7 @@ void voxel3(const double x,const double y,const double z,
       //b0starts
       Matrix R(3,3);
       Matrix A(3,3);
-      R=rotmat(rmnew);//control matrix, changes only when the axis changes 
+      R=rotmat(rmnew);//control matrix, changes only when the axis changes
       A=axismat(rnew);//moving matrix, controls rotation between control matrices
       RowVector b0(3);
       b0 <<(double)0<<(double)0<<(double)1;//static magnetic field Bo
@@ -1959,11 +1959,11 @@ void voxel3(const double x,const double y,const double z,
         b0tmp33freq=b0tmp333freq[rfstep-1];
       }
       fb0=gammabar*(b0tmp11freq*b11+b0tmp12freq*b12+b0tmp13freq*b13+b0tmp21freq*b21+b0tmp22freq*b22+b0tmp23freq*b23+b0tmp31freq*b31+b0tmp32freq*b32+b0tmp33freq*b33+chshift);
-      double f=rr1*x+rr2*y+rr3*z+trr+fb0;//frequency at this voxel, gammabar is included already, 
+      double f=rr1*x+rr2*y+rr3*z+trr+fb0;//frequency at this voxel, gammabar is included already,
       double fval=(f-fc)/df;
       double off=(fval-dslcp_first)/dslcp;
       int nf=(int) off;
-      if (nf>=0 && nf<=(Nslc-2)) { 
+      if (nf>=0 && nf<=(Nslc-2)) {
         off-=nf;
         double ts=table_slcprof[nf];
         double sx=(table_slcprof[nf+1]-ts)*off + ts;
@@ -1973,7 +1973,7 @@ void voxel3(const double x,const double y,const double z,
           excitation=1;
           m=free(m,tt,tissue,phase,actint);
 	  //new stuff mon dec 19
-	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel  
+	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel
           double xvalrf=fabs(glo_cx*(gg1+b0x*tt));
           double yvalrf=fabs(glo_cy*(gg2+b0y*tt));
           double zvalrf=fabs(glo_cz*(gg3+b0z*tt));
@@ -1983,7 +1983,7 @@ void voxel3(const double x,const double y,const double z,
           m=rot(rfangle_f,"x")*m;
           //new stuff
           m00=sqrt(m(1)*m(1)+m(2)*m(2));
- 
+
           trf=tnew;
           grf1=g1;
           grf2=g2;
@@ -2029,7 +2029,7 @@ void voxel3(const double x,const double y,const double z,
 	off-=nbin;
 	ts=table_sinc[nbin];
 	double sy=(table_sinc[nbin+1]-ts)*off + ts;
-	//z        
+	//z
         off=zval*glo_idsinc;
 	nbin=(int) off;
 	off-=nbin;
@@ -2064,7 +2064,7 @@ void voxel3(const double x,const double y,const double z,
           cout<<"b0= "<<b00<<"; chshift= "<<chshift<<endl;
           cout<<"tnew= "<<tnew<<"; trf= "<<trf<<endl;
           cout<<"tt=tnew-trf= "<<tt<<endl;
-          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+gg4+(b0+chshift)*tt)= "<<phase<<endl; 
+          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+gg4+(b0+chshift)*tt)= "<<phase<<endl;
 	  cout<<"phase_2pi= "<<phase_2pi<<endl;
 	  cout<<"table_cos(phase)= "<<wanted_cos<<"; cos-table(phase)= "<<cos(phase)-wanted_cos<<endl;
           cout<<"table_sin(phase)= "<<wanted_sin<<"; sin-table(phase)= "<<sin(phase)-wanted_sin<<endl;
@@ -2093,7 +2093,7 @@ void voxel3(const double x,const double y,const double z,
  }
 }
 ////////////////////////////////
-void voxel4(const double x,const double y,double z, 
+void voxel4(const double x,const double y,double z,
             const RowVector& tissue,const Matrix& H,
             const int nreadp,const int v,
             const double xdim,const double ydim,const double zdim,
@@ -2101,32 +2101,32 @@ void voxel4(const double x,const double y,double z,
             const double* b0timecourse, const int Nb0,
             const double b0, const double b0x,const double b0y,const double b0z,
             const double* timecourse, const double* activation,const int Nact,
-	    const string outputname,  
+	    const string outputname,
 	    const double* table_slcprof, const double dslcp, const double dslcp_first, const int Nslc,
             const double den,const double RFtrans,const int opt_test,
             const int nospeedup,
             const int save_kcoord,
             double* sreal, double* simag){
-  // Returns a signal (one rowvector for the real part and one for the 
+  // Returns a signal (one rowvector for the real part and one for the
   //  imaginary part) for one voxel at place x,y,z(m) of the phantom through time
   // tissue = (T_1(s),T_2(s),\rho) ; H = event matrix (pulse sequence)
-  // nreadp = number of readoutpoints !!! pay attention as you are not using this at all here;  
+  // nreadp = number of readoutpoints !!! pay attention as you are not using this at all here;
   // v = internal voxel index number (used to check if it is the first voxel)
   // idsx, idsy, idsz are constants = cx/ds where cx=gammabar dim_x (Hz*m/T) and ds=1/100000 interval in sinc table
   //b0shift is inhomogeneity in the field that can be due to either b0sus or chemical shift, it is in T
-  //b0x,b0y,b0z are values of gradients of b0 inhomogeneity field for each voxel (T/m) 
+  //b0x,b0y,b0z are values of gradients of b0 inhomogeneity field for each voxel (T/m)
   //table_sinc,sin,cos are there for use instead of conventional sinc, sin, cos --speed up
   //idss=1/dss, dss=1/40000 is an interval in the sin and cos table ; idsshelp = idss*2*pi;
 
   ///////////////////////////////////////////////////////////////////////////
-  //INITIALIZATION OF THE MAGNETIZATION VECTOR 
+  //INITIALIZATION OF THE MAGNETIZATION VECTOR
   ///////////////////////////////////////////////////////////////////////////
   ColumnVector m(3);//magnetization vector
   m(1)=0;
   m(2)=0;
   m(3)=tissue(3);
   double m00=0;//the magnitude of the transverse magnetization vector
-  /////////////////////////////////////////////////////////////////////////// 
+  ///////////////////////////////////////////////////////////////////////////
   //PHASE,GRADIENTS,COUNTERS,CONSTANTS
   ///////////////////////////////////////////////////////////////////////////
   double chshift=tissue(4);//chemical shift
@@ -2137,9 +2137,9 @@ void voxel4(const double x,const double y,double z,
   double T2=tissue(2);
   double iT2=1/T2;
   int rftest=0;
-  double g1,g2,g3,grf1,grf2,grf3; 
+  double g1,g2,g3,grf1,grf2,grf3;
   g1=0.0; g2=0.0; g3=0.0; grf1=0.0; grf2=0.0; grf3=0.0;
-  Matrix coord(3,nreadp); 
+  Matrix coord(3,nreadp);
   if (v==1) {
      g1static=new double[numpoints];
      g2static=new double[numpoints];
@@ -2165,7 +2165,7 @@ void voxel4(const double x,const double y,double z,
      glo_cy=gammabar*ydim;
      glo_cz=gammabar*zdim;
      ////////////////////////////////////////////////////////////////////////
-  } 
+  }
   ///////////////////////////////////////////////////////////////////////////
   //  ACTIVATION PARAMETERS
   ///////////////////////////////////////////////////////////////////////////
@@ -2192,7 +2192,7 @@ void voxel4(const double x,const double y,double z,
   double b0val=0.0;
   ///////////////////////////////////////////////////////////////////////////
   //SIGNAL
-  /////////////////////////////////////////////////////////////////////////// 
+  ///////////////////////////////////////////////////////////////////////////
   for (int step=2;step<=numpoints;step++){
     double tnew=H(step,1);
     double told=H(step-1,1);
@@ -2209,24 +2209,24 @@ void voxel4(const double x,const double y,double z,
       if (gynew!=0 || gyold!=0){
         g2+=i1(gyold,gynew,told, tnew);
       }
-      if (gznew!=0 || gzold!=0){ 
+      if (gznew!=0 || gzold!=0){
         g3+=i1(gzold,gznew,told, tnew);
       }
       g1static[step-2]=g1;
       g2static[step-2]=g2;
       g3static[step-2]=g3;
-    }  
+    }
     else{
 	g1=g1static[step-2];
 	g2=g2static[step-2];
 	g3=g3static[step-2];
-    } 
+    }
     double gg1=g1-grf1;
     double gg2=g2-grf2;
     double gg3=g3-grf3;
     double tt=tnew-trf;//time since the last rf pulse
     cout.precision(20);
-    //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"tnew "<<tnew<<";told "<<told<<";trf "<<trf<<";tt=tnew-trf "<<tt<<";tnew-told "<<tnew-told<<endl; 
+    //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"tnew "<<tnew<<";told "<<told<<";trf "<<trf<<";tt=tnew-trf "<<tt<<";tnew-told "<<tnew-told<<endl;
     //if (v==1 && readstep%4096==1 && opt_test==1)cout<<"g1 "<<g1<<";grf1 "<<grf1<<";gg1 "<<gg1<<endl;
      if (told>=timecourse[actstep] && actstep<=(Nact-2)){
       coeff(activation[actstep],activation[actstep+1],timecourse[actstep],timecourse[actstep+1],dT2_1,dT2_2);
@@ -2254,7 +2254,7 @@ void voxel4(const double x,const double y,double z,
     b0xint+=(db0x_1+db0x_2*(tnew+told)/2)*(tnew-told);
     b0yint+=(db0y_1+db0y_2*(tnew+told)/2)*(tnew-told);
     b0zint+=(db0z_1+db0z_2*(tnew+told)/2)*(tnew-told);
-    double phase=gama*(gg1*x+gg2*y+gg3*z+b0int+chshift*tt+b0*tt); 
+    double phase=gama*(gg1*x+gg2*y+gg3*z+b0int+chshift*tt+b0*tt);
     if (rfangle!=0){
       excitation=0;
       double df=H(step,3);
@@ -2265,7 +2265,7 @@ void voxel4(const double x,const double y,double z,
       double fval=(f-fc)/df;
       double off=(fval-dslcp_first)/dslcp;
       int nf=(int) off;
-      if (nf>=0 && nf<=(Nslc-2)) { 
+      if (nf>=0 && nf<=(Nslc-2)) {
         off-=nf;
         double ts=table_slcprof[nf];
         double sx=(table_slcprof[nf+1]-ts)*off + ts;
@@ -2279,7 +2279,7 @@ void voxel4(const double x,const double y,double z,
           excitation=1;
           m=free(m,tt,tissue,phase,actint);
 	  //new stuff mon dec 19
-	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel  
+	  //due to crushers or any gradient induced dephasing over the voxel a new initial magnetisation is introduced which is the average of the magnetisations over the voxel
           double xvalrf=fabs(glo_cx*(gg1+b0xint+b0x*tt));
           double yvalrf=fabs(glo_cy*(gg2+b0yint+b0y*tt));
           double zvalrf=fabs(glo_cz*(gg3+b0zint+b0z*tt));
@@ -2289,7 +2289,7 @@ void voxel4(const double x,const double y,double z,
           m=rot(rfangle_f,"x")*m;
           //new stuff
           m00=sqrt(m(1)*m(1)+m(2)*m(2));
-          if (opt_test==1 && fabs(z)<0.0005 ){ 
+          if (opt_test==1 && fabs(z)<0.0005 ){
             cout<<"Projection of the magnetisation vector into the xy plane after flipping is "<<m00<<endl;
 	  }
           trf=tnew;
@@ -2337,7 +2337,7 @@ void voxel4(const double x,const double y,double z,
 	off-=nbin;
 	ts=table_sinc[nbin];
 	double sy=(table_sinc[nbin+1]-ts)*off + ts;
-	//z        
+	//z
         off=zval*glo_idsinc;
 	nbin=(int) off;
 	off-=nbin;
@@ -2345,7 +2345,7 @@ void voxel4(const double x,const double y,double z,
 	double sz=(table_sinc[nbin+1]-ts)*off + ts;
 	//CALCULATING TMP
         tmp=m00*exp(-tt*iT2+actint)*sx*sy*sz;
-	//TESTING 
+	//TESTING
 	if (opt_test==1 && v==1 && readstep%4096==2081){
 	cout.precision(20);
 	cout<<"table_sinc(xval)= "<<sx<<"; table_sinc(yval)= "<<sy<<"; table_sinc(zval)= "<<sz<<endl;
@@ -2368,7 +2368,7 @@ void voxel4(const double x,const double y,double z,
       //SIGNAL CALCULATION
       sreal[readstep-1]+=den*tmp*wanted_cos;
       simag[readstep-1]+=den*tmp*wanted_sin;
-      //TESTING  
+      //TESTING
       if(opt_test==1 && v==1 && readstep%4096==2081){
           cout.precision(20);
           cout<<"readstep= "<<readstep<<endl;
@@ -2380,7 +2380,7 @@ void voxel4(const double x,const double y,double z,
           cout<<"b0int= "<<b0int<<endl;
           cout<<"tnew= "<<tnew<<"; trf= "<<trf<<endl;
           cout<<"tt=tnew-trf= "<<tt<<endl;
-          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+(b0+chshift)*tt)= "<<phase<<endl; 
+          cout<<"phase=gama*(gg1*x+gg2*y+gg3*z+(b0+chshift)*tt)= "<<phase<<endl;
 	  cout<<"phase_2pi= "<<phase_2pi<<endl;
 	  cout<<"table_cos(phase)= "<<wanted_cos<<"; cos-table(phase)= "<<cos(phase)-wanted_cos<<endl;
           cout<<"table_sin(phase)= "<<wanted_sin<<"; sin-table(phase)= "<<sin(phase)-wanted_sin<<endl;

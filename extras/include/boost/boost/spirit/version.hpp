@@ -18,7 +18,7 @@
 
 #if BOOST_VERSION < 103200
 #error "Spirit v1.8.x needs at least Boost V1.32.0 to compile successfully."
-#endif 
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //

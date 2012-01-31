@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -45,7 +45,7 @@ private slots:
 
 private:
   Image::Handle getStructureImage(int);
-  
+
   void show() {}
 
   AtlasOptions& m_options;

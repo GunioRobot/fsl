@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -87,25 +87,25 @@ using namespace Utilities;
 using namespace MISCMATHS;
 
 namespace Bint {
-    
+
   class Prior
   {
   public:
-    
+
     Prior(){}
-    
+
     virtual ~Prior(){}
     virtual float calc_energy(float value) const  = 0;
     virtual float calc_gradient(float value) const  = 0;
 
   private:
-    
+
   };
-  
+
   class GaussPrior : public Prior
   {
   public:
-    GaussPrior(float pmn,float pstd, float pmin = -1e16, float pmax = 1e16) : 
+    GaussPrior(float pmn,float pstd, float pmin = -1e16, float pmax = 1e16) :
       Prior(),
       mn(pmn),std(pstd),min(pmin),max(pmax) {}
 
@@ -123,45 +123,45 @@ namespace Bint {
     {
       operator=(pin);
     }
-    
+
     virtual ~GaussPrior(){}
 
-    virtual float calc_energy(float value) const { 
+    virtual float calc_energy(float value) const {
       float energy = MAX_EN;
       if(value > min && value < max)
 	energy = pow(double((value-mn)/std),2.0)/2.0;
-      
+
       return energy; }
 
     virtual float calc_gradient(float value) const {
       float grad = 0;
-      
+
       if(value > min && value < max)
 	grad = ((mn-value)/(std*std));
-      
+
       return grad;
     }
 
   private:
 
-    GaussPrior();    
+    GaussPrior();
     float mn;
     float std;
     float min;
     float max;
   };
-  
-  
+
+
   class UnifPrior : public Prior
   {
   public:
-    UnifPrior(float pmin = -1e16, float pmax = 1e16) : 
+    UnifPrior(float pmin = -1e16, float pmax = 1e16) :
       Prior(),
       min(pmin),max(pmax) {
-      
+
       en=-std::log( 1/(max-min) );
     }
-    
+
     const UnifPrior& operator=(const UnifPrior& pin)
     {
       min = pin.min;
@@ -176,9 +176,9 @@ namespace Bint {
     }
 
     virtual ~UnifPrior(){}
-    
 
-    virtual float calc_energy(float value) const { 
+
+    virtual float calc_energy(float value) const {
       float energy=MAX_EN;
       if(value >= min && value <= max )
 	energy=en;
@@ -186,13 +186,13 @@ namespace Bint {
 
     virtual float calc_gradient(float value) const {
       float grad = 0;
-     
+
       return grad;
     }
 
   private:
 
-    UnifPrior();    
+    UnifPrior();
     float min;
     float max;
     float en;
@@ -203,7 +203,7 @@ namespace Bint {
   {
   public:
     // m=a/b, v=a/b^2, a=m^2/v, b=m/v
-    GammaPrior(float pa,float pb, float pmin = 0, float pmax = 1e16) : 
+    GammaPrior(float pa,float pb, float pmin = 0, float pmax = 1e16) :
       Prior(),
       a(pa),b(pb),min(pmin),max(pmax) {}
 
@@ -224,15 +224,15 @@ namespace Bint {
       operator=(pin);
     }
 
-    virtual float calc_energy(float value) const { 
-     
+    virtual float calc_energy(float value) const {
+
       float energy = MAX_EN;
       if(value > min && value < max)
 	{
 	  energy = -(a-1)*std::log(value)+b*value;
 	}
 
-      return energy; 
+      return energy;
     }
 
     virtual float calc_gradient(float value) const {
@@ -260,10 +260,10 @@ namespace Bint {
   class SinPrior : public Prior
   {
   public:
-    SinPrior(float pscale=1,float pmin=-1e16,float pmax=1e16) : 
+    SinPrior(float pscale=1,float pmin=-1e16,float pmax=1e16) :
       Prior(),
       scale(pscale),min(pmin),max(pmax){}
-    
+
     const SinPrior& operator=(const SinPrior& pin)
     {
       scale = pin.scale;
@@ -278,21 +278,21 @@ namespace Bint {
     }
 
     virtual ~SinPrior(){}
-    
 
-    virtual float calc_energy(float value) const { 
-      
+
+    virtual float calc_energy(float value) const {
+
       float energy= MAX_EN;
-      
+
       if(value > min && value < max){
 	if(!value==0){
 	  energy=-std::log(fabs(std::sin(value/scale)/2));
 	}
       }
-      
-      return energy; 
+
+      return energy;
     }
-    
+
     virtual float calc_gradient(float value) const {
       float grad = 0;
       if(value > min && value < max)
@@ -306,7 +306,7 @@ namespace Bint {
 
   private:
 
-    SinPrior();    
+    SinPrior();
     float scale;
     float min;
     float max;
@@ -315,9 +315,9 @@ namespace Bint {
  class GaussARDPrior : public Prior
   {
   public:
-    GaussARDPrior() : 
+    GaussARDPrior() :
       Prior(){}
-    
+
     const GaussARDPrior& operator=(const GaussARDPrior& pin)
     {
       return *this;
@@ -329,18 +329,18 @@ namespace Bint {
     }
 
     virtual ~GaussARDPrior(){}
-    
 
-    virtual float calc_energy(float value) const { 
-      
+
+    virtual float calc_energy(float value) const {
+
       float energy= MAX_EN;
       if(value!=0){
 	energy=std::log(fabs(value));
       }
-      
-      return energy; 
+
+      return energy;
     }
-    
+
     virtual float calc_gradient(float value) const {
       float grad = 1; //Wooly thinks this is better than 0
       if(value!=0){ grad =sign(value)/fabs(value);}
@@ -348,7 +348,7 @@ namespace Bint {
     }
 
   private:
- 
+
  };
 
 
@@ -356,7 +356,7 @@ namespace Bint {
   class Parameter
   {
   public:
-        
+
     Parameter(const string& pname, float pinitvalue, float pinitstd, Prior& pprior, bool pallowtovary = true, bool psave = true) :
       name(pname),
       init_value(pinitvalue),
@@ -364,7 +364,7 @@ namespace Bint {
       priorobj(pprior),
       allowtovary(pallowtovary),
       save(psave)
-    {      
+    {
     }
 
     virtual ~Parameter(){}
@@ -374,29 +374,29 @@ namespace Bint {
     float getinitstd() const {return init_std;}
     bool getallowtovary() const {return allowtovary;}
     bool getsave() const { return save; }
-    
+
     void setinitvalue(float pinitvalue) {init_value = pinitvalue;}
 
   protected:
 
     string name;
-    float init_value;    
-    float init_std;    
+    float init_value;
+    float init_std;
     Prior& priorobj;
     bool allowtovary;
     bool save;
-  
+
   private:
 
     Parameter();
     const Parameter& operator=(Parameter& par);
     Parameter(const Parameter&);
   };
-  
+
   class ForwardModel
   {
   public:
-    ForwardModel(int pdebuglevel) : 
+    ForwardModel(int pdebuglevel) :
       debuglevel(pdebuglevel),
       paramcount(0)
     {}
@@ -411,7 +411,7 @@ namespace Bint {
     Parameter& getparam(int p) {return *params[p];}
 
     int getnparams() const {return paramcount;}
-  
+
     void clear_params() {params.clear();paramcount = 0;}
 
     void add_param(const string& pname, float pinit_value, float pinit_std, Prior* tmp, bool pallowtovary, bool psave)
@@ -420,36 +420,36 @@ namespace Bint {
 
       priors.push_back(tmp);
       params.push_back(new Parameter(pname,pinit_value,pinit_std,*tmp,pallowtovary,psave));
-    }   
+    }
 
     void add_param(const string& pname, float pinit_value, float pinit_std, GaussPrior& pprior, bool pallowtovary = true, bool psave = true)
-    {   
+    {
       add_param(pname,pinit_value,pinit_std,new GaussPrior(pprior),pallowtovary,psave);
-    }  
-    
+    }
+
     void add_param(const string& pname, float pinit_value, float pinit_std, UnifPrior& pprior, bool pallowtovary = true, bool psave = true)
     {
       add_param(pname,pinit_value,pinit_std,new UnifPrior(pprior),pallowtovary,psave);
-    }  
+    }
 
     void add_param(const string& pname, float pinit_value, float pinit_std, GammaPrior& pprior, bool pallowtovary = true, bool psave = true)
     {
       add_param(pname,pinit_value,pinit_std,new GammaPrior(pprior),pallowtovary,psave);
-    }  
+    }
 
     void add_param(const string& pname, float pinit_value, float pinit_std, SinPrior& pprior, bool pallowtovary = true, bool psave = true)
     {
       add_param(pname,pinit_value,pinit_std,new SinPrior(pprior),pallowtovary,psave);
-    }  
-  
+    }
+
     void add_param(const string& pname, float pinit_value, float pinit_std, GaussARDPrior& pprior, bool pallowtovary = true, bool psave = true)
     {
       add_param(pname,pinit_value,pinit_std,new GaussARDPrior(pprior),pallowtovary,psave);
-    } 
+    }
   protected:
-    
-    int debuglevel;   
-    
+
+    int debuglevel;
+
     vector<Parameter*> params;
 
     int paramcount;
@@ -466,7 +466,7 @@ namespace Bint {
   class gForwardModel : public ForwardModel
   {
   public:
-    gForwardModel(int pdebuglevel) : 
+    gForwardModel(int pdebuglevel) :
       ForwardModel(pdebuglevel)
     {}
 
@@ -482,6 +482,6 @@ namespace Bint {
     gForwardModel(const gForwardModel&);
   };
 }
-   
+
 #endif
 

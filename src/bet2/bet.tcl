@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -83,7 +83,7 @@ proc bet:updatevariations { w } {
 
     pack forget $w.f.variations.input
 
-    if { $bet($w,variations) == "-A2" } { 
+    if { $bet($w,variations) == "-A2" } {
 	pack $w.f.variations.input -in $w.f.variations -side bottom -padx 5 -pady 2 -anchor s
     }
 }
@@ -159,14 +159,14 @@ if { $argc > 0 && [ string length [ lindex $argv 0 ] ] > 0 } {
 
 
 FileEntry $w.f.input -textvariable bet($w,input) -label "Input image   " -title "Select the input image"  -width 50 -filedialog directory  -filetypes IMAGE -command "bet:select $w"
-FileEntry $w.f.output -textvariable bet($w,output) -label "Output image" -title "Select the output image"  -width 50 -filedialog directory  -filetypes IMAGE 
+FileEntry $w.f.output -textvariable bet($w,output) -label "Output image" -title "Select the output image"  -width 50 -filedialog directory  -filetypes IMAGE
 
 #}}}
     #{{{ fractional brain threshold
 
 set bet($w,fraction) 0.5
 
-LabelSpinBox  $w.f.fraction -label "Fractional intensity threshold; smaller values give larger brain outline estimates" -textvariable bet($w,fraction) -range " 0.0 1.0 0.05 " 
+LabelSpinBox  $w.f.fraction -label "Fractional intensity threshold; smaller values give larger brain outline estimates" -textvariable bet($w,fraction) -range " 0.0 1.0 0.05 "
 
 #}}}
     #{{{ variations
@@ -251,7 +251,7 @@ pack $w.f.opts.overlay.label $w.f.opts.overlay.yn -in $w.f.opts.overlay -side le
 
 set bet($w,gradient) 0
 
-LabelSpinBox $w.f.opts.gradient -label "Threshold gradient; positive values give larger brain outline at bottom, smaller at top" -textvariable bet($w,gradient) -range " -1.0 1.0 0.05 " 
+LabelSpinBox $w.f.opts.gradient -label "Threshold gradient; positive values give larger brain outline at bottom, smaller at top" -textvariable bet($w,gradient) -range " -1.0 1.0 0.05 "
 
 #}}}
 #{{{ co-ordinates for centre of initial brain surface sphere
@@ -280,17 +280,17 @@ pack $w.f.opts.gradient $w.f.opts.c -in $w.f.opts.b -side top -anchor w -pady 5
 
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
- 
+
     button $w.apply     -command "bet:apply $w keep" \
         -text "Go" -width 5
     bind $w.apply <Return> {
         [winfo toplevel %W].apply invoke}
- 
+
     button $w.cancel    -command "bet:destroy $w" \
         -text "Exit" -width 5
     bind $w.cancel <Return> {
         [winfo toplevel %W].cancel invoke}
- 
+
     button $w.help -command "FmribWebHelp file: ${FSLDIR}/doc/bet2/index.html" \
             -text "Help" -width 5
     bind $w.help <Return> {
@@ -299,7 +299,7 @@ pack $w.f.opts.gradient $w.f.opts.c -in $w.f.opts.b -side top -anchor w -pady 5
     pack $w.btns.b -side bottom -fill x
     pack $w.apply $w.cancel $w.help -in $w.btns.b \
         -side left -expand yes -padx 3 -pady 10 -fill y
- 
+
     pack $w.f $w.btns -expand yes -fill both
 
 #}}}

@@ -11,20 +11,20 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <boost/config.hpp> // NO_STD_LOCALE, DEDUCED_TYPENAME.
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale>
 #endif
-#include <boost/iostreams/detail/ios.hpp>   
-#include <boost/iostreams/detail/wrap_unwrap.hpp>       
-#include <boost/iostreams/traits.hpp>         
-#include <boost/iostreams/operations.hpp>        
-#include <boost/mpl/if.hpp>    
-#include <boost/static_assert.hpp>  
+#include <boost/iostreams/detail/ios.hpp>
+#include <boost/iostreams/detail/wrap_unwrap.hpp>
+#include <boost/iostreams/traits.hpp>
+#include <boost/iostreams/operations.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_same.hpp> 
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -44,9 +44,9 @@ class combined_device {
 public:
     typedef typename char_type_of<Source>::type char_type;
     struct category
-        : bidirectional, 
-          device_tag, 
-          closable_tag, 
+        : bidirectional,
+          device_tag,
+          closable_tag,
           localizable_tag
         { };
     combined_device(const Source& src, const Sink& snk);
@@ -67,9 +67,9 @@ private:
 // Template name: combined_filter.
 // Description: Model of Device defined in terms of a Source/Sink pair.
 // Template paramters:
-//      InputFilter - A model of InputFilter, with the same char_type as 
+//      InputFilter - A model of InputFilter, with the same char_type as
 //          OutputFilter.
-//      OutputFilter - A model of OutputFilter, with the same char_type as 
+//      OutputFilter - A model of OutputFilter, with the same char_type as
 //          InputFilter.
 //
 template<typename InputFilter, typename OutputFilter>
@@ -79,9 +79,9 @@ private:
     typedef typename category_of<OutputFilter>::type   out_category;
 public:
     typedef typename char_type_of<InputFilter>::type   char_type;
-    struct category 
+    struct category
         : multichar_bidirectional_filter_tag,
-          closable_tag, 
+          closable_tag,
           localizable_tag
         { };
     combined_filter(const InputFilter& in, const OutputFilter& out);
@@ -113,7 +113,7 @@ private:
 };
 
 template<typename In, typename Out>
-struct combination_traits 
+struct combination_traits
     : mpl::if_<
           is_device<In>,
           combined_device<
@@ -144,7 +144,7 @@ namespace detail {
 template<typename In, typename Out>
 struct combine_traits {
     typedef combination<
-                BOOST_DEDUCED_TYPENAME detail::unwrapped_type<In>::type, 
+                BOOST_DEDUCED_TYPENAME detail::unwrapped_type<In>::type,
                 BOOST_DEDUCED_TYPENAME detail::unwrapped_type<Out>::type
             > type;
 };
@@ -162,10 +162,10 @@ struct combine_traits {
 //
 template<typename In, typename Out>
 typename detail::combine_traits<In, Out>::type
-combine(const In& in, const Out& out) 
-{ 
+combine(const In& in, const Out& out)
+{
     typedef typename detail::combine_traits<In, Out>::type return_type;
-    return return_type(in, out); 
+    return return_type(in, out);
 }
 
 //----------------------------------------------------------------------------//
@@ -192,11 +192,11 @@ combined_device<Source, Sink>::write(const char_type* s, std::streamsize n)
 template<typename Source, typename Sink>
 inline void
 combined_device<Source, Sink>::close(BOOST_IOS::openmode which)
-{ 
+{
     if (which & BOOST_IOS::in)
-        iostreams::close(src_, which); 
+        iostreams::close(src_, which);
     if (which & BOOST_IOS::out)
-        iostreams::close(sink_, which); 
+        iostreams::close(sink_, which);
 }
 
 #ifndef BOOST_NO_STD_LOCALE

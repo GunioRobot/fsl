@@ -1,4 +1,4 @@
-/* 
+/*
  * tkFont.c --
  *
  *	This file maintains a database of fonts for the Tk toolkit.
@@ -23,7 +23,7 @@
  * exist in the current application.  It must be stored in the
  * TkMainInfo for the application.
  */
- 
+
 typedef struct TkFontInfo {
     Tcl_HashTable fontCache;	/* Map a string to an existing Tk_Font.
 				 * Keys are string font names, values are
@@ -50,7 +50,7 @@ typedef struct NamedFont {
 				 * last reference goes away. */
     TkFontAttributes fa;	/* Desired attributes for named font. */
 } NamedFont;
-    
+
 /*
  * The following two structures are used to keep track of string
  * measurement information when using the text layout facilities.
@@ -146,7 +146,7 @@ static TkStateMap xlfdWeightMap[] = {
     {TK_FW_BOLD,	"demi"},
     {TK_FW_BOLD,	"demibold"},
     {TK_FW_NORMAL,	NULL}		/* Assume anything else is "normal". */
-}; 
+};
 
 static TkStateMap xlfdSlantMap[] = {
     {TK_FS_ROMAN,	"r"},
@@ -164,7 +164,7 @@ static TkStateMap xlfdSetwidthMap[] = {
 };
 
 /*
- * The following structure and defines specify the valid builtin options 
+ * The following structure and defines specify the valid builtin options
  * when configuring a set of font attributes.
  */
 
@@ -228,7 +228,7 @@ static char *gothicAliases[] = {
 				/* Windows (MS goshikku). */
     "\344\270\270\343\202\264\343\202\267\343\203\203\343\202\257\342\210\222\357\274\255",
 				/* Mac (goshikku-M). */
-    NULL    
+    NULL
 };
 
 static char *dingbatsAliases[] = {
@@ -247,12 +247,12 @@ static char **fontAliases[] = {
     gothicAliases,
     dingbatsAliases,
     NULL
-};  
+};
 
 /*
- * Hardcoded font classes.  If the character cannot be found in the base 
- * font, the classes are examined in order to see if some other similar 
- * font should be examined also.  
+ * Hardcoded font classes.  If the character cannot be found in the base
+ * font, the classes are examined in order to see if some other similar
+ * font should be examined also.
  */
 
 static char *systemClass[] = {
@@ -303,7 +303,7 @@ static char **fontFallbacks[] = {
 /*
  * Global fallbacks.  If the character could not be found in the preferred
  * fallback list, this list is examined.  If the character still cannot be
- * found, all font families in the system are examined. 
+ * found, all font families in the system are examined.
  */
 
 static char *globalFontClass[] = {
@@ -374,8 +374,8 @@ Tcl_ObjType tkFontObjType = {
  *	package on a per application basis.
  *
  * Results:
- *	Stores a token in the mainPtr to hold information needed by this 
- *	package on a per application basis. 
+ *	Stores a token in the mainPtr to hold information needed by this
+ *	package on a per application basis.
  *
  * Side effects:
  *	Memory allocated.
@@ -433,7 +433,7 @@ TkFontPkgFree(mainPtr)
 	    searchPtr = Tcl_NextHashEntry(&search)) {
 	fontsLeft++;
 #ifdef DEBUG_FONTS
-	fprintf(stderr, "Font %s still in cache.\n", 
+	fprintf(stderr, "Font %s still in cache.\n",
 		Tcl_GetHashKey(&fiPtr->fontCache, searchPtr));
 #endif
     }
@@ -459,7 +459,7 @@ TkFontPkgFree(mainPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * Tk_FontObjCmd -- 
+ * Tk_FontObjCmd --
  *
  *	This procedure is implemented to process the "font" Tcl command.
  *	See the user documentation for details on what it does.
@@ -664,7 +664,7 @@ Tk_FontObjCmd(clientData, interp, objc, objv)
 	    Tk_Font tkfont;
 	    int length, skip;
 	    Tcl_Obj *resultPtr;
-	    
+
 	    skip = TkGetDisplayOf(interp, objc - 3, objv + 3, &tkwin);
 	    if (skip < 0) {
 		return TCL_ERROR;
@@ -741,7 +741,7 @@ Tk_FontObjCmd(clientData, interp, objc, objv)
 	    Tcl_HashSearch search;
 	    Tcl_HashEntry *namedHashPtr;
 	    Tcl_Obj *strPtr, *resultPtr;
-	    
+
 	    if (objc != 2) {
 		Tcl_WrongNumArgs(interp, 1, objv, "names");
 		return TCL_ERROR;
@@ -870,7 +870,7 @@ RecomputeWidgets(winPtr)
  * CreateNamedFont --
  *
  *	Create the specified named font with the given attributes in the
- *	named font table associated with the interp.  
+ *	named font table associated with the interp.
  *
  * Results:
  *	Returns TCL_OK if the font was successfully created, or TCL_ERROR
@@ -898,12 +898,12 @@ CreateNamedFont(interp, tkwin, name, faPtr)
     TkFontInfo *fiPtr;
     Tcl_HashEntry *namedHashPtr;
     int new;
-    NamedFont *nfPtr;    
+    NamedFont *nfPtr;
 
     fiPtr = ((TkWindow *) tkwin)->mainPtr->fontInfoPtr;
 
     namedHashPtr = Tcl_CreateHashEntry(&fiPtr->namedTable, name, &new);
-		    
+
     if (new == 0) {
 	nfPtr = (NamedFont *) Tcl_GetHashValue(namedHashPtr);
 	if (nfPtr->deletePending == 0) {
@@ -929,7 +929,7 @@ CreateNamedFont(interp, tkwin, name, faPtr)
     nfPtr->deletePending = 0;
     Tcl_SetHashValue(namedHashPtr, nfPtr);
     nfPtr->fa = *faPtr;
-    nfPtr->refCount = 0;	
+    nfPtr->refCount = 0;
     nfPtr->deletePending = 0;
     return TCL_OK;
 }
@@ -937,7 +937,7 @@ CreateNamedFont(interp, tkwin, name, faPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * Tk_GetFont -- 
+ * Tk_GetFont --
  *
  *	Given a string description of a font, map the description to a
  *	corresponding Tk_Font that represents the font.
@@ -964,20 +964,20 @@ Tk_GetFont(interp, tkwin, string)
     CONST char *string;		/* String describing font, as: named font,
 				 * native format, or parseable string. */
 {
-    Tk_Font tkfont; 
+    Tk_Font tkfont;
     Tcl_Obj *strPtr;
 
     strPtr = Tcl_NewStringObj((char *) string, -1);
     Tcl_IncrRefCount(strPtr);
     tkfont = Tk_AllocFontFromObj(interp, tkwin, strPtr);
-    Tcl_DecrRefCount(strPtr);	
+    Tcl_DecrRefCount(strPtr);
     return tkfont;
 }
 
 /*
  *---------------------------------------------------------------------------
  *
- * Tk_AllocFontFromObj -- 
+ * Tk_AllocFontFromObj --
  *
  *	Given a string description of a font, map the description to a
  *	corresponding Tk_Font that represents the font.
@@ -1124,7 +1124,7 @@ Tk_AllocFontFromObj(interp, tkwin, objPtr)
      * Get information used for drawing underlines in generic code on a
      * non-underlined font.
      */
-    
+
     descent = fontPtr->fm.descent;
     fontPtr->underlinePos = descent / 2;
     fontPtr->underlineHeight = TkFontGetPixels(tkwin, fontPtr->fa.size) / 10;
@@ -1144,7 +1144,7 @@ Tk_AllocFontFromObj(interp, tkwin, objPtr)
 	    fontPtr->underlineHeight = 1;
 	}
     }
-    
+
     objPtr->internalRep.twoPtrValue.ptr1 = (VOID *) fontPtr;
     return (Tk_Font) fontPtr;
 }
@@ -1163,7 +1163,7 @@ Tk_AllocFontFromObj(interp, tkwin, objPtr)
  *
  * Side effects:
  *	If the object is not already a font ref, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -1176,7 +1176,7 @@ Tk_GetFontFromObj(tkwin, objPtr)
     TkFontInfo *fiPtr = ((TkWindow *) tkwin)->mainPtr->fontInfoPtr;
     TkFont *fontPtr;
     Tcl_HashEntry *hashPtr;
- 
+
     if (objPtr->typePtr != &tkFontObjType) {
 	SetFontFromAny((Tcl_Interp *) NULL, objPtr);
     }
@@ -1249,7 +1249,7 @@ SetFontFromAny(interp, objPtr)
     Tcl_ObjType *typePtr;
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     Tcl_GetString(objPtr);
@@ -1295,7 +1295,7 @@ Tk_NameOfFont(tkfont)
 /*
  *---------------------------------------------------------------------------
  *
- * Tk_FreeFont -- 
+ * Tk_FreeFont --
  *
  *	Called to release a font allocated by Tk_GetFont().
  *
@@ -1362,7 +1362,7 @@ Tk_FreeFont(tkfont)
 /*
  *---------------------------------------------------------------------------
  *
- * Tk_FreeFontFromObj -- 
+ * Tk_FreeFontFromObj --
  *
  *	Called to release a font inside a Tcl_Obj *. Decrements the refCount
  *	of the font and removes it from the hash tables if necessary.
@@ -1389,7 +1389,7 @@ Tk_FreeFontFromObj(tkwin, objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * FreeFontObjProc -- 
+ * FreeFontObjProc --
  *
  *	This proc is called to release an object reference to a font.
  *	Called when the object's internal rep is released or when
@@ -1424,7 +1424,7 @@ FreeFontObjProc(objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * DupFontObjProc -- 
+ * DupFontObjProc --
  *
  *	When a cached font object is duplicated, this is called to
  *	update the internal reps.
@@ -1445,7 +1445,7 @@ DupFontObjProc(srcObjPtr, dupObjPtr)
     Tcl_Obj *dupObjPtr;		/* The object we are copying to. */
 {
     TkFont *fontPtr = (TkFont *) srcObjPtr->internalRep.twoPtrValue.ptr1;
-    
+
     dupObjPtr->typePtr = srcObjPtr->typePtr;
     dupObjPtr->internalRep.twoPtrValue.ptr1 = (VOID *) fontPtr;
 
@@ -1673,7 +1673,7 @@ Tk_PostscriptFontName(tkfont, dsPtr)
      */
 
     if ((slantString == NULL) && (weightString == NULL)) {
-	if ((strcmp(family, "Times") == 0) 
+	if ((strcmp(family, "Times") == 0)
 		|| (strcmp(family, "NewCenturySchlbk") == 0)
 		|| (strcmp(family, "Palatino") == 0)) {
 	    Tcl_DStringAppend(dsPtr, "-Roman", -1);
@@ -1736,7 +1736,7 @@ Tk_TextWidth(tkfont, string, numBytes)
  *	underline.  This procedure would mainly be used to quickly
  *	underline a few characters without having to construct an
  *	underlined font.  To produce properly underlined text, the
- *	appropriate underlined font should be constructed and used. 
+ *	appropriate underlined font should be constructed and used.
  *
  * Results:
  *	None.
@@ -1769,7 +1769,7 @@ Tk_UnderlineChars(display, drawable, gc, tkfont, string, x, y, firstByte,
     int startX, endX;
 
     fontPtr = (TkFont *) tkfont;
-    
+
     Tk_MeasureChars(tkfont, string, firstByte, -1, 0, &startX);
     Tk_MeasureChars(tkfont, string, lastByte, -1, 0, &endX);
 
@@ -1805,7 +1805,7 @@ Tk_UnderlineChars(display, drawable, gc, tkfont, string, x, y, firstByte,
  *	are stored in *widthPtr and *heightPtr.
  *
  * Side effects:
- *	Memory is allocated to hold the measurement information.  
+ *	Memory is allocated to hold the measurement information.
  *
  *---------------------------------------------------------------------------
  */
@@ -1842,7 +1842,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
     int curLine, layoutHeight;
 
     Tcl_DStringInit(&lineBuffer);
-    
+
     fontPtr = (TkFont *) tkfont;
     if ((fontPtr == NULL) || (string == NULL)) {
 	if (widthPtr != NULL) {
@@ -1886,7 +1886,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
     special = string;
 
     flags &= TK_IGNORE_TABS | TK_IGNORE_NEWLINES;
-    flags |= TK_WHOLE_WORDS | TK_AT_LEAST_ONE;	    
+    flags |= TK_WHOLE_WORDS | TK_AT_LEAST_ONE;
     for (start = string; start < end; ) {
 	if (start >= special) {
 	    /*
@@ -1926,7 +1926,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 	    if (bytesThisChunk > 0) {
 		chunkPtr = NewChunk(&layoutPtr, &maxChunks, start,
 			bytesThisChunk, curX, newX, baseline);
-			
+
 		start += bytesThisChunk;
 		curX = newX;
 	    }
@@ -1957,7 +1957,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 		    flags &= ~TK_AT_LEAST_ONE;
 		    continue;
 		}
-	    } else {	
+	    } else {
 		NewChunk(&layoutPtr, &maxChunks, start, 1, curX, curX,
 			baseline)->numDisplayChars = -1;
 		start++;
@@ -1968,7 +1968,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 	/*
 	 * No more characters are going to go on this line, either because
 	 * no more characters can fit or there are no more characters left.
-	 * Consume all extra spaces at end of line.  
+	 * Consume all extra spaces at end of line.
 	 */
 
 	while ((start < end) && isspace(UCHAR(*start))) { /* INTL: ISO space */
@@ -2004,7 +2004,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 	    }
 	}
 
-        wrapLine: 
+        wrapLine:
 	flags |= TK_AT_LEAST_ONE;
 
 	/*
@@ -2041,7 +2041,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 	    Tcl_DStringAppend(&lineBuffer, (char *) &curX, sizeof(curX));
 	    baseline += height;
 	}
-    }	    
+    }
 
     layoutPtr->width = maxWidth;
     layoutHeight = baseline - fmPtr->ascent;
@@ -2068,7 +2068,7 @@ Tk_ComputeTextLayout(tkfont, string, numChars, wrapLength, justify, flags,
 	 * Using maximum line length, shift all the chunks so that the lines
 	 * are all justified correctly.
 	 */
-    
+
 	curLine = 0;
 	chunkPtr = layoutPtr->chunks;
 	y = chunkPtr->y;
@@ -2256,7 +2256,7 @@ Tk_UnderlineTextLayout(display, drawable, gc, layout, x, y, underline)
 	layoutPtr = (TextLayout *) layout;
 	fontPtr = (TkFont *) layoutPtr->tkfont;
 
-	XFillRectangle(display, drawable, gc, x + xx, 
+	XFillRectangle(display, drawable, gc, x + xx,
 		y + yy + fontPtr->fm.ascent + fontPtr->underlinePos,
 		(unsigned int) width, (unsigned int) fontPtr->underlineHeight);
     }
@@ -2408,7 +2408,7 @@ Tk_PointToChar(layout, x, y)
  * Tk_CharBbox --
  *
  *	Use the information in the Tk_TextLayout token to return the
- *	bounding box for the character specified by index.  
+ *	bounding box for the character specified by index.
  *
  *	The width of the bounding box is the advance width of the
  *	character, and does not include and left- or right-bearing.
@@ -2425,7 +2425,7 @@ Tk_PointToChar(layout, x, y)
  *
  *	A text layout that contains no characters is considered to
  *	contain a single zero-width placeholder character.
- * 
+ *
  * Results:
  *	The return value is 0 if the index did not specify a character
  *	in the text layout, or non-zero otherwise.  In that case,
@@ -2571,7 +2571,7 @@ Tk_DistanceToTextLayout(layout, x, y)
     fontPtr = (TkFont *) layoutPtr->tkfont;
     ascent = fontPtr->fm.ascent;
     descent = fontPtr->fm.descent;
-    
+
     minDist = 0;
     chunkPtr = layoutPtr->chunks;
     for (i = 0; i < layoutPtr->numChunks; i++) {
@@ -2662,7 +2662,7 @@ Tk_IntersectTextLayout(layout, x, y, width, height)
      * detected, return immediately; otherwise wait until all chunks have
      * been processed and see if they were all inside or all outside.
      */
-    
+
     layoutPtr = (TextLayout *) layout;
     chunkPtr = layoutPtr->chunks;
     fontPtr = (TkFont *) layoutPtr->tkfont;
@@ -2796,7 +2796,7 @@ Tk_TextLayoutToPostscript(interp, layout)
 		last_p=p;
 		p +=(charsize= Tcl_UtfToUniChar(p,&ch));
 		Tcl_UtfToExternal(interp,NULL,last_p,charsize,0,NULL,one_char,4,
-			NULL,&bytecount,NULL); 
+			NULL,&bytecount,NULL);
                 if (bytecount == 1) {
 		    c = UCHAR(one_char[0]);
 		    /* c = UCHAR( ch & 0xFF) */;
@@ -2820,16 +2820,16 @@ Tk_TextLayoutToPostscript(interp, layout)
 		     * So, we must use full glyph name */
 		    sprintf(uindex,"%04X",ch); /* endianness? */
 		    if ((glyphname = Tcl_GetVar2( interp , "::tk::psglyphs",uindex,0))) {
-			if (used > 0 && buf [used-1] == '(') 
+			if (used > 0 && buf [used-1] == '(')
 			    --used;
 			else
 			    buf[used++] = ')';
 			buf[used++] = '/';
-			while( (*glyphname) && (used < (MAXUSE+27))) 
+			while( (*glyphname) && (used < (MAXUSE+27)))
 			    buf[used++] = *glyphname++ ;
 			buf[used++] = '(';
 		    }
-		    
+
 		}
 		if (used >= MAXUSE) {
 		    buf[used] = '\0';
@@ -2843,7 +2843,7 @@ Tk_TextLayoutToPostscript(interp, layout)
 	     * If there are a whole bunch of returns or tabs in a row,
 	     * then buf[] could get filled up.
 	     */
-	     
+
 	    buf[used] = '\0';
 	    Tcl_AppendResult(interp, buf, (char *) NULL);
 	    used = 0;
@@ -2892,7 +2892,7 @@ ConfigAttributesObj(interp, tkwin, objc, objv, faPtr)
     int i, n, index;
     Tcl_Obj *optionPtr, *valuePtr;
     char *value;
-    
+
     for (i = 0; i < objc; i += 2) {
 	optionPtr = objv[i];
 	valuePtr = objv[i + 1];
@@ -3030,7 +3030,7 @@ GetAttributeInfoObj(interp, faPtr, objPtr)
 		str = TkFindStateString(weightMap, faPtr->weight);
 		valuePtr = Tcl_NewStringObj(str, -1);
 		break;
-	
+
 	    case FONT_SLANT:
 		str = TkFindStateString(slantMap, faPtr->slant);
 		valuePtr = Tcl_NewStringObj(str, -1);
@@ -3095,7 +3095,7 @@ ParseFontNameObj(interp, tkwin, objPtr, faPtr)
     int objc, result, i, n;
     Tcl_Obj **objv;
     char *string;
-    
+
     TkInitFontAttributes(faPtr);
 
     string = Tcl_GetString(objPtr);
@@ -3104,7 +3104,7 @@ ParseFontNameObj(interp, tkwin, objPtr, faPtr)
 	 * This may be an XLFD or an "-option value" string.
 	 *
 	 * If the string begins with "-*" or a "-foundry-family-*" pattern,
-	 * then consider it an XLFD.  
+	 * then consider it an XLFD.
 	 */
 
 	if (string[1] == '*') {
@@ -3122,7 +3122,7 @@ ParseFontNameObj(interp, tkwin, objPtr, faPtr)
 
 	return ConfigAttributesObj(interp, tkwin, objc, objv, faPtr);
     }
-    
+
     if (*string == '*') {
 	/*
 	 * This is appears to be an XLFD.  Under Unix, all valid XLFDs were
@@ -3238,7 +3238,7 @@ NewChunk(layoutPtrPtr, maxPtr, start, numBytes, curX, newX, y)
     LayoutChunk *chunkPtr;
     int maxChunks, numChars;
     size_t s;
-    
+
     layoutPtr = *layoutPtrPtr;
     maxChunks = *maxPtr;
     if (layoutPtr->numChunks == maxChunks) {
@@ -3274,7 +3274,7 @@ NewChunk(layoutPtrPtr, maxPtr, start, numBytes, curX, newX, y)
  * Results:
  *	Return value is TCL_ERROR if string was not a fully specified XLFD.
  *	Otherwise, fills font attribute buffer with the values parsed
- *	from the XLFD and returns TCL_OK.  
+ *	from the XLFD and returns TCL_OK.
  *
  * Side effects:
  *	None.
@@ -3301,7 +3301,7 @@ TkFontParseXLFD(string, faPtr, xaPtr)
     char *field[XLFD_NUMFIELDS + 2];
     Tcl_DString ds;
     TkXLFDAttributes xa;
-    
+
     if (xaPtr == NULL) {
 	xaPtr = &xa;
     }
@@ -3434,7 +3434,7 @@ TkFontParseXLFD(string, faPtr, xaPtr)
 	     *
 	     *	    [ N1 N2 N3 N4 ]
 	     *
-	     * where N1 is the pixel size, and where N2, N3, and N4 
+	     * where N1 is the pixel size, and where N2, N3, and N4
 	     * are some additional numbers that I don't know
 	     * the purpose of, so I ignore them.
 	     */
@@ -3515,7 +3515,7 @@ FieldSpecified(field)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 int
 TkFontGetPixels(tkwin, size)
     Tk_Window tkwin;		/* For point->pixel conversion factor. */
@@ -3549,7 +3549,7 @@ TkFontGetPixels(tkwin, size)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 int
 TkFontGetPoints(tkwin, size)
     Tk_Window tkwin;		/* For pixel->point conversion factor. */
@@ -3577,7 +3577,7 @@ TkFontGetPoints(tkwin, size)
  *	that this platform expects when asking for the font.
  *
  * Results:
- *	As above.  The return value is NULL if the font name has no 
+ *	As above.  The return value is NULL if the font name has no
  *	aliases.
  *
  * Side effects:
@@ -3585,11 +3585,11 @@ TkFontGetPoints(tkwin, size)
  *
  *-------------------------------------------------------------------------
  */
-	
+
 char **
 TkFontGetAliasList(faceName)
     CONST char *faceName;	/* Font name to test for aliases. */
-{   
+{
     int i, j;
 
     for (i = 0; fontAliases[i] != NULL; i++) {
@@ -3608,7 +3608,7 @@ TkFontGetAliasList(faceName)
  * TkFontGetFallbacks --
  *
  *	Get the list of font fallbacks that the platform-specific code
- *	can use to try to find the closest matching font the name 
+ *	can use to try to find the closest matching font the name
  *	requested.
  *
  * Results:
@@ -3619,7 +3619,7 @@ TkFontGetAliasList(faceName)
  *
  *-------------------------------------------------------------------------
  */
-	
+
 char ***
 TkFontGetFallbacks()
 {
@@ -3644,7 +3644,7 @@ TkFontGetFallbacks()
  *
  *-------------------------------------------------------------------------
  */
-	
+
 char **
 TkFontGetGlobalClass()
 {
@@ -3656,7 +3656,7 @@ TkFontGetGlobalClass()
  *
  * TkFontGetSymbolClass --
  *
- *	Get the list of fonts that are symbolic; used if the operating 
+ *	Get the list of fonts that are symbolic; used if the operating
  *	system cannot apriori identify symbolic fonts on its own.
  *
  * Results:
@@ -3667,7 +3667,7 @@ TkFontGetGlobalClass()
  *
  *-------------------------------------------------------------------------
  */
-	
+
 char **
 TkFontGetSymbolClass()
 {
@@ -3716,7 +3716,7 @@ TkDebugFont(tkwin, name)
 	    Tcl_ListObjAppendElement(NULL, objPtr,
 		    Tcl_NewIntObj(fontPtr->resourceRefCount));
 	    Tcl_ListObjAppendElement(NULL, objPtr,
-		    Tcl_NewIntObj(fontPtr->objRefCount)); 
+		    Tcl_NewIntObj(fontPtr->objRefCount));
 	    Tcl_ListObjAppendElement(NULL, resultPtr, objPtr);
 	}
     }

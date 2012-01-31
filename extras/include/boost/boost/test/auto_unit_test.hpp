@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -34,13 +34,13 @@ namespace boost {
 namespace unit_test {
 
 struct auto_unit_test_suite_t : test_suite {
-    auto_unit_test_suite_t() 
+    auto_unit_test_suite_t()
     : test_suite( "Master Test Suite" )
     , argc( 0 )
     , argv( 0 )
     {}
-    
-    // Data members    
+
+    // Data members
     int      argc;
     char**   argv;
 };
@@ -236,7 +236,7 @@ init_unit_test_suite( int argc, char* argv[] ) {
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: auto_unit_test.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

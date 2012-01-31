@@ -9,7 +9,7 @@
 # include <boost/type_traits/add_reference.hpp>
 # include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost { namespace python { namespace detail {
 
 template <class T>
 struct value_arg
@@ -21,7 +21,7 @@ struct value_arg
         >::type
   >
 {};
-  
+
 }}} // namespace boost::python::detail
 
 #endif // VALUE_ARG_DWA2004312_HPP

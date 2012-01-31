@@ -1,4 +1,4 @@
-/* 
+/*
  * tkTextWind.c --
  *
  *	This file contains code that allows arbitrary windows to be
@@ -240,7 +240,7 @@ TkTextWindowCmd(textPtr, interp, argc, argv)
 	/*
 	 * Don't allow insertions on the last (dummy) line of the text.
 	 */
-    
+
 	lineIndex = TkBTreeLineIndex(index.linePtr);
 	if (lineIndex == TkBTreeNumLines(textPtr->tree)) {
 	    lineIndex--;

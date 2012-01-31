@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -71,7 +71,7 @@
 
 namespace MISCMATHS {
 
-  set<kernelstorage*, kernelstorage::comparer> kernel::existingkernels;  
+  set<kernelstorage*, kernelstorage::comparer> kernel::existingkernels;
 
   //////// Support function /////////
 
@@ -86,16 +86,16 @@ namespace MISCMATHS {
     dn -= n;
     if (n>(kernel.Nrows()-1)) return 0.0;
     if (n<1) return 0.0;
-    
+
     return kernel(n)*(1.0-dn) + kernel(n+1)*dn;
   }
-  
+
   inline bool in_bounds(ColumnVector data, int index)
   { return ( (index>=1) && (index<=data.Nrows())); }
-  
+
   inline bool in_bounds(ColumnVector data, float index)
   { return ( ((int)floor(index)>=1) && ((int)ceil(index)<=data.Nrows())); }
-  
+
   // Support Functions
 
   float sincfn(float x)
@@ -104,26 +104,26 @@ namespace MISCMATHS {
     float y=M_PI*x;
     return sin(y)/y;
   }
-  
+
   float hanning(float x, int w)
   {  // w is half-width
-    if (fabs(x)>w) 
+    if (fabs(x)>w)
       return 0.0;
     else
       return (0.5 + 0.5 *cos(M_PI*x/w));
   }
-  
+
   float blackman(float x, int w)
   {  // w is half-width
-    if (fabs(x)>w) 
+    if (fabs(x)>w)
       return 0.0;
     else
       return (0.42 + 0.5 *cos(M_PI*x/w) + 0.08*cos(2.0*M_PI*x/w));
   }
-  
+
   float rectangular(float x, int w)
   {  // w is half-width
-    if (fabs(x)>w) 
+    if (fabs(x)>w)
       return 0.0;
     else
       return 1.0;
@@ -154,8 +154,8 @@ namespace MISCMATHS {
     return ker;
   }
 
-  
-  kernel sinckernel(const string& sincwindowtype, int w, int nstore) 
+
+  kernel sinckernel(const string& sincwindowtype, int w, int nstore)
   {
     kernel sinck;
     sinck = sinckernel(sincwindowtype,w,w,w,nstore);
@@ -179,7 +179,7 @@ namespace MISCMATHS {
     kx = sinckernel1D(sincwindowtype,wx,nstore);
     ky = sinckernel1D(sincwindowtype,wy,nstore);
     kz = sinckernel1D(sincwindowtype,wz,nstore);
-    
+
     sinckern.setkernel(kx,ky,kz,hwx,hwy,hwz);
     return sinckern;
   }
@@ -200,13 +200,13 @@ namespace MISCMATHS {
 
     return extrapval;
   }
-  
+
   // basic trilinear call
   float interpolate_1d(ColumnVector data, const float index)
   {
     float interpval;
     int low_bound = (int)floor(index);
-    int high_bound = (int)ceil(index); 
+    int high_bound = (int)ceil(index);
 
     if (in_bounds(data, index))
       interpval = data(low_bound) + (index - low_bound)*(data(high_bound) - data(low_bound));
@@ -216,7 +216,7 @@ namespace MISCMATHS {
     return interpval;
   }
 
-    
+
   //////// Spline Support /////////
 
   float hermiteinterpolation_1d(ColumnVector data, int p1, int p4, float t)
@@ -225,7 +225,7 @@ namespace MISCMATHS {
     // inputs: points P_1, P_4; tangents R_1, R_4; interpolation index t;
 
     float retval, r1 = 0.0, r4 = 0.0;
-    
+
     if (!in_bounds(data,p1) || !in_bounds(data,p4)) {
       cerr << "Hermite Interpolation - ERROR: One or more indicies lie outside the data range. Returning ZERO" << endl;
       retval = 0.0;
@@ -236,17 +236,17 @@ namespace MISCMATHS {
 	    retval = data(p1);
 	    } else if (t == 1.0) {
 	    retval = data(p4);
-      */   
+      */
     } else {
       r1 = 0.5 * (extrapolate_1d(data, p1) - extrapolate_1d(data, p1 - 1)) + 0.5 * (extrapolate_1d(data, p1 + 1) - extrapolate_1d(data, p1));// tangent @ P_1
       r4 = 0.5 * (extrapolate_1d(data, p4) - extrapolate_1d(data, p4 - 1)) + 0.5 * (extrapolate_1d(data, p4 + 1) - extrapolate_1d(data, p4));// tangent @ P_4
-      
+
       float t2 = t*t; float t3 = t2*t;
       retval = (2*t3 - 3*t2 + 1)*data(p1) + (-2*t3 + 3*t2)*data(p4) + (t3 - 2*t2 + t)*r1 + (t3 - t2)*r4;
     }
 
     // cerr << "p1, p4, t, r1, r4 = " << p1 << ", " << p4 << ", " << t << ", " << r1 << ", " << r4 << endl;
-    
+
     return retval;
   }
 
@@ -261,12 +261,12 @@ namespace MISCMATHS {
     int wx= widthx;
     ColumnVector kernelx = userkernel;
     float *storex = new float[2*wx+1];
-  
+
     int ix0;
     ix0 = (int) floor(index);
-    
+
     float convsum=0.0, interpval=0.0, kersum=0.0;
-    
+
     for (int d=-wx; d<=wx; d++) {
       storex[d+wx] = kernelval((index-ix0+d),wx,kernelx);
     }
@@ -284,7 +284,7 @@ namespace MISCMATHS {
     }
 
     delete(storex);
-    
+
     if ( (fabs(kersum)>1e-9) ) {
       interpval = convsum / kersum;
     } else {
@@ -295,7 +295,7 @@ namespace MISCMATHS {
 
     return interpval;
   }
-  
+
   ////// Kernel wrappers //////
 
   float kernelinterpolation_1d(ColumnVector data, float index)
@@ -321,4 +321,4 @@ namespace MISCMATHS {
 
 
 
- 
+

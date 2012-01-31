@@ -8,20 +8,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -125,8 +125,8 @@ int fmrib_main(int argc, char* argv[], bool out_int)
   read_volume(s1,string(argv[argindex++]));
   s1min=atof(argv[argindex++]);
   s1max=atof(argv[argindex++]);
-  
-  if (argc-argindex-1>2){  
+
+  if (argc-argindex-1>2){
     read_volume(s2,string(argv[argindex++]));
     s2min=atof(argv[argindex++]);
     s2max=atof(argv[argindex++]);
@@ -150,8 +150,8 @@ int fmrib_main(int argc, char* argv[], bool out_int)
     miscpic newpic;
     volume<float> newvol;
 
-    newpic.overlay(newvol, bg, s1, s2, bgmin, bgmax, s1min, s1max, 
-		   s2min, s2max, colour_type, checker, 
+    newpic.overlay(newvol, bg, s1, s2, bgmin, bgmax, s1min, s1max,
+		   s2min, s2max, colour_type, checker,
 		   cbarfname, cbartype, out_int, debug);
     if(out_int)
       save_volume_dtype(newvol,string(argv[argindex]), DT_SIGNED_SHORT);
@@ -159,7 +159,7 @@ int fmrib_main(int argc, char* argv[], bool out_int)
       save_volume(newvol,string(argv[argindex]));
 
     return 0;
-  } 
+  }
 }
 
 
@@ -171,18 +171,18 @@ int main(int argc,char *argv[])
 
   int otype;
   otype = atoi(argv[2]);
-  
+
   // if (otype == 0)
 //     return call_fmrib_main(DT_FLOAT,argc,argv);
 //   else if (otype == 1)
-//     return call_fmrib_main(DT_SIGNED_SHORT,argc,argv);  
+//     return call_fmrib_main(DT_SIGNED_SHORT,argc,argv);
 //   else
 //     usage();
 
   if (otype == 0)
     return fmrib_main(argc,argv,false);
   else if (otype == 1)
-    return fmrib_main(argc,argv,true);  
+    return fmrib_main(argc,argv,true);
   else
     usage();
 

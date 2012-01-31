@@ -128,14 +128,14 @@ namespace boost { namespace fusion
         {}
 
         template <class Tag, class Stream>
-        void 
+        void
         string_ios_manip<Tag,Stream>::set(string_type const& s)
         {
             stream_data_t::attach(stream, s);
         }
 
         template <class Tag, class Stream>
-        void 
+        void
         string_ios_manip<Tag,Stream>::print(char const* default_) const
         {
             // print a delimiter
@@ -147,7 +147,7 @@ namespace boost { namespace fusion
         }
 
         template <class Tag, class Stream>
-        void 
+        void
         string_ios_manip<Tag,Stream>::read(char const* default_) const
         {
             // read a delimiter

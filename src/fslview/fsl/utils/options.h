@@ -19,16 +19,16 @@ using namespace std;
 
 namespace Utilities {
 
-  bool string_to_T(bool &b, const std::string& s); 
-  bool string_to_T(std::string& d, const std::string& s); 
-  bool string_to_T(int& i, const std::string& s); 
-  bool string_to_T(float& v, const std::string& s); 
+  bool string_to_T(bool &b, const std::string& s);
+  bool string_to_T(std::string& d, const std::string& s);
+  bool string_to_T(int& i, const std::string& s);
+  bool string_to_T(float& v, const std::string& s);
   bool string_to_T(std::vector<int>& vi, const std::string& s);
   bool string_to_T(std::vector<float>& vi, const std::string& s);
   bool string_to_T(std::vector<std::string>& vi, const std::string& s);
 
-  typedef enum argflag { 
-    no_argument = 0, requires_argument, optional_argument, requires_2_arguments, 
+  typedef enum argflag {
+    no_argument = 0, requires_argument, optional_argument, requires_2_arguments,
                      requires_3_arguments, requires_4_arguments, requires_5_arguments
   } ArgFlag;
 
@@ -42,17 +42,17 @@ namespace Utilities {
   {
     return os << o.first << "," << o.second;
   }
-  
+
   template<class T>
   std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
   {
     std::ostringstream oss;
     std::copy(v.begin(), v.end(), std::ostream_iterator<T>(oss,","));
-    
+
     std::string s(oss.str());
-  
+
     os << s.substr(0, s.length() - 1); // Strip off the final ","
-    
+
     return os;
   }
 
@@ -81,7 +81,7 @@ namespace Utilities {
 
   /**
      Provides behaviour common to all option types. Actual options are
-     declared using the templated Option class. The 
+     declared using the templated Option class. The
      OptionParser class can be used to parse command lines.
      @see Option
      @see OptionParser
@@ -97,8 +97,8 @@ namespace Utilities {
        @param f one of no_argument, requires_argument, optional_argument
        to indicate what arguments should be supplied
     */
-    BaseOption(const std::string& k, const std::string& ht, bool c, ArgFlag f): 
-      key_(k), help_text_(ht), arg_flag_(f), 
+    BaseOption(const std::string& k, const std::string& ht, bool c, ArgFlag f):
+      key_(k), help_text_(ht), arg_flag_(f),
       unset_(true), compulsory_(c), visible_(true) {}
     /**
        @param k comma seperated list of key aliases
@@ -108,8 +108,8 @@ namespace Utilities {
        @param v true or false -- display the option in usage
        to indicate what arguments should be supplied
     */
-    BaseOption(const std::string& k, const std::string& ht, bool c, ArgFlag f, bool v): 
-      key_(k), help_text_(ht), arg_flag_(f), 
+    BaseOption(const std::string& k, const std::string& ht, bool c, ArgFlag f, bool v):
+      key_(k), help_text_(ht), arg_flag_(f),
       unset_(true), compulsory_(c), visible_(v) {}
 
     /**
@@ -127,17 +127,17 @@ namespace Utilities {
     /**
        @return true if the option requires an argument
     */
-    bool required() const { return ( (arg_flag_ == requires_argument) || 
+    bool required() const { return ( (arg_flag_ == requires_argument) ||
 			             (arg_flag_ == requires_2_arguments) ||
 			             (arg_flag_ == requires_3_arguments) ||
 			             (arg_flag_ == requires_4_arguments) ||
 			             (arg_flag_ == requires_5_arguments) ); }
     /**
-       @return the number of required arguments 
+       @return the number of required arguments
     */
-    int nrequired() const { 
-      if ((arg_flag_ == requires_argument) || 
-	  (arg_flag_ == optional_argument)) { return 1; } 
+    int nrequired() const {
+      if ((arg_flag_ == requires_argument) ||
+	  (arg_flag_ == optional_argument)) { return 1; }
       else if (arg_flag_ == requires_2_arguments) { return 2; }
       else if (arg_flag_ == requires_3_arguments) { return 3; }
       else if (arg_flag_ == requires_4_arguments) { return 4; }
@@ -225,7 +225,7 @@ namespace Utilities {
   */
   template<class T> class Option: public BaseOption {
   public:
-    /** 
+    /**
 	@param k Comma seperated list of key aliases
 	@param v Default value for this option
 	@param ht Help text to be printed when outputting usage
@@ -233,9 +233,9 @@ namespace Utilities {
 	@param f This options argument requirements
     */
     Option(const std::string& k, const T& v, const std::string& ht,
-	   bool c, ArgFlag f = no_argument): 
+	   bool c, ArgFlag f = no_argument):
       BaseOption(k, ht, c, f), default_(v), value_(v) {}
-  /** 
+  /**
 	@param k Comma seperated list of key aliases
 	@param v Default value for this option
 	@param ht Help text to be printed when outputting usage
@@ -243,11 +243,11 @@ namespace Utilities {
 	@param f This options argument requirements
     */
     Option(const std::string& k, const T& v, const std::string& ht,
-	   bool c, ArgFlag f, bool vis): 
+	   bool c, ArgFlag f, bool vis):
       BaseOption(k, ht, c, f, vis), default_(v), value_(v) {}
 
 
-    /** 
+    /**
 	@param s The value string which needs to be parsed to set
 	this options value. The overloaded function string_to_T must be defined
 	for type T.
@@ -255,7 +255,7 @@ namespace Utilities {
 	@return true if the value actually got set
     */
     bool set_value(const std::string& s)
-      { 
+      {
 	if(string_to_T(value_, s))
 	  unset_ = false;
 	return !unset_;
@@ -306,7 +306,7 @@ namespace Utilities {
       return os.str();
     }
 
-    /** 
+    /**
 	@param v The new value.
 	Set the options type specific value. You should rarely need this
 	method. Use of it means you either haven't planned your options well
@@ -314,7 +314,7 @@ namespace Utilities {
 	a warning in your user interface if you call this as you're possibly
 	overriding his/her prefered value.
     */
-    bool set_T(const T& v) { 
+    bool set_T(const T& v) {
       value_ = v;
       unset_ = false;
       return !unset_;
@@ -323,23 +323,23 @@ namespace Utilities {
     /**
        @return The options value.
     */
-    const T& value(int n=0) const { 
+    const T& value(int n=0) const {
       if (nrequired()<=1) { return value_; }
       else if ((unsigned int) n<=valuevec_size_) {
-	return valuevec_[n]; 
+	return valuevec_[n];
       } else {
 	throw X_OptionError("Request for more arguments in value() than exist");
       }
     }
-    /** 
+    /**
 	@return The options default value.
     */
     const T& default_value() const { return default_; }
 
     virtual ostream& print(ostream& os) const {
-      os << "# " << help_text() << std::endl 
+      os << "# " << help_text() << std::endl
 	 << config_key() << value_string();
-      
+
       return os;
     }
 
@@ -350,7 +350,7 @@ namespace Utilities {
 
   private:
     Option() {}
-  
+
     T default_, value_;
     T valuevec_[5];
     unsigned int valuevec_size_;
@@ -365,20 +365,20 @@ namespace Utilities {
   {
   public:
     HiddenOption(const std::string& k, const T& v, const std::string& ht,
-		 bool c, ArgFlag f = no_argument): 
+		 bool c, ArgFlag f = no_argument):
       Option<T>(k, v, ht, c, f, false) {}
   };
-  
+
   template<class T> class FmribOption: public Option<T>
   {
   public:
     FmribOption(const std::string& k, const T& v, const std::string& ht,
-		 bool c, ArgFlag f = no_argument): 
+		 bool c, ArgFlag f = no_argument):
       Option<T>(k, v, ht, c, f) { if( getenv("FSLINFMRIB") ){ Option<T>::visible_ = true; } else { Option<T>::visible_ = false; } }
   };
-  
+
   /**
-     A class for parsing command line arguments into Option objects. The 
+     A class for parsing command line arguments into Option objects. The
      following example demonstrates the principle:
      @author Dave Flitney
      @version 1.0b, Nov., 2000.
@@ -387,12 +387,12 @@ namespace Utilities {
      <pre>
 #include "options.h"
 
-// $Id: options.h,v 1.33 2009/04/24 15:34:42 flitney Exp $ 
+// $Id: options.h,v 1.33 2009/04/24 15:34:42 flitney Exp $
 
 using namespace Utilities;
 
-Option<bool> verbose(string("-V,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-V,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, BaseOption::no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -410,7 +410,7 @@ Option<int> segid(string("-s,--shared-seg-id"), -1,
 		  "shared memory segment ID",
 		  false, BaseOption::requires_argument);
 
-string title = 
+string title =
 "opttst (Version 1.0)\n\n\
 Copyright(c) 2000, University of Oxford\n\
 Dave Flitney";
@@ -433,11 +433,11 @@ int main(unsigned int argc, char **argv) {
     options.add(mask);
     options.add(resid);
 
-    for(unsigned int a = options.parse_command_line(argc, argv); 
+    for(unsigned int a = options.parse_command_line(argc, argv);
 	a < argc; a++)
       cout << argv[a] << endl;
-  
-    if(help.value() || 
+
+    if(help.value() ||
        !options.check_compulsory_arguments())
       options.usage();
 
@@ -455,7 +455,7 @@ int main(unsigned int argc, char **argv) {
     cerr << endl << e.what() << endl;
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  }    
+  }
 }
      </pre>
   */
@@ -514,7 +514,7 @@ int main(unsigned int argc, char **argv) {
        if applicable.
        @return true on success.
     */
-    unsigned int parse_option(const std::string& optstr, const std::string& valstr, 
+    unsigned int parse_option(const std::string& optstr, const std::string& valstr,
 			      char *argv[], int valpos, int argc)
       throw(X_OptionError);
 

@@ -31,7 +31,7 @@ namespace random {
 // Carter Bays and S.D. Durham 1979
 template<class UniformRandomNumberGenerator, int k,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename UniformRandomNumberGenerator::result_type 
+  typename UniformRandomNumberGenerator::result_type
 #else
   uint32_t
 #endif
@@ -125,7 +125,7 @@ private:
 #endif
     result_type range = (max)()-(min)();
     assert(range > 0);      // otherwise there would be little choice
-    if(static_cast<unsigned long>(k * range) < 
+    if(static_cast<unsigned long>(k * range) <
        static_cast<unsigned long>(range))  // not a sufficient condition
       // likely overflow with bucket number computation
       assert(!"overflow will occur");
@@ -143,18 +143,18 @@ private:
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
-template<class UniformRandomNumberGenerator, int k, 
+template<class UniformRandomNumberGenerator, int k,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename UniformRandomNumberGenerator::result_type 
+  typename UniformRandomNumberGenerator::result_type
 #else
   uint32_t
 #endif
   val>
 const bool shuffle_output<UniformRandomNumberGenerator, k, val>::has_fixed_range;
 
-template<class UniformRandomNumberGenerator, int k, 
+template<class UniformRandomNumberGenerator, int k,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename UniformRandomNumberGenerator::result_type 
+  typename UniformRandomNumberGenerator::result_type
 #else
   uint32_t
 #endif

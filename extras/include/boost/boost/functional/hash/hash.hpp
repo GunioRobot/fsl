@@ -6,7 +6,7 @@
 //
 //  Based on Peter Dimov's proposal
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
-//  issue 6.18. 
+//  issue 6.18.
 
 #if !defined(BOOST_FUNCTIONAL_HASH_HASH_HPP)
 #define BOOST_FUNCTIONAL_HASH_HASH_HPP
@@ -36,7 +36,7 @@ namespace boost
     // when compiling boost::hash<bool>.
     std::size_t hash_value(bool);
 #endif
-    
+
     std::size_t hash_value(int);
     std::size_t hash_value(unsigned int);
     std::size_t hash_value(long);
@@ -320,7 +320,7 @@ namespace boost
         {
             return hash_detail::call_hash<T>::call(val);
         }
-#endif        
+#endif
     };
 }
 

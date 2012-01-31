@@ -27,7 +27,7 @@ namespace boost { namespace program_options {
     public:
         invalid_syntax(const std::string& tokens, const std::string& msg)
         : error(std::string(msg).append(" in '").append(tokens).append("'")),
-          tokens(tokens), msg(msg)                       
+          tokens(tokens), msg(msg)
         {}
 
         // gcc says that throw specification on dtor is loosened
@@ -42,14 +42,14 @@ namespace boost { namespace program_options {
     class BOOST_PROGRAM_OPTIONS_DECL unknown_option : public error {
     public:
         unknown_option(const std::string& name)
-        : error(std::string("unknown option ").append(name)) 
+        : error(std::string("unknown option ").append(name))
         {}
     };
 
     /** Class thrown when there's ambiguity amoung several possible options. */
     class BOOST_PROGRAM_OPTIONS_DECL ambiguous_option : public error {
     public:
-        ambiguous_option(const std::string& name, 
+        ambiguous_option(const std::string& name,
                          const std::vector<std::string>& alternatives)
         : error(std::string("ambiguous option ").append(name)),
           alternatives(alternatives)
@@ -69,7 +69,7 @@ namespace boost { namespace program_options {
     };
 
     /** Class thrown when there are several occurrences of an
-        option, but user called a method which cannot return 
+        option, but user called a method which cannot return
         them all. */
     class BOOST_PROGRAM_OPTIONS_DECL multiple_occurrences : public error {
     public:
@@ -86,10 +86,10 @@ namespace boost { namespace program_options {
         mutable std::string m_message; // For on-demand formatting in 'what'
         std::string m_option_name; // The name of the option which
                                    // caused the exception.
-        const char* what() const throw();  
+        const char* what() const throw();
     };
 
-    class BOOST_PROGRAM_OPTIONS_DECL invalid_option_value 
+    class BOOST_PROGRAM_OPTIONS_DECL invalid_option_value
         : public validation_error
     {
     public:
@@ -102,14 +102,14 @@ namespace boost { namespace program_options {
     /** Class thrown when there are too many positional options. */
     class BOOST_PROGRAM_OPTIONS_DECL too_many_positional_options_error : public error {
     public:
-        too_many_positional_options_error(const std::string& what) 
+        too_many_positional_options_error(const std::string& what)
         : error(what) {}
     };
 
     /** Class thrown when there are too few positional options. */
     class BOOST_PROGRAM_OPTIONS_DECL too_few_positional_options_error : public error {
     public:
-        too_few_positional_options_error(const std::string& what) 
+        too_few_positional_options_error(const std::string& what)
         : error(what) {}
     };
 
@@ -129,7 +129,7 @@ namespace boost { namespace program_options {
     protected:
         static std::string error_message(kind_t kind);
     private:
-        kind_t m_kind;        
+        kind_t m_kind;
     };
 
     class BOOST_PROGRAM_OPTIONS_DECL invalid_command_line_style : public error {

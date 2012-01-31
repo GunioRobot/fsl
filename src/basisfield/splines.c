@@ -2,20 +2,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -27,13 +27,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -44,7 +44,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -72,7 +72,7 @@
 #include <string.h>
 
 #include "splines.h"
- 
+
 /*
 This is used to ensure that memory allocated C-style is
 also freed C-style. This is intended to use when this
@@ -82,8 +82,8 @@ void please_free(void *ptr)
 {
   if (ptr) {my_free(ptr);}
 }
- 
-/* 
+
+/*
 Calculates a 2- or 3D cubic B-spline given an array
 of 1D splines (obtained by get_1D_spline).
 */
@@ -102,7 +102,7 @@ int spline_kron(/* Input */
 
    for (i=0; i<ndim; i++) {ldim[i] = dim[i]; n *= dim[i]; lsp1d[i] = sp1d[i];}
    for (i=ndim; i<3; i++) {ldim[i] = 1; lsp1d[i] = &tmp;}
-   
+
    for (k=0; k<ldim[2]; k++)
    {
       for (j=0; j<ldim[1]; j++)
@@ -117,7 +117,7 @@ int spline_kron(/* Input */
    return(n);
 }
 
-/* 
+/*
 Calculates all non-zero values of a 1D cubic B-spline
 given a specific knot spacing.
 */
@@ -148,7 +148,7 @@ int get_1D_spline(/* Input */
    return(ksp2sz(knsp));
 }
 
-/* 
+/*
 Calculates all non-zero values of the first spatial derivative of a
 1D cubic B-spline given a specific knot spacing.
 */
@@ -179,7 +179,7 @@ int get_1D_spline_d(/* Input */
    return(ksp2sz(knsp));
 }
 
-/* 
+/*
 Calculates all non-zero values of the second spatial derivative of a
 1D cubic B-spline given a specific knot spacing.
 */
@@ -241,7 +241,7 @@ int zoom_field(/* input */
    for (i=0, sz=1; i<3; i++) {tksp[i] = oksp[i]; sz *= no_of_knots(oksp[i],idim[i]);}
 
    tmpc1 = oc;
-   
+
    for (dim=0; dim<3; dim++)
    {
       sf = oksp[dim]/nksp[dim];
@@ -267,11 +267,11 @@ int zoom_field(/* input */
 
    memcpy(nc,tmpc2,sz*sizeof(double));
    my_free(tmpc2);
- 
+
    return(1);
 }
 /*
-Calculates the new set of spline-coefficients resulting when the 
+Calculates the new set of spline-coefficients resulting when the
 knot-spacing of an existing field is cut by half in one direction.
 */
 int zoom_field_by2(/* Input */
@@ -291,10 +291,10 @@ int zoom_field_by2(/* Input */
    double   a2=3.0/4.0;
 
    for (i=ndim; i<3; i++) {ocdim[i] = 1; idim[i] = 1; ksp[i] = 1;}
-   for (i=0, nsz=1; i<3; i++) 
+   for (i=0, nsz=1; i<3; i++)
    {
       ocdim[i] = no_of_knots(ksp[i],idim[i]);
-      ncdim[i] = (i==zdim) ? no_of_knots(ksp[i]/2,idim[i]) : ocdim[i]; 
+      ncdim[i] = (i==zdim) ? no_of_knots(ksp[i]/2,idim[i]) : ocdim[i];
       nsz *= ncdim[i];
    }
 
@@ -306,11 +306,11 @@ int zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (i % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index((i+1)/2-1,j,k,ocdim)] + 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index((i+1)/2-1,j,k,ocdim)] +
 		                              a2*oc[index((i+1)/2,j,k,ocdim)];
                   if (((i+1)/2+1) < ocdim[0]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index((i+1)/2+1,j,k,ocdim)];
@@ -319,9 +319,9 @@ int zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i/2,j,k,ocdim)];
-                  if ((i/2+1) < ocdim[0]) { 
+                  if ((i/2+1) < ocdim[0]) {
 		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i/2+1,j,k,ocdim)];
-		  } 
+		  }
                }
 	    }
 	 }
@@ -333,12 +333,12 @@ int zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (j % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,(j+1)/2-1,k,ocdim)] + 
-		                              a2*oc[index(i,(j+1)/2,k,ocdim)]; 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,(j+1)/2-1,k,ocdim)] +
+		                              a2*oc[index(i,(j+1)/2,k,ocdim)];
                   if (((j+1)/2+1) < ocdim[1]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index(i,(j+1)/2+1,k,ocdim)];
 		  }
@@ -346,9 +346,9 @@ int zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i,j/2,k,ocdim)];
-                  if ((j/2+1) < ocdim[1]) { 
-		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j/2+1,k,ocdim)]; 
-		  } 
+                  if ((j/2+1) < ocdim[1]) {
+		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j/2+1,k,ocdim)];
+		  }
                }
 	    }
 	 }
@@ -360,11 +360,11 @@ int zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (k % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,j,(k+1)/2-1,ocdim)] + 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,j,(k+1)/2-1,ocdim)] +
 		                              a2*oc[index(i,j,(k+1)/2,ocdim)];
                   if (((k+1)/2+1) < ocdim[2]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index(i,j,(k+1)/2+1,ocdim)];
@@ -373,9 +373,9 @@ int zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i,j,k/2,ocdim)];
-                  if ((k/2+1) < ocdim[2]) { 
-		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j,k/2+1,ocdim)]; 
-		  } 
+                  if ((k/2+1) < ocdim[2]) {
+		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j,k/2+1,ocdim)];
+		  }
                }
 	    }
 	 }
@@ -461,12 +461,12 @@ int get_range(/* Input */
    if ((*fe) > fsz) {(*fe) = fsz;}
 
    return(1);
-} 
-  
+}
+
 int no_of_knots(int    ksp,
                 int    msz)
 {
-   if (msz == 1) return(1); /* Collapsed dimension. */ 
+   if (msz == 1) return(1); /* Collapsed dimension. */
    else return(((int) ceil((((double) msz) + 1.0) / ((double) ksp))) + 2);
 }
 
@@ -503,7 +503,7 @@ int make_A(/* Input. */
 	 for (ki=0; ki<kdim[0]; ki++)
 	 {
             get_range(ki,sdim[0],idim[0],&iis,&iie,&sis);
-            jcp[ci] = cntr; 
+            jcp[ci] = cntr;
             for (ik=iks,sk=sks; ik<ike; ik++,sk++)
 	    {
 	       for (ij=ijs, sj=sjs; ij<ije; ij++,sj++)
@@ -521,7 +521,7 @@ int make_A(/* Input. */
       }
    }
    jcp[ci] = cntr;
-   
+
    return(cntr);
 }
 
@@ -548,12 +548,12 @@ int make_Aty(/* Input. */
 
    /* First multiply image and y-vector. */
    for (i=0; i<idim[0]*idim[1]*idim[2]; i++) {y_by_i[i] = ima[i]*y[i];}
-   
+
    /* First three loops over splines determine the row of Aty. */
    ri = 0;
    for (k=0; k<cdim[2]; k++)
    {
-      for (j=0; j<cdim[1]; j++) 
+      for (j=0; j<cdim[1]; j++)
       {
 	 for (i=0; i<cdim[0]; i++)
 	 {
@@ -566,21 +566,21 @@ int make_Aty(/* Input. */
    my_free(s_by_i);
    my_free(y_by_i);
 
-   return(ri);      
+   return(ri);
 }
 
 /*
 Calculates the gradient of the membrane energy for the field given by the
 spline-coefficients beta, without taking the detour via the H-matrix.
-This way the user won't need to store the (potentially) quite big matrix H. 
-The membrane energy can be expressed as b'*A_x'*A_x*b + b'*A_y'*A_y*b + b'*A_z'*A_z*b 
-where A_i is a matrix with fsize rows and nbas columns, and where the jth column 
-contains an unravelled version of a spline-kernel once differentiated in the ith 
+This way the user won't need to store the (potentially) quite big matrix H.
+The membrane energy can be expressed as b'*A_x'*A_x*b + b'*A_y'*A_y*b + b'*A_z'*A_z*b
+where A_i is a matrix with fsize rows and nbas columns, and where the jth column
+contains an unravelled version of a spline-kernel once differentiated in the ith
 direction.
 If we denote the matrix (A_x'*A_x + A_y'*A_y + A_z'*A_z) by H, then the gradient
 of the membrane energy is given by 2*H*b.
 The helper function memen_AtAb simply calculates, depending on the what-flag, either A*b
-or A'*A*b. 
+or A'*A*b.
 */
 int get_memen_grad(/* Input. */
                    int           ndim,    /* # of dimensions (1,2 or 3) */
@@ -596,7 +596,7 @@ int get_memen_grad(/* Input. */
    int     csz = 1;           /* Total # of coefficients. */
    int     AtAb_sz = 0;       /* # of rows in A'*A*b. */
    double  *spline = NULL;    /* Spline kernel. */
-   double  *AtAb = NULL;   
+   double  *AtAb = NULL;
    double  *sp_1D[3] = {NULL, NULL, NULL};
    double  *sp_1D_d[3] = {NULL, NULL, NULL};
    double  *tmp[3] = {NULL, NULL, NULL};
@@ -627,7 +627,7 @@ int get_memen_grad(/* Input. */
 
    my_free(spline);
    for (i=0; i<ndim; i++) {my_free(sp_1D[i]); my_free(sp_1D_d[i]);}
-                  
+
    return(csz);
 }
 
@@ -641,7 +641,7 @@ once differentiated in the ith direction.
 Note that fsize is larger than nvox. This is because we base the membrane energy on the
 full extent of the field, not just the part that fits into the image FOV.
 The helper function memen_AtAb simply calculates, depending on the what-flag, either A*b
-or A'*A*b. 
+or A'*A*b.
 */
 double get_memen(/* Input. */
                  int           ndim,    /* # of dimensions (1,2 or 3) */
@@ -655,7 +655,7 @@ double get_memen(/* Input. */
    int     Ab_sz = 0;        /* # of rows in A*b. */
    double  memen = 0.0;      /* Membrane energy. */
    double  *spline = NULL;   /* Spline kernel. */
-   double  *Ab = NULL;   
+   double  *Ab = NULL;
    double  *sp_1D[3] = {NULL, NULL, NULL};
    double  *sp_1D_d[3] = {NULL, NULL, NULL};
    double  *tmp[3] = {NULL, NULL, NULL};
@@ -667,7 +667,7 @@ double get_memen(/* Input. */
    }
 
    spline = (double *) my_calloc(ssz,sizeof(double));
-   
+
    /* Then do one dimension at a time. */
    memen = 0.0;
    for (i=0; i<ndim; i++) {
@@ -684,7 +684,7 @@ double get_memen(/* Input. */
 
    my_free(spline);
    for (i=0; i<ndim; i++) {my_free(sp_1D[i]); my_free(sp_1D_d[i]);}
-                  
+
    return(memen);
 }
 double *memen_AtAb(/* Input. */
@@ -712,7 +712,7 @@ double *memen_AtAb(/* Input. */
    double *Ab = NULL;
    double *AtAb = NULL;
 
-   for (i=0, eisz=1, ksz=1; i<ndim; i++) 
+   for (i=0, eisz=1, ksz=1; i<ndim; i++)
    {
       eidim[i] = ksp[i]*(cdim[i]+3) - 1;
       eisz *= eidim[i];
@@ -724,7 +724,7 @@ double *memen_AtAb(/* Input. */
    Ab = (double *) my_calloc(eisz,sizeof(double));
    indx = (int *) my_calloc(ksz,sizeof(int));
 
-   /* 
+   /*
    First get a range of indicies into Abeta
    for the first ((0,0,0) in coef-space)
    spline kernel.
@@ -761,7 +761,7 @@ double *memen_AtAb(/* Input. */
       }
    }
 
-   /* 
+   /*
    Go on to build A'*A'b if that is what
    we are asked to do.
    */
@@ -783,12 +783,12 @@ double *memen_AtAb(/* Input. */
       my_free(Ab);
    }
    else {*sz = eisz; *ovec = Ab;}
-               
+
    my_free(indx);
 
    return(*ovec);
 }
-/* 
+/*
 Calculates the H-matrix such that b'*H*b gives the membrane energy for the field given
 by the spline coefficients b. The reason we are not using make_AtA for this is that that
 would give the energy for a field extending exactly over the image FOV, which would give
@@ -832,7 +832,7 @@ int make_memen_H(/* Input. */
       }
       splines[i] = (double *) my_calloc(memsize,sizeof(double));
       spline_kron(ndim,sdim,sp_1D,splines[i]);
-      for (j=0; j<ndim; j++) 
+      for (j=0; j<ndim; j++)
       {
          my_free(sp_1D[j]);
       }
@@ -840,14 +840,14 @@ int make_memen_H(/* Input. */
 
    for (i=ndim; i<3; i++) {cdim[i]=1; sdim[i]=1;}
 
-   
+
    /* First three loops over splines determine the column of H. */
    ci = 0;
    cntr = 0;
    for (s1k=0; s1k<cdim[2]; s1k++)
    {
       get_nabos(s1k,cdim[2],sdim[2],&kns,&kne);
-      for (s1j=0; s1j<cdim[1]; s1j++) 
+      for (s1j=0; s1j<cdim[1]; s1j++)
       {
 	 get_nabos(s1j,cdim[1],sdim[1],&jns,&jne);
 	 for (s1i=0; s1i<cdim[0]; s1i++)
@@ -883,8 +883,8 @@ int make_memen_H(/* Input. */
          }
       }
    }
-   jcp[ci] = cntr;   
-   
+   jcp[ci] = cntr;
+
    for (i=0; i<ndim; i++) {my_free(splines[i]);}
 
    return(cntr);
@@ -919,14 +919,14 @@ int make_AtA(/* Input. */
    for (i=ndim; i<3; i++) {cdim[i]=1; sdim[i]=1; idim[i]=1;}
 
    s_by_i = (double *) my_calloc(sdim[0]*sdim[1]*sdim[2],sizeof(double));
-   
+
    /* First three loops over splines determine the column of AtA. */
    ci = 0;
    cntr = 0;
    for (s1k=0; s1k<cdim[2]; s1k++)
    {
       get_nabos(s1k,cdim[2],sdim[2],&kns,&kne);
-      for (s1j=0; s1j<cdim[1]; s1j++) 
+      for (s1j=0; s1j<cdim[1]; s1j++)
       {
 	 get_nabos(s1j,cdim[1],sdim[1],&jns,&jne);
 	 for (s1i=0; s1i<cdim[0]; s1i++)
@@ -966,7 +966,7 @@ int make_AtA(/* Input. */
          }
       }
    }
-   jcp[ci] = cntr;   
+   jcp[ci] = cntr;
 
    my_free(s_by_i);
 
@@ -1026,14 +1026,14 @@ int make_AtB(/* Input. */
    for (i=ndim; i<3; i++) {cdim[i]=1; sdim[i]=1; idim[i]=1;}
 
    s_by_i = (double *) my_calloc(sdim[0]*sdim[1]*sdim[2],sizeof(double));
-   
+
    /* First three loops over splines determine the column of AtB. */
    ci = 0;
    cntr = 0;
    for (s1k=0; s1k<cdim[2]; s1k++)
    {
       get_nabos(s1k,cdim[2],sdim[2],&kns,&kne);
-      for (s1j=0; s1j<cdim[1]; s1j++) 
+      for (s1j=0; s1j<cdim[1]; s1j++)
       {
 	 get_nabos(s1j,cdim[1],sdim[1],&jns,&jne);
 	 for (s1i=0; s1i<cdim[0]; s1i++)
@@ -1065,17 +1065,17 @@ int make_AtB(/* Input. */
          }
       }
    }
-   jcp[ci] = cntr;   
+   jcp[ci] = cntr;
 
    my_free(s_by_i);
 
    return(cntr);
 }
 
-double dot_prod(int       i1,         /* [i1 j1 k1] is index of first spline kernel/coef. */ 
+double dot_prod(int       i1,         /* [i1 j1 k1] is index of first spline kernel/coef. */
                 int       j1,
                 int       k1,
-                int       i2,         /* [i2 j2 k2] is index of second spline kernel/coef. */ 
+                int       i2,         /* [i2 j2 k2] is index of second spline kernel/coef. */
                 int       j2,
                 int       k2,
                 int       sdim[3],    /* Size of spline kernel (common to s1 and s2). */
@@ -1094,30 +1094,30 @@ double dot_prod(int       i1,         /* [i1 j1 k1] is index of first spline ker
    int   i2i=0, i2j=0, i2k=0;       /* Indicies into ima. */
    int   s2i=0, s2j=0, s2k=0;       /* Indicies into s2. */
    int   s1i=0, s1j=0, s1k=0;       /* Indicies into s1. */
-   double   dp = 0.0;               /* Dot product. */  
+   double   dp = 0.0;               /* Dot product. */
 
    get_range(i2,sdim[0],idim[0],&is2i,&ie2i,&ss2i);
    get_range(j2,sdim[1],idim[1],&is2j,&ie2j,&ss2j);
    get_range(k2,sdim[2],idim[2],&is2k,&ie2k,&ss2k);
 
-   /* 
-      Get indicies for overlap 
+   /*
+      Get indicies for overlap
    */
 
    if (is2i>is1[0]) {ss1i = ss1[0] + (is2i-is1[0]);}
    else if (is1[0]>is2i) {ss1i = ss1[0]; ss2i += (is1[0]-is2i); is2i = is1[0];}
-   else {ss1i = ss1[0];} 
-   ie2i = MIN(ie2i,ie1[0]); 
-   
+   else {ss1i = ss1[0];}
+   ie2i = MIN(ie2i,ie1[0]);
+
    if (is2j>is1[1]) {ss1j = ss1[1] + (is2j-is1[1]);}
    else if (is1[1]>is2j) {ss1j = ss1[1]; ss2j += (is1[1]-is2j); is2j = is1[1];}
-   else {ss1j = ss1[1];} 
-   ie2j = MIN(ie2j,ie1[1]); 
-   
+   else {ss1j = ss1[1];}
+   ie2j = MIN(ie2j,ie1[1]);
+
    if (is2k>is1[2]) {ss1k = ss1[2] + (is2k-is1[2]);}
    else if (is1[2]>is2k) {ss1k = ss1[2]; ss2k += (is1[2]-is2k); is2k = is1[2];}
-   else {ss1k = ss1[2];} 
-   ie2k = MIN(ie2k,ie1[2]); 
+   else {ss1k = ss1[2];}
+   ie2k = MIN(ie2k,ie1[2]);
 
    dp = 0.0;
    for (i2k=is2k,s2k=ss2k,s1k=ss1k; i2k<ie2k; i2k++,s2k++,s1k++)
@@ -1133,11 +1133,11 @@ double dot_prod(int       i1,         /* [i1 j1 k1] is index of first spline ker
 
    return(dp);
 }
-                
-double dot_prod_H(int       i1,         /* [i1 j1 k1] is index of first spline kernel/coef. */ 
+
+double dot_prod_H(int       i1,         /* [i1 j1 k1] is index of first spline kernel/coef. */
                   int       j1,
                   int       k1,
-                  int       i2,         /* [i2 j2 k2] is index of second spline kernel/coef. */ 
+                  int       i2,         /* [i2 j2 k2] is index of second spline kernel/coef. */
                   int       j2,
                   int       k2,
                   int       sdim[3],    /* Size of spline kernel (common to s1 and s2). */
@@ -1149,20 +1149,20 @@ double dot_prod_H(int       i1,         /* [i1 j1 k1] is index of first spline k
    int     ss2i=0, ss2j=0, ss2k=0;    /* Start indicies into s2 (second spline kernel). */
    int     s2i=0, s2j=0, s2k=0;       /* Indicies into s2. */
    int     s1i=0, s1j=0, s1k=0;       /* Indicies into s1. */
-   double  dp = 0.0;                  /* Dot product. */  
+   double  dp = 0.0;                  /* Dot product. */
 
    if (i1<i2) {se1i=sdim[0]; ss2i=0; ss1i=(i2-i1)*sz2ksp(sdim[0]); }
    else if (i2<i1) {ss1i=0; se1i=sdim[0]-(i1-i2)*sz2ksp(sdim[0]); ss2i=(i1-i2)*sz2ksp(sdim[0]);}
    else {ss1i=ss2i=0; se1i=sdim[0];}
-   
+
    if (j1<j2) {se1j=sdim[1]; ss2j=0; ss1j=(j2-j1)*sz2ksp(sdim[1]); }
    else if (j2<j1) {ss1j=0; se1j=sdim[1]-(j1-j2)*sz2ksp(sdim[1]); ss2j=(j1-j2)*sz2ksp(sdim[1]);}
    else {ss1j=ss2j=0; se1j=sdim[1];}
-   
+
    if (k1<k2) {se1k=sdim[2]; ss2k=0; ss1k=(k2-k1)*sz2ksp(sdim[2]); }
    else if (k2<k1) {ss1k=0; se1k=sdim[2]-(k1-k2)*sz2ksp(sdim[2]); ss2k=(k1-k2)*sz2ksp(sdim[2]);}
    else {ss1k=ss2k=0; se1k=sdim[2];}
-   
+
 
    dp = 0.0;
    for (s2k=ss2k,s1k=ss1k; s1k<se1k; s2k++,s1k++)
@@ -1178,7 +1178,7 @@ double dot_prod_H(int       i1,         /* [i1 j1 k1] is index of first spline k
 
    return(dp);
 }
-                
+
 double get_s_by_i(/* Input */
                   int      i,         /* [i j k] index of spline kernel/coef. */
                   int      j,
@@ -1189,8 +1189,8 @@ double get_s_by_i(/* Input */
                   double   *ima,      /* Image. */
                   /* Output */
                   double   *sbyi)     /* Spline multiplied with appuretenant values in image. */
-{    
-   int     ii=0, ij=0, ik=0;     /* Indicies into image. */     
+{
+   int     ii=0, ij=0, ik=0;     /* Indicies into image. */
    int     si=0, sj=0, sk=0;     /* Indicies into spline. */
    int     sindex=0;             /* linear index into spline. */
    int     iks=0, ijs=0, iis=0;  /* Start indicies into image. */
@@ -1216,7 +1216,7 @@ double get_s_by_i(/* Input */
          }
       }
    }
-			      
+
    return(sum);
 }
 
@@ -1234,7 +1234,7 @@ int get_nabos(/* Input. */
    if ((*ns=i-ol) < 0) {*ns = 0;}
    if ((*ne=i+ol+1) > csz) {*ne = csz;}
 
-   return(*ns); /* As an extra courtesy. */  
+   return(*ns); /* As an extra courtesy. */
 }
 
 int get_A_nzmax(/* Input. */
@@ -1265,7 +1265,7 @@ int get_A_nzmax(/* Input. */
          }
       }
    }
-   
+
    return(nzmax);
 }
 
@@ -1294,10 +1294,10 @@ int get_AtA_nzmax(int          ndim,
             nzmax += n_knabo*n_jnabo*n_inabo;
          }
       }
-   }   
+   }
    return(nzmax);
 }
- 
+
 int n_nabo(int   i,
            int   n,
            int   ksp)
@@ -1310,7 +1310,7 @@ int n_nabo(int   i,
    if (i < ksp) nn -= (ksp - i);
    if ((n-1-i) < ksp) nn -= (ksp - (n-1-i));
 
-   return(nn);     
+   return(nn);
 }
 
 
@@ -1334,11 +1334,11 @@ int AtimesB(/* Input. */
    int      si2=0, ei2=0;
    int      ndx = 0;         /* Scratch. */
    int      ci = 0;          /* Column index for A*B */
-   int      cnt = 0;         /* Total # of non-zero elements. */ 
+   int      cnt = 0;         /* Total # of non-zero elements. */
    int      nc = 0;          /* # of non-zero elements in present column. */
    double   bval = 0.0;      /* Scratch. */
-   int      *ir_out = NULL; 
-   double   *s_out = NULL; 
+   int      *ir_out = NULL;
+   double   *s_out = NULL;
    int      *ir_tmp = NULL;  /* ir_tmp, full _ir and full_s plays the role of SPA   */
    int      *full_ir = NULL; /* as described in Gilbert, Moler & Schreiber 1992.    */
    double   *full_s = NULL;
@@ -1353,7 +1353,7 @@ int AtimesB(/* Input. */
    for (ci=0; ci<nB; ci++)  /* Loop over all columns of A*B (and hence B). */
    {
       jc_out[ci] = cnt;
-      nc = 0; 
+      nc = 0;
       si = jc_B[ci]; ei = jc_B[ci+1];
       for (i=si; i<ei; i++) /* Loop over all non-zero values in B column. */
       {
@@ -1371,7 +1371,7 @@ int AtimesB(/* Input. */
          }
       }
       /* Sort ir_tmp prior to copying to ir_out. */
-      qsort(ir_tmp,nc,sizeof(int),cmpf); 
+      qsort(ir_tmp,nc,sizeof(int),cmpf);
 
       /* Check we have room for new column. */
       if ((cnt+nc) > nzmax)
@@ -1381,10 +1381,10 @@ int AtimesB(/* Input. */
          s_out = (double *) my_realloc(s_out,nzmax*sizeof(double));
          printf("\nWarning, non-optimal nzmax passed to AtranspA.");
       }
- 
+
       /* Put values in ir_out and s_out. */
-      memcpy(&(ir_out[cnt]),ir_tmp,nc*sizeof(int)); 
-      for (i=cnt; i<(cnt+nc); i++) 
+      memcpy(&(ir_out[cnt]),ir_tmp,nc*sizeof(int));
+      for (i=cnt; i<(cnt+nc); i++)
       {
 	 ndx = ir_out[i];
          s_out[i] = full_s[ndx];
@@ -1397,12 +1397,12 @@ int AtimesB(/* Input. */
 
    *ir_out_orig = ir_out;
    *s_out_orig = s_out;
- 
+
    my_free(full_s);
    my_free(full_ir);
    my_free(ir_tmp);
 
-   return(nzmax);             
+   return(nzmax);
 }
 
 
@@ -1411,7 +1411,7 @@ int cmpf(const void    *el1,
 {
    if (*((int *)el1) < *((int *)el2)) return(-1);
    else if (*((int *)el1) > *((int *)el2)) return(1);
-   else return(0); 
+   else return(0);
 }
 
 
@@ -1438,7 +1438,7 @@ int AtranspA(/* Input. */
    int     *ir_out = NULL;
    double  *s_out = NULL;
 
-   /* 
+   /*
       We are working with copies of the input pointers
       to avoid double dereferencing at each access.
    */
@@ -1501,7 +1501,7 @@ int AtranspA(/* Input. */
 		  ir_out[cnt++] = ri;
                }
             }
-         } 
+         }
 	 /* Reset dense copy of column of A. */
 	 for (i=si; i<ei; i++) {flags[ir_in[i]] = 0;}
       }
@@ -1547,7 +1547,7 @@ int AtranspB(/* Input. */
 
    if (mA != mB) {return(-1);} /* mA is n of A' */
 
-   /* 
+   /*
       We are working with copies of the input pointers
       to avoid double dereferencing at each access.
    */
@@ -1591,8 +1591,8 @@ int AtranspB(/* Input. */
                   }
 	       }
                if (s_out[cnt]) {ir_out[cnt++] = ri;}
-	    } 
-         } 
+	    }
+         }
          for (i=si; i<ei; i++) {flags[ir_B[i]] = 0;}
       }
    }
@@ -1611,7 +1611,7 @@ int AtranspB(/* Input. */
 
 These routines "shadow" zoom_field and zoom_field_by2,
 but take the "true" old coefficient matrix size as input
-parameter. 
+parameter.
 
 */
 
@@ -1642,7 +1642,7 @@ int fnirt_zoom_field(/* input */
    for (i=0; i<3; i++) {tksp[i] = oksp[i]; tcdim[i] = ocdim[i];}
 
    tmpc1 = oc;
-   
+
    for (dim=0; dim<3; dim++)
    {
       sf = oksp[dim]/nksp[dim];
@@ -1669,11 +1669,11 @@ int fnirt_zoom_field(/* input */
 
    memcpy(nc,tmpc2,sz*sizeof(double));
    my_free(tmpc2);
- 
+
    return(1);
 }
 /*
-Calculates the new set of spline-coefficients resulting when the 
+Calculates the new set of spline-coefficients resulting when the
 knot-spacing of an existing field is cut by half in one direction.
 */
 int fnirt_zoom_field_by2(/* Input */
@@ -1694,9 +1694,9 @@ int fnirt_zoom_field_by2(/* Input */
    double   a2=3.0/4.0;
 
    for (i=ndim; i<3; i++) {ocdim[i] = 1; idim[i] = 1; ksp[i] = 1;}
-   for (i=0, nsz=1; i<3; i++) 
+   for (i=0, nsz=1; i<3; i++)
    {
-      ncdim[i] = (i==zdim) ? no_of_knots(ksp[i]/2,idim[i]) : ocdim[i]; 
+      ncdim[i] = (i==zdim) ? no_of_knots(ksp[i]/2,idim[i]) : ocdim[i];
       nsz *= ncdim[i];
    }
 
@@ -1708,11 +1708,11 @@ int fnirt_zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (i % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index((i+1)/2-1,j,k,ocdim)] + 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index((i+1)/2-1,j,k,ocdim)] +
 		                              a2*oc[index((i+1)/2,j,k,ocdim)];
                   if (((i+1)/2+1) < ocdim[0]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index((i+1)/2+1,j,k,ocdim)];
@@ -1721,9 +1721,9 @@ int fnirt_zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i/2,j,k,ocdim)];
-                  if ((i/2+1) < ocdim[0]) { 
+                  if ((i/2+1) < ocdim[0]) {
 		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i/2+1,j,k,ocdim)];
-		  } 
+		  }
                }
 	    }
 	 }
@@ -1735,12 +1735,12 @@ int fnirt_zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (j % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,(j+1)/2-1,k,ocdim)] + 
-		                              a2*oc[index(i,(j+1)/2,k,ocdim)]; 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,(j+1)/2-1,k,ocdim)] +
+		                              a2*oc[index(i,(j+1)/2,k,ocdim)];
                   if (((j+1)/2+1) < ocdim[1]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index(i,(j+1)/2+1,k,ocdim)];
 		  }
@@ -1748,9 +1748,9 @@ int fnirt_zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i,j/2,k,ocdim)];
-                  if ((j/2+1) < ocdim[1]) { 
-		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j/2+1,k,ocdim)]; 
-		  } 
+                  if ((j/2+1) < ocdim[1]) {
+		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j/2+1,k,ocdim)];
+		  }
                }
 	    }
 	 }
@@ -1762,11 +1762,11 @@ int fnirt_zoom_field_by2(/* Input */
       {
 	 for (j=0; j<ncdim[1]; j++)
 	 {
-	    for (i=0; i<ncdim[0]; i++) 
+	    for (i=0; i<ncdim[0]; i++)
 	    {
 	       if (k % 2)
 	       {
-		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,j,(k+1)/2-1,ocdim)] + 
+		  (*nc)[index(i,j,k,ncdim)] = a4*oc[index(i,j,(k+1)/2-1,ocdim)] +
 		                              a2*oc[index(i,j,(k+1)/2,ocdim)];
                   if (((k+1)/2+1) < ocdim[2]) {
                     (*nc)[index(i,j,k,ncdim)] += a0*oc[index(i,j,(k+1)/2+1,ocdim)];
@@ -1775,9 +1775,9 @@ int fnirt_zoom_field_by2(/* Input */
                else
 	       {
 		  (*nc)[index(i,j,k,ncdim)] = a3*oc[index(i,j,k/2,ocdim)];
-                  if ((k/2+1) < ocdim[2]) { 
-		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j,k/2+1,ocdim)]; 
-		  } 
+                  if ((k/2+1) < ocdim[2]) {
+		    (*nc)[index(i,j,k,ncdim)] += a1*oc[index(i,j,k/2+1,ocdim)];
+		  }
                }
 	    }
 	 }

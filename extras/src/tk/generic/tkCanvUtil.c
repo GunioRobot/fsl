@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvUtil.c --
  *
  *	This procedure contains a collection of utility procedures
@@ -845,9 +845,9 @@ Tk_GetDash(interp, value, dash)
 	    goto syntaxError;
 	}
 	*pt++ = i;
-	argc--; largv++; 
+	argc--; largv++;
     }
-  
+
     if (argv != NULL) {
 	ckfree((char *) argv);
     }
@@ -1183,7 +1183,7 @@ Tk_ChangeOutlineGC(canvas, item, outline)
  *
  * Tk_ResetOutlineGC
  *
- *	Restores the GC to the situation before 
+ *	Restores the GC to the situation before
  *	Tk_ChangeDashGC() was called.
  *	This function should be called just after the dashed
  *	item is drawn, because the GC is supposed to be
@@ -1609,7 +1609,7 @@ TkCanvTranslatePath (canvPtr, numVertex, coordArr, closedPath, outArr)
     ** But if a vertex outside of the bounding box is seen, break out of
     ** the loop.
     **
-    ** Most of the time, no clipping is needed, so this one loop is 
+    ** Most of the time, no clipping is needed, so this one loop is
     ** sufficient to do the translation.
     */
     for(i=0; i<numVertex; i++){
@@ -1649,7 +1649,7 @@ TkCanvTranslatePath (canvPtr, numVertex, coordArr, closedPath, outArr)
     **
     ** Each pass clips line segments that extend beyond a single side
     ** of the bounding box, and four passes rotate the coordinate system
-    ** back to its original value.  I'm not an expert on graphics 
+    ** back to its original value.  I'm not an expert on graphics
     ** algorithms, but I think this is called Cohen-Sutherland polygon
     ** clipping.
     **

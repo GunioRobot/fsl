@@ -64,9 +64,9 @@ struct iterator_writability_disabled
       , boost::detail::indirect_traits::is_reference_to_const<Reference>
       , is_const<ValueParam>
     >
-# else 
+# else
   : is_const<ValueParam>
-# endif 
+# endif
 {};
 
 
@@ -103,7 +103,7 @@ struct iterator_facade_default_category
       , typename mpl::eval_if<
             mpl::and_<
                 is_convertible<Traversal, single_pass_traversal_tag>
-                
+
                 // check for readability
               , is_convertible<Reference, ValueParam>
             >
@@ -146,7 +146,7 @@ struct iterator_category_with_traversal
     operator Category() const { return Category(); }
     operator Traversal() const { return Traversal(); }
 # endif
-    
+
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     // Make sure this isn't used to build any categories where
     // convertibility to Traversal is redundant.  Should just use the
@@ -162,8 +162,8 @@ struct iterator_category_with_traversal
     BOOST_STATIC_ASSERT(!is_iterator_traversal<Category>::value);
 #  if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
     BOOST_STATIC_ASSERT(is_iterator_traversal<Traversal>::value);
-#  endif 
-# endif 
+#  endif
+# endif
 };
 
 // Computes an iterator_category tag whose traversal is Traversal and
@@ -173,12 +173,12 @@ struct facade_iterator_category_impl
 {
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     BOOST_STATIC_ASSERT(!is_iterator_category<Traversal>::value);
-# endif 
-    
+# endif
+
     typedef typename iterator_facade_default_category<
         Traversal,ValueParam,Reference
     >::type category;
-    
+
     typedef typename mpl::if_<
         is_same<
             Traversal

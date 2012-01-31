@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCursor.c --
  *
  *	This file maintains a database of read-only cursors for the Tk
@@ -79,13 +79,13 @@ Tcl_ObjType tkCursorObjType = {
  *	unless objPtr couldn't be parsed correctly.  In this case,
  *	None is returned and an error message is left in the interp's result.
  *	The caller should never modify the cursor that is returned, and
- *	should eventually call Tk_FreeCursorFromObj when the cursor is no 
+ *	should eventually call Tk_FreeCursorFromObj when the cursor is no
  *	longer needed.
  *
  * Side effects:
  *	The cursor is added to an internal database with a reference count.
  *	For each call to this procedure, there should eventually be a call
- *	to Tk_FreeCursorFromObj, so that the database can be cleaned up 
+ *	to Tk_FreeCursorFromObj, so that the database can be cleaned up
  *	when cursors aren't needed anymore.
  *
  *----------------------------------------------------------------------
@@ -243,7 +243,7 @@ TkcGetCursor(interp, tkwin, string)
 	CursorInit(dispPtr);
     }
 
-    nameHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorNameTable, 
+    nameHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorNameTable,
             string, &new);
     if (!new) {
 	existingCursorPtr = (TkCursor *) Tcl_GetHashValue(nameHashPtr);
@@ -277,7 +277,7 @@ TkcGetCursor(interp, tkwin, string)
     cursorPtr->otherTable = &dispPtr->cursorNameTable;
     cursorPtr->hashPtr = nameHashPtr;
     cursorPtr->nextPtr = existingCursorPtr;
-    cursorPtr->idHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorIdTable, 
+    cursorPtr->idHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorIdTable,
             (char *) cursorPtr->cursor, &new);
     if (!new) {
 	panic("cursor already registered in Tk_GetCursor");
@@ -346,7 +346,7 @@ Tk_GetCursorFromData(interp, tkwin, source, mask, width, height,
     dataKey.fg = fg;
     dataKey.bg = bg;
     dataKey.display = Tk_Display(tkwin);
-    dataHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorDataTable, 
+    dataHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorDataTable,
             (char *) &dataKey, &new);
     if (!new) {
 	cursorPtr = (TkCursor *) Tcl_GetHashValue(dataHashPtr);
@@ -381,7 +381,7 @@ Tk_GetCursorFromData(interp, tkwin, source, mask, width, height,
     cursorPtr->otherTable = &dispPtr->cursorDataTable;
     cursorPtr->hashPtr = dataHashPtr;
     cursorPtr->objRefCount = 0;
-    cursorPtr->idHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorIdTable, 
+    cursorPtr->idHashPtr = Tcl_CreateHashEntry(&dispPtr->cursorIdTable,
             (char *) cursorPtr->cursor, &new);
     cursorPtr->nextPtr = NULL;
 
@@ -432,7 +432,7 @@ Tk_NameOfCursor(display, cursor)
 
     if (!dispPtr->cursorInit) {
 	printid:
-	sprintf(dispPtr->cursorString, "cursor id 0x%x", 
+	sprintf(dispPtr->cursorString, "cursor id 0x%x",
                 (unsigned int) cursor);
 	return dispPtr->cursorString;
     }
@@ -549,7 +549,7 @@ Tk_FreeCursor(display, cursor)
  *
  * Side effects:
  *	The reference count associated with the cursor represented by
- *	objPtr is decremented, and the cursor is released to X if there are 
+ *	objPtr is decremented, and the cursor is released to X if there are
  *	no remaining uses for it.
  *
  *----------------------------------------------------------------------
@@ -568,7 +568,7 @@ Tk_FreeCursorFromObj(tkwin, objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * FreeCursorFromObjProc -- 
+ * FreeCursorFromObjProc --
  *
  *	This proc is called to release an object reference to a cursor.
  *	Called when the object's internal rep is released or when
@@ -593,7 +593,7 @@ FreeCursorObjProc(objPtr)
 
     if (cursorPtr != NULL) {
 	cursorPtr->objRefCount--;
-	if ((cursorPtr->objRefCount == 0) 
+	if ((cursorPtr->objRefCount == 0)
 		&& (cursorPtr->resourceRefCount == 0)) {
 	    ckfree((char *) cursorPtr);
 	}
@@ -604,7 +604,7 @@ FreeCursorObjProc(objPtr)
 /*
  *---------------------------------------------------------------------------
  *
- * DupCursorObjProc -- 
+ * DupCursorObjProc --
  *
  *	When a cached cursor object is duplicated, this is called to
  *	update the internal reps.
@@ -625,7 +625,7 @@ DupCursorObjProc(srcObjPtr, dupObjPtr)
     Tcl_Obj *dupObjPtr;		/* The object we are copying to. */
 {
     TkCursor *cursorPtr = (TkCursor *) srcObjPtr->internalRep.twoPtrValue.ptr1;
-    
+
     dupObjPtr->typePtr = srcObjPtr->typePtr;
     dupObjPtr->internalRep.twoPtrValue.ptr1 = (VOID *) cursorPtr;
 
@@ -640,7 +640,7 @@ DupCursorObjProc(srcObjPtr, dupObjPtr)
  * Tk_GetCursorFromObj --
  *
  *	Returns the cursor referred to buy a Tcl object. The cursor must
- *	already have been allocated via a call to Tk_AllocCursorFromObj or 
+ *	already have been allocated via a call to Tk_AllocCursorFromObj or
  *	Tk_GetCursor.
  *
  * Results:
@@ -649,7 +649,7 @@ DupCursorObjProc(srcObjPtr, dupObjPtr)
  *
  * Side effects:
  *	If the object is not already a cursor, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -679,7 +679,7 @@ Tk_GetCursorFromObj(tkwin, objPtr)
  *
  * Side effects:
  *	If the object is not already a cursor, the conversion will free
- *	any old internal representation. 
+ *	any old internal representation.
  *
  *----------------------------------------------------------------------
  */
@@ -762,7 +762,7 @@ InitCursorObj(objPtr)
     Tcl_ObjType *typePtr;
 
     /*
-     * Free the old internalRep before setting the new one. 
+     * Free the old internalRep before setting the new one.
      */
 
     Tcl_GetString(objPtr);
@@ -803,9 +803,9 @@ CursorInit(dispPtr)
      * machines.
      */
 
-    /* 
+    /*
      *  Old code....
-     *     Tcl_InitHashTable(&dispPtr->cursorIdTable, sizeof(Display *) 
+     *     Tcl_InitHashTable(&dispPtr->cursorIdTable, sizeof(Display *)
      *                       /sizeof(int));
      *
      * The comment above doesn't make sense.
@@ -863,7 +863,7 @@ TkDebugCursor(tkwin, name)
 	    Tcl_ListObjAppendElement(NULL, objPtr,
 		    Tcl_NewIntObj(cursorPtr->resourceRefCount));
 	    Tcl_ListObjAppendElement(NULL, objPtr,
-		    Tcl_NewIntObj(cursorPtr->objRefCount)); 
+		    Tcl_NewIntObj(cursorPtr->objRefCount));
 	    Tcl_ListObjAppendElement(NULL, resultPtr, objPtr);
 	}
     }

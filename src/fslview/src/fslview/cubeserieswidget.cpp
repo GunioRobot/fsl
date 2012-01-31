@@ -21,55 +21,55 @@
 
 CubeSeriesWidget::CubeSeriesWidget(QWidget *parent, Image::Handle& i, Cursor::Handle& c,PlotOptions::Handle& options):
   TimeSeriesDisplay(parent)
-{   
+{
   m_tabWidget = new QTabWidget(this);
 
   GridSeriesWidget* gridFront  = new GridSeriesWidget(this,i,c,options,1);
   GridSeriesWidget* gridMiddle = new GridSeriesWidget(this,i,c,options,0);
   GridSeriesWidget* gridBack   = new GridSeriesWidget(this,i,c,options,-1);
 
-  m_tabWidget->addTab(gridFront,  "z+1");  
-  m_tabWidget->addTab(gridMiddle, "z+0");  
-  m_tabWidget->addTab(gridBack,   "z-1");  
- 
- 
-  m_tabWidget->showPage(gridMiddle);  
+  m_tabWidget->addTab(gridFront,  "z+1");
+  m_tabWidget->addTab(gridMiddle, "z+0");
+  m_tabWidget->addTab(gridBack,   "z-1");
+
+
+  m_tabWidget->showPage(gridMiddle);
 
 
   connect(this,SIGNAL(addTimeSeriesSignal()),
           gridFront,SLOT(addTimeSeries()));
   connect(this,SIGNAL(remTimeSeriesSignal()),
-          gridFront,SLOT(remTimeSeries()));      
+          gridFront,SLOT(remTimeSeries()));
   connect(this,SIGNAL(demeanButtonToggleSignal(bool)),
-          gridFront,SLOT(demeanButtonToggle(bool)));  
+          gridFront,SLOT(demeanButtonToggle(bool)));
   connect(this,SIGNAL(setEnabledSignal(bool)),
-          gridFront,SLOT(setEnabled(bool)));  
+          gridFront,SLOT(setEnabled(bool)));
   connect(this,SIGNAL(axisDisplaySignal()),
-          gridFront,SLOT(axisDisplay())); 
- 
+          gridFront,SLOT(axisDisplay()));
+
 
   connect(this,SIGNAL(demeanButtonToggleSignal(bool)),
-          gridMiddle,SLOT(demeanButtonToggle(bool)));  
+          gridMiddle,SLOT(demeanButtonToggle(bool)));
   connect(this,SIGNAL(addTimeSeriesSignal()),
           gridMiddle,SLOT(addTimeSeries()));
   connect(this,SIGNAL(remTimeSeriesSignal()),
           gridMiddle,SLOT(remTimeSeries()));
   connect(this,SIGNAL(setEnabledSignal(bool)),
-          gridMiddle,SLOT(setEnabled(bool)));  
+          gridMiddle,SLOT(setEnabled(bool)));
   connect(this,SIGNAL(axisDisplaySignal()),
-          gridMiddle,SLOT(axisDisplay())); 
+          gridMiddle,SLOT(axisDisplay()));
 
 
   connect(this,SIGNAL(addTimeSeriesSignal()),
           gridBack,SLOT(addTimeSeries()));
   connect(this,SIGNAL(remTimeSeriesSignal()),
-          gridBack,SLOT(remTimeSeries()));      
+          gridBack,SLOT(remTimeSeries()));
   connect(this,SIGNAL(demeanButtonToggleSignal(bool)),
           gridBack,SLOT(demeanButtonToggle(bool)));
   connect(this,SIGNAL(setEnabledSignal(bool)),
-          gridBack,SLOT(setEnabled(bool)));  
+          gridBack,SLOT(setEnabled(bool)));
   connect(this,SIGNAL(axisDisplaySignal()),
-          gridBack,SLOT(axisDisplay()));  
+          gridBack,SLOT(axisDisplay()));
 
 }
 
@@ -108,4 +108,4 @@ void CubeSeriesWidget::resizeEvent( QResizeEvent* )
 {
     m_tabWidget->resize(this->size());
 }
- 
+

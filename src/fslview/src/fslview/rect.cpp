@@ -21,7 +21,7 @@ struct Rect::Implementation
 
 Rect::Rect(int blX, int blY, int trX ,int trY):
   m_impl(new Implementation)
-{ 
+{
   setRect(blX,blY,trX,trY);
 }
 
@@ -43,7 +43,7 @@ void Rect::setRect(int botLeftX,int botLeftY,int topRightX,int topRightY)
   m_impl->m_bottom = std::min(topRightY,botLeftY);
   m_impl->m_top    = std::max(topRightY,botLeftY);
   m_impl->m_left   = std::min(topRightX,botLeftX);
-  m_impl->m_right  = std::max(topRightX,botLeftX);  
+  m_impl->m_right  = std::max(topRightX,botLeftX);
 }
 
 int Rect::top(){return m_impl->m_top;}
@@ -103,6 +103,6 @@ void Rect::setUnion(Rect::Handle r)
   bottom = std::min(bottom,viewTop);
   top    = std::max(viewBottom,m_impl->m_top);
   top    = std::min(top,viewTop);
-  
-  setRect(left, bottom, right, top); 
+
+  setRect(left, bottom, right, top);
 }

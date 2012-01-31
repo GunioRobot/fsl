@@ -29,13 +29,13 @@
 #include <boost/iterator/iterator_categories.hpp>
 
 namespace boost
-{   
+{
 namespace ptr_container_detail
 {
-        
+
     template
-    < 
-        class T, 
+    <
+        class T,
         class VoidPtrSeq
     >
     struct sequence_config
@@ -47,26 +47,26 @@ namespace ptr_container_detail
 
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSeq::allocator_type
                     allocator_type;
-        
+
         typedef U   value_type;
 
         typedef void_ptr_iterator<
-                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::iterator, U > 
+                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::iterator, U >
                     iterator;
-       
+
         typedef void_ptr_iterator<
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
                     const_iterator;
-        
+
         typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::reverse_iterator, U >
                    reverse_iterator;
-        
+
         typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_reverse_iterator, const U >
                    const_reverse_iterator;
-        
-        typedef value_type 
+
+        typedef value_type
                    object_type;
 
 #ifdef BOOST_NO_SFINAE
@@ -76,7 +76,7 @@ namespace ptr_container_detail
         {
             return static_cast<U*>( *i.base() );
         }
-        
+
 #else
         template< class Iter >
         static U* get_pointer( void_ptr_iterator<Iter,U> i )
@@ -89,7 +89,7 @@ namespace ptr_container_detail
         {
             return &*i;
         }
-#endif        
+#endif
 
 #if defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
 
@@ -98,7 +98,7 @@ namespace ptr_container_detail
         {
             return static_cast<const U*>( *i.base() );
         }
-        
+
 #else // BOOST_NO_SFINAE
 
 #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
@@ -124,7 +124,7 @@ namespace ptr_container_detail
 
         BOOST_STATIC_CONSTANT(bool, allow_null = boost::is_nullable<T>::value );
     };
-    
+
 } // ptr_container_detail
 
 
@@ -135,40 +135,40 @@ namespace ptr_container_detail
     }
 
 
-    
+
     template
-    < 
+    <
         class T,
-        class VoidPtrSeq, 
+        class VoidPtrSeq,
         class CloneAllocator = heap_clone_allocator
     >
-    class ptr_sequence_adapter : public 
-        ptr_container_detail::reversible_ptr_container< ptr_container_detail::sequence_config<T,VoidPtrSeq>, 
+    class ptr_sequence_adapter : public
+        ptr_container_detail::reversible_ptr_container< ptr_container_detail::sequence_config<T,VoidPtrSeq>,
                                             CloneAllocator >
     {
         typedef ptr_container_detail::reversible_ptr_container< ptr_container_detail::sequence_config<T,VoidPtrSeq>,
                                                     CloneAllocator >
              base_type;
-        
+
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
 
         typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator> this_type;
-         
+
     public:
-        typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
-        typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
+        typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
-         
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
+
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter,
                                                  base_type )
-    
+
         template< class PtrContainer >
         ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
           : base_type( clone )
         { }
 
         template< class PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        void operator=( std::auto_ptr<PtrContainer> clone )
         {
             base_type::operator=( clone );
         }
@@ -177,7 +177,7 @@ namespace ptr_container_detail
         // modifiers
         /////////////////////////////////////////////////////////////
 
-        void push_back( value_type x )  // strong               
+        void push_back( value_type x )  // strong
         {
             this->enforce_null_policy( x, "Null pointer in 'push_back()'" );
 
@@ -186,21 +186,21 @@ namespace ptr_container_detail
             ptr.release();                     // nothrow
         }
 
-        void push_front( value_type x )                
+        void push_front( value_type x )
         {
             this->enforce_null_policy( x, "Null pointer in 'push_front()'" );
 
             auto_type ptr( x );                // nothrow
             this->c_private().push_front( x ); // strong, commit
             ptr.release();                     // nothrow
-        } 
+        }
 
         auto_type pop_back()
         {
-            if( this->empty() ) 
+            if( this->empty() )
                 throw bad_ptr_container_operation( "'pop_back()' "
                                                      " on empty container" );
-            auto_type ptr( static_cast<value_type>( 
+            auto_type ptr( static_cast<value_type>(
                          this->c_private().back() ) ); // nothrow
             this->c_private().pop_back();              // nothrow
             return ptr_container_detail::move( ptr );                        // nothrow
@@ -208,29 +208,29 @@ namespace ptr_container_detail
 
         auto_type pop_front()
         {
-            if( this->empty() ) 
-                throw bad_ptr_container_operation( "'pop_front()' on" 
-                                                     " empty container" ); 
-            auto_type ptr( static_cast<value_type>(
-                        this->c_private().front() ) ); // nothrow 
-            this->c_private().pop_front();              // nothrow
-            return ptr_container_detail::move( ptr ); 
-        }
-        
-        reference front()        
-        { 
             if( this->empty() )
-                throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
-            return *this->begin(); 
+                throw bad_ptr_container_operation( "'pop_front()' on"
+                                                     " empty container" );
+            auto_type ptr( static_cast<value_type>(
+                        this->c_private().front() ) ); // nothrow
+            this->c_private().pop_front();              // nothrow
+            return ptr_container_detail::move( ptr );
         }
 
-        const_reference front() const  
+        reference front()
         {
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( this->begin() ) );
-            return *this->begin(); 
+            return *this->begin();
+        }
+
+        const_reference front() const
+        {
+            if( this->empty() )
+                throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
+            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
+            return *this->begin();
         }
 
         reference back()
@@ -238,7 +238,7 @@ namespace ptr_container_detail
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
-            return *--this->end(); 
+            return *--this->end();
         }
 
         const_reference back() const
@@ -246,25 +246,25 @@ namespace ptr_container_detail
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
-            return *--this->end(); 
+            return *--this->end();
         }
 
     public: // deque/vector inerface
-        
-        reference operator[]( size_type n ) // nothrow 
+
+        reference operator[]( size_type n ) // nothrow
         {
             BOOST_ASSERT( n < this->size() );
             BOOST_ASSERT( !this->is_null( n ) );
-            return *static_cast<value_type>( this->c_private()[n] ); 
+            return *static_cast<value_type>( this->c_private()[n] );
         }
-        
-        const_reference operator[]( size_type n ) const // nothrow  
-        { 
-            BOOST_ASSERT( n < this->size() ); 
+
+        const_reference operator[]( size_type n ) const // nothrow
+        {
+            BOOST_ASSERT( n < this->size() );
             BOOST_ASSERT( !this->is_null( n ) );
             return *static_cast<value_type>( this->c_private()[n] );
         }
-        
+
         reference at( size_type n )
         {
             if( n >= this->size() )
@@ -272,30 +272,30 @@ namespace ptr_container_detail
             BOOST_ASSERT( !this->is_null( n ) );
             return (*this)[n];
         }
-        
+
         const_reference at( size_type n ) const
         {
             if( n >= this->size() )
                 throw bad_index( "'at()' out of bounds" );
             BOOST_ASSERT( !this->is_null( n ) );
-            return (*this)[n]; 
+            return (*this)[n];
         }
-        
+
     public: // vector interface
-        
+
         size_type capacity() const
         {
             return this->c_private().capacity();
         }
-        
+
         void reserve( size_type n )
         {
-            this->c_private().reserve( n ); 
+            this->c_private().reserve( n );
         }
 
         void reverse()
         {
-            this->c_private().reverse(); 
+            this->c_private().reverse();
         }
 
     public: // assign, insert, transfer
@@ -303,12 +303,12 @@ namespace ptr_container_detail
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
         void assign( InputIterator first, InputIterator last ) // strong
-        { 
+        {
 //#ifdef BOOST_NO_SFINAE
 //#else
 //            BOOST_STATIC_ASSERT(( boost::is_convertible< typename iterator_reference<InputIterator>::type,
 //                                                         reference_type >::value ));
-//#endif            
+//#endif
             base_type temp( first, last );
             this->swap( temp );
         }
@@ -330,22 +330,22 @@ namespace ptr_container_detail
         template< class I >
         void insert_impl( iterator before, I first, I last, std::forward_iterator_tag ) // strong
         {
-            if( first == last ) 
+            if( first == last )
                 return;
             scoped_deleter sd( first, last );                // strong
-            this->insert_clones_and_release( sd, before );   // strong, commit 
+            this->insert_clones_and_release( sd, before );   // strong, commit
         }
 
     public:
 
         using base_type::insert;
-        
+
         template< class InputIterator >
         void insert( iterator before, InputIterator first, InputIterator last ) // strong
         {
             insert_impl( before, first, last, BOOST_DEDUCED_TYPENAME
                          iterator_category<InputIterator>::type() );
-        } 
+        }
 
 #ifdef BOOST_NO_SFINAE
 #else
@@ -359,23 +359,23 @@ namespace ptr_container_detail
 
 #endif
 
-        void transfer( iterator before, 
-                       iterator first, 
-                       iterator last, 
+        void transfer( iterator before,
+                       iterator first,
+                       iterator last,
                        ptr_sequence_adapter& from ) // strong
         {
             BOOST_ASSERT( &from != this );
             if( from.empty() )
                 return;
             this->c_private().
-                insert( before.base(), 
+                insert( before.base(),
                         first.base(), last.base() ); // strong
             from.c_private().erase( first.base(),
                                     last.base() );   // nothrow
         }
 
-        void transfer( iterator before, 
-                       iterator object, 
+        void transfer( iterator before,
+                       iterator object,
                        ptr_sequence_adapter& from ) // strong
         {
             BOOST_ASSERT( &from != this );
@@ -389,7 +389,7 @@ namespace ptr_container_detail
 
 #ifdef BOOST_NO_SFINAE
 #else
-        
+
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                                                   iterator > >::type
@@ -399,7 +399,7 @@ namespace ptr_container_detail
         }
 
 #endif
-        
+
         void transfer( iterator before, ptr_sequence_adapter& from ) // strong
         {
             BOOST_ASSERT( &from != this );
@@ -412,7 +412,7 @@ namespace ptr_container_detail
         }
 
     public: // null functions
-         
+
         bool is_null( size_type idx ) const
         {
             BOOST_ASSERT( idx < this->size() );
@@ -425,7 +425,7 @@ namespace ptr_container_detail
         {
             sort( first, last, std::less<T>() );
         }
-        
+
         void sort()
         {
             sort( this->begin(), this->end() );
@@ -436,23 +436,23 @@ namespace ptr_container_detail
         {
             BOOST_ASSERT( first <= last && "out of range sort()" );
             BOOST_ASSERT( this->begin() <= first && "out of range sort()" );
-            BOOST_ASSERT( last <= this->end() && "out of range sort()" ); 
+            BOOST_ASSERT( last <= this->end() && "out of range sort()" );
             // some static assert on the arguments of the comparison
-            std::sort( first.base(), last.base(), 
+            std::sort( first.base(), last.base(),
                        void_ptr_indirect_fun<Compare,T>(comp) );
         }
-        
+
         template< class Compare >
         void sort( Compare comp )
         {
             sort( this->begin(), this->end(), comp );
         }
-        
+
         void unique( iterator first, iterator last )
         {
             unique( first, last, std::equal_to<T>() );
         }
-        
+
         void unique()
         {
             unique( this->begin(), this->end() );
@@ -470,16 +470,16 @@ namespace ptr_container_detail
 
         void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
         {
-            
-            typename base_type::ptr_iterator p = std::stable_partition( 
-                                                    first.base(), 
-                                                    last.base(), 
+
+            typename base_type::ptr_iterator p = std::stable_partition(
+                                                    first.base(),
+                                                    last.base(),
                                                     is_not_zero_ptr() );
             this->c_private().erase( p, this->end().base() );
-            
+
         }
 
-        void range_check_impl( iterator first, iterator last, 
+        void range_check_impl( iterator first, iterator last,
                                std::bidirectional_iterator_tag )
         { /* do nothing */ }
 
@@ -488,22 +488,22 @@ namespace ptr_container_detail
         {
             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
-            BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
+            BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );
         }
-        
+
         void range_check( iterator first, iterator last )
         {
-            range_check_impl( first, last, 
+            range_check_impl( first, last,
                               BOOST_DEDUCED_TYPENAME iterator_category<iterator>::type() );
         }
-        
+
     public:
-        
+
         template< class Compare >
         void unique( iterator first, iterator last, Compare comp )
         {
             range_check(first,last);
-            
+
             iterator prev = first;
             iterator next = first;
             ++next;
@@ -525,7 +525,7 @@ namespace ptr_container_detail
 
             compact_and_erase_nulls( first, last );
         }
-        
+
         template< class Compare >
         void unique( Compare comp )
         {
@@ -537,7 +537,7 @@ namespace ptr_container_detail
         {
             range_check(first,last);
 
-            iterator next = first; 
+            iterator next = first;
             for( ; next != last; ++next )
             {
                 BOOST_ASSERT( !::boost::is_null(next) );
@@ -550,7 +550,7 @@ namespace ptr_container_detail
 
             compact_and_erase_nulls( first, last );
         }
-        
+
         template< class Pred >
         void erase_if( Pred pred )
         {
@@ -558,43 +558,43 @@ namespace ptr_container_detail
         }
 
 
-        void merge( iterator first, iterator last, 
+        void merge( iterator first, iterator last,
                     ptr_sequence_adapter& from )
         {
              merge( first, last, from, std::less<T>() );
         }
-        
+
         template< class BinPred >
-        void merge( iterator first, iterator last, 
+        void merge( iterator first, iterator last,
                     ptr_sequence_adapter& from, BinPred pred )
         {
             void_ptr_indirect_fun<BinPred,T>  bin_pred(pred);
-            size_type                         current_size = this->size(); 
+            size_type                         current_size = this->size();
             this->transfer( this->end(), first, last, from );
             typename base_type::ptr_iterator middle = this->begin().base();
-            std::advance(middle,current_size); 
+            std::advance(middle,current_size);
             std::inplace_merge( this->begin().base(),
                                 middle,
                                 this->end().base(),
                                 bin_pred );
         }
-        
+
         void merge( ptr_sequence_adapter& r )
         {
             merge( r, std::less<T>() );
             BOOST_ASSERT( r.empty() );
         }
-        
+
         template< class BinPred >
         void merge( ptr_sequence_adapter& r, BinPred pred )
         {
             merge( r.begin(), r.end(), r, pred );
-            BOOST_ASSERT( r.empty() );    
+            BOOST_ASSERT( r.empty() );
         }
 
     };
 
 
-} // namespace 'boost'  
+} // namespace 'boost'
 
 #endif

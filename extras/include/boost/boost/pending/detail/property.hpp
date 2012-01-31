@@ -1,4 +1,4 @@
-//  (C) Copyright Jeremy Siek 2004 
+//  (C) Copyright Jeremy Siek 2004
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -24,11 +24,11 @@ namespace boost {
     struct property_value_dispatch {
       template <class PropertyTag, class T, class Tag>
       inline static T& get_value(PropertyTag& p, T*, Tag) {
-        return p.m_value; 
+        return p.m_value;
       }
       template <class PropertyTag, class T, class Tag>
       inline static const T& const_get_value(const PropertyTag& p, T*, Tag) {
-        return p.m_value; 
+        return p.m_value;
       }
     };
 
@@ -55,8 +55,8 @@ namespace boost {
     };
     template <>
     struct property_value_end<no_property> {
-      template <class T> struct result { 
-        typedef detail::error_property_not_found type; 
+      template <class T> struct result {
+        typedef detail::error_property_not_found type;
       };
 
       // Stop the recursion and return error
@@ -141,7 +141,7 @@ namespace boost {
         enum { match = same_property<Tag1,Tag2>::value };
         typedef typename TagValueAList::second_type Next;
         typedef typename ev_selector<Next>::type Extractor;
-        typedef typename boost::ct_if< match, Value, 
+        typedef typename boost::ct_if< match, Value,
           typename Extractor::template bind_<Next,Tag1>::type
         >::type type;
       };
@@ -154,7 +154,7 @@ namespace boost {
     };
 #endif //!defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-  } // namespace detail 
+  } // namespace detail
 } // namespace boost
 
 #endif // BOOST_DETAIL_PROPERTY_HPP

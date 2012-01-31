@@ -11,7 +11,7 @@
 
 #include <boost/spirit/meta/impl/fundamental.ipp>
 
-namespace boost { namespace spirit 
+namespace boost { namespace spirit
 {
     ///////////////////////////////////////////////////////////////////////////
     //

@@ -10,7 +10,7 @@
 # include <boost/python/object.hpp>
 # include <boost/python/converter/pytype_object_mgr_traits.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {
@@ -21,7 +21,7 @@ namespace detail
       long count(object_cref value) const; // return number of occurrences of value
 
       void extend(object_cref sequence); // extend list by appending sequence elements
-    
+
       long index(object_cref value) const; // return index of first occurrence of value
 
       void insert(int index, object_cref); // insert object before index
@@ -32,7 +32,7 @@ namespace detail
       object pop(object const& index);
 
       void remove(object_cref value); // remove first occurrence of value
-    
+
       void reverse(); // reverse *IN PLACE*
 
       void sort(); //  sort *IN PLACE*; if given, cmpfunc(x, y) -> -1, 0, 1
@@ -44,7 +44,7 @@ namespace detail
       explicit list_base(object_cref sequence); // new list initialized from sequence's items
 
       BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS(list_base, object)
-   private:    
+   private:
       static detail::new_non_null_reference call(object const&);
   };
 }
@@ -72,7 +72,7 @@ class list : public detail::list_base
     {
         return base::count(object(value));
     }
-    
+
     template <class T>
     void extend(T const& x)
     {
@@ -84,13 +84,13 @@ class list : public detail::list_base
     {
         return base::index(object(x));
     }
-    
+
     template <class T>
     void insert(int index, T const& x) // insert object before index
     {
         base::insert(index, object(x));
     }
-    
+
     template <class T>
     void insert(object const& index, T const& x) // insert object before index
     {
@@ -99,7 +99,7 @@ class list : public detail::list_base
 
     object pop() { return base::pop(); }
     object pop(long index) { return base::pop(index); }
-    
+
     template <class T>
     object pop(T const& index)
     {
@@ -113,13 +113,13 @@ class list : public detail::list_base
     }
 
     void sort() { base::sort(); }
-    
+
     template <class T>
     void sort(T const& value)
     {
         base::sort(object(value));
     }
-    
+
  public: // implementation detail -- for internal use only
     BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS(list, base)
 };

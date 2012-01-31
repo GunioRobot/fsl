@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -84,7 +84,7 @@ namespace Gs {
   void Mcmc_Mh::setup()
   {
     Tracer_Plus trace("Mcmc_Mh::setup");
-    
+
     beta_naccepted = 0;
     phi_naccepted = 0;
     gamma_naccepted = 0;
@@ -103,7 +103,7 @@ namespace Gs {
 
     Matrix gamC;
     reshape(gamC, gamma_S, nevs, nevs); // gamC is Covariance
-    
+
     gamma_latest = gamma_mean;
     gamma_proposal_std = sqrt(diag(gamC))*8;
     gamma_samples = 0;
@@ -137,12 +137,12 @@ namespace Gs {
 
     beta_samples = 0;
     phi_samples = 0;
- 
+
     for(int g = 1; g <= ngs; g++)
       {
 	beta_prior_energy_old(g) = beta_prior_energy(g);
       }
-    
+
     if(uncertainty_in_varcopes)
       {
 	for(int t = 1; t <= ntpts; t++)
@@ -162,7 +162,7 @@ namespace Gs {
 	    sumovere(t) += design_matrix(t,e)*gamma_latest(e);
 	    // 	OUT(gamma_latest(e));
 	    // 	OUT(design_matrix(t,e));
-	  }	
+	  }
       }
 
     likelihood_energy_old = likelihood_energy(0,0,false);
@@ -173,7 +173,7 @@ namespace Gs {
 //       {
 // 	likelihood_energy_old += beta_prior_energy(g);
 //       }
-    
+
 //     likelihood_energy_old += likelihood_energy();
 
   }
@@ -181,7 +181,7 @@ namespace Gs {
   void Mcmc_Mh::jump()
   {
     Tracer_Plus trace("Mcmc_Mh::jump");
-        
+
     //    all_jump();
 
     beta_jump();
@@ -195,14 +195,14 @@ namespace Gs {
       {
 	  for(int g = 1; g <= ngs; g++)
 	    beta_proposal_std(g) *= 0.65/((1+beta_nrejected(g))/float(1+beta_naccepted(g)+beta_nrejected(g)));
-	
+
 	if(uncertainty_in_varcopes)
 	  for(int t = 1; t <= ntpts; t++)
 	    phi_proposal_std(t) *= 0.65/((1+phi_nrejected(t))/float(1+phi_naccepted(t)+phi_nrejected(t)));
-	
+
 	for(int e = 1; e <= nevs; e++)
 	  gamma_proposal_std(e) *= 0.65/((1+gamma_nrejected(e))/float(1+gamma_naccepted(e)+gamma_nrejected(e)));
-	
+
 	beta_naccepted = 0;
 	phi_naccepted = 0;
 	gamma_naccepted = 0;
@@ -213,11 +213,11 @@ namespace Gs {
 	subsampcount = 0;
       }
     else
-      {	
+      {
 	subsampcount++;
       }
 
-  } 
+  }
 
   void Mcmc_Mh::beta_jump()
   {
@@ -233,16 +233,16 @@ namespace Gs {
 	ColumnVector prec_ontwo_old = prec_ontwo;
 	ColumnVector logprec_ontwo_old = logprec_ontwo;
 
-	// propose new value	
-	beta_latest(g) += normrnd().AsScalar()*beta_proposal_std(g);	  
+	// propose new value
+	beta_latest(g) += normrnd().AsScalar()*beta_proposal_std(g);
 
 	// use when sampling from log(variance)
 	//	if(abs(beta_latest(g)) > 50) {beta_latest(g) = beta_old; beta_nrejected(g)++; return;}
 
 	// use when sampling from variance
 	if(beta_latest(g) <= 0) {beta_latest(g) = beta_old; beta_nrejected(g)++; return;}
-	
-	float likelihood_energy_new = likelihood_energy(0,0,true);	
+
+	float likelihood_energy_new = likelihood_energy(0,0,true);
 	float beta_prior_energy_new = beta_prior_energy(g);
 
 	// calculate acceptance threshold
@@ -252,11 +252,11 @@ namespace Gs {
 
 	if(GsOptions::getInstance().debuglevel.value()==2)
 	  {
-	    cout << "--------------" << endl;	
+	    cout << "--------------" << endl;
 	    OUT(varcopedata.t());
 	    OUT(copedata.t());
 	    OUT(sampcount);
-	    OUT(gamma_latest.t());	    
+	    OUT(gamma_latest.t());
 	    OUT(beta_latest(g));
 	    OUT(beta_proposal_std(g));
 	    OUT(beta_old);
@@ -271,7 +271,7 @@ namespace Gs {
 	  }
 
 	bool accept = exp(energy_old - energy_new) > tmp;
-	
+
 	if(accept)
 	  {
 	    if(GsOptions::getInstance().debuglevel.value()==2)
@@ -313,12 +313,12 @@ namespace Gs {
 	ColumnVector prec_ontwo_old = prec_ontwo;
 	ColumnVector logprec_ontwo_old = logprec_ontwo;
 
-	// propose new value	
-	phi_latest(t) += normrnd().AsScalar()*phi_proposal_std(t);	  
+	// propose new value
+	phi_latest(t) += normrnd().AsScalar()*phi_proposal_std(t);
 
 	if(phi_latest(t) <= 0) {phi_latest(t) = phi_old; phi_nrejected(t)++; return;}
-	
-	float likelihood_energy_new = likelihood_energy_phichanged(t);	
+
+	float likelihood_energy_new = likelihood_energy_phichanged(t);
 	float phi_prior_energy_new = phi_prior_energy(t);
 	float beta_prior_energy_new = beta_prior_energy(design.getgroup(t));
 
@@ -329,11 +329,11 @@ namespace Gs {
 
 	if(GsOptions::getInstance().debuglevel.value()==2)
 	  {
-	    cout << "--------------" << endl;	
+	    cout << "--------------" << endl;
 	    OUT(varcopedata.t());
 	    OUT(copedata.t());
 	    OUT(sampcount);
-	    OUT(gamma_latest.t());	    
+	    OUT(gamma_latest.t());
 	    OUT(phi_latest(t));
 	    OUT(phi_proposal_std(t));
 	    OUT(phi_old);
@@ -348,7 +348,7 @@ namespace Gs {
 	  }
 
 	bool accept = exp(energy_old - energy_new) > tmp;
-	
+
 	if(accept)
 	  {
 	    if(GsOptions::getInstance().debuglevel.value()==2)
@@ -385,16 +385,16 @@ namespace Gs {
 //     ColumnVector gamma_old(nevs);
 //     for(int e = 1; e <= nevs; e++)
 //       {
-// 	gamma_old(e) = gamma_latest(e);       
+// 	gamma_old(e) = gamma_latest(e);
 // 	gamma_latest(e) += normal.Next()*gamma_proposal_std(e);
 //       }
-    
-//     float likelihood_energy_new = likelihood_energy();	
+
+//     float likelihood_energy_new = likelihood_energy();
 
 //     // calculate acceptance threshold
 //     float tmp = uniform.Next();
 //     bool accept = exp(likelihood_energy_old - likelihood_energy_new) > tmp;
-    
+
 //     if(accept)
 //       {
 // 	likelihood_energy_old = likelihood_energy_new;
@@ -407,7 +407,7 @@ namespace Gs {
 // 	  {
 // 	    gamma_latest(e) = gamma_old(e);
 // 	  }
-	
+
 // 	gamma_nrejected(1)++;
 //       }
 //   }
@@ -415,17 +415,17 @@ namespace Gs {
   void Mcmc_Mh::gamma_jump()
   {
     Tracer_Plus trace("Mcmc_Mh::gamma_jump");
-    
+
     for(int e = 1; e <= nevs; e++)
       {
 	// store old values
-	float gamma_old = gamma_latest(e);       
+	float gamma_old = gamma_latest(e);
 	ColumnVector sumovere_old = sumovere;
 
-	// propose new values	
-	gamma_latest(e) += normrnd().AsScalar()*gamma_proposal_std(e);      
+	// propose new values
+	gamma_latest(e) += normrnd().AsScalar()*gamma_proposal_std(e);
 
-	float likelihood_energy_new = likelihood_energy(e,gamma_old,false);	
+	float likelihood_energy_new = likelihood_energy(e,gamma_old,false);
 
 	// calculate acceptance threshold
 
@@ -440,12 +440,12 @@ namespace Gs {
 	  }
 	else
 	  {
-	    // restore old values	    
+	    // restore old values
 	    gamma_latest(e) = gamma_old;
 	     sumovere = sumovere_old;
 	    gamma_nrejected(e)++;
 	  }
-      } 
+      }
   }
 
 //   void Mcmc_Mh::all_jump()
@@ -457,7 +457,7 @@ namespace Gs {
 //     ColumnVector gamma_old(nevs);
 //     for(int e = 1; e <= nevs; e++)
 //       {
-// 	gamma_old(e) = gamma_latest(e);       
+// 	gamma_old(e) = gamma_latest(e);
 // 	gamma_latest(e) += normrnd().AsScalar()*gamma_proposal_std(e);
 //       }
 
@@ -467,17 +467,17 @@ namespace Gs {
 //     for(int g = 1; g <= ngs; g++)
 //       {
 // 	beta_old(g) = beta_latest(g);
-// 	beta_latest(g) += normrnd().AsScalar()*beta_proposal_std(g);	  
+// 	beta_latest(g) += normrnd().AsScalar()*beta_proposal_std(g);
 // 	if(beta_latest(g) <= 0) {beta_latest(g) = beta_old(g);}
 // 	energy_new += beta_prior_energy(g);
 //       }
-    
-//     energy_new += likelihood_energy();	
+
+//     energy_new += likelihood_energy();
 
 //     // calculate acceptance threshold
 //     float tmp = unifrnd().AsScalar();
 //     bool accept = exp(likelihood_energy_old - energy_new) > tmp;
-    
+
 //     if(accept)
 //       {
 // 	likelihood_energy_old = energy_new;
@@ -495,7 +495,7 @@ namespace Gs {
 // 	  {
 // 	    beta_latest(g) = beta_old(g);
 // 	  }
-	
+
 // 	gamma_nrejected(1)++;
 //       }
 //   }
@@ -513,7 +513,7 @@ namespace Gs {
 
     if(echanged>0) gamlatest= gamma_latest(echanged);
 
-    // matlab:   n = 4;y = ones(n)*o+eye(n)*k;inv(y),det(y)    
+    // matlab:   n = 4;y = ones(n)*o+eye(n)*k;inv(y),det(y)
     for(int t = 1; t <= ntpts; t++)
       {
 	//float sumovere = 0.0;
@@ -530,7 +530,7 @@ namespace Gs {
 	  {
 	    if(!infer_outliers)
 	      {
-		prec_ontwo(t) = 0.5/(phi_latest(t)+beta_latest(design.getgroup(t)));				
+		prec_ontwo(t) = 0.5/(phi_latest(t)+beta_latest(design.getgroup(t)));
 	      }
 	    else
 	      {
@@ -557,16 +557,16 @@ namespace Gs {
 // 	OUT(varcopedata(t));
 // 	OUT(beta_latest(design.getgroup(t)));
 // 	OUT(prec);
-// 	OUT(design.getgroup(t));	
-	  
+// 	OUT(design.getgroup(t));
+
       }
 
     //    OUT(energy);
     return en;
   }
-  
+
   float Mcmc_Mh::likelihood_energy_phichanged(const int t)
-  {    
+  {
     // logprec_ontwo(t) and prec_ontwo(t) will be calculated using phi_old
     float old_energy = (-logprec_ontwo(t) + prec_ontwo(t)*Sqr(copedata(t) - sumovere(t)));
 
@@ -583,9 +583,9 @@ namespace Gs {
   float Mcmc_Mh::beta_prior_energy(int g)
   {
     Tracer_Plus trace("Mcmc_Mh::beta_prior_energy");
-    
+
     float en = 0.0;
-    
+
     // prior is 1/beta (beta is variance)
     en = log(beta_latest(g));
 
@@ -595,7 +595,7 @@ namespace Gs {
   float Mcmc_Mh::phi_prior_energy(int t)
   {
     Tracer_Plus trace("Mcmc_Mh::phi_prior_energy");
-    
+
     // p276 Lee
     float S = dofvarcopedata(t)/varcopedata(t);
     float en = -(dofvarcopedata(t)/2-1)*log(phi_latest(t)) + 0.5*S*phi_latest(t);
@@ -607,7 +607,7 @@ namespace Gs {
   {
     Tracer_Plus trace("Mcmc_Mh::sample");
 
-    sampcount++;    
+    sampcount++;
 
     for(int g = 1; g <= ngs; g++)
       beta_samples(g,samp) = beta_latest(g);
@@ -616,7 +616,7 @@ namespace Gs {
       phi_samples(t,samp) = phi_latest(t);
 
     for(int e = 1; e <= nevs; e++)
-      gamma_samples(e,samp) = gamma_latest(e);	
+      gamma_samples(e,samp) = gamma_latest(e);
 
     likelihood_samples(samp) = likelihood_energy_old;
 
@@ -626,13 +626,13 @@ namespace Gs {
 //   void Mcmc_Mh::sample_sumsquares(int samp)
 //   {
 //     Tracer_Plus trace("Mcmc_Mh::sample_sumsquares");
-    
+
 //     ss_samples[0](samp) = sumsquare_residuals(design_matrix,copedata,gamma_latest);
-    
+
 //     for(int f = 1; f < design.getnumfcontrasts()+1; f++)
-//       {	
+//       {
 // 	const Matrix& reduceddm = design.getfreduceddm(f);
-	
+
 // // 	OUT(copedata.t());
 // // 	OUT(gamma_latest.t());
 // // 	OUT(reduceddm);
@@ -640,7 +640,7 @@ namespace Gs {
 // 		ss_samples[f](samp) = sumsquare_residuals(reduceddm,copedata,gamma_latest);
 //       }
 //   }
-  
+
 //   float Mcmc_Mh::sumsquare_residuals(const Matrix& pdm, const ColumnVector& pdata, const ColumnVector& ppes)
 //   {
 //     Tracer_Plus trace("Mcmc_Mh::sumsquare_residuals");
@@ -650,7 +650,7 @@ namespace Gs {
 //     for(int t = 1; t <= ntpts; t++)
 //       {
 // 	float sumovere = 0.0;
-	
+
 // 	for(int e = 1; e <= nevs; e++)
 // 	  {
 // 	    sumovere += pdm(t,e)*ppes(e);
@@ -659,28 +659,28 @@ namespace Gs {
 
 // 	ss += prec*Sqr(pdata(t) - sumovere);
 // 	//ss += Sqr(pdata(t) - sumovere);
-	
+
 //       }
 
 //     ss = ss/ntpts;
 
 //     return ss;
 //   }
-  
+
 //   void Mcmc_Mh::dic(float& DIC, float& pd)
-//   {       
+//   {
 //     Tracer_Plus trace("Mcmc_Mh::dic");
 
     // calc Dthetabar
     // set latest params to posterior means
 //     gamma_latest = mean(gamma_samples,2);
-//     beta_latest = mean(beta_samples,2); 
+//     beta_latest = mean(beta_samples,2);
 
 //     float Dthetabar = 2*likelihood_energy();
 
 //     // calc Dbar
 //     float Dbar = mean(2*likelihood_samples).AsScalar();
-    
+
 //     // pd = Dbar - Dthetabar
 //     pd = Dbar - Dthetabar;
 
@@ -691,7 +691,7 @@ namespace Gs {
   void Mcmc_Mh::run()
   {
     Tracer_Plus trace("Mcmc_Mh::run");
-    
+
     int samples = 1;
     int jumps = 0;
     int subsamplejumps = 0;
@@ -700,24 +700,24 @@ namespace Gs {
       {
 	jumps++;
 	subsamplejumps++;
-	    
+
   	jump();
 
 	if(subsamplejumps >= opts.sampleevery.value())
 	  {
 	    subsamplejumps = 0;
-	    
+
 	    // sample components after burnin
 	    if(jumps > opts.burnin.value())
-	      {	   		
+	      {
 		sample(samples);
 		samples++;
-		
+
 		if(samples>nsamples)
 		  break;
 	      }
 	  }
-      }    
+      }
   }
 
 }

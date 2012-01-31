@@ -56,8 +56,8 @@ done
 
 # make list unique
 lst=`echo $lst2 | tr ' ' '\n' | sort -u`;
-if [ $extension = 0 ] ; then 
+if [ $extension = 0 ] ; then
   echo `${FSLDIR}/bin/remove_ext $lst`;
-else 
+else
   echo $lst;
 fi

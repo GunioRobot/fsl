@@ -5,20 +5,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -30,13 +30,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -47,7 +47,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
     cout<<"bvecs     "<<opts.bvecsfile.value()<<endl;
     cout<<"bvals     "<<opts.bvalsfile.value()<<endl;
   }
-  
+
   // Set random seed:
   Matrix bvecs = read_ascii_matrix(opts.bvecsfile.value());
   if(bvecs.Nrows()>3) bvecs=bvecs.t();
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
       bvecs(1,i)=bvecs(1,i)/tmpsum;
       bvecs(2,i)=bvecs(2,i)/tmpsum;
       bvecs(3,i)=bvecs(3,i)/tmpsum;
-    }  
+    }
   }
   Matrix bvals = read_ascii_matrix(opts.bvalsfile.value());
   if(bvals.Nrows()>1) bvals=bvals.t();
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
     dvol_std.reinitialize(maxx-minx,maxy-miny,maxz-minz);
     dvol_std=0;
   }
-  
+
 
   if(opts.verbose.value()) cout<<"ok"<<endl;
 
@@ -178,7 +178,7 @@ int main(int argc, char** argv)
 	if(opts.modelnum.value()==1){
 	  PVM_single pvm(S,bvecs,bvals,opts.nfibres.value());
 	  pvm.fit();
-	  
+
 	  S0(i-minx,j-miny,k-minz)   = pvm.get_s0();
 	  dvol(i-minx,j-miny,k-minz) = pvm.get_d();
 	  for(int f=0;f<opts.nfibres.value();f++){
@@ -190,7 +190,7 @@ int main(int argc, char** argv)
 	else{
 	  PVM_multi pvm(S,bvecs,bvals,opts.nfibres.value());
 	  pvm.fit();
-	  
+
 	  S0(i-minx,j-miny,k-minz)   = pvm.get_s0();
 	  dvol(i-minx,j-miny,k-minz) = pvm.get_d();
 	  dvol_std(i-minx,j-miny,k-minz) = pvm.get_d_std();
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 	    phvol[f](i-minx,j-miny,k-minz) = pvm.get_ph(f+1);
 	  }
 	}
-	
+
 	for(int f=0;f<opts.nfibres.value();f++){
 	  dyads[f](i-minx,j-miny,k-minz,0) = sin(thvol[f](i-minx,j-miny,k-minz)) * cos(phvol[f](i-minx,j-miny,k-minz));
 	  dyads[f](i-minx,j-miny,k-minz,1) = sin(thvol[f](i-minx,j-miny,k-minz)) * sin(phvol[f](i-minx,j-miny,k-minz));
@@ -209,8 +209,8 @@ int main(int argc, char** argv)
       }
     }
   }
-  
-  
+
+
   if(opts.verbose.value())
     cout << "saving results" << endl;
 

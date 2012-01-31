@@ -18,12 +18,12 @@ XFILES = fslorient fslstats fslmerge \
 
 SCRIPTS = fslval fslchpixdim fslanimate fslsize sliceanimate fslinfo fsledithd avw2fsl fslswapdim fslchfiletype fslreorient2std
 
-FSCRIPTS = fmriborient 
+FSCRIPTS = fmriborient
 
 all: ${XFILES}
 
 fslstats: fslstats.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslstats.o ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslstats.o ${LIBS}
 
 fslfft: fslfft.cc
 	${CXX} ${CXXFLAGS} ${LDFLAGS} -o fslfft fslfft.cc ${LIBS}
@@ -38,16 +38,16 @@ fslcomplex: fslcomplex.cc
 	${CXX} ${CXXFLAGS} ${LDFLAGS} -o fslcomplex fslcomplex.cc ${LIBS}
 
 fslswapdim_exe: fslswapdim.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o fslswapdim_exe fslswapdim.o ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o fslswapdim_exe fslswapdim.o ${LIBS}
 
 fslorient: fslorient.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslorient.o ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslorient.o ${LIBS}
 
 fslslice: fslslice.cc
 	${CXX} ${CXXFLAGS} ${LDFLAGS} -o fslslice fslslice.cc ${LIBS}
 
 fslpspec: fslpspec.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslpspec.o ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ fslpspec.o ${LIBS}
 
 
 #start of matts c++ rewrites

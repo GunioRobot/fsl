@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -119,9 +119,9 @@ namespace MISCMATHS {
   ReturnMatrix read_binary_matrix(const string& filename);
   ReturnMatrix read_matrix(const string& filename);
 
-  int write_ascii_matrix(const Matrix& mat, const string& filename, 
+  int write_ascii_matrix(const Matrix& mat, const string& filename,
 			 int precision=-1);
-  int write_ascii_matrix(const string& filename, const Matrix& mat, 
+  int write_ascii_matrix(const string& filename, const Matrix& mat,
 			 int precision=-1);
   int write_vest(const Matrix& x, string p_fname, int precision=-1);
   int write_vest(string p_fname, const Matrix& x, int precision=-1);
@@ -140,7 +140,7 @@ namespace MISCMATHS {
 
   // General maths
 
-  int round(int x); 
+  int round(int x);
   int round(float x);
   int round(double x);
   double rounddouble(double x);
@@ -148,7 +148,7 @@ namespace MISCMATHS {
   inline int sign(int x){ if (x>0) return 1; else { if (x<0) return -1; else return 0; } }
   inline int sign(float x){ if (x>0) return 1; else { if (x<0) return -1; else return 0; } }
   inline int sign(double x){ if (x>0) return 1; else { if (x<0) return -1; else return 0; } }
-  
+
   inline double pow(double x, float y) { return std::pow(x,(double) y); }
   inline double pow(float x, double y) { return std::pow((double) x,y); }
   inline double pow(double x, int y) { return std::pow(x,(double) y); }
@@ -164,14 +164,14 @@ namespace MISCMATHS {
 
   int periodicclamp(int x, int x1, int x2);
 
-  template<class S, class T> 
+  template<class S, class T>
    inline T Min(const S &a, const T &b) { if (a<b) return (T) a; else return b; }
 
   template<class S, class T>
    inline T Max(const S &a, const T &b) { if (a>b) return (T) a; else return b; }
 
   template<class T>
-   inline T Sqr(const T& x) { return x*x; } 
+   inline T Sqr(const T& x) { return x*x; }
 
   ColumnVector cross(const ColumnVector& a, const ColumnVector& b);
   ColumnVector cross(const Real *a, const Real *b);
@@ -203,7 +203,7 @@ namespace MISCMATHS {
   int construct_rotmat_quat(const ColumnVector& params, int n, Matrix& aff);
   int construct_rotmat_quat(const ColumnVector& params, int n, Matrix& aff,
 		   const ColumnVector& centre);
-  int make_rot(const ColumnVector& angl, const ColumnVector& centre, 
+  int make_rot(const ColumnVector& angl, const ColumnVector& centre,
 	       Matrix& rot);
 
   int getrotaxis(ColumnVector& axis, const Matrix& rotmat);
@@ -215,13 +215,13 @@ namespace MISCMATHS {
 		    const ColumnVector& centre,
 		    int (*rotmat2params)(ColumnVector& , const Matrix& ));
   int compose_aff(const ColumnVector& params, int n, const ColumnVector& centre,
-		  Matrix& aff, 
+		  Matrix& aff,
 		  int (*params2rotmat)(const ColumnVector& , int , Matrix& ,
 				       const ColumnVector& ) );
-  float rms_deviation(const Matrix& affmat1, const Matrix& affmat2, 
-		      const ColumnVector& centre, const float rmax); 
-  float rms_deviation(const Matrix& affmat1, const Matrix& affmat2, 
-		      const float rmax=80.0); 
+  float rms_deviation(const Matrix& affmat1, const Matrix& affmat2,
+		      const ColumnVector& centre, const float rmax);
+  float rms_deviation(const Matrix& affmat1, const Matrix& affmat2,
+		      const float rmax=80.0);
 
   Matrix Mat44ToNewmat(mat44 m);
   mat44 NewmatToMat44(const Matrix& m);
@@ -231,7 +231,7 @@ namespace MISCMATHS {
   void get_axis_orientations(const Matrix& sform_mat, int sform_code,
 			     const Matrix& qform_mat, int qform_code,
 			     int& icode, int& jcode, int& kcode);
-    
+
   // 1D lookup table with linear interpolation
   float interp1(const ColumnVector& x, const ColumnVector& y, float xi);
 
@@ -254,7 +254,7 @@ namespace MISCMATHS {
     return( dot(X,P.SubMatrix(1,3,1,1))+P(4) );
   }
 
-  // returns the first P such that 2^P >= abs(N). 
+  // returns the first P such that 2^P >= abs(N).
   int nextpow2(int n);
 
   // Auto-correlation function estimate of columns of p_ts
@@ -286,13 +286,13 @@ namespace MISCMATHS {
   ReturnMatrix max(const Matrix& mat);
   ReturnMatrix max(const Matrix& mat,ColumnVector& index);
   ReturnMatrix min(const Matrix& mat);
-  ReturnMatrix gt(const Matrix& mat1,const Matrix& mat2); 
-  ReturnMatrix lt(const Matrix& mat1,const Matrix& mat2); 
-  ReturnMatrix geqt(const Matrix& mat1,const Matrix& mat2);  
-  ReturnMatrix geqt(const Matrix& mat1,const float a); 
-  ReturnMatrix leqt(const Matrix& mat1,const Matrix& mat2); 
-  ReturnMatrix eq(const Matrix& mat1,const Matrix& mat2); 
-  ReturnMatrix neq(const Matrix& mat1,const Matrix& mat2); 
+  ReturnMatrix gt(const Matrix& mat1,const Matrix& mat2);
+  ReturnMatrix lt(const Matrix& mat1,const Matrix& mat2);
+  ReturnMatrix geqt(const Matrix& mat1,const Matrix& mat2);
+  ReturnMatrix geqt(const Matrix& mat1,const float a);
+  ReturnMatrix leqt(const Matrix& mat1,const Matrix& mat2);
+  ReturnMatrix eq(const Matrix& mat1,const Matrix& mat2);
+  ReturnMatrix neq(const Matrix& mat1,const Matrix& mat2);
   ReturnMatrix SD(const Matrix& mat1,const Matrix& mat2); // Schur (element-wise) divide
   ReturnMatrix vox_to_vox(const ColumnVector& xyz1,const ColumnVector& dims1,const ColumnVector& dims2,const Matrix& xfm);
   ReturnMatrix mni_to_imgvox(const ColumnVector& mni,const ColumnVector& mni_origin,const Matrix& mni2img, const ColumnVector& img_dims);
@@ -308,7 +308,7 @@ namespace MISCMATHS {
   // matlab-like flip function
   ReturnMatrix flipud(const Matrix& mat);
   ReturnMatrix fliplr(const Matrix& mat);
-  
+
   // ols
   // data is t x v
   // des is t x ev (design matrix)
@@ -317,15 +317,15 @@ namespace MISCMATHS {
   // but will be resized if they are wrong
   void ols(const Matrix& data,const Matrix& des,const Matrix& tc, Matrix& cope,Matrix& varcope);
   float ols_dof(const Matrix& des);
-  
 
-  // Conjugate Gradient methods to solve for x in:   A * x = b 
+
+  // Conjugate Gradient methods to solve for x in:   A * x = b
   // A must be symmetric and positive definite
-  int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b, 
+  int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b,
 	       int maxit=3);
   // allow specification of reltol = relative tolerance of residual error
   //  (stops when error < reltol * initial error)
-  int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b, 
+  int conjgrad(ColumnVector& x, const Matrix& A, const ColumnVector& b,
 	       int maxit, float reltol);
 
   float csevl(const float x, const ColumnVector& cs, const int n);
@@ -333,7 +333,7 @@ namespace MISCMATHS {
   void glm_vb(const Matrix& X, const ColumnVector& Y, ColumnVector& B, SymmetricMatrix& ilambda_B, int niters=20);
 
   vector<float> ColumnVector2vector(const ColumnVector& col);
-  
+
   ///////////////////////////////////////////////////////////////////////////
   // Uninteresting byte swapping functions
   void Swap_2bytes ( int n , void *ar ) ;
@@ -350,26 +350,26 @@ namespace MISCMATHS {
   template<class t> ReturnMatrix vector2ColumnVector(const vector<t>& vec)
   {
     ColumnVector col(vec.size());
-    
+
     for(unsigned int c = 0; c < vec.size(); c++)
       col(c+1) = vec[c];
 
     col.Release();
     return col;
   }
- 
+
   template<class t> void write_vector(const string& fname, const vector<t>& vec)
-  { 
+  {
     ofstream out;
     out.open(fname.c_str(), ios::out);
     copy(vec.begin(), vec.end(), ostream_iterator<t>(out, " "));
   }
-  
+
   template<class t> void write_vector(const vector<t>& vec, const string& fname)
   {
     write_vector(fname,vec);
-  }  
-  
+  }
+
   template <class T>
   string num2str(T n, int width)
   {

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -83,7 +83,7 @@ class ranopts {
  public:
   static ranopts& getInstance();
   ~ranopts() { delete gopt; }
-  
+
   Option<bool> demean_data;
   Option<bool> one_samp;
   Option<string> in_fileroot;
@@ -126,22 +126,22 @@ class ranopts {
   Option<bool> verbose_old;
 
   void parse_command_line(int argc, char** argv,Log& logger);
-  
+
  private:
-  ranopts();  
+  ranopts();
   const ranopts& operator=(ranopts&);
   ranopts(ranopts&);
 
-  OptionParser options; 
-      
+  OptionParser options;
+
   static ranopts* gopt;
-  
+
 };
 
  inline ranopts& ranopts::getInstance(){
    if(gopt == NULL)
      gopt = new ranopts();
-   
+
    return *gopt;
  }
 
@@ -160,42 +160,42 @@ class ranopts {
        false, requires_argument),
    out_fileroot(string("-o"), string(""),
 	    string("~<out_root>\toutput file-rootname"),
-	    true, requires_argument),  
+	    true, requires_argument),
    dm_file(string("-d"), string(""),
 	    string("~<design.mat>\tdesign matrix file"),
-	    false, requires_argument),  
+	    false, requires_argument),
    tc_file(string("-t"), string(""),
 	    string("~<design.con>\tt contrasts file"),
-	    false, requires_argument),  
+	    false, requires_argument),
    fc_file(string("-f"), string(""),
             string("~<design.fts>\tf contrasts file"),
-	   false, requires_argument),  
+	   false, requires_argument),
    gp_file(string("-e"), string(""),
             string("~<design.grp>\texchangeability block labels file"),
-	   false, requires_argument),  
+	   false, requires_argument),
    effectiveDesignFile(string("--effective_design"), string(""),
             string("~<design2.mat>\talternative design for determining valid permutations"),
 	   false, requires_argument),
    how_many_perms(string("-q"), false,
 	    string("\tprint out how many unique permutations would be generated and exit"),
-	    false, no_argument), 
+	    false, no_argument),
    parallelData(string("-Q"), false,
 	    string("\tprint out information required for parallel mode and exit"),
 	    false, no_argument),
    n_perm(string("-n"), 5000,
 	    string("~<n_perm>\tnumber of permutations (default 5000, set to 0 for exhaustive)"),
-	    false, requires_argument),  
+	    false, requires_argument),
    voxelwiseOutput(string("-x"),false,
 	    string("\toutput voxelwise (corrected and uncorrected) p-value images"),
-		 false, no_argument),  
-   doFOnly(string("--fonly"), false, 
-	   string("\tcalculate f-statistics only"), 
+		 false, no_argument),
+   doFOnly(string("--fonly"), false,
+	   string("\tcalculate f-statistics only"),
 	   false, no_argument),
-   tfce(string("-T"), false, 
-	   string("\tcarry out Threshold-Free Cluster Enhancement"), 
+   tfce(string("-T"), false,
+	   string("\tcarry out Threshold-Free Cluster Enhancement"),
 	   false, no_argument),
-   tfce2D(string("--T2"), false, 
-	   string("\tcarry out Threshold-Free Cluster Enhancement with 2D optimisation (e.g. for TBSS data); H=2, E=1, C=26"), 
+   tfce2D(string("--T2"), false,
+	   string("\tcarry out Threshold-Free Cluster Enhancement with 2D optimisation (e.g. for TBSS data); H=2, E=1, C=26"),
 	   false, no_argument),
    cluster_thresh(string("-c"), -1,
 	  string("~<thresh>\tcarry out cluster-based thresholding"),
@@ -218,53 +218,53 @@ class ranopts {
    help(string("-h,--help"), false,
 	string("display this message"),
 	false, no_argument),
-   verbose(string("--quiet"), true, 
+   verbose(string("--quiet"), true,
 	   string("\tswitch off diagnostic messages"),
 	   false, no_argument),
-   cluster_norm(string("--twopass"), false, 
-	   string("\tcarry out cluster normalisation thresholding"), 
+   cluster_norm(string("--twopass"), false,
+	   string("\tcarry out cluster normalisation thresholding"),
 		false, no_argument,false),
-   outputRaw(string("-R"), false, 
-	   string("\toutput raw ( unpermuted ) statistic images"), 
+   outputRaw(string("-R"), false,
+	   string("\toutput raw ( unpermuted ) statistic images"),
 		false, no_argument),
-   outputTextPerm(string("-P"), false, 
-	   string("\toutput permutation vector text file"), 
+   outputTextPerm(string("-P"), false,
+	   string("\toutput permutation vector text file"),
 		false, no_argument),
-   outputTextNull(string("-N"), false, 
-	   string("\toutput null distribution text files"), 
+   outputTextNull(string("-N"), false,
+	   string("\toutput null distribution text files"),
 		false, no_argument),
-   output_permstat(string("--permout"), false, 
-	   string("\toutput permuted tstat"), 
+   output_permstat(string("--permout"), false,
+	   string("\toutput permuted tstat"),
 		false, no_argument,false),
    randomSeed(string("--seed"),0,
 	    string("~<seed>\tspecific integer seed for random number generator"),
 		 false, requires_argument),
-   voxelwise_ev_numbers(string("--vxl"), vector<int>(), 
-         string("\tlist of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). caution BETA option."), 
+   voxelwise_ev_numbers(string("--vxl"), vector<int>(),
+         string("\tlist of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). caution BETA option."),
          false, requires_argument),
-   voxelwise_ev_filenames(string("--vxf"), vector<string>(), 
-         string("\tlist of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). caution BETA option."), 
+   voxelwise_ev_filenames(string("--vxf"), vector<string>(),
+         string("\tlist of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). caution BETA option."),
          false, requires_argument),
    nMultiVariate(string("--multi"),1,
 	    string("~<dim>\tmultivariate dimension (default 1). caution BETA option."),
 		 false, requires_argument, false),
-   isDebugging(string("--debug"), false, 
+   isDebugging(string("--debug"), false,
 	   string("\tOutput debug information"),
 	       false, no_argument,false),
    confoundMethod(string("-U"),1,
 	    string("~<mode>\tconfound mode. 0: Kennedy Y_a on X_a (old) 1: Freedman-Lane Y_a on X|Z (default) 2: Y on X|Z. Caution BETA option."),
 		  false, requires_argument, false),
-   detectNullSubjects(string("--detectNull"), false, 
-	   string("attempt to detect uninformative rows in the effective regressor and not permute them"), 
+   detectNullSubjects(string("--detectNull"), false,
+	   string("attempt to detect uninformative rows in the effective regressor and not permute them"),
 		      false, no_argument, false),
-   verbose_old(string("-V"), false, 
+   verbose_old(string("-V"), false,
 	   string("\tswitch on diagnostic messages (deprecated: now always on unless quiet)"),
 	       false, no_argument, false),
 
 
    options("randomise v2.6", "randomise -i <input> -o <output> -d <design.mat> -t <design.con> [options]")
      {
-    
+
      try {
        options.add(demean_data);
        options.add(one_samp);
@@ -278,14 +278,14 @@ class ranopts {
        options.add(effectiveDesignFile);
        options.add(how_many_perms);
        options.add(parallelData);
-       options.add(n_perm);    
-       options.add(voxelwiseOutput);   
+       options.add(n_perm);
+       options.add(voxelwiseOutput);
        options.add(doFOnly);
        options.add(tfce);
        options.add(tfce2D);
        options.add(cluster_thresh);
        options.add(clustermass_thresh);
-       options.add(f_thresh);     
+       options.add(f_thresh);
        options.add(fmass_thresh);
        options.add(var_sm_sig);
        options.add(help);
@@ -296,12 +296,12 @@ class ranopts {
        options.add(outputTextNull);
        options.add(output_permstat);
        options.add(randomSeed);
-       options.add(tfce_height);     
-       options.add(tfce_size);     
-       options.add(tfce_connectivity); 
+       options.add(tfce_height);
+       options.add(tfce_size);
+       options.add(tfce_connectivity);
        options.add(voxelwise_ev_numbers);
-       options.add(voxelwise_ev_filenames); 
-       options.add(nMultiVariate); 
+       options.add(voxelwise_ev_filenames);
+       options.add(nMultiVariate);
        options.add(isDebugging);
        options.add(confoundMethod);
        options.add(detectNullSubjects);
@@ -310,11 +310,11 @@ class ranopts {
      catch(X_OptionError& e) {
        options.usage();
        cerr << endl << e.what() << endl;
-     } 
+     }
      catch(std::exception &e) {
        cerr << e.what() << endl;
-     }    
-     
+     }
+
    }
 }
 

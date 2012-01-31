@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacTclCode.r --
  *
  *	This file creates resources from the Tcl code that is
@@ -17,7 +17,7 @@
 
 #define TK_LIBRARY_RESOURCES 3000
 
-/* 
+/*
  * The mechanisim below loads Tcl source into the resource fork of the
  * application.  The example below creates a TEXT resource named
  * "Init" from the file "init.tcl".  This allows applications to use
@@ -29,43 +29,43 @@
  * will load the TEXT resource named "Init".
  */
 
-read 'TEXT' (TK_LIBRARY_RESOURCES+1, "tk", purgeable,preload) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+1, "tk", purgeable,preload)
 	"::library:tk.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+2, "button", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+2, "button", purgeable)
 	"::library:button.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+3, "dialog", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+3, "dialog", purgeable)
 	"::library:dialog.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+4, "entry", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+4, "entry", purgeable)
 	"::library:entry.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+5, "focus", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+5, "focus", purgeable)
 	"::library:focus.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+6, "listbox", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+6, "listbox", purgeable)
 	"::library:listbox.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+7, "menu", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+7, "menu", purgeable)
 	"::library:menu.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+8, "optMenu", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+8, "optMenu", purgeable)
 	"::library:optMenu.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+9, "palette", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+9, "palette", purgeable)
 	"::library:palette.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+10, "scale", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+10, "scale", purgeable)
 	"::library:scale.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+11, "scrlbar", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+11, "scrlbar", purgeable)
 	"::library:scrlbar.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+12, "tearoff", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+12, "tearoff", purgeable)
 	"::library:tearoff.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+13, "text", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+13, "text", purgeable)
 	"::library:text.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+14, "bgerror", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+14, "bgerror", purgeable)
 	"::library:bgerror.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+15, "console", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+15, "console", purgeable)
 	"::library:console.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+16, "msgbox", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+16, "msgbox", purgeable)
 	"::library:msgbox.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+17, "comdlg", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+17, "comdlg", purgeable)
 	"::library:comdlg.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+18, "spinbox", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+18, "spinbox", purgeable)
 	"::library:spinbox.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+19, "panedwindow", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+19, "panedwindow", purgeable)
 	"::library:panedwindow.tcl";
-read 'TEXT' (TK_LIBRARY_RESOURCES+20, "msgcat", purgeable) 
+read 'TEXT' (TK_LIBRARY_RESOURCES+20, "msgcat", purgeable)
 	":::tcl:library:msgcat:msgcat.tcl";

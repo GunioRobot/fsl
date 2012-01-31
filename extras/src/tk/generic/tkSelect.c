@@ -1,4 +1,4 @@
-/* 
+/*
  * tkSelect.c --
  *
  *	This file manages the selection for the Tk toolkit,
@@ -200,7 +200,7 @@ Tk_CreateSelHandler(tkwin, selection, target, proc, clientData, format)
 		     * The clientData is selection controlled memory, so
 		     * we should make a copy for this selPtr.
 		     */
-		    unsigned cmdInfoLen = sizeof(CommandInfo) + 
+		    unsigned cmdInfoLen = sizeof(CommandInfo) +
 			    ((CommandInfo*)clientData)->cmdLength - 3;
 		    selPtr->clientData = (ClientData)ckalloc(cmdInfoLen);
 		    memcpy(selPtr->clientData, clientData, cmdInfoLen);
@@ -251,13 +251,13 @@ Tk_DeleteSelHandler(tkwin, selection, target)
     TkWindow *winPtr = (TkWindow *) tkwin;
     register TkSelHandler *selPtr, *prevPtr;
     register TkSelInProgress *ipPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
      * Find the selection handler to be deleted, or return if it doesn't
      * exist.
-     */ 
+     */
 
     for (selPtr = winPtr->selHandlerList, prevPtr = NULL; ;
 	    prevPtr = selPtr, selPtr = selPtr->nextPtr) {
@@ -274,7 +274,7 @@ Tk_DeleteSelHandler(tkwin, selection, target)
      * handler is dead.
      */
 
-    for (ipPtr = tsdPtr->pendingPtr; ipPtr != NULL; 
+    for (ipPtr = tsdPtr->pendingPtr; ipPtr != NULL;
             ipPtr = ipPtr->nextPtr) {
 	if (ipPtr->selPtr == selPtr) {
 	    ipPtr->selPtr = NULL;
@@ -370,8 +370,8 @@ Tk_OwnSelection(tkwin, selection, proc, clientData)
     Tk_LostSelProc *clearProc = NULL;
     ClientData clearData = NULL;	/* Initialization needed only to
 					 * prevent compiler warning. */
-    
-    
+
+
     if (dispPtr->multipleAtom == None) {
 	TkSelInit(tkwin);
     }
@@ -497,7 +497,7 @@ Tk_ClearSelection(tkwin, selection)
 	}
 	prevPtr = infoPtr;
     }
-    
+
     if (infoPtr != NULL) {
 	clearProc = infoPtr->clearProc;
 	clearData = infoPtr->clearData;
@@ -570,7 +570,7 @@ Tk_GetSelection(interp, tkwin, selection, target, proc, clientData)
     TkWindow *winPtr = (TkWindow *) tkwin;
     TkDisplay *dispPtr = winPtr->dispPtr;
     TkSelectionInfo *infoPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (dispPtr->multipleAtom == None) {
@@ -696,7 +696,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
     };
     enum options { SELECTION_CLEAR, SELECTION_GET, SELECTION_HANDLE,
 		       SELECTION_OWN };
-    
+
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "option ?arg arg ...?");
 	return TCL_ERROR;
@@ -714,7 +714,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    };
 	    enum clearOptions { CLEAR_DISPLAYOF, CLEAR_SELECTION };
 	    int clearIndex;
-	    
+
 	    for (count = objc-2, objs = ((Tcl_Obj **)objv)+2; count > 0;
 		 count-=2, objs+=2) {
 		string = Tcl_GetString(objs[0]);
@@ -757,7 +757,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    } else {
 		selection = XA_PRIMARY;
 	    }
-	    
+
 	    Tk_ClearSelection(tkwin, selection);
 	    break;
 	}
@@ -772,7 +772,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    };
 	    enum getOptions { GET_DISPLAYOF, GET_SELECTION, GET_TYPE };
 	    int getIndex;
-	    
+
 	    for (count = objc-2, objs = ((Tcl_Obj **)objv)+2; count>0;
 		 count-=2, objs+=2) {
 		string = Tcl_GetString(objs[0]);
@@ -784,7 +784,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 			    "\" missing", (char *) NULL);
 		    return TCL_ERROR;
 		}
-		
+
 		if (Tcl_GetIndexFromObj(interp, objs[0], getOptionStrings,
 			"option", 0, &getIndex) != TCL_OK) {
 		    return TCL_ERROR;
@@ -847,7 +847,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    enum handleOptions { HANDLE_FORMAT, HANDLE_SELECTION,
 				     HANDLE_TYPE };
 	    int handleIndex;
-	    
+
 	    for (count = objc-2, objs = ((Tcl_Obj **)objv)+2; count > 0;
 		 count-=2, objs+=2) {
 		string = Tcl_GetString(objs[0]);
@@ -891,7 +891,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    } else {
 		selection = XA_PRIMARY;
 	    }
-	    
+
 	    if (count > 2) {
 		target = Tk_InternAtom(tkwin, Tcl_GetString(objs[2]));
 	    } else if (targetName != NULL) {
@@ -923,7 +923,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    }
 	    return TCL_OK;
 	}
-	
+
 	case SELECTION_OWN: {
 	    register LostCommand *lostPtr;
 	    char *script = NULL;
@@ -933,7 +933,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 	    };
 	    enum ownOptions { OWN_COMMAND, OWN_DISPLAYOF, OWN_SELECTION };
 	    int ownIndex;
-	    
+
 	    for (count = objc-2, objs = ((Tcl_Obj **)objv)+2; count > 0;
 		 count-=2, objs+=2) {
 		string = Tcl_GetString(objs[0]);
@@ -963,7 +963,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 			break;
 		}
 	    }
-	    
+
 	    if (count > 2) {
 		Tcl_WrongNumArgs(interp, 2, objv, "?options? ?window?");
 		return TCL_ERROR;
@@ -988,11 +988,11 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 		    if (infoPtr->selection == selection)
 			break;
 		}
-		
+
 		/*
 		 * Ignore the internal clipboard window.
 		 */
-		
+
 		if ((infoPtr != NULL)
 			&& (infoPtr->owner != winPtr->dispPtr->clipWindow)) {
 		    Tcl_SetResult(interp, Tk_PathName(infoPtr->owner),
@@ -1034,8 +1034,8 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
  *      list of pending searches.
  *
  * Results:
- *	The return value is a pointer to the first search in progress, 
- *      or NULL if there are none. 
+ *	The return value is a pointer to the first search in progress,
+ *      or NULL if there are none.
  *
  * Side effects:
  *	None.
@@ -1046,7 +1046,7 @@ Tk_SelectionObjCmd(clientData, interp, objc, objv)
 TkSelInProgress *
 TkSelGetInProgress _ANSI_ARGS_((void))
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     return tsdPtr->pendingPtr;
@@ -1057,7 +1057,7 @@ TkSelGetInProgress _ANSI_ARGS_((void))
  *
  * TkSelSetInProgress --
  *
- *	This procedure is used to set the thread-local list of pending 
+ *	This procedure is used to set the thread-local list of pending
  *      searches.  It is required because the pending list is kept
  *      in thread local storage.
  *
@@ -1073,7 +1073,7 @@ void
 TkSelSetInProgress(pendingPtr)
     TkSelInProgress *pendingPtr;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
    tsdPtr->pendingPtr = pendingPtr;
@@ -1103,7 +1103,7 @@ TkSelDeadWindow(winPtr)
     register TkSelHandler *selPtr;
     register TkSelInProgress *ipPtr;
     TkSelectionInfo *infoPtr, *prevPtr, *nextPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -1115,7 +1115,7 @@ TkSelDeadWindow(winPtr)
     while (winPtr->selHandlerList != NULL) {
 	selPtr = winPtr->selHandlerList;
 	winPtr->selHandlerList = selPtr->nextPtr;
-	for (ipPtr = tsdPtr->pendingPtr; ipPtr != NULL; 
+	for (ipPtr = tsdPtr->pendingPtr; ipPtr != NULL;
                 ipPtr = ipPtr->nextPtr) {
 	    if (ipPtr->selPtr == selPtr) {
 		ipPtr->selPtr = NULL;
@@ -1421,7 +1421,7 @@ HandleTclCommand(clientData, offset, buffer, maxBytes)
 		    strncpy(cmdInfoPtr->buffer, string, (size_t) length);
 		}
 		cmdInfoPtr->buffer[length] = '\0';
-	    }		
+	    }
 	    cmdInfoPtr->byteOffset += count + extraBytes;
 	}
 	count += extraBytes;
@@ -1576,7 +1576,7 @@ LostSelection(clientData)
 
     interp = lostPtr->interp;
     Tcl_Preserve((ClientData) interp);
-    
+
     /*
      * Execute the command.  Save the interpreter's result, if any, and
      * restore it after executing the command.
@@ -1594,7 +1594,7 @@ LostSelection(clientData)
     Tcl_DecrRefCount(objPtr);
 
     Tcl_Release((ClientData) interp);
-    
+
     /*
      * Free the storage for the command, since we're done with it now.
      */

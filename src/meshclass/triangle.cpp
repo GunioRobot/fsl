@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -67,7 +67,7 @@
 
 namespace mesh{
 
-//this constructor also puts the connexions between the points. 
+//this constructor also puts the connexions between the points.
 Triangle::Triangle(Mpoint* const p1, Mpoint* const p2, Mpoint* const p3,float val):_value(val) {
   oriented = false;
   _vertice[0]=p1;
@@ -77,7 +77,7 @@ Triangle::Triangle(Mpoint* const p1, Mpoint* const p2, Mpoint* const p3,float va
   p1->_triangles.push_back(this);
   p2->_triangles.push_back(this);
   p3->_triangles.push_back(this);
-  
+
   p1->_neighbours.remove(p2);
   p1->_neighbours.remove(p3);
   p2->_neighbours.remove(p3);
@@ -112,13 +112,13 @@ return Pt((_vertice[0]->get_coord().X +_vertice[1]->get_coord().X +_vertice[2]->
 
 const Vec Triangle::normal() const{
   Vec result = (_vertice[2]->get_coord() - _vertice[0]->get_coord()) * (_vertice[1]->get_coord() - _vertice[0]->get_coord());
-  return result; 
+  return result;
 }
 
 const Vec Triangle::area(const Mpoint* const p) const{
   Vec v1,v2,vA;
   float Tarea;
- 
+
   //calculate
   v1=*_vertice[1]-*_vertice[0];
   v2=*_vertice[2]-*_vertice[0];
@@ -131,7 +131,7 @@ const Vec Triangle::area(const Mpoint* const p) const{
   }
   vA=vA/vA.norm()*Tarea;
 
-  return vA; 
+  return vA;
 }
 
 
@@ -182,11 +182,11 @@ const bool Triangle::intersect(const Triangle & t) const
       for (int i = 0; i < 3; i++)
 	if ((normal|(t.get_vertice(i)->get_coord() - this->get_vertice(0)->get_coord())) * (normal|(t.get_vertice((i+1)%3)->get_coord() - this->get_vertice(0)->get_coord())) < 0)
 	  {
-	    Vec v1 = this->get_vertice(1)->get_coord() - this->get_vertice(0)->get_coord(); 
-	    Vec v2 = this->get_vertice(2)->get_coord() - this->get_vertice(0)->get_coord(); 
-	    Vec v3 = this->get_vertice(2)->get_coord() - this->get_vertice(1)->get_coord(); 
+	    Vec v1 = this->get_vertice(1)->get_coord() - this->get_vertice(0)->get_coord();
+	    Vec v2 = this->get_vertice(2)->get_coord() - this->get_vertice(0)->get_coord();
+	    Vec v3 = this->get_vertice(2)->get_coord() - this->get_vertice(1)->get_coord();
 	    Vec v = v1 * v2;
-	    
+
 	    Vec p1 = t.get_vertice(i)->get_coord() - this->get_vertice(0)->get_coord();
 	    Vec d1 = t.get_vertice((i+1)%3)->get_coord() - t.get_vertice(i)->get_coord();
 	    double denom = (d1.X * v.X + d1.Y * v.Y + d1.Z * v.Z);
@@ -194,7 +194,7 @@ const bool Triangle::intersect(const Triangle & t) const
 	      {
 		double lambda1 = - (p1.X * v.X + p1.Y * v.Y + p1.Z * v.Z)/denom;
 		Vec proj1 = p1 + (d1 * lambda1);
-		
+
 		//checks if proj is inside the triangle ...
 		bool inside = false;
 		Vec n1 = v1 * proj1;
@@ -202,22 +202,22 @@ const bool Triangle::intersect(const Triangle & t) const
 		Vec n3 = v3 * (proj1 + (v1 * -1));
 		if (((n1 | n3) > 0 & (n2 | n3) > 0 & (n1 | n2) > 0) | ((n1 | n3) < 0 & (n2 | n3) < 0 & (n1 | n2) < 0) )
 		  inside = true;
-		
+
 		result = result | inside;
 	      }
 	  }
 
       //test from t
-      
+
       Vec normalt = (t.get_vertice(0)->get_coord() - t.get_vertice(1)->get_coord()) * (t.get_vertice(0)->get_coord() - t.get_vertice(2)->get_coord());
       for (int i = 0; i < 3; i++)
 	if ((normalt|(this->get_vertice(i)->get_coord() - t.get_vertice(0)->get_coord())) * (normalt|(this->get_vertice((i+1)%3)->get_coord() - t.get_vertice(0)->get_coord())) < 0)
 	  {
-	    Vec v1 = t.get_vertice(1)->get_coord() - t.get_vertice(0)->get_coord(); 
-	    Vec v2 = t.get_vertice(2)->get_coord() - t.get_vertice(0)->get_coord(); 
-	    Vec v3 = t.get_vertice(2)->get_coord() - t.get_vertice(1)->get_coord(); 
+	    Vec v1 = t.get_vertice(1)->get_coord() - t.get_vertice(0)->get_coord();
+	    Vec v2 = t.get_vertice(2)->get_coord() - t.get_vertice(0)->get_coord();
+	    Vec v3 = t.get_vertice(2)->get_coord() - t.get_vertice(1)->get_coord();
 	    Vec v = v1 * v2;
-	    
+
 	    Vec p1 = this->get_vertice(i)->get_coord() - t.get_vertice(0)->get_coord();
 	    Vec d1 = this->get_vertice((i+1)%3)->get_coord() - this->get_vertice(i)->get_coord();
 
@@ -226,7 +226,7 @@ const bool Triangle::intersect(const Triangle & t) const
 	      {
 		double lambda1 = - (p1.X * v.X + p1.Y * v.Y + p1.Z * v.Z)/denom;
 		Vec proj1 = p1 + (d1 * lambda1);
-		
+
 		//checks if proj is inside the triangle ...
 		bool inside = false;
 		Vec n1 = v1 * proj1;
@@ -234,7 +234,7 @@ const bool Triangle::intersect(const Triangle & t) const
 		Vec n3 = v3 * (proj1 + (v1 * -1));
 		if (((n1 | n3) > 0 & (n2 | n3) > 0 & (n1 | n2) > 0) | ((n1 | n3) < 0 & (n2 | n3) < 0 & (n1 | n2) < 0) )
 		  inside = true;
-		
+
 		result = result | inside;
 	      }
 	  }
@@ -249,11 +249,11 @@ const bool Triangle::intersect(const Triangle & t) const
       for (int i = 0; i < 3; i++)
 	if ((normal|(t.get_vertice(i)->get_coord() - this->get_vertice(0)->get_coord())) * (normal|(t.get_vertice((i+1)%3)->get_coord() - this->get_vertice(0)->get_coord())) < 0)
 	  {
-	    Vec v1 = this->get_vertice(1)->get_coord() - this->get_vertice(0)->get_coord(); 
-	    Vec v2 = this->get_vertice(2)->get_coord() - this->get_vertice(0)->get_coord(); 
-	    Vec v3 = this->get_vertice(2)->get_coord() - this->get_vertice(1)->get_coord(); 
+	    Vec v1 = this->get_vertice(1)->get_coord() - this->get_vertice(0)->get_coord();
+	    Vec v2 = this->get_vertice(2)->get_coord() - this->get_vertice(0)->get_coord();
+	    Vec v3 = this->get_vertice(2)->get_coord() - this->get_vertice(1)->get_coord();
 	    Vec v = v1 * v2;
-	    
+
 	    Vec p1 = t.get_vertice(i)->get_coord() - this->get_vertice(0)->get_coord();
 	    Vec d1 = t.get_vertice((i+1)%3)->get_coord() - t.get_vertice(i)->get_coord();
 	    double denom = (d1.X * v.X + d1.Y * v.Y + d1.Z * v.Z);
@@ -273,17 +273,17 @@ const bool Triangle::intersect(const Triangle & t) const
 		result = result | inside;
 	      }
 	  }
-      
+
       //test from t
       Vec normalt = (t.get_vertice(0)->get_coord() - t.get_vertice(1)->get_coord()) * (t.get_vertice(0)->get_coord() - t.get_vertice(2)->get_coord());
       for (int i = 0; i < 3; i++)
 	if ((normalt|(this->get_vertice(i)->get_coord() - t.get_vertice(0)->get_coord())) * (normalt|(this->get_vertice((i+1)%3)->get_coord() - t.get_vertice(0)->get_coord())) < 0)
 	  {
-	    Vec v1 = t.get_vertice(1)->get_coord() - t.get_vertice(0)->get_coord(); 
-	    Vec v2 = t.get_vertice(2)->get_coord() - t.get_vertice(0)->get_coord(); 
-	    Vec v3 = t.get_vertice(2)->get_coord() - t.get_vertice(1)->get_coord(); 
+	    Vec v1 = t.get_vertice(1)->get_coord() - t.get_vertice(0)->get_coord();
+	    Vec v2 = t.get_vertice(2)->get_coord() - t.get_vertice(0)->get_coord();
+	    Vec v3 = t.get_vertice(2)->get_coord() - t.get_vertice(1)->get_coord();
 	    Vec v = v1 * v2;
-	    
+
 	    Vec p1 = this->get_vertice(i)->get_coord() - t.get_vertice(0)->get_coord();
 	    Vec d1 = this->get_vertice((i+1)%3)->get_coord() - this->get_vertice(i)->get_coord();
 	    double denom = (d1.X * v.X + d1.Y * v.Y + d1.Z * v.Z);
@@ -291,7 +291,7 @@ const bool Triangle::intersect(const Triangle & t) const
 	      {
 		double lambda1 = - (p1.X * v.X + p1.Y * v.Y + p1.Z * v.Z)/denom;
 		Vec proj1 = p1 + (d1 * lambda1);
-		
+
 		//checks if proj is inside the triangle ...
 		bool inside = false;
 		Vec n1 = v1 * proj1;
@@ -301,7 +301,7 @@ const bool Triangle::intersect(const Triangle & t) const
 		  {
 		    inside = true;
 		  }
-		
+
 		result = result | inside;
 	      }
 	  }

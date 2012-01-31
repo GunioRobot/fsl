@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: tclvars.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH tclvars n 8.0 Tcl "Tcl Built-In Commands"
 .BS
@@ -37,7 +37,7 @@ If the entire \fBenv\fR array is unset then Tcl will stop
 monitoring \fBenv\fR accesses and will not update environment
 variables.
 .RS
-.VS 8.0 
+.VS 8.0
 Under Windows, the environment variables PATH and COMSPEC in any
 capitalization are converted automatically to upper case.  For instance, the
 PATH variable could be exported by the operating system as ``path'',
@@ -98,7 +98,7 @@ A file named  \fITcl Environment Variables\fR may be placed in the
 preferences folder in the Mac system folder.  Each line of this file
 should be of the form \fIVAR_NAME=var_data\fR.
 .PP
-The last alternative is to place environment variables in a 'STR#' 
+The last alternative is to place environment variables in a 'STR#'
 resource named \fITcl Environment Variables\fR of the application.  This
 is considered a little more ``Mac like'' than a Unix style Environment
 Variable file.  Each entry in the 'STR#' resource has the same format
@@ -193,7 +193,7 @@ nested Tcl commands that had been invoked at the time of the error.
 This variable holds the name of a directory containing the
 system library of Tcl scripts, such as those used for auto-loading.
 The value of this variable is returned by the \fBinfo library\fR command.
-See the \fBlibrary\fR manual entry for details of the facilities 
+See the \fBlibrary\fR manual entry for details of the facilities
 provided by the Tcl script library.
 Normally each application or package will have its own application-specific
 script library in addition to the Tcl script library;
@@ -251,7 +251,7 @@ predefined elements are:
 .TP
 \fBbyteOrder\fR
 The native byte order of this machine: either \fBlittleEndian\fR or
-\fBbigEndian\fR. 
+\fBbigEndian\fR.
 .VE
 .TP
 \fBdebug\fR
@@ -266,7 +266,7 @@ The instruction set executed by this machine, such as
 \fBintel\fR, \fBPPC\fR, \fB68k\fR, or \fBsun4m\fR.  On UNIX machines, this
 is the value returned by \fBuname -m\fR.
 .TP
-\fBos\fR 
+\fBos\fR
 The name of the operating system running on this machine,
 such as \fBWindows 95\fR, \fBWindows NT\fR, \fBMacOS\fR, or \fBSunOS\fR.
 On UNIX machines, this is the value returned by \fBuname -s\fR.

@@ -4,9 +4,9 @@
 //  use, modify, sell and distribute this software is granted provided this
 //  copyright notice appears in all copies.  This software is provided "as is"
 //  without express or implied warranty, and with no claim as to its suitability
-//  for any purpose. 
+//  for any purpose.
 
-//  See http://www.boost.org for updates, documentation, and revision history. 
+//  See http://www.boost.org for updates, documentation, and revision history.
 
 #ifndef BOOST_MATH_COMMON_FACTOR_RT_HPP
 #define BOOST_MATH_COMMON_FACTOR_RT_HPP

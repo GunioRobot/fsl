@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,7 +85,7 @@ namespace Gs {
   void Mcmc::setup()
   {
     Tracer_Plus trace("Mcmc::setup");
-        
+
     gamma_latest.ReSize(nevs);
     gamma_samples.ReSize(nevs,nsamples);
     beta_latest.ReSize(ngs);
@@ -102,12 +102,12 @@ namespace Gs {
 	m_latest(t) = normal.Next()*sqrt(m_var(t))+m_mean(t);
       }
 
-  } 
+  }
 
   void Mcmc::jump(bool relax)
   {
     Tracer_Plus trace("Mcmc::jump");
-    
+
     if(!switched)
       {
 	m_jump(relax);
@@ -121,12 +121,12 @@ namespace Gs {
 	gamma_jump_switched(relax);
       }
 
-  } 
+  }
 
   void Mcmc::m_jump(bool relax)
   {
     Tracer_Plus trace("Mcmc::m_jump");
-    
+
     for(int t = 1; t <= ntpts; t++)
       {
 	float sumovere = 0;
@@ -144,16 +144,16 @@ namespace Gs {
 	    // do ordered overrelaxation
 	    multiset<float> ms;
 	    ms.insert(normal.Next()/invstd + mn);
-	    
+
 	    for(int k = 2; k <= 20; k++)
 	      {
-		ms.insert(normal.Next()/invstd + mn);	    
+		ms.insert(normal.Next()/invstd + mn);
 	      }
-	    
+
 	    int d = distance(ms.insert(m_latest(t)),ms.end())-1;
 	    multiset<float>::iterator iter = ms.begin();
 	    advance(iter,d);
-	
+
 	    m_latest(t) = *iter;
 	  }
 	else
@@ -162,19 +162,19 @@ namespace Gs {
 	  }
       }
   }
-  
+
   void Mcmc::m_jump_switched(bool relax)
   {
     Tracer_Plus trace("Mcmc::m_jump_switched");
-    
+
     for(int t = 1; t <= ntpts; t++)
       {
-	float sumovere = 0; 
+	float sumovere = 0;
 	for(int e = 1; e <= nevs; e++)
 	  {
 	    sumovere += design.getdm()(t,e)*gamma_latest(e)/varcopedata(t);
 	  }
-	float preccope = 1.0/varcopedata(t);	
+	float preccope = 1.0/varcopedata(t);
 
 	float invstd = sqrt(preccope+beta_latest(design.getgroup(t)));
 	float mn = (sumovere + copedata(t)*beta_latest(design.getgroup(t)))/(preccope+beta_latest(design.getgroup(t)));
@@ -184,16 +184,16 @@ namespace Gs {
 	    // do ordered overrelaxation
 	    multiset<float> ms;
 	    ms.insert(normal.Next()/invstd + mn);
-	    
+
 	    for(int k = 2; k <= 20; k++)
 	      {
-		ms.insert(normal.Next()/invstd + mn);	    
+		ms.insert(normal.Next()/invstd + mn);
 	      }
-	
+
 	    int d = distance(ms.insert(m_latest(t)),ms.end())-1;
 	    multiset<float>::iterator iter = ms.begin();
 	    advance(iter,d);
-	
+
 	    m_latest(t) = *iter;
 	  }
 	else
@@ -211,12 +211,12 @@ namespace Gs {
 
     for(int g = 1; g <= ngs; g++)
       {
-	float sumovert = 0; 
+	float sumovert = 0;
 	for(int t = 1; t <= ntpts; t++)
 	  {
 	    if(design.getgroup(t)==g)
 	      {
-		float sumovere = 0; 
+		float sumovere = 0;
 		for(int e = 1; e <= nevs; e++)
 		  {
 		    sumovere += design.getdm()(t,e)*gamma_latest(e);
@@ -226,22 +226,22 @@ namespace Gs {
 	  }
 
 	c_latest = 1e-6+0.5*sumovert;
-	
+
 	if(relax)
 	  {
 	    // do ordered overrelaxation
 	    multiset<float> betas;
 	    betas.insert(gam.rnd(1e-6+design.getntptsingroup(g)/2.0, 1e-6+0.5*sumovert));
-	    
+
 	    for(int k = 2; k <= 20; k++)
 	      {
-		betas.insert(gam.rnd());	    
+		betas.insert(gam.rnd());
 	      }
-	    
+
 	    int d = distance(betas.insert(beta_latest(g)),betas.end())-1;
 	    multiset<float>::iterator iter = betas.begin();
 	    advance(iter,d);
-	    
+
 	    beta_latest(g) = *iter;
 	  }
 	else
@@ -257,7 +257,7 @@ namespace Gs {
 
     for(int g = 1; g <= ngs; g++)
       {
-	float sumovert = 0; 
+	float sumovert = 0;
 	for(int t = 1; t <= ntpts; t++)
 	  {
 	    if(design.getgroup(t)==g)
@@ -273,12 +273,12 @@ namespace Gs {
 	    // do ordered overrelaxation
 	    multiset<float> betas;
 	    betas.insert(gam.rnd(1e-6+design.getntptsingroup(g)/2.0, 1e-6+0.5*sumovert));
-	
+
 	    for(int k = 2; k <= 20; k++)
 	      {
-		betas.insert(gam.rnd());	    
+		betas.insert(gam.rnd());
 	      }
-	
+
 	    int d = distance(betas.insert(beta_latest(g)),betas.end())-1;
 	    multiset<float>::iterator iter = betas.begin();
 	    advance(iter,d);
@@ -318,13 +318,13 @@ namespace Gs {
 	    float sumovert1 = 0;
 	    for(int t = 1; t <= ntpts; t++)
 		sumovert1 +=  design.getdm()(t,e)*design.getdm()(t,e2)*beta_latest(design.getgroup(t));
-	      
+
 	    gamcovar(e,e2) =  1.0/(sumovert1);
 	  }
       }
 
     gamma_latest = mvnormrandm(gammean,gamcovar);
- 
+
   }
 
   void Mcmc::gamma_jump_switched(bool relax)
@@ -368,7 +368,7 @@ namespace Gs {
 
     for(int e = 1; e <= nevs; e++)
       {
-	gamma_samples(e,samp) = gamma_latest(e);	
+	gamma_samples(e,samp) = gamma_latest(e);
       }
     c_samples(samp) = c_latest;
   }
@@ -376,7 +376,7 @@ namespace Gs {
   void Mcmc::run()
   {
     Tracer_Plus trace("Mcmc::run");
-    
+
     int samples = 1;
     int jumps = 0;
     int subsamplejumps = 0;
@@ -386,7 +386,7 @@ namespace Gs {
       {
 	jumps++;
 	subsamplejumps++;
-	    
+
   	jump(relax);
 
 	if(subsamplejumps >= opts.sampleevery.value())
@@ -398,19 +398,19 @@ namespace Gs {
 	      }
 
 	    subsamplejumps = 0;
-	    
+
 	    // sample components after burnin
 	    if(jumps > opts.burnin.value())
-	      {	   		
+	      {
 		//		if(!relax) relax = true;
 		sample(samples);
 		samples++;
-		
+
 		if(samples>=nsamples)
 		  break;
 	      }
 	  }
-      }    
+      }
   }
 
 }

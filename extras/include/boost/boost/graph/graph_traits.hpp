@@ -60,12 +60,12 @@ namespace boost {
   }
 
   template <typename Graph>
-  bool is_directed(const Graph&) { 
+  bool is_directed(const Graph&) {
     typedef typename graph_traits<Graph>::directed_category Cat;
     return detail::is_directed(Cat());
   }
   template <typename Graph>
-  bool is_undirected(const Graph& g) { 
+  bool is_undirected(const Graph& g) {
     return ! is_directed(g);
   }
 
@@ -79,7 +79,7 @@ namespace boost {
   }
 
   template <typename Graph>
-  bool allows_parallel_edges(const Graph&) { 
+  bool allows_parallel_edges(const Graph&) {
     typedef typename graph_traits<Graph>::edge_parallel_category Cat;
     return detail::allows_parallel(Cat());
   }
@@ -87,7 +87,7 @@ namespace boost {
   // traversal_category tags
   struct incidence_graph_tag { };
   struct adjacency_graph_tag { };
-  struct bidirectional_graph_tag : 
+  struct bidirectional_graph_tag :
     public virtual incidence_graph_tag { };
   struct vertex_list_graph_tag { };
   struct edge_list_graph_tag { };

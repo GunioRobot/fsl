@@ -3,12 +3,12 @@
  * Copyright (c) 2004
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_traits_defaults.hpp
@@ -78,7 +78,7 @@ inline bool is_combining<unsigned char>(unsigned char)
    return false;
 }
 #ifndef __HP_aCC
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
 template<>
 inline bool is_combining<wchar_t>(wchar_t c)
 {
@@ -108,11 +108,11 @@ template <class charT>
 inline bool is_separator(charT c)
 {
    return BOOST_REGEX_MAKE_BOOL(
-      (c == static_cast<charT>('\n')) 
-      || (c == static_cast<charT>('\r')) 
-      || (c == static_cast<charT>('\f')) 
-      || (static_cast<boost::uint16_t>(c) == 0x2028u) 
-      || (static_cast<boost::uint16_t>(c) == 0x2029u) 
+      (c == static_cast<charT>('\n'))
+      || (c == static_cast<charT>('\r'))
+      || (c == static_cast<charT>('\f'))
+      || (static_cast<boost::uint16_t>(c) == 0x2028u)
+      || (static_cast<boost::uint16_t>(c) == 0x2029u)
       || (static_cast<boost::uint16_t>(c) == 0x85u));
 }
 template <>
@@ -165,7 +165,7 @@ int get_default_class_id(const charT* p1, const charT* p2)
       'x', 'd', 'i', 'g', 'i', 't',
    };
 
-   static const character_pointer_range<charT> ranges[19] = 
+   static const character_pointer_range<charT> ranges[19] =
    {
       {data+0, data+5,}, // alnum
       {data+5, data+10,}, // alpha
@@ -189,7 +189,7 @@ int get_default_class_id(const charT* p1, const charT* p2)
    };
    static const character_pointer_range<charT>* ranges_begin = ranges;
    static const character_pointer_range<charT>* ranges_end = ranges + (sizeof(ranges)/sizeof(ranges[0]));
-   
+
    character_pointer_range<charT> t = { p1, p2, };
    const character_pointer_range<charT>* p = std::lower_bound(ranges_begin, ranges_end, t);
    if((p != ranges_end) && (t == *p))

@@ -69,11 +69,11 @@ namespace util {
         severity_fatal,
         severity_commandline_error
     };
-    
+
     inline char const *
-    get_severity(severity level) 
+    get_severity(severity level)
     {
-        static char const *severity_text[] = 
+        static char const *severity_text[] =
         {
             "remark",           // severity_remark
             "warning",          // severity_warning
@@ -81,20 +81,20 @@ namespace util {
             "fatal error",      // severity_fatal
             "command line error"    // severity_commandline_error
         };
-        BOOST_ASSERT(severity_remark <= level && 
+        BOOST_ASSERT(severity_remark <= level &&
             level <= severity_commandline_error);
         return severity_text[level];
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//  cpp_exception, the base class for all specific C preprocessor exceptions 
+//  cpp_exception, the base class for all specific C preprocessor exceptions
 class cpp_exception
 :   public std::exception
 {
 public:
-    cpp_exception(int line_, int column_, char const *filename_) throw() 
-    :   line(line_), column(column_) 
+    cpp_exception(int line_, int column_, char const *filename_) throw()
+    :   line(line_), column(column_)
     {
         unsigned int off = 0;
         while (off < sizeof(filename) && *filename_)
@@ -102,14 +102,14 @@ public:
         filename[off] = 0;
     }
     ~cpp_exception() throw() {}
-    
+
     virtual char const *what() const throw() = 0;   // to be overloaded
     virtual char const *description() const throw() = 0;
-    
+
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
     char const *file_name() const throw() { return filename; }
-    
+
 protected:
     char filename[512];
     int line;
@@ -163,8 +163,8 @@ public:
         character_literal_out_of_range
     };
 
-    preprocess_exception(char const *what_, error_code code, int line_, 
-        int column_, char const *filename_) throw() 
+    preprocess_exception(char const *what_, error_code code, int line_,
+        int column_, char const *filename_) throw()
     :   cpp_exception(line_, column_, filename_), level(severity_level(code))
     {
         unsigned int off = 0;
@@ -173,7 +173,7 @@ public:
         buffer[off] = 0;
     }
     ~preprocess_exception() throw() {}
-    
+
     virtual char const *what() const throw()
     {
         return "boost::wave::preprocess_exception";
@@ -236,7 +236,7 @@ public:
             "unbalanced #if/#endif in include file",    // unbalanced_if_endif
             "character literal out of range"            // character_literal_out_of_range
         };
-        BOOST_ASSERT(unexpected_error <= code && 
+        BOOST_ASSERT(unexpected_error <= code &&
             code <= character_literal_out_of_range);
         return preprocess_exception_errors[code];
     }
@@ -283,7 +283,7 @@ public:
             util::severity_warning,            // unbalanced_if_endif
             util::severity_warning             // character_literal_out_of_range
         };
-        BOOST_ASSERT(unexpected_error <= code && 
+        BOOST_ASSERT(unexpected_error <= code &&
             code <= character_literal_out_of_range);
         return preprocess_exception_severity[code];
     }

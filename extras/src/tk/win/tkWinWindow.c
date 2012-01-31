@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinWindow.c --
  *
  *	Xlib emulation routines for Windows related to creating,
@@ -16,7 +16,7 @@
 
 typedef struct ThreadSpecificData {
     int initialized;            /* 0 means table below needs initializing. */
-    Tcl_HashTable windowTable;  /* The windowTable maps from HWND to 
+    Tcl_HashTable windowTable;  /* The windowTable maps from HWND to
 				 * Tk_Window handles. */
 } ThreadSpecificData;
 static Tcl_ThreadDataKey dataKey;
@@ -34,7 +34,7 @@ static void		NotifyVisibility _ANSI_ARGS_((XEvent *eventPtr,
  * Tk_AttachHWND --
  *
  *	This function binds an HWND and a reflection procedure to
- *	the specified Tk_Window. 
+ *	the specified Tk_Window.
  *
  * Results:
  *	Returns an X Window that encapsulates the HWND.
@@ -54,7 +54,7 @@ Tk_AttachHWND(tkwin, hwnd)
     int new;
     Tcl_HashEntry *entryPtr;
     TkWinDrawable *twdPtr = (TkWinDrawable *) Tk_WindowId(tkwin);
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!tsdPtr->initialized) {
@@ -110,7 +110,7 @@ Tk_HWNDToWindow(hwnd)
     HWND hwnd;
 {
     Tcl_HashEntry *entryPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!tsdPtr->initialized) {
@@ -257,7 +257,7 @@ TkpMakeWindow(winPtr, parent)
     HWND parentWin;
     int style;
     HWND hwnd;
-    
+
     if (parent != None) {
 	parentWin = Tk_GetHWND(parent);
 	style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
@@ -305,7 +305,7 @@ XDestroyWindow(display, w)
     TkWinDrawable *twdPtr = (TkWinDrawable *)w;
     TkWindow *winPtr = TkWinGetWinPtr(w);
     HWND hwnd = Tk_GetHWND(w);
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     display->request++;
@@ -391,7 +391,7 @@ XMapWindow(display, w)
 	event.xmap.override_redirect = winPtr->atts.override_redirect;
 	Tk_QueueWindowEvent(&event, TCL_QUEUE_TAIL);
     }
-    
+
     /*
      * Generate VisibilityNotify events for this window and its mapped
      * children.
@@ -435,7 +435,7 @@ NotifyVisibility(eventPtr, winPtr)
 	eventPtr->xvisibility.window = winPtr->window;
 	Tk_QueueWindowEvent(eventPtr, TCL_QUEUE_TAIL);
     }
-    for (winPtr = winPtr->childList; winPtr != NULL; 
+    for (winPtr = winPtr->childList; winPtr != NULL;
 	    winPtr = winPtr->nextPtr) {
 	if (winPtr->flags & TK_MAPPED) {
 	    NotifyVisibility(eventPtr, winPtr);

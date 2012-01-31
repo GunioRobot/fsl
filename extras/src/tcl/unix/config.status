@@ -230,6 +230,6 @@ test "$FRAMEWORK_BUILD" = "1" && n=Tcl &&
 	ln -s $v/$n $v/Resources $f && ln -s ../../../$n $f/$v &&
 	ln -s ../../../../$n-Info.plist $f/$v/Resources/Info.plist &&
 	unset n f v
-    
+
 
 exit 0

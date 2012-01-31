@@ -77,8 +77,8 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
     if( tl == PASS )
         framework::assertion_result( true );
     else if( tl != WARN )
-        framework::assertion_result( false );    
-        
+        framework::assertion_result( false );
+
     switch( tl ) {
     case PASS:
         ll      = log_successful_tests;
@@ -106,29 +106,29 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
 
     switch( ct ) {
     case CHECK_PRED:
-        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) 
+        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num )
                       << ll << prefix << check_descr.str() << suffix;
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
-        
+
         unit_test_log << unit_test::log::end();
         break;
     case CHECK_MSG:
         unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) << ll;
-        
+
         if( tl == PASS )
             unit_test_log << prefix << "'" << check_descr.str() << "'" << suffix;
         else
             unit_test_log << check_descr.str();
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
         unit_test_log << unit_test::log::end();
         break;
     case MSG_ONLY:
-        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) 
+        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num )
                       << log_messages << check_descr.str() << unit_test::log::end();
         break;
     case SET_CHECKPOINT:
@@ -143,14 +143,14 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
         char const* arg2_descr  = va_arg( args, char const* );
         char const* arg2_val    = va_arg( args, char const* );
 
-        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) 
+        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num )
                       << ll << prefix << arg1_descr << " == " << arg2_descr << suffix;
 
         if( tl != PASS )
             unit_test_log << " [" << arg1_val << " != " << arg2_val << "]" ;
 
         va_end( args );
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
@@ -170,13 +170,13 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
 
         unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) << ll;
 
-        unit_test_log << "difference between " << arg1_descr << "{" << arg1_val << "}" 
+        unit_test_log << "difference between " << arg1_descr << "{" << arg1_val << "}"
                       << " and "               << arg2_descr << "{" << arg2_val << "}"
                       << ( tl == PASS ? " doesn't exceed " : " exceeds " )
                       << toler_val << "%",
 
         va_end( args );
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
@@ -194,12 +194,12 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
 
         unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) << ll;
 
-        unit_test_log << "absolute value of " << arg1_descr << "{" << arg1_val << "}" 
+        unit_test_log << "absolute value of " << arg1_descr << "{" << arg1_val << "}"
                       << ( tl == PASS ? " doesn't exceed " : " exceeds " )
                       << toler_val,
 
         va_end( args );
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
@@ -207,7 +207,7 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
         break;
     }
     case CHECK_PRED_WITH_ARGS: {
-        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) 
+        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num )
                       << ll << prefix << check_descr.str();
 
         // print predicate call description
@@ -219,30 +219,30 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
             for( std::size_t i = 0; i < num_of_args; ++i ) {
                 unit_test_log << va_arg( args, char const* );
                 va_arg( args, char const* ); // skip argument value;
-                
+
                 if( i != num_of_args-1 )
                     unit_test_log << ", ";
             }
             unit_test_log << " )" << suffix;
             va_end( args );
         }
-                        
+
         if( tl != PASS ) {
             va_list args;
             va_start( args, num_of_args );
 
             unit_test_log << " for ( ";
             for( std::size_t i = 0; i < num_of_args; ++i ) {
-                va_arg( args, char const* ); // skip argument description;            
+                va_arg( args, char const* ); // skip argument description;
                 unit_test_log << va_arg( args, char const* );
-                
+
                 if( i != num_of_args-1 )
                     unit_test_log << ", ";
             }
             unit_test_log << " )";
             va_end( args );
         }
-       
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
@@ -258,14 +258,14 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
         char const* right_begin_descr   = va_arg( args, char const* );
         char const* right_end_descr     = va_arg( args, char const* );
 
-        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num ) 
-                      << ll << prefix 
-                      << "{ " << left_begin_descr  << ", " << left_end_descr  << " } == { " 
+        unit_test_log << unit_test::log::begin() << unit_test::log::file( file_name ) << unit_test::log::line( line_num )
+                      << ll << prefix
+                      << "{ " << left_begin_descr  << ", " << left_end_descr  << " } == { "
                               << right_begin_descr << ", " << right_end_descr << " }"
                       << suffix;
 
         va_end( args );
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 
@@ -283,7 +283,7 @@ check_impl( predicate_result const& pr, wrap_stringstream& check_descr,
                       << ll << prefix << left_descr  << " =.= " << right_descr << suffix;
 
         va_end( args );
-        
+
         if( !pr.has_empty_message() )
             unit_test_log << ". " << pr.message();
 

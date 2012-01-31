@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2004-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : 
+//  Description :
 // ***************************************************************************
 
 #ifndef BOOST_ISTREAM_LINE_ITERATOR_HPP_071894GER
@@ -58,7 +58,7 @@ public:
         this->init();
     }
     explicit basic_istream_line_iterator( istream_type& input )
-    : m_input_stream( &input ) 
+    : m_input_stream( &input )
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
     , m_delimeter( '\n' )
 #else
@@ -95,7 +95,7 @@ typedef basic_istream_line_iterator<wchar_t>    wistream_line_iterator;
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: istream_line_iterator.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

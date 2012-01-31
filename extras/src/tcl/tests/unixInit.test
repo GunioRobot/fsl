@@ -27,7 +27,7 @@ test unixInit-1.1 {TclpInitPlatform: ignore SIGPIPE} {unixOnly stdio} {
 
     # Watch out for a race condition here.  If tcltest is too slow to start
     # then we'll kill it before it has a chance to set up its signal handler.
-    
+
     set f [open "|[list [interpreter]]" w+]
     puts $f "puts hi"
     flush $f
@@ -131,7 +131,7 @@ test unixInit-2.1 {TclpInitLibraryPath: value of installLib, developLib} \
     set x
 } {0 0}
 test unixInit-2.2 {TclpInitLibraryPath: TCL_LIBRARY} {unixOnly stdio} {
-    # ((str != NULL) && (str[0] != '\0')) 
+    # ((str != NULL) && (str[0] != '\0'))
 
     set env(TCL_LIBRARY) sparkly
     set path [getlibpath]
@@ -203,7 +203,7 @@ test unixInit-2.8 {TclpInitLibraryPath: all absolute pathtype} {unix noSparkly n
     # Checking for Bug 219416
     # When a program that embeds the Tcl library, like tcltest, is
     # installed near the "root" of the file system, there was a problem
-    # constructing directories relative to the executable.  When a 
+    # constructing directories relative to the executable.  When a
     # relative ".." went past the root, relative path names were created
     # rather than absolute pathnames.  In some cases, accessing past the
     # root caused memory access violations too.

@@ -112,7 +112,7 @@ public:
           localizable_tag,
           optimally_buffered_tag
         { };
-    restricted_filter( const Filter& flt, stream_offset off, 
+    restricted_filter( const Filter& flt, stream_offset off,
                        stream_offset len = -1 );
 
     template<typename Source>
@@ -138,7 +138,7 @@ public:
             open(snk);
         if (end_ != -1 && pos_ + n >= end_)
             bad_write();
-        std::streamsize result = 
+        std::streamsize result =
             iostreams::write(this->component(), snk, s, n);
         pos_ += result;
         return result;
@@ -237,19 +237,19 @@ restriction<T> restrict( const T& t, stream_offset off, stream_offset len = -1
                          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
 { return restriction<T>(t, off, len); }
 
-restriction<std::streambuf> 
+restriction<std::streambuf>
 restrict(std::streambuf& sb, stream_offset off, stream_offset len = -1)
 { return restriction<std::streambuf>(sb, off, len); }
 
-restriction<std::istream> 
+restriction<std::istream>
 restrict(std::istream<Ch, Tr>& is, stream_offset off, stream_offset len = -1)
 { return restriction<std::istream>(is, off, len); }
 
-restriction<std::ostream> 
+restriction<std::ostream>
 restrict(std::ostream<Ch, Tr>& os, stream_offset off, stream_offset len = -1)
 { return restriction<std::ostream>(os, off, len); }
 
-restriction<std::iostream> 
+restriction<std::iostream>
 restrict(std::iostream<Ch, Tr>& io, stream_offset off, stream_offset len = -1)
 { return restriction<std::iostream>(io, off, len); }
 
@@ -257,19 +257,19 @@ restrict(std::iostream<Ch, Tr>& io, stream_offset off, stream_offset len = -1)
 #else // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //----------------//
 
 template<typename T>
-restriction<T> 
+restriction<T>
 restrict(const T& t, stream_offset off, stream_offset len, mpl::true_)
 {   // Bad overload resolution.
     return restriction<T>(const_cast<T&>(t, off, len));
 }
 
 template<typename T>
-restriction<T> 
+restriction<T>
 restrict(const T& t, stream_offset off, stream_offset len, mpl::false_)
 { return restriction<T>(t, off, len); }
 
 template<typename T>
-restriction<T> 
+restriction<T>
 restrict( const T& t, stream_offset off, stream_offset len = -1
           BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
 { return restrict(t, off, len, is_std_io<T>()); }
@@ -294,7 +294,7 @@ namespace detail {
 template<typename Device>
 restricted_indirect_device<Device>::restricted_indirect_device
     (param_type dev, stream_offset off, stream_offset len)
-    : basic_adapter<Device>(dev), beg_(off), pos_(off), 
+    : basic_adapter<Device>(dev), beg_(off), pos_(off),
       end_(len != -1 ? off + len : -1)
 {
     if (len < -1 || off < 0)
@@ -361,13 +361,13 @@ restricted_direct_device<Device>::restricted_direct_device
 {
     std::pair<char_type*, char_type*> seq =
         sequence(is_convertible<category, input>());
-    if ( off < 0 || len < -1 || 
+    if ( off < 0 || len < -1 ||
          len != -1 && off + len > seq.second - seq.first )
     {
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
     }
     beg_ = seq.first + off;
-    end_ = len != -1 ? 
+    end_ = len != -1 ?
         seq.first + off + len :
         seq.second;
 }

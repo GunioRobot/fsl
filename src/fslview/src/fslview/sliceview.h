@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -29,7 +29,7 @@ public:
   typedef enum { Enabled, Greyed, Disabled } LabelState;
 
   SliceView(QWidget *, const char *);
-  
+
   void setSliceWidget(SliceWidget *);
 
   void setNorthText(const std::string& s);

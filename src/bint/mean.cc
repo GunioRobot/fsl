@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -90,58 +90,58 @@ using namespace NEWMAT;
 using namespace MISCMATHS;
 using namespace NEWIMAGE;
 
-class MeanModel : public ForwardModel  
+class MeanModel : public ForwardModel
   {
   public:
-   
+
     MeanModel(int pntpts, int pdebuglevel)
       : ForwardModel(pdebuglevel),
 	ntpts(pntpts)
     {}
-    
+
     ~MeanModel(){}
-  
+
     virtual void setparams();
-    ReturnMatrix nonlinearfunc(const ColumnVector& paramvalues) const; 
+    ReturnMatrix nonlinearfunc(const ColumnVector& paramvalues) const;
     void initialise(const ColumnVector& data){}
   protected:
-    
+
     int ntpts;
-};  
+};
 
 void MeanModel::setparams()
 {
   Tracer_Plus tr("MeanModel::setdata");
-  
+
   clear_params();
   GaussPrior tmp(MeanOptions::getInstance().priormean.value(),MeanOptions::getInstance().priorstd.value());
-  add_param("mean",1,0.1,tmp);    
+  add_param("mean",1,0.1,tmp);
 }
 
 ReturnMatrix MeanModel::nonlinearfunc(const ColumnVector& paramvalues) const
 {
-  Tracer_Plus trace("MeanModel::nonlinearfunc");    
-  
+  Tracer_Plus trace("MeanModel::nonlinearfunc");
+
   ColumnVector ret(ntpts);
   ret = paramvalues(1);
   ret.Release();
-  
+
   return ret;
 }
 
 int main(int argc, char *argv[])
 {
-  try{  
-    
+  try{
+
     // Setup logging:
     Log& logger = LogSingleton::getInstance();
-    
+
     // parse command line - will output arguments to logfile
     MeanOptions& opts = MeanOptions::getInstance();
     opts.parse_command_line(argc, argv, logger);
 
     srand(MeanOptions::getInstance().seed.value());
-   
+
     if(opts.debuglevel.value()==1)
       Tracer_Plus::setrunningstackon();
 
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
     // read data
     volume4D<float> input;
-    read_volume4D(input,opts.datafile.value());  
+    read_volume4D(input,opts.datafile.value());
     int ntpts=input.tsize();
     volume4D<float> maskNew;
     read_volume4D(maskNew,opts.maskfile.value());
@@ -178,19 +178,19 @@ int main(int argc, char *argv[])
 	 lslaplace.run();
 	 lslaplace.save();
        }
-    
+
     if(opts.timingon.value())
       Tracer_Plus::dump_times(logger.getDir());
 
     cout << endl << "Log directory was: " << logger.getDir() << endl;
   }
   catch(Exception& e) {
-    cerr << endl << e.what() << endl;   
+    cerr << endl << e.what() << endl;
   }
   catch(X_OptionError& e) {
     cerr << endl << e.what() << endl;
   }
-    
+
 
   return 0;
 }

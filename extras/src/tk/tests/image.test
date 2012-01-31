@@ -215,7 +215,7 @@ test image-8.1 {Tk_ImageCmd procedure, "inuse" option} testImageType {
     image delete myimage2
     set res
 } [list 0 1]
-    
+
 
 test image-9.1 {Tk_ImageChanged procedure} testImageType {
     .c delete all
@@ -391,7 +391,7 @@ test image-14.1 {image command vs hidden commands} {
     image delete hidden
     list [image names] [interp hidden]
 } [list $l $h]
-    
+
 destroy .c
 eval image delete [image names]
 

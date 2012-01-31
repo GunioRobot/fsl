@@ -29,7 +29,7 @@ namespace Utilities {
     if((theOption = find_matching_option(optstr)) == 0)
       throw X_OptionError(optstr, "Option doesn't exist");
 
-    if(theOption->unset() || (overWriteMode_==Allow)) 
+    if(theOption->unset() || (overWriteMode_==Allow))
       {
 	if(theOption->has_arg()) {
 	  if(valstr.length() > 0) {
@@ -40,19 +40,19 @@ namespace Utilities {
 	      for (int nn=valpos+1; nn<=valpos + theOption->nrequired(); nn++) {
 		if (nn<argc)  errstr += " " + string(argv[nn]);
 	      }
-	      throw X_OptionError(optstr, errstr + "\""); 
+	      throw X_OptionError(optstr, errstr + "\"");
 	    }
 	  } else if(!theOption->optional()) {
 	    throw X_OptionError(optstr, "Missing non-optional argument");
 	  }
 	}
-	if(theOption->optional()) 
+	if(theOption->optional())
 	  theOption->use_default_value();
 	else
 	  theOption->set_value(string());
 	return 1;
-      } 
-    else 
+      }
+    else
       {
 	if( overWriteMode_!= Ignore)
 	  throw X_OptionError(optstr, "Option already set");
@@ -87,7 +87,7 @@ namespace Utilities {
 
     if(cf.fail())
       throw X_OptionError(filename, "Couldn't open the file");
-    
+
     OverwriteMode oldMode=overWriteMode_;
     overWriteMode_=Ignore;
 
@@ -105,9 +105,9 @@ namespace Utilities {
     overWriteMode_=oldMode;
     return 1;
   }
- 
-  unsigned int OptionParser::parse_command_line(unsigned int argc, 
-						char **argv, int skip) 
+
+  unsigned int OptionParser::parse_command_line(unsigned int argc,
+						char **argv, int skip)
   {
     unsigned int optpos = 1 + skip;
     unsigned int valpos = 1 + skip;
@@ -115,7 +115,7 @@ namespace Utilities {
     while(optpos < argc) {
 
       unsigned int increments = 0;
-      
+
       string optstr(argv[optpos]), valstr;
 
       if(optstr[0] != '-')	// End of parsable options
@@ -133,20 +133,20 @@ namespace Utilities {
 	for(unsigned int i = 1; i < optstr.length(); ++i)
 	  {
 	    string suboptstr = "-" + optstr.substr(i, 1);
-	    
+
 	    if (valpos<argc) valstr=string(argv[valpos]); else valstr=string();
 	    increments = parse_option(suboptstr, valstr, argv, valpos, argc);
-	    
+
 	    valpos += increments - 1;
 	  }
-	
+
 	optpos = valpos;
       }
-    } 
+    }
     return optpos;		// User should process any remaining args
   }
 
-  std::ostream& operator<<(std::ostream& os, const OptionParser p) 
+  std::ostream& operator<<(std::ostream& os, const OptionParser p)
   {
     for(OptionParser::Options::const_iterator o = p.options_.begin();
 	o != p.options_.end(); ++o)

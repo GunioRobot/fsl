@@ -10,7 +10,7 @@
 # include <boost/type_traits/transform_traits.hpp>
 # include <boost/type_traits/cv_traits.hpp>
 
-namespace boost { namespace python { namespace converter { 
+namespace boost { namespace python { namespace converter {
 
 struct registration;
 
@@ -56,7 +56,7 @@ namespace detail
      = registry::lookup(pointer_type_id<T>());
 }
 
-# endif 
+# endif
 }}} // namespace boost::python::converter
 
 #endif // REGISTERED_POINTEE_DWA2002710_HPP

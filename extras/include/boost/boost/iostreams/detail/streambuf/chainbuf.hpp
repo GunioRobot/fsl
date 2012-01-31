@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif      
+#endif
 
 #include <boost/config.hpp>                    // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
@@ -50,7 +50,7 @@ public:
 protected:
     typedef linked_streambuf<char_type, traits_type>         delegate_type;
     chainbuf() { client_type::set_chain(&chain_); }
-    int_type underflow() 
+    int_type underflow()
         { sentry t(this); return translate(delegate().underflow()); }
     int_type pbackfail(int_type c)
         { sentry t(this); return translate(delegate().pbackfail(c)); }
@@ -74,7 +74,7 @@ protected:
                  typename Chain::char_type,
                  typename Chain::traits_type
              )                                               base_type;
-//#if !BOOST_WORKAROUND(__GNUC__, == 2)                                 
+//#if !BOOST_WORKAROUND(__GNUC__, == 2)
 //    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
 //#endif
 private:
@@ -82,11 +82,11 @@ private:
     // Translate from std int_type to chain's int_type.
     typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)           std_traits;
     typedef typename Chain::traits_type                      chain_traits;
-    static typename chain_traits::int_type 
+    static typename chain_traits::int_type
     translate(typename std_traits::int_type c)
         { return translate_int_type<std_traits, chain_traits>(c); }
 
-    delegate_type& delegate() 
+    delegate_type& delegate()
         { return static_cast<delegate_type&>(chain_.front()); }
     void get_pointers()
         {

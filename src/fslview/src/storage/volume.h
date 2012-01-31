@@ -63,7 +63,7 @@ public:
   typedef boost::shared_ptr< VolumeStore<VoxelType> > Handle;
 
   virtual ~VolumeStore();
-	
+
   VoxelType& operator()(short x, short y, short z);
   VoxelType& operator()(unsigned int offset);
   const VoxelType& operator()(short x, short y, short z) const;

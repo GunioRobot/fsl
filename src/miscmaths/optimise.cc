@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,7 +85,7 @@ namespace MISCMATHS {
   using std::exp;
   using std::log;
 
-  bool estquadmin(float &xnew, float x1, float xmid, float x2, 
+  bool estquadmin(float &xnew, float x1, float xmid, float x2,
 		   float y1, float ymid, float y2)
   {
     // Finds the estimated quadratic minimum's position
@@ -121,7 +121,7 @@ namespace MISCMATHS {
     }
     return xnew;
   }
-  
+
 
 
   float nextpt(float x1, float xmid, float x2, float y1, float ymid, float y2)
@@ -139,10 +139,10 @@ namespace MISCMATHS {
     return xnew;
   }
 
-      
 
-  void findinitialbound(float &x1, float &xmid, float &x2, 
-			float &y1, float &ymid, float &y2, 
+
+  void findinitialbound(float &x1, float &xmid, float &x2,
+			float &y1, float &ymid, float &y2,
 			float (*func)(const ColumnVector &),
 			const ColumnVector &unitdir, const ColumnVector &pt)
   {
@@ -166,15 +166,15 @@ namespace MISCMATHS {
     y2 = (*func)(x2*unitdir + pt);
 
     while (ymid > y2) {  // note: must maintain y1 >= ymid
-	
-      // cout << "    <" << Min(x1,x2) << "," << xmid 
+
+      // cout << "    <" << Min(x1,x2) << "," << xmid
       //   << "," << Max(x1,x2) << ">" << endl;
       maxx2 = xmid + maxextrap*(x2 - xmid);
       quadok = estquadmin(newx2,x1,xmid,x2,y1,ymid,y2);
       if ((!quadok) || ((newx2 - x1)*dir<0) || ((newx2 - maxx2)*dir>0)) {
 	newx2 = xmid + extrapolationfactor*(x2-x1);
       }
-      
+
       newy2 = (*func)(newx2*unitdir + pt);
 
       if ((newx2 - xmid)*(newx2 - x1)<0) {  // newx2 is between x1 and xmid
@@ -198,19 +198,19 @@ namespace MISCMATHS {
 	  x2 = newx2;  y2 = newy2;
 	}
       }
-	
+
     }
 
     if ( (y2<ymid) || (y1<ymid) ) {
       cerr << "findinitialbound failed to bracket: current triplet is" << endl;
     }
   }
-  
 
-  float optimise1d(ColumnVector &pt, const ColumnVector dir, 
-		  const ColumnVector tol, int &iterations_done, 
+
+  float optimise1d(ColumnVector &pt, const ColumnVector dir,
+		  const ColumnVector tol, int &iterations_done,
 		  float (*func)(const ColumnVector &), int max_iter,
-		  float init_value, float boundguess) 
+		  float init_value, float boundguess)
   {
     // Golden Search Routine
     // Must pass in the direction vector in N-space (dir), the initial
@@ -304,9 +304,9 @@ namespace MISCMATHS {
 
 
 
-  
-  float optimise(ColumnVector &pt, int numopt, const ColumnVector &tol, 
-		 float (*func)(const ColumnVector &), int &iterations_done, 
+
+  float optimise(ColumnVector &pt, int numopt, const ColumnVector &tol,
+		 float (*func)(const ColumnVector &), int &iterations_done,
 		 int max_iter, const ColumnVector& boundguess)
   {
     // Calculate dot product of dir by tol

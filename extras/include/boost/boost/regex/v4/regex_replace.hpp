@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -32,8 +32,8 @@ template <class OutputIterator, class BidirectionalIterator, class traits, class
 OutputIterator regex_replace(OutputIterator out,
                          BidirectionalIterator first,
                          BidirectionalIterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const charT* fmt, 
+                         const basic_regex<charT, traits>& e,
+                         const charT* fmt,
                          match_flag_type flags = match_default)
 {
    regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
@@ -49,7 +49,7 @@ OutputIterator regex_replace(OutputIterator out,
       while(i != j)
       {
          if(!(flags & regex_constants::format_no_copy))
-            out = re_detail::copy(i->prefix().first, i->prefix().second, out); 
+            out = re_detail::copy(i->prefix().first, i->prefix().second, out);
          out = i->format(out, fmt, flags, e);
          last_m = (*i)[0].second;
          if(flags & regex_constants::format_first_only)
@@ -66,7 +66,7 @@ template <class OutputIterator, class Iterator, class traits, class charT>
 inline OutputIterator regex_replace(OutputIterator out,
                          Iterator first,
                          Iterator last,
-                         const basic_regex<charT, traits>& e, 
+                         const basic_regex<charT, traits>& e,
                          const std::basic_string<charT>& fmt,
                          match_flag_type flags = match_default)
 {
@@ -75,7 +75,7 @@ inline OutputIterator regex_replace(OutputIterator out,
 
 template <class traits, class charT>
 std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
-                         const basic_regex<charT, traits>& e, 
+                         const basic_regex<charT, traits>& e,
                          const charT* fmt,
                          match_flag_type flags = match_default)
 {
@@ -87,7 +87,7 @@ std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
 
 template <class traits, class charT>
 std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
-                         const basic_regex<charT, traits>& e, 
+                         const basic_regex<charT, traits>& e,
                          const std::basic_string<charT>& fmt,
                          match_flag_type flags = match_default)
 {

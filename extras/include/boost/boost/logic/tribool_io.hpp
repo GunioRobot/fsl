@@ -105,7 +105,7 @@ inline std::basic_string<char> get_default_indeterminate_name<char>()
 { return "indeterminate"; }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-// VC++ 6.0 chokes on the specialization below, so we're stuck without 
+// VC++ 6.0 chokes on the specialization below, so we're stuck without
 // wchar_t support. What a pain.
 #else
 #  ifndef BOOST_NO_WCHAR_T
@@ -217,9 +217,9 @@ operator<<(std::basic_ostream<CharT, Traits>& out, tribool x)
  */
 template<typename CharT, typename Traits>
 inline std::basic_ostream<CharT, Traits>&
-operator<<(std::basic_ostream<CharT, Traits>& out, 
+operator<<(std::basic_ostream<CharT, Traits>& out,
            bool (*)(tribool, detail::indeterminate_t))
-{ return out << tribool(indeterminate); } 
+{ return out << tribool(indeterminate); }
 
 /**
  * \brief Reads a tribool value from a stream.

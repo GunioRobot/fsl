@@ -4,7 +4,7 @@ PROJNAME = libhfunc
 
 AFILES = libhfunc.a
 HFILES = libhfunc.h dbh.h
-XFILES = 
+XFILES =
 
 OBJS = libhfunc.o
 

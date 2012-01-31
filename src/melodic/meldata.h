@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     meldata.h - data container class
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -82,18 +82,18 @@ using namespace Utilities;
 using namespace NEWIMAGE;
 
 namespace Melodic{
-  
+
   class MelodicData{
     public:
 
       //constructor
-      MelodicData(MelodicOptions &popts, Log &plogger):  
+      MelodicData(MelodicOptions &popts, Log &plogger):
 				opts(popts),logger(plogger)
-			{	
+			{
 	  		after_mm = false;
 	  		Resels = 0;
-			}  
- 
+			}
+
       void save();
 
       Matrix process_file(string fname, int numfiles = 1);
@@ -104,15 +104,15 @@ namespace Melodic{
 	 			save_volume4D(tempVol,logger.appendDir(fname));
 	 			message("  " << logger.appendDir(fname) << endl);
       }
-      
+
       inline void saveascii(Matrix what, string fname){
-	 			write_ascii_matrix(logger.appendDir(fname),what);   
-	 			message("  " << logger.appendDir(fname) << endl);   
+	 			write_ascii_matrix(logger.appendDir(fname),what);
+	 			message("  " << logger.appendDir(fname) << endl);
       }
- 
+
       inline void savebinary(Matrix what, string fname){
-      	write_binary_matrix(what,logger.appendDir(fname));  
-	 			message("  " << logger.appendDir(fname) << endl);    
+      	write_binary_matrix(what,logger.appendDir(fname));
+	 			message("  " << logger.appendDir(fname) << endl);
       }
 
       int  remove_components();
@@ -131,12 +131,12 @@ namespace Melodic{
       inline Matrix& get_IC() {return IC;}
       inline void set_IC(Matrix& Arg) {IC = Arg;}
       inline void set_IC(int ctr, Matrix& Arg) {IC.Row(ctr) = Arg;}
-      
+
       inline vector<Matrix>& get_Smodes() {return Smodes;}
       inline Matrix& get_Smodes(int what) {return Smodes.at(what);}
-      inline void add_Smodes(Matrix& Arg) {Smodes.push_back(Arg);}      
+      inline void add_Smodes(Matrix& Arg) {Smodes.push_back(Arg);}
       inline void save_Smodes(){
-				Matrix tmp = Smodes.at(0); 
+				Matrix tmp = Smodes.at(0);
 				for(unsigned int ctr = 1; ctr < Smodes.size(); ctr++)
 	  			tmp |= Smodes.at(ctr);
 				  saveascii(tmp,opts.outputfname.value() + "_Smodes");
@@ -146,7 +146,7 @@ namespace Melodic{
       inline Matrix& get_Tmodes(int what) {return Tmodes.at(what);}
       inline void add_Tmodes(Matrix& Arg) {Tmodes.push_back(Arg);}
       inline void save_Tmodes(){
-				Matrix tmp = Tmodes.at(0); 
+				Matrix tmp = Tmodes.at(0);
 				for(unsigned int ctr = 1; ctr < Tmodes.size(); ctr++)
 	  			tmp |= Tmodes.at(ctr);
 				saveascii(tmp,opts.outputfname.value() + "_Tmodes");
@@ -154,24 +154,24 @@ namespace Melodic{
 
       void set_TSmode();
 
-      inline Matrix& get_param() {return param;} 
-      inline void set_param(Matrix& Arg) {param = Arg;}	
+      inline Matrix& get_param() {return param;}
+      inline void set_param(Matrix& Arg) {param = Arg;}
 
-      inline Matrix& get_paramS() {return paramS;} 
-      inline void set_paramS(Matrix& Arg) {paramS = Arg;}	
+      inline Matrix& get_paramS() {return paramS;}
+      inline void set_paramS(Matrix& Arg) {paramS = Arg;}
 
       inline Matrix& get_white() {return whiteMatrix;}
       inline void set_white(Matrix& Arg) {whiteMatrix = Arg;}
-      
+
       inline Matrix& get_dewhite() {return dewhiteMatrix;}
       inline void set_dewhite(Matrix& Arg) {dewhiteMatrix = Arg;}
-      
+
       inline Matrix& get_meanC() {return meanC;}
       inline Matrix& get_meanR() {return meanR;}
 
       inline Matrix& get_stdDevi() {return stdDevi;}
       inline void set_stdDevi(Matrix& Arg) {stdDevi = Arg;}
-  
+
       inline Matrix& get_mix() {return mixMatrix;}
 
       inline void set_mix(Matrix& Arg) {
@@ -183,10 +183,10 @@ namespace Melodic{
 	  			}
       }
 
-      Matrix expand_mix(); 
-      Matrix expand_dimred(const Matrix& Mat); 
-      Matrix reduce_dimred(const Matrix& Mat); 
-      
+      Matrix expand_mix();
+      Matrix expand_dimred(const Matrix& Mat);
+      Matrix reduce_dimred(const Matrix& Mat);
+
       inline Matrix& get_fmix() {return mixFFT;}
       inline void set_fmix(Matrix& Arg) {mixFFT = Arg;}
 
@@ -195,10 +195,10 @@ namespace Melodic{
 
       inline volume<float>& get_mask() {return Mask;}
       inline void set_mask(volume<float>& Arg) {Mask = Arg;}
-  
+
       inline volume<float>& get_mean() {return Mean;}
       inline void set_mean(volume<float>& Arg) {Mean = Arg;}
-   
+
       inline volume<float>& get_bg() {
 				if(opts.bgimage.value()>"")
 					return background;
@@ -206,20 +206,20 @@ namespace Melodic{
 					return Mean;
 			}
       inline void set_bg(volume<float>& Arg) {background = Arg;}
-   
+
       inline Matrix& get_Data() {return Data;}
       inline void set_Data(Matrix& Arg) {Data = Arg;}
-    
+
       inline Matrix& get_RXweight() {return RXweight;}
       inline void set_RXweight(Matrix& Arg) {RXweight = Arg;}
- 
+
       inline Matrix& get_ICstats() {return ICstats;}
       inline void set_ICstats(Matrix& Arg) {ICstats = Arg;}
-     
+
       inline Matrix& get_EVP() {return EVP;}
       inline void set_EVP(Matrix& Arg) {if(EVP.Storage()==0)
 																					EVP = Arg;}
-      
+
       inline Matrix& get_EV() {return EV;}
       inline void set_EV(Matrix& Arg) {if(EV.Storage()==0)
 																				 EV = Arg;}
@@ -233,7 +233,7 @@ namespace Melodic{
 
       inline int data_dim() {return Data.Nrows();}
       inline int data_samples() {return Data.Ncols();}
-     
+
       inline float get_resels() {return Resels;}
       inline void set_resels(float& Arg) {Resels = Arg;}
 
@@ -253,18 +253,18 @@ namespace Melodic{
 	  			ICstats(num,4) = -1.0*tmp;
 				}
       }
-      
+
       void sort();
 	  void reregress();
 
       vector<Matrix> DWM, WM;
 			basicGLM glmT, glmS;
-			Matrix Tdes, Tcon, TconF, Sdes, Scon, SconF, param, paramS;	
-			RowVector explained_var;		
+			Matrix Tdes, Tcon, TconF, Sdes, Scon, SconF, param, paramS;
+			RowVector explained_var;
 
     private:
-      MelodicOptions &opts;     
-      Log &logger;       
+      MelodicOptions &opts;
+      Log &logger;
 
       Matrix pcaE;
       RowVector pcaD;
@@ -293,7 +293,7 @@ namespace Melodic{
       Matrix Data;
       Matrix PPCA;
       Matrix jointCC;
-      
+
       bool after_mm;
 
       float Resels;
@@ -306,7 +306,7 @@ namespace Melodic{
       void create_RXweight();
       void est_smoothness();
 
-      unsigned long standardise(volume<float>& mask, 
+      unsigned long standardise(volume<float>& mask,
 				volume4D<float>& R);
       float est_resels(volume4D<float> R, volume<float> mask);
   };

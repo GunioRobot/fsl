@@ -20,11 +20,11 @@
 //! properties.
 class CurveData
 {
-public:  
+public:
   typedef boost::shared_ptr< CurveData > Handle;
   typedef enum {Null,FiltFunc,Full,Cope1,Cope2,Cope3,Cope4, PE} Feat;
 
-  static Handle create(const TimeSeries::Handle &ts,bool browse);  
+  static Handle create(const TimeSeries::Handle &ts,bool browse);
   static Handle create(const TimeSeries::Handle &ts,bool browse,
                        int index);
   TimeSeries::Handle inqTimeSeries(){return m_timeSeries;}
@@ -40,8 +40,8 @@ public:
   float              inqYValue(short x){return m_timeSeries->value(x);}
   int                inqIndex(){return m_index;}
 
-private: 
-  
+private:
+
   CurveData(const TimeSeries::Handle &timeSeries,
             bool browse, int index);
   TimeSeries::Handle m_timeSeries;
@@ -50,11 +50,11 @@ private:
   bool m_isBrowseCurve;
   int  m_index;
 };
-  
+
 //! @brief Manage a list of CurveData objects
 class CurveDataList
 {
-public:  
+public:
   typedef boost::shared_ptr< CurveDataList > Handle;
   typedef std::vector<CurveData::Handle>::iterator It;
   static Handle create();
@@ -72,8 +72,8 @@ public:
   It begin();
   It end();
 
-private: 
-  
+private:
+
   CurveDataList();
   std::vector<CurveData::Handle> m_list;
 };

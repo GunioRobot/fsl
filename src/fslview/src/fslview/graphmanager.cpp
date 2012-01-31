@@ -15,9 +15,9 @@ GraphManager::GraphManager()
   m_submittedCount = 0;
 }
 
-GraphManager::Handle GraphManager::create() 
+GraphManager::Handle GraphManager::create()
 {
-   Handle g = Handle(new GraphManager());  
+   Handle g = Handle(new GraphManager());
    g->setCountedThis(g);
    return g;
 }
@@ -46,7 +46,7 @@ struct Update
 
 void GraphManager::notify() const
 {
-  std::for_each(m_observers.begin(), m_observers.end(), 
+  std::for_each(m_observers.begin(), m_observers.end(),
                 Update(countedThis()));
 }
 

@@ -23,7 +23,7 @@ namespace boost {
 
 // find_format_copy (iterator variant) implementation -------------------------------//
 
-            template< 
+            template<
                 typename OutputIteratorT,
                 typename InputT,
                 typename FinderT,
@@ -35,8 +35,8 @@ namespace boost {
                 FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult )
-            {       
-                return find_format_copy_impl2( 
+            {
+                return find_format_copy_impl2(
                     Output,
                     Input,
                     Finder,
@@ -45,7 +45,7 @@ namespace boost {
                     Formatter(FindResult) );
             }
 
-            template< 
+            template<
                 typename OutputIteratorT,
                 typename InputT,
                 typename FinderT,
@@ -59,10 +59,10 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult,
                 const FormatResultT& FormatResult )
-            {       
+            {
                 typedef find_format_store<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<InputT>::type, 
+                    BOOST_STRING_TYPENAME
+                        range_const_iterator<InputT>::type,
                         FormatterT,
                         FormatResultT > store_type;
 
@@ -89,8 +89,8 @@ namespace boost {
 
 // find_format_copy implementation --------------------------------------------------//
 
-            template< 
-                typename InputT, 
+            template<
+                typename InputT,
                 typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
@@ -108,8 +108,8 @@ namespace boost {
                     Formatter(FindResult) );
             }
 
-            template< 
-                typename InputT, 
+            template<
+                typename InputT,
                 typename FinderT,
                 typename FormatterT,
                 typename FindResultT,
@@ -122,8 +122,8 @@ namespace boost {
                 const FormatResultT& FormatResult)
             {
                 typedef find_format_store<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<InputT>::type, 
+                    BOOST_STRING_TYPENAME
+                        range_const_iterator<InputT>::type,
                         FormatterT,
                         FormatResultT > store_type;
 
@@ -148,13 +148,13 @@ namespace boost {
             }
 
 // replace implementation ----------------------------------------------------//
-        
+
             template<
                 typename InputT,
                 typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
-            inline void find_format_impl( 
+            inline void find_format_impl(
                 InputT& Input,
                 FinderT Finder,
                 FormatterT Formatter,
@@ -174,7 +174,7 @@ namespace boost {
                 typename FormatterT,
                 typename FindResultT,
                 typename FormatResultT >
-            inline void find_format_impl2( 
+            inline void find_format_impl2(
                 InputT& Input,
                 FinderT,
                 FormatterT Formatter,
@@ -182,8 +182,8 @@ namespace boost {
                 const FormatResultT& FormatResult)
             {
                 typedef find_format_store<
-                    BOOST_STRING_TYPENAME 
-                        range_iterator<InputT>::type, 
+                    BOOST_STRING_TYPENAME
+                        range_iterator<InputT>::type,
                         FormatterT,
                         FormatResultT > store_type;
 

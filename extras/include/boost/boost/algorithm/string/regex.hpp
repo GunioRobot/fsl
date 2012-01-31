@@ -24,7 +24,7 @@
 #include <boost/algorithm/string/iter_find.hpp>
 
 /*! \file
-    Defines regex variants of the algorithms. 
+    Defines regex variants of the algorithms.
 */
 
 namespace boost {
@@ -35,26 +35,26 @@ namespace boost {
         //! Find regex algorithm
         /*!
             Search for a substring matching the given regex in the input.
-            
+
             \param Input A container which will be searched.
             \param Rx A regular expression
             \param Flags Regex options
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c RangeT::iterator or 
-                \c RangeT::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c RangeT::iterator or
+                \c RangeT::const_iterator, depending on the constness of
                 the input parameter.
 
               \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename RangeT, 
-            typename CharT, 
+        template<
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type >
-        find_regex( 
-            RangeT& Input, 
+        find_regex(
+            RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -66,9 +66,9 @@ namespace boost {
 
         //! Replace regex algorithm
         /*!
-            Search for a substring matching given regex and format it with 
-            the specified format.             
-            The result is a modified copy of the input. It is returned as a sequence 
+            Search for a substring matching given regex and format it with
+            the specified format.
+            The result is a modified copy of the input. It is returned as a sequence
             or copied to the output iterator.
 
             \param Output An output iterator to which the result will be copied
@@ -77,14 +77,14 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
             \return An output iterator pointing just after the last inserted character or
-                    a modified copy of the input   
+                    a modified copy of the input
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
+        template<
             typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
         inline OutputIteratorT replace_regex_copy(
@@ -94,7 +94,7 @@ namespace boost {
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            return find_format_copy( 
+            return find_format_copy(
                 Output,
                 Input,
                 regex_finder( Rx, Flags ),
@@ -105,18 +105,18 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline SequenceT replace_regex_copy( 
+        inline SequenceT replace_regex_copy(
             const SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            return find_format_copy( 
+            return find_format_copy(
                 Input,
                 regex_finder( Rx, Flags ),
                 regex_formatter( Format, Flags ) );
@@ -124,7 +124,7 @@ namespace boost {
 
         //! Replace regex algorithm
         /*!
-            Search for a substring matching given regex and format it with 
+            Search for a substring matching given regex and format it with
             the specified format. The input string is modified in-place.
 
             \param Input An input string
@@ -132,18 +132,18 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline void replace_regex( 
+        inline void replace_regex(
             SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            find_format( 
+            find_format(
                 Input,
                 regex_finder( Rx, Flags ),
                 regex_formatter( Format, Flags ) );
@@ -153,8 +153,8 @@ namespace boost {
 
         //! Replace all regex algorithm
         /*!
-            Format all substrings, matching given regex, with the specified format. 
-            The result is a modified copy of the input. It is returned as a sequence 
+            Format all substrings, matching given regex, with the specified format.
+            The result is a modified copy of the input. It is returned as a sequence
             or copied to the output iterator.
 
             \param Output An output iterator to which the result will be copied
@@ -163,14 +163,14 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
             \return An output iterator pointing just after the last inserted character or
-                    a modified copy of the input     
+                    a modified copy of the input
 
               \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
+        template<
             typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
         inline OutputIteratorT replace_all_regex_copy(
@@ -180,7 +180,7 @@ namespace boost {
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            return find_format_all_copy( 
+            return find_format_all_copy(
                 Output,
                 Input,
                 regex_finder( Rx, Flags ),
@@ -191,18 +191,18 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline SequenceT replace_all_regex_copy( 
+        inline SequenceT replace_all_regex_copy(
             const SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            return find_format_all_copy( 
+            return find_format_all_copy(
                 Input,
                 regex_finder( Rx, Flags ),
                 regex_formatter( Format, Flags ) );
@@ -210,26 +210,26 @@ namespace boost {
 
         //! Replace all regex algorithm
         /*!
-            Format all substrings, matching given regex, with the specified format. 
+            Format all substrings, matching given regex, with the specified format.
             The input string is modified in-place.
 
             \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
-            \param Flags Regex options            
+            \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline void replace_all_regex( 
+        inline void replace_all_regex(
             SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
         {
-            find_format_all( 
+            find_format_all(
                 Input,
                 regex_finder( Rx, Flags ),
                 regex_formatter( Format, Flags ) );
@@ -240,22 +240,22 @@ namespace boost {
         //! Erase regex algorithm
         /*!
             Remove a substring matching given regex from the input.
-            The result is a modified copy of the input. It is returned as a sequence 
-            or copied to the output iterator.                        
+            The result is a modified copy of the input. It is returned as a sequence
+            or copied to the output iterator.
 
             \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
             \return An output iterator pointing just after the last inserted character or
-                       a modified copy of the input    
+                       a modified copy of the input
 
              \note The second variant of this function provides the strong exception-safety guarantee
        */
-        template< 
+        template<
             typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT >
         inline OutputIteratorT erase_regex_copy(
             OutputIteratorT Output,
@@ -274,17 +274,17 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT >
-        inline SequenceT erase_regex_copy( 
+        inline SequenceT erase_regex_copy(
             const SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
-            return find_format_copy( 
-                Input, 
+            return find_format_copy(
+                Input,
                 regex_finder( Rx, Flags ),
                 empty_formatter( Input ) );
         }
@@ -298,17 +298,17 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT >
-        inline void erase_regex( 
+        inline void erase_regex(
             SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
-            find_format( 
-                Input, 
+            find_format(
+                Input,
                 regex_finder( Rx, Flags ),
                 empty_formatter( Input ) );
         }
@@ -318,23 +318,23 @@ namespace boost {
         //! Erase all regex algorithm
         /*!
             Erase all substrings, matching given regex, from the input.
-            The result is a modified copy of the input. It is returned as a sequence 
+            The result is a modified copy of the input. It is returned as a sequence
             or copied to the output iterator.
-            
+
 
             \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
             \return An output iterator pointing just after the last inserted character or
-                    a modified copy of the input                        
+                    a modified copy of the input
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
+        template<
             typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT >
         inline OutputIteratorT erase_all_regex_copy(
             OutputIteratorT Output,
@@ -353,17 +353,17 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT >
-        inline SequenceT erase_all_regex_copy( 
+        inline SequenceT erase_all_regex_copy(
             const SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
-            return find_format_all_copy( 
-                Input, 
+            return find_format_all_copy(
+                Input,
                 regex_finder( Rx, Flags ),
                 empty_formatter( Input ) );
         }
@@ -377,17 +377,17 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
+        template<
+            typename SequenceT,
+            typename CharT,
             typename RegexTraitsT>
-        inline void erase_all_regex( 
+        inline void erase_all_regex(
             SequenceT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
-            find_format_all( 
-                Input, 
+            find_format_all(
+                Input,
                 regex_finder( Rx, Flags ),
                 empty_formatter( Input ) );
         }
@@ -397,8 +397,8 @@ namespace boost {
         //! Find all regex algorithm
         /*!
             This algorithm finds all substrings matching the give regex
-            in the input.             
-            
+            in the input.
+
             Each part is copied and added as a new element to the output container.
             Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
@@ -416,10 +416,10 @@ namespace boost {
 
              \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename SequenceSequenceT, 
-            typename RangeT,         
-            typename CharT, 
+        template<
+            typename SequenceSequenceT,
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT >
         inline SequenceSequenceT& find_all_regex(
             SequenceSequenceT& Result,
@@ -430,13 +430,13 @@ namespace boost {
             return iter_find(
                 Result,
                 Input,
-                regex_finder(Rx,Flags) );         
+                regex_finder(Rx,Flags) );
         }
 
 //  split_regex ------------------------------------------------------------------//
 
         //! Split regex algorithm
-        /*! 
+        /*!
             Tokenize expression. This function is equivalent to C strtok. Input
             sequence is split into tokens, separated  by separators. Separator
             is an every match of the given regex.
@@ -446,8 +446,8 @@ namespace boost {
             a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
-    
-            \param Result A container that can hold copies of references to the substrings.          
+
+            \param Result A container that can hold copies of references to the substrings.
             \param Input A container which will be searched.
             \param Rx A regular expression
             \param Flags Regex options
@@ -457,10 +457,10 @@ namespace boost {
 
                \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename SequenceSequenceT, 
-            typename RangeT,         
-            typename CharT, 
+        template<
+            typename SequenceSequenceT,
+            typename RangeT,
+            typename CharT,
             typename RegexTraitsT >
         inline SequenceSequenceT& split_regex(
             SequenceSequenceT& Result,
@@ -471,7 +471,7 @@ namespace boost {
             return iter_split(
                 Result,
                 Input,
-                regex_finder(Rx,Flags) );         
+                regex_finder(Rx,Flags) );
         }
 
     } // namespace algorithm

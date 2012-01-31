@@ -25,7 +25,7 @@
 #include <boost/preprocessor/control/expr_if.hpp>
 #include <boost/preprocessor/list/at.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp> 
+#include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -667,7 +667,7 @@ inline bool operator==(
   typedef typename CompositeKey::key_extractor_tuple     key_extractor_tuple;
   typedef typename CompositeKey::value_type              value_type;
   typedef tuple<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(Value)> key_tuple;
-  
+
   BOOST_STATIC_ASSERT(
     tuples::length<key_extractor_tuple>::value==
     tuples::length<key_tuple>::value);
@@ -692,7 +692,7 @@ inline bool operator==(
   typedef typename CompositeKey::key_extractor_tuple     key_extractor_tuple;
   typedef typename CompositeKey::value_type              value_type;
   typedef tuple<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(Value)> key_tuple;
-  
+
   BOOST_STATIC_ASSERT(
     tuples::length<key_extractor_tuple>::value==
     tuples::length<key_tuple>::value);
@@ -739,7 +739,7 @@ inline bool operator<(
   typedef typename CompositeKey::key_extractor_tuple     key_extractor_tuple;
   typedef typename CompositeKey::value_type              value_type;
   typedef tuple<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(Value)> key_tuple;
-  
+
   return detail::compare_ckey_cval<
     key_extractor_tuple,value_type,
     key_tuple,detail::generic_operator_less_tuple
@@ -760,7 +760,7 @@ inline bool operator<(
   typedef typename CompositeKey::key_extractor_tuple     key_extractor_tuple;
   typedef typename CompositeKey::value_type              value_type;
   typedef tuple<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(Value)> key_tuple;
-  
+
   return detail::compare_ckey_cval<
     key_extractor_tuple,value_type,
     key_tuple,detail::generic_operator_less_tuple
@@ -863,7 +863,7 @@ public:
       y.composite_key.key_extractors(),y.value,
       key_eqs());
   }
-  
+
   template
   <
     typename CompositeKey,
@@ -965,7 +965,7 @@ public:
       y.composite_key.key_extractors(),y.value,
       key_comps());
   }
-  
+
   template
   <
     typename CompositeKey,
@@ -1057,7 +1057,7 @@ public:
       key_hasher_tuple
     >::hash(x.composite_key.key_extractors(),x.value,key_hash_functions());
   }
-  
+
   template<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(typename Value)>
   std::size_t operator()(
     const tuple<BOOST_MULTI_INDEX_CK_ENUM_PARAMS(Value)>& x)const

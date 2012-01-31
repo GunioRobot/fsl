@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: text.n,v 1.1.1.1 2007/07/10 15:05:16 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH text n 8.4 Tk "Tk Built-In Commands"
 .BS
@@ -97,7 +97,7 @@ justification and the third uses center justification.
 If the list of tab stops does not have enough elements to cover all
 of the tabs in a text line, then Tk extrapolates new tab stops using
 the spacing and alignment from the last tab stop in the list.  Tab
-distances must be strictly positive, and must always increase from one 
+distances must be strictly positive, and must always increase from one
 tab stop to the next (if not, an error is thrown).
 The value of the \fBtabs\fR option may be overridden by \fB\-tabs\fR
 options in tags.
@@ -293,8 +293,8 @@ refers to the next-to-last character in the text and
 ``\fBinsert wordstart \- 1 c\fR'' refers to the character just before
 the first one in the word containing the insertion cursor.  Modifiers
 are applied one by one in this left to right order, and after each step
-the resulting index is constrained to be a valid index in the text 
-widget.  So, for example, the index ``\fB1.0 -1c +1c\fR'' refers to the 
+the resulting index is constrained to be a valid index in the text
+widget.  So, for example, the index ``\fB1.0 -1c +1c\fR'' refers to the
 index ``\fB2.0\fR''.
 .SH TAGS
 .PP
@@ -646,7 +646,7 @@ instance.  The name is taken to be the value of the \fB\-name\fP option
 in use in the text widget, then \fB#\fInn\fR is added to the end of the
 \fIimageName\fP, where \fInn\fP is an arbitrary integer.  This insures
 the \fIimageName\fP is unique.
-Once this name is assigned to this instance of the image, it does not 
+Once this name is assigned to this instance of the image, it does not
 change, even though the \fB\-image\fP or \fB\-name\fP values can be changed
 with \fBimage configure\fP.
 .PP
@@ -704,7 +704,7 @@ If the selection is claimed away by another application or by another
 window within this application, then the \fBsel\fR tag will be removed
 from all characters in the text.
 .IP [4]
-Whenever the \fBsel\fR tag range changes a virtual event 
+Whenever the \fBsel\fR tag range changes a virtual event
 \fB<<Selection>>\fR is generated.
 .PP
 The \fBsel\fR tag is automatically defined when a text widget is
@@ -728,8 +728,8 @@ this point whenever the text widget has the input focus.
 The text widget can keep track of changes to the content of the widget
 by means of the modified flag. Inserting or deleting text will set
 this flag. The flag can be queried, set and cleared programmatically
-as well. Whenever the flag changes state a \fB<<Modified>>\fR virtual 
-event is generated. See the \fBedit modified\fR widget command for 
+as well. Whenever the flag changes state a \fB<<Modified>>\fR virtual
+event is generated. See the \fBedit modified\fR widget command for
 more details.
 .SH "THE UNDO MECHANISM"
 .PP
@@ -1266,7 +1266,7 @@ defined for \fItagName\fR.
 .PP
 .VS
 The only events for which bindings may be specified are those related
-to the mouse and keyboard (such as \fBEnter\fR, \fBLeave\fR, 
+to the mouse and keyboard (such as \fBEnter\fR, \fBLeave\fR,
 \fBButtonPress\fR, \fBMotion\fR, and \fBKeyPress\fR) or virtual events.
 Event bindings for a text widget use the \fBcurrent\fR mark described
 under \fBMARKS\fR above.  An \fBEnter\fR event triggers for a tag when the tag
@@ -1718,7 +1718,7 @@ Control-x deletes whatever is selected in the text widget
 after copying it to the clipboard.
 .IP [31]
 Control-t reverses the order of the two characters to the right of
-the insertion cursor. 
+the insertion cursor.
 .IP [32]
 .VS 8.4
 Control-z (and Control-underscore on UNIX when \fBtk_strictMotif\fR is

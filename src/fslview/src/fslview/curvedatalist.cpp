@@ -13,40 +13,40 @@ class SetAllInActive
 {
 public:
   SetAllInActive(){}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     cd->setIsActive(false);
   }
 };
 
-class ActiveSearch 
+class ActiveSearch
 {
 public:
   ActiveSearch(){}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     if(cd->inqIsActive())m_curve = cd;
   }
   CurveData::Handle m_curve;
 };
 
-class BrowseSearch 
+class BrowseSearch
 {
 public:
   BrowseSearch(){}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     if(cd->inqBrowse())m_curve = cd;
   }
   CurveData::Handle m_curve;
 };
 
-class CurveDataSearch 
+class CurveDataSearch
 {
 public:
   CurveDataSearch(long curve) : m_found(false),
                                 m_curve(curve) {}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     if(cd->inqCurve() ==  m_curve){m_found = true;m_curveData = cd;}
   }
@@ -58,12 +58,12 @@ private:
 
 
 
-class CoordinatesSearch 
+class CoordinatesSearch
 {
 public:
-  CoordinatesSearch(CurveData::Handle newCd) : 
+  CoordinatesSearch(CurveData::Handle newCd) :
     m_found(false),m_newCd(newCd){}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     if ((cd->inqX() == m_newCd->inqX()) &&
         (cd->inqY() == m_newCd->inqY()) &&
@@ -79,12 +79,12 @@ private:
   CurveData::Handle m_newCd;
 };
 
-class MaxMinSearch 
+class MaxMinSearch
 {
 public:
-  MaxMinSearch() : 
+  MaxMinSearch() :
     m_max(0),m_min(0),m_firstItem(true){}
-  void operator()(CurveData::Handle cd) 
+  void operator()(CurveData::Handle cd)
   {
     double min =  cd->inqTimeSeries()->inqMinVal();
     double max =  cd->inqTimeSeries()->inqMaxVal();
@@ -114,7 +114,7 @@ CurveData::Handle CurveData::create(const TimeSeries::Handle &ts,bool browse)
     Handle dst(new CurveData(ts,browse,0));
     return dst;
   }
-  
+
 CurveData::Handle CurveData::create(const TimeSeries::Handle &ts,
                                     bool browse,int index)
 {
@@ -128,8 +128,8 @@ CurveData::CurveData(const TimeSeries::Handle &timeSeries,bool browse,
   m_timeSeries(timeSeries),m_isActive(false),m_isBrowseCurve(browse),
   m_index(index)
   {
-    
-    
+
+
   }
 
 CurveDataList::CurveDataList(){}
@@ -141,7 +141,7 @@ CurveDataList::Handle CurveDataList::create()
 }
 
 bool CurveDataList::push_back(CurveData::Handle cd)
-{  
+{
   CoordinatesSearch search = std::for_each(m_list.begin(),
                                            m_list.end(),
                                            CoordinatesSearch(cd));
@@ -171,7 +171,7 @@ void CurveDataList::setAllInActive()
                 m_list.end(),
                 SetAllInActive());
 }
-  
+
 CurveData::Handle CurveDataList::getCurveData(long curve)
 {
   CurveDataSearch search = std::for_each(m_list.begin(),
@@ -181,7 +181,7 @@ CurveData::Handle CurveDataList::getCurveData(long curve)
 }
 
 CurveData::Handle CurveDataList::getActiveData()
-{    
+{
   ActiveSearch search = std::for_each(m_list.begin(),
                                       m_list.end(),
                                       ActiveSearch());
@@ -233,7 +233,7 @@ double CurveDataList::inqMaxCurveValue() const
   MaxMinSearch search = std::for_each(m_list.begin(),
                                       m_list.end(),
                                       MaxMinSearch());
-  
+
   return search.m_max;
 }
 
@@ -242,6 +242,6 @@ double CurveDataList::inqMinCurveValue() const
   MaxMinSearch search = std::for_each(m_list.begin(),
                                       m_list.end(),
                                       MaxMinSearch());
-  
+
   return search.m_min;
 }

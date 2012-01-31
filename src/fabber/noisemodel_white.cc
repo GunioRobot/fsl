@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -78,10 +78,10 @@ void WhiteNoiseModel::HardcodedInitialDists(NoiseParams& priorIn,
     NoiseParams& posteriorIn) const
 {
     Tracer_Plus tr("WhiteNoiseModel::HardcodedInitialDists");
-    
+
     WhiteParams& prior = dynamic_cast<WhiteParams&>(priorIn);
     WhiteParams& posterior = dynamic_cast<WhiteParams&>(posteriorIn);
-    
+
     int nPhis = Qis.size();
     assert(nPhis > 0);
 //    prior.resize(nPhis);
@@ -103,7 +103,7 @@ void WhiteNoiseModel::HardcodedInitialDists(NoiseParams& priorIn,
 const MVNDist WhiteParams::OutputAsMVN() const
 {
   Tracer_Plus tr("WhiteParams::OutputAsMVN");
-  
+
   assert((unsigned)nPhis == phis.size());
   MVNDist mvn( phis.size() );
   SymmetricMatrix vars( phis.size() );
@@ -125,8 +125,8 @@ void WhiteParams::InputFromMVN( const MVNDist& mvn )
         for (int j = i+1; j <= mvn.means.Nrows(); j++)
             if (mvn.GetCovariance()(i, j) != 0.0)
                 throw Invalid_option("Phis should have zero covariance!");
-    }    
-} 
+    }
+}
 
 
 void WhiteParams::Dump(const string indent) const
@@ -140,11 +140,11 @@ void WhiteParams::Dump(const string indent) const
     }
 }
 
-//WhiteNoiseModel::WhiteNoiseModel(const string& pattern) 
+//WhiteNoiseModel::WhiteNoiseModel(const string& pattern)
 //  : phiPattern(pattern)
 WhiteNoiseModel::WhiteNoiseModel(ArgsType& args)
   : phiPattern(args.ReadWithDefault("noise-pattern","1"))
-{ 
+{
   Tracer_Plus tr("WhiteNoiseModel::WhiteNoiseModel");
   assert(phiPattern.length() > 0);
   MakeQis(phiPattern.length()); // a quick way to validate the input
@@ -158,7 +158,7 @@ WhiteNoiseModel::WhiteNoiseModel(ArgsType& args)
 void WhiteNoiseModel::MakeQis(int dataLen) const
 {
   Tracer_Plus tr("WhiteNoiseModel::MakeQis");
-  if (!Qis.empty() && Qis[0].Nrows() == dataLen) 
+  if (!Qis.empty() && Qis[0].Nrows() == dataLen)
     return;  // Qis are already up-to-date
 
   // Read the pattern string into a vector pat
@@ -224,13 +224,13 @@ void WhiteNoiseModel::UpdateNoise(
   	const ColumnVector& data) const
 {
   Tracer_Plus tr("WhiteNoiseModel::UpdateNoise");
-  
+
   WhiteParams& posterior = dynamic_cast<WhiteParams&>(noise);
   const WhiteParams& prior = dynamic_cast<const WhiteParams&>(noisePrior);
-  
+
   const Matrix& J = linear.Jacobian();
   ColumnVector k = data - linear.Offset() + J*(linear.Centre() - theta.means);
-  
+
   // check the Qis are valid
   MakeQis(data.Nrows());
   const int nPhis = Qis.size();
@@ -241,24 +241,24 @@ void WhiteNoiseModel::UpdateNoise(
   for (int i = 1; i <= nPhis; i++)
     {
       const DiagonalMatrix& Qi = Qis[i-1];
-      double tmp = 
+      double tmp =
 	(k.t() * Qi * k).AsScalar()
 	+ (theta.GetCovariance() * J.t() * Qi * J).Trace();
-      
+
       posterior.phis[i-1].b =
 	1/( tmp*0.5 + 1/prior.phis[i-1].b);
-      
+
       double nTimes = Qi.Trace(); // number of data points for this dist
       assert(nTimes == int(nTimes)); // should be an integer
 
-      posterior.phis[i-1].c = 
+      posterior.phis[i-1].c =
 	(nTimes-1)*0.5 + prior.phis[i-1].c;
 
       if (lockedNoiseStdev > 0)
 	{
 	  // Ignore this update and force phi to a specified value.
 	  // b*c = noise precision = lockedNoiseStdev^-2
-	  posterior.phis[i-1].b = 
+	  posterior.phis[i-1].b =
 	    1/posterior.phis[i-1].c/lockedNoiseStdev/lockedNoiseStdev;
 	}
 
@@ -290,7 +290,7 @@ void WhiteNoiseModel::UpdateTheta(
   assert(Qis.size() == (unsigned)noise.nPhis);
 
   // Marginalize over phi distributions
-  DiagonalMatrix X(data.Nrows()); 
+  DiagonalMatrix X(data.Nrows());
   X = 0;
   for (unsigned i = 1; i <= Qis.size(); i++)
     X += Qis[i-1] * noise.phis[i-1].CalcMean();
@@ -299,7 +299,7 @@ void WhiteNoiseModel::UpdateTheta(
 
   // Calculate Lambda & Lambda*m (without priors)
   SymmetricMatrix Ltmp;
-  Ltmp << J.t() * X * J;  
+  Ltmp << J.t() * X * J;
   // use << instead of = because this is considered a lossy assignment
   // (since NEWMAT isn't smart enough to know J'*X*J is always symmetric)
   ColumnVector mTmp = J.t() * X * (data - gml + J*ml);
@@ -313,7 +313,7 @@ void WhiteNoiseModel::UpdateTheta(
     {
       Tracer_Plus tr("WhiteNoiseModel::UpdateTheta - WithoutPrior calcs");
       thetaWithoutPrior->SetSize(theta.GetSize());
-      
+
       thetaWithoutPrior->SetPrecisions(Ltmp);
 
       //      try
@@ -370,10 +370,10 @@ double WhiteNoiseModel::CalcFreeEnergy(
 
   double expectedLogPhiDist = 0; //bits arising fromt he factorised posterior for phi
   vector<double> expectedLogPosteriorParts(10); //bits arising from the likelihood
-   for (int i = 0; i<10; i++) 
+   for (int i = 0; i<10; i++)
      expectedLogPosteriorParts[i] = 0;
-  
-   for (int i = 0; i < nPhis; i++) 
+
+   for (int i = 0; i < nPhis; i++)
      {
       double si = noise.phis[i].b;
       double ci = noise.phis[i].c;
@@ -383,48 +383,48 @@ double WhiteNoiseModel::CalcFreeEnergy(
       expectedLogPhiDist +=
 	-gammaln(ci) - ci*log(si) - ci
 	+(ci-1)*(digamma(ci)+log(si));
-      
-      expectedLogPosteriorParts[0] += 
+
+      expectedLogPosteriorParts[0] +=
 	(digamma(ci)+log(si)) * ( (Qis[i].Trace())*0.5 + ciPrior - 1); // nTimes using phi_{i+1} = Qis[i].Trace()
-      
-      expectedLogPosteriorParts[9] += 
+
+      expectedLogPosteriorParts[9] +=
 	-gammaln(ciPrior) -ciPrior*log(siPrior) - si*ci/siPrior;
-     } 
+     }
 
    expectedLogPosteriorParts[1] = 0; //*NB not required
-  
+
   expectedLogPosteriorParts[2] =
-    -0.5 * (k.t() *  k).AsScalar() 
+    -0.5 * (k.t() *  k).AsScalar()
     -0.5 * (J.t() * J * Linv).Trace(); //*NB remove Qsum
-  
+
   expectedLogPosteriorParts[3] =
     +0.5 * thetaPrior.GetPrecisions().LogDeterminant().LogValue()
     -0.5 * nTimes * log(2*M_PI)
     -0.5 * nTheta * log(2*M_PI);
-  
-  expectedLogPosteriorParts[4] = 
+
+  expectedLogPosteriorParts[4] =
     -0.5 * (
-            (theta.means - thetaPrior.means).t() 
-            * thetaPrior.GetPrecisions() 
+            (theta.means - thetaPrior.means).t()
+            * thetaPrior.GetPrecisions()
             * (theta.means - thetaPrior.means)
 	    ).AsScalar();
-  
+
   expectedLogPosteriorParts[5] =
     -0.5 * (Linv * thetaPrior.GetPrecisions()).Trace();
 
   expectedLogPosteriorParts[6] = 0; //*NB not required
-  
-  expectedLogPosteriorParts[7] = 0; //*NB not required  
-  
+
+  expectedLogPosteriorParts[7] = 0; //*NB not required
+
   expectedLogPosteriorParts[8] = 0; //*NB not required
 
-  
+
   // Assemble the parts into F
-  double F =  
-    - expectedLogThetaDist 
+  double F =
+    - expectedLogThetaDist
     - expectedLogPhiDist;
-  
-  for (int i=0; i<10; i++) 
+
+  for (int i=0; i<10; i++)
     F += expectedLogPosteriorParts[i];
 
   // Error checking
@@ -435,14 +435,14 @@ double WhiteNoiseModel::CalcFreeEnergy(
     //LOG_ERR("expectedLogPosteriorParts == " << expectedLogPosteriorParts << endl);
     throw overflow_error("Non-finite free energy!");
   }
-  
+
   return F;
 }
 
 /*
 void WhiteNoiseModel::SaveParams(const MVNDist& theta) {
   Tracer_Plus tr("WhiteNoiseModel::SaveParams");
-  // save the current values of parameters 
+  // save the current values of parameters
   int nPhis = phis.size();
   assert(nPhis > 0);
   phissave.resize(phis.size());

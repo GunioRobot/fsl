@@ -289,7 +289,7 @@ TkpDisplayMenuButton(
 	    Tk_RedrawImage(butPtr->image, 0, 0, width, height, pixmap, 0, 0);
 	} else {
 	    GC gc;
-	    
+
 	    if (butPtr->state == STATE_DISABLED) {
 		gc = butPtr->disabledGC;
 	    } else if (butPtr->state == STATE_ACTIVE) {

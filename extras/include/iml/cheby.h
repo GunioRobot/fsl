@@ -4,19 +4,19 @@
 // CHEBY solves the symmetric positive definite linear
 // system Ax = b using the Preconditioned Chebyshev Method
 //
-// CHEBY follows the algorithm described on p. 30 of the 
+// CHEBY follows the algorithm described on p. 30 of the
 // SIAM Templates book.
 //
 // The return value indicates convergence within max_iter (input)
 // iterations (0), or no convergence within max_iter iterations (1).
 //
 // Upon successful return, output arguments have the following values:
-//  
+//
 //        x  --  approximate solution to Ax = b
 // max_iter  --  the number of iterations performed before the
 //               tolerance was reached
 //      tol  --  the residual after the final iteration
-//  
+//
 //*****************************************************************
 //
 // Slightly modified version of IML++ template. See ReadMe file.
@@ -31,7 +31,7 @@ namespace MISCMATHS {
 
 template < class Matrix, class Vector, class Preconditioner, class Real,
            class Type >
-int 
+int
 CHEBY(const Matrix &A, Vector &x, const Vector &b,
       const Preconditioner &M, int &max_iter, Real &tol,
       Type eigmin, Type eigmax)
@@ -45,7 +45,7 @@ CHEBY(const Matrix &A, Vector &x, const Vector &b,
 
   if (normb == 0.0)
     normb = 1;
-  
+
   if ((resid = r.NormFrobenius() / normb) <= tol) {
     tol = resid;
     max_iter = 0;

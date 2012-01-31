@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacPanic.c --
  *
  *	Source code for the "Tcl_Panic" library procedure used in "Simple
@@ -81,13 +81,13 @@ TclpPanic TCL_VARARGS_DEF(CONST char *, format)
     va_end(varg);
 
     /*
-     * Put up an alert without using the Resource Manager (there may 
+     * Put up an alert without using the Resource Manager (there may
      * be no resources to load). Use the Window and Control Managers instead.
-     * We want the window centered on the main monitor. The following 
+     * We want the window centered on the main monitor. The following
      * should be tested with multiple monitors. Look and see if there is a way
      * not using qd.screenBits.
      */
- 
+
     macRect.top = (qd.screenBits.bounds.top + qd.screenBits.bounds.bottom)
 	/ 2 - (PANICHEIGHT / 2);
     macRect.bottom = (qd.screenBits.bounds.top + qd.screenBits.bounds.bottom)
@@ -96,31 +96,31 @@ TclpPanic TCL_VARARGS_DEF(CONST char *, format)
 	/ 2 - (PANICWIDTH / 2);
     macRect.right = (qd.screenBits.bounds.left + qd.screenBits.bounds.right)
 	/ 2 + (PANICWIDTH / 2);
-    
+
     macWinPtr = NewWindow(NULL, &macRect, "\p", true, dBoxProc, (WindowRef) -1,
             false, 0);
     if (macWinPtr == NULL) {
 	goto exitNow;
     }
-    
+
     okButtonHandle = NewControl(macWinPtr, &buttonRect, "\pOK", true,
 	    0, 0, 1, pushButProc, 0);
     if (okButtonHandle == NULL) {
 	CloseWindow(macWinPtr);
 	goto exitNow;
     }
-    
+
     SelectWindow(macWinPtr);
     SetCursor(&qd.arrow);
     stopIconHandle = GetIcon(kStopIcon);
-            
+
     while (!done) {
 	if (WaitNextEvent(mDownMask | keyDownMask | updateMask,
 		&event, 0, NULL)) {
 	    switch(event.what) {
 		case mouseDown:
 		    part = FindWindow(event.where, &foundWinPtr);
-    
+
 		    if ((foundWinPtr != macWinPtr) || (part != inContent)) {
 		    	SysBeep(1);
 		    } else {
@@ -128,8 +128,8 @@ TclpPanic TCL_VARARGS_DEF(CONST char *, format)
 		    	GlobalToLocal(&event.where);
 		    	part = FindControl(event.where, macWinPtr,
 				&okButtonHandle);
-    	
-			if ((kControlButtonPart == part) && 
+
+			if ((kControlButtonPart == part) &&
 				(TrackControl(okButtonHandle,
 					event.where, NULL))) {
 			    done = true;
@@ -145,10 +145,10 @@ TclpPanic TCL_VARARGS_DEF(CONST char *, format)
 			    done = true;
 		    }
 		    break;
-		case updateEvt:   
+		case updateEvt:
 		    SetPortWindowPort(macWinPtr);
 		    TextFont(systemFont);
-		    
+
 		    BeginUpdate(macWinPtr);
 		    if (stopIconHandle != NULL) {
 			PlotIcon(&iconRect, stopIconHandle);

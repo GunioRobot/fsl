@@ -39,12 +39,12 @@ AtlasGroup::Handle atlases;
 int main(int argc, char **argv)
 {
   using namespace Utilities;
-  
+
   try {
     atlases = AtlasGroup::create();
 
-    Option<bool> verbose(string("-V,--verbose"), false, 
-			 string("switch on diagnostic messages"), 
+    Option<bool> verbose(string("-V,--verbose"), false,
+			 string("switch on diagnostic messages"),
 			 false, no_argument);
     Option<bool> help(string("-h,--help"), false,
 		      string("display this message"),
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 			 true, requires_argument);
     string title("atlasquery (version 1.0)\n\nCopyright(c) 2005, University of Oxford\nDave Flitney");
     string usage("atlasquery [-a \"<atlasname>\"] [-m <maskimage>] [-c <X>,<Y>,<Z>]");
-    
+
     OptionParser options(title, usage);
     options.add(verbose);
     options.add(help);
@@ -71,10 +71,10 @@ int main(int argc, char **argv)
     options.add(coord);
     options.add(atlasname);
     options.add(dumpatlases);
-      
+
     for(int a = options.parse_command_line(argc, argv); a < argc; ++a) {
     }
-    
+
     if(dumpatlases.value()) {
       for(AtlasGroup::ConstIterator it = atlases->begin(); it != atlases->end(); ++it)
 	cout << it->second->inqName() << endl;
@@ -119,8 +119,8 @@ int main(int argc, char **argv)
       {
 	if(verbose.value())
 	  cout << "Working from coord: "
-	       << coord.value()[0] << "," 
-	       << coord.value()[1] << "," 
+	       << coord.value()[0] << ","
+	       << coord.value()[1] << ","
 	       << coord.value()[2] << endl;
 
 	cout << atlas->getDescription(coord.value()[0], coord.value()[1], coord.value()[2]) << endl;
@@ -138,6 +138,6 @@ int main(int argc, char **argv)
   } catch(...) {
     cout << "Opps! Unknown exception! " << endl;
     return 1;
-  }    
+  }
   return 0;
 }

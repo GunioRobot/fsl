@@ -12,15 +12,15 @@
 #include "connected_offset.h"
 
 namespace Mm{
-    
+
   class Connected_Offset
-    {	
+    {
     public:
       Connected_Offset(int px, int py, int pz, int pind, int ppartner_ind)
 	: x(px),y(py),z(pz),ind(pind),partner_ind(ppartner_ind)
 	{
 	}
-      
+
       int x;
       int y;
       int z;

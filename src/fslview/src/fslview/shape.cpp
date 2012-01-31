@@ -40,7 +40,7 @@ struct VoxelRead {
 
     if( m_volume->inRange(vo->inqX(), vo->inqY(), vo->inqZ()) )
       {
-	Voxel::Handle nv = 
+	Voxel::Handle nv =
 	  Voxel::create( vo->inqX(), vo->inqY(), vo->inqZ(),
 			 m_volume->value(vo->inqX(), vo->inqY(), vo->inqZ()) );
 
@@ -53,12 +53,12 @@ struct VoxelRead {
 };
 
 
-struct VoxelSearch 
+struct VoxelSearch
 {
   VoxelSearch(Voxel::Handle &v):
     m_found(false), m_v(v) {}
 
-  void operator()(Voxel::Handle v) 
+  void operator()(Voxel::Handle v)
   {
     if ( (v->inqX() == m_v->inqX()) &&
 	 (v->inqY() == m_v->inqY()) &&
@@ -90,15 +90,15 @@ Shape::Handle Shape::create(QPainter* painter,
   return dst;
 }
 
-void Shape::drawVertex(const Voxel::Handle& vo) 
-{ 
+void Shape::drawVertex(const Voxel::Handle& vo)
+{
   m_paint->setPen(QColor(255,255,255) );
 
   int x(0), y(0);
   if(m_orient == SliceWidget::Axial)         { x = vo->inqX(); y = vo->inqY(); }
   else if(m_orient == SliceWidget::Sagittal) { x = vo->inqY(); y = vo->inqZ(); }
   else if(m_orient == SliceWidget::Coronal)  { x = vo->inqX(); y = vo->inqZ(); }
-  
+
   m_paint->drawPoint(x, y);
   m_paint->drawRect(x, y, 2, 2);
 }
@@ -123,7 +123,7 @@ void Shape::commit()
 {
   TRACKER("Shape::commit()");
 
-  std::for_each(m_commitVoxels.begin(), m_commitVoxels.end(), 
+  std::for_each(m_commitVoxels.begin(), m_commitVoxels.end(),
 		boost::bind1st(boost::mem_fun(&Shape::commitVertex), this));
 
   m_commitVoxels.clear();
@@ -132,13 +132,13 @@ void Shape::commit()
 void Shape::floodFill(int x, int y, float newVal)
 {
   /*
-    This flood algorithm has been taken from "CVu The Journal of the ACCU" 
+    This flood algorithm has been taken from "CVu The Journal of the ACCU"
     (August 2003 Volume 15 No 4) See www.accu.org for more details.
     The article was by James Holland.  The algorithm is very similar to the
     spans fill algorithm mentioned in "Foley and van Dam"(Computer Graphics
     Section 19.5.2 The Basic Filling Algorithms.
   */
-  
+
   if(inRange(x,y))
     {
       float oldVal = readPixel(x,y);
@@ -146,7 +146,7 @@ void Shape::floodFill(int x, int y, float newVal)
 	{
 	  Location seed_location = {x,y};
 	  m_seedStack.push(seed_location);
-    
+
 	  while(!m_seedStack.empty())
 	    {
 	      Location location = m_seedStack.top();
@@ -155,9 +155,9 @@ void Shape::floodFill(int x, int y, float newVal)
 	      pushFloodUndoPixel(location.column, location.row, oldVal);
 	      writePixel(location.column, location.row, newVal);
 	      --location.column;
-	      while(location.column >= 0 && 
+	      while(location.column >= 0 &&
 		    readPixel(location.column,location.row) == oldVal)
-		{            
+		{
 		  pushFloodUndoPixel(location.column, location.row, oldVal);
 		  writePixel(location.column, location.row, newVal);
 		  --location.column;
@@ -175,11 +175,11 @@ void Shape::floodFill(int x, int y, float newVal)
 		  ++location.column;
 		}
 	      int extreme_right = location.column - 1;
-        
+
 	      //Scan above the seed row
 
 	      if(inRange(locationOrig.column, locationOrig.row + 1))
-		{        
+		{
 		  location.row = locationOrig.row + 1;
 
 		  bool previous_pixel_is_border = true;
@@ -202,7 +202,7 @@ void Shape::floodFill(int x, int y, float newVal)
 		}
 	      //Scan below the seed row
 	      location.row = locationOrig.row - 1;
-        
+
 	      if(location.row >= 0)
 		{
 		  bool previous_pixel_is_border = true;
@@ -225,7 +225,7 @@ void Shape::floodFill(int x, int y, float newVal)
 		}
 	    }
 	}
-    } 
+    }
 }
 
 Voxel::Handle Shape::pixelToVoxel(int x, int y, float val)
@@ -247,11 +247,11 @@ Voxel::Handle Shape::pixelToVoxel(int x, int y, float val)
 }
 
 void Shape::addVertex(int x, int y, int size, float val)
-{  
+{
   /*
     When a vertex is added a line of pixels is automatically drawn
     between the last vertex and the current vertex.  The basic concept
-    of how this is acheived is roughly described in Foley and van Dam 
+    of how this is acheived is roughly described in Foley and van Dam
     section 3.2.1 "The Basic Incremental Algoritm"
 
     Different processes occur depending on wether the gradient of the line
@@ -259,14 +259,14 @@ void Shape::addVertex(int x, int y, int size, float val)
     increment x and calculate y or increment y and calculate x.
   */
   TRACKER("Shape::addVertex(int x, int y, int size, float val)");
-  
+
   Voxel::Handle cur = pixelToVoxel(x, y, val);
 
   if(m_commitVoxels.empty()) {
     addSurroundingVoxels(cur, size, val);
   } else {
     Voxel::Handle prev = m_commitVoxels.back();
-    
+
     int diffX(0), diffY(0), prevX(0), prevY(0);
 
     if(m_orient == SliceWidget::Axial) {
@@ -322,13 +322,13 @@ void Shape::addVertex(int x, int y, int size, float val)
             float xValue;
             int yStep(0),xValueInt,xValueSign;
             while(abs(yStep) <= abs(diffY))
-              {                
-                xValue     = gradrecip * yStep + prevX;  
+              {
+                xValue     = gradrecip * yStep + prevX;
                 if(xValue < 0){xValueSign = -1;}else{xValueSign = 1;}
-                xValueInt  = int(floor(fabs(xValue + 0.5))) * xValueSign;                        
+                xValueInt  = int(floor(fabs(xValue + 0.5))) * xValueSign;
                 Voxel::Handle mid = pixelToVoxel(xValueInt,
 						 yStep + prevY,
-						 val); 
+						 val);
 		MESSAGE(QString(">1 - val = %1").arg(mid->inqVal()));
                 addSurroundingVoxels(mid,size,val);
                 if(diffY < 0){--yStep;}
@@ -344,22 +344,22 @@ Shape::Handle Shape::getBuffer()
 {
   TRACKER("Shape::getBuffer()");
 
-  Shape::Handle hnd; 
+  Shape::Handle hnd;
   hnd = Handle(new Shape(m_paint,m_volume,m_orient,m_slice));
   std::for_each(m_commitVoxels.begin(),
                 m_commitVoxels.end(),
                 VoxelRead(m_volume, hnd->m_commitVoxels));
-  
-  return hnd; 
+
+  return hnd;
 }
 
 Shape::Handle Shape::getFloodBuffer()
 {
-  Shape::Handle hnd; 
+  Shape::Handle hnd;
   hnd = Handle(new Shape(m_paint,m_volume,m_orient,m_slice));
   hnd->m_commitVoxels = m_floodUndoVoxels;
 
-  return hnd; 
+  return hnd;
 }
 
 float Shape::readVoxel(int x, int y, int z)
@@ -384,7 +384,7 @@ float Shape::readPixel(int x, int y)
 }
 
 void Shape::writeVoxel(int x, int y, int z, float newVal)
-{ 
+{
   m_volume->setValue(x,y,z,newVal);
 }
 
@@ -441,7 +441,7 @@ void Shape::push_check(Voxel::Handle& vox, int size)
   VoxelSearch search = std::for_each(start,
                                      m_voxels.end(),
                                      VoxelSearch(vox));
-  if(!search.m_found) 
+  if(!search.m_found)
     m_voxels.push_back(vox);
 }
 
@@ -464,10 +464,10 @@ void Shape::addSurroundingVoxels(Voxel::Handle & v, int size, float val)
 	if(m_orient == SliceWidget::Axial)
 	  loc = Voxel::create(nx-size/2, ny-size/2, m_slice, val);
 	else if(m_orient == SliceWidget::Sagittal)
-	  loc = Voxel::create(m_slice, nx-size/2, ny-size/2, val);	
+	  loc = Voxel::create(m_slice, nx-size/2, ny-size/2, val);
 	else if(m_orient == SliceWidget::Coronal)
-	  loc = Voxel::create(nx-size/2, m_slice, ny-size/2, val);	
-	
+	  loc = Voxel::create(nx-size/2, m_slice, ny-size/2, val);
+
 	push_check(loc, size);
       }
 

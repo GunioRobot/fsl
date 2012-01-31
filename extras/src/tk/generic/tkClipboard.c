@@ -236,7 +236,7 @@ ClipboardLostSel(clientData)
  *	clipWindow for the display of tkwin.  In order to guarantee
  *	atomicity, no event handling should occur between
  *	Tk_ClipboardClear and the following Tk_ClipboardAppend
- *	calls.  This procedure may cause a user-defined LostSel command 
+ *	calls.  This procedure may cause a user-defined LostSel command
  * 	to be invoked when the CLIPBOARD is claimed, so any calling
  *	function should be reentrant at the point Tk_ClipboardClear is
  *	invoked.
@@ -460,13 +460,13 @@ Tk_ClipboardObjCmd(clientData, interp, objc, objv)
 	    enum appendOptions { APPEND_DISPLAYOF, APPEND_FORMAT,
 				     APPEND_TYPE };
 	    int subIndex, length;
-	    
+
 	    for (i = 2; i < objc - 1; i++) {
 		string = Tcl_GetStringFromObj(objv[i], &length);
 		if (string[0] != '-') {
 		    break;
 		}
-		
+
 		/*
 		 * If the argument is "--", it signifies the end of arguments.
 		 */
@@ -651,7 +651,7 @@ TkClipInit(interp, dispPtr)
     dispPtr->clipTargetPtr = NULL;
     dispPtr->clipboardActive = 0;
     dispPtr->clipboardAppPtr = NULL;
-    
+
     /*
      * Create the window used for clipboard ownership and selection retrieval,
      * and set up an event handler for it.

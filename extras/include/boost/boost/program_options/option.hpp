@@ -24,8 +24,8 @@ namespace boost { namespace program_options {
     class basic_option {
     public:
         basic_option() : position_key(-1), unregistered(false) {}
-        basic_option(const std::string& string_key, 
-               const std::vector< std::string> &value) 
+        basic_option(const std::string& string_key,
+               const std::vector< std::string> &value)
         : string_key(string_key), value(value), unregistered(false)
         {}
 

@@ -1891,7 +1891,7 @@ test filename-15.4 {unix specific no complain: no errors, good result} \
 } {/home/ouster /home/welch}
 test filename-15.4.1 {no complain: no errors, good result} {
     # test used to fail because if an error occurs, the interp's result
-    # is reset... 
+    # is reset...
     string equal [glob -nocomplain ~wontexist ~blah ~] \
       [glob -nocomplain ~ ~blah ~wontexist]
 } {1}

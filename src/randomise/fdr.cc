@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,8 +85,8 @@ using namespace Utilities;
 string title="fdr (Version 1.2)\nCopyright(c) 2004-2006, University of Oxford (Mark Jenkinson)";
 string examples="fdr -i <pvalimage> [options]\ne.g.  fdr -i <pvalimage> -m <maskimage> -q 0.05\n      fdr -i <pvalimage> -o <qrateimage>\nNote: if a mask is not specified, voxels where p>.9999 are ignored.";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -133,7 +133,7 @@ vector<int> get_sortindex(const Matrix& vals)
 
 ////////////////////////////////////////////////////////////////////////////
 
-int save_as_image(const string& filename, const volume<float>& mask, 
+int save_as_image(const string& filename, const volume<float>& mask,
 		  const Matrix& valmat)
 {
     // put values back into volume format
@@ -145,7 +145,7 @@ int save_as_image(const string& filename, const volume<float>& mask,
 }
 
 
-int do_work(int argc, char* argv[], int nonoptarg) 
+int do_work(int argc, char* argv[], int nonoptarg)
 {
   volume4D<float> pimg; // reading in 4D in order to be able to use the newimage<->newmat functions - only actually use first timepoint
   read_volume4D(pimg,inname.value());
@@ -170,13 +170,13 @@ int do_work(int argc, char* argv[], int nonoptarg)
   int Ntot = pmat.Nrows();
 
   // calculate FDR threshold required to make each voxel significant
-  // FDR formula is: p = n*q / (N * C)  
-  //   where n=order index, N=total number of p values, 
-  //         C=1 for the simple case, and 
+  // FDR formula is: p = n*q / (N * C)
+  //   where n=order index, N=total number of p values,
+  //         C=1 for the simple case, and
   //         C=1/1 + 1/2 + 1/3 + ... + 1/N for the most general correlation
   // We use the inverse formula: q_{min} = N*C*p / n
 
-  if (verbose.value()) { cerr << "Calculating FDR values" << endl; } 
+  if (verbose.value()) { cerr << "Calculating FDR values" << endl; }
   float C=1.0;
   if (conservativetest.value()) {
     for (int n=2; n<=Ntot; n++) { C+=1.0/((double) n); }
@@ -190,17 +190,17 @@ int do_work(int argc, char* argv[], int nonoptarg)
     float qfac = qthr / ( C * (float) Ntot );
     float pthresh = 0.0;
     for (int j=1; j<=Ntot; j++) {
-      if ( (pmat(j,1) > pthresh) && 
+      if ( (pmat(j,1) > pthresh) &&
 	   ( pmat(j,1) < qfac * (float) norder[j-1] ) )
       {
-	 if (verbose.value()) { cout << "p = " << pmat(j,1) << " , n = " 
+	 if (verbose.value()) { cout << "p = " << pmat(j,1) << " , n = "
 	         << norder[j-1] << " , qfac = " << qfac << endl; }
          pthresh = pmat(j,1);
       }
     }
     cout << "Probability Threshold is: " << endl << pthresh << endl;
   }
-  
+
 
   // output the q (fdr) image, if requested
   if (qoutname.set()) {
@@ -208,12 +208,12 @@ int do_work(int argc, char* argv[], int nonoptarg)
     for (int j=1; j<=Ntot; j++) {
       qmat(j,1) = pmat(j,1) * Ntot * C / norder[j-1];
     }
-    
+
     // save the FDR (q_min) results
     save_as_image(qoutname.value(),vmask,qmat);
   }
 
-  
+
   // save the order values, if requested
   if (ordername.set()) {
     Matrix ordermat(Ntot,1);
@@ -241,7 +241,7 @@ int main(int argc,char *argv[])
     options.add(conservativetest);
     options.add(verbose);
     options.add(help);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -249,14 +249,14 @@ int main(int argc,char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
 

@@ -1,4 +1,4 @@
-#* 
+#*
 #* ------------------------------------------------------------------
 #* labelcombobox.tcl - Labeled ComboBox
 #* Created by Robert Heller on Thu Feb 16 10:03:17 2006
@@ -16,28 +16,28 @@
 #* ------------------------------------------------------------------
 #* Contents:
 #* ------------------------------------------------------------------
-#*  
+#*
 #*     Generic Project
 #*     Copyright (C) 2005  Robert Heller D/B/A Deepwoods Software
 #* 			51 Locke Hill Road
 #* 			Wendell, MA 01379-9728
-#* 
+#*
 #*     This program is free software; you can redistribute it and/or modify
 #*     it under the terms of the GNU General Public License as published by
 #*     the Free Software Foundation; either version 2 of the License, or
 #*     (at your option) any later version.
-#* 
+#*
 #*     This program is distributed in the hope that it will be useful,
 #*     but WITHOUT ANY WARRANTY; without even the implied warranty of
 #*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #*     GNU General Public License for more details.
-#* 
+#*
 #*     You should have received a copy of the GNU General Public License
 #*     along with this program; if not, write to the Free Software
 #*     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#* 
-#*  
-#* 
+#*
+#*
+#*
 # ------------------------------------------------------------------------------
 #  $Id: labelcombobox.tcl,v 1.1 2006/11/28 15:34:01 mwebster Exp $
 # ------------------------------------------------------------------------------
@@ -65,13 +65,13 @@ namespace eval LabelComboBox {
 
     Widget::bwinclude LabelComboBox ComboBox .combo \
         remove {-fg -bg} \
-        rename {-foreground -comboboxfg -background -comboboxbg 
+        rename {-foreground -comboboxfg -background -comboboxbg
 		-height -comboboxheight -listboxwidth comboboxlistboxwidth}
 
     Widget::addmap LabelComboBox "" :cmd {-background {}}
 
     Widget::syncoptions LabelComboBox ComboBox .combo {-autocomplete -bwlistbox
-						       -expand -hottrack 
+						       -expand -hottrack
 						       -images -modifycmd
 						       -postcommand -values {}}
     Widget::syncoptions LabelComboBox LabelFrame .labf {-label -text -underline {}}
@@ -91,7 +91,7 @@ proc LabelComboBox::create { path args } {
     eval [list frame $path] $maps(:cmd) -class LabelComboBox \
 	    -relief flat -bd 0 -highlightthickness 0 -takefocus 0
     Widget::initFromODB LabelComboBox $path $maps(LabelComboBox)
-	
+
     set labf  [eval [list LabelFrame::create $path.labf] $maps(.labf) \
                    [list -relief flat -borderwidth 0 -focus $path.combo]]
     set subf  [LabelFrame::getframe $labf]

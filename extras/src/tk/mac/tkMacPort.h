@@ -77,7 +77,7 @@ EXTERN void 		panic  _ANSI_ARGS_(TCL_VARARGS(char *, string));
 EXTERN int		strcasecmp _ANSI_ARGS_((CONST char *s1,
 			    CONST char *s2));
 #endif
-#ifndef strncasecmp			    
+#ifndef strncasecmp
 EXTERN int		strncasecmp _ANSI_ARGS_((CONST char *s1,
 			    CONST char *s2, size_t n));
 #endif

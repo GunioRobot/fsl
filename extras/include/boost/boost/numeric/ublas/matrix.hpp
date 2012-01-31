@@ -1048,7 +1048,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size1_;
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return size2_;
         }
 
@@ -1082,27 +1082,27 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)]; 
+            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)];
         }
         BOOST_UBLAS_INLINE
         reference at_element (size_type i, size_type j) {
-            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)]; 
+            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)];
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
-            return at_element (i, j); 
+            return at_element (i, j);
         }
 
         // Element assignment
         BOOST_UBLAS_INLINE
         reference insert_element (size_type i, size_type j, const_reference t) {
-            return (at_element (i, j) = t); 
+            return (at_element (i, j) = t);
         }
         BOOST_UBLAS_INLINE
         void erase_element (size_type i, size_type j) {
-            at_element (i, j) = value_type/*zero*/(); 
+            at_element (i, j) = value_type/*zero*/();
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -1119,13 +1119,13 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        vector_of_vector &assign_temporary (vector_of_vector &m) { 
+        vector_of_vector &assign_temporary (vector_of_vector &m) {
             swap (m);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        vector_of_vector &operator = (const matrix_expression<AE> &ae) { 
+        vector_of_vector &operator = (const matrix_expression<AE> &ae) {
             self_type temporary (ae);
             return assign_temporary (temporary);
         }
@@ -1138,8 +1138,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        vector_of_vector &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign<scalar_assign> (*this, ae); 
+        vector_of_vector &assign (const matrix_expression<AE> &ae) {
+            matrix_assign<scalar_assign> (*this, ae);
             return *this;
         }
         template<class AE>
@@ -1156,8 +1156,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        vector_of_vector &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign<scalar_plus_assign> (*this, ae); 
+        vector_of_vector &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign<scalar_plus_assign> (*this, ae);
             return *this;
         }
         template<class AE>
@@ -1175,7 +1175,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_of_vector &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign<scalar_minus_assign> (*this, ae); 
+            matrix_assign<scalar_minus_assign> (*this, ae);
             return *this;
         }
         template<class AT>
@@ -1294,7 +1294,7 @@ namespace boost { namespace numeric { namespace ublas {
                 const self_type &m = (*this) ();
                 if (layout_type::fast1 ())
                     ++ it_;
-                else 
+                else
                     it_ = m.find1 (1, i_, j_).it_;
                 return *this;
             }
@@ -2369,7 +2369,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        identity_matrix &assign_temporary (identity_matrix &m) { 
+        identity_matrix &assign_temporary (identity_matrix &m) {
             swap (m);
             return *this;
         }
@@ -2464,14 +2464,14 @@ namespace boost { namespace numeric { namespace ublas {
             typename self_type::
 #endif
             const_iterator2 begin () const {
-                return const_iterator2 ((*this) (), it_); 
+                return const_iterator2 ((*this) (), it_);
             }
             BOOST_UBLAS_INLINE
 #ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
             typename self_type::
 #endif
             const_iterator2 end () const {
-                return const_iterator2 ((*this) (), it_ + 1); 
+                return const_iterator2 ((*this) (), it_ + 1);
             }
             BOOST_UBLAS_INLINE
 #ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
@@ -2576,14 +2576,14 @@ namespace boost { namespace numeric { namespace ublas {
             typename self_type::
 #endif
             const_iterator1 begin () const {
-                return const_iterator1 ((*this) (), it_); 
+                return const_iterator1 ((*this) (), it_);
             }
             BOOST_UBLAS_INLINE
 #ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
             typename self_type::
 #endif
             const_iterator1 end () const {
-                return const_iterator1 ((*this) (), it_ + 1); 
+                return const_iterator1 ((*this) (), it_ + 1);
             }
             BOOST_UBLAS_INLINE
 #ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
@@ -2729,7 +2729,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type /*i*/, size_type /*j*/) const {
-            return value_; 
+            return value_;
         }
 
         // Assignment
@@ -2741,7 +2741,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        scalar_matrix &assign_temporary (scalar_matrix &m) { 
+        scalar_matrix &assign_temporary (scalar_matrix &m) {
             swap (m);
             return *this;
         }
@@ -2786,7 +2786,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int /*rank*/, size_type i, size_type j) const {
             return const_iterator2 (*this, i, j);
-        }   
+        }
 
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -3216,7 +3216,7 @@ namespace boost { namespace numeric { namespace ublas {
         reference insert_element (size_type i, size_type j, const_reference t) {
             return (at_element (i, j) = t);
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -3247,14 +3247,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        c_matrix &operator = (const matrix_expression<AE> &ae) { 
+        c_matrix &operator = (const matrix_expression<AE> &ae) {
             self_type temporary (ae);
             return assign_temporary (temporary);
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        c_matrix &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign<scalar_assign> (*this, ae); 
+        c_matrix &assign (const matrix_expression<AE> &ae) {
+            matrix_assign<scalar_assign> (*this, ae);
             return *this;
         }
         template<class AE>
@@ -3271,8 +3271,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        c_matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign<scalar_plus_assign> (*this, ae); 
+        c_matrix &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign<scalar_plus_assign> (*this, ae);
             return *this;
         }
         template<class AE>
@@ -3289,8 +3289,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        c_matrix &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign<scalar_minus_assign> (*this, ae); 
+        c_matrix &minus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign<scalar_minus_assign> (*this, ae);
             return *this;
         }
         template<class AT>

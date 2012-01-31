@@ -1,6 +1,6 @@
 /* {{{ Copyright etc. */
 
-/*  fsl_boxplot - 
+/*  fsl_boxplot -
 
     Christian Beckmann, FMRIB Image Analysis Group
 
@@ -9,20 +9,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -70,13 +70,13 @@
 
 /* }}} */
 /* {{{ defines, includes and typedefs */
- 
+
 #include "libvis/miscplot.h"
 #include "miscmaths/miscmaths.h"
 #include "miscmaths/miscprob.h"
 #include "utils/options.h"
 #include <vector>
- 
+
 using namespace MISCPLOT;
 using namespace MISCMATHS;
 using namespace Utilities;
@@ -103,7 +103,7 @@ Option< std::vector<string> > inname(string("-i,--in"), std::vector<string>(),
 		  true, requires_argument);
 Option<string> outname(string("-o,--out"), string(""),
 		  string("output filename for the PNG file"),
-		  true, requires_argument);  
+		  true, requires_argument);
 Option<string> ptitle(string("-t,--title"), string(""),
 		  string("plot title"),
 		  false, requires_argument);
@@ -128,9 +128,9 @@ int nonoptarg;
 ////////////////////////////////////////////////////////////////////////////
 
 // Local functions
-int do_work(int argc, char* argv[]) 
+int do_work(int argc, char* argv[])
 {
-  
+
   int num_bp = 0;
 
   miscplot newplot;
@@ -152,7 +152,7 @@ int do_work(int argc, char* argv[])
       if (!fs) {
 	cerr << "Could not open file " << labelname.value() << endl;
       }
-      
+
       int ctr=1;
       string cline;
       while(!fs.eof())
@@ -162,7 +162,7 @@ int do_work(int argc, char* argv[])
 	    newplot.add_label(cline);
 	    ctr++;
 	  }
-	} 
+	}
       fs.close();
     }
 
@@ -171,7 +171,7 @@ int do_work(int argc, char* argv[])
 
   newplot.set_minmaxscale(1.05);
   newplot.add_xlabel(xtitle.value());
-  newplot.add_ylabel(ytitle.value()); 
+  newplot.add_ylabel(ytitle.value());
   newplot.boxplot(outname.value(),ptitle.value());
   return 0;
 }
@@ -196,25 +196,25 @@ int main(int argc,char *argv[])
     options.add(ytitle);
     options.add(ysize);
     options.add(xsize);
- 
-    
+
+
     options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
   return do_work(argc,argv);

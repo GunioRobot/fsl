@@ -62,7 +62,7 @@ Atlas::Handle LabelAtlas::create(const ImageStore& i, const ImageStore& s, const
 Atlas::Atlas(const ImageStore& i, const ImageStore& s, const string& n):
   m_impl(new Implementation(i, s, n))
 {
-  m_impl->m_image =   i.at(0);  
+  m_impl->m_image =   i.at(0);
   m_impl->m_summary = s.at(0);
 }
 
@@ -157,7 +157,7 @@ string LabelAtlas::getDescription(float x, float y, float z) const
   info->mmToVoxCoord(x, y, z, tx, ty, tz);
 
   Volume::Handle vol(m_impl->m_image->getVolume(0));
-  int index( info->isValidCoordinate(tx, ty, tz) ? 
+  int index( info->isValidCoordinate(tx, ty, tz) ?
 	     int(vol->value(tx, ty, tz)) : 0 );
 
   text << "<b>" << m_impl->m_name << "</b><br>";
@@ -175,7 +175,7 @@ unsigned int LabelAtlas::getProbability(unsigned int structure, float x, float y
   short tx(0), ty(0), tz(0);
   info->mmToVoxCoord(x, y, z, tx, ty, tz);
   Volume::Handle vol(m_impl->m_image->getVolume(0));
-  return info->isValidCoordinate(tx, ty, tz) ? 
+  return info->isValidCoordinate(tx, ty, tz) ?
     ( (vol->value(tx, ty, tz) == structure) ? 100 : 0 ) : 0;
 }
 
@@ -191,20 +191,20 @@ string ProbabilisticAtlas::getDescription(float x, float y, float z) const
 
   for(int v = 0; v < nvols; ++v) {
     Volume::Handle vol(m_impl->m_image->getVolume(v));
-    int prob( info->isValidCoordinate(tx, ty, tz) ? 
+    int prob( info->isValidCoordinate(tx, ty, tz) ?
 	      int(vol->value(tx, ty, tz)) : 0 );
- 
+
     if( prob > 0 ) {
       Implementation::LabelsConstIterator pos = m_impl->findLabel(v);
       if(pos != m_impl->m_labels.end())
 	labels.insert(make_pair(prob, pos->second));
     }
   }
-  
+
   unsigned int count(0);
 
   ostringstream text;
-  
+
   text << "<b>" << m_impl->m_name << "</b><br>";
 
   for(map<int,string>::reverse_iterator it = labels.rbegin();
@@ -250,7 +250,7 @@ unsigned int ProbabilisticAtlas::getProbability(unsigned int index, float x, flo
   short tx(0), ty(0), tz(0);
   info->mmToVoxCoord(x, y, z, tx, ty, tz);
   Volume::Handle vol(m_impl->m_image->getVolume(index));
-  return info->isValidCoordinate(tx, ty, tz) ? 
+  return info->isValidCoordinate(tx, ty, tz) ?
     int(vol->value(tx, ty, tz)) : 0;
 }
 
@@ -266,16 +266,16 @@ float ProbabilisticAtlas::getAverageProbability(Image::Handle mask, unsigned int
 
   for(short z = 0; z < m->inqZ(); ++z)
     for(short y = 0; y < m->inqY(); ++y)
-      for(short x = 0; x < m->inqX(); ++x) 
+      for(short x = 0; x < m->inqX(); ++x)
 	{
 	  float tx(0), ty(0), tz(0);
 	  short i, j, k;
 
 	  maskinfo->voxToMMCoord(x, y, z, tx, ty, tz);
 	  probinfo->mmToVoxCoord(tx, ty, tz, i, j, k);
-	  
+
 	  float weight(m->value(x, y, z));
-	  
+
 	  total += p->value(i, j, k) * weight;
 	  sum += weight;
 	}
@@ -300,14 +300,14 @@ float LabelAtlas::getAverageProbability(Image::Handle mask, unsigned int index) 
 
   for(short z = 0; z < m->inqZ(); ++z)
     for(short y = 0; y < m->inqY(); ++y)
-      for(short x = 0; x < m->inqX(); ++x) 
+      for(short x = 0; x < m->inqX(); ++x)
 	{
 	  float tx(0), ty(0), tz(0);
 	  short i, j, k;
 
 	  maskinfo->voxToMMCoord(x, y, z, tx, ty, tz);
 	  labelinfo->mmToVoxCoord(tx, ty, tz, i, j, k);
-	  
+
 	  float weight(m->value(x, y, z));
 
 	  total += (l->value(i, j, k) == index ? 100 : 0) * weight;
@@ -330,8 +330,8 @@ AtlasGroup::AtlasGroup()
 
     Preferences p;
     vector<string> atlasdirs(p.inqAtlasPathElements());
- 
-    for(vector<string>::iterator it = atlasdirs.begin(); 
+
+    for(vector<string>::iterator it = atlasdirs.begin();
 	it != atlasdirs.end(); ++it){
       if( FileManager::checkFileExists(*it) ) {
 	vector<string> fv = FileManager::getFilenames(*it, "*.xml");
@@ -357,7 +357,7 @@ Atlas::Handle AtlasGroup::getAtlasByName(const std::string& name)
 {
   Atlas::Handle atlas;
 
-  std::map<std::string, Atlas::Handle>::const_iterator pos = 
+  std::map<std::string, Atlas::Handle>::const_iterator pos =
     m_atlases.find(name);
 
   if(pos != m_atlases.end())
@@ -369,6 +369,6 @@ Atlas::Handle AtlasGroup::getAtlasByName(const std::string& name)
 void AtlasGroup::readAtlas(const std::string& path, const std::string& filename)
 {
   Atlas::Handle atlas(FileManager::readXMLAtlas(path, filename));
-  
+
   m_atlases.insert(make_pair(atlas->inqName(), atlas));
 }

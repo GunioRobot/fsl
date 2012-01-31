@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 	    vector<MVNDist*> vmvnin;
 	    MVNDist::Load(vmvnin,infile,mask);
 
-	    
+
 	    if (ins | write) {
 		/* section to deal with writing to or inserting into an MVN*/
 		SymmetricMatrix mvncov;
@@ -91,29 +91,29 @@ int main(int argc, char** argv)
 		oldsize = mvnin.GetSize();
 
 		if (ins)
-		  { 
+		  {
 		    cout << "Inserting new parameter" << endl;
 		    if (param > oldsize+1) throw Invalid_option("Cannot insert parameter here, not enough parameters in existing MVN");
 		  }
 		else
 		  { if (param > oldsize) throw Invalid_option("Cannot edit this parameter, not enough parameters in existing MVN");}
-		
+
 		MVNDist mvnnew(1);
 		mvnnew.means = 0;
 		SymmetricMatrix covnew(1);
 		covnew(1,1) = 0;
 		mvnnew.SetCovariance(covnew);
 		MVNDist mvnout;
-		
+
 		/* Loop over each enrty in mvnin */
 		for (unsigned v=0;v < vmvnin.size(); v++)
 		  {
 		    mvnin = *vmvnin[v];
-		    
+
 		    if (ins)
 		      { /* insert new parameter */
 			//cout << "Add new parameter" << endl;
-			
+
 			if (param-1 >= 1)
 			  {
 			    MVNDist mvn1(param -1);
@@ -124,28 +124,28 @@ int main(int argc, char** argv)
 			  {
 			    mvnout = mvnnew;
 			  }
-			
+
 			if (oldsize >= param)
 			  {
 			    MVNDist mvn2(oldsize+1-param);
 			    mvn2.CopyFromSubmatrix(mvnin,param,oldsize,0);
 			    mvnout=MVNDist(mvnout,mvn2);
 			  }
-   
+
 			mvncov = mvnout.GetCovariance();
 		      }
 		    else
-		      { 
+		      {
 			mvnout = mvnin;
 			mvncov = mvnin.GetCovariance();
 		      }
-		    
+
 		    /* Set parameters mean value and variance*/
 		    //cout << "Set parameter mean and variance" << endl;
 		    mvnout.means(param) = val;
 		    mvncov(param,param) = var;
 		    mvnout.SetCovariance(mvncov);
-		    
+
 		    vmvnout[v] = new MVNDist(mvnout);
 		  }
 
@@ -184,9 +184,9 @@ int main(int argc, char** argv)
 	      output.set_intent(NIFTI_INTENT_NONE,0,0,0);
 	      save_volume4D(output,outfile);
 	    }
-	      
+
 	    cout << "Done." << endl;
-	    
+
 	    return 0;
 	  }
 	catch (const Invalid_option& e)

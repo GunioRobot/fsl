@@ -14,9 +14,9 @@ href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
 
 <p><b>bedpostx</b> takes about 24 hours to run but will automatically batch if run on an SGE-capable system..
 
-<p>To call the FDT GUI, either run <b>Fdt</b>, or run <b>fsl</b> and press the <b>FDT</b> button.  Use the top left drop down menu to select <b>BEDPOSTX</b>. 
+<p>To call the FDT GUI, either run <b>Fdt</b>, or run <b>fsl</b> and press the <b>FDT</b> button.  Use the top left drop down menu to select <b>BEDPOSTX</b>.
 
-<p> 
+<p>
 <b>Input directory:</b> Use the browse button to select an input directory. That directory must contain the following files:
 <ul>
 <li><b>data</b>: A 4D series of data volumes.  This will include diffusion-weighted volumes and volume(s) with no diffusion weighting.</li>
@@ -26,7 +26,7 @@ href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
 The format is<pre>
 x_1 x_2 x_3 ... x_n
 y_1 y_2 y_3 ... y_n
-z_1 z_2 z_3 ... z_n<br></pre> 
+z_1 z_2 z_3 ... z_n<br></pre>
 Vectors are normalised to unit length within the <b>bedpostx</b> code. For volumes in which there was no diffusion weighting, the entry should still be present, although the
 direction of the vector does not matter!  </li>
 <li><b>bvals</b>: A text file containing a list of bvalues applied during each volume acquisition. The order of entries in this file must match the
@@ -37,7 +37,7 @@ b_1 b_2 b_3 ... b_n<br></pre>
 The order of <b>bvals</b> must match the order of <b>data.</b></li>
 </ul>
 <br><br>
-<i>Tip: Run <b>bedpostx_datacheck</b> in command line to check if your input directory contains the correct files required for <b>bedpostx</b>.</i> 
+<i>Tip: Run <b>bedpostx_datacheck</b> in command line to check if your input directory contains the correct files required for <b>bedpostx</b>.</i>
 <br><br>
 
 
@@ -72,7 +72,7 @@ copied from input directory
 <p><h4>Advanced Options</h4>
 You may change some options before running <b>bedpostx</b>, depending on the questions you want to ask or the quality of your diffusion data. The default values of these parameters are the ones used in the corresponding paper (Behrens et al, NeuroImage 2007, 34:144-55).
 <ul>
-<li><b>Fibres</b>: Number of fibres modelled per voxel. 
+<li><b>Fibres</b>: Number of fibres modelled per voxel.
 <li><b>Weight</b>: Multiplicative factor for the prior on the additional modelled fibres. A smaller factor means more weighting for the additional fibres.
 <li><b>Burnin</b>: Number of iterations before starting the sampling. These might be increased if the data are noisy, and the MCMC needs more iterations to converge.
 </ul>

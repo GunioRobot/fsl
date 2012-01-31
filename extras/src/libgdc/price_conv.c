@@ -1,7 +1,7 @@
 /* GDCHART 0.10.0dev  PRICE_CONV.C  2 Nov 2000 */
 /* Copyright Bruce Verderaime 1998, 1999, 2000 */
 
-/* 
+/*
 *  - price as float to a string (ostensibly for printing)
 */
 
@@ -44,7 +44,7 @@ price_to_str( float	price,
 
 	numr = dec * 256;
 	/* check if we have a perfect fration in 256ths */
-	{	
+	{
 		float	rdec = GET_DEC( numr );
 
 		if( rdec < EPSILON )

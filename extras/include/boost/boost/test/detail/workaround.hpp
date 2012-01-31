@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : contains mics. workarounds 
+//  Description : contains mics. workarounds
 // ***************************************************************************
 
 #ifndef BOOST_TEST_WORKAROUND_HPP_021005GER
@@ -34,7 +34,7 @@ namespace ut_detail {
 #ifdef BOOST_NO_STD_DISTANCE
 template <class T>
 std::ptrdiff_t distance( T const& x_, T const& y_ )
-{ 
+{
     std::ptrdiff_t res = 0;
 
     std::distance( x_, y_, res );
@@ -61,7 +61,7 @@ namespace unit_test_framework = unit_test;
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: workaround.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -72,9 +72,9 @@ void AtlasOptionsDialog::setAtlas(Atlas::Handle atlas)
     m_structureList->insertItem(it->second);
   if( atlas->inqType() != Atlas::Probabilistic ) {
     m_superimpose->setChecked(false);
-    m_superimpose->setEnabled(false);   
+    m_superimpose->setEnabled(false);
   } else {
-    m_superimpose->setEnabled(true);   
+    m_superimpose->setEnabled(true);
   }
 }
 
@@ -101,7 +101,7 @@ void AtlasOptionsDialog::structureSelected(int i)
   if(m_options.locate()) {
     Atlas::Handle atlas( m_atlases->getAtlasByName(m_atlasSelection->currentText()) );
     Image::Handle refimage( m_overlayList->getActiveMetaImage()->getImage() );
-    
+
     m_cursor->setCursor( atlas->getCursor(refimage, m_options.structure()) );
   }
 
@@ -118,7 +118,7 @@ void AtlasOptionsDialog::structureSelected(int i)
     if(m_probImage) {
       m_overlayList->getImageGroup()->remOverlay(m_probImage);
       m_probImage.reset();
-    }      
+    }
   }
 }
 

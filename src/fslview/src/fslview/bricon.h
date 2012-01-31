@@ -17,9 +17,9 @@ class BriConObserver;
 /**
  * @author David Flitney <flitney@fmrib.ox.ac.uk>
  * @date   Thu Jan  2 15:18:22 2003
- * 
+ *
  * @brief  Class for managing brightness and contrast changes
- * 
+ *
  * A BriCon object tracks modifications to the brightness and contrast settings
  * by updating the range of voxel intensities that are displayable. The adjust
  * method can be called for a given image intensity to find the bricon adjusted
@@ -55,8 +55,8 @@ private:
   BriCon(float min, float max);
   BriCon(float origMin, float origMax, float min, float max);
 
-  struct Implementation;  
-  const std::auto_ptr< Implementation > m_impl;  
+  struct Implementation;
+  const std::auto_ptr< Implementation > m_impl;
 };
 
 //! @brief interface for any class wishing to observe BriCon objects

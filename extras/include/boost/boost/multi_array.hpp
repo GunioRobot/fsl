@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -83,7 +83,7 @@ template <>
 struct disable_multi_array_impl_impl<true>
 {
     // forming a pointer to a reference triggers SFINAE
-    typedef int& type; 
+    typedef int& type;
 };
 
 
@@ -139,7 +139,7 @@ public:
   explicit multi_array() :
     super_type((T*)initial_base_,c_storage_order(),
                /*index_bases=*/0, /*extents=*/0) {
-    allocate_space(); 
+    allocate_space();
   }
 
   template <class ExtentList>
@@ -157,7 +157,7 @@ public:
     allocate_space();
   }
 
-    
+
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
                        const general_storage_order<NumDims>& so) :
@@ -216,14 +216,14 @@ public:
   // array_view object.  The following constructors ensure that.
   //
 
-  // Due to limited support for partial template ordering, 
-  // MSVC 6&7 confuse the following with the most basic ExtentList 
+  // Due to limited support for partial template ordering,
+  // MSVC 6&7 confuse the following with the most basic ExtentList
   // constructor.
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
   template <typename OPtr>
   multi_array(const const_multi_array_ref<T,NumDims,OPtr>& rhs,
               const general_storage_order<NumDims>& so = c_storage_order())
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     // Warning! storage order may change, hence the following copy technique.
@@ -234,7 +234,7 @@ public:
   multi_array(const detail::multi_array::
               const_sub_array<T,NumDims,OPtr>& rhs,
               const general_storage_order<NumDims>& so = c_storage_order())
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -245,7 +245,7 @@ public:
   multi_array(const detail::multi_array::
               const_multi_array_view<T,NumDims,OPtr>& rhs,
               const general_storage_order<NumDims>& so = c_storage_order())
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -256,7 +256,7 @@ public:
 
 
   multi_array(const const_multi_array_ref<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     // Warning! storage order may change, hence the following copy technique.
@@ -265,7 +265,7 @@ public:
 
   multi_array(const const_multi_array_ref<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     // Warning! storage order may change, hence the following copy technique.
@@ -274,7 +274,7 @@ public:
 
   multi_array(const detail::multi_array::
               const_sub_array<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -283,7 +283,7 @@ public:
   multi_array(const detail::multi_array::
               const_sub_array<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -292,7 +292,7 @@ public:
 
   multi_array(const detail::multi_array::
               const_multi_array_view<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -301,7 +301,7 @@ public:
   multi_array(const detail::multi_array::
               const_multi_array_view<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -311,7 +311,7 @@ public:
 
   // Thes constructors are necessary because of more exact template matches.
   multi_array(const multi_array_ref<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     // Warning! storage order may change, hence the following copy technique.
@@ -320,7 +320,7 @@ public:
 
   multi_array(const multi_array_ref<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     // Warning! storage order may change, hence the following copy technique.
@@ -330,7 +330,7 @@ public:
 
   multi_array(const detail::multi_array::
               sub_array<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -339,7 +339,7 @@ public:
   multi_array(const detail::multi_array::
               sub_array<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -348,21 +348,21 @@ public:
 
   multi_array(const detail::multi_array::
               multi_array_view<T,NumDims>& rhs)
-    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
+    : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
-    
+
   multi_array(const detail::multi_array::
               multi_array_view<T,NumDims>& rhs,
               const general_storage_order<NumDims>& so)
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+    : super_type(0,so,rhs.index_bases(),rhs.shape())
   {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
-    
+
   // Since assignment is a deep copy, multi_array_ref
   // contains all the necessary code.
   template <typename ConstMultiArray>

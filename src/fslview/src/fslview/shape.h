@@ -31,11 +31,11 @@ struct Location
 class Voxel
 {
 
-public:   
-  typedef boost::shared_ptr< Voxel > Handle;  
+public:
+  typedef boost::shared_ptr< Voxel > Handle;
 
-  static Handle create(int, int, int, float);   
-  
+  static Handle create(int, int, int, float);
+
   virtual ~Voxel(){};
   int inqX() const {return m_x;}
   int inqY() const {return m_y;}
@@ -45,7 +45,7 @@ public:
   void setDrawn(bool state) {m_drawn = state;}
   bool inqDrawn() const {return m_drawn;}
 
-private: 
+private:
   Voxel(int, int, int, float);
   int m_x;
   int m_y;
@@ -61,19 +61,19 @@ public:
   typedef boost::shared_ptr< Shape > Handle;
   static Handle create(QPainter * p, Volume::Handle, int orient, int slice);
   virtual  ~Shape();
-  void draw();   
+  void draw();
   void commit();
   void list();
   bool empty(){return m_commitVoxels.empty();}
   int  size() {return m_commitVoxels.size();}
-  Shape::Handle getBuffer();  
+  Shape::Handle getBuffer();
   Shape::Handle getFloodBuffer();
   virtual void addVertex(int, int, int, float);
   virtual void floodFill(int, int, float newVal);
 
 private:
   Shape() {}
-  Shape(QPainter* p, Volume::Handle vol, int orient, int slice);  
+  Shape(QPainter* p, Volume::Handle vol, int orient, int slice);
   virtual void addSurroundingVoxels(Voxel::Handle &,int size, float val);
   void push_check(Voxel::Handle & pix, int size);
   virtual float readVoxel(int, int, int);
@@ -110,4 +110,4 @@ class Cube: public Shape
 private:
   virtual void addSurroundingVoxels(Voxel::Handle &,int size, float val);
 };
-#endif 
+#endif

@@ -4,7 +4,7 @@
  *	Resources needed by menus.
  *
  *	This file also contains the icons 'SICN' used by the menu code
- *	in menu items.  
+ *	in menu items.
  *
  * Copyright (c) 1997 Sun Microsystems, Inc.
  *

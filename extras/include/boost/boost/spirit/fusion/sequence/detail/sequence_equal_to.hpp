@@ -31,7 +31,7 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef typename meta::end<Seq1>::type end1_type;
         typedef typename meta::end<Seq2>::type end2_type;
-        
+
         template <typename I1, typename I2>
         static bool
         call(I1 const& a, I2 const& b)

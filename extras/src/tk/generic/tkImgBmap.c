@@ -1,4 +1,4 @@
-/* 
+/*
  * tkImgBmap.c --
  *
  *	This procedure implements images of type "bitmap" for Tk.
@@ -86,7 +86,7 @@ static int		ImgBmapCreate _ANSI_ARGS_((Tcl_Interp *interp,
 static ClientData	ImgBmapGet _ANSI_ARGS_((Tk_Window tkwin,
 			    ClientData clientData));
 static void		ImgBmapDisplay _ANSI_ARGS_((ClientData clientData,
-			    Display *display, Drawable drawable, 
+			    Display *display, Drawable drawable,
 			    int imageX, int imageY, int width, int height,
 			    int drawableX, int drawableY));
 static void		ImgBmapFree _ANSI_ARGS_((ClientData clientData,
@@ -532,7 +532,7 @@ TkGetBitmapData(interp, string, fileName, widthPtr, heightPtr,
 	    }
 	    return NULL;
 	}
-	
+
         if (Tcl_SetChannelOption(interp, pi.chan, "-translation", "binary")
 		!= TCL_OK) {
             return NULL;
@@ -663,7 +663,7 @@ TkGetBitmapData(interp, string, fileName, widthPtr, heightPtr,
     if (interp != NULL) {
 	Tcl_SetResult(interp, "format error in bitmap data", TCL_STATIC);
     }
-    
+
     errorCleanup:
     if (data != NULL) {
 	ckfree(data);
@@ -1154,7 +1154,7 @@ ImgBmapPsImagemask(interp, width, height, data)
     int i, j, nBytePerRow;
     char buffer[200];
 
-    /* 
+    /*
      * The bit order of bitmaps in Tk is the opposite of the bit order that
      * postscript uses.  (In Tk, the least significant bit is on the right
      * side of the bitmap and in postscript the least significant bit is shown

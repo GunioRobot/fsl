@@ -96,7 +96,7 @@ retrieve_framework_parameter( const_string parameter_name, int* argc, char** arg
         OUTPUT_FORMAT     , "--output_format",
         DETECT_MEM_LEAK   , "--detect_memory_leak",
         RANDOM_SEED       , "--random",
-        
+
         ""
     );
 
@@ -197,7 +197,7 @@ init( int* argc, char** argv )
 
     const_string rs_str = retrieve_framework_parameter( RANDOM_SEED, argc, argv );
     s_random_seed       = rs_str.is_empty() ? 0 : lexical_cast<unsigned int>( rs_str );
-    
+
     s_log_level         = log_level_name[retrieve_framework_parameter( LOG_LEVEL, argc, argv )];
     s_report_level      = report_level_name[retrieve_framework_parameter( REPORT_LEVEL, argc, argv )];
 

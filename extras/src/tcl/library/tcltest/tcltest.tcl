@@ -349,7 +349,7 @@ namespace eval tcltest {
 	# This is very subtle and tricky, so let me try to explain.
 	# (Hopefully this longer comment will be clear when I come
 	# back in a few months, unlike its predecessor :) )
-	# 
+	#
 	# The [outputChannel] command (and underlying variable) have to
 	# be kept in sync with the [configure -outfile] configuration
 	# option ( and underlying variable Option(-outfile) ).  This is
@@ -364,12 +364,12 @@ namespace eval tcltest {
 	# configuration options to parse the command line option the first
 	# time they are read.  These traces are cancelled whenever the
 	# program itself calls [configure].
-	# 
+	#
 	# OK, then so to support tcltest 1 compatibility, it seems we want
 	# to get the return from [outputFile] to trigger the read traces,
 	# just in case.
 	#
-	# BUT!  A little known feature of Tcl variable traces is that 
+	# BUT!  A little known feature of Tcl variable traces is that
 	# traces are disabled during the handling of other traces.  So,
 	# if we trigger read traces on Option(-outfile) and that triggers
 	# command line parsing which turns around and sets an initial
@@ -605,7 +605,7 @@ namespace eval tcltest {
 	set code [catch {eval Configure $args} msg]
 	return -code $code $msg
     }
-    
+
     proc AcceptVerbose { level } {
 	set level [AcceptList $level]
 	if {[llength $level] == 1} {
@@ -683,7 +683,7 @@ namespace eval tcltest {
     # some additional output regarding operations of the test harness.
     # The tcltest package currently implements only up to debug level 3.
     Option -debug 0 {
-	Internal debug level 
+	Internal debug level
     } AcceptInteger debug
 
     proc SetSelectedConstraints args {
@@ -711,7 +711,7 @@ namespace eval tcltest {
     }
     Option -limitconstraints false {
 	whether to run only tests with the constraints
-    } AcceptBoolean limitConstraints 
+    } AcceptBoolean limitConstraints
     trace variable Option(-limitconstraints) w \
 	    [namespace code {ClearUnselectedConstraints ;#}]
 
@@ -724,7 +724,7 @@ namespace eval tcltest {
     # Default is to run each test file in a separate process
     Option -singleproc 0 {
 	whether to run all tests in one process
-    } AcceptBoolean singleProcess 
+    } AcceptBoolean singleProcess
 
     proc AcceptTemporaryDirectory { directory } {
 	set directory [AcceptAbsolutePath $directory]
@@ -935,7 +935,7 @@ proc tcltest::testConstraint {constraint {value ""}} {
     if {[catch {expr {$value && $value}} msg]} {
 	return -code error $msg
     }
-    if {[limitConstraints] 
+    if {[limitConstraints]
 	    && [lsearch -exact $Option(-constraints) $constraint] == -1} {
 	set value 0
     }
@@ -1236,7 +1236,7 @@ proc tcltest::DefineConstraintInitializers {} {
     # setting files into nonblocking mode.
 
     ConstraintInitializer nonBlockFiles {
-	    set code [expr {[catch {set f [open defs r]}] 
+	    set code [expr {[catch {set f [open defs r]}]
 		    || [catch {fconfigure $f -blocking off}]}]
 	    catch {close $f}
 	    set code
@@ -1250,7 +1250,7 @@ proc tcltest::DefineConstraintInitializers {} {
     # (Mark Diekhans).
 
     ConstraintInitializer asyncPipeClose {expr {
-	    !([string equal unix $::tcl_platform(platform)] 
+	    !([string equal unix $::tcl_platform(platform)]
 	    && ([catch {exec uname -X | fgrep {Release = 3.2v}}] == 0))}}
 
     # Test to see if we have a broken version of sprintf with respect
@@ -1940,7 +1940,7 @@ proc tcltest::test {name description args} {
 	return
     }
 
-    # Save information about the core file.  
+    # Save information about the core file.
     if {[preserveCore]} {
 	if {[file exists [file join [workingDirectory] core]]} {
 	    set coreModTime [file mtime [file join [workingDirectory] core]]
@@ -2002,7 +2002,7 @@ proc tcltest::test {name description args} {
 	    } else {
 		set coreFailure 1
 	    }
-	
+
 	    if {([preserveCore] > 1) && ($coreFailure)} {
 		append coreMsg "\nMoving file to:\
 		    [file join [temporaryDirectory] core-$name]"
@@ -2086,7 +2086,7 @@ proc tcltest::test {name description args} {
     variable currentFailure true
     if {![IsVerbose body]} {
 	set body ""
-    }	
+    }
     puts [outputChannel] "\n==== $name\
 	    [string trim $description] FAILED"
     if {[string length $body]} {
@@ -2242,7 +2242,7 @@ proc tcltest::Skipped {name constraints} {
 		}
 	    }
 	}
-	
+
 	if {!$doTest} {
 	    if {[IsVerbose skip]} {
 		puts [outputChannel] "++++ $name SKIPPED: $constraints"
@@ -2788,9 +2788,9 @@ proc tcltest::runAllTests { {shell ""} } {
 	set dir [file tail $directory]
 	puts [outputChannel] [string repeat ~ 44]
 	puts [outputChannel] "$dir test began at [eval $timeCmd]\n"
-	
+
 	uplevel 1 [list ::source [file join $directory all.tcl]]
-	
+
 	set endTime [eval $timeCmd]
 	puts [outputChannel] "\n$dir test ended at $endTime"
 	puts [outputChannel] ""
@@ -2979,7 +2979,7 @@ proc tcltest::removeFile {name {directory ""}} {
 	DebugDo 1 {
 	    Warn "removeFile removing \"$fullName\":\n  not created by makeFile"
 	}
-    } 
+    }
     if {![file isfile $fullName]} {
 	DebugDo 1 {
 	    Warn "removeFile removing \"$fullName\":\n  not a file"
@@ -3050,7 +3050,7 @@ proc tcltest::removeDirectory {name {directory ""}} {
 	    Warn "removeDirectory removing \"$fullName\":\n  not created\
 		    by makeDirectory"
 	}
-    } 
+    }
     if {![file isdirectory $fullName]} {
 	DebugDo 1 {
 	    Warn "removeDirectory removing \"$fullName\":\n  not a directory"
@@ -3245,7 +3245,7 @@ proc tcltest::threadReap {} {
 	testthread errorproc ThreadError
 	return [llength [testthread names]]
     } elseif {[info commands thread::id] != {}} {
-	
+
 	# Thread extension
 
 	thread::errorproc ThreadNullError

@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     melodic.cc - main program file
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -118,16 +118,16 @@ int main(int argc, char *argv[]){
   try{
     // Setup logging:
     Log& logger  =   LogSingleton::getInstance();
- 
+
     // parse command line - will output arguments to logfile
     MelodicOptions& opts = MelodicOptions::getInstance();
-    opts.parse_command_line(argc, argv, logger, Melodic::version); 
+    opts.parse_command_line(argc, argv, logger, Melodic::version);
 
     //set up data object
     MelodicData melodat(opts,logger);
-    //set up report object     
+    //set up report object
     MelodicReport report(melodat,opts,logger);
-   
+
     if (opts.filtermode || opts.filtermix.value().length()>0){
       if(opts.filtermode){ // just filter out some noise from a previous run
     		melodat.setup();
@@ -152,7 +152,7 @@ int main(int argc, char *argv[]){
 				//do ICA
 				MelodicICA icaobj(melodat,opts,logger,report);
 				icaobj.perf_ica(melodat.get_white()*melodat.get_Data());
-    
+
 				no_conv = icaobj.no_convergence;
 
 				opts.maxNumItt.set_T(500);
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]){
 	  			if(no_conv){
 	    			retry++;
 	    			opts.approach.set_T("defl");
-	    			message(endl << "Restarting MELODIC using deflation approach" 
+	    			message(endl << "Restarting MELODIC using deflation approach"
 		    			<< endl << endl);
 	  			}else{
 	    			leaveloop = true;
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
 				}else{
 	  			if(no_conv){
 	    			retry++;
-	    			if(opts.pca_dim.value()-retry*opts.retrystep > 
+	    			if(opts.pca_dim.value()-retry*opts.retrystep >
 	       			0.1*melodat.data_dim()){
 	      				opts.pca_dim.set_T(opts.pca_dim.value()-retry*opts.retrystep);
 	    				}
@@ -177,27 +177,27 @@ int main(int argc, char *argv[]){
 	      			if(opts.pca_dim.value()+retry*opts.retrystep <  melodat.data_dim()){
 								opts.pca_dim.set_T(opts.pca_dim.value()+retry*opts.retrystep);
 	      			}else{
-								leaveloop = true; //stupid, but break does not compile 
+								leaveloop = true; //stupid, but break does not compile
 		                  						//on all platforms
 	      			}
 	    			}
 	    			if(!leaveloop){
 					if(opts.paradigmfname.value().length()>0)
 						opts.pca_dim.set_T(std::max(opts.pca_dim.value(),melodat.get_param().Ncols()+3*opts.retrystep-1));
-	      			message(endl << "Restarting MELODIC using -d " 
-		      			<< opts.pca_dim.value() 
+	      			message(endl << "Restarting MELODIC using -d "
+		      			<< opts.pca_dim.value()
 		      			<< endl << endl);
 	          }
 	  			}
 				}
-      } while (no_conv && retry<opts.maxRestart.value() && !leaveloop);	
-     
+      } while (no_conv && retry<opts.maxRestart.value() && !leaveloop);
+
       if(!no_conv){
 				//save raw IC results
 				melodat.save();
 				Matrix pmaps;//(melodat.get_IC());
 				Matrix mmres;
-			
+
 				message("Creating report index page ...");
 				if( bool(opts.genreport.value()) ){
 		  		report.analysistxt();
@@ -205,14 +205,14 @@ int main(int argc, char *argv[]){
 						report.Smode_rep();
 		  		report.PPCA_rep();
 				}
-					
+
 				message("done"<< endl <<endl);
 				if(opts.perf_mm.value())
 	  			mmres = mmall(logger,opts,melodat,report,pmaps);
 				else{
 	  			if( bool(opts.genreport.value()) ){
-	    			message(endl 
-		    			<< "Creating web report in " << report.getDir() 
+	    			message(endl
+		    			<< "Creating web report in " << report.getDir()
 		    			<< " " << endl);
 	    			for(int ctr=1; ctr<= melodat.get_IC().Nrows(); ctr++){
 	      			string prefix = "IC_"+num2str(ctr);
@@ -222,15 +222,15 @@ int main(int argc, char *argv[]){
 
 	    			message(endl << endl <<
 		    			" To view the output report point your web browser at " <<
-		    			report.getDir() + "/00index.html" << endl<< endl); 
+		    			report.getDir() + "/00index.html" << endl<< endl);
 	  			}
-				}		 
+				}
 
 				message("finished!" << endl << endl);
-      } 
-	  else { 
+      }
+	  else {
 				message(endl <<"No convergence -- giving up " << endl << endl);
-      }	     
+      }
     }
   }
   catch(Exception e) {
@@ -251,7 +251,7 @@ void mmonly(Log& logger, MelodicOptions& opts,
   Matrix fmixMatrix;
   volume<float> Mask;
   volume<float> Mean;
-  
+
   {
     volume4D<float> RawData;
     message("Reading data file " << opts.inputfname.value().at(0) << "  ... ");
@@ -272,23 +272,23 @@ void mmonly(Log& logger, MelodicOptions& opts,
     ICs = RawIC.matrix(Mask);
     if(ICs.Nrows()>1){
       Matrix DStDev=stdev(ICs);
-      
+
       volume4D<float> tmpMask;
       tmpMask.setmatrix(DStDev,Mask);
-      
+
       float tMmax;
       volume<float> tmpMask2;
       tmpMask2 = tmpMask[0];
       tMmax = tmpMask2.max();
       double st_mean = DStDev.Sum()/DStDev.Ncols();
       double st_std  = stdev(DStDev.t()).AsScalar();
-      
+
       Mask = binarise(tmpMask2,(float) max((float) st_mean-3*st_std,
-					   (float) 0.01*st_mean),tMmax);  
+					   (float) 0.01*st_mean),tMmax);
       ICs = RawIC.matrix(Mask);
     }
     else{
-      Mask = binarise(RawIC[0],float(0.001),float(RawIC[0].max())) 
+      Mask = binarise(RawIC[0],float(0.001),float(RawIC[0].max()))
 	+ binarise(RawIC[0],float(RawIC[0].min()),float(-0.001));
       ICs = RawIC.matrix(Mask);
     }
@@ -330,7 +330,7 @@ void mmonly(Log& logger, MelodicOptions& opts,
   melodat.set_unmix(fmixMatrix);
   //  melodat.sort();
   //  write_ascii_matrix("ICs",ICs);
-  
+
   Matrix mmres;
   Matrix pmaps;//(ICs);
  if(opts.perf_mm.value())
@@ -338,27 +338,27 @@ void mmonly(Log& logger, MelodicOptions& opts,
 	}
 
 Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicReport& report, Matrix& pmaps){
-  
+
   Matrix mmpars(5*melodat.get_IC().Nrows(),5);
   mmpars = 0;
   Log stats;
-  
-  if(opts.output_MMstats.value()){  
+
+  if(opts.output_MMstats.value()){
     stats.makeDir(logger.appendDir("stats"),"stats.log");
   }
 
-  message(endl 
-	  << "Running Mixture Modelling on Z-transformed IC maps ..." 
+  message(endl
+	  << "Running Mixture Modelling on Z-transformed IC maps ..."
 	  << endl);
-  
+
   ColumnVector diagvals;
   diagvals=pow(diag(melodat.get_unmix()*melodat.get_unmix().t()),-0.5);
-  
+
   for(int ctr=1; ctr <= melodat.get_IC().Nrows(); ctr++){
     MelGMix mixmod(opts, logger);
-    
+
     message("  IC map " << ctr << " ... "<< endl;);
-    
+
     Matrix ICmap;
 		dbgmsg(" stdNoisei max : "<< melodat.get_stdNoisei().Maximum() <<" "<< melodat.get_stdNoisei().Minimum() << endl);
 
@@ -376,7 +376,7 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
 		dbgmsg(" ICmap max : "<< mean(ICmap,2).AsScalar() << endl);
     mixmod.setup( ICmap,
 		  wherelog,ctr,
-		  melodat.get_mask(), 
+		  melodat.get_mask(),
 		  melodat.get_mean(),3);
     message("   calculating mixture-model fit "<<endl);
     mixmod.fit("GGM");
@@ -389,7 +389,7 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
 
     //re-scale spatial maps to mean 0 for nht
     if(opts.rescale_nht.value()){
-      message("   re-scaling spatial maps ... "<< endl); 
+      message("   re-scaling spatial maps ... "<< endl);
       RowVector tmp;
       tmp = mixmod.get_means();
       float dmean  = tmp(1);
@@ -406,13 +406,13 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
       mixmod.set_data(tmp);
       //if(opts.varnorm.value()&&melodat.get_stdNoisei().Storage()>0)
       //	tmp = SP(tmp,pow(diagvals(ctr)*melodat.get_stdNoisei(),-1));
-     
+
       melodat.set_IC(ctr,tmp);
     }
 
     if(opts.smooth_probmap.value()<0.0){
       message("   smoothing probability map ... "<< endl);
-      mixmod.smooth_probs(0.5*(std::min(std::min(std::abs(melodat.get_mean().xdim()),std::abs(melodat.get_mean().ydim())),std::abs(melodat.get_mean().zdim()))));  
+      mixmod.smooth_probs(0.5*(std::min(std::min(std::abs(melodat.get_mean().xdim()),std::abs(melodat.get_mean().ydim())),std::abs(melodat.get_mean().zdim()))));
     }
 
     if(opts.smooth_probmap.value()>0.0){
@@ -421,13 +421,13 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
     }
 
     message("   thresholding ... "<< endl);
-    mixmod.threshold(opts.mmthresh.value());  
+    mixmod.threshold(opts.mmthresh.value());
 
     Matrix tmp;
     tmp=(mixmod.get_threshmaps().Row(1));
     float posint = SP(tmp,gt(tmp,zeros(1,tmp.Ncols()))).Sum();
     float negint = -SP(tmp,lt(tmp,zeros(1,tmp.Ncols()))).Sum();
-    
+
     if((posint<0.01)&&(negint<0.01)){
       mixmod.clear_infstr();
       mixmod.threshold("0.05n "+opts.mmthresh.value());
@@ -439,7 +439,7 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
       //  mixmod.flipres(ctr);
     }
 
-    //save mixture model stats 
+    //save mixture model stats
     if(opts.output_MMstats.value()){
       stats << " IC " << num2str(ctr) << " " << mixmod.get_type() << endl
 	    << " Means :  " << mixmod.get_means() << endl
@@ -463,40 +463,40 @@ Matrix mmall(Log& logger, MelodicOptions& opts,MelodicData& melodat, MelodicRepo
 		//     tmp =  mixmod.get_vars();
 		//     for(int ctr2=1;ctr2<=mixmod.get_vars().Ncols();ctr2++)
 		//       mmpars((ctr-1)*5+3,ctr2) = tmp(1,ctr2);
-		//     tmp =  mixmod.get_pi(); 
+		//     tmp =  mixmod.get_pi();
 		//     for(int ctr2=1;ctr2<=mixmod.get_pi().Ncols();ctr2++)
 		//       mmpars((ctr-1)*5+4,ctr2) = tmp(1,ctr2);
 		//     mmpars((ctr-1)*5+5,1) = mixmod.get_offset();
 
     if( bool(opts.genreport.value()) ){
       message("   creating report page ... ");
-      report.IC_rep(mixmod,ctr,melodat.get_IC().Nrows(),melodat.get_ICstats());	    
+      report.IC_rep(mixmod,ctr,melodat.get_IC().Nrows(),melodat.get_ICstats());
       message("   done" << endl);
     }
   }
-  
+
   if(!opts.filtermode&&opts.filtermix.value().length()==0){
     //now safe new data
     //    bool what = opts.verbose.value();
     //opts.verbose.set_T(false);
-    
+
     melodat.set_after_mm(TRUE);
     melodat.save();
     //opts.verbose.set_T(what);
 
     //if(melodat.get_IC().Storage()>0){
-    //  volume4D<float> tempVol;	
+    //  volume4D<float> tempVol;
     //  tempVol.setmatrix(melodat.get_IC(),melodat.get_mask());
-    //  save_volume4D(tempVol,logger.appendDir(opts.outputfname.value() 
+    //  save_volume4D(tempVol,logger.appendDir(opts.outputfname.value()
   	//					     + "_IC"),melodat.tempInfo);
 	  //  message(endl<< endl << " Saving " << logger.appendDir(opts.outputfname.value() + "_IC") <<endl);
    	//}
 
    if( bool(opts.genreport.value()) ){
-    message(endl << endl << 
+    message(endl << endl <<
 	    " To view the output report point your web browser at " <<
-	    report.getDir() + "/00index.html" << endl << endl); 
-   }   
+	    report.getDir() + "/00index.html" << endl << endl);
+   }
   }
   return mmpars;
   }

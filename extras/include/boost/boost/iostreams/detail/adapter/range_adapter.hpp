@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                             // min.
 #include <cassert>
@@ -91,8 +91,8 @@ inline std::streamsize range_adapter<Mode, Range>::write
 template<typename Mode, typename Range>
 std::streampos range_adapter<Mode, Range>::seek
     (stream_offset off, BOOST_IOS::seekdir way)
-{ 
-    impl::seek(first_, cur_, last_, off, way); 
+{
+    impl::seek(first_, cur_, last_, off, way);
     return offset_to_position(cur_ - first_);
 }
 
@@ -126,7 +126,7 @@ struct range_adapter_impl<std::random_access_iterator_tag> {
     static std::streamsize read
         (Iter& cur, Iter& last, Ch* s,std::streamsize n)
     {
-        std::streamsize result = 
+        std::streamsize result =
             (std::min)(static_cast<std::streamsize>(last - cur), n);
         if (result)
             std::copy(cur, cur + result, s);
@@ -142,7 +142,7 @@ struct range_adapter_impl<std::random_access_iterator_tag> {
             (std::min)(static_cast<std::streamsize>(last - cur), n);
         std::copy(s, s + count, cur);
         cur += count;
-        if (count < n) 
+        if (count < n)
             throw write_area_exhausted();
         return n;
     }

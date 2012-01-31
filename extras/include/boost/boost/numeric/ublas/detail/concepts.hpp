@@ -83,7 +83,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T = typename std::iterator_traits<I>::value_type>
     struct BidirectionalIteratorConcept {
         typedef I iterator_type;
-        
+
         typedef typename std::iterator_traits<I>::iterator_category iterator_category;
         typedef typename std::iterator_traits<I>::difference_type difference_type;
         typedef typename std::iterator_traits<I>::value_type value_type;

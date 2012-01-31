@@ -16,7 +16,7 @@
 // IN GENERAL, ARCHIVES CREATED WITH THIS CLASS WILL NOT BE READABLE
 // ON PLATFORM APART FROM THE ONE THEY ARE CREATED ON
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -32,8 +32,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::memcpy; 
+namespace std{
+    using ::memcpy;
     using ::size_t;
 } // namespace std
 #endif
@@ -48,7 +48,7 @@ namespace std{
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 /////////////////////////////////////////////////////////////////////////////
@@ -92,9 +92,9 @@ public:
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
-    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     basic_binary_iprimitive(IStream  &is_, bool no_codecvt);
-    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     ~basic_binary_iprimitive();
 public:
     void
@@ -104,7 +104,7 @@ public:
 template<class Archive, class IStream>
 inline void
 basic_binary_iprimitive<Archive, IStream>::load_binary(
-    void *address, 
+    void *address,
     std::size_t count
 ){
     assert(
@@ -115,7 +115,7 @@ basic_binary_iprimitive<Archive, IStream>::load_binary(
     // note: an optimizer should eliminate the following for char files
     std::size_t s = count / sizeof(BOOST_DEDUCED_TYPENAME IStream::char_type);
     is.read(
-        static_cast<BOOST_DEDUCED_TYPENAME IStream::char_type *>(address), 
+        static_cast<BOOST_DEDUCED_TYPENAME IStream::char_type *>(address),
         s
     );
     // note: an optimizer should eliminate the following for char files

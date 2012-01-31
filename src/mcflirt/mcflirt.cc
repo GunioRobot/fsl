@@ -1,26 +1,26 @@
 /*  mcflirt.cc - Motion Correction FLIRT
-    
+
     Peter Bannister, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2001 University of Oxford  */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -112,8 +112,8 @@ int vector2affine(const ColumnVector& inparams, int n, const ColumnVector& centr
     params(3) = tmp_params(1); params(4) = tmp_params(2); params(5) = tmp_params(3);
   } else
     params = inparams;
-  
-  switch (Globaloptions::getInstance().anglerep) 
+
+  switch (Globaloptions::getInstance().anglerep)
     {
     case Euler:
       compose_aff(params,n,centre,aff,construct_rotmat_euler);
@@ -126,7 +126,7 @@ int vector2affine(const ColumnVector& inparams, int n, const ColumnVector& centr
       return -1;
     }
   return 0;
-}  
+}
 
 
 int vector2affine(const ColumnVector& params, int n, Matrix& aff)
@@ -138,7 +138,7 @@ int vector2affine(const ColumnVector& params, int n, Matrix& aff)
 int affmat2vector(const Matrix& aff, int n, const ColumnVector& centre,
  		  ColumnVector& params)
 {
-  switch (Globaloptions::getInstance().anglerep) 
+  switch (Globaloptions::getInstance().anglerep)
     {
     case Euler:
       decompose_aff(params,aff,centre,rotmat2euler);
@@ -193,13 +193,13 @@ int affmat2vector(const Matrix& aff, int n, ColumnVector& params)
 
 
 
- void powell_opt(ColumnVector& params, int no_params, ColumnVector& param_tol, 
- 		int &no_its, float &fans, float (*costfunc)(const ColumnVector&), 
+ void powell_opt(ColumnVector& params, int no_params, ColumnVector& param_tol,
+ 		int &no_its, float &fans, float (*costfunc)(const ColumnVector&),
  		int itmax)
  {
    // sets up the initial parameters and calls the powell optimisation routine
    if (params.MaximumAbsoluteValue() < 0.001)  initialise_params(params);
-   { 
+   {
      Matrix affmattst(4,4);
      vector2affine(params,no_params,affmattst);
    }
@@ -207,7 +207,7 @@ int affmat2vector(const Matrix& aff, int n, ColumnVector& params)
    set_param_basis(parambasis,no_params);
    float ptol[13];
    for (int i=1; i<=no_params; i++) { ptol[i] = param_tol(i); }
-  
+
    // the optimisation call
    //powell(params,parambasis,no_params,ptol,no_its, fans, costfunc, itmax);
    fans = MISCMATHS::optimise(params,no_params,param_tol,costfunc,no_its,itmax,
@@ -215,13 +215,13 @@ int affmat2vector(const Matrix& aff, int n, ColumnVector& params)
  }
 
 
-void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol, 
- 	      int &no_its, float &fans, float (*costfunc)(const ColumnVector &), 
+void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
+ 	      int &no_its, float &fans, float (*costfunc)(const ColumnVector &),
  	      int itmax=4)
 {
   ColumnVector sub_params(3);
   ColumnVector sub_tols(3);
-  
+
   if ((bool)(Globaloptions::getInstance().twodcorrect)){
     no_params = 3;
     sub_params(1) = params(3); sub_params(2) = params(4); sub_params(3) = params(5);
@@ -230,7 +230,7 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
   } else {
     powell_opt(params,no_params,param_tol,no_its,fans,costfunc,itmax);
   }
-  
+
 
   if ((bool)(Globaloptions::getInstance().twodcorrect)){
     no_params = 12;
@@ -239,7 +239,7 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
     params = sub_params;
     //params(3) = sub_params(1); params(4) = sub_params(2); params(5) = sub_params(3);
   }
-  
+
 }
 
  ////////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
    if (globalopts.verbose>=20) {
      cerr << "Cost::affmat = " << endl << affmat << endl;
    }
- 
+
    globalopts.impair->set_costfn(globalopts.maincostfn);
 
    retval = globalopts.impair->cost(affmat);  // breaking here
@@ -276,7 +276,7 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
 
    return retval;
  }
-  
+
 
  //------------------------------------------------------------------------//
 
@@ -292,19 +292,19 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
 
  ////////////////////////////////////////////////////////////////////////////
 
- int optimise_strategy1(Matrix& matresult, float& fans, int input_dof, 
+ int optimise_strategy1(Matrix& matresult, float& fans, int input_dof,
  		       int max_iterations, float new_tolerance)
  {
    Tracer tr("optimise_strategy1");
    // the most basic strategy - just do a single optimisation run at the
    //  specified dof
    int dof=input_dof;
-   if (dof<6) { 
-     cerr << "Erroneous dof " << dof << " : using 6 instead\n"; 
-     dof=6; 
+   if (dof<6) {
+     cerr << "Erroneous dof " << dof << " : using 6 instead\n";
+     dof=6;
    }
    if (dof>12) {
-     cerr << "Erroneous dof " << dof << " : using 12 instead\n"; 
+     cerr << "Erroneous dof " << dof << " : using 12 instead\n";
      dof=12;
    }
 
@@ -313,14 +313,14 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
    Globaloptions::getInstance().no_params = Max(dof, 6);
    set_param_tols(param_tol,12);
    param_tol = param_tol * new_tolerance;
-   
+
    affmat2vector(matresult,dof,params);
    optimise(params,dof,param_tol,no_its,fans,costfn,max_iterations);
    vector2affine(params,dof,matresult);
 
    return no_its;
- 
-}  
+
+}
 
  ////////////////////////////////////////////////////////////////////////////
 
@@ -330,10 +330,10 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
    Tracer tr("usroptimise");
    // OPTIMISE
    int dof = Min(Globaloptions::getInstance().dof,usrdof);
-  
+
    float costval=0.0;
    optimise_strategy1(matresult,costval,dof,usrmaxitn, new_tolerance);
- 
+
    // matresult is the desired solution (cost is costval)
  }
 
@@ -341,7 +341,7 @@ void optimise(ColumnVector& params, int no_params, ColumnVector& param_tol,
 void usrsetscale(volume<float>& newrefvol, volume<float>& newtestvol, int usrscale) {
    Tracer tr("usrsetscale");
    Costfn *globalpair=0;
-   if (Globaloptions::getInstance().impair != 0) 
+   if (Globaloptions::getInstance().impair != 0)
      delete Globaloptions::getInstance().impair;
    globalpair = new Costfn(newrefvol,newtestvol);
    globalpair->set_no_bins(Globaloptions::getInstance().no_bins/usrscale);
@@ -353,7 +353,7 @@ void usrsetscale(volume<float>& newrefvol, volume<float>& newtestvol, int usrsca
  void g_smooth(volume<float>& testvol) {
    Tracer tr("g_smooth");
    volume<float> result;
-   
+
    result = testvol;
    volume<float> g_kern = gaussian_kernel3D(1.933, 8);
    testvol.setextrapolationmethod(mirror);
@@ -382,11 +382,11 @@ void double_end_slices(volume<float>& testvol)
   testvol = newtestvol;
 }
 
-void fix2D(volume<float>& vol) 
+void fix2D(volume<float>& vol)
 {
   float fov = Globaloptions::getInstance().fov; // make a globaloption
-  
-  if ( (vol.zsize()<3) || (vol.zsize()*vol.zdim()<fov) || (bool)(Globaloptions::getInstance().twodcorrect)) {     
+
+  if ( (vol.zsize()<3) || (vol.zsize()*vol.zdim()<fov) || (bool)(Globaloptions::getInstance().twodcorrect)) {
     Globaloptions::getInstance().twodcorrect = 1;
     Globaloptions::getInstance().smoothsize = 0.1;
 
@@ -407,10 +407,10 @@ void fix2D(volume<float>& vol)
 
    refvol = reference_volume;
    fix2D(refvol);
-   
+
    if ((!Globaloptions::getInstance(). no_reporting) && (Globaloptions::getInstance().twodcorrect == 1))
      cerr << "restricting optimization to R_z, T_x and T_y" << endl;
-    
+
    /*
      not the most elegant logic but if we come into this loop with i = -2, and with stop = -2
      (i.e. stage 4 + mean_reg), it crashes as it passes stopping cond. and tries to correct timeseries[-2]
@@ -418,18 +418,18 @@ void fix2D(volume<float>& vol)
 
    if ((i == -2) && (stop == -1))
      stop = -2;
-   
+
    while ( i != (direction == 1 ? globalopts. no_volumes : stop)) {
-     if (!globalopts. no_reporting) 
+     if (!globalopts. no_reporting)
        cerr << "[" << i << "]";
      testvol = timeseries[i];
-     
+
      if (globalopts. edgeflag){
-       if (!globalopts. no_reporting) 
+       if (!globalopts. no_reporting)
 	 cerr <<"Calculating contour image for volume [" << i << "]" << endl;
-       fixed_edge_detect(testvol, 15000);  
+       fixed_edge_detect(testvol, 15000);
      } else if (globalopts. gdtflag){
-       if (!globalopts. no_reporting) 
+       if (!globalopts. no_reporting)
 	 cerr <<"Calculating gradient image for volume [" << i << "]" << endl;
        volume<float> gtempvol = testvol;
        gtempvol = gradient(testvol);
@@ -443,14 +443,14 @@ void fix2D(volume<float>& vol)
      usroptimise(offsettrans,globalopts.dof,1,new_tolerance);
 
      finalmat = offsettrans * globalopts.initmat;
-    
+
      mat_array_out[i] = finalmat;
      i += direction;
-     
+
      if ((scaling == 8.0) && (i < globalopts. no_volumes - 1) && (i > -1) && (globalopts. fudgeflag == 0))
        // if first scaling level, use previous result to initialise next transformation search
        mat_array_in[i] = finalmat;
-    
+
    }
  }
 
@@ -474,14 +474,14 @@ void fix2D(volume<float>& vol)
 
    ofstream outfile, rmsrelfile, rmsabsfile, rmsrelmeanfile, rmsabsmeanfile;
 
-   param_vec = 0;   
+   param_vec = 0;
    center(1) = 0.5*(refvol.xsize() - 1.0)*refvol.xdim();
    center(2) = 0.5*(refvol.ysize() - 1.0)*refvol.ydim();
    center(3) = 0.5*(refvol.zsize() - 1.0)*refvol.zdim();
-   
+
    if (globalopts. plotflag)
      outfile. open(filename.c_str());
-     
+
    string pathname = globalopts. inputfname;
    find_pathname(pathname);
    if (globalopts. matflag || globalopts. rmsrelflag || globalopts. rmsabsflag) {
@@ -500,9 +500,9 @@ void fix2D(volume<float>& vol)
      }
      rmsrelmeanfile. open(rms_rel_mean_filename.c_str());
      rmsrelmeanfile << (rms_rel_mean/ (globalopts. no_volumes - 1)) << endl;
-   }  
-   
-   
+   }
+
+
    if (globalopts. rmsabsflag){
      rmsabsfile. open(rms_abs_filename.c_str());
      for (int i = 0; i < globalopts. no_volumes; i++){
@@ -513,7 +513,7 @@ void fix2D(volume<float>& vol)
      rmsabsmeanfile. open(rms_abs_mean_filename.c_str());
      rmsabsmeanfile << (rms_abs_mean/ globalopts. no_volumes) << endl;
    }
- 
+
    for (int i = 0; i < globalopts. no_volumes; i++){
      if (i == globalopts. refnum){
        ostringstream osc;
@@ -527,11 +527,11 @@ void fix2D(volume<float>& vol)
 	   cerr << "error: unable to open output file!\n";
 	   exit(0);
 	 }
-	 outfile << param_vec(1) << "  " << param_vec(2) << "  " 
-		 << param_vec(3) << "  " << param_vec(4) << "  " 
+	 outfile << param_vec(1) << "  " << param_vec(2) << "  "
+		 << param_vec(3) << "  " << param_vec(4) << "  "
 		 << param_vec(5) << "  " << param_vec(6) << "  " << endl;
        }
-       
+
      } else {
        ostringstream oscP;
        oscP << "MAT_" << setw(4) << setfill('0') << i;
@@ -543,8 +543,8 @@ void fix2D(volume<float>& vol)
 	   cerr << "error: unable to open output file!\n";
 	   exit(0);
 	 }
-	 outfile << param_vec(1) << "  " << param_vec(2) << "  " 
-		 << param_vec(3) << "  " << param_vec(4) << "  " 
+	 outfile << param_vec(1) << "  " << param_vec(2) << "  "
+		 << param_vec(3) << "  " << param_vec(4) << "  "
 		 << param_vec(5) << "  " << param_vec(6) << "  " << endl;
        }
      }
@@ -554,7 +554,7 @@ void fix2D(volume<float>& vol)
  void eval_costs(volume<float>& refvol, volume4D<float>& timeseries, vector<Matrix>& mat_array, float current_scale) {
    Globaloptions& globalopts = Globaloptions::getInstance();
    ofstream outfile;
-   
+
    outfile. open("/usr/people/prb/medx/motion/releasetest/costs.txt");
    for (int i=0; i < globalopts. no_volumes; i++){
      usrsetscale(refvol, timeseries[i], (int)current_scale);
@@ -562,12 +562,12 @@ void fix2D(volume<float>& vol)
    }
  }
 
- 
+
  void run_and_save_stats(const volume4D<float>& timeseries) {
    Tracer tr("run_and_save_stats");
    Globaloptions& globalopts = Globaloptions::getInstance();
    volume<float> variancevol, meanvol, sigmavol;
-  
+
    int vmax = timeseries.tsize();
 
    meanvol = timeseries[0];
@@ -582,34 +582,34 @@ void fix2D(volume<float>& vol)
    for (int x=0; x< timeseries[0].xsize(); x++) {
      for (int y=0; y< timeseries[0].ysize(); y++) {
        for (int z=1; z< (timeseries[0].zsize()-1); z++) {
-	 for (int i=0; i< vmax; i++) 
+	 for (int i=0; i< vmax; i++)
 	   meanvol(x,y,z) += timeseries[i](x,y,z);
 	 meanvol(x,y,z) = meanvol(x,y,z)/(float)vmax;
        }
      }
    }
-   
+
    // change limits on z index for end slice exclusion
    for (int x=0; x< timeseries[0].xsize(); x++) {
      for (int y=0; y< timeseries[0].ysize(); y++) {
        for (int z=1; z< (timeseries[0].zsize()-1); z++) {
-	 for (int i=0; i< vmax; i++) 
+	 for (int i=0; i< vmax; i++)
 	   variancevol(x,y,z) += (timeseries[i](x,y,z) - meanvol(x,y,z))*(timeseries[i](x,y,z) - meanvol(x,y,z));
 	 variancevol(x,y,z) = variancevol(x,y,z)/((float)(vmax - 1));
 	 sigmavol(x,y,z) = sqrt(variancevol(x,y,z));
        }
      }
    }
-   
-   if (!globalopts. no_reporting) 
+
+   if (!globalopts. no_reporting)
      cerr <<"Saving mean volume... " << endl;
    save_volume(meanvol, globalopts.outputfname+"_meanvol");
-  
-   if (!globalopts. no_reporting) 
+
+   if (!globalopts. no_reporting)
      cerr <<"Saving variance volume... " << endl;
    save_volume(variancevol, globalopts.outputfname+"_variance");
 
-   if (!globalopts. no_reporting) 
+   if (!globalopts. no_reporting)
      cerr <<"Saving standard deviation volume... " << endl;
    save_volume(sigmavol, globalopts.outputfname+"_sigma");
  }
@@ -635,7 +635,7 @@ int main (int argc,char** argv)
   read_volume4D(timeseries, globalopts.inputfname);
   globalopts.datatype = dtype(globalopts.inputfname);
   globalopts. no_volumes = timeseries.tsize();
-  
+
   for (int vol_count = 0; vol_count < globalopts. no_volumes; vol_count++) {
     mat_array0.push_back(IdentityMatrix(4));
     mat_array1.push_back(IdentityMatrix(4));
@@ -648,7 +648,7 @@ int main (int argc,char** argv)
     if (globalopts. no_stages>=1) {
       if (!globalopts. no_reporting) cerr <<"first iteration - 8mm scaling, set tolerance" << endl;
       new_tolerance=8*0.2*0.5; current_scale=8.0; mat_index[0] = (int) (new_tolerance*current_scale);
-      
+
       if (mean_its == 0) {
         if (globalopts. reffileflag) {
           read_volume(extrefvol, globalopts. reffilename);
@@ -660,38 +660,38 @@ int main (int argc,char** argv)
       } else { //2nd pass - generate mean volume, clear mat_array0
 	meanvol = timeseries[0];
 	meanvol = 0.0;
-	for (int i = 0; i < globalopts. no_volumes; i++){	  
+	for (int i = 0; i < globalopts. no_volumes; i++){
 	  testvol = timeseries[i];
 	  timeseries[i].setextrapolationmethod(extraslice);
 	  timeseries[i].setinterpolationmethod(trilinear);
 	  affine_transform(timeseries[i],testvol,mat_array1[i],1.0);
 	  meanvol = meanvol + testvol;
 	}
-	
+
 	for (int x = 0; x < meanvol. xsize(); x++)
 	  for (int y = 0; y < meanvol. ysize(); y++)
 	    for (int z = 0; z < meanvol. zsize(); z++)
-	      meanvol(x,y,z) = meanvol(x,y,z)/(float)globalopts. no_volumes;    
-	
+	      meanvol(x,y,z) = meanvol(x,y,z)/(float)globalopts. no_volumes;
+
 	save_volume(meanvol, globalopts.outputfname + "_mean_reg");
-	
+
 	anisorefvol = meanvol;
 	globalopts. refnum = -1; // to ensure stopping condition in ::correct subroutine
 	for (int i=0; i < globalopts. no_volumes; i++)
 	  mat_array0[i] = IdentityMatrix(4);
 	mean_cond = 1;
       }
-      
-      if (!globalopts. no_reporting)  cerr <<"Rescaling reference volume [" << globalopts. refnum << "] to " 
+
+      if (!globalopts. no_reporting)  cerr <<"Rescaling reference volume [" << globalopts. refnum << "] to "
 					   << current_scale << " mm pixels" << endl;
-	
+
       refvol = isotropic_resample(anisorefvol,current_scale);
-      
+
       fix2D(refvol);
 
       if (globalopts. edgeflag){
 	if (!globalopts. no_reporting) cerr <<"Calculating contour image for reference volume" << endl;
-	fixed_edge_detect(refvol, 15000);  
+	fixed_edge_detect(refvol, 15000);
 	if (!globalopts. no_reporting) cerr <<"Saving contour reference volume... " << endl;
 	save_volume(refvol, "crefvol_"+globalopts.outputfname);
       } else if (globalopts. gdtflag){
@@ -700,7 +700,7 @@ int main (int argc,char** argv)
 	if (!globalopts. no_reporting) cerr <<"Saving gradient reference volume... " << endl;
 	save_volume(refvol, "grefvol_"+globalopts.outputfname);
       }
-      
+
       globalopts.initmat=IdentityMatrix(globalopts.initmat.Nrows());
       if (!globalopts. no_reporting) cerr <<"Registering volumes ... ";
       correct(1, refvol, timeseries, current_scale, new_tolerance, mat_array0, mat_array1, mean_cond);
@@ -708,18 +708,18 @@ int main (int argc,char** argv)
     } else {
       for (int i=0; i<globalopts.no_volumes; i++)  mat_array1[i] = mat_array0[i];
     }
-    
+
     if (globalopts. no_stages>=2) {
       if (!globalopts. no_reporting) cerr <<endl << "second iteration - drop to 4mm scaling" << endl;
       new_tolerance=4*0.2; current_scale=4.0; mat_index[1] = (int) (new_tolerance*current_scale);
-      
-      if (!globalopts. no_reporting) cerr <<"Rescaling reference volume [" << globalopts. refnum << "] to " 
+
+      if (!globalopts. no_reporting) cerr <<"Rescaling reference volume [" << globalopts. refnum << "] to "
 					  << current_scale << " mm pixels" << endl;
       refvol = isotropic_resample(anisorefvol,current_scale);
-      
+
       if (globalopts. edgeflag){
 	if (!globalopts. no_reporting) cerr <<"Calculating contour image for reference volume" << endl;
-	fixed_edge_detect(refvol, 15000);  
+	fixed_edge_detect(refvol, 15000);
 	if (!globalopts. no_reporting) cerr <<"Saving contour reference volume... " << endl;
 	save_volume(refvol, "crefvol_"+globalopts.outputfname);
       } else if (globalopts. gdtflag){
@@ -729,19 +729,19 @@ int main (int argc,char** argv)
 	if (!globalopts. no_reporting) cerr <<"Saving gradient reference volume... " << endl;
 	save_volume(refvol, "grefvol_"+globalopts.outputfname);
       }
-      
+
       if (!globalopts. no_reporting) cerr <<"Registering volumes ... ";
       correct(1, refvol, timeseries, current_scale, new_tolerance, mat_array1, mat_array2, mean_cond);
       correct(-1, refvol, timeseries, current_scale, new_tolerance, mat_array1, mat_array2, mean_cond);
     } else {
       for (int i=0; i<globalopts.no_volumes; i++)  mat_array2[i] = mat_array1[i];
     }
-    
-    
+
+
     if (globalopts. no_stages>=3) {
       if (!globalopts. no_reporting) cerr << endl << "third iteration - 4mm scaling, eighth tolerance" << endl;
       new_tolerance = 0.1; mat_index[2] = (int) (new_tolerance*current_scale);
-      
+
       if (!globalopts. no_reporting) cerr <<"Registering volumes ... ";
       correct(1, refvol, timeseries, current_scale, new_tolerance, mat_array2, mat_array1, mean_cond);
       correct(-1, refvol, timeseries, current_scale, new_tolerance, mat_array2, mat_array1, mean_cond);
@@ -749,12 +749,12 @@ int main (int argc,char** argv)
       for (int i=0; i<globalopts.no_volumes; i++)  mat_array1[i] = mat_array2[i];
     }
   }
-      
+
   mean_cond = 0;
 
   if (globalopts. no_stages>=4) {
     if (!globalopts. no_reporting) cerr << endl << "fourth iteration - 4mm scaling, eighth tolerance, sinc interpolation" << endl;
-    
+
     if (!globalopts. no_reporting) cerr <<"Registering volumes ... ";
     if (globalopts.maincostfn == NormCorr)  globalopts.maincostfn = NormCorrSinc;
     correct(1, refvol, timeseries, current_scale, new_tolerance, mat_array1, mat_array0, mean_cond);

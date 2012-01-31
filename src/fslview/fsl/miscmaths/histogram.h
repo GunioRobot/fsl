@@ -21,7 +21,7 @@
 using namespace NEWMAT;
 
 namespace MISCMATHS {
- 
+
   class Histogram
     {
     public:
@@ -36,19 +36,19 @@ namespace MISCMATHS {
       Histogram(const ColumnVector& psourceData, int numBins)
 	: sourceData(psourceData), calcRange(true), bins(numBins){}
 
-      Histogram(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) 
+      Histogram(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins)
 	: sourceData(psourceData), calcRange(false), histMin(phistMin), histMax(phistMax), bins(numBins){}
-      
-      void set(const ColumnVector& psourceData, int numBins) {	
+
+      void set(const ColumnVector& psourceData, int numBins) {
 	sourceData=psourceData; calcRange=true; bins=numBins;
       }
 
-      void set(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) {	
+      void set(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) {
 	sourceData=psourceData; calcRange=false; histMin=phistMin; histMax=phistMax; bins=numBins;
       }
 
       void generate();
-      
+
       float getHistMin() const {return histMin;}
       float getHistMax() const {return histMax;}
       void setHistMax(float phistMax) {histMax = phistMax;}
@@ -89,7 +89,7 @@ namespace MISCMATHS {
       float binwidth=(histMax-histMin)/bins;
       return Max(1, Min((int)((((float)bins)*((float)(value-(histMin-binwidth))))/((float)(histMax-histMin))),bins));
     }
-  
+
   inline float Histogram::getValue(int bin) const
     {
       return (bin*(histMax-histMin))/(float)bins + histMin;

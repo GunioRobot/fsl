@@ -5,12 +5,12 @@ PROJNAME = first
 
 USRINCFLAGS = -I${INC_NEWMAT}
 
-USRLDFLAGS = -L${LIB_NEWMAT} 
+USRLDFLAGS = -L${LIB_NEWMAT}
 
 
-LIBS= -lshapeModel -lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz 
+LIBS= -lshapeModel -lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz
 
-FMBLIBS= -lnewimage -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz 
+FMBLIBS= -lnewimage -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz
 
 XFILES= first first_utils first_mult_bcorr
 

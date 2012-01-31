@@ -23,49 +23,49 @@ namespace boost
 {
 
     template
-    < 
-        class T, 
+    <
+        class T,
         class CloneAllocator = heap_clone_allocator,
         class Allocator      = std::allocator<void*>
     >
-    class ptr_list : public 
-        ptr_sequence_adapter< T, 
-                              std::list<void*,Allocator>, 
+    class ptr_list : public
+        ptr_sequence_adapter< T,
+                              std::list<void*,Allocator>,
                               CloneAllocator >
     {
-        typedef    ptr_sequence_adapter< T, 
-                                         std::list<void*,Allocator>, 
+        typedef    ptr_sequence_adapter< T,
+                                         std::list<void*,Allocator>,
                                          CloneAllocator >
             base_class;
 
         typedef ptr_list<T,CloneAllocator,Allocator> this_type;
-        
+
     public:
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
+        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list,
                                                           base_class,
                                                           this_type );
-        
+
     public:
         using base_class::merge;
-        
-        void merge( ptr_list& x )                                 
+
+        void merge( ptr_list& x )
         {
             merge( x, std::less<T>() );
         }
 
-        template< typename Compare > 
-        void merge( ptr_list& x, Compare comp )                   
+        template< typename Compare >
+        void merge( ptr_list& x, Compare comp )
         {
             this->c_private().merge( x.c_private(), void_ptr_indirect_fun<Compare,T>( comp ) );
         }
 
-        void sort()                                                    
-        { 
-            sort( std::less<T>() ); 
+        void sort()
+        {
+            sort( std::less<T>() );
         };
 
-        template< typename Compare > 
-        void sort( Compare comp )                             
+        template< typename Compare >
+        void sort( Compare comp )
         {
             this->c_private().sort( void_ptr_indirect_fun<Compare,T>( comp ) );
         }
@@ -80,7 +80,7 @@ namespace boost
     {
         return r.clone().release();
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // swap
 

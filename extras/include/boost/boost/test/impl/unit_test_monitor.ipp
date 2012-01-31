@@ -35,9 +35,9 @@ namespace unit_test {
 namespace {
 struct zero_return_wrapper {
     explicit zero_return_wrapper( callback0<> const& f ) : m_f( f ) {}
-    
+
     int operator()() { m_f(); return 0; }
-    
+
     callback0<> const& m_f;
 };
 

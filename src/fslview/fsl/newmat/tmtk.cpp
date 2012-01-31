@@ -55,7 +55,7 @@ void trymatk()
    A1.CleanUp(); B1.CleanUp();
 
    cout << "LowerTriangularMatrix\n";
-   LowerTriangularMatrix A2(35), B2(35); 
+   LowerTriangularMatrix A2(35), B2(35);
    for (i=0; i<35; i++) for (j=0; j<=i; j++)
       { A2[i][j] = i+100*j; B2(i+1,j+1) = i+100*j; }
    X = A2 - B2; Print(X); Y = X;

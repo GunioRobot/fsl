@@ -34,7 +34,7 @@ namespace grammars {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Encapsulation of the grammar for command line driven predefined macros.
-struct predefined_macros_grammar : 
+struct predefined_macros_grammar :
     public boost::spirit::grammar<predefined_macros_grammar>
 {
     template <typename ScannerT>
@@ -45,13 +45,13 @@ struct predefined_macros_grammar :
 
         rule_t plain_define, macro_definition, macro_parameters;
 
-        definition(predefined_macros_grammar const &self) 
+        definition(predefined_macros_grammar const &self)
         {
         // import the spirit and cpplexer namespaces here
             using namespace boost::spirit;
             using namespace boost::wave;
             using namespace boost::wave::util;
-            
+
         // save the rule id's for later use
             self.rule_ids.plain_define_id = plain_define.id().to_long();
             self.rule_ids.macro_parameters_id = macro_parameters.id().to_long();
@@ -70,7 +70,7 @@ struct predefined_macros_grammar :
             plain_define
                 =   (   ch_p(T_IDENTIFIER)
                     |   pattern_p(KeywordTokenType, TokenTypeMask)
-                    |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                    |   pattern_p(OperatorTokenType|AltExtTokenType,
                             ExtTokenTypeMask)   // and, bit_and etc.
                     )
                     >>  !macro_parameters
@@ -84,12 +84,12 @@ struct predefined_macros_grammar :
                        !list_p(
                             (   ch_p(T_IDENTIFIER)
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
-                            |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                            |   pattern_p(OperatorTokenType|AltExtTokenType,
                                     ExtTokenTypeMask)   // and, bit_and etc.
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             |   ch_p(T_ELLIPSIS)
 #endif
-                            ), 
+                            ),
                             no_node_d
                             [
                                 *ch_p(T_SPACE) >> ch_p(T_COMMA) >> *ch_p(T_SPACE)
@@ -116,12 +116,12 @@ struct predefined_macros_grammar :
     };
 
     predefined_macros_grammar_rule_ids &rule_ids;
-    
-    predefined_macros_grammar(predefined_macros_grammar_rule_ids &rule_ids_) 
+
+    predefined_macros_grammar(predefined_macros_grammar_rule_ids &rule_ids_)
     :   rule_ids(rule_ids_)
-    { 
-        BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, 
-            "predefined_macros_grammar", TRACE_PREDEF_MACROS_GRAMMAR); 
+    {
+        BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this,
+            "predefined_macros_grammar", TRACE_PREDEF_MACROS_GRAMMAR);
     }
 
 };
@@ -130,21 +130,21 @@ struct predefined_macros_grammar :
 #undef TRACE_PREDEF_MACROS_GRAMMAR
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
-//  The following parse function is defined here, to allow the separation of 
-//  the compilation of the cpp_predefined_macros_grammar from the function 
+//
+//  The following parse function is defined here, to allow the separation of
+//  the compilation of the cpp_predefined_macros_grammar from the function
 //  using it.
-//  
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 #define BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE
 #else
 #define BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE inline
-#endif 
+#endif
 
 template <typename LexIteratorT>
-BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE 
+BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE
 boost::spirit::tree_parse_info<LexIteratorT>
 predefined_macros_grammar_gen<LexIteratorT>::parse_predefined_macro (
     LexIteratorT const &first, LexIteratorT const &last)

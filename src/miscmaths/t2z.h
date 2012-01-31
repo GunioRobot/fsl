@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -68,7 +68,7 @@
 
 #if !defined(__t2z_h)
 #define __t2z_h
-  
+
 #include <iostream>
 #include <fstream>
 #include "newmatap.h"
@@ -84,10 +84,10 @@ namespace MISCMATHS {
     public:
       static T2z& getInstance();
       ~T2z() { delete t2z; }
-      
+
       float convert(float t, int dof);
       float converttologp(float t, int dof);
-   
+
       static void ComputePs(const ColumnVector& p_vars, const ColumnVector& p_cbs, int p_dof, ColumnVector& p_ps);
       static void ComputeZStats(const ColumnVector& p_vars, const ColumnVector& p_cbs, int p_dof, ColumnVector& p_zs);
       static void ComputeZStats(const ColumnVector& p_vars, const ColumnVector& p_cbs, const ColumnVector& p_dof, ColumnVector& p_zs);
@@ -95,10 +95,10 @@ namespace MISCMATHS {
     private:
       T2z() : Base2z()
 	{}
-      
+
       const T2z& operator=(T2z&);
       T2z(T2z&);
-      
+
       bool issmalllogp(float logp);
       bool islarget(float t, int dof, float &logp);
       float larget2logp(float t, int dof);
@@ -106,11 +106,11 @@ namespace MISCMATHS {
       static T2z* t2z;
 
     };
- 
+
   inline T2z& T2z::getInstance(){
     if(t2z == NULL)
       t2z = new T2z();
-  
+
     return *t2z;
   }
 
@@ -121,13 +121,13 @@ namespace MISCMATHS {
     public:
       static Z2t& getInstance();
       ~Z2t() { delete z2t; }
-      
+
       float convert(float t, int dof);
 
     private:
       Z2t()
 	{}
-      
+
       const Z2t& operator=(Z2t&);
       Z2t(Z2t&);
 
@@ -138,7 +138,7 @@ namespace MISCMATHS {
   inline Z2t& Z2t::getInstance(){
     if(z2t == NULL)
       z2t = new Z2t();
-  
+
     return *z2t;
   }
 

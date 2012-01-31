@@ -36,7 +36,7 @@ using namespace FNIRT;
 int main(int   argc,
          char  *argv[])
 {
-  // Parse command line and return object that we can 
+  // Parse command line and return object that we can
   // later ask what the user wants us to do.
   boost::shared_ptr<fnirt_clp> clp;
   try {
@@ -44,7 +44,7 @@ int main(int   argc,
   }
   catch (const std::exception& error) {
     cerr << "Error occured when parsing the command line" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -57,7 +57,7 @@ int main(int   argc,
   }
   catch (const std::exception& error) {
     cerr << "Error occurred when reading --ref or --obj file" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -65,10 +65,10 @@ int main(int   argc,
   if (trying_to_register_to_self(clp->Ref(),*ref,clp->Obj(),*obj,clp->Affine())) {
     try {
       write_self_results(*clp,*ref);
-    } 
+    }
     catch(const std::exception& error) {
       cerr << "Error occurred when writing results of registration to self" << endl;
-      cerr << "Exception thrown with message: " << error.what() << endl; 
+      cerr << "Exception thrown with message: " << error.what() << endl;
     }
     if (clp->Verbose()) cerr << "Input to fnirt was two identical images. Result is unity transform" << endl;
     exit(EXIT_SUCCESS);  // Sort of
@@ -86,7 +86,7 @@ int main(int   argc,
 
     // Normalise ref global mean to 100
     double refmean = spmlike_mean(*ref);
-    (*ref) *= (100.0/refmean);     
+    (*ref) *= (100.0/refmean);
 
     // Create objmask as a combination of explicit and implicit masks.
     boost::shared_ptr<volume<char> > objmask;
@@ -95,7 +95,7 @@ int main(int   argc,
 
     // Normalise obj to global mean 100
     objmean = spmlike_mean(*obj);
-    (*obj) *= (100.0/objmean);          
+    (*obj) *= (100.0/objmean);
 
     // Initialise the field that describes the warps.
     std::vector<boost::shared_ptr<basisfield> >    field = init_warpfield(*clp);
@@ -142,7 +142,7 @@ int main(int   argc,
   }
   catch (const std::exception& error) {
     cerr << "Error occurred when preparing to fnirt" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -158,7 +158,7 @@ int main(int   argc,
   }
   catch (const std::exception& error) {
     cerr << "Error occured during estimation at first level of subsampling" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -173,7 +173,7 @@ int main(int   argc,
         boost::shared_ptr<volume<char> > refmask;
         if (clp->UseRefMask(ssl)) refmask = make_mask(clp->RefMask(),InclusiveMask,*ref,clp->UseImplicitRefMask(),clp->ImplicitRefValue());
         else refmask = make_mask(clp->RefMask(),IgnoreMask,*ref,clp->UseImplicitRefMask(),clp->ImplicitRefValue());
-        if (refmask) cf->SetRefMask(*refmask);      
+        if (refmask) cf->SetRefMask(*refmask);
       }
       if (clp->UseObjMask(ssl) != clp->UseObjMask(ssl-1)) {
         boost::shared_ptr<volume<char> > objmask;
@@ -210,13 +210,13 @@ int main(int   argc,
       }
     }
 
-    // If we stopped short of full resolution, 
+    // If we stopped short of full resolution,
     // up-sample field to full resolution.
     if (clp->SubSampling(clp->NoLevels()) > 1) cf->SubsampleRef(1);
   }
   catch (const std::exception& error) {
     cerr << "Error occured during estimation at subsampling level > 1" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -232,15 +232,15 @@ int main(int   argc,
     if (clp->ObjOutFname().length()) {
       if (clp->ObjFWHM(clp->NoLevels())!=0.0) cf->SmoothObj(0.0);          // "Un-smooth" it
       cf->IntensityScaleObj(objmean/100.0);                                // "Un-scale" it
-      cf->SaveRobj(clp->ObjOutFname());                                  
+      cf->SaveRobj(clp->ObjOutFname());
     }
   }
   catch(const std::exception& error) {
     cerr << "Error occured while writing output from fnirt" << endl;
-    cerr << "Exception thrown with message: " << error.what() << endl; 
+    cerr << "Exception thrown with message: " << error.what() << endl;
     exit(EXIT_FAILURE);
   }
 
   exit(EXIT_SUCCESS);  // R.I.P.
 }
-    
+

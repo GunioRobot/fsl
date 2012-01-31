@@ -9,22 +9,22 @@
 # include <boost/detail/workaround.hpp>
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
 #  include <boost/type_traits/is_enum.hpp>
-# endif 
-namespace boost { namespace python { namespace detail { 
+# endif
+namespace boost { namespace python { namespace detail {
 
 template <
     bool array
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
   , bool enum_  // vc7 has a problem destroying enums
-# endif 
+# endif
     > struct value_destroyer;
-    
+
 template <>
 struct value_destroyer<
     false
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
   , false
-# endif 
+# endif
     >
 {
     template <class T>
@@ -39,7 +39,7 @@ struct value_destroyer<
     true
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
   , false
-# endif 
+# endif
     >
 {
     template <class A, class T>
@@ -51,11 +51,11 @@ struct value_destroyer<
                 boost::is_array<T>::value
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
               , boost::is_enum<T>::value
-# endif 
+# endif
             >::execute(p);
         }
     }
-    
+
     template <class T>
     static void execute(T const volatile* p)
     {
@@ -81,7 +81,7 @@ struct value_destroyer<false,true>
     {
     }
 };
-# endif 
+# endif
 template <class T>
 inline void destroy_referent_impl(void* p, T& (*)())
 {
@@ -91,7 +91,7 @@ inline void destroy_referent_impl(void* p, T& (*)())
          (boost::is_array<T>::value)
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
        , (boost::is_enum<T>::value)
-# endif 
+# endif
     >::execute((const volatile T*)p);
 }
 

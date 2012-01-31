@@ -156,7 +156,7 @@ test cmdMZ-4.10 {Tcl_SplitObjCmd: basic split commands} {
         foreach f [split {]\n} {}] {
             append x $f
         }
-        return $x	
+        return $x
     }
     foo
 } {]\n}

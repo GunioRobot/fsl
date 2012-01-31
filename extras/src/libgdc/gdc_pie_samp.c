@@ -19,7 +19,7 @@ main( int argc, char *argv[] )
 						   "IBM",
 						   "SGI",
 						   "SUN\nSPARC",
-						   "other" }; 
+						   "other" };
 	/* values to chart */
 	float		 p[] = { 12.5,
 						 20.1,
@@ -55,7 +55,7 @@ main( int argc, char *argv[] )
 	GDCPIE_explode   = expl;			/* default: NULL - no explosion */
 	GDCPIE_Color     = clr;
 	GDCPIE_BGColor   = 0xFFFFFFL;
-	/*	GDCPIE_EdgeColor = 0x000000L;		   default is GDCPIE_NOCOLOR */ 
+	/*	GDCPIE_EdgeColor = 0x000000L;		   default is GDCPIE_NOCOLOR */
 										/* for no edging */
 	GDCPIE_missing   = missing;			/* default: NULL - none missing */
 

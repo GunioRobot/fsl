@@ -66,12 +66,12 @@ for projname in $PROJECTS; do
 	  if [ -x fslconfig ] ; then
 	    ./fslconfig ;
 	  fi
-	  if ${MAKE} -k ${MAKEOPTIONS} ; then 
+	  if ${MAKE} -k ${MAKEOPTIONS} ; then
 	    if ${MAKE} install ; then
 	      installok=true;
 	      # Clean up after ourselves
 	      ${MAKE} distclean ;
-	    else 
+	    else
 	      installok=false;
 	      errorinstall="$errorinstall $projname" ; export errorinstall ;
             fi

@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // dinkumware.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -35,7 +35,7 @@ namespace std {
 
 // define i/o operators for 64 bit integers
 template<class CharType>
-basic_ostream<CharType> & 
+basic_ostream<CharType> &
 operator<<(basic_ostream<CharType> & os, boost::uint64_t t){
     // octal rendering of 64 bit number would be 22 octets + eos
     CharType d[23];
@@ -72,7 +72,7 @@ operator<<(basic_ostream<CharType> & os, boost::uint64_t t){
 }
 
 template<class CharType>
-basic_ostream<CharType> & 
+basic_ostream<CharType> &
 operator<<(basic_ostream<CharType> &os, boost::int64_t t){
     if(0 <= t){
         os << static_cast<boost::uint64_t>(t);
@@ -85,7 +85,7 @@ operator<<(basic_ostream<CharType> &os, boost::int64_t t){
 }
 
 template<class CharType>
-basic_istream<CharType> & 
+basic_istream<CharType> &
 operator>>(basic_istream<CharType> &is, boost::int64_t & t){
     CharType d;
     do{
@@ -125,7 +125,7 @@ operator>>(basic_istream<CharType> &is, boost::int64_t & t){
 }
 
 template<class CharType>
-basic_istream<CharType> & 
+basic_istream<CharType> &
 operator>>(basic_istream<CharType> &is, boost::uint64_t & t){
     boost::int64_t it;
     is >> it;
@@ -136,7 +136,7 @@ operator>>(basic_istream<CharType> &is, boost::uint64_t & t){
 //#endif
 
 template<>
-class back_insert_iterator<basic_string<char> > : public 
+class back_insert_iterator<basic_string<char> > : public
     iterator<output_iterator_tag, char>
 {
 public:
@@ -146,7 +146,7 @@ public:
     explicit back_insert_iterator(container_type & s)
         : container(& s)
     {}    // construct with container
-    
+
     back_insert_iterator<container_type> & operator=(
         container_type::const_reference Val_
     ){    // push value into container
@@ -173,7 +173,7 @@ protected:
     container_type *container;    // pointer to container
 };
 
-template<char> 
+template<char>
 inline back_insert_iterator<basic_string<char> > back_inserter(
     basic_string<char> & s
 ){
@@ -181,7 +181,7 @@ inline back_insert_iterator<basic_string<char> > back_inserter(
 }
 
 template<>
-class back_insert_iterator<basic_string<wchar_t> > : public 
+class back_insert_iterator<basic_string<wchar_t> > : public
     iterator<output_iterator_tag, wchar_t>
 {
 public:
@@ -191,7 +191,7 @@ public:
     explicit back_insert_iterator(container_type & s)
         : container(& s)
     {}    // construct with container
-    
+
     back_insert_iterator<container_type> & operator=(
         container_type::const_reference Val_
     ){    // push value into container
@@ -218,7 +218,7 @@ protected:
     container_type *container;    // pointer to container
 };
 
-template<wchar_t> 
+template<wchar_t>
 inline back_insert_iterator<basic_string<wchar_t> > back_inserter(
     basic_string<wchar_t> & s
 ){

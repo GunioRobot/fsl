@@ -24,7 +24,7 @@ class Cursor
 public:
   typedef boost::shared_ptr< Cursor > Handle;
   typedef boost::weak_ptr< Cursor > WeakHandle;
-  
+
   Handle clone();
 
   void setCursor(const Cursor::Handle c);
@@ -41,7 +41,7 @@ public:
   void setVMax(short);
   short inqVMax() const;
 
-  static Handle create(CursorObserver *o, 
+  static Handle create(CursorObserver *o,
                        short xMax, short yMax, short zMax,short vMax);
   static Handle create(short xMax, short yMax, short zMax,short vMax);
 

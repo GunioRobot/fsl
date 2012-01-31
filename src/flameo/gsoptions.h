@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,7 +85,7 @@ namespace Gs {
   public:
     static GsOptions& getInstance();
     ~GsOptions() { delete gopt; }
-  
+
     Option<bool> verbose;
     Option<int> debuglevel;
     Option<bool> timingon;
@@ -115,43 +115,43 @@ namespace Gs {
     Option<float> sigma_smooth_globalproboutlier;
     Option<int> io_niters;
     Option<bool> outputDof;
-  
+
     void parse_command_line(int argc, char** argv, Log& logger);
-  
+
   private:
-    GsOptions();  
+    GsOptions();
     const GsOptions& operator=(GsOptions&);
     GsOptions(GsOptions&);
 
-    OptionParser options; 
-      
+    OptionParser options;
+
     static GsOptions* gopt;
-  
+
   };
 
   inline GsOptions& GsOptions::getInstance(){
     if(gopt == NULL)
       gopt = new GsOptions();
-   
+
     return *gopt;
   }
 
   inline GsOptions::GsOptions() :
-    verbose(string("-v,-V,--verbose"), false, 
-	    string("switch on diagnostic messages"), 
+    verbose(string("-v,-V,--verbose"), false,
+	    string("switch on diagnostic messages"),
 	    false, no_argument),
     debuglevel(string("--debug,--debuglevel"), 0,
-	       string("set debug level"), 
+	       string("set debug level"),
 	       false, requires_argument),
-    timingon(string("--to,--timingon"), false, 
-	     string("turn timing on"), 
+    timingon(string("--to,--timingon"), false,
+	     string("turn timing on"),
 	     false, no_argument),
     help(string("-h,--help"), false,
 	 string("display this message"),
 	 false, no_argument),
     copefile(string("--cope,--copefile"), string("cope"),
 	     string("cope regressor data file"),
-	     true, requires_argument),  
+	     true, requires_argument),
     varcopefile(string("--vc,--vcope,--varcope,--varcopefile"), string(""),
 		string("varcope weightings data file"),
 		false, requires_argument),
@@ -163,19 +163,19 @@ namespace Gs {
 	     true, requires_argument),
     designfile(string("--dm,--designfile"), string("design.mat"),
 	       string("design matrix file"),
-	       true, requires_argument), 
+	       true, requires_argument),
     covsplitfile(string("--cs,--csf,--covsplitfile"), string("design.gs"),
 		 string("file containing an ASCII matrix specifying the groups the covariance is split into"),
 		 true, requires_argument),
     tcontrastsfile(string("--tc,--tcf,--tcontrastsfile"), string("design.con"),
 		   string("file containing an ASCII matrix specifying the t contrasts"),
-		   true, requires_argument),  
+		   true, requires_argument),
     fcontrastsfile(string("--fc,--fcf,--fcontrastsfile"), string(""),
 		   string("file containing an ASCII matrix specifying the f contrasts"),
-		   false, requires_argument),  
+		   false, requires_argument),
     logdir(string("--ld,--logdir"), string("logdir"),
 	   string("log directory"),
-	   false, requires_argument),  
+	   false, requires_argument),
     njumps(string("--nj,--njumps"), 5000,
 	   string("Num of jumps to be made by MCMC"),
 	   false, requires_argument),
@@ -191,26 +191,26 @@ namespace Gs {
     zupperthreshold(string("--zut"), 0,
 		    string("Absolute value of upper threshold on FLAME stage 1 z-stats, used to see which voxels are passed to FLAME stage 2"),
 		    false, requires_argument),
-    fixmeanfortfit(string("--fm,--fixmean"), false, 
-		   string("Fix mean for tfit"), 
+    fixmeanfortfit(string("--fm,--fixmean"), false,
+		   string("Fix mean for tfit"),
 		   false, no_argument),
-    infer_outliers(string("--io,--inferoutliers"), false, 
-		   string("Infer outliers -- note that does not apply to fixed effects"), 
+    infer_outliers(string("--io,--inferoutliers"), false,
+		   string("Infer outliers -- note that does not apply to fixed effects"),
 		   false, no_argument),
-    no_pe_output(string("--npo,--nopeoutput"), false, 
-		   string("Do not output PE files"), 
+    no_pe_output(string("--npo,--nopeoutput"), false,
+		   string("Do not output PE files"),
 		   false, no_argument),
-    runmode(string("--runmode"), string(""), 
-	    string("Inference to perform: runmode=fe (fixed effects), runmode=ols (mixed effects - OLS), runmode=flame1 (mixed effects - FLAME stage 1), runmode=flame12 (mixed effects - FLAME stage 1+2)"), 
+    runmode(string("--runmode"), string(""),
+	    string("Inference to perform: runmode=fe (fixed effects), runmode=ols (mixed effects - OLS), runmode=flame1 (mixed effects - FLAME stage 1), runmode=flame12 (mixed effects - FLAME stage 1+2)"),
 	    true, requires_argument),
-    seed(string("--seed"), 10, 
-	 string("seed for pseudo random number generator"), 
+    seed(string("--seed"), 10,
+	 string("seed for pseudo random number generator"),
 	 false, requires_argument),
-    voxelwise_ev_numbers(string("--voxelwise_ev_numbers,--ven"), vector<int>(), 
-	 string("List of numbers indicating voxelwise EVs position in the design matrix (list corresponds in order to files in voxelwise_ev_filenames)"), 
+    voxelwise_ev_numbers(string("--voxelwise_ev_numbers,--ven"), vector<int>(),
+	 string("List of numbers indicating voxelwise EVs position in the design matrix (list corresponds in order to files in voxelwise_ev_filenames)"),
 	 false, requires_argument),
-    voxelwise_ev_filenames(string("--voxelwise_ev_filenames,--vef"), vector<string>(), 
-	 string("List of 4D niftii files containing voxelwise EVs (list corresponds in order to numbers in voxelwise_ev_numbers)"), 
+    voxelwise_ev_filenames(string("--voxelwise_ev_filenames,--vef"), vector<string>(),
+	 string("List of 4D niftii files containing voxelwise EVs (list corresponds in order to numbers in voxelwise_ev_numbers)"),
 	 false, requires_argument),
     sigma_smooth_flame2_dofs(string("--sdof,--sigma_dofs"), 1,
 				   string("sigma (in mm) to use for Gaussian smoothing the DOFs in FLAME 2. Default is 1mm, -1 indicates no smoothing"),
@@ -221,8 +221,8 @@ namespace Gs {
     io_niters(string("--ioni"), 12,
 				   string("Number of max iterations to use when inferring outliers. Default is 12."),
 	 false, requires_argument),
-    outputDof(string("--outputdof"), false, 
-	    string("output dof for lower-level compatibility usage"), 
+    outputDof(string("--outputdof"), false,
+	    string("output dof for lower-level compatibility usage"),
 	    false, no_argument),
     options("flameo"," flameo --cope=filtered_func_data --mask=mask --dm=design.mat --tc=design.con --cs=design.grp --runmode=ols\n flameo --cope=filtered_func_data --varcope=var_filtered_func_data --mask=mask --dm=design.mat --tc=design.con --cs=design.grp --runmode=flame1")
   {
@@ -260,11 +260,11 @@ namespace Gs {
     catch(X_OptionError& e) {
       options.usage();
       cerr << endl << e.what() << endl;
-    } 
+    }
     catch(std::exception &e) {
       cerr << e.what() << endl;
-    }    
-     
+    }
+
   }
 }
 

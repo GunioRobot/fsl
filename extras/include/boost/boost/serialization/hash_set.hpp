@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // hash_set.hpp: serialization for stl hash_set templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -37,7 +37,7 @@
 #define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -47,8 +47,8 @@ inline void save(
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::hash_set<Key, Compare, Allocator> 
+        Archive,
+        STD::hash_set<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -62,11 +62,11 @@ inline void load(
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_set<
-            Archive, 
-            STD::hash_set<Key, Compare, Allocator> 
+            Archive,
+            STD::hash_set<Key, Compare, Allocator>
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_set<Key, Compare, Allocator> 
+            STD::hash_set<Key, Compare, Allocator>
         >
     >(ar, t);
 }
@@ -90,8 +90,8 @@ inline void save(
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::hash_multiset<Key, Compare, Allocator> 
+        Archive,
+        STD::hash_multiset<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -106,13 +106,13 @@ inline void load(
         BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_multiset<
             Archive, STD::hash_multiset<
-                Key, 
-                Compare, 
+                Key,
+                Compare,
                 Allocator
-            > 
+            >
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_multiset<Key, Compare, Allocator> 
+            STD::hash_multiset<Key, Compare, Allocator>
         >
     >(ar, t);
 }

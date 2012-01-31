@@ -21,25 +21,25 @@
 using namespace NEWMAT;
 
 namespace Utilities {
- 
+
   // Newmat version:
   class Tracer_Plus : public RBD_COMMON::Tracer, public Time_Tracer
     {
     public:
-      Tracer_Plus(const char* str) : 
+      Tracer_Plus(const char* str) :
 	Tracer(const_cast<char*>(str)),
 	Time_Tracer(str)
-	{		
+	{
 	}
 
-      Tracer_Plus(char* str) : 
+      Tracer_Plus(char* str) :
 	Tracer(str),
 	Time_Tracer(str)
-	{		
+	{
 	}
-	
-      virtual ~Tracer_Plus() 
-	{ 
+
+      virtual ~Tracer_Plus()
+	{
 	}
 
     private:

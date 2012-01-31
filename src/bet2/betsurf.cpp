@@ -10,20 +10,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -102,23 +102,23 @@ void noMoreMemory()
 string title="BETSURF (BET Surface Finder) v2.1 - FMRIB Analysis Group, Oxford";
 string examples=" betsurf          [options] <t1> <t2> <bet_mesh.off> <t1_to_standard.mat> <output>\n betsurf --t1only [options] <t1>      <bet_mesh.off> <t1_to_standard.mat> <output>";
 
-Option<bool> help(string("-h,--help"), false, 
-		     string("displays this help, then exits"), 
+Option<bool> help(string("-h,--help"), false,
+		     string("displays this help, then exits"),
 		     false, no_argument);
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 
-Option<bool> t1only(string("-1,--t1only"), false, 
+Option<bool> t1only(string("-1,--t1only"), false,
 		    string("extraction with t1 only"), false, no_argument);
 
-Option<bool> outline(string("-o,--outline"), false, 
-		     string("generates all surface outlines"), 
+Option<bool> outline(string("-o,--outline"), false,
+		     string("generates all surface outlines"),
 		     false, no_argument);
 
-Option<bool> mask(string("-m,--mask"), false, 
-		  string("generates binary masks from the meshes"), 
+Option<bool> mask(string("-m,--mask"), false,
+		  string("generates binary masks from the meshes"),
 		  false, no_argument);
 
 Option<bool> skullmask(string("-s,--skullmask"), false,
@@ -137,7 +137,7 @@ void draw_segment(volume<short>& image, const Pt& p1, const Pt& p2)
   double ydim = (double) image.ydim();
   double zdim = (double) image.zdim();
   double mininc = min(xdim,min(ydim,zdim)) * .5;
- 
+
   Vec n = p1 - p2;
   double d = n.norm();
   n.normalize();
@@ -167,7 +167,7 @@ void draw_mesh(volume<short>& image, const Mesh &m)
 	{
 	  Pt p = (*i)->get_vertice(1)->get_coord()  + j* n;
 	  draw_segment(image, p, (*i)->get_vertice(2)->get_coord());
-	} 
+	}
     }
 
 }
@@ -179,11 +179,11 @@ volume<short> make_mask_from_mesh(const volume<short> & image, const Mesh& m)
   double zdim = (double) image.zdim();
 
   volume<short> mask = image;
-  
+
   int xsize = mask.xsize();
   int ysize = mask.ysize();
   int zsize = mask.zsize();
-  
+
   vector<Pt> current;
   current.clear();
   Pt c(0., 0., 0.);
@@ -207,7 +207,7 @@ volume<short> make_mask_from_mesh(const volume<short> & image, const Mesh& m)
       if (0<=z-1 && mask.value(x, y, z-1)==0) current.push_back(Pt(x, y, z-1));
       if (xsize>x+1 && mask.value(x+1, y, z)==0) current.push_back(Pt(x+1, y, z));
       if (ysize>y+1 && mask.value(x, y+1, z)==0) current.push_back(Pt(x, y+1, z));
-      if (zsize>z+1 && mask.value(x, y, z+1)==0) current.push_back(Pt(x, y, z+1)); 
+      if (zsize>z+1 && mask.value(x, y, z+1)==0) current.push_back(Pt(x, y, z+1));
     }
   return mask;
 }
@@ -216,7 +216,7 @@ double standard_step_of_computation(const volume<float> & image, Mesh & m, const
   double xdim = image.xdim();
   double ydim = image.ydim();
   double zdim = image.zdim();
-  
+
   if (nb_iter % 50 == 0)
     {
       double l2 = 0;
@@ -251,7 +251,7 @@ double standard_step_of_computation(const volume<float> & image, Mesh & m, const
 	    }
 
 	  if (max < .1)
-	    {   
+	    {
               //There is a problem here for precision mode, since with the copy, no guarantee that data is non-zero size
               //even if mesh.cpp operator = is modified to copy data, after retesselate "new" points will have zero size data member
 	      if ( (*i)->data.size() ) (*i)->data.pop_back();
@@ -269,22 +269,22 @@ double standard_step_of_computation(const volume<float> & image, Mesh & m, const
     {
       Vec sn, st, u1, u2, u3, u;
       double f2, f3=0;
-      
+
       Vec n = (*i)->local_normal();
       Vec dv = (*i)->difference_vector();
-      
+
       double tmp = dv|n;
       sn = n * tmp;
       st = dv - sn;
-      
+
       u1 = st*.5;
-      
+
       double rinv = (2 * fabs(sn|n))/(l*l);
-      
+
       f2 = (1+tanh(F*(rinv - E)))*0.5;
-      
+
       u2 = f2 * sn * addsmooth;
-      
+
       if ((*i)->data.back() == 0)
 	{
 	  //main term of skull_extraction
@@ -292,31 +292,31 @@ double standard_step_of_computation(const volume<float> & image, Mesh & m, const
 	    Pt point = (*i)->get_coord();
 	    Pt ipoint(point.X/xdim, point.Y/ydim, point.Z/zdim);
 	    Vec in(n.X/xdim, n.Y/ydim, n.Z/zdim);
-	    
+
 	    Pt c_m = ipoint + (-1.) * in;
 	    Pt c_p = ipoint + 1. * in;
-	    
+
 	    double tmp = image.interpolate((c_p.X ),( c_p.Y),(c_p.Z));
 	    double gradient = tmp - image.interpolate((c_m.X),(c_m.Y), (c_m.Z));
-	    
+
 	    double tmp2 = gradient*100;
 	    f3 = max(-1., min(tmp2, 1.));
 	    if (tmp2 >= 0 && tmp2 < .1 && tmp < .1 ) f3 = speed;
-	    
-	    if (vol) 
+
+	    if (vol)
 	      {
 		double tmpvol = mask.interpolate((ipoint.X ),(ipoint.Y),(ipoint.Z));
 		if (tmpvol > .0)
 		  {
-		    f3 = Max(Max(tmpvol*.5, .1), f3); 
+		    f3 = Max(Max(tmpvol*.5, .1), f3);
 		    f2 = 0;
 		  }
 	      }
-	    
-	    
+
+
 	  }
 	}
-      else 
+      else
 	{
 	  f3 = 0;
 	  Pt point = (*i)->get_coord();
@@ -324,31 +324,31 @@ double standard_step_of_computation(const volume<float> & image, Mesh & m, const
 	  double tmpvol = mask.interpolate((ipoint.X ),(ipoint.Y),(ipoint.Z));
 	  if (tmpvol > .0)
 	    {
-	      f3 = Max(tmpvol*.5, .1); 
+	      f3 = Max(tmpvol*.5, .1);
 	      f2 = 0;
 	    }
 	}
 
       u3 = .05 * f3 * n;
-      
+
       u = u1 + u2 + u3;
-      
+
       (*i)->_update_coord = (*i)->get_coord() + u;
     }
 
   m.update();
-  
-  return (0); 
+
+  return (0);
 }
 
 //extracts profiles in the area around the eyes
 vector<double> t1only_special_extract(const volume<float> & t1, const Pt & point, const Vec & n) {
   vector<double> resul;
   resul.clear();
-  bool output = true; 
+  bool output = true;
   const double INNER_DEPTH = 3;
   const double OUTER_DEPTH = 100;
-  
+
   Profile pt1;
   for (double d = -INNER_DEPTH; d < OUTER_DEPTH; d+=.5)
     {
@@ -362,29 +362,29 @@ vector<double> t1only_special_extract(const volume<float> & t1, const Pt & point
   double outskin = pt1.last_point_over(pt1.end(), .2);
   double check = pt1.last_point_over(outskin - 1.5, .2);
   if (outskin - check > 2) output = false;
-  
+
   pt1.set_rroi(outskin);
-  
+
   double inskull = pt1.next_point_under(-INNER_DEPTH, .25);
   if (inskull > 5) inskull = 0;
-  
+
   double outskull = pt1.next_point_over(inskull, .35);
-  
+
   resul.push_back(inskull);
   resul.push_back(outskull);
   resul.push_back(outskin);
-  
+
   return resul;
 }
 
 vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const Vec & n) {
   vector<double> resul;
   resul.clear();
-  bool output = true; 
+  bool output = true;
   bool alloutput = true;
   const double INNER_DEPTH = 3;
   const double OUTER_DEPTH = 60;
-  
+
   Profile pt1;
   for (double d = -INNER_DEPTH; d < OUTER_DEPTH; d+=.5)
     {
@@ -400,7 +400,7 @@ vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const V
   double check = pt1.last_point_over(outskin - 1.5, .2);
   if (outskin - check > 2) outskin = check;
 
-  const double OUTER_SKIN = outskin;  
+  const double OUTER_SKIN = outskin;
 
   pt1.set_rroi(OUTER_SKIN);
 
@@ -411,10 +411,10 @@ vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const V
   if (alloutput)
     {
       //outer skull
-      
+
       //starting from the skin
       double outskull2 = 0;
-      outskull2 = pt1.last_point_over(outskin, .75); 
+      outskull2 = pt1.last_point_over(outskin, .75);
 
       outskull2 = pt1.last_point_under(outskull2, .20);
 
@@ -441,7 +441,7 @@ vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const V
 		  if ((*i).val<lowthreshold) test--;
 		  if (test < 0) test=0;
 		  if (test == 12) {stop = true;}
-		  if ((*i).val<lowthreshold) 
+		  if ((*i).val<lowthreshold)
 		    {
 		      localminabs = (*i).abs;
 		    }
@@ -450,12 +450,12 @@ vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const V
 	}
 
       double outskull = pt1.next_point_over(localminabs, .15);//.20
-      
+
       if (outskull2 - outskull < -2 || outskull2 - outskull >= 2) {output = false;}
-      
+
       if (outskin - outskull2 < 2) output = false;
-      
-      if (output) 
+
+      if (output)
 	{
 	  resul.push_back(inskull);
 	  resul.push_back(outskull2);
@@ -463,7 +463,7 @@ vector<double> t1only_co_ext(const volume<float> & t1, const Pt & point, const V
 	}
       else resul.push_back(outskin);
     }
-  
+
   return resul;
 }
 
@@ -491,13 +491,13 @@ void t1only_write_ext_skull(volume<float> & output_inskull, volume<float> & outp
 
       double max_neighbour = 0;
       const Vec normal = (*i)->local_normal();
-      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);      
-      
+      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);
+
       for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour); 
-      
+	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour);
+
       max_neighbour = ceil((max_neighbour)/2);
-      
+
       const Pt mpoint((*i)->get_coord().X/xdim,(*i)->get_coord().Y/ydim,(*i)->get_coord().Z/zdim);
       for (int ck = (int)floor(mpoint.Z - max_neighbour/zdim); ck <= (int)floor(mpoint.Z + max_neighbour/zdim); ck++)
 	for (int cj = (int)floor(mpoint.Y - max_neighbour/ydim); cj <= (int)floor(mpoint.Y + max_neighbour/ydim); cj++)
@@ -506,14 +506,14 @@ void t1only_write_ext_skull(volume<float> & output_inskull, volume<float> & outp
 	      bool compute = false;
 	      const Pt point(ci, cj, ck);
 	      const Pt realpoint(ci*xdim, cj*ydim, ck*zdim);
-	      if (meshimage(ci, cj, ck) == 1) 
+	      if (meshimage(ci, cj, ck) == 1)
 		{
 		  double mindist = 10000;
 		  for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-		    mindist = Min(((realpoint) - (**nei)).norm(), mindist); 
+		    mindist = Min(((realpoint) - (**nei)).norm(), mindist);
 		  if (mindist >= ((realpoint) - (**i)).norm()) compute = true;
 		}
-	    
+
 
 	      if (compute)
 		{
@@ -528,29 +528,29 @@ void t1only_write_ext_skull(volume<float> & output_inskull, volume<float> & outp
 
 		  if (val.size() == 3)
 		    {
-		      Pt opoint(point.X, point.Y, point.Z); 
-		      Vec on(n.X, n.Y, n.Z); 
+		      Pt opoint(point.X, point.Y, point.Z);
+		      Vec on(n.X, n.Y, n.Z);
 		      Pt c0 = opoint + val[0]*on;
 		      Pt c1 = opoint + val[1]*on;
 		      Pt c2 = opoint + val[2]*on;
 
-		      output_inskull((int)floor(c0.X + .5) + infxm,(int) floor(c0.Y + .5) + infym,(int) floor(c0.Z + .5) + infzm) +=1; 
-		      output_outskull((int)floor(c1.X + .5) + infxm,(int) floor(c1.Y + .5) + infym,(int) floor(c1.Z + .5) + infzm)+=1; 
-		      output_outskin((int)floor(c2.X + .5) + infxm,(int) floor(c2.Y + .5) + infym,(int) floor(c2.Z + .5) + infzm) +=1; 
+		      output_inskull((int)floor(c0.X + .5) + infxm,(int) floor(c0.Y + .5) + infym,(int) floor(c0.Z + .5) + infzm) +=1;
+		      output_outskull((int)floor(c1.X + .5) + infxm,(int) floor(c1.Y + .5) + infym,(int) floor(c1.Z + .5) + infzm)+=1;
+		      output_outskin((int)floor(c2.X + .5) + infxm,(int) floor(c2.Y + .5) + infym,(int) floor(c2.Z + .5) + infzm) +=1;
 		    }
 		  else {
 		    rem_counter++;
 
 		    if (val.size()==1)
 		      {
-			Pt opoint(point.X, point.Y, point.Z); 
-			Vec on(n.X, n.Y, n.Z); 
+			Pt opoint(point.X, point.Y, point.Z);
+			Vec on(n.X, n.Y, n.Z);
 			Pt c0 = opoint + val[0]*on;
-			
-			output_outskin((int)floor(c0.X + .5) + infxm,(int) floor(c0.Y + .5) + infym,(int) floor(c0.Z + .5) + infzm) +=1; 
+
+			output_outskin((int)floor(c0.X + .5) + infxm,(int) floor(c0.Y + .5) + infym,(int) floor(c0.Z + .5) + infzm) +=1;
 		      }
 		  }
-		}      
+		}
 	    }
     }
   if (verbose.value())
@@ -561,15 +561,15 @@ void t1only_write_ext_skull(volume<float> & output_inskull, volume<float> & outp
 }
 
 int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
-  
+
   if (argc - nb_pars < 4)
     {
       cerr<<"too few arguments"<<endl;
       options.usage(); return -1;
     }
-  
+
   int count_arg = nb_pars;
-  
+
   const string inputt1(argv[count_arg]);
   count_arg++;
   const string mesh(argv[count_arg]);
@@ -609,7 +609,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 
   //founding brain robustmax (useful if skull is too bright)
   double thr;
-  
+
   {
     volume<short> brain_mask;
     copyconvert(t1, brain_mask);
@@ -621,7 +621,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
       for(int j = 0; j < ysize; j++)
 	for(int i = 0; i < xsize; i++)
 	  if (brain_mask.value(i, j, k) == 1) brain_hist.push_back(t1.value(i, j, k));
-    
+
     int size = brain_hist.size();
     int e98 = (int) ceil(.98 * size);
     nth_element(brain_hist.begin(), brain_hist.begin() + e98 - 1, brain_hist.end());
@@ -702,7 +702,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
     {
       (*i)->data.push_back(0);
     }
-  
+
   m.translation(xdim * infxm, ydim * infym, zdim * infzm);
 
   if (verbose.value()) cout<<" inner skull"<<endl;
@@ -718,9 +718,9 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
         mprecise.retessellate();
       for (int c = 0; c < 100; c++)
       standard_step_of_computation(write0, mprecise, c, E, F, smoothness0, .5, c);
-      
+
     }
-  
+
   Mesh realmesh;
     if (precision.value() == 0)
       realmesh = m;
@@ -738,7 +738,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
     copyconvert(write0, maskinskull);
     draw_mesh(maskinskull, m);
     maskinskull = make_mask_from_mesh(maskinskull, m);
-    
+
     volume<short> output1;
     copyconvert(t1, output1);
     output1 = 0;
@@ -747,14 +747,14 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
       {
 	draw_mesh(output1, realmesh);
       }
-    
-    
+
+
     if (outline.value())
       {
 	if (verbose.value()) cout<<"  outline"<<endl;
 	if (save_volume(output1, (outputstr+"_inskull_mesh").c_str())<0)  return -1;
       }
-      
+
     if (mask.value() | skullmask.value())
       {
 	volume<short> smask = make_mask_from_mesh(output1, realmesh);
@@ -763,14 +763,14 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	    maskinskull2 = smask;
 	  }
 	if (mask.value())
-	  {  
-	    if (verbose.value()) cout<<"  mask"<<endl;	
+	  {
+	    if (verbose.value()) cout<<"  mask"<<endl;
 	    if (save_volume(smask, (outputstr+"_inskull_mask").c_str())<0)  return -1;
 	  }
       }
   }
-  
-  
+
+
   {
     int xsiz = write1.xsize();
     int ysiz = write1.ysize();
@@ -801,16 +801,16 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	mprecise.retessellate();
       for (int c = 0; c < 100; c++)
 	standard_step_of_computation(write1, mprecise, c, E, F, smoothness1, .5, c, 5, 15);
-      
+
     }
 
   write1.destroy();
-  
+
   Mesh realmesh2;
   if (precision.value() == 0)
     realmesh2 = m;
   else realmesh2 = mprecise;
-  
+
   realmesh2.translation(- xdim * infxm, - ydim * infym, - zdim * infzm);
   realmesh2.save((outputstr+"_outskull_mesh.off").c_str());
 
@@ -819,34 +819,34 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
   volume<short> maskoutskull2;
   maskoutskull2 = 0;
   volume<short> meshoutskull;
-  meshoutskull = 0;  
+  meshoutskull = 0;
 
   {
     copyconvert(write0, maskoutskull);
     write0.destroy();
     draw_mesh(maskoutskull, m);
     maskoutskull = make_mask_from_mesh(maskoutskull, m);
-    
+
     volume<short> output1;
     copyconvert(t1, output1);
     output1 = 0;
 
     if (mask.value() | outline.value() | skullmask.value())
       draw_mesh(output1, realmesh2);
-    
+
     if (skullmask.value())
       meshoutskull = output1;
-    
+
     if (outline.value())
       {
 	if (verbose.value()) cout<<"  outline"<<endl;
 	if (save_volume(output1, (outputstr+"_outskull_mesh").c_str())<0)  return -1;
       }
-    
+
     if (mask.value()|skullmask.value())
-      {      
+      {
 	volume<short> smask = make_mask_from_mesh(output1, realmesh2);
-	
+
 	if (skullmask.value())
 	  {
 	    maskoutskull2 = smask;
@@ -858,7 +858,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	  }
       }
   }
-  
+
   if (skullmask.value())
     {
       volume<short> smask = maskoutskull2;
@@ -869,17 +869,17 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	for(int j = 0; j < ysize; j++)
 	  for(int i = 0; i < xsize; i++)
 	    smask.value(i, j, k) = Min (1, maskoutskull2.value(i, j, k) * (1 - maskinskull2.value(i, j, k)) + meshoutskull.value(i, j, k));
-      
+
       if (save_volume(smask, (outputstr+"_skull_mask").c_str())<0) return -1;
     }
 
   meshoutskull.destroy();
   maskoutskull2.destroy();
   maskinskull2.destroy();
-  
+
   //computing the starting mesh for outer skull
   if (verbose.value()) cout<<" skin"<<endl;
-  
+
   Mesh m2;
   make_mesh_from_icosa(5, m2);
 
@@ -887,7 +887,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
     {
       (*i)->data.push_back(0);
     }
-  
+
   Pt p;
   int counter=0;
   for (vector<Mpoint*>::const_iterator i = m._points.begin(); i!= m._points.end(); i++)
@@ -911,7 +911,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
     standard_step_of_computation(write2, m2, c, E, F, smoothness2, 1.5, c, 5, 15, true, maskoutskull);
 
   maskoutskull.destroy();
-  
+
   if (precision.value() > 0)
     {
       if (verbose.value()) cout<<"  increased precision"<<endl;
@@ -919,7 +919,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	m2.retessellate();
       for (int c = 0; c < 100; c++)
 	standard_step_of_computation(write2, m2, c, E, F, smoothness2, 1.5, c, 5, 15);
-      
+
     }
 
   write2.destroy();
@@ -938,7 +938,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
       if (outline.value())
 	{
 	  if (verbose.value()) cout<<"  outline"<<endl;
-	  if (save_volume(output1, (outputstr+"_outskin_mesh").c_str())<0)  return -1;  
+	  if (save_volume(output1, (outputstr+"_outskin_mesh").c_str())<0)  return -1;
 	}
       if (mask.value())
 	{
@@ -947,7 +947,7 @@ int t1only_main(int argc, char *argv[], int nb_pars, OptionParser & options){
 	  if (save_volume(mask, (outputstr+"_outskin_mask").c_str())<0)  return -1;
 	}
     }
-  
+
 
   return 0;
 }
@@ -960,7 +960,7 @@ vector<double> special_extract(const volume<float> & t1, const volume<float> & t
   bool alloutput = true;
   const double INNER_DEPTH = 3;
   const double OUTER_DEPTH = 100;
-  
+
   Profile pt1;
   Profile pt2;
   for (double d = -30; d < OUTER_DEPTH; d+=.5)
@@ -995,7 +995,7 @@ vector<double> special_extract(const volume<float> & t1, const volume<float> & t
 
   double outskull = pt1.next_point_over(val, .35);
 
-  if (val - inskull >= 7) outskull = inskull + .5; 
+  if (val - inskull >= 7) outskull = inskull + .5;
   if (outskull - inskull < 0) outskull = inskull + .5;
 
   if (alloutput)
@@ -1004,7 +1004,7 @@ vector<double> special_extract(const volume<float> & t1, const volume<float> & t
       resul.push_back(outskull);
       resul.push_back(inskull);
     }
-  
+
   //computing csf
   pt1.init_roi();
   pt1.set_rroi(outskull - .5);
@@ -1019,9 +1019,9 @@ vector<double> special_extract(const volume<float> & t1, const volume<float> & t
 	    Pt csf = point + d*n;
 	    csfvolume((int)floor(csf.X + .5), (int)floor(csf.Y + .5), (int)floor(csf.Z + .5))=5;
 	  }
-      
+
     }
-  
+
   return resul;
 }
 
@@ -1029,11 +1029,11 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 
   vector<double> resul;
   resul.clear();
-  bool output = true; 
+  bool output = true;
   bool alloutput = true;
-  const double INNER_DEPTH = 3; 
+  const double INNER_DEPTH = 3;
   const double OUTER_DEPTH = 60;
-  
+
   Profile pt1;
   Profile pt2;
   for (double d = -30; d < OUTER_DEPTH; d+=.5)
@@ -1057,20 +1057,20 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 
 
   double outskin2 = pt2.last_point_over(pt2.end(), .25);
-  if (fabs(outskin - outskin2) > 5) 
+  if (fabs(outskin - outskin2) > 5)
     {
       //artefact might be present ...
       bool b = true;
       if (outskin < outskin2) b = false;
       double m = Min(outskin, outskin2) + 15;
       double m2;
-      if (b) 
+      if (b)
 	{
 	  m2 = pt1.last_point_over(m, .2);
 	  if (fabs(m2 - outskin2) > 10) alloutput = false;
 	  else outskin = m2;
 	}
-      else 
+      else
 	{
 	  m2 = pt2.last_point_over(m, .25);
 	  if (fabs(m2 - outskin) > 10) alloutput = false;
@@ -1090,7 +1090,7 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
       double inskull;
       {
 	inskull = pt1.next_point_under(pt2.begin(), .25);
-	double inskullt1 = pt2.next_point_under(inskull, .30); 
+	double inskullt1 = pt2.next_point_under(inskull, .30);
 	if (inskullt1 > inskull) inskull = inskullt1;
 	pt2.set_lroi(inskull);
 	vector<double> gaps;
@@ -1099,7 +1099,7 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 	int counter = 0;
 	bool step = false;
 	while (t!=-500 && counter < 6)
-	  {	
+	  {
 	    if (step)
 	      {
 		t = pt2.next_point_under(t, .30);
@@ -1112,7 +1112,7 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 		if (sum == -50) sum = t;
 	      }
 	    step = !step;
-	
+
 	  }
 	if (counter > 1 && (sum - inskull) < 10)
 	  {
@@ -1127,14 +1127,14 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
       pt1.set_lroi(OUTER_SKULL_SEARCH_BEGIN);
       double outskull2 = 0;
       outskull2 = pt1.last_point_over(outskin, .75);
-      outskull2 = pt1.last_point_under(outskull2, .30); 
+      outskull2 = pt1.last_point_under(outskull2, .30);
       if (outskull2 == -500) outskull2 = OUTER_SKULL_SEARCH_BEGIN;
 
       //leftmost min
       double minabs = pt1.next_point_under(pt1.begin(), .30);
       if (minabs == -500) {output = false;exit (-1);}
-	
-      double localminabs = minabs; 
+
+      double localminabs = minabs;
       if (output)
 	{
 	  bool stop = false;
@@ -1146,21 +1146,21 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 	      if (!stop && (*i).abs>=minabs && i!=pt1.v.end() && i!=pt1.v.begin())
 		{
 		  if ((*i).val>upthreshold) stop = true; //avoid climbing skin
-		  if ((*i).val<lowthreshold) 
+		  if ((*i).val<lowthreshold)
 		    {
 		      localminabs = (*i).abs;
 		    }
-		}     
+		}
 	    }
 	}
       double outskull = pt1.next_point_over(localminabs, .15);
-      
+
       if (outskull2 - outskull >= 3 | outskull - outskull2 >=2) {output = false;}
 
-      if (outskin - outskull < 2) output = false; 
+      if (outskin - outskull < 2) output = false;
       if (outskull - inskull < 0) output = false;
 
-      if (output) 
+      if (output)
 	{
 	  resul.push_back(outskin);
 	  resul.push_back(outskull);
@@ -1184,7 +1184,7 @@ vector<double> co_ext(const volume<float> & t1, const volume<float> & t2, const 
 	      }
 	}
     }
-  
+
   return resul;
 }
 
@@ -1204,7 +1204,7 @@ bool special_case(const Pt & point, const Vec & n, const trMatrix & M)
       realy -= 128;
       realz -= 74;
 
-      double plan = realy * .0117213 + realz * -.021433355 - .6; 
+      double plan = realy * .0117213 + realz * -.021433355 - .6;
       if (plan > 0) result = true;
       if (realy > 62 && realx > -16 && realx < 16) test2 = true;
     }
@@ -1235,13 +1235,13 @@ void write_ext_skull(volume<float> & output_inskull, volume<float> & output_outs
 
       double max_neighbour = 0;
       const Vec normal = (*i)->local_normal();
-      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);      
-      
+      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);
+
       for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour); 
-      
+	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour);
+
       max_neighbour = ceil((max_neighbour)/2);
-      
+
       const Pt mpoint((*i)->get_coord().X/xdim,(*i)->get_coord().Y/ydim,(*i)->get_coord().Z/zdim);
       for (int ck = (int)floor(mpoint.Z - max_neighbour/zdim); ck <= (int)floor(mpoint.Z + max_neighbour/zdim); ck++)
 	for (int cj = (int)floor(mpoint.Y - max_neighbour/ydim); cj <= (int)floor(mpoint.Y + max_neighbour/ydim); cj++)
@@ -1250,14 +1250,14 @@ void write_ext_skull(volume<float> & output_inskull, volume<float> & output_outs
 	      bool compute = false;
 	      const Pt point(ci, cj, ck);
 	      const Pt realpoint(ci*xdim, cj*ydim, ck*zdim);
-	      if (meshimage(ci, cj, ck) == 1) 
+	      if (meshimage(ci, cj, ck) == 1)
 		{
 		  double mindist = 10000;
 		  for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-		    mindist = Min(((realpoint) - (**nei)).norm(), mindist); 
+		    mindist = Min(((realpoint) - (**nei)).norm(), mindist);
 		  if (mindist >= ((realpoint) - (**i)).norm()) compute = true;
 		}
-	    
+
 
 	      if (compute)
 		{
@@ -1270,8 +1270,8 @@ void write_ext_skull(volume<float> & output_inskull, volume<float> & output_outs
 
 		  if (val.size() == 3)
 		    {
-		      Pt opoint(point.X, point.Y, point.Z); 
-		      Vec on(n.X, n.Y, n.Z); 
+		      Pt opoint(point.X, point.Y, point.Z);
+		      Vec on(n.X, n.Y, n.Z);
 		      Pt c0 = opoint + val[0]*on;
 		      Pt c1 = opoint + val[1]*on;
 		      Pt c2 = opoint + val[2]*on;
@@ -1285,11 +1285,11 @@ void write_ext_skull(volume<float> & output_inskull, volume<float> & output_outs
 
 		    if (val.size()==1)
 		      {
-			Pt opoint(point.X, point.Y, point.Z); 
-			Vec on(n.X, n.Y, n.Z); 
+			Pt opoint(point.X, point.Y, point.Z);
+			Vec on(n.X, n.Y, n.Z);
 			Pt c0 = opoint + val[0]*on;
-			
-			output_outskin((int)floor(c0.X + .5) + infxm ,(int) floor(c0.Y + .5) + infym ,(int) floor(c0.Z + .5) + infzm) +=1; 
+
+			output_outskin((int)floor(c0.X + .5) + infxm ,(int) floor(c0.Y + .5) + infym ,(int) floor(c0.Z + .5) + infzm) +=1;
 		      }
 		  }
 		}
@@ -1325,11 +1325,11 @@ int main(int argc, char *argv[]) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
-  } 
+  }
   catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
-  
+  }
+
   if (help.value()) {options.usage(); return 0;};
 
   for (int i = nb_pars; i < argc; i++)
@@ -1399,7 +1399,7 @@ int main(int argc, char *argv[]) {
 
   //founding brain robustmax (useful if skull is too bright)
   double thr;
-  
+
   {
     volume<short> brain_mask;
     copyconvert(t1, brain_mask);
@@ -1411,7 +1411,7 @@ int main(int argc, char *argv[]) {
       for(int j = 0; j < ysize; j++)
 	for(int i = 0; i < xsize; i++)
 	  if (brain_mask.value(i, j, k) == 1) brain_hist.push_back(t1.value(i, j, k));
-    
+
     int size = brain_hist.size();
     int e98 = (int) ceil(.98 * size);
     nth_element(brain_hist.begin(), brain_hist.begin() + e98 - 1, brain_hist.end());
@@ -1423,8 +1423,8 @@ int main(int argc, char *argv[]) {
     for(int j = 0; j < ysize; j++)
       for(int i = 0; i < xsize; i++)
 	if (t1.value(i, j, k) > thr) t1.value(i, j, k) = thr;
-  
-  infxm=0; infym=0; infzm=0; 
+
+  infxm=0; infym=0; infzm=0;
   int infxp=0, infyp=0, infzp=0;
   //checking if the mesh is inside the volume. If not, increasing the size of the volume.
   for (vector<Mpoint *>::const_iterator p = m._points.begin(); p != m._points.end(); p++)
@@ -1458,9 +1458,9 @@ int main(int argc, char *argv[]) {
   volume<short> csfvolume;
   copyconvert(t1, csfvolume);
   csfvolume = 0;
-  
+
   if (verbose.value()) cout<<"extracting profiles"<<endl;
-  
+
   write_ext_skull(write0, write1, write2, t1, t2, m, M, csfvolume);
 
 
@@ -1507,11 +1507,11 @@ int main(int argc, char *argv[]) {
       mprecise = m;
       if (verbose.value()) cout<<"  increased precision"<<endl;
       for (int i = 0; i < precision.value(); i++)
-	mprecise.retessellate(); 
+	mprecise.retessellate();
       for (int c = 0; c < 100; c++)
 	standard_step_of_computation(write0, mprecise, c, E, F, smoothness0, .5, c);
     }
-  
+
   Mesh realmesh;
     if (precision.value() == 0)
       realmesh = m;
@@ -1537,7 +1537,7 @@ int main(int argc, char *argv[]) {
       {
 	draw_mesh(output1, realmesh);
       }
-    
+
     if (skullmask.value())
       meshinskull = output1;
 
@@ -1557,7 +1557,7 @@ int main(int argc, char *argv[]) {
 	  }
 	if (mask.value())
 	  {
-	    if (verbose.value()) cout<<"  mask"<<endl;	
+	    if (verbose.value()) cout<<"  mask"<<endl;
 	    if (save_volume(smask, (outputstr+"_inskull_mask").c_str())<0)  return -1;
 	  }
 
@@ -1594,11 +1594,11 @@ int main(int argc, char *argv[]) {
 	mprecise.retessellate();
       for (int c = 0; c < 100; c++)
 	standard_step_of_computation(write1, mprecise, c, E, F, smoothness1, .5, c, 5, 15);
-      
+
     }
 
   write1.destroy();
-  
+
   volume<short> maskoutskull;
   volume<short> maskoutskull2;
 
@@ -1606,7 +1606,7 @@ int main(int argc, char *argv[]) {
   if (precision.value() == 0)
     realmesh2 = m;
   else realmesh2 = mprecise;
-  
+
   realmesh2.translation(- xdim * infxm, - ydim * infym, - zdim * infzm);
   realmesh2.save((outputstr+"_outskull_mesh.off").c_str());
 
@@ -1616,20 +1616,20 @@ int main(int argc, char *argv[]) {
     write0.destroy();
     draw_mesh(maskoutskull, m);
     maskoutskull = make_mask_from_mesh(maskoutskull, m);
-    
+
     volume<short> output1;
     copyconvert(t1, output1);
     output1 = 0;
 
     if (mask.value() | outline.value() | skullmask.value())
       draw_mesh(output1, realmesh2);
-    
+
     if (outline.value())
       {
 	if (verbose.value()) cout<<"  outline"<<endl;
 	if (save_volume(output1, (outputstr+"_outskull_mesh").c_str())<0)  return -1;
       }
-    
+
     if (mask.value()|skullmask.value())
       {
 	volume<short> smask = make_mask_from_mesh(output1, realmesh2);
@@ -1643,10 +1643,10 @@ int main(int argc, char *argv[]) {
 	    if (save_volume(smask, (outputstr+"_outskull_mask").c_str())<0)  return -1;
 	  }
       }
-    
+
   }
 
-  
+
   if (skullmask.value())
     {
       volume<short> smask = maskoutskull2;
@@ -1657,17 +1657,17 @@ int main(int argc, char *argv[]) {
 	for(int j = 0; j < ysize; j++)
 	  for(int i = 0; i < xsize; i++)
 	    smask.value(i, j, k) = Min (1, maskoutskull2.value(i, j, k) * (1 - maskinskull2.value(i, j, k)) + meshinskull.value(i, j, k));
-      
+
       if (save_volume(smask, (outputstr+"_skull_mask").c_str())<0) return -1;
     }
 
   maskoutskull2.destroy();
   maskinskull2.destroy();
   meshinskull.destroy();
-  
+
   //computing the starting mesh for outer skull
   if (verbose.value()) cout<<" skin"<<endl;
-  
+
   Mesh m2;
   make_mesh_from_icosa(5, m2);
 
@@ -1675,7 +1675,7 @@ int main(int argc, char *argv[]) {
     {
       (*i)->data.push_back(0);
     }
-  
+
   Pt p;
   int counter=0;
   for (vector<Mpoint*>::const_iterator i = m._points.begin(); i!= m._points.end(); i++)
@@ -1707,14 +1707,14 @@ int main(int argc, char *argv[]) {
 	m2.retessellate();
       for (int c = 0; c < 100; c++)
 	standard_step_of_computation(write2, m2, c, E, F, smoothness2, 1.5, c, 5, 15);
-      
+
     }
 
   write2.destroy();
-  
+
   m2.translation(-xdim * infxm, -ydim * infym, -zdim * infzm);
   m2.save((outputstr+"_outskin_mesh.off").c_str());
-  
+
   if (outline.value()| mask.value())
     {
       volume<short> output1;
@@ -1722,11 +1722,11 @@ int main(int argc, char *argv[]) {
       output1 = 0;
 
       draw_mesh(output1, m2);
-      
+
       if (outline.value())
 	{
 	  if (verbose.value()) cout<<"  outline"<<endl;
-	  if (save_volume(output1, (outputstr+"_outskin_mesh").c_str())<0)  return -1;  
+	  if (save_volume(output1, (outputstr+"_outskin_mesh").c_str())<0)  return -1;
 	}
       if (mask.value())
 	{
@@ -1735,7 +1735,7 @@ int main(int argc, char *argv[]) {
 	  if (save_volume(mask, (outputstr+"_outskin_mask").c_str())<0)  return -1;
 	}
     }
-  
+
   return (0);
 }
 

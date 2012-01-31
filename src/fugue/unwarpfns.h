@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -107,7 +107,7 @@ ColumnVector pava(const ColumnVector& data);
 
 template <class T>
 void simple_erode(volume<T>& binaryvol);
-  
+
 template <class T>
 void simple_dilate(volume<T>& binaryvol);
 
@@ -115,26 +115,26 @@ volume<float> despike_filter2D(const volume<float>& vol, float threshold);
 
 volume<float> median_filter2D(const volume<float>& vol);
 
-volume<float> masked_despike_filter2D(const volume<float>& vol, 
+volume<float> masked_despike_filter2D(const volume<float>& vol,
 				      const volume<float>& mask,
 				      float threshold);
 
-volume<float> masked_median_filter2D(const volume<float>& vol, 
+volume<float> masked_median_filter2D(const volume<float>& vol,
 				     const volume<float>& mask);
 
 float basic_mask_threshold(const volume<float>& absmap);
 
 volume<float> make_basic_head_mask(const volume<float>& absmap, float thresh);
 
-volume<float> make_head_mask(const volume<float>& absmap, float thresh); 
+volume<float> make_head_mask(const volume<float>& absmap, float thresh);
 volume<float> make_head_mask2D(const volume<float>& absmap, float thresh);
 
-volume<float> make_filled_head_mask(const volume<float>& absmap); 
+volume<float> make_filled_head_mask(const volume<float>& absmap);
 
 volume<float> fill_head_mask(const volume<float>& origmask);
 
-void fill_holes(volume<float>& vol, const volume<float>& holemask, 
-		const volume<float>& mask); 
+void fill_holes(volume<float>& vol, const volume<float>& holemask,
+		const volume<float>& mask);
 
 volume<float> extrapolate_volume(const volume<float>& datavol,
 				 const volume<float>& origmask,
@@ -149,20 +149,20 @@ volume<float> fourier_extrapolate(const volume<float>& datavol,
 				  int n, bool verbose=false);
 
 void connection_matrices(const volume<float>& phasemap,
-			 const volume<int>& label, 
+			 const volume<int>& label,
 			 Matrix& Qab, Matrix& Pab, Matrix& Nab, double& K);
 
 void connection_matrices(const volume<float>& phasemap,
 			 const volume<int>& label, Matrix& Kab);
 
-float calc_cost(const Matrix& Mab, const Matrix& Qab, const Matrix& Pvec, 
-		float K); 
+float calc_cost(const Matrix& Mab, const Matrix& Qab, const Matrix& Pvec,
+		float K);
 
 float calc_delta_cost(const Matrix& Mab, const Matrix& Qab, const Matrix& Pvec,
-		      int j, float d); 
+		      int j, float d);
 
-float calc_delta_cost(const Matrix& Mab, const Matrix& Qab, 
-		      const Matrix& Pvecon2PI, int signedj); 
+float calc_delta_cost(const Matrix& Mab, const Matrix& Qab,
+		      const Matrix& Pvecon2PI, int signedj);
 
 float wrap(float theta);
 
@@ -176,25 +176,25 @@ ColumnVector estimate_linear_ramps(volume<float>& ph, const volume<float>& mask)
 
 ////////////////////////////////////////////////////////////////////////////
 
-volume<float> apply_unwrapping(const volume<float>& phasemap, 
-			       const volume<int>& label, 
+volume<float> apply_unwrapping(const volume<float>& phasemap,
+			       const volume<int>& label,
 			       const Matrix& label_offsets);
 
-volume<int> find_phase_labels(const volume<float>& phasemap, 
+volume<int> find_phase_labels(const volume<float>& phasemap,
 			      const volume<float>& mask,
 			      int n=4);
 
-volume<int> find_phase_labels2D(const volume<float>& phasemap, 
+volume<int> find_phase_labels2D(const volume<float>& phasemap,
 				const volume<float>& mask,
-				int n, bool unique3Dlabels); 
- 
-volume<float> unwrap(const volume<float>& phasemap, 
+				int n, bool unique3Dlabels);
+
+volume<float> unwrap(const volume<float>& phasemap,
 		     const volume<int>& label, bool verbose=false);
 
-volume<float> unwrap2D(const volume<float>& phasemap, 
+volume<float> unwrap2D(const volume<float>& phasemap,
 		       const volume<int>& label, bool verbose=false);
 
-volume<float> calc_fmap(const volume<float>& phase1, 
+volume<float> calc_fmap(const volume<float>& phase1,
 			const volume<float>& phase2,
 			const volume<float>& mask1,
 			const volume<float>& mask2,
@@ -205,7 +205,7 @@ float fmap2pixshift_factor(const volume<float>& fmap, float pe_dwell_time,
 
 volume<float> yderiv(const volume<float>& vol);
 
-volume<float> limit_pixshift(const volume<float>& pixshift, 
+volume<float> limit_pixshift(const volume<float>& pixshift,
 			     const volume<float>& mask, float mindiff);
 
 volume<float> apply_pixshift(const volume<float>& epivol,
@@ -228,7 +228,7 @@ void simple_erode(volume<T>& binaryvol)
 				 structelement,structelement);
   binaryvol.binarise(1.0 - 0.5/27.0);
 }
-  
+
 template <class T>
 void simple_dilate(volume<T>& binaryvol)
 {

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacTest.c --
  *
  *	Contains commands for platform specific tests for
@@ -47,7 +47,7 @@ TkplatformtestInit(
     /*
      * Add commands for platform specific tests on MacOS here.
      */
-    
+
     Tcl_CreateCommand(interp, "debugger", DebuggerCmd,
             (ClientData) 0, (Tcl_CmdDeleteProc *) NULL);
 

@@ -187,6 +187,6 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)
-#endif    
+#endif
 
 #endif  // #ifndef BOOST_WEAK_PTR_HPP_INCLUDED

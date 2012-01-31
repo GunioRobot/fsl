@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2003-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : implements support for test cases templates instantiated with 
+//  Description : implements support for test cases templates instantiated with
 //                sequence of test types
 // ***************************************************************************
 
@@ -97,7 +97,7 @@ struct generate_test_case_4_type {
             full_name += " const";
         full_name += '>';
 
-        m_holder.m_test_cases.push_back( 
+        m_holder.m_test_cases.push_back(
             new test_case( full_name, test_case_template_invoker<TestCaseTemplate,TestType>() ) );
     }
 
@@ -127,7 +127,7 @@ public:
     {
         if( m_test_cases.empty() )
             return 0;
-    
+
         test_unit* res = m_test_cases.front();
         m_test_cases.pop_front();
 
@@ -152,7 +152,7 @@ public:
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: test_case_template.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

@@ -1,14 +1,14 @@
 /*
  * tkMacMDEF.r --
  *
- *	This file contains the actual MDEF. Since this is not likely to 
+ *	This file contains the actual MDEF. Since this is not likely to
  *	change much, this seems the easiest method to use. The address
  *	of the routine descriptor is written into offset 0x24 hex, and
  *	then when the MDEF is called, the Mixed Mode Manager will take
  *	care of the setup.
  *
  *	This file also contains the icons 'SICN' used by the menu code
- *	in menu items.  
+ *	in menu items.
  *
  * Copyright (c) 1996-1997 Sun Microsystems, Inc.
  *

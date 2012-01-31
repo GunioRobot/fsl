@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -115,7 +115,7 @@ namespace NEWIMAGE {
   std::vector<T> calc_percentiles(const volume<T>& vol);
 
   template <class T>
-  std::vector<T> calc_percentiles(const volume<T>& vol, const volume<T>& mask, 
+  std::vector<T> calc_percentiles(const volume<T>& vol, const volume<T>& mask,
 				  const std::vector<float>& percentilepvals);
 
   template <class T>
@@ -139,7 +139,7 @@ namespace NEWIMAGE {
   // Declaration of helper functions.
 
   SPLINTERPOLATOR::ExtrapolationType translate_extrapolation_type(extrapolation ep);
-  
+
   // CONSTRUCTORS (not including copy constructor - see under copying)
 
   template <class T>
@@ -168,7 +168,7 @@ namespace NEWIMAGE {
 	Data = 0;
 	data_owner = false;
       }
-      
+
       setdefaultproperties();
       return 0;
     }
@@ -191,16 +191,16 @@ namespace NEWIMAGE {
       IntentParam1 = 0.0;
       IntentParam2 = 0.0;
       IntentParam3 = 0.0;
-      
+
       SliceOrderingCode = NIFTI_SLICE_UNKNOWN;
-      
+
       Limits.resize(6,0);
       setdefaultlimits();
       // Default ROI is whole volume
       ROIbox = Limits;
       activeROI = false;
       calc_no_voxels();
-      
+
       minmax.init(this,calc_minmax);
       sums.init(this,calc_sums);
       backgroundval.init(this,calc_backgroundval);
@@ -249,10 +249,10 @@ namespace NEWIMAGE {
     {
       this->initialize(0,0,0,0,false);
     }
-  
+
 
   template <class T>
-  volume<T>::volume(int xsize, int ysize, int zsize) 
+  volume<T>::volume(int xsize, int ysize, int zsize)
     : Data(0), data_owner(false)
     {
       this->initialize(xsize,ysize,zsize,0,true);
@@ -260,7 +260,7 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  volume<T>::volume(int xsize, int ysize, int zsize, T *d, bool d_owner) 
+  volume<T>::volume(int xsize, int ysize, int zsize, T *d, bool d_owner)
     : Data(d), data_owner(false)
     {
       this->initialize(xsize,ysize,zsize,d,d_owner);
@@ -274,7 +274,7 @@ namespace NEWIMAGE {
     }
 
   template <class T>
-  int volume<T>::reinitialize(int xsize, int ysize, int zsize, T *d, 
+  int volume<T>::reinitialize(int xsize, int ysize, int zsize, T *d,
 			      bool d_owner)
     {
       return this->initialize(xsize,ysize,zsize,d,d_owner);
@@ -286,7 +286,7 @@ namespace NEWIMAGE {
     if (data_owner) delete [] Data;
     Data = 0;
   }
-  
+
 
   template <class T>
   volume<T>::~volume()
@@ -295,37 +295,37 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  void volume<T>::calc_no_voxels() const 
+  void volume<T>::calc_no_voxels() const
   {
-    no_voxels = ((unsigned long int)(maxx()-minx()+1)) *((unsigned long int) (maxy()-miny()+1)) *((unsigned long int) (maxz()-minz()+1)); 
+    no_voxels = ((unsigned long int)(maxx()-minx()+1)) *((unsigned long int) (maxy()-miny()+1)) *((unsigned long int) (maxz()-minz()+1));
   }
-  
+
   template <class T>
-  void volume<T>::setupsizeproperties() const 
+  void volume<T>::setupsizeproperties() const
   {
-    calc_no_voxels(); 
+    calc_no_voxels();
   }
 
   template <class T>
   void volume<T>::setdefaultlimits() const
     {
-      Limits[0]=0; Limits[1]=0; Limits[2]=0; 
-      Limits[3]=this->xsize()-1; 
-      Limits[4]=this->ysize()-1; 
+      Limits[0]=0; Limits[1]=0; Limits[2]=0;
+      Limits[3]=this->xsize()-1;
+      Limits[4]=this->ysize()-1;
       Limits[5]=this->zsize()-1;
     }
 
-  
+
   template <class T>
   void volume<T>::enforcelimits(std::vector<int>& lims) const
     {
       // clamp all elements within valid bounds
-//        lims[0]=Max(0,lims[0]); 
-//        lims[1]=Max(0,lims[1]); 
-//        lims[2]=Max(0,lims[2]); 
-//        lims[3]=Min(this->xsize() - 1,lims[3]); 
-//        lims[4]=Min(this->ysize() - 1,lims[4]); 
-//        lims[5]=Min(this->zsize() - 1,lims[5]); 
+//        lims[0]=Max(0,lims[0]);
+//        lims[1]=Max(0,lims[1]);
+//        lims[2]=Max(0,lims[2]);
+//        lims[3]=Min(this->xsize() - 1,lims[3]);
+//        lims[4]=Min(this->ysize() - 1,lims[4]);
+//        lims[5]=Min(this->zsize() - 1,lims[5]);
     }
 
   // COPYING AND CONVERSION FUNCTIONS
@@ -337,9 +337,9 @@ namespace NEWIMAGE {
       this->copydata(source);
       return this->copyproperties(source);
     }
-  
+
   template <class T>
-  volume<T>::volume(const volume<T>& source) : Data(0), 
+  volume<T>::volume(const volume<T>& source) : Data(0),
     data_owner(false)
     {
       this->reinitialize(source);
@@ -407,7 +407,7 @@ namespace NEWIMAGE {
     }
 
     // now copy only the appropriate data
-    int xoff=source.minx()-minx(), yoff=source.miny()-miny(), 
+    int xoff=source.minx()-minx(), yoff=source.miny()-miny(),
       zoff=source.minz()-minz();
     for (int z=source.minz(); z<=source.maxz(); z++) {
       for (int y=source.miny(); y<=source.maxy(); y++) {
@@ -422,7 +422,7 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  int volume<T>::copyproperties(const volume<T>& source) 
+  int volume<T>::copyproperties(const volume<T>& source)
   {
     // sets all properties
     copybasicproperties(source,*this);
@@ -438,7 +438,7 @@ namespace NEWIMAGE {
     l_histogram.copy(source.l_histogram,this);
     HISTbins = source.HISTbins;
     HISTmin = source.HISTmin;
-    HISTmax = source.HISTmax;    
+    HISTmax = source.HISTmax;
     percentilepvals = source.percentilepvals;
     p_userextrap = source.p_userextrap;
     p_userinterp = source.p_userinterp;
@@ -538,15 +538,15 @@ namespace NEWIMAGE {
   // ROI functions
 
   template <class T>
-  void volume<T>::setROIlimits(int x0, int y0, int z0, 
+  void volume<T>::setROIlimits(int x0, int y0, int z0,
 				    int x1, int y1, int z1) const
-    { 
+    {
       // Enforce ordering
-      ROIbox[0]=Min(x0,x1); 
-      ROIbox[1]=Min(y0,y1); 
-      ROIbox[2]=Min(z0,z1); 
-      ROIbox[3]=Max(x0,x1); 
-      ROIbox[4]=Max(y0,y1); 
+      ROIbox[0]=Min(x0,x1);
+      ROIbox[1]=Min(y0,y1);
+      ROIbox[2]=Min(z0,z1);
+      ROIbox[3]=Max(x0,x1);
+      ROIbox[4]=Max(y0,y1);
       ROIbox[5]=Max(z0,z1);
       enforcelimits(ROIbox);
       if (activeROI) activateROI();
@@ -554,28 +554,28 @@ namespace NEWIMAGE {
 
   template <class T>
   void volume<T>::setROIlimits(const std::vector<int>& lims) const
-      { 
-	if (lims.size()!=6) return; 
+      {
+	if (lims.size()!=6) return;
 	setROIlimits(lims[0],lims[1],lims[2],lims[3],lims[4],lims[5]);
       }
- 
+
   template <class T>
   void volume<T>::activateROI() const
-  { 
-    activeROI=true; 
+  {
+    activeROI=true;
     enforcelimits(ROIbox);
     Limits = ROIbox;
     set_whole_cache_validity(false);
-    setupsizeproperties(); 
+    setupsizeproperties();
   }
 
   template <class T>
   void volume<T>::deactivateROI() const
-  { 
-    activeROI=false; 
+  {
+    activeROI=false;
     setdefaultlimits();
-    set_whole_cache_validity(false); 
-    setupsizeproperties(); 
+    set_whole_cache_validity(false);
+    setupsizeproperties();
   }
 
 
@@ -594,7 +594,7 @@ namespace NEWIMAGE {
 
   template <class T>
   void volume<T>::setinterpolationmethod(interpolation interpmethod) const
-    { 
+    {
       p_interpmethod = interpmethod;
       // define a default sinc kernel if no kernel has previously been defined
       if ( (interpmethod == sinc) && (interpkernel.kernelvals()==0) ) {
@@ -613,12 +613,12 @@ namespace NEWIMAGE {
   template <class T>
   bool in_neigh_bounds(const volume<T>& vol, int x, int y, int z)
     {  return ( (x>=0) && (y>=0) && (z>=0) &&
-		(x<(vol.xsize()-1)) && (y<(vol.ysize()-1)) && 
+		(x<(vol.xsize()-1)) && (y<(vol.ysize()-1)) &&
 		(z<(vol.zsize()-1)) ); }
 
-  inline float q_tri_interpolation(float v000, float v001, float v010, 
-				   float v011, float v100, float v101, 
-				   float v110, float v111, 
+  inline float q_tri_interpolation(float v000, float v001, float v010,
+				   float v011, float v100, float v101,
+				   float v110, float v111,
 				   float dx, float dy, float dz)
 
     {
@@ -633,39 +633,39 @@ namespace NEWIMAGE {
       // final third order term
       return (temp6 - temp5)*dz + temp5;
     }
-  
+
   //////// Kernel Interpolation Call /////////
-  
+
   template <class T>
-  float volume<T>::kernelinterpolation(const float x, const float y, 
+  float volume<T>::kernelinterpolation(const float x, const float y,
 				       const float z) const
   {
     const kernelstorage* storedkernel = interpkernel.kernelvals();
     // sanity check on kernel
     if (storedkernel==0) {
-      cerr << "ERROR: Must set kernel parameters before using interpolation!" 
+      cerr << "ERROR: Must set kernel parameters before using interpolation!"
 	   << endl;
       return (float) extrapolate(0,0,0);
     }
-    
+
     // kernel half-width  (i.e. range is +/- w)
-    int wx=storedkernel->widthx();  
-    int wy=storedkernel->widthy();  
-    int wz=storedkernel->widthz();  
+    int wx=storedkernel->widthx();
+    int wy=storedkernel->widthy();
+    int wz=storedkernel->widthz();
     ColumnVector kernelx = storedkernel->kernelx();
     ColumnVector kernely = storedkernel->kernely();
     ColumnVector kernelz = storedkernel->kernelz();
     float *storex = storedkernel->storex;
     float *storey = storedkernel->storey;
     float *storez = storedkernel->storez;
-    
+
     int ix0, iy0, iz0;
     ix0 = (int) floor(x);
     iy0 = (int) floor(y);
     iz0 = (int) floor(z);
-    
+
     float convsum=0.0, interpval=0.0, kersum=0.0;
-    
+
     for (int d=-wz; d<=wz; d++) {
       storez[d+wz] = kernelval((z-iz0+d),wz,kernelz);
     }
@@ -675,7 +675,7 @@ namespace NEWIMAGE {
     for (int d=-wx; d<=wx; d++) {
       storex[d+wx] = kernelval((x-ix0+d),wx,kernelx);
     }
-    
+
     int xj, yj, zj;
     for (int z1=iz0-wz; z1<=iz0+wz; z1++) {
       zj=iz0-z1+wz;
@@ -687,24 +687,24 @@ namespace NEWIMAGE {
 	    float kerfac = storex[xj] * storey[yj] * storez[zj];
 	    convsum += this->operator()(x1,y1,z1) * kerfac;
 	    kersum += kerfac;
-	  } 
+	  }
 	}
       }
     }
-    
+
     if ( (fabs(kersum)>1e-9) ) {
       interpval = convsum / kersum;
     } else {
       interpval = (float) extrapolate(ix0,iy0,iz0);
     }
     return interpval;
-    
+
   }
-  
+
   // The following routines are used to obtain an interpolated intensity value and
   // either a selected partial derivative (dx, dy or dz) or all partial derivatives
-  // at the same location. The routine returning all derivatives is useful for 
-  // non-linear registration of one subject to another (or to an atlas) and the 
+  // at the same location. The routine returning all derivatives is useful for
+  // non-linear registration of one subject to another (or to an atlas) and the
   // routines returning a single derivative are useful e.g. for distortion correction.
   // Puss J
 
@@ -743,9 +743,9 @@ namespace NEWIMAGE {
       else {
 	T t000, t001, t010, t011, t100, t101, t110, t111;
 	this->getneighbours(ix,iy,iz,t000,t001,t010,t011,t100,t101,t110,t111);
-	v000 = ((float) t000); v001 = ((float) t001); v010 = ((float) t010);  
-	v011 = ((float) t011); v100 = ((float) t100); v101 = ((float) t101);  
-	v110 = ((float) t110); v111 = ((float) t111); 
+	v000 = ((float) t000); v001 = ((float) t001); v010 = ((float) t010);
+	v011 = ((float) t011); v100 = ((float) t100); v101 = ((float) t101);
+	v110 = ((float) t110); v111 = ((float) t111);
       }
       // The (seemingly silly) code multiplication below is to
       // ensure that in no case does calculating one of the partials
@@ -764,7 +764,7 @@ namespace NEWIMAGE {
 	*pderiv = tmp22 - tmp21;
 	return((1.0-dx)*tmp21 + dx*tmp22);
       }
-      else if (dir == 1) {       // df/dy 
+      else if (dir == 1) {       // df/dy
 	float onemdz = 1.0-dz;
 	tmp11 = onemdz*v000 + dz*v001;
 	tmp12 = onemdz*v010 + dz*v011;
@@ -824,15 +824,15 @@ namespace NEWIMAGE {
       else {
 	T t000, t001, t010, t011, t100, t101, t110, t111;
 	this->getneighbours(ix,iy,iz,t000,t001,t010,t011,t100,t101,t110,t111);
-	v000 = ((float) t000); v001 = ((float) t001); v010 = ((float) t010);  
-	v011 = ((float) t011); v100 = ((float) t100); v101 = ((float) t101);  
-	v110 = ((float) t110); v111 = ((float) t111); 
+	v000 = ((float) t000); v001 = ((float) t001); v010 = ((float) t010);
+	v011 = ((float) t011); v100 = ((float) t100); v101 = ((float) t101);
+	v110 = ((float) t110); v111 = ((float) t111);
       }
       //
       // And do linear interpolation with calculation of all partials
       //
       float onemdz = 1.0-dz;
-      float onemdy = 1.0-dy;    
+      float onemdy = 1.0-dy;
       float tmp11 = onemdz*v000 + dz*v001;
       float tmp12 = onemdz*v010 + dz*v011;
       float tmp13 = onemdz*v100 + dz*v101;
@@ -867,7 +867,7 @@ namespace NEWIMAGE {
       if (ep == boundsassert) { *deriv=0.0; assert(false); extrapval = padvalue; return(extrapval); }
       else if (ep == boundsexception) imthrow("splineinterpolate: Out of bounds",1);
       else if (ep == zeropad) { *deriv=0.0; extrapval = static_cast<T>(0.0); return(extrapval); }
-      else if (ep == constpad) { *deriv=0.0; extrapval = padvalue; return(extrapval); } 
+      else if (ep == constpad) { *deriv=0.0; extrapval = padvalue; return(extrapval); }
     }
 
     T         partial = static_cast<T>(0.0);
@@ -878,9 +878,9 @@ namespace NEWIMAGE {
       rval = static_cast<float>(spp(x,y,z,dir,&partial));
     }
     else rval = static_cast<float>(sp(x,y,z,dir,&partial));
-    *deriv = static_cast<float>(partial); 
+    *deriv = static_cast<float>(partial);
     return(rval);
-  }  
+  }
 
   template<class T>
   float volume<T>::spline_interp3partial(// Input
@@ -894,7 +894,7 @@ namespace NEWIMAGE {
       if (ep == boundsassert) { *dfdx=0.0; *dfdy=0.0; *dfdz=0.0; assert(false); extrapval = padvalue; return(extrapval); }
       else if (ep == boundsexception) imthrow("splineinterpolate: Out of bounds",1);
       else if (ep == zeropad) { *dfdx=0.0; *dfdy=0.0; *dfdz=0.0; extrapval = static_cast<T>(0.0); return(extrapval); }
-      else if (ep == constpad) { *dfdx=0.0; *dfdy=0.0; *dfdz=0.0; extrapval = padvalue; return(extrapval); } 
+      else if (ep == constpad) { *dfdx=0.0; *dfdy=0.0; *dfdz=0.0; extrapval = padvalue; return(extrapval); }
     }
 
     static std::vector<T>   partials(3,0);
@@ -905,9 +905,9 @@ namespace NEWIMAGE {
       rval = static_cast<float>(spp.ValAndDerivs(x,y,z,partials));
     }
     else rval = static_cast<float>(sp.ValAndDerivs(x,y,z,partials));
-    *dfdx = static_cast<float>(partials[0]); 
-    *dfdy = static_cast<float>(partials[1]); 
-    *dfdz = static_cast<float>(partials[2]); 
+    *dfdx = static_cast<float>(partials[0]);
+    *dfdy = static_cast<float>(partials[1]);
+    *dfdz = static_cast<float>(partials[2]);
     return(rval);
   }
 
@@ -920,7 +920,7 @@ namespace NEWIMAGE {
       if (ep == boundsassert) { assert(false); extrapval = padvalue; return(extrapval); }
       else if (ep == boundsexception) imthrow("splineinterpolate: Out of bounds",1);
       else if (ep == zeropad) { extrapval = static_cast<T>(0.0); return(extrapval); }
-      else if (ep == constpad) { extrapval = padvalue; return(extrapval); } 
+      else if (ep == constpad) { extrapval = padvalue; return(extrapval); }
     }
     if (ep == extraslice) if (!in_extraslice_bounds(x,y,z)) { extrapval = padvalue; return(extrapval); }
 
@@ -1000,9 +1000,9 @@ namespace NEWIMAGE {
 	  T t000=0, t001=0, t010=0, t011=0, t100=0, t101=0, t110=0, t111=0;
 	  float v000, v001, v010, v011, v100, v101, v110, v111;
 	  this->getneighbours(ix,iy,iz,t000,t001,t010,t011,t100,t101,t110,t111);
-	  v000=(float) t000; v001=(float) t001; v010=(float) t010; 
-	  v011=(float) t011; v100=(float) t100; v101=(float) t101; 
-	  v110=(float) t110; v111=(float) t111; 
+	  v000=(float) t000; v001=(float) t001; v010=(float) t010;
+	  v011=(float) t011; v100=(float) t100; v101=(float) t101;
+	  v110=(float) t110; v111=(float) t111;
 	  return q_tri_interpolation(v000,v001,v010,v011,v100,v101,v110,v111,
 				     dx,dy,dz);
 	}
@@ -1025,7 +1025,7 @@ namespace NEWIMAGE {
   template <class T>
   const T& volume<T>::extrapolate(int x, int y, int z) const
   {
-    
+
     switch (getextrapolationmethod()) {
     case userextrapolation:
       if (p_userextrap == 0) {
@@ -1070,7 +1070,7 @@ namespace NEWIMAGE {
         msg << "Out of Bounds at ("<<x<<","<<y<<","<<z<<")";
         imthrow(msg.str(),1);
       } else {
-        return extrapval; 
+        return extrapval;
       }
     case boundsassert:
       assert(in_bounds(x,y,z));
@@ -1086,7 +1086,7 @@ namespace NEWIMAGE {
   template <class T>
   void volume<T>::defineuserinterpolation(float (*interp)(
                          const volume<T>& , float, float, float)) const
-  { 
+  {
     p_userinterp = interp;
   }
 
@@ -1094,15 +1094,15 @@ namespace NEWIMAGE {
   template <class T>
   void volume<T>::defineuserextrapolation(T (*extrap)(
                          const volume<T>& , int, int, int)) const
-  { 
+  {
     p_userextrap = extrap;
   }
 
 
   template <class T>
-  void volume<T>::definekernelinterpolation(const ColumnVector& kx, 
+  void volume<T>::definekernelinterpolation(const ColumnVector& kx,
 					    const ColumnVector& ky,
-					    const ColumnVector& kz, 
+					    const ColumnVector& kz,
 					    int wx, int wy, int wz) const
   {
     // takes full-widths and converts all to half-widths
@@ -1120,7 +1120,7 @@ namespace NEWIMAGE {
   }
 
   // Support Functions
-  
+
   template <class T>
   void volume<T>::definesincinterpolation(const string& sincwindowtype,
 					  int w, int nstore) const
@@ -1131,7 +1131,7 @@ namespace NEWIMAGE {
 
   template <class T>
   void volume<T>::definesincinterpolation(const string& sincwindowtype,
-					  int wx, int wy, int wz, 
+					  int wx, int wy, int wz,
 					  int nstore) const
   {
     // full widths
@@ -1141,10 +1141,10 @@ namespace NEWIMAGE {
     kx = sinckernel1D(sincwindowtype,wx,nstore);
     ky = sinckernel1D(sincwindowtype,wy,nstore);
     kz = sinckernel1D(sincwindowtype,wz,nstore);
-    
+
     this->definekernelinterpolation(kx,ky,kz,wx,wy,wz);
   }
-  
+
 
   // PROPERTIES
 
@@ -1159,8 +1159,8 @@ namespace NEWIMAGE {
     // NOTE: no origin information is contained in this matrix!
     return samp;
   }
-  
-  template <class T>  
+
+  template <class T>
   Matrix volume4D<T>::sampling_mat() const
   {
     return this->operator[](0).sampling_mat();
@@ -1183,32 +1183,32 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  Matrix volume4D<T>::sform_mat() const 
+  Matrix volume4D<T>::sform_mat() const
   {
     return this->operator[](0).sform_mat();
   }
 
   template <class T>
-  int volume4D<T>::sform_code() const 
+  int volume4D<T>::sform_code() const
   {
     return this->operator[](0).sform_code();
   }
 
 
   template <class T>
-  Matrix volume4D<T>::qform_mat() const 
+  Matrix volume4D<T>::qform_mat() const
   {
     return this->operator[](0).qform_mat();
   }
 
   template <class T>
-  int volume4D<T>::qform_code() const 
+  int volume4D<T>::qform_code() const
   {
     return this->operator[](0).qform_code();
   }
 
   template <class T>
-  void volume4D<T>::set_sform(int sform_code, const Matrix& snewmat) const 
+  void volume4D<T>::set_sform(int sform_code, const Matrix& snewmat) const
   {
     for (int t=0; t<this->tsize(); t++) {
       vols[t].set_sform(sform_code,snewmat);
@@ -1216,7 +1216,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  void volume4D<T>::set_qform(int qform_code, const Matrix& qnewmat) const 
+  void volume4D<T>::set_qform(int qform_code, const Matrix& qnewmat) const
   {
     for (int t=0; t<this->tsize(); t++) {
       vols[t].set_qform(qform_code,qnewmat);
@@ -1246,20 +1246,20 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  int volume4D<T>::intent_code() const 
+  int volume4D<T>::intent_code() const
   {
     return this->operator[](0).intent_code();
   }
 
   template <class T>
-  float volume4D<T>::intent_param(int n) const 
+  float volume4D<T>::intent_param(int n) const
   {
     return this->operator[](0).intent_param(n);
   }
 
   template <class T>
-  void volume4D<T>::set_intent(int intent_code, float p1, float p2, float p3) 
-    const 
+  void volume4D<T>::set_intent(int intent_code, float p1, float p2, float p3)
+    const
   {
     for (int t=0; t<this->tsize(); t++) {
       vols[t].set_intent(intent_code,p1,p2,p3);
@@ -1275,18 +1275,18 @@ namespace NEWIMAGE {
     ColumnVector res = tmp.SubMatrix(1,3,n,n);
     return res;
   }
-  
+
   template <class T>
   Matrix volume<T>::principleaxes_mat() const
   {
     return principleaxes();
   }
-  
+
 
   int pval_index_end() { return -1; }
 
   template <class T>
-  int get_pval_index(const std::vector<T>& pvals, float p) 
+  int get_pval_index(const std::vector<T>& pvals, float p)
   {
     int idx=0;
     while (idx < (int) pvals.size()) {
@@ -1296,14 +1296,14 @@ namespace NEWIMAGE {
       else
 	idx++;
     }
-    return pval_index_end(); 
+    return pval_index_end();
   }
-    
+
 
   template <class T>
   T volume<T>::percentile(float pvalue, const volume<T>& mask) const
   {
-    if ((pvalue>1.0) || (pvalue<0.0)) 
+    if ((pvalue>1.0) || (pvalue<0.0))
       { imthrow("Percentiles must be in the range [0.0,1.0]",4); }
     std::vector<float> pvaluevec;
     std::vector<T> retval;
@@ -1316,7 +1316,7 @@ namespace NEWIMAGE {
   template <class T>
   T volume<T>::percentile(float pvalue) const
   {
-    if ((pvalue>1.0) || (pvalue<0.0)) 
+    if ((pvalue>1.0) || (pvalue<0.0))
       { imthrow("Percentiles must be in the range [0.0,1.0]",4); }
     int idx = get_pval_index(percentilepvals,pvalue);
     if (idx==pval_index_end()) {
@@ -1329,9 +1329,9 @@ namespace NEWIMAGE {
   }
 
 
- 
+
   template <class T>
-  std::vector<T> percentile_vec(std::vector<T>& hist, 
+  std::vector<T> percentile_vec(std::vector<T>& hist,
 				const std::vector<float>& percentilepvals)
   {
     unsigned int numbins = hist.size();
@@ -1340,12 +1340,12 @@ namespace NEWIMAGE {
       hist.push_back((T) 0);
       return hist;
     }
-    
+
     sort(hist.begin(),hist.end());
-    
+
     std::vector<T> outputvals(percentilepvals.size());
     for (unsigned int n=0; n<percentilepvals.size(); n++) {
-      unsigned int percentile = 
+      unsigned int percentile =
 	(unsigned int) (((float) numbins) * percentilepvals[n]);
       if (percentile<0)  percentile=0;
       if (percentile>=numbins)  percentile=numbins-1;
@@ -1353,10 +1353,10 @@ namespace NEWIMAGE {
     }
     return outputvals;
   }
-  
+
 
   template <class T>
-  std::vector<T> calc_percentiles(const volume<T>& vol, const volume<T>& mask, 
+  std::vector<T> calc_percentiles(const volume<T>& vol, const volume<T>& mask,
 				  const std::vector<float>& percentilepvals)
   {
     if (!samesize(vol,mask)) {
@@ -1371,8 +1371,8 @@ namespace NEWIMAGE {
       }
     }
     return percentile_vec(hist,percentilepvals);
-  }      
-  
+  }
+
 
   template <class T>
   std::vector<T> calc_percentiles(const volume<T>& vol)
@@ -1388,8 +1388,8 @@ namespace NEWIMAGE {
       }
     }
     return percentile_vec(hist,vol.percentilepvalues());
-  }      
-  
+  }
+
 
   template <class T>
   ColumnVector volume<T>::histogram(int nbins, T minval, T maxval) const
@@ -1421,7 +1421,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  ColumnVector volume<T>::histogram(int nbins, T minval, T maxval, 
+  ColumnVector volume<T>::histogram(int nbins, T minval, T maxval,
 				    const volume<T>& mask) const
   {
     ColumnVector hist;
@@ -1441,7 +1441,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.min;	
+    return retval.min;
   }
 
   template <class T>
@@ -1449,7 +1449,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.max;	
+    return retval.max;
   }
 
   template <class T>
@@ -1457,7 +1457,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minx;	
+    return retval.minx;
   }
 
   template <class T>
@@ -1465,7 +1465,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.miny;	
+    return retval.miny;
   }
 
   template <class T>
@@ -1473,7 +1473,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minz;	
+    return retval.minz;
   }
 
   template <class T>
@@ -1481,7 +1481,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxx;	
+    return retval.maxx;
   }
 
   template <class T>
@@ -1489,7 +1489,7 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxy;	
+    return retval.maxy;
   }
 
   template <class T>
@@ -1497,19 +1497,19 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxz;	
+    return retval.maxz;
   }
 
   template <class T>
   double volume<T>::mean(const volume<T>& mask) const
-  { 
+  {
     return sum(mask)/(Max((double) no_mask_voxels(mask),1.0));
   }
 
 
   template <class T>
   double volume<T>::variance(const volume<T>& mask) const
-  { 
+  {
     if (no_mask_voxels(mask)>0) {
       double n=(double) no_mask_voxels(mask);
       return (n/Max(1.0,n-1))*(sumsquares(mask)/n - mean(mask)*mean(mask));
@@ -1524,7 +1524,7 @@ namespace NEWIMAGE {
   minmaxstuff<T> calc_minmax(const volume<T>& vol)
   {
     T newmin, newmax;
-    int newminx=vol.minx(), newminy=vol.miny(), newminz=vol.minz(), 
+    int newminx=vol.minx(), newminy=vol.miny(), newminz=vol.minz(),
         newmaxx=vol.minx(), newmaxy=vol.miny(), newmaxz=vol.minz();
     newmin = newmax = vol(vol.minx(),vol.miny(),vol.minz());
     for (int z=vol.minz(); z<=vol.maxz(); z++) {
@@ -1560,7 +1560,7 @@ namespace NEWIMAGE {
     }
     bool valid=false;
     T newmin, newmax;
-    int newminx=vol.minx(), newminy=vol.miny(), newminz=vol.minz(), 
+    int newminx=vol.minx(), newminy=vol.miny(), newminz=vol.minz(),
         newmaxx=vol.minx(), newmaxy=vol.miny(), newmaxz=vol.minz();
     newmin = newmax = vol(vol.minx(),vol.miny(),vol.minz());
     for (int z=vol.minz(); z<=vol.maxz(); z++) {
@@ -1587,7 +1587,7 @@ namespace NEWIMAGE {
       newminmax.maxy = newmaxy;
       newminmax.maxz = newmaxz;
       newminmax.maxt = 0;
-    } else { 
+    } else {
 	// invalid return type
       cerr << "ERROR:: Empty mask image" << endl;
       newminmax.min = 0;
@@ -1629,7 +1629,7 @@ namespace NEWIMAGE {
       totsum2+=sum2;
     } else {
       for (typename volume<T>::fast_const_iterator it=vol.fbegin(),
-	       itend = vol.fend();   it!=itend; ++it) 
+	       itend = vol.fend();   it!=itend; ++it)
 	{
 	  T val = *it;
 	  sum += val;
@@ -1652,7 +1652,7 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[0];	
+    return retval[0];
   }
 
   template <class T>
@@ -1660,7 +1660,7 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[1];	
+    return retval[1];
   }
 
 
@@ -1717,7 +1717,7 @@ namespace NEWIMAGE {
 
 
 
-  
+
   // the following calculates a robust background by taking the 10th percentile
   //  of the edge voxels only
   // Note: it does NOT use the ROI even if it is active
@@ -1797,7 +1797,7 @@ namespace NEWIMAGE {
 	    tot += val;
 	    n++;
 	    if (n>nlim) {
-	      n=0; total+=tot; v_cog(1)+=vx; v_cog(2)+=vy; v_cog(3)+=vz; 
+	      n=0; total+=tot; v_cog(1)+=vx; v_cog(2)+=vy; v_cog(3)+=vz;
 	      tot=0; vx=0; vy=0; vz=0;
 	    }
 	  }
@@ -1913,23 +1913,23 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  int calc_histogram(const volume<T>& vol, int nbins, double minval, 
-		     double maxval, ColumnVector& hist, const volume<T>& mask, 
+  int calc_histogram(const volume<T>& vol, int nbins, double minval,
+		     double maxval, ColumnVector& hist, const volume<T>& mask,
 		     bool use_mask=true)
   {
     // MJ NOTE: Concerned about the behaviour for integer volumes
     //           as rounding could cause values to go into the wrong bins
     if (hist.Nrows()!=nbins) hist.ReSize(nbins);
     hist = 0.0;
-    
+
     if (maxval < minval) return -1;
-    
+
     double a=((double) nbins)/(maxval - minval);
     double b= - ((double) nbins)*minval/(maxval - minval);
     int binno = 0;
-    
-    for (int z=vol.minz(); z<=vol.maxz(); z++) { 
-      for (int y=vol.miny(); y<=vol.maxy(); y++) { 
+
+    for (int z=vol.minz(); z<=vol.maxz(); z++) {
+      for (int y=vol.miny(); y<=vol.maxy(); y++) {
 	for (int x=vol.minx(); x<=vol.maxx(); x++) {
 	  if ( (!use_mask) || (mask(x,y,z)>(T) 0.5) ) {
 	    binno = (int) (a*((double) vol(x,y,z)) + b);
@@ -1940,23 +1940,23 @@ namespace NEWIMAGE {
 	}
       }
     }
-    return 0; 
+    return 0;
   }
-  
+
 
 
 
   template <class T>
-  int calc_histogram(const volume<T>& vol, int nbins, double minval, 
+  int calc_histogram(const volume<T>& vol, int nbins, double minval,
 		     double maxval, ColumnVector& hist)
   {
     return calc_histogram(vol,nbins,minval,maxval,hist,vol,false);
   }
 
-  
+
 
   template <class T>
-  int calc_histogram(const volume4D<T>& vol, int nbins, double minval, 
+  int calc_histogram(const volume4D<T>& vol, int nbins, double minval,
 		     double maxval, ColumnVector& hist, const volume4D<T>& mask,
 		     bool use_mask=true)
   {
@@ -1968,16 +1968,16 @@ namespace NEWIMAGE {
 
     if (hist.Nrows()!=nbins) hist.ReSize(nbins);
     hist = 0.0;
-    
+
     if (maxval < minval) return -1;
-    
+
     double a=((double) nbins)/(maxval - minval);
     double b= - ((double) nbins)*minval/(maxval - minval);
     int binno = 0;
-    
-    for (int t=vol.mint(); t<=vol.maxt(); t++) { 
-      for (int z=vol.minz(); z<=vol.maxz(); z++) { 
-	for (int y=vol.miny(); y<=vol.maxy(); y++) { 
+
+    for (int t=vol.mint(); t<=vol.maxt(); t++) {
+      for (int z=vol.minz(); z<=vol.maxz(); z++) {
+	for (int y=vol.miny(); y<=vol.maxy(); y++) {
 	  for (int x=vol.minx(); x<=vol.maxx(); x++) {
 	    if ( (!use_mask) || (mask(x,y,z,Min(t,mask.maxt()))>(T) 0.5) ) {
 	      binno = (int) (a*((double) vol(x,y,z,t)) + b);
@@ -1989,13 +1989,13 @@ namespace NEWIMAGE {
 	}
       }
     }
-    return 0; 
+    return 0;
   }
-  
+
 
 
   template <class T>
-  int calc_histogram(const volume4D<T>& vol, int nbins, double minval, 
+  int calc_histogram(const volume4D<T>& vol, int nbins, double minval,
 		     double maxval, ColumnVector& hist, const volume<T>& mask,
 		     bool use_mask=true)
   {
@@ -2007,16 +2007,16 @@ namespace NEWIMAGE {
 
     if (hist.Nrows()!=nbins) hist.ReSize(nbins);
     hist = 0.0;
-    
+
     if (maxval < minval) return -1;
-    
+
     double a=((double) nbins)/(maxval - minval);
     double b= - ((double) nbins)*minval/(maxval - minval);
     int binno = 0;
-    
-    for (int t=vol.mint(); t<=vol.maxt(); t++) { 
-      for (int z=vol.minz(); z<=vol.maxz(); z++) { 
-	for (int y=vol.miny(); y<=vol.maxy(); y++) { 
+
+    for (int t=vol.mint(); t<=vol.maxt(); t++) {
+      for (int z=vol.minz(); z<=vol.maxz(); z++) {
+	for (int y=vol.miny(); y<=vol.maxy(); y++) {
 	  for (int x=vol.minx(); x<=vol.maxx(); x++) {
 	    if ( (!use_mask) || (mask(x,y,z)>(T) 0.5) ) {
 	      binno = (int) (a*((double) vol(x,y,z,t)) + b);
@@ -2028,12 +2028,12 @@ namespace NEWIMAGE {
 	}
       }
     }
-    return 0; 
+    return 0;
   }
-  
+
 
   template <class T>
-  int calc_histogram(const volume4D<T>& vol, int nbins, double minval, 
+  int calc_histogram(const volume4D<T>& vol, int nbins, double minval,
 		     double maxval, ColumnVector& hist)
   {
     return calc_histogram(vol,nbins,minval,maxval,hist,vol,false);
@@ -2042,7 +2042,7 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  int find_histogram(const volume<T>& vol, ColumnVector& hist, int bins, 
+  int find_histogram(const volume<T>& vol, ColumnVector& hist, int bins,
 		     T& min, T& max)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
@@ -2050,7 +2050,7 @@ namespace NEWIMAGE {
     /* zero histogram */
     hist=0;
     if (min==max) return -1;
-    
+
     /* create histogram; the MIN is so that the maximum value falls in the last valid bin, not the (last+1) bin */
 
     double fA = ((double)bins)/(max-min);
@@ -2063,18 +2063,18 @@ namespace NEWIMAGE {
 	}
       }
     }
-    
+
     return validsize;
   }
 
-  
-  
+
+
   template <class T>
-  int find_histogram(const volume<T>& vol, ColumnVector& hist, int bins, 
+  int find_histogram(const volume<T>& vol, ColumnVector& hist, int bins,
 		     T& min, T& max, const volume<T>& mask)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
-    if (!samesize(vol,mask)) { 
+    if (!samesize(vol,mask)) {
       imthrow("find_histogram:: mask and volume must be the same size",4);
     }
     if (no_mask_voxels(mask)==0) {
@@ -2085,7 +2085,7 @@ namespace NEWIMAGE {
     /* zero histogram */
     hist=0;
     if (min==max) return -1;
-    
+
     /* create histogram; the MIN is so that the maximum value falls in the last valid bin, not the (last+1) bin */
 
     double fA = ((double)bins)/(max-min);
@@ -2101,19 +2101,19 @@ namespace NEWIMAGE {
 	}
       }
     }
-    
+
     return validsize;
   }
-  
+
 
 
 
   template <class T>
-  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins, 
+  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins,
 		     T& min, T& max, const volume4D<T>& mask)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
-    if (!samesize(vol[0],mask[0])) { 
+    if (!samesize(vol[0],mask[0])) {
       imthrow("find_histogram:: mask and volume must be the same size",4);
     }
     if (no_mask_voxels(mask)==0) {
@@ -2124,7 +2124,7 @@ namespace NEWIMAGE {
     /* zero histogram */
     hist=0;
     if (min==max) return -1;
-    
+
     /* create histogram; the MIN is so that the maximum value falls in the last valid bin, not the (last+1) bin */
 
     double fA = ((double)bins)/(max-min);
@@ -2142,18 +2142,18 @@ namespace NEWIMAGE {
 	}
       }
     }
-    
+
     return validsize;
   }
-  
+
 
 
   template <class T>
-  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins, 
+  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins,
 		     T& min, T& max, const volume<T>& mask)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
-    if (!samesize(vol[0],mask)) { 
+    if (!samesize(vol[0],mask)) {
       imthrow("find_histogram:: mask and volume must be the same size",4);
     }
     if (no_mask_voxels(mask)==0) {
@@ -2171,7 +2171,7 @@ namespace NEWIMAGE {
       for (int z=vol.minz(); z<=vol.maxz(); z++) {
 	for (int y=vol.miny(); y<=vol.maxy(); y++) {
 	  for (int x=vol.minx(); x<=vol.maxx(); x++) {
-	    if ( (mask(x,y,z)>(T) 0.5) ) 
+	    if ( (mask(x,y,z)>(T) 0.5) )
 	      {
 		hist(Max(0, Min( (int)(fA*(vol(x,y,z,t)) + fB), bins-1) ) + 1)++;
 		validsize++;
@@ -2180,13 +2180,13 @@ namespace NEWIMAGE {
 	}
       }
     }
-    
+
     return validsize;
   }
-  
+
 
   template <class T>
-  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins, 
+  int find_histogram(const volume4D<T>& vol, ColumnVector& hist, int bins,
 		     T& min, T& max)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
@@ -2208,10 +2208,10 @@ namespace NEWIMAGE {
 	}
       }
     }
-    
+
     return validsize;
   }
-  
+
 
 
 
@@ -2219,7 +2219,7 @@ namespace NEWIMAGE {
   void find_thresholds(const S& vol, T& minval, T& maxval, const R& mask, bool use_mask=true)
   {
     // STEVE SMITH'S CODE - ADAPTED FOR NEWIMAGE BY MARK JENKINSON
-  int HISTOGRAM_BINS=1000; 
+  int HISTOGRAM_BINS=1000;
   ColumnVector hist(HISTOGRAM_BINS);
   int MAX_PASSES=10;
   int top_bin=0, bottom_bin=0, count, pass=1,
@@ -2232,13 +2232,13 @@ namespace NEWIMAGE {
   while ( (pass==1) ||
 	  ( (double) (thresh98 - thresh2) < (((double) (max - min)) / 10.0) ) ) // test for very long tails
     // find histogram and thresholds
-    { 
+    {
       if (pass>1) // redo histogram with new min and max
 	{
 	  // increase range slightly from the 2-98% range found
-	  bottom_bin=Max(bottom_bin-1,0);           
+	  bottom_bin=Max(bottom_bin-1,0);
 	  top_bin=Min(top_bin+1,HISTOGRAM_BINS-1);
-	  
+
 	  // now set new min and max on the basis of this new range
 	  T tmpmin = (T)( min + ((double)bottom_bin/(double)(HISTOGRAM_BINS))*(max-min) );
 	  max = (T)( min + ((double)(top_bin+1)/(double)(HISTOGRAM_BINS))*(max-min) );
@@ -2250,32 +2250,32 @@ namespace NEWIMAGE {
 	  if (use_mask) { min=vol.min(mask); max=vol.max(mask); }
  	  else { min=vol.min();  max=vol.max(); }
 	}
-       
+
       if (use_mask) validsize = find_histogram(vol,hist,HISTOGRAM_BINS,min,max,mask);
       else validsize = find_histogram(vol,hist,HISTOGRAM_BINS,min,max);
-      
+
       if (validsize<1)
 	{
           minval=thresh2=min;
 	  maxval=thresh98=max;
 	  return;
-	}    
-      
+	}
+
       if (pass==MAX_PASSES)  /* ... _but_ ignore end bins */
 	{
-	  validsize-= MISCMATHS::round(hist(lowest_bin+1)) + 
+	  validsize-= MISCMATHS::round(hist(lowest_bin+1)) +
 	    MISCMATHS::round(hist(highest_bin+1));
 	  lowest_bin++;
 	  highest_bin--;
 	}
-      
+
       if (validsize<0) /* ie zero range */
 	{
 
 	  thresh2=thresh98=min;
 	  break;
 	}
-      
+
       double fA = (max-min)/(double)(HISTOGRAM_BINS);
 
       for(count=0, bottom_bin=lowest_bin; count<validsize/50; bottom_bin++)
@@ -2293,7 +2293,7 @@ namespace NEWIMAGE {
     }
     minval=thresh2;
     maxval=thresh98;
-   
+
   }
 
 
@@ -2363,7 +2363,7 @@ namespace NEWIMAGE {
     return rlimits;
   }
 
-  
+
 
   template <class T>
   std::vector<T> calc_robustlimits(const volume4D<T>& vol, const volume<T>& mask)
@@ -2382,7 +2382,7 @@ namespace NEWIMAGE {
     return rlimits;
   }
 
-  
+
 
   template <class T>
   T volume<T>::robustmin(const volume<T>& mask) const
@@ -2458,7 +2458,7 @@ namespace NEWIMAGE {
     dim[0] = vol.xsize(); dim[1] = vol.ysize(); dim[2] = vol.zsize();
     std::vector<SPLINTERPOLATOR::ExtrapolationType>  ep(3,SPLINTERPOLATOR::Mirror);
     for (unsigned int i=0; i<3; i++) ep[i] = translate_extrapolation_type(vol.getextrapolationmethod());
-    
+
     SPLINTERPOLATOR::Splinterpolator<T>  rval(vol.fbegin(),dim,ep,vol.getsplineorder(),false);
 
     return(rval);
@@ -2483,7 +2483,7 @@ namespace NEWIMAGE {
       return(SPLINTERPOLATOR::Zeros);
       break;
     case constpad: // Not implemented in splinterpolator, so I'll deal with this too at the actual interpolation.
-      return(SPLINTERPOLATOR::Zeros); 
+      return(SPLINTERPOLATOR::Zeros);
       break;
     case userextrapolation:
       imthrow("translate_extrapolation_type: userextrapolation not implemented for spline interpolation",10);
@@ -2504,10 +2504,10 @@ namespace NEWIMAGE {
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
 	  for (int x=minx(); x<=maxx(); x++) {
-	    if ( ((tt==inclusive) && 
-			(value(x,y,z)>= lowerth) && (value(x,y,z)<= upperth))  
-	      || ((tt==exclusive) && 
-			(value(x,y,z)>lowerth) && (value(x,y,z)<upperth)) ) 
+	    if ( ((tt==inclusive) &&
+			(value(x,y,z)>= lowerth) && (value(x,y,z)<= upperth))
+	      || ((tt==exclusive) &&
+			(value(x,y,z)>lowerth) && (value(x,y,z)<upperth)) )
 	    {
 	      //value(x,y,z) = 1;
 	    } else {
@@ -2519,7 +2519,7 @@ namespace NEWIMAGE {
     } else {
       for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it) {
-	if ( ((tt==inclusive) && ((*it)>= lowerth) && ((*it)<= upperth)) 
+	if ( ((tt==inclusive) && ((*it)>= lowerth) && ((*it)<= upperth))
 	  || ((tt==exclusive) && ((*it)> lowerth) && ((*it)< upperth)) )
 	{
 	  //*it = 1;
@@ -2529,7 +2529,7 @@ namespace NEWIMAGE {
       }
     }
   }
-  
+
 
 
   template <class T>
@@ -2539,10 +2539,10 @@ namespace NEWIMAGE {
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
 	  for (int x=minx(); x<=maxx(); x++) {
-	    if ( ((tt==inclusive) && 
-			(value(x,y,z)>= lowerth) && (value(x,y,z)<= upperth))  
-	      || ((tt==exclusive) && 
-			(value(x,y,z)>lowerth) && (value(x,y,z)<upperth)) ) 
+	    if ( ((tt==inclusive) &&
+			(value(x,y,z)>= lowerth) && (value(x,y,z)<= upperth))
+	      || ((tt==exclusive) &&
+			(value(x,y,z)>lowerth) && (value(x,y,z)<upperth)) )
 	    {
 	      value(x,y,z) = 1;
 	    } else {
@@ -2554,7 +2554,7 @@ namespace NEWIMAGE {
     } else {
       for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it) {
-	if ( ((tt==inclusive) && ((*it)>= lowerth) && ((*it)<= upperth)) 
+	if ( ((tt==inclusive) && ((*it)>= lowerth) && ((*it)<= upperth))
 	  || ((tt==exclusive) && ((*it)> lowerth) && ((*it)< upperth)) )
 	{
 	  *it = 1;
@@ -2564,7 +2564,7 @@ namespace NEWIMAGE {
       }
     }
   }
-  
+
 
 
   template <class S>
@@ -2586,7 +2586,7 @@ namespace NEWIMAGE {
     }
     return (S) 0;  // should never get here
   }
- 
+
 
   template <class T>
   inline int coordval(const volume<T>& vol, int x, int y, int z, int dim)
@@ -2607,7 +2607,7 @@ namespace NEWIMAGE {
     }
     return 0;  // should never get here
   }
-  
+
 
   int dimarg(const string& val)
   {
@@ -2627,7 +2627,7 @@ namespace NEWIMAGE {
       return 0;
     }
   }
-  
+
 
   template <class T>
   void setrow(Matrix& affmat, int rownum, int dimnum, const volume<T>& invol)
@@ -2654,7 +2654,7 @@ namespace NEWIMAGE {
     }
     affmat(rownum,4)=fov;
   }
-  
+
 
   template <class T>
   Matrix volume<T>::swapmat(int dim1, int dim2, int dim3) const
@@ -2675,7 +2675,7 @@ namespace NEWIMAGE {
     return this->swapmat(dimarg(newx),dimarg(newy),dimarg(newz));
   }
 
-  
+
   template <class T>
   void volume<T>::swapdimensions(const string& newx, const string& newy, const string& newz)
   {
@@ -2695,14 +2695,14 @@ namespace NEWIMAGE {
   {
     // valid entries for dims are +/- 1, 2, 3 (corresponding to +/- x,y,z)
     if ( (dim1>3) || (dim1<-3) || (dim1==0) ||
-	 (dim2<-3) || (dim2>3) || (dim2==0) || 
+	 (dim2<-3) || (dim2>3) || (dim2==0) ||
 	 (dim3<-3) || (dim3>3) || (dim3==0) )
-      { 
+      {
 	imthrow("Invalid dimension numbers entered to swapdimensions",8);
       }
 
-    if ( (std::abs(dim1)==std::abs(dim2)) || (std::abs(dim1)==std::abs(dim3)) 
-	 || (std::abs(dim2)==std::abs(dim3)) ) 
+    if ( (std::abs(dim1)==std::abs(dim2)) || (std::abs(dim1)==std::abs(dim3))
+	 || (std::abs(dim2)==std::abs(dim3)) )
       {
 	imthrow("Dimension numbers were not a permutation in swapdimensions",8);
       }
@@ -2732,7 +2732,7 @@ namespace NEWIMAGE {
     // therefore the data really has flipped, as otherwise it views identically
     if (keepLRorder) {
       // arbitrarily choose x to flip (if necessary)
-      if (this->swapmat(dim1,dim2,dim3).Determinant() < 0) { dim1*=-1; }  
+      if (this->swapmat(dim1,dim2,dim3).Determinant() < 0) { dim1*=-1; }
     }
 
     float dx = swapval(this->xdim(), this->ydim(), this->zdim(), dim1);
@@ -2741,7 +2741,7 @@ namespace NEWIMAGE {
     swapvol.setdims(dx,dy,dz);
 
     // fix sform and qform matrices
-    //   NB: sform and qform are voxel->mm but swapmat is mm->mm (flirt mm), 
+    //   NB: sform and qform are voxel->mm but swapmat is mm->mm (flirt mm),
     //   hence sampling mats
 
     Matrix nmat;
@@ -2749,7 +2749,7 @@ namespace NEWIMAGE {
     swapvol.set_sform(this->sform_code(), nmat);
     nmat = this->qform_mat() * this->sampling_mat().i() * this->swapmat(dim1,dim2,dim3).i() * swapvol.sampling_mat();
     swapvol.set_qform(this->qform_code(), nmat);
-    
+
     int nx, ny, nz, mx, my, mz;
     mx = coordval(*this,this->minx(),this->miny(),this->minz(),dim1);
     my = coordval(*this,this->minx(),this->miny(),this->minz(),dim2);
@@ -2782,18 +2782,18 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  short vox2mm_all(const volume<T>& vol, Matrix& vox2mm_mat, short& code) 
+  short vox2mm_all(const volume<T>& vol, Matrix& vox2mm_mat, short& code)
   {
     mat44 vox2mm44;
     code = FslGetVox2mmMatrix2(&vox2mm44,vol.sform_code(),
-			      newmat_to_mat44(vol.sform_mat()), 
-			      vol.qform_code(), 
-			      newmat_to_mat44(vol.qform_mat()), 
+			      newmat_to_mat44(vol.sform_mat()),
+			      vol.qform_code(),
+			      newmat_to_mat44(vol.qform_mat()),
 			      vol.xdim(),vol.ydim(),vol.zdim());
     vox2mm_mat = mat44_to_newmat(vox2mm44);
     return code;
   }
- 	  	 
+
   template <class T>
   Matrix volume<T>::newimagevox2mm_mat() const
   {
@@ -2808,12 +2808,12 @@ namespace NEWIMAGE {
   {
     Matrix vox2vox=IdentityMatrix(4);
     if ((!RadiologicalFile) && (this->left_right_order()==FSL_RADIOLOGICAL)) {
-      vox2vox = (this->sampling_mat()).i() * this->swapmat(-1,2,3) * 
+      vox2vox = (this->sampling_mat()).i() * this->swapmat(-1,2,3) *
 	(this->sampling_mat());
     }
     return vox2vox;
   }
- 	 
+
 
 
   template <class T>
@@ -2847,7 +2847,7 @@ namespace NEWIMAGE {
     if (this->left_right_order()==FSL_RADIOLOGICAL) { this->swapLRorder(); }
   }
 
-  
+
 
 
   // ARITHMETIC OPERATIONS
@@ -2890,9 +2890,9 @@ namespace NEWIMAGE {
       }
     }
     return *this;
-    
+
   }
-    
+
   template <class T>
   const volume<T>& volume<T>::operator-=(T val)
   {
@@ -2911,9 +2911,9 @@ namespace NEWIMAGE {
       }
     }
     return *this;
-    
+
   }
-    
+
   template <class T>
   const volume<T>& volume<T>::operator*=(T val)
   {
@@ -2932,9 +2932,9 @@ namespace NEWIMAGE {
       }
     }
     return *this;
-    
+
   }
-    
+
   template <class T>
   const volume<T>& volume<T>::operator/=(T val)
   {
@@ -2953,9 +2953,9 @@ namespace NEWIMAGE {
       }
     }
     return *this;
-    
+
   }
-    
+
 
   template <class T>
   const volume<T>& volume<T>::operator+=(const volume<T>& source)
@@ -2964,7 +2964,7 @@ namespace NEWIMAGE {
       imthrow("Attempted to add images/ROIs of different sizes",3);
     }
     if (activeROI || source.activeROI) {
-      int xoff=source.minx()-minx(), yoff=source.miny()-miny(), 
+      int xoff=source.minx()-minx(), yoff=source.miny()-miny(),
 	  zoff=source.minz()-minz();
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
@@ -2975,13 +2975,13 @@ namespace NEWIMAGE {
       }
     } else {
       fast_const_iterator dit=source.fbegin();
-      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend(); 
+      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it, ++dit) {
 	*it += *dit;
       }
     }
     return *this;
-    
+
   }
 
 
@@ -2992,7 +2992,7 @@ namespace NEWIMAGE {
       imthrow("Attempted to subtract images/ROIs of different sizes",3);
     }
     if (activeROI || source.activeROI) {
-      int xoff=source.minx()-minx(), yoff=source.miny()-miny(), 
+      int xoff=source.minx()-minx(), yoff=source.miny()-miny(),
 	  zoff=source.minz()-minz();
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
@@ -3003,13 +3003,13 @@ namespace NEWIMAGE {
       }
     } else {
       fast_const_iterator dit=source.fbegin();
-      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend(); 
+      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it, ++dit) {
 	*it -= *dit;
       }
     }
     return *this;
-    
+
   }
 
 
@@ -3020,7 +3020,7 @@ namespace NEWIMAGE {
       imthrow("Attempted to multiply images/ROIs of different sizes",3);
     }
     if (activeROI || source.activeROI) {
-      int xoff=source.minx()-minx(), yoff=source.miny()-miny(), 
+      int xoff=source.minx()-minx(), yoff=source.miny()-miny(),
 	  zoff=source.minz()-minz();
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
@@ -3031,13 +3031,13 @@ namespace NEWIMAGE {
       }
     } else {
       fast_const_iterator dit=source.fbegin();
-      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend(); 
+      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it, ++dit) {
 	*it *= *dit;
       }
     }
     return *this;
-    
+
   }
 
 
@@ -3048,7 +3048,7 @@ namespace NEWIMAGE {
       imthrow("Attempted to divide images/ROIs of different sizes",3);
     }
     if (activeROI || source.activeROI) {
-      int xoff=source.minx()-minx(), yoff=source.miny()-miny(), 
+      int xoff=source.minx()-minx(), yoff=source.miny()-miny(),
 	  zoff=source.minz()-minz();
       for (int z=minz(); z<=maxz(); z++) {
 	for (int y=miny(); y<=maxy(); y++) {
@@ -3059,13 +3059,13 @@ namespace NEWIMAGE {
       }
     } else {
       fast_const_iterator dit=source.fbegin();
-      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend(); 
+      for (nonsafe_fast_iterator it=nsfbegin(), itend=nsfend();
 	   it!=itend; ++it, ++dit) {
 	*it /= *dit;
       }
     }
     return *this;
-    
+
   }
 
 
@@ -3149,7 +3149,7 @@ namespace NEWIMAGE {
 
   template <class T>
   minmaxstuff<T> calc_minmax(const volume4D<T>& source, const volume4D<T>& mask);
- 
+
   template <class T>
   std::vector<double> calc_sums(const volume4D<T>& vol);
 
@@ -3158,22 +3158,22 @@ namespace NEWIMAGE {
 
   template <class T>
   std::vector<double> calc_sums(const volume4D<T>& vol, const volume4D<T>& mask);
- 
+
   template <class T>
   std::vector<T> calc_percentiles(const volume4D<T>& vol);
 
   template <class T>
-  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume<T>& mask, 
+  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume<T>& mask,
 				  const std::vector<float>& percentilepvals);
 
   template <class T>
-  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume4D<T>& mask, 
+  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume4D<T>& mask,
 				  const std::vector<float>& percentilepvals);
 
   // CONSTRUCTORS (not including copy constructor - see under copying)
 
   template <class T>
-  int volume4D<T>::initialize(int xsize, int ysize, int zsize, int tsize, 
+  int volume4D<T>::initialize(int xsize, int ysize, int zsize, int tsize,
 				T *d)
   {
     this->destroy();
@@ -3220,7 +3220,7 @@ namespace NEWIMAGE {
     }
     percentilepvals.push_back(0.995);
     percentilepvals.push_back(0.999);
-    percentilepvals.push_back(1.0);    
+    percentilepvals.push_back(1.0);
 
     set_whole_cache_validity(false);
   }
@@ -3231,17 +3231,17 @@ namespace NEWIMAGE {
     {
       this->initialize(0,0,0,0,0);
     }
-  
+
 
   template <class T>
-  volume4D<T>::volume4D(int xsize, int ysize, int zsize, int tsize, T *d) 
+  volume4D<T>::volume4D(int xsize, int ysize, int zsize, int tsize, T *d)
     {
       this->initialize(xsize,ysize,zsize,tsize,d);
     }
 
 
   template <class T>
-  int volume4D<T>::reinitialize(int xsize, int ysize, int zsize, int tsize, 
+  int volume4D<T>::reinitialize(int xsize, int ysize, int zsize, int tsize,
 				  T *d)
     {
       return this->initialize(xsize,ysize,zsize,tsize,d);
@@ -3250,15 +3250,15 @@ namespace NEWIMAGE {
 
   template <class T>
   void volume4D<T>::destroy()
-    { 
+    {
       for (int t=0; t<tsize(); t++) { vols[t].destroy(); }
-      if (tsize()>0)  vols.clear(); 
+      if (tsize()>0)  vols.clear();
     }
 
 
   template <class T>
   volume4D<T>::~volume4D()
-    { 
+    {
       this->destroy();
     }
 
@@ -3267,8 +3267,8 @@ namespace NEWIMAGE {
   void volume4D<T>::setdefaultlimits() const
     {
       Limits[0]=0; Limits[1]=0; Limits[2]=0; Limits[3]=0;
-      Limits[4]=this->xsize()-1; 
-      Limits[5]=this->ysize()-1; 
+      Limits[4]=this->xsize()-1;
+      Limits[5]=this->ysize()-1;
       Limits[6]=this->zsize()-1;
       Limits[7]=this->tsize()-1;
     }
@@ -3277,14 +3277,14 @@ namespace NEWIMAGE {
   template <class T>
   void volume4D<T>::enforcelimits(std::vector<int>& lims) const
     {
-//        lims[0]=Max(0,lims[0]); 
-//        lims[1]=Max(0,lims[1]); 
-//        lims[2]=Max(0,lims[2]); 
-      lims[3]=Max(0,lims[3]); 
-//        lims[4]=Min(this->xsize() - 1,lims[4]); 
-//        lims[5]=Min(this->ysize() - 1,lims[5]); 
-//        lims[6]=Min(this->zsize() - 1,lims[6]); 
-      lims[7]=Min(this->tsize() - 1,lims[7]); 
+//        lims[0]=Max(0,lims[0]);
+//        lims[1]=Max(0,lims[1]);
+//        lims[2]=Max(0,lims[2]);
+      lims[3]=Max(0,lims[3]);
+//        lims[4]=Min(this->xsize() - 1,lims[4]);
+//        lims[5]=Min(this->ysize() - 1,lims[5]);
+//        lims[6]=Min(this->zsize() - 1,lims[6]);
+      lims[7]=Min(this->tsize() - 1,lims[7]);
     }
 
   // COPYING AND CONVERSION FUNCTIONS
@@ -3297,7 +3297,7 @@ namespace NEWIMAGE {
       this->copyvolumes(source);
       return this->copyproperties(source);
     }
-  
+
   template <class T>
   volume4D<T>::volume4D(const volume4D<T>& source)
     {
@@ -3324,7 +3324,7 @@ namespace NEWIMAGE {
     if (tsize() != source.tsize()) {
       imthrow("Attempted to copy with non-matching tsizes",2);
     }
-    
+
     for (int t=0; t<source.tsize(); t++) {
       vols[t] = source.vols[t];
     }
@@ -3414,25 +3414,25 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  void volume4D<T>::setROIlimits(int x0, int y0, int z0, int t0, 
+  void volume4D<T>::setROIlimits(int x0, int y0, int z0, int t0,
 				 int x1, int y1, int z1, int t1) const
-  { 
+  {
     this->setROIlimits(x0,y0,z0,x1,y1,z1);
     this->setROIlimits(t0,t1);
   }
-  
+
 
   template <class T>
-  void volume4D<T>::setROIlimits(int x0, int y0, int z0, 
+  void volume4D<T>::setROIlimits(int x0, int y0, int z0,
 				 int x1, int y1, int z1) const
-    { 
-      // Enforce ordering 
-      ROIbox[0]=Min(x0,x1); 
-      ROIbox[1]=Min(y0,y1); 
-      ROIbox[2]=Min(z0,z1); 
-      ROIbox[4]=Max(x0,x1); 
-      ROIbox[5]=Max(y0,y1); 
-      ROIbox[6]=Max(z0,z1); 
+    {
+      // Enforce ordering
+      ROIbox[0]=Min(x0,x1);
+      ROIbox[1]=Min(y0,y1);
+      ROIbox[2]=Min(z0,z1);
+      ROIbox[4]=Max(x0,x1);
+      ROIbox[5]=Max(y0,y1);
+      ROIbox[6]=Max(z0,z1);
       enforcelimits(ROIbox);
       for (int t=0; t<this->tsize(); t++) {
 	vols[t].setROIlimits(x0,y0,z0,x1,y1,z1);
@@ -3442,40 +3442,40 @@ namespace NEWIMAGE {
 
   template <class T>
   void volume4D<T>::setROIlimits(int t0, int t1) const
-    { 
-      // Enforce ordering 
-      ROIbox[3]=Min(t0,t1); 
-      ROIbox[7]=Max(t0,t1); 
+    {
+      // Enforce ordering
+      ROIbox[3]=Min(t0,t1);
+      ROIbox[7]=Max(t0,t1);
       enforcelimits(ROIbox);
       if (activeROI) this->activateROI();
     }
 
   template <class T>
   void volume4D<T>::setROIlimits(const std::vector<int>& lims) const
-      { 
-	if (lims.size()!=8) return; 
+      {
+	if (lims.size()!=8) return;
 	setROIlimits(lims[0],lims[1],lims[2],lims[3],
 		     lims[4],lims[5],lims[6],lims[7]);
       }
- 
+
   template <class T>
   void volume4D<T>::activateROI() const
-  { 
-    activeROI=true; 
+  {
+    activeROI=true;
     enforcelimits(ROIbox);
-    Limits = ROIbox; 
+    Limits = ROIbox;
     set_whole_cache_validity(false);
     for (int t=0; t<this->tsize(); t++) {
       vols[t].activateROI();
     }
   }
-  
+
   template <class T>
   void volume4D<T>::deactivateROI() const
-  { 
-    activeROI=false; 
+  {
+    activeROI=false;
     setdefaultlimits();
-    set_whole_cache_validity(false); 
+    set_whole_cache_validity(false);
     for (int t=0; t<this->tsize(); t++) {
       vols[t].deactivateROI();
     }
@@ -3483,7 +3483,7 @@ namespace NEWIMAGE {
 
 
   template <class T>
-  void make_consistent_params(const volume4D<T>& vols, int t) 
+  void make_consistent_params(const volume4D<T>& vols, int t)
     {
       vols[t].setextrapolationmethod(vols.getextrapolationmethod());
       vols[t].setinterpolationmethod(vols.getinterpolationmethod());
@@ -3499,7 +3499,7 @@ namespace NEWIMAGE {
 
 
   // VOLUME ACCESS FUNCTIONS (INSERT AND DELETE)
-  
+
   template <class T>
   void volume4D<T>::insertvolume(const volume<T>& source, int t)
   {
@@ -3518,14 +3518,14 @@ namespace NEWIMAGE {
   template <class T>
   void volume4D<T>::addvolume(const volume<T>& source)
   { // add to the end of the series
-    insertvolume(source,tsize()); 
+    insertvolume(source,tsize());
   }
 
   template <class T>
   void volume4D<T>::addvolume(const volume4D<T>& source)
   { // add to the end of the series
     for (int t=source.mint(); t<=source.maxt(); t++) {
-      addvolume(source[t]); 
+      addvolume(source[t]);
     }
   }
 
@@ -3551,13 +3551,13 @@ namespace NEWIMAGE {
 
   template <class T>
   interpolation volume4D<T>::getinterpolationmethod() const
-  { 
+  {
     return p_interpmethod;
   }
 
   template <class T>
   void volume4D<T>::setinterpolationmethod(interpolation interpmethod) const
-  { 
+  {
     p_interpmethod = interpmethod;
     if (interpmethod == userinterpolation) {
       this->defineuserinterpolation(p_userinterp);
@@ -3594,38 +3594,38 @@ namespace NEWIMAGE {
   {
     if (!tsize()) imthrow("getextrapolationvalidity: No volumes defined yet",10);
     return(vols[0].getextrapolationvalidity());
-  }  
+  }
 
   template <class T>
   extrapolation volume4D<T>::getextrapolationmethod() const
-  { 
+  {
     return p_extrapmethod;
   }
 
   template <class T>
   void volume4D<T>::setextrapolationmethod(extrapolation extrapmethod) const
-  { 
+  {
     p_extrapmethod = extrapmethod;
     for (int t=0;  t<tsize(); t++) vols[t].setextrapolationmethod(extrapmethod);
   }
 
   template <class T>
   void volume4D<T>::setpadvalue(T padval) const
-  { 
+  {
     p_padval = padval;
     for (int t=0;  t<tsize(); t++) vols[t].setpadvalue(padval);
   }
 
   template <class T>
   T volume4D<T>::getpadvalue() const
-  { 
+  {
     return p_padval;
   }
 
   template <class T>
   void volume4D<T>::defineuserinterpolation(float (*interp)(
                        const volume<T>& , float, float, float)) const
-  { 
+  {
     p_userinterp = interp;
     for (int t=0;  t<tsize(); t++) vols[t].defineuserinterpolation(interp);
   }
@@ -3633,57 +3633,57 @@ namespace NEWIMAGE {
   template <class T>
   void volume4D<T>::defineuserextrapolation(T (*extrap)(
                        const volume<T>& , int, int, int)) const
-  { 
+  {
     p_userextrap = extrap;
     for (int t=0;  t<tsize(); t++) vols[t].defineuserextrapolation(extrap);
   }
 
   template <class T>
-  void volume4D<T>::definekernelinterpolation(const ColumnVector& kx, 
+  void volume4D<T>::definekernelinterpolation(const ColumnVector& kx,
 					      const ColumnVector& ky,
-					      const ColumnVector& kz, 
+					      const ColumnVector& kz,
 					      int wx, int wy, int wz) const
-  { 
+  {
     // full widths
-    for (int t=0;  t<tsize(); t++) 
+    for (int t=0;  t<tsize(); t++)
       vols[t].definekernelinterpolation(kx,ky,kz,wx,wy,wz);
 
   }
 
   template <class T>
   void volume4D<T>::definekernelinterpolation(const volume4D<T>& vol) const
-  { 
+  {
     if (vol.tsize()>0) {
-      for (int t=0;  t<tsize(); t++) 
+      for (int t=0;  t<tsize(); t++)
 	vols[t].definekernelinterpolation(vol.vols[0]);
     }
   }
 
   template <class T>
   void volume4D<T>::definekernelinterpolation(const volume<T>& vol) const
-  { 
-    for (int t=0;  t<tsize(); t++) 
+  {
+    for (int t=0;  t<tsize(); t++)
       vols[t].definekernelinterpolation(vols[0]);
   }
 
   template <class T>
   void volume4D<T>::definesincinterpolation(const string& sincwindowtype,
 					    int w, int nstore) const
-  { 
+  {
     // full width
-    for (int t=0;  t<tsize(); t++) 
+    for (int t=0;  t<tsize(); t++)
       vols[t].definesincinterpolation(sincwindowtype, w, nstore);
   }
   template <class T>
   void volume4D<T>::definesincinterpolation(const string& sincwindowtype,
-					    int wx, int wy, int wz, 
+					    int wx, int wy, int wz,
 					    int nstore) const
-  { 
+  {
     // full widths
-    for (int t=0;  t<tsize(); t++) 
+    for (int t=0;  t<tsize(); t++)
       vols[t].definesincinterpolation(sincwindowtype, wx, wy, wz, nstore);
   }
-  
+
   // MATRIX <-> VOLUME4D CONVERSIONS
 
   template <class T>
@@ -3763,12 +3763,12 @@ namespace NEWIMAGE {
 			      const T pad)
   {
     int tsz = this->maxt() - this->mint() + 1;
-    if ( (tsz==0) || 
+    if ( (tsz==0) ||
 	 (tsz!=newmatrix.Nrows()) || (!samesize(mask,vols[0])) ) {
       this->reinitialize(mask.xsize(),mask.ysize(),mask.zsize(),
 			 newmatrix.Nrows());
     }
-    this->copyproperties(mask);		       
+    this->copyproperties(mask);
     this->operator=(pad);
     if (newmatrix.Ncols()!=no_mask_voxels(mask)) {
       imthrow("Incompatible number of mask positions and matrix columns",4);
@@ -3792,7 +3792,7 @@ namespace NEWIMAGE {
 
     set_whole_cache_validity(false);
   }
-      
+
 
   template <class T>
   void volume4D<T>::setmatrix(const Matrix& newmatrix)
@@ -3801,7 +3801,7 @@ namespace NEWIMAGE {
     dummymask = 1;
     this->setmatrix(newmatrix,dummymask,0);
   }
-  
+
   template <class T>
   volume<int> volume4D<T>::vol2matrixkey(volume<T>& mask)
   {
@@ -3817,11 +3817,11 @@ namespace NEWIMAGE {
 	  else{
 	    tmp(x,y,z)=0;
 	  }
-	  
+
 	}
       }
     }
-   
+
     return tmp;
   }
 
@@ -3847,7 +3847,7 @@ namespace NEWIMAGE {
 	  }
     key.Release();
     return key;
-     
+
   }
 
 
@@ -3884,7 +3884,7 @@ namespace NEWIMAGE {
   // PROPERTIES
 
   template <class T>
-  void volume4D<T>::setxdim(float x) 
+  void volume4D<T>::setxdim(float x)
     { for (int t=0; t<tsize(); t++) vols[t].setxdim(x); }
 
   template <class T>
@@ -3912,12 +3912,12 @@ namespace NEWIMAGE {
     newminmax.min=source(source.minx(),source.miny(),source.minz(),source.mint());
     newminmax.max=newminmax.min;
     newminmax.minx=source.minx();
-    newminmax.miny=source.miny(); 
-    newminmax.minz=source.minz(); 
-    newminmax.maxx=source.minx(); 
-    newminmax.maxy=source.miny(); 
+    newminmax.miny=source.miny();
+    newminmax.minz=source.minz();
+    newminmax.maxx=source.minx();
+    newminmax.maxy=source.miny();
     newminmax.maxz=source.minz();
-    newminmax.mint=source.mint(); 
+    newminmax.mint=source.mint();
     newminmax.maxt=source.maxt();
 
 
@@ -3927,7 +3927,7 @@ namespace NEWIMAGE {
       newminmax.maxt = source.mint();
     }
     for (int t=source.mint(); t<=source.maxt(); t++) {
-      if (source[t].min() < newminmax.min) { 
+      if (source[t].min() < newminmax.min) {
 	newminmax.min = source[t].min();
 	newminmax.minx = source[t].mincoordx();
 	newminmax.miny = source[t].mincoordy();
@@ -3952,27 +3952,27 @@ namespace NEWIMAGE {
     if (!samesize(source[0],mask)) {
       imthrow("Mask of different size used in calc_minmax",3);
     }
-    
+
     minmaxstuff<T> newminmax;
     newminmax.min=source(source.minx(),source.miny(),source.minz(),source.mint());
     newminmax.max=newminmax.min;
     newminmax.minx=source.minx();
-    newminmax.miny=source.miny(); 
-    newminmax.minz=source.minz(); 
-    newminmax.maxx=source.minx(); 
-    newminmax.maxy=source.miny(); 
+    newminmax.miny=source.miny();
+    newminmax.minz=source.minz();
+    newminmax.maxx=source.minx();
+    newminmax.maxy=source.miny();
     newminmax.maxz=source.minz();
-    newminmax.mint=source.mint(); 
+    newminmax.mint=source.mint();
     newminmax.maxt=source.maxt();
-    
-    
+
+
     if (source.maxt()>=source.mint()) {
       newminmax = calc_minmax(source[source.mint()],mask);
       newminmax.mint = source.mint();
       newminmax.maxt = source.mint();
     }
     for (int t=source.mint(); t<=source.maxt(); t++) {
-      if (source[t].min(mask) < newminmax.min) { 
+      if (source[t].min(mask) < newminmax.min) {
 	newminmax.min = source[t].min(mask);
 	newminmax.minx = source[t].mincoordx(mask);
 	newminmax.miny = source[t].mincoordy(mask);
@@ -3989,8 +3989,8 @@ namespace NEWIMAGE {
     }
     return newminmax;
   }
-  
-  
+
+
 
   template <class T>
   minmaxstuff<T> calc_minmax(const volume4D<T>& source, const volume4D<T>& mask)
@@ -3998,17 +3998,17 @@ namespace NEWIMAGE {
     if (!samesize(source[0],mask[0])) {
       imthrow("Mask of different size used in calc_minmax",3);
     }
-    
+
     minmaxstuff<T> newminmax;
     newminmax.min=source(source.minx(),source.miny(),source.minz(),source.mint());
     newminmax.max=newminmax.min;
     newminmax.minx=source.minx();
-    newminmax.miny=source.miny(); 
-    newminmax.minz=source.minz(); 
-    newminmax.maxx=source.minx(); 
-    newminmax.maxy=source.miny(); 
+    newminmax.miny=source.miny();
+    newminmax.minz=source.minz();
+    newminmax.maxx=source.minx();
+    newminmax.maxy=source.miny();
     newminmax.maxz=source.minz();
-    newminmax.mint=source.mint(); 
+    newminmax.mint=source.mint();
     newminmax.maxt=source.maxt();
 
 
@@ -4018,7 +4018,7 @@ namespace NEWIMAGE {
       newminmax.maxt = source.mint();
     }
     for (int t=source.mint(); t<=source.maxt(); t++) {
-      if (source[t].min(mask[Min(t,mask.maxt())]) < newminmax.min) { 
+      if (source[t].min(mask[Min(t,mask.maxt())]) < newminmax.min) {
 	newminmax.min = source[t].min(mask[Min(t,mask.maxt())]);
 	newminmax.minx = source[t].mincoordx(mask[Min(t,mask.maxt())]);
 	newminmax.miny = source[t].mincoordy(mask[Min(t,mask.maxt())]);
@@ -4035,8 +4035,8 @@ namespace NEWIMAGE {
     }
     return newminmax;
   }
-  
-  
+
+
   template <class T>
   std::vector<double> calc_sums(const volume4D<T>& vol)
   {
@@ -4067,7 +4067,7 @@ namespace NEWIMAGE {
     return newsums;
   }
 
-  
+
   template <class T>
   std::vector<double> calc_sums(const volume4D<T>& vol, const volume4D<T>& mask)
   {
@@ -4085,21 +4085,21 @@ namespace NEWIMAGE {
   }
 
 
-  
+
   template <class T>
   T volume4D<T>::min(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.min;	
+    return retval.min;
   }
-  
+
   template <class T>
   T volume4D<T>::min(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.min;	
+    return retval.min;
   }
 
   template <class T>
@@ -4107,15 +4107,15 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.max;	
+    return retval.max;
   }
-  
+
   template <class T>
   T volume4D<T>::max(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.max;	
+    return retval.max;
   }
 
   template <class T>
@@ -4123,95 +4123,95 @@ namespace NEWIMAGE {
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minx;	
+    return retval.minx;
   }
-  
+
   template <class T>
   int volume4D<T>::mincoordx(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minx;	
+    return retval.minx;
   }
-  
+
   template <class T>
   int volume4D<T>::mincoordy(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.miny;	
+    return retval.miny;
   }
-  
+
   template <class T>
   int volume4D<T>::mincoordy(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.miny;	
+    return retval.miny;
   }
-  
+
   template <class T>
   int volume4D<T>::mincoordz(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minz;	
+    return retval.minz;
   }
-  
+
   template <class T>
   int volume4D<T>::mincoordz(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.minz;	
+    return retval.minz;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordx(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxx;	
+    return retval.maxx;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordx(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxx;	
+    return retval.maxx;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordy(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxy;	
+    return retval.maxy;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordy(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxy;	
+    return retval.maxy;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordz(const volume<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxz;	
+    return retval.maxz;
   }
-  
+
   template <class T>
   int volume4D<T>::maxcoordz(const volume4D<T>& mask) const
   {
     minmaxstuff<T> retval;
     retval = calc_minmax(*this,mask);
-    return retval.maxz;	
+    return retval.maxz;
   }
 
   template <class T>
@@ -4219,7 +4219,7 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[0];	
+    return retval[0];
   }
 
   template <class T>
@@ -4227,7 +4227,7 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[0];	
+    return retval[0];
   }
 
   template <class T>
@@ -4235,7 +4235,7 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[1];	
+    return retval[1];
   }
 
   template <class T>
@@ -4243,25 +4243,25 @@ namespace NEWIMAGE {
   {
     std::vector<double> retval;
     retval = calc_sums(*this,mask);
-    return retval[1];	
+    return retval[1];
   }
 
   template <class T>
   double volume4D<T>::mean(const volume<T>& mask) const
-  { 
+  {
     return sum(mask)/(Max((double) no_mask_voxels(mask),1.0));
   }
 
   template <class T>
   double volume4D<T>::mean(const volume4D<T>& mask) const
-  { 
+  {
     return sum(mask)/(Max((double) no_mask_voxels(mask),1.0));
   }
 
 
   template <class T>
   double volume4D<T>::variance(const volume<T>& mask) const
-  { 
+  {
     if (no_mask_voxels(mask)>0) {
       double n=(double) no_mask_voxels(mask);
       return (n/Max(1.0,n-1))*(sumsquares(mask)/n - mean(mask)*mean(mask));
@@ -4273,7 +4273,7 @@ namespace NEWIMAGE {
 
   template <class T>
   double volume4D<T>::variance(const volume4D<T>& mask) const
-  { 
+  {
     if (no_mask_voxels(mask)>0) {
       double n=(double) no_mask_voxels(mask);
       return (n/Max(1.0,n-1))*(sumsquares(mask)/n - mean(mask)*mean(mask));
@@ -4288,7 +4288,7 @@ namespace NEWIMAGE {
   template <class T>
   T volume4D<T>::percentile(float pvalue) const
   {
-    if ((pvalue>1.0) || (pvalue<0.0)) 
+    if ((pvalue>1.0) || (pvalue<0.0))
       { imthrow("Percentiles must be in the range [0.0,1.0]",4); }
     int idx = get_pval_index(percentilepvals,pvalue);
     if (idx==pval_index_end()) {
@@ -4304,7 +4304,7 @@ namespace NEWIMAGE {
   template <class T>
   T volume4D<T>::percentile(float pvalue, const volume<T>& mask) const
   {
-    if ((pvalue>1.0) || (pvalue<0.0)) 
+    if ((pvalue>1.0) || (pvalue<0.0))
       { imthrow("Percentiles must be in the range [0.0,1.0]",4); }
     std::vector<float> pvaluevec;
     std::vector<T> retval;
@@ -4317,7 +4317,7 @@ namespace NEWIMAGE {
   template <class T>
   T volume4D<T>::percentile(float pvalue, const volume4D<T>& mask) const
   {
-    if ((pvalue>1.0) || (pvalue<0.0)) 
+    if ((pvalue>1.0) || (pvalue<0.0))
       { imthrow("Percentiles must be in the range [0.0,1.0]",4); }
     std::vector<float> pvaluevec;
     std::vector<T> retval;
@@ -4344,11 +4344,11 @@ namespace NEWIMAGE {
       }
     }
     return percentile_vec(hist,vol.percentilepvalues());
-  }      
+  }
 
-  
+
   template <class T>
-  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume<T>& mask, 
+  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume<T>& mask,
 				    const std::vector<float>& percentilepvals)
   {
     if (!samesize(vol[0],mask)) {
@@ -4367,11 +4367,11 @@ namespace NEWIMAGE {
       }
     }
     return percentile_vec(hist,percentilepvals);
-  }      
-  
+  }
+
 
   template <class T>
-  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume4D<T>& mask, 
+  std::vector<T> calc_percentiles(const volume4D<T>& vol, const volume4D<T>& mask,
 				    const std::vector<float>& percentilepvals)
   {
     if (!samesize(vol[0],mask[0])) {
@@ -4388,7 +4388,7 @@ namespace NEWIMAGE {
       }
     }
     return percentile_vec(hist,percentilepvals);
-  }      
+  }
 
 
 
@@ -4418,7 +4418,7 @@ namespace NEWIMAGE {
     return hist;
   }
 
- 
+
   template <class T>
   ColumnVector volume4D<T>::histogram(int nbins, T minval, T maxval) const
   {
@@ -4449,7 +4449,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  ColumnVector volume4D<T>::histogram(int nbins, T minval, T maxval, 
+  ColumnVector volume4D<T>::histogram(int nbins, T minval, T maxval,
 				      const volume4D<T>& mask) const
   {
     ColumnVector hist;
@@ -4462,9 +4462,9 @@ namespace NEWIMAGE {
   {
     return histogram(nbins,robustmin(),robustmax(),mask);
   }
-    
+
   template <class T>
-  ColumnVector volume4D<T>::histogram(int nbins, T minval, T maxval, 
+  ColumnVector volume4D<T>::histogram(int nbins, T minval, T maxval,
 				      const volume<T>& mask) const
   {
     ColumnVector hist;
@@ -4477,8 +4477,8 @@ namespace NEWIMAGE {
   {
     return histogram(nbins,robustmin(),robustmax(),mask);
   }
-    
-  
+
+
 
  // GENERAL MANIPULATION
 
@@ -4487,19 +4487,19 @@ namespace NEWIMAGE {
   {
     set_whole_cache_validity(false);
     for (int t=this->mint(); t<=this->maxt(); t++)  {
-      vols[t].binarise(lowerth,upperth,tt); 
+      vols[t].binarise(lowerth,upperth,tt);
     }
   }
-  
+
   template <class T>
   void volume4D<T>::threshold(T lowerth, T upperth, threshtype tt)
   {
     set_whole_cache_validity(false);
-    for (int t=this->mint(); t<=this->maxt(); t++)  { 
-      vols[t].threshold(lowerth,upperth,tt); 
+    for (int t=this->mint(); t<=this->maxt(); t++)  {
+      vols[t].threshold(lowerth,upperth,tt);
     }
   }
-  
+
   template <class T>
   void volume4D<T>::swapdimensions(int dim1, int dim2, int dim3)
   {
@@ -4538,7 +4538,7 @@ namespace NEWIMAGE {
     if (this->tsize()>0) return vols[0].newimagevox2mm_mat();
     return IdentityMatrix(4);
   }
- 	 
+
   template <class T>
   Matrix volume4D<T>::niftivox2newimagevox_mat() const
   {
@@ -4546,7 +4546,7 @@ namespace NEWIMAGE {
     return IdentityMatrix(4);
   }
 
- 	 
+
   template <class T>
   int volume4D<T>::left_right_order() const
   {
@@ -4604,7 +4604,7 @@ namespace NEWIMAGE {
     }
     return *this;
   }
-    
+
   template <class T>
   const volume4D<T>& volume4D<T>::operator-=(T val)
   {
@@ -4614,7 +4614,7 @@ namespace NEWIMAGE {
     }
     return *this;
   }
-    
+
   template <class T>
   const volume4D<T>& volume4D<T>::operator*=(T val)
   {
@@ -4624,7 +4624,7 @@ namespace NEWIMAGE {
     }
     return *this;
   }
-    
+
   template <class T>
   const volume4D<T>& volume4D<T>::operator/=(T val)
   {
@@ -4634,7 +4634,7 @@ namespace NEWIMAGE {
     }
     return *this;
   }
-    
+
 
   template <class T>
   const volume4D<T>& volume4D<T>::operator+=(const volume<T>& source)
@@ -4647,7 +4647,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  const volume4D<T>& volume4D<T>::operator-=(const volume<T>& source) 
+  const volume4D<T>& volume4D<T>::operator-=(const volume<T>& source)
   {
     set_whole_cache_validity(false);
     for (int t=this->mint(); t<=this->maxt(); t++) {
@@ -4657,7 +4657,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  const volume4D<T>& volume4D<T>::operator*=(const volume<T>& source) 
+  const volume4D<T>& volume4D<T>::operator*=(const volume<T>& source)
   {
     set_whole_cache_validity(false);
     for (int t=this->mint(); t<=this->maxt(); t++) {
@@ -4667,7 +4667,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  const volume4D<T>& volume4D<T>::operator/=(const volume<T>& source) 
+  const volume4D<T>& volume4D<T>::operator/=(const volume<T>& source)
   {
     set_whole_cache_validity(false);
     for (int t=this->mint(); t<=this->maxt(); t++) {
@@ -4676,7 +4676,7 @@ namespace NEWIMAGE {
     return *this;
   }
 
- 
+
   template <class T>
   const volume4D<T>& volume4D<T>::operator+=(const volume4D<T>& source)
   {

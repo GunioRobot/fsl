@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -92,7 +92,7 @@ using namespace NEWMAT;
       EigenValues(Q,D,V);
       vector<pair<float,int> > myvec;
       vector<pair<float,int> > myvec2;
-      
+
       for(int i=1;i<=D.Nrows();i++){
 	pair<float,int> mypair;
 	mypair.first=D(i);
@@ -101,14 +101,14 @@ using namespace NEWMAT;
       }
       sort(myvec.begin(),myvec.end());
       int ind=myvec[1].second; // index for second eigenval
-      
+
       ColumnVector v2scale(V.Nrows());
       for(int i=1;i<=V.Nrows();i++){
 	v2scale(i)=V(i,ind); //second eigvec
       }
       v2scale=t*v2scale; //scale it
-      
-      
+
+
       for(int i=1;i<=D.Nrows();i++){
 	pair<float,int> mypair;
 	mypair.first=v2scale(i);
@@ -116,23 +116,23 @@ using namespace NEWMAT;
 	myvec2.push_back(mypair);
       }
       //myvec2 contains scaled second eigenvector and index for sorting.
-      
-      
+
+
       sort(myvec2.begin(),myvec2.end());
       r.ReSize(D.Nrows());
       y.ReSize(D.Nrows());
-      
+
       for(int i=1;i<=D.Nrows();i++){
 	y(i)=myvec2[i-1].first;
 	r(i)=myvec2[i-1].second;
       }
-      
-  } 
+
+  }
 
 
 void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& tractcoordmat,const bool coordbool,const bool tractcoordbool,Matrix& newOMmat,Matrix& newcoordmat, Matrix& newtractcoordmat)
 {
- 
+
  vector<int> zerorows;
  vector<int> zerocols;
  int dimsum =0;
@@ -190,7 +190,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
      }
      else{zcolcounter++;} //move onto next z col
    }
-   
+
    else{  //No zero Columns
      for(int i=1;i<=myOMmat.Nrows();i++){
        if(zerorows.size()>0){
@@ -221,7 +221,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
        }
        else{zrowcounter++;}
      }
-   } 
+   }
    else{//No zero Rows
      newcoordmat=coordmat;
    }
@@ -241,7 +241,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
        else{zcolcounter++;}
      }
    }
-   else{//No zero Cols 
+   else{//No zero Cols
      newtractcoordmat=tractcoordmat;
    }
  }
@@ -258,7 +258,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
 
 void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,const vector<int>& excl_cols)
 {
- 
+
 
  Matrix newOMmat,newtractcoordmat;
  newOMmat.ReSize(myOMmat.Nrows(),myOMmat.Ncols()-excl_cols.size());
@@ -272,7 +272,7 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
 
  for(int j=1;j<=myOMmat.Ncols();j++){
    zrowcounter=0;
-   nzrowcounter=1;   
+   nzrowcounter=1;
 
    if(excl_cols.size()>0){ //Are there any excl Columns
      if(excl_cols[zcolcounter]!=j){  // Only add a col if it's not the next zcol
@@ -305,7 +305,7 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
    }
 }
 
- 
+
  if(tractcoordbool){
    zcolcounter=0;nzcolcounter=1;
    if(excl_cols.size()>0){//Are there any zero cols?
@@ -319,14 +319,14 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
        else{zcolcounter++;}
      }
    }
-   else{//No zero Cols 
+   else{//No zero Cols
      newtractcoordmat=tractcoordmat;
    }
  }
 
  myOMmat = newOMmat;
  tractcoordmat = newtractcoordmat;
-  
+
 }
 
 
@@ -354,7 +354,7 @@ int main ( int argc, char **argv ){
  volume<int> tractcoordvol;
  bool coordbool=false,tractcoordbool=false;
  read_volume(myOM,ip);
- 
+
  Matrix myOMmat(myOM.xsize(),myOM.ysize());
  Matrix mycoordmat,mytractcoordmat;
  Matrix newOMmat,newcoordmat,newtractcoordmat;
@@ -362,7 +362,7 @@ int main ( int argc, char **argv ){
  for(int j=0;j<myOM.ysize();j++){
    for(int i=0;i<myOM.xsize();i++){
      if(atof(argv[3])==0)
-       myOMmat(i+1,j+1)=float(myOM(i,j,0)); 
+       myOMmat(i+1,j+1)=float(myOM(i,j,0));
      else{
        if(myOM(i,j,0)>atof(argv[3])){
 	 myOMmat(i+1,j+1)=1.0f;
@@ -406,11 +406,11 @@ int main ( int argc, char **argv ){
  else{
    cerr<<"Tract Space Coordinate File Not present - Ignoring"<<endl;
  }
- 
 
 
- // If user specifies an exclusion mask in tract space. 
- // work out which columns in the matrix to remove 
+
+ // If user specifies an exclusion mask in tract space.
+ // work out which columns in the matrix to remove
  // This only works if there is a lookup matrix available
 
 
@@ -431,7 +431,7 @@ int main ( int argc, char **argv ){
        for(int i=0;i<=excl.xsize();i++){
 	 if(excl(i,j,k)==1){
 	   if(lookup_tract(i,j,k)!=0){
-	     
+
 	     if(lookup_tract(i,j,k)<=mytractcoordmat.Nrows()){
 	       excl_cols.push_back(lookup_tract(i,j,k)+1);
 	     }
@@ -441,8 +441,8 @@ int main ( int argc, char **argv ){
 	       cerr<<"If so you can't use an exclusion mask as the"<<endl;
 	       cerr<<"tractspace_lookup volume is not valid for this matrix"<<endl;
 	     }
-	     
-	     
+
+
 	   }
 	 }
        }
@@ -452,12 +452,12 @@ int main ( int argc, char **argv ){
    rem_cols(myOMmat,mytractcoordmat,tractcoordbool,excl_cols);
  }
 
- 
+
  rem_zrowcol(myOMmat,mycoordmat,mytractcoordmat,coordbool,tractcoordbool,newOMmat,newcoordmat,newtractcoordmat);
 //   cerr<<"NOW"<<endl;
 //   cerr<<myOMmat.MaximumAbsoluteValue()<<endl;
 //   cerr<<newOMmat.MaximumAbsoluteValue()<<endl;
- 
+
 //write_ascii_matrix("ncm",newcoordmat);
 // write_ascii_matrix("nctm",newtractcoordmat);
 
@@ -483,16 +483,16 @@ cerr<<"Starting first Reordering"<<endl;
    }
  }
 
- 
+
   if(coordbool){
    cerr<<"Permuting Seed Coordinates"<<endl;
    for(int i=0;i<outcoords.xsize();i++){
      outcoords(i,0,0)=(int)newcoordmat(int(r1(i+1)),1);
      outcoords(i,1,0)=(int)newcoordmat(int(r1(i+1)),2);
      outcoords(i,2,0)=(int)newcoordmat(int(r1(i+1)),3);
-   } 
+   }
  }
- 
+
  write_ascii_matrix(r1,base+"r1");
  write_ascii_matrix(y1,base+"y1");
  save_volume(outCCvol,"reord_CC_"+base);
@@ -506,7 +506,7 @@ cerr<<"Starting first Reordering"<<endl;
  CC << corrcoef(newOMmat);
  CC<<CC+1;
  spect_reord(CC,r2,y2);
- 
+
  write_ascii_matrix(r2,base+"r2");
  write_ascii_matrix(y2,base+"y2");
 
@@ -527,14 +527,14 @@ cerr<<"Starting first Reordering"<<endl;
      outtractcoords(i,0,0)=(int)newtractcoordmat(int(r2(i+1)),1);
      outtractcoords(i,1,0)=(int)newtractcoordmat(int(r2(i+1)),2);
      outtractcoords(i,2,0)=(int)newtractcoordmat(int(r2(i+1)),3);
-   } 
+   }
  }
  save_volume(outvol,"reord_"+base);
  save_volume(outtractcoords,"tract_space_coords_for_reord_"+base);
 
  return 0;
 }
- 
+
 
 
 

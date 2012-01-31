@@ -15,5 +15,5 @@ FLIRT v3.0   - ?
 FLIRT v3.1   - Added cost function weighting (also fixed bounds error bug)
 FLIRT v4.0   - Converted to use newimage rather than mjimage (now obsolete)
 FLIRT v4.1   - Recompiled on all platforms (4.0 was not consistent in results...)
- 
+
 

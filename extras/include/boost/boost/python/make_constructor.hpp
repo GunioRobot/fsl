@@ -47,7 +47,7 @@ namespace detail
           std::auto_ptr<U> owner(x);
           dispatch(owner, mpl::false_());
       }
-      
+
       template <class Ptr>
       void dispatch(Ptr x, mpl::false_) const
       {
@@ -64,10 +64,10 @@ namespace detail
               throw;
           }
       }
-      
+
       PyObject* m_self;
   };
-  
+
   struct constructor_result_converter
   {
       template <class T>
@@ -89,7 +89,7 @@ namespace detail
   {
       return get(mpl::int_<(N+Offset::value)>(), args_.base);
   }
-  
+
   template <class BaseArgs, class Offset>
   inline unsigned arity(offset_args<BaseArgs,Offset> const& args_)
   {
@@ -100,7 +100,7 @@ namespace detail
   struct constructor_policy : BasePolicy_
   {
       constructor_policy(BasePolicy_ base) : BasePolicy_(base) {}
-      
+
       // If the BasePolicy_ supplied a result converter it would be
       // ignored; issue an error if it's not the default.
       BOOST_STATIC_ASSERT((
@@ -109,7 +109,7 @@ namespace detail
             , default_result_converter
           >::value
       ));
-      
+
       typedef constructor_result_converter result_converter;
       typedef offset_args<typename BasePolicy_::argument_package, mpl::int_<1> > argument_package;
   };
@@ -128,7 +128,7 @@ namespace detail
   {
       typedef int type;
   };
-  
+
   //
   // These helper functions for make_constructor (below) do the raw work
   // of constructing a Python object from some invokable entity. See
@@ -146,7 +146,7 @@ namespace detail
       typedef typename outer_constructor_signature<Sig>::type outer_signature;
 
       typedef constructor_policy<CallPolicies> inner_policy;
-      
+
       return objects::function_object(
           objects::py_function(
               detail::caller<F,inner_policy,Sig>(f, inner_policy(p))
@@ -154,7 +154,7 @@ namespace detail
           )
       );
   }
-  
+
   // As above, except that it accepts argument keywords. NumKeywords
   // is used only for a compile-time assertion to make sure the user
   // doesn't pass more keywords than the function can accept. To
@@ -169,15 +169,15 @@ namespace detail
       )
   {
       enum { arity = mpl::size<Sig>::value - 1 };
-      
+
       typedef typename detail::error::more_keywords_than_function_arguments<
           NumKeywords::value, arity
           >::too_many_keywords assertion;
-    
+
       typedef typename outer_constructor_signature<Sig>::type outer_signature;
 
       typedef constructor_policy<CallPolicies> inner_policy;
-      
+
       return objects::function_object(
           objects::py_function(
               detail::caller<F,inner_policy,Sig>(f, inner_policy(p))
@@ -246,7 +246,7 @@ object make_constructor(
     typedef typename
         detail::is_reference_to_keywords<KeywordsOrSignature&>::type
         is_kw;
-    
+
     return detail::make_constructor_dispatch(
         f
       , policies
@@ -273,7 +273,7 @@ object make_constructor(
 }
 // }
 
-}} 
+}}
 
 
 #endif // MAKE_CONSTRUCTOR_DWA20011221_HPP

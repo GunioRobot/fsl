@@ -19,9 +19,9 @@ template <class VoxelType>
 inline void TimeSeriesStore<VoxelType>::setValue(int index, float val)
 {
   VoxelType tmp;
-  if(m_doscaling) 
+  if(m_doscaling)
     tmp=VoxelType((val-m_intercept) / m_slope);
-  else 
+  else
     tmp=VoxelType(val);
   m_buffer[index] = tmp;
 }
@@ -33,7 +33,7 @@ inline float TimeSeriesStore<VoxelType>::mean() const
   double accm(0.0);
   for (int n=0;n <m_count;++n)
       accm = accm + m_buffer[n];
-  
+
   mean = accm/m_count;
   return mean;
 }

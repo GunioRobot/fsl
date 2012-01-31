@@ -72,7 +72,7 @@
     && !defined(BOOST_PYTHON_USE_GCC_SYMBOL_VISIBILITY)                         \
     && BOOST_WORKAROUND(__GNUC__, >= 3) && (__GNUC_MINOR__ >=5 || __GNUC__ > 3)
 #    define BOOST_PYTHON_USE_GCC_SYMBOL_VISIBILITY 1
-#  endif 
+#  endif
 
 #  if BOOST_PYTHON_USE_GCC_SYMBOL_VISIBILITY
 #     if defined(BOOST_PYTHON_SOURCE)

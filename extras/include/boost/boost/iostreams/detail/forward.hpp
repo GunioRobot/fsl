@@ -5,12 +5,12 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED   
+#define BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                  
- 
+#endif
+
 #include <boost/config.hpp> // BOOST_MSVC
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/limits.hpp>
@@ -24,11 +24,11 @@
 #include <boost/preprocessor/tuple/elem.hpp>
 
 //------Macros for defining forwarding constructors and open overloads--------//
-    
+
 //
 // Macro: BOOST_IOSTREAMS_DEFINE_FORWARDING_FUNCTIONS(mode, name, helper).
 // Description: Defines constructors and overloads of 'open' which construct
-//      a device using the given argument list and pass it to 'open_impl'. 
+//      a device using the given argument list and pass it to 'open_impl'.
 //      Assumes that 'policy_type' is an alias for the device type.
 //      Not supported on Intel 7.1 and VC6.5.
 //

@@ -1,7 +1,7 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
     Authors:    Brian Patenaude
-		David Flitney 
+		David Flitney
 		Stephen Smith
 
     FMRIB Image Analysis Group
@@ -152,7 +152,7 @@ public:
 
 private:
   mutable unsigned int m_index;
-  
+
   std::vector<vtkLookupTable*> m_luts;
 };
 
@@ -193,7 +193,7 @@ public:
   void SetMapper(vtkPolyDataMapper* m) { m_mapper = m; }
 
 private:
-  
+
   vtkDepthSortPolyData* m_sorter;
   vtkClipPolyData* m_clipper;
   vtkPolyDataMapper* m_mapper;
@@ -215,20 +215,20 @@ public:
   void SetPlanes(vtkPlanes* p) { m_planes = p; }
 
 private:
-  
+
   vtkPlanes* m_planes;
   vtkTransform* m_xform;
 };
 
-VTKProperties::VTKProperties(): 
-  m_upperThreshold(32000), 
-  m_lowerThreshold(80), 
+VTKProperties::VTKProperties():
+  m_upperThreshold(32000),
+  m_lowerThreshold(80),
   m_mcThreshold(0.999),
   m_interpMode(VTK_GOURAUD),
   m_iterations(5),
-  m_relaxationFactor(0.2), 
-  m_ambient(0.1), 
-  m_diffuse(0.9), 
+  m_relaxationFactor(0.2),
+  m_ambient(0.1),
+  m_diffuse(0.9),
   m_opacity(1.0),
   m_specular(0.1),
   m_specularPower(20),
@@ -236,10 +236,10 @@ VTKProperties::VTKProperties():
   m_stdDev(0.1), m_radius(1.0),
   m_colorR(0.80), m_colorG(0.80), m_colorB(0.80),
   m_clipping(false)
-{ 
-} 
+{
+}
 
-VTKProperties::VTKProperties(const VTKProperties& rhs): 
+VTKProperties::VTKProperties(const VTKProperties& rhs):
   m_upperThreshold(rhs.m_upperThreshold),
   m_lowerThreshold(rhs.m_lowerThreshold),
   m_mcThreshold(rhs.m_mcThreshold),
@@ -333,11 +333,11 @@ class ImagePipelineObject: public BriConObserver
 public:
   typedef boost::shared_ptr<ImagePipelineObject> Handle;
 
-  ImagePipelineObject(MetaImage::Handle mi, vtkRenderer *ren): 
+  ImagePipelineObject(MetaImage::Handle mi, vtkRenderer *ren):
     m_smooth(vtkSmoothPolyDataFilter::New()),
 //     m_sorter(vtkDepthSortPolyData::New()),
     m_normals(vtkPolyDataNormals::New()),
-    m_bricon(mi->getDs()->inqBriCon()), 
+    m_bricon(mi->getDs()->inqBriCon()),
     m_metaimage(mi), m_layerMapper(0),
     m_ren(ren)
   {
@@ -358,10 +358,10 @@ public:
     for(int z = 0; z < ii->inqZ(); ++z)
       for(int y = 0; y < ii->inqY(); ++y)
 	for(int x = 0; x < ii->inqX(); ++x)
-	  // 
+	  //
 	  // 	  NB. X inversion to view 3D in neurological convention
 	  // 	  since data is in radiological order
-	  // 
+	  //
 	  *ptr++ = im->getVolume(0)->value(ii->inqX() - 1 - x, y, z);
 
     m_surfLut = LookUpTableFactory::convert(LookUpTable::greyScale());
@@ -372,11 +372,11 @@ public:
     m_layerRGBA->SetInput(m_imageData);
     m_layerRGBA->SetLookupTable(m_imageLut);
   }
-  
+
   virtual void setSurfaceLut(vtkLookupTable* lut) { m_surfLut = lut; }
   virtual vtkLookupTable* getSurfaceLut() const { return m_surfLut; }
-  virtual void setImageLut(vtkLookupTable* lut) 
-  { 
+  virtual void setImageLut(vtkLookupTable* lut)
+  {
     m_imageLut = lut;
     m_layerRGBA->SetLookupTable(m_imageLut);
     update(m_bricon.get());
@@ -394,7 +394,7 @@ public:
   virtual void update(const BriCon* bc) {}
 
   virtual vtkMapper *getLayerMapper()
-  { 
+  {
     if(!m_layerMapper)
       m_layerMapper = vtkPolyDataMapper::New();
     m_layerMapper->SetInput(GetSurface());
@@ -445,7 +445,7 @@ public:
     m_th(vtkImageThreshold::New())
   {
     LookUpTable::Handle lh(mi->getDs()->inqLookUpTable());
-    
+
     if(lh) {
       MESSAGE(std::string("Searching for LUT:") + lh->inqLutName());
       setImageLut(LookUpTableFactory::convert(lh));
@@ -459,7 +459,7 @@ public:
     m_imageLut->SetRange(bc->inqMin(), bc->inqMax());
 
     m_layerRGBA->SetLookupTable(m_imageLut);
- 
+
     // And IsoSurface
     m_th->SetInput(m_imageData);
     m_th->ThresholdByUpper(bc->inqMin());
@@ -475,7 +475,7 @@ public:
 //     mcdil->SetKernelSize(2, 2, 2);
 //     mcdil->SetDilateValue(1);
 //     mcdil->SetErodeValue(0);
-	  
+
     vtkMarchingCubes *mclayer = vtkMarchingCubes::New();
     mclayer->SetInput(m_th->GetOutput());
     mclayer->SetValue(0,0.5);
@@ -507,7 +507,7 @@ public:
   }
 
   virtual vtkMapper *getLayerMapper()
-  { 
+  {
     if(!m_layerMapper)
       m_layerMapper = vtkPolyDataMapper::New();
     m_layerMapper->SetInput(GetSurface());
@@ -516,13 +516,13 @@ public:
     getSurfaceLut()->SetRange(0, 1);
     m_layerMapper->SetLookupTable(getSurfaceLut());
     m_layerMapper->ScalarVisibilityOn();
-    
+
     return m_layerMapper;
   }
 
   virtual void update(const BriCon* bc)
   {
-    m_th->ThresholdByUpper(bc->inqMin());    
+    m_th->ThresholdByUpper(bc->inqMin());
     m_imageLut->SetRange(bc->inqMin(), bc->inqMax());
     Render();
   }
@@ -535,10 +535,10 @@ class MaskImage: public ImagePipelineObject
 {
 public:
   MaskImage(MetaImage::Handle mi, vtkRenderer* ren):
-    ImagePipelineObject(mi, ren) 
+    ImagePipelineObject(mi, ren)
   {
     LookUpTable::Handle lh(mi->getDs()->inqLookUpTable());
-    
+
     if(lh) {
       MESSAGE(std::string("Searching for LUT:") + lh->inqLutName());
       setImageLut(LookUpTableFactory::convert(lh));
@@ -552,7 +552,7 @@ public:
     m_imageLut->SetRange(bc->inqMin(), bc->inqMax());
 
     m_layerRGBA->SetLookupTable(m_imageLut);
- 
+
     // And IsoSurface
     m_th = vtkImageThreshold::New();
     m_th->SetInput(m_imageData);
@@ -590,7 +590,7 @@ public:
     m_normals->ConsistencyOn();
     m_normals->NonManifoldTraversalOff();
     m_normals->SetFeatureAngle(150);
-    
+
 //     m_sorter->SetInput(m_smooth->GetOutput());
 //     m_sorter->SetCamera(ren->GetActiveCamera());
 //     m_sorter->SortScalarsOn();
@@ -632,7 +632,7 @@ public:
     m_mc = vtkMarchingCubes::New();
     m_mc->SetInput(m_gaussian->GetOutput());
     m_mc->SetValue(0, props.inqMcThreshold());
- 
+
     vtkPolyDataConnectivityFilter *connect = vtkPolyDataConnectivityFilter::New();
     connect->SetInput(m_mc->GetOutput());
     connect->SetExtractionModeToLargestRegion();
@@ -662,9 +662,9 @@ public:
   }
 
   vtkImageData *GetThreshOutput() { return m_thresh->GetOutput(); }
-  
-  virtual void update(const BriCon* bc) 
-  { 
+
+  virtual void update(const BriCon* bc)
+  {
     m_imageLut->SetRange(bc->inqMin(), bc->inqMax());
     Render();
   }
@@ -691,7 +691,7 @@ private:
 
 struct VTKWidget::Implementation
 {
-  Implementation(QWidget* parent, OverlayList::Handle ol) :   
+  Implementation(QWidget* parent, OverlayList::Handle ol) :
     m_brainActor(vtkActor::New()),
     m_sorter(vtkDepthSortPolyData::New()),
     m_surfMapper(vtkPolyDataMapper::New()),
@@ -710,9 +710,9 @@ struct VTKWidget::Implementation
 
     MESSAGE("destroying implementation elements");
 
-    std::for_each(m_actors.begin(), m_actors.end(), 
+    std::for_each(m_actors.begin(), m_actors.end(),
 		  DeleteVTKObject<vtkActor>());
-    std::for_each(m_gaussians.begin(), m_gaussians.end(), 
+    std::for_each(m_gaussians.begin(), m_gaussians.end(),
 		  DeleteVTKObject<vtkImageGaussianSmooth>());
 
     m_sorter->Delete();
@@ -743,14 +743,14 @@ struct VTKWidget::Implementation
   OverlayList::Handle m_ol;
 };
 
-VTKWidget::VTKWidget(QWidget *parent, 
+VTKWidget::VTKWidget(QWidget *parent,
 		     ImageGroup::Handle i,
-		     OverlayList::Handle ol, 
-		     Cursor::Handle c) :  
+		     OverlayList::Handle ol,
+		     Cursor::Handle c) :
   ImageWidget(parent,i,ol,c), m_impl(new Implementation(this, ol)), m_image(i)
 {
   TRACKER("VTKWidget::VTKWidget");
-  
+
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
   m_vtkwidget = new QVTKWidget( this, "vtkWidget" );
@@ -759,7 +759,7 @@ VTKWidget::VTKWidget(QWidget *parent,
   QToolBar *tb = new QToolBar(this);
   VTKToolbar *vt = new VTKToolbar(tb, m_impl->m_props);
 
-  addDockWindow(tb, tr("VTK Rendering Tools"), Top, FALSE);  
+  addDockWindow(tb, tr("VTK Rendering Tools"), Top, FALSE);
   m_toolbar->hide();
   m_modebar->hide();
 
@@ -774,7 +774,7 @@ VTKWidget::VTKWidget(QWidget *parent,
   m_vtkwidget->GetRenderWindow()->AddRenderer(ren);
 
   //  LookUpTableFactory *lut = new LookUpTableFactory();
-    
+
   m_impl->m_mainImage = MainImage::Handle(new MainImage(ol->getMainMetaImage(), m_impl->m_props, ren));
   m_impl->m_mainImage->update(ol->getMainMetaImage()->getDs()->inqBriCon().get());
 
@@ -803,7 +803,7 @@ VTKWidget::VTKWidget(QWidget *parent,
 	layer->SetScalarTypeToFloat();
 	layer->SetNumberOfScalarComponents(1);
 	layer->AllocateScalars();
-	
+
 // 	vtkPoints *points = vtkPoints::New();
 // 	vtkFloatArray *tensors = vtkFloatArray::New();
 // 	tensors->SetNumberOfComponents(9);
@@ -811,7 +811,7 @@ VTKWidget::VTKWidget(QWidget *parent,
 // 	unsigned int offset(0);
 
 	if(info->isMaskImage()) {
-	  
+
 	  MaskImage::Handle maskim(new MaskImage(mi, ren));
 
 	  vtkActor *layerActor = vtkActor::New();
@@ -819,7 +819,7 @@ VTKWidget::VTKWidget(QWidget *parent,
 	  layerActor->GetProperty()->SetOpacity(0.4);
 
 	  ren->AddViewProp(layerActor);
-	  
+
 	  m_impl->m_actors.push_back(layerActor);
 	  m_impl->m_pipelineObjects.push_back(maskim);
 	  m_impl->m_metaImages.push_back(mi);
@@ -827,23 +827,23 @@ VTKWidget::VTKWidget(QWidget *parent,
 	if(info->isStatImage()) {
 	  // Accumulate this layer into composite "blend"
 	  // image for rendering onto cut surfaces
-	  
+
 	  StatsImage::Handle si(new StatsImage(mi, ren));
 
 	  MESSAGE("Blending in stat image");
 	  blend->AddInput(si->GetOutputRGBA());
 	  blend->SetOpacity(count, 1.0); count++;
-	  
+
 	  vtkActor *layerActor = vtkActor::New();
 	  layerActor->SetMapper(si->getLayerMapper());
 	  layerActor->GetProperty()->SetOpacity(0.4);
 
 	  ren->AddViewProp(layerActor);
-	  
+
 	  m_impl->m_actors.push_back(layerActor);
 	  m_impl->m_pipelineObjects.push_back(si);
 	  m_impl->m_metaImages.push_back(mi);
-	  
+
 	} else if(info->isDtiImage()) {
 // 	  // Create glyphs for each tensor
 // 	  // in the data set.
@@ -861,9 +861,9 @@ VTKWidget::VTKWidget(QWidget *parent,
 // 		  vz = im->getVolume(2)->value(x, y, z);
 
 // 		  if((vx != 0) && (vy != 0) && (vz != 0)) {
-// 		    FslGetMMCoord(info->inqStdMat(), 
+// 		    FslGetMMCoord(info->inqStdMat(),
 // 				  x, y, z, &mmx, &mmy, &mmz);
-		  
+
 // 		    float tensor[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 // 		    for(unsigned short j = 0; j < 9; ++j)
 // 		      tensor[j] = im->getVolume(j)->value(x, y, z);
@@ -894,14 +894,14 @@ VTKWidget::VTKWidget(QWidget *parent,
 // 	  normals->SetInput(glyph->GetOutput());
 // 	  vtkPolyDataMapper *ellipseMapper = vtkPolyDataMapper::New();
 // 	  ellipseMapper->SetInput(normals->GetOutput());
-	  
+
 // 	  LookUpTable::Handle lh(mi->getDs()->inqLookUpTable());
 // 	  vtkLookupTable *thisLut;
 // 	  if(lh)
 // 	    thisLut = LookUpTableFactory::convert(lh);
 // 	  else
 // 	    thisLut = LookUpTableFactory::convert(LookUpTable::greyScale());
-	       
+
 
 // 	  vtkActor *ellipseActor = vtkActor::New();
 // 	  ellipseActor->SetMapper(ellipseMapper);
@@ -979,7 +979,7 @@ VTKWidget::VTKWidget(QWidget *parent,
   // Add Actor to renderer
   ren->AddViewProp(m_impl->m_brainActor);
 
-  unsigned short verts[][3] = { {1, 5, 0}, 
+  unsigned short verts[][3] = { {1, 5, 0},
 				{0, 4, 3}, {1, 2, 0}, {2, 6, 3},
 				{5, 6, 4}, {1, 2, 5}
   };
@@ -995,7 +995,7 @@ VTKWidget::VTKWidget(QWidget *parent,
 
       ps->SetXResolution(100);
       ps->SetYResolution(100);
-  
+
       vtkTransformPolyDataFilter *xform = vtkTransformPolyDataFilter::New();
       xform->SetInput(ps->GetOutput());
       xform->SetTransform(boxXForm);
@@ -1060,7 +1060,7 @@ VTKWidget::VTKWidget(QWidget *parent,
   planez->SetInteractor(ren->GetRenderWindow()->GetInteractor());
 
   MESSAGE("Rendering");
-  
+
   // Reset camera
   ren->ResetCamera();
   m_vtkwidget->GetRenderWindow()->Render();
@@ -1081,7 +1081,7 @@ void VTKWidget::update(const BriCon* bc)
 {
   TRACKER("VTKWidget::update(const BriCon*)");
 
-  m_impl->m_surfMapper->SetScalarRange(bc->inqMin(), bc->inqMax());  
+  m_impl->m_surfMapper->SetScalarRange(bc->inqMin(), bc->inqMax());
 }
 
 void VTKWidget::addMesh()
@@ -1089,9 +1089,9 @@ void VTKWidget::addMesh()
   //FileDialog to find mesh file
 
   QString fn = QFileDialog::getOpenFileName(QDir::currentDirPath(),
-					    "Mesh files (*.vtk)", 
+					    "Mesh files (*.vtk)",
 					    this );
-  if(!fn.isEmpty()) 
+  if(!fn.isEmpty())
     {
       QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
       ImageInfo::Handle info(m_impl->m_ol->getMainMetaImage()->getInfo());
@@ -1148,7 +1148,7 @@ void VTKWidget::update(const Cursor::Handle c)
 void VTKWidget::update(const OverlayList *ol, OverlayListMsg msg)
 {
   TRACKER("VTKWidget::update(const OverlayList *ol, OverlayListMsg msg)");
-  
+
   vtkPolyData *ds = m_impl->m_mainImage->GetSurface();
   if(m_impl->m_props.inqClipping())
     ds = m_impl->m_clipper->GetOutput();
@@ -1160,7 +1160,7 @@ void VTKWidget::update(const OverlayList *ol, OverlayListMsg msg)
 
   unsigned int count(0);
 
-  for(std::vector<vtkActor *>::iterator it = m_impl->m_actors.begin(); 
+  for(std::vector<vtkActor *>::iterator it = m_impl->m_actors.begin();
       it != m_impl->m_actors.end(); ++it, ++count)
     {
       vtkActor *thisActor = m_impl->m_actors.at(count);
@@ -1181,15 +1181,15 @@ void VTKWidget::update(const OverlayList *ol, OverlayListMsg msg)
       po->setImageLut(lut);
       po->setSurfaceLut(lut);
     }
-  
+
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
   m_vtkwidget->GetRenderWindow()->Render();
   QApplication::restoreOverrideCursor();
 }
 
-void VTKWidget::print() 
+void VTKWidget::print()
 {
-  QString fn = QFileDialog::getSaveFileName("screenshot.tiff", 
+  QString fn = QFileDialog::getSaveFileName("screenshot.tiff",
 					    "TIFF files (*.tif, *.tiff)", this,
 					    "Screenshot dialog",
 					    "Select a filename for saving");
@@ -1197,7 +1197,7 @@ void VTKWidget::print()
   if(!fn.isNull()) {
     vtkWindowToImageFilter *w2i = vtkWindowToImageFilter::New();
     vtkTIFFWriter *writer = vtkTIFFWriter::New();
-    
+
     w2i->SetInput(m_vtkwidget->GetRenderWindow());
     w2i->Update();
     writer->SetInput(w2i->GetOutput());
@@ -1230,7 +1230,7 @@ struct SetGaussianParams
 void VTKWidget::options()
 {
   VTKPropertyDialog optionsDialog(this, m_impl->m_props);
-  
+
   if(optionsDialog.exec() == QDialog::Accepted)
     {
       m_impl->m_props = optionsDialog.getProperties();
@@ -1256,7 +1256,7 @@ void VTKWidget::options()
 	m_impl->m_surfMapper->SetInput(m_impl->m_clipper->GetOutput());
       else
 	m_impl->m_surfMapper->SetInput(m_impl->m_mainImage->GetSurface());
-	
+
       QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
       m_vtkwidget->GetRenderWindow()->Render();
       QApplication::restoreOverrideCursor();

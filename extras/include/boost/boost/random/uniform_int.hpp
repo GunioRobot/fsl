@@ -53,7 +53,7 @@ public:
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   void reset() { }
-  
+
   // can't have member function templates out-of-line due to MSVC bugs
   template<class Engine>
   result_type operator()(Engine& eng)
@@ -63,7 +63,7 @@ public:
     base_result brange = (eng.max)() - (eng.min)();
 
     if(_range == 0) {
-      return _min;    
+      return _min;
     } else if(random::equal_signed_unsigned(brange, _range)) {
       // this will probably never happen in real life
       // basically nothing to do; just take care we don't overflow / underflow
@@ -143,7 +143,7 @@ private:
   {
     _range = _max - _min;
   }
-    
+
   result_type _min, _max, _range;
 };
 

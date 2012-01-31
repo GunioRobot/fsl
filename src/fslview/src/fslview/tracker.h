@@ -37,11 +37,11 @@ public:
 
 private:
   Tracker(const void *, const std::string &);
-  
+
   const std::string message() const;
   unsigned int count() const;
 
-  struct Implementation; 
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

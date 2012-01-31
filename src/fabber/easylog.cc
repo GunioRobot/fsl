@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,7 +91,7 @@ void EasyLog::StartLog(const string& basename)
 	{
 	  throw Runtime_error(("Cannot create directory (bad path, or too many + signs?):\n    " + outDir).c_str());
 	}
-      
+
       // not portable!
       //int ret = system(("mkdir "+ outDir + " 2>/dev/null").c_str());
 
@@ -105,12 +105,12 @@ void EasyLog::StartLog(const string& basename)
       outDir += "+";
       count++;
     }
-  
+
   filestream = new ofstream( (outDir + "/logfile").c_str() );
 
   if (!filestream->good())
     {
-      delete filestream; 
+      delete filestream;
       filestream = NULL;
       cout << "Cannot open logfile in " << outDir;
       throw runtime_error("Cannot open logfile!");
@@ -120,7 +120,7 @@ void EasyLog::StartLog(const string& basename)
   system( ("uname -a > " + outDir + "/uname.txt").c_str() );
 
   // try to make a link to the latest version
-  // REMOVED because it's annoying, not terribly useful, and implemented 
+  // REMOVED because it's annoying, not terribly useful, and implemented
   // badly (only really works output dir is in current dir).
   // PUT BACK because Michael uses it and finds it useful!
   system(("ln -sfn '" + outDir + "' '" + basename + "_latest'").c_str());
@@ -173,13 +173,13 @@ void Warning::IssueAlways(const string& text)
 
 void Warning::ReissueAll()
 {
-  if (issueCount.size() == 0) 
+  if (issueCount.size() == 0)
     return; // avoid issuing pointless message
 
   LOG_ERR_SAFE("\nSummary of warnings (" << issueCount.size() << " distinct warnings)\n");
   for (map<string,int>::iterator it = issueCount.begin();
        it != issueCount.end(); it++)
-    LOG_ERR_SAFE("Issued " << 
+    LOG_ERR_SAFE("Issued " <<
 	    ( (it->second==1)?
 	      " once: " :
 	      stringify(it->second)+" times: "

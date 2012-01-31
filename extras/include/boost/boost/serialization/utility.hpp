@@ -10,7 +10,7 @@
 // serialization/utility.hpp:
 // serialization for stl utility templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -31,7 +31,7 @@
 #define STD std
 #endif
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 // pair
@@ -41,7 +41,7 @@ inline void serialize(
     STD::pair<F, S> & p,
     const unsigned int /* file_version */
 ){
-    // note: we remove any const-ness on the first argument.  The reason is that 
+    // note: we remove any const-ness on the first argument.  The reason is that
     // for stl maps, the type saved is pair<const key, T).  We remove
     // the const-ness in order to be able to load it.
     typedef BOOST_DEDUCED_TYPENAME boost::remove_const<F>::type typef;

@@ -19,16 +19,16 @@
 
 #include "lightbox.xpm"
 
-LightboxWidget::LightboxWidget(QWidget *parent,ImageGroup::Handle i,OverlayList::Handle ol, Cursor::Handle& c ) :  
+LightboxWidget::LightboxWidget(QWidget *parent,ImageGroup::Handle i,OverlayList::Handle ol, Cursor::Handle& c ) :
   ImageWidget(parent,i,ol,c), m_image(i), m_zoom(1.0)
 {
   TRACKER("LightboxWidget::LightboxWidget");
   m_sv = new QScrollView(this);
-  
+
   setIcon( QPixmap(lightbox_xpm) );
 
   setCentralWidget(m_sv);
-  
+
   m_sv->viewport()->setBackgroundColor(QColor(128, 128, 128));
 
   connect(m_sv->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(scrolled(int)));
@@ -41,10 +41,10 @@ LightboxWidget::LightboxWidget(QWidget *parent,ImageGroup::Handle i,OverlayList:
   for(int n = 0; n < m_image->inqZ(); ++n)
   {
     SliceWidget::Handle axial =
-      SliceWidget::Handle(new AxialWidget(m_sv->viewport(), "axial", 
+      SliceWidget::Handle(new AxialWidget(m_sv->viewport(), "axial",
 					  m_cursor, m_overlayList, m_drawSettings, m_undoList,
 					  m_opts));
-    
+
     m_sv->addChild(axial.get());
     m_slices->push_back(axial);
 
@@ -59,7 +59,7 @@ LightboxWidget::LightboxWidget(QWidget *parent,ImageGroup::Handle i,OverlayList:
     axial->setSlice(n,m_cursor->inqV());
     axial->setSliceIsFixed(true);
   }
-  
+
   m_mainToolbarWidget->setCrossHairsMode(true);
 }
 
@@ -100,7 +100,7 @@ struct SliceRepainter
 void LightboxWidget::scrolled(int v)
 {
   TRACKER("LightboxWidget::scrolled");
-  
+
   std::for_each(m_slices->begin(), m_slices->end(), SliceHider(m_sv->viewport()->geometry()));
   if(!m_sv->verticalScrollBar()->draggingSlider())repaintSlices();
 }
@@ -109,11 +109,11 @@ struct SlicePlacer
 {
   SlicePlacer(QScrollView* sv, unsigned int border, float zoom):
     m_sv(sv), m_borderPixels(border), m_zoom(zoom),
-    m_x(border), m_y(border), 
+    m_x(border), m_y(border),
     m_availableWidth(sv->visibleWidth()), m_heightIncrement(0),
     m_width(0) {}
 
-  void operator()(SliceWidget::Handle s) 
+  void operator()(SliceWidget::Handle s)
   {
     unsigned int height = unsigned(s->inqHeight() * m_zoom);
     unsigned int width  = unsigned(s->inqWidth() * m_zoom);
@@ -171,7 +171,7 @@ void LightboxWidget::resizeEvent(QResizeEvent *e)
 // void LightboxWidget::update(const Cursor::Handle& c)
 // {
 //   TRACKER("LightboxWidget::update");
-//   std::for_each(m_slices->begin(), m_slices->end(), SetImageCursor(c));  
+//   std::for_each(m_slices->begin(), m_slices->end(), SetImageCursor(c));
 // }
 
 void LightboxWidget::repaintSlices()
@@ -183,14 +183,14 @@ void LightboxWidget::repaintSlices()
 
 #include <qfiledialog.h>
 #include <qpixmap.h>
- 
+
 void LightboxWidget::print()
 {
-  QString fn = QFileDialog::getSaveFileName("screenshot.png", 
+  QString fn = QFileDialog::getSaveFileName("screenshot.png",
 					    "PNG files (*.png)", this,
 					    "Screenshot dialog",
 					    "Select a filename for saving");
-  if(!fn.isNull()) 
+  if(!fn.isNull())
     {
       QPixmap pm(centralWidget()->size());
       bitBlt(&pm, 0, 0, centralWidget());

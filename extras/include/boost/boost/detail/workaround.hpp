@@ -19,8 +19,8 @@
 //
 //     (BOOST_MSVC) != 0 && (BOOST_MSVC) <= 1200
 //
-// When used for workarounds that apply to the latest known version 
-// and all earlier versions of a compiler, the following convention 
+// When used for workarounds that apply to the latest known version
+// and all earlier versions of a compiler, the following convention
 // should be observed:
 //
 //     #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1301))
@@ -68,6 +68,6 @@
 
 #  define BOOST_WORKAROUND(symbol, test) 0
 
-# endif 
+# endif
 
 #endif // WORKAROUND_DWA2002126_HPP

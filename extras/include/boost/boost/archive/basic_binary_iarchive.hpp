@@ -16,7 +16,7 @@
 // IN GENERAL, ARCHIVES CREATED WITH THIS CLASS WILL NOT BE READABLE
 // ON PLATFORM APART FROM THE ONE THEY ARE CREATED ON
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -41,13 +41,13 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 /////////////////////////////////////////////////////////////////////////
 // class basic_binary_iarchive - read serialized objects from a input binary stream
 template<class Archive>
-class basic_binary_iarchive : 
+class basic_binary_iarchive :
     public detail::common_iarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -62,19 +62,19 @@ protected:
 protected:
 #endif
     // intermediate level to support override of operators
-    // fot templates in the absence of partial function 
+    // fot templates in the absence of partial function
     // template ordering
     template<class T>
     void load_override(T & t, BOOST_PFTO int)
     {
         archive::load(* this->This(), t);
     }
-    // binary files don't include the optional information 
+    // binary files don't include the optional information
     void load_override(class_id_optional_type & /* t */, int){}
 
     // the following have been overridden to provide specific sizes
     // for these pseudo prmitive types.
-    void load_override(version_type & t, int){ 
+    void load_override(version_type & t, int){
         // upto 255 versions
         unsigned char x;
         * this->This() >> x;
@@ -114,7 +114,7 @@ protected:
     load_override(class_name_type & t, int);
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
-   
+
     basic_binary_iarchive(unsigned int flags) :
         detail::common_iarchive<Archive>(flags)
     {}

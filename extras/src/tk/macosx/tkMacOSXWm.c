@@ -5350,7 +5350,7 @@ TkMacOSXMakeRealWindowExist(
 	/*
 	 * Workaround GetWindowStructureWidths() Carbon bug:
 	 */
-	
+
 	strWidths.top = 16;
     }
     wmPtr->xInParent = strWidths.left;
@@ -6133,7 +6133,7 @@ WmGetWindowGroup(
 	TkDisplay *dispPtr = TkGetDisplayList();
 	TkWindow *masterWinPtr = (TkWindow *)Tk_IdToWindow(dispPtr->display,
 		wmPtr->master);
-	
+
 	if (masterWinPtr && masterWinPtr->window != None &&
 		TkMacOSXHostToplevelExists(masterWinPtr)) {
 	    WindowRef masterMacWin =

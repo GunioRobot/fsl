@@ -44,8 +44,8 @@ string title="run_mesh_utils (Version 1.0)\nCopyright(c) 2008, University of Oxf
 string examples="run_mesh_utils [options] ";
 
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -53,22 +53,22 @@ Option<bool> help(string("-h,--help"), false,
 Option<bool> sampNN(string("--sampNN,--help"), false,
 		    string("display this message"),
 		    false, no_argument);
-		  
+
 
 Option<bool> toggle(string("--toggle,--toggle"), false,
 		    string("toggle a feature"),
 		    false, no_argument);
-		  
-		  
+
+
 Option<int> myindex(string("-a,--myindex"), 0,
 		    string("degrees of freedom"),
-		    false, requires_argument);			  
+		    false, requires_argument);
 Option<int> dof(string("-d,--dof"), 6,
 		string("degrees of freedom"),
 		false, requires_argument);
 Option<int> dof2(string("-e,--dof2"), 6,
 		 string("degrees of freedom2"),
-		 false, requires_argument);	
+		 false, requires_argument);
 Option<string> inname(string("-i,--in"), string(""),
 		      string("filename of input image"),
 		      false, requires_argument);
@@ -77,7 +77,7 @@ Option<string> flirtmatname(string("-f"), string(""),
 			    false, requires_argument);
 Option<string> inname2(string("-j"), string(""),
 		       string("filename ofsecond input image"),
-		       false, requires_argument);		  
+		       false, requires_argument);
 
 
 Option<int> label(string("-l,--label"),1,
@@ -97,7 +97,7 @@ Option<string> outname(string("-o,--out"), string(""),
 
 Option<float> thresh(string("-t,--thresh"), 0,
 		     string("threshold"),
-		     false, requires_argument);	
+		     false, requires_argument);
 
 Option<float> shiftx(string("-x,--xshift"), 0,
 		     string("filename of input image"),
@@ -107,23 +107,23 @@ Option<float> shifty(string("-y,--yshift"), 0,
 		     false, requires_argument);
 Option<float> shiftz(string("-z,--zshift"), 0,
 		     string("filename of input image"),
-		     false, requires_argument);			  
+		     false, requires_argument);
 
 Option<float> w_im(string("-p,--w_im"), 0,
 		   string("weighting image force"),
-		   false, requires_argument);		
+		   false, requires_argument);
 
 Option<float> w_tan(string("-r,--w_tan"), 0,
 		    string("weighting image force"),
-		    false, requires_argument);		
-					 
+		    false, requires_argument);
+
 Option<float> w_tri(string("-q,--w_tri"), 0,
 		    string("weighting image force"),
-		    false, requires_argument);		
-					 
+		    false, requires_argument);
+
 Option<float> w_norm(string("-s,--w_norm"), 0,
 		     string("weighting image force"),
-		     false, requires_argument);		
+		     false, requires_argument);
 
 
 Option<bool> doMeshReg(string("--doMeshReg,--meshreg"), false,
@@ -143,67 +143,67 @@ Option<bool> doUnCentreMesh(string("--doUnCentreMesh,doUnCentreMesh"), false,
 			    false, no_argument);
 Option<bool>  doLabelAndCombineSB(string("--doLabelAndCombineSB, doLabelAndCombineSB"), false,
 				  string("label shared vertices and combine meshes"),
-				  false, no_argument);			  
-							
+				  false, no_argument);
+
 Option<bool>  doSubtractMeshes(string("--doSubtractMeshes, doSubtractMeshes"), false,
 			       string("doSubtractMeshes"),
-			       false, no_argument);							  
-								
+			       false, no_argument);
+
 Option<bool>  doAppendSBmask(string("--doAppendSBmask, doAppendSBmask"), false,
 			     string("doAppendSBmask"),
-			     false, no_argument);							    
-			
+			     false, no_argument);
+
 Option<bool>  doAlterVertsBySBmask(string("--doAlterVertsBySBmask, doAlterVertsBySBmask"), false,
 				   string("doAlterVertsBySBmask"),
-				   false, no_argument);							 	  	
-	
+				   false, no_argument);
+
 Option<bool>  doAppendIndexedSBmask(string("--doAppendIndexedSBmask, doAppendIndexedSBmask"), false,
 				    string("doAppendIndexedSBmask"),
-				    false, no_argument);	
-		  
+				    false, no_argument);
+
 Option<bool>  useSc2(string("--useSc2, useSc2"), false,
 		     string("useSc2"),
-		     false, no_argument);	
-		  
+		     false, no_argument);
+
 Option<bool>  inverse(string("--inverse, inverse"), false,
 		      string("inverse"),
-		      false, no_argument);	 
-		  
-		  		  
+		      false, no_argument);
+
+
 Option<bool>  doWarpMesh(string("--doWarpMesh,  doWarpMesh"), false,
 			 string(" doWarpMesh"),
-			 false, no_argument);	
-		  
+			 false, no_argument);
+
 Option<bool>  doApplyFlirtThenSBmask(string("--doApplyFlirtThenSBmask, doApplyFlirtThenSBmask"), false,
 				     string("doApplyFlirtThenSBmask"),
-				     false, no_argument);		
+				     false, no_argument);
 Option<bool>  doSurfDistMap(string("--doSurfDistMap,  doSurfDistMap"), false,
 			    string("doSurfDistMap"),
-			    false, no_argument);	
-		  
+			    false, no_argument);
+
 Option<bool>  doSurfMeanAndStDev(string("--doSurfMeanAndStDev,  doSurfMeanAndStDev"), false,
 				 string("doSurfMeanAndStDev"),
-				 false, no_argument);	
-		  
+				 false, no_argument);
+
 Option<bool>  doLQSurfReg(string("--doLQSurfReg,  doLQSurfReg"), false,
 			  string("doLQSurfReg"),
-			  false, no_argument);												  
-				
+			  false, no_argument);
+
 Option<bool>  doCartToSphere(string("--doCartToSphere,  doCartToSphere"), false,
 			     string("doCartToSphere"),
 			     false, no_argument);
-				
+
 Option<bool>  doSphereToCart(string("--doSphereToCart,  doSphereToCart"), false,
 			     string("doSphereToCart"),
-			     false, no_argument);		
-		  	
+			     false, no_argument);
+
 Option<bool> doFindMidMidPoint(string("--doFindMidMidPoint, doFindMidMidPoint"), false,
 			       string("doFindMidMidPoint"),
-			       false, no_argument);			
-				
+			       false, no_argument);
+
 Option<bool> doWarpGrid(string("--doWarpGrid, doWarpGrid"), false,
 			string("doWarpGrid"),
-			false, no_argument);		
+			false, no_argument);
 Option<bool> doSampleGrid(string("--doSampleGrid, doSampleGrid"), false,
 			  string("doSampleGrid"),
 			  false, no_argument);
@@ -213,36 +213,36 @@ Option<bool> doSampleMesh(string("--doSampleMesh, doSampleMesh"), false,
 
 Option<bool> doRandMesh(string("--doRandMesh, doRandMesh"), false,
 			string("doRandMesh"),
-			false, no_argument);								
-					
+			false, no_argument);
+
 Option<bool> doMeshToBvars(string("--doMeshToBvars, doMeshToBvars"), false,
 			   string("doMeshToBvars"),
-			   false, no_argument);	
-										
+			   false, no_argument);
+
 Option<bool> doAddModesUsingScalars(string("--doAddModesUsingScalars, doAddModesUsingScalars"), false,
 				    string("doAddModesUsingScalars"),
-				    false, no_argument);	
-				
+				    false, no_argument);
+
 Option<bool> doRandMatrices(string("--doRandMatrices, doRandMatrices"), false,
 			    string("doRandMatrices"),
-			    false, no_argument);	
-				
+			    false, no_argument);
+
 Option<bool> doWriteConditionalIntensity(string("--doWriteConditionalIntensity, doWriteConditionalIntensity"), false,
 					 string("doWriteConditionalIntensity"),
-					 false, no_argument);	
-			
+					 false, no_argument);
+
 Option<bool> doUgridToImage(string("--doUgridToImage, doUgridToImage"), false,
 			    string("doUgridToImage"),
-			    false, no_argument);	
-			
+			    false, no_argument);
+
 Option<bool> doReplaceVertsWithCoef(string("--doReplaceVertsWithCoef, doReplaceVertsWithCoef"), false,
 				    string("doReplaceVertsWithCoef"),
 				    false, no_argument);
 
 Option<bool> doCoefModelToImage(string("--doCoefModelToImage, doCoefModelToImage"), false,
 				string("doCoefModelToImage"),
-				false, no_argument);		
-				
+				false, no_argument);
+
 Option<bool> doFieldModelToImage(string("--doFieldModelToImage,doFieldModelToImage"), false,
 				 string("doFieldModelToImage"),
 				 false, no_argument);
@@ -277,16 +277,16 @@ Option<bool> doFtoP(string("--doFtoP"), false,
 
 Option<bool> doGetMeans(string("--doGetMeans"), false,
 			string("doGetMeans"),
-			false, no_argument);		
-				
+			false, no_argument);
+
 Option<bool> doFlipMesh(string("--doFlipMesh"), false,
 			string("doFlipMesh"),
-			false, no_argument);		
-				
+			false, no_argument);
+
 Option<bool> doAppendConstScalar(string("--doAppendConstScalar"), false,
 				 string("doAppendConstScalar"),
-				 false, no_argument);		
-				
+				 false, no_argument);
+
 Option<bool> doShiftGrid(string("--doShiftGrid"), false,
 			 string("doShiftGrid"),
 			 false, no_argument);
@@ -298,24 +298,24 @@ Option<bool> doConcatIntensityGrid(string("--doConcatIntensityGrid"), false,
 Option<bool> doDeMeanIntensities(string("--doDeMeanIntensities"), false,
 				 string("doDeMeanIntensities"),
 				 false, no_argument);
-				
+
 Option<bool> doConvert_ASCII_To_Binary(string("--doConvert_ASCII_To_Binary"), false,
 				       string("doConvert_ASCII_To_Binary"),
-				       false, no_argument);			
-				
+				       false, no_argument);
+
 Option<bool> doConvert_Binary_To_ASCII(string("--doConvert_Binary_To_ASCII"), false,
 				       string("doConvert_Binary_To_ASCII"),
-				       false, no_argument);	
-																		  
-																	  		
+				       false, no_argument);
+
+
 Option<bool> doUnCentreModel(string("--doUnCentreModel"), false,
 			     string(" doUnCentreModel"),
-			     false, no_argument);	
-		
+			     false, no_argument);
+
 Option<bool> doSampleAndNormalizeIntensities(string("--doSampleAndNormalizeIntensities"), false,
 					     string(" doSampleAndNormalizeIntensities"),
 					     false, no_argument);
-			
+
 Option<bool> doDeformSurface(string("--doDeformSurface"), false,
 			     string(" doDeformSurface"),
 			     false, no_argument);
@@ -327,43 +327,43 @@ Option<bool> doMeshReg_LeastSq(string("--doMeshReg_LeastSq"), false,
 Option<bool> doGetMeshFromModel(string("--doGetMeshFromModel"), false,
 				string("doGetMeshFromModel"),
 				false, no_argument);
-							
+
 Option<bool> doVertexLDA_LOO(string("--doVertexLDA_LOO"), false,
 			     string("doVertexLDA_LOO"),
 			     false, no_argument);
 
 Option<bool> doVertexLDA_save(string("--doVertexLDA_save"), false,
 			      string("doVertexLDA_save"),
-			      false, no_argument);	
-				
+			      false, no_argument);
+
 Option<bool> doVertexLDA_loadAndApply(string("--doVertexLDA_loadAndApply"), false,
 				      string("doVertexLDA_loadAndApply"),
-				      false, no_argument);	
-				
+				      false, no_argument);
+
 Option<bool> doGetMaxScalar(string("--doGetMaxScalar"), false,
 			    string("doGetMaxScalar"),
-			    false, no_argument);	
-				
+			    false, no_argument);
+
 Option<bool> doGetMeanScalar(string("--doGetMeanScalar"), false,
 			     string("doGetMeanScalar"),
-			     false, no_argument);	
-				
+			     false, no_argument);
+
 Option<bool> doAddScalars(string("--doAddScalars"), false,
 			  string("doAddScalars"),
-			  false, no_argument);	
-				
+			  false, no_argument);
+
 Option<bool> doDivideScalarsByScalar(string("--doDivideScalarsByScalar"), false,
 				     string("doDivideScalarsByScalar"),
-				     false, no_argument);	
-					 
-				
+				     false, no_argument);
+
+
 Option<bool> doDisplayNumericFieldNames(string("--doDisplayNumericFieldNames"), false,
 				     string("doDisplayNumericFieldNames"),
-				     false, no_argument);					 
+				     false, no_argument);
 		Option<bool> doDisplayNumericField(string("--doDisplayNumericField"), false,
 				     string("doDisplayNumericField"),
-				     false, no_argument);					 
-					 			 
+				     false, no_argument);
+
 int nonoptarg;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -374,10 +374,10 @@ int nonoptarg;
 
 int main(int argc,char *argv[])
 {
-	
+
   Tracer tr("main");
   OptionParser options(title, examples);
-	
+
   try {
     // must include all wanted options here (the order determines how
     //  the help message is printed)
@@ -468,8 +468,8 @@ int main(int argc,char *argv[])
 	options.add(doDisplayNumericFieldNames);
 	options.add(doDisplayNumericField);
     nonoptarg = options.parse_command_line(argc, argv);
-		
-		// line below stops the program if the help was requested or 
+
+		// line below stops the program if the help was requested or
 		//  a compulsory option was not set
 		if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
 		{
@@ -482,7 +482,7 @@ int main(int argc,char *argv[])
 		{
 		//	meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 						fslvtkIO* m = new fslvtkIO();//inmeshname.value(),static_cast<fslvtkIO::DataType>(0));
-		
+
 						m->setSwitchRowsCols(toggle.value());
 							m->readPolyData(inmeshname.value());
 
@@ -490,7 +490,7 @@ int main(int argc,char *argv[])
 			m->setBinaryWrite(true);
 			m->save(outname.value());
 
-		
+
 		}else if (doConvert_Binary_To_ASCII.value())
 		{
 		//	meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
@@ -502,11 +502,11 @@ int main(int argc,char *argv[])
 			m->setBinaryWrite(false);
 			m->save(outname.value());
 
-		
+
 		}else if (doUnCentreModel.value()){
 			meshUtils* m = new meshUtils();
 			m->setSwitchRowsCols(toggle.value());
-			
+
 			volume<float> im;
 			read_volume(im,inname.value());//load label image
 			float tx = (im.xsize()-1)/2.0*abs(im.xdim());
@@ -519,8 +519,8 @@ int main(int argc,char *argv[])
 			m->setBinaryWrite(true);
 			m->save(outname.value());
 
-		
-		
+
+
 		}else if (doFillMesh.value())
 		{
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
@@ -546,11 +546,11 @@ int main(int argc,char *argv[])
 				m->setScalars(vdist);
 				m->save(outname.value());
 				delete m;
-				
+
 		}else if(doSurfMeanAndStDev.value())
 		{
 			meshUtils* m = new meshUtils;
-			
+
 			Matrix MeanPoints;
 			Matrix MeanScalars;
 			Matrix StDevScalars;
@@ -560,7 +560,7 @@ int main(int argc,char *argv[])
 
 			m->save(outname.value());
 			delete m;
-			
+
 		}else if(doMeshReg.value())
 		{
 			meshUtils* m = new meshUtils;
@@ -571,27 +571,27 @@ int main(int argc,char *argv[])
 			m->meshReg(fmat);
 			m->save(outname.value());
 			delete m;
-			
+
 		}else if (doShiftGrid.value())
 		{
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 			m->shiftPoints(shiftx.value(),shifty.value(),shiftz.value());
 			m->save(outname.value());
-			
-			
+
+
 		}else if (doLQSurfReg.value())
 		{
 			meshUtils* m = new meshUtils;
 			m->loadMesh(inmeshname.value());
-			
+
 			meshUtils* mRef = new meshUtils;
 			mRef->loadMesh(inmeshname2.value());
-			
+
 			Matrix fmat;
 			m->LQSurfaceReg(mRef->getPointsAsMatrix(),fmat, dof.value());
-			
+
 			cout<<"final "<<fmat<<endl;
-			
+
 			meshUtils::writeFlirtMatrix(fmat, outname.value()+".mat");
 			m->meshReg(fmat);
 			m->save(outname.value()+".vtk");
@@ -600,11 +600,11 @@ int main(int argc,char *argv[])
 		}else if (doCombineMeshes.value())
 		{
 			meshUtils m;
-						
+
 			m.combineMeshesWithVectorsAndScalars(meshUtils::fileToVector(inmeshname.value()));
 			m.save(outname.value());
 			//delete m;
-		
+
 		}else if (doMeshToContours.value())
 		{
 					 meshUtils* m ;
@@ -622,7 +622,7 @@ int main(int argc,char *argv[])
 			}
 			volume<char> im;
 			read_volume(im,inname.value());
-			
+
 			vector<float> verts;
 			verts=m->meshToContours(im,meshUtils::readFlirtMat(flirtmatname.value()));
 			cout<<"foudn verts"<<endl;
@@ -644,21 +644,21 @@ int main(int argc,char *argv[])
 
 			meshUtils* mRef = new meshUtils;
 			mRef->loadMesh(inmeshname2.value());
-			
+
 			//replace the avgvertcies with the defored
 			meshUtils* mnew = new meshUtils;
 			mnew->loadMesh(inname.value());
-			
+
 			Matrix Sc=m->appendSharedBoundaryMask(mRef->getPointsAsMatrix());
 			m->setPoints(mnew->getPointsAsMatrix());
 			m->setScalars(Sc);
 			m->save(outname.value());
 
-			
+
 			delete m;
 			delete mRef;
 			delete mnew;
-		
+
 		}else if (doAlterVertsBySBmask.value())
 		{
 			meshUtils* m = new meshUtils;
@@ -666,19 +666,19 @@ int main(int argc,char *argv[])
 
 			meshUtils* mRef = new meshUtils;
 			mRef->loadMesh(inmeshname2.value());
-			
+
 			m->sampleSharedBoundaryByMask(mRef->getPointsAsMatrix());
-			m->save(outname.value());			
+			m->save(outname.value());
 			delete m;
 
 		}else if (doFindMidMidPoint.value())
 		{
 			meshUtils* m = new meshUtils;
 			m->loadMesh(inmeshname.value());
-	
+
 			volume<char> im;
 			read_volume(im,inname.value());
-	
+
 			float cx=0, cy=0, cz=0;
 			m->findMidPointOfMidSlice(im,meshUtils::readFlirtMat(flirtmatname.value()),cx,cy,cz);
 			cout<<"foudn verts"<<endl;
@@ -694,87 +694,87 @@ int main(int argc,char *argv[])
 			try
 			{
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
-			 
-			 
+
+
 			volume4D<float> warpField;
 			read_volume4D(warpField,inname.value());
 			m->warpGridWithDefField(warpField, shiftx.value(),shifty.value(),shiftz.value());
 			m->save(outname.value());
 			}catch(exception& e){
-			
+
 			cout<<e.what()<<endl;
 			return 1;
 			}
-		
-			
+
+
 		}else if (doWarpMesh.value())
 		{
 			try
 			{
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
-			 
-			 
+
+
 			volume4D<float> warpField;
 			read_volume4D(warpField,inname.value());
 			m->warpGridWithDefField(warpField, shiftx.value(),shifty.value(),shiftz.value());
 			m->save(outname.value());
 			}catch(exception& e){
-			
+
 			cout<<e.what()<<endl;
 			return 1;
 			}
-		
-			
+
+
 		}else if (doSampleGrid.value())
 		{
 			cout<<"sample grid"<<endl;
-			
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
-			
-		
+
+
 		//	Matrix fmat=meshUtils::readFlirtMat(flirtmatname.value());
 		//	m->meshReg(fmat.i());
 			volume<float> image;
 			vector<float> vsamples;
 			read_volume(image,inname.value());
 			m->sampleImageAtPoints<float>(image, vsamples);
-			
+
 			delete m;
-			
+
 			meshUtils* mout = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 			mout->setScalars<float>(vsamples);
 			mout->save(outname.value());
-			
+
 			delete mout;
 		}else if (doSampleMesh.value())
 		{
 			cout<<"sample grid"<<endl;
-			
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix pts=m->getPointsAsMatrix();
 		//	Matrix fmat=meshUtils::readFlirtMat(flirtmatname.value());
 		//	m->meshReg(fmat.i());
-			
+
 			volume<float> image;
 			vector<float> vsamples;
 			read_volume(image,inname.value());
 			m->sampleImageAtPoints<float>(image, vsamples);
-			
+
 			delete m;
-			
+
 		//	meshUtils* mout = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			m->setScalars<float>(vsamples);
 			m->save(outname.value());
-			
+
 			delete m;
 		}else if (doSampleAndNormalizeIntensities.value()){
-		
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			// MJ: WHAT IS GOING ON HERE?? APPARENTLY NOTHING, BUT WHY?
 		}else if (doRandMesh.value())
 		{
 			cout<<"sample grid"<<endl;
-			
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix sc=m->getScalars();
 			vector<bool> vsc;
@@ -786,20 +786,20 @@ int main(int argc,char *argv[])
 			}else
 					vsc.push_back(false);
 			}
-			
+
 			Mesh m1;
 			m1.load(inmeshname.value());
 			Matrix points=m->getPointsAsMatrix();
 			int count=0;
 			for (vector<Mpoint*>::iterator i = m1._points.begin(); i!=m1._points.end(); i++ , count++)
 			{
-			(*i)->_update_coord = Pt(points.element(count,0), points.element(count,1),points.element(count,2)); 
-				}	
+			(*i)->_update_coord = Pt(points.element(count,0), points.element(count,1),points.element(count,2));
+				}
 				m1.update();
 			meshUtils::generateRandomMeshUsingScalar(m1,outname.value(), vsc,40);
 			delete m;
-			
-			
+
+
 		}else if (doRandMatrices.value())
 		{
 			meshUtils::generateRandom6DOFMatrices( outname.value(), 40);
@@ -807,36 +807,36 @@ int main(int argc,char *argv[])
 		}else if (doUgridToImage.value())
 		{
 				cout<<"convert grid to image"<<endl;
-			
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
-			
+
 			volume<float> image;
 			read_volume(image,inname.value());
 			m->ugridToImage<float>(image);
-		
-			save_volume(image,outname.value());	
+
+			save_volume(image,outname.value());
 			delete m;
-		
-		}else if (doReplaceVertsWithCoef.value()){//used to play around 
-				
+
+		}else if (doReplaceVertsWithCoef.value()){//used to play around
+
 				cout<<"replace verts"<<endl;
-				
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 
 				// MJ: WHAT IS GOING ON HERE?? APPARENTLY NOTHING, BUT WHY?
-				
-				
-		//getcoefrep disappear		
+
+
+		//getcoefrep disappear
 		//		FnirtFileReader fr(inname.value());
-				
+
 		//		cout<<"number of ceofficient fields "<<fr.GetCoefRep().size()<<" "<<fr.GetCoefRep().at(0)->GetCoef()->Nrows()<<" "<<fr.GetCoefRep().at(1)->CoefSz()<<endl;
 		//		Matrix Coefs=*(fr.GetCoefRep().at(0)->GetCoef()) & *(fr.GetCoefRep().at(1)->GetCoef()) & *(fr.GetCoefRep().at(2)->GetCoef());
 		//		cout<<"Coefs "<<Coefs.Nrows()<<" "<<Coefs.Ncols()<<endl;
 		//		m->setPoints(*(fr.GetCoefRep().at(0)->GetCoef()) | *(fr.GetCoefRep().at(1)->GetCoef()) | *(fr.GetCoefRep().at(2)->GetCoef()));
-				
+
 		//		m->save(outname.value());
-		
-			
+
+
 		}else if (doScalarsToVolume.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix Msc=m->getScalars();
@@ -844,7 +844,7 @@ int main(int argc,char *argv[])
 			for (unsigned int i=0; i<static_cast<unsigned int>(Msc.Nrows());i++)
 						Scvol.value(i,0,0)=Msc.element(i,0);
 			save_volume(Scvol,outname.value());
-			
+
 		}else if (doVolumeToScalars.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			volume<float> Scvol;
@@ -856,7 +856,7 @@ int main(int argc,char *argv[])
 			}
 			m->setScalars(Msc);
 			m->save(outname.value());
-			
+
 		}else if (doVectorsToVolume.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix Msc=m->getVectors();
@@ -867,7 +867,7 @@ int main(int argc,char *argv[])
 			  }
 			}
 			save_volume4D(Scvol,outname.value());
-			
+
 		}else if (doVolumeToVectors.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			volume4D<float> Scvol;
@@ -881,7 +881,7 @@ int main(int argc,char *argv[])
 			}
 			m->setVectors(Msc);
 			m->save(outname.value());
-			
+
 		}else if (doPointsToVolume.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix Msc=m->getPointsAsMatrix();
@@ -892,7 +892,7 @@ int main(int argc,char *argv[])
 			  }
 			}
 			save_volume(Scvol,outname.value());
-			
+
 		}else if (doFtoP.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix Msc=m->getScalars();
@@ -919,19 +919,19 @@ int main(int argc,char *argv[])
 			m->setScalars(Msc);
 			m->save(outname.value());
 
-			
+
 		}else if (doGetMeans.value()){
 			meshUtils *m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix pts=m->getPointsAsMatrix();
 			Matrix Vecs=m->getVectors();
 			ColumnVector labels(pts.Nrows());
 			labels=0;
-			
+
 			meshUtils *mout = new meshUtils();
 			mout->setPoints(pts);
 			mout->setPolygons(m->getPolygons());
 
-		
+
 			Matrix dist=Vecs;
 			for (int i =0;i<pts.Nrows();i++)
 			{
@@ -941,20 +941,20 @@ int main(int argc,char *argv[])
 
 			mout->setScalars(labels);
 			mout->save(outname.value()+"_mean0.vtk");
-	
-			
+
+
 			labels=1;
 				mout->setPoints(pts+Vecs);
 			mout->setScalars(labels);
 			mout->save(outname.value()+"_mean1.vtk");
-		
-		}else if (doCoefModelToImage.value()){//used to play around 
+
+		}else if (doCoefModelToImage.value()){//used to play around
 				int mode=myindex.value();
 
 				cout<<"replace verts"<<endl;
-				
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
-				
+
 				Matrix CoefMean=m->getPointsAsMatrix();
 				cout<<"Smodes"<<endl;
 				Matrix CoefModes=m->getField("Smodes");
@@ -965,22 +965,22 @@ int main(int argc,char *argv[])
 
 				ColumnVector Vimean=m->getField("Imean");
 				cout<<"i mean "<<Vimean.Nrows()<<" "<<IModes.Nrows()<<endl;
-				
-				
-				
+
+
+
 				FnirtFileReader fr(inname.value());
-				
+
 				cout<<"coef "<<CoefMean.Nrows()<<" "<<CoefMean.Ncols()<<" "<<CoefModes.Nrows()<<" "<<CoefModes.Ncols()<<" "<<endl;
 				ColumnVector NewCoefX(CoefMean.Nrows());
 				ColumnVector NewCoefY(CoefMean.Nrows());
 				ColumnVector NewCoefZ(CoefMean.Nrows());
-				
+
 				volume4D<float> imean;
 				volume4D<float> ivar;
 				volume4D<float> fmean;
-				
+
 				volume<float> imtemp, imY,imZ;
-				
+
 				read_volume(imtemp,inname.value());
 				imY=imtemp;
 				imZ=imtemp;
@@ -1000,12 +1000,12 @@ int main(int argc,char *argv[])
 				//save_volume4D(imean,outname.value());
 				fmean=fr.FieldAsNewimageVolume4D();
 				save_volume4D(fmean,"field_"+outname.value());
-				
+
 				//	meshUtils::getConditionalMeanAndVariance(model1, imean, ivar, imtemp, 0, -3, 3, 0.5, 210);
-				
+
 				//save_volume4D(imean, outname.value()+"_mean");
 				//			save_volume4D(ivar, outname.value()+"_var");
-				
+
 				meshUtils* mout= new meshUtils(inmeshname2.value(),static_cast<meshUtils::DataType>(1));
 				mout->warpGridWithDefField(fmean,0,0,0);
 				//				mout->setPoints(CoefMean);
@@ -1015,7 +1015,7 @@ int main(int argc,char *argv[])
 				vector<float> vars;
 				for (unsigned int i=0;i<=static_cast<unsigned int>(mode);i++)
 							vars.push_back(0);
-				
+
 				volume4D<float> Vmode;
 				volume4D<float> VmodeVar;
 /*
@@ -1024,19 +1024,19 @@ int main(int argc,char *argv[])
 				ColumnVector Var(Mivar.Nrows());
 				cout<<ieigs.Nrows()<<" "<<Mivar.Nrows()<<" "<<Mivar.Ncols()<<" "<<Var.Nrows()<<endl;
 				for (unsigned int i=0;i<Var.Nrows();i++)
-				{ 
+				{
 					float vartemp=0;
 					for (unsigned int j=0; j<Mivar.Ncols();j++)
 						vartemp+=Mivar.element(i,j)*Mivar.element(i,j)*ieigs.element(j);
-					
+
 					Var.element(i)=vartemp;
-				
+
 				}
 				*/
 				for (float i=-3;i<=3;i+=0.5)
 				{
 				cout<<"Iter i "<<i<<endl;
-	
+
 				vars.at(mode)=i;
 				Matrix inew=meshUtils::getDeformedVector(Vimean, IModes, se,vars);
 
@@ -1049,7 +1049,7 @@ int main(int argc,char *argv[])
 				cout<<"SCALE "<<sc<<endl;
 				//Var*=sc;
 				///******************//
-				
+
 				NewCoefX=CoefMean.Column(1);
 				NewCoefY=CoefMean.Column(2);
 				NewCoefZ=CoefMean.Column(3);
@@ -1059,10 +1059,10 @@ int main(int argc,char *argv[])
 					NewCoefX.element(i)+=CoefModes.element(3*i,mode)*sqrt(se.element(mode))*vars.at(mode);
 					NewCoefY.element(i)+=CoefModes.element(3*i+1,mode)*sqrt(se.element(mode))*vars.at(mode);
 					NewCoefZ.element(i)+=CoefModes.element(3*i+2,mode)*sqrt(se.element(mode))*vars.at(mode);
-					
+
 				}
-				
-				
+
+
 				//////-------------------FUCNTION DISAAPPEARED NEED THEM TO WORK PROPERLY ------------------//////
 //				fr.GetCoefRep().at(0)->SetCoef(NewCoefX);
 //				fr.GetCoefRep().at(1)->SetCoef(NewCoefY);
@@ -1076,13 +1076,13 @@ int main(int argc,char *argv[])
 				read_volume(image,inname2.value());
 				mout2->ugridToImage<float>(image);
 				Vmode.addvolume(image);
-			/*	
+			/*
 				mout2->setScalars(Var*sc);
 				mout2->ugridToImage<float>(image);
 				VmodeVar.addvolume(image);
 */
-				
-				
+
+
 				//mout2->save("ugrid_int_min3mde0.vtk");
 				delete mout2;
 				cout<<"end of loop"<<endl;
@@ -1095,15 +1095,15 @@ int main(int argc,char *argv[])
 				//	Matrix Coefs=*(fr.GetCoefRep().at(0)->GetCoef()) & *(fr.GetCoefRep().at(1)->GetCoef()) & *(fr.GetCoefRep().at(2)->GetCoef());
 				//	cout<<"Coefs "<<Coefs.Nrows()<<" "<<Coefs.Ncols()<<endl;
 				//	m->setPoints(*(fr.GetCoefRep().at(0)->GetCoef()) | *(fr.GetCoefRep().at(1)->GetCoef()) | *(fr.GetCoefRep().at(2)->GetCoef()));
-				
+
 				//	m->save(outname.value());
-			}else if (doFieldModelToImage.value()){//used to play around 
+			}else if (doFieldModelToImage.value()){//used to play around
 				int mode=myindex.value();
 
 				cout<<"replace verts"<<endl;
-				
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
-				
+
 				Matrix CoefMean=m->getPointsAsMatrix();
 				cout<<"Smodes"<<endl;
 				Matrix CoefModes=m->getField("Smodes");
@@ -1114,11 +1114,11 @@ int main(int argc,char *argv[])
 
 				ColumnVector Vimean=m->getField("Imean");
 				cout<<"i mean "<<Vimean.Nrows()<<endl;
-	
+
 							vector<float> vars;
 				for (unsigned int i=0;i<=static_cast<unsigned int>(mode);i++)
 							vars.push_back(0);
-				
+
 				volume4D<float> Vmode;
 				volume4D<float> VmodeVar;
 
@@ -1127,15 +1127,15 @@ int main(int argc,char *argv[])
 				ColumnVector Var(Mivar.Nrows());
 				cout<<ieigs.Nrows()<<" "<<Mivar.Nrows()<<" "<<Mivar.Ncols()<<" "<<Var.Nrows()<<endl;
 				for (unsigned int i=0;i<static_cast<unsigned int>(Var.Nrows());i++)
-				{ 
+				{
 					float vartemp=0;
 					for (unsigned int j=0; j<static_cast<unsigned int>(Mivar.Ncols());j++)
 						vartemp+=Mivar.element(i,j)*Mivar.element(i,j)*ieigs.element(j);
-					
+
 					Var.element(i)=vartemp;
-				
+
 				}
-			
+
 				meshUtils* mout2= new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 				for (float i=-3;i<=3;i+=0.5)
 		//					for (float i=-25;i<=59;i+=10)
@@ -1146,8 +1146,8 @@ int main(int argc,char *argv[])
 
 				for (unsigned int q=0;q<vars.size();q++)
 					cout<<vars.at(q)<<" ";
-				cout<<endl;	
-	
+				cout<<endl;
+
 			//	Matrix snew=meshUtils::getDeformedVector(Vimean, IModes, se,vars);
 				Matrix inew=meshUtils::getDeformedVector(Vimean, IModes, se,vars);
 
@@ -1160,7 +1160,7 @@ int main(int argc,char *argv[])
 				cout<<"SCALE "<<sc<<endl;
 				//Var*=sc;
 				///******************//
-			
+
 				//int mode=0;
 				CoefMean=m->getPointsAsMatrix();
 				cout<<CoefMean.element(0,0)<<" "<<CoefMean.element(0,1)<<" "<<CoefMean.element(0,2)<<endl;
@@ -1169,21 +1169,21 @@ int main(int argc,char *argv[])
 					CoefMean.element(i,0)+=CoefModes.element(3*i,mode)*sqrt(se.element(mode))*vars.at(mode);
 					CoefMean.element(i,1)+=CoefModes.element(3*i+1,mode)*sqrt(se.element(mode))*vars.at(mode);
 					CoefMean.element(i,2)+=CoefModes.element(3*i+2,mode)*sqrt(se.element(mode))*vars.at(mode);
-					
+
 				}
-		
+
 			//	meshUtils* mout2= new meshUtils(inmeshname2.value(),static_cast<meshUtils::DataType>(1));
 				mout2->setPoints(CoefMean);
 				mout2->setScalars(inew);
-				
+
 								cout<<"points set "<<endl;
 
 				volume<float> image;
 				read_volume(image,inname.value());
 				mout2->ugridToImage<float>(image);
 				Vmode.addvolume(image);
-				
-				
+
+
 				cout<<"now do var "<<endl;
 				mout2->setScalars(Var*sc);
 								cout<<"now do var2 "<<endl;
@@ -1192,8 +1192,8 @@ int main(int argc,char *argv[])
 				VmodeVar.addvolume(image);
 				cout<<"now do var added "<<endl;
 
-				
-				
+
+
 			//	mout2->save("ugrid_int_min3mde0.vtk");
 			//	delete mout2;
 				cout<<"end of loop"<<endl;
@@ -1206,13 +1206,13 @@ int main(int argc,char *argv[])
 				//	Matrix Coefs=*(fr.GetCoefRep().at(0)->GetCoef()) & *(fr.GetCoefRep().at(1)->GetCoef()) & *(fr.GetCoefRep().at(2)->GetCoef());
 				//	cout<<"Coefs "<<Coefs.Nrows()<<" "<<Coefs.Ncols()<<endl;
 				//	m->setPoints(*(fr.GetCoefRep().at(0)->GetCoef()) | *(fr.GetCoefRep().at(1)->GetCoef()) | *(fr.GetCoefRep().at(2)->GetCoef()));
-				
+
 				//	m->save(outname.value());
-				
+
 			}else if (doSubSampleGrid.value()){
-				
+
 				cout<<"sub sample grid"<<endl;
-				
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 								cout<<"get Points"<<endl;
 
@@ -1223,15 +1223,15 @@ int main(int argc,char *argv[])
 				volume<short> image;
 				vector<short> vsamples;
 				read_volume(image,inname.value());
-				
+
 				m->sampleImageAtPoints<short>(image, vsamples);
 				cout<<"crreate mask"<<endl;
 				vector<bool> vmask;
 				int N=0;
 				for (vector<short>::iterator i=vsamples.begin();i!=vsamples.end();i++)
 				{
-				
-					if ((*i) >0 ) 
+
+					if ((*i) >0 )
 					{
 						vmask.push_back(true);
 						N++;
@@ -1244,7 +1244,7 @@ int main(int argc,char *argv[])
 					}
 				}
 				cout<<"set data "<<N<<endl;
-				
+
 				meshUtils* mout = new meshUtils();
 				mout->setDataType(static_cast<meshUtils::DataType>(1));
 								cout<<"Pointss"<<endl;
@@ -1255,17 +1255,17 @@ int main(int argc,char *argv[])
 				mout->addFieldData(meshUtils::subSampleMatrix(m->getField("Imodes"),vmask),"Imodes","float");
 				mout->addFieldData(meshUtils::subSampleMatrix(m->getField("Imean"),vmask),"Imean","float");
 				mout->addFieldData(meshUtils::subSampleMatrix(m->getField("ICondMat"),vmask),"ICondMat","float");
-			
+
 				mout->addFieldData(m->getField("Errs"),"Errs","float");
 				mout->addFieldData(m->getField("Labels"),"Labels","float");
 				mout->addFieldData(m->getField("NumberOfSubjects"),"NumberOfSubjects","float");
 				mout->addFieldData(m->getField("SCondEigs"),"SCondEigs","float");
 				mout->addFieldData(m->getField("ICondEigs"),"ICondEigs","float");
 				cout<<"saving"<<endl;
-				mout->save(outname.value());		
+				mout->save(outname.value());
 				delete m;
 				delete mout;
-				
+
 			}else if (doFlipMesh.value()){
 				volume<float> im;
 				read_volume(im,inname.value());
@@ -1285,13 +1285,13 @@ int main(int argc,char *argv[])
 			}else if (doConcatIntensityGrid.value()){
 					meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 					meshUtils* m2 = new meshUtils(inmeshname2.value(),static_cast<meshUtils::DataType>(1));
-				
+
 					m->setPoints(m->getPointsAsMatrix() & m2->getPointsAsMatrix() );
 					m->setScalars(m->getScalars() & m2->getScalars() );
 					m->save(outname.value());
-				
+
 					delete m;
-					delete m2;	
+					delete m2;
 			}else if (doDeMeanIntensities.value()){
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(1));
 				Matrix intensity=m->getScalars();
@@ -1299,15 +1299,15 @@ int main(int argc,char *argv[])
 				float avg=0;
 				for (unsigned int i=0; i<static_cast<unsigned int>(intensity.Nrows());i++)
 					avg+=intensity.element(i,0);//sum values
-				
+
 				avg/=intensity.Nrows();//normalize
 
 				for (unsigned int i=0; i<static_cast<unsigned int>(intensity.Nrows());i++)
 					intensity.element(i,0)-=avg;//demean
-				
-				m->setScalars(intensity);	
+
+				m->setScalars(intensity);
 				m->save(outname.value());
-				
+
 				delete m;
 			}else if (doDeformSurface.value())
 			{
@@ -1316,13 +1316,13 @@ int main(int argc,char *argv[])
 				read_volume(image, inname.value());
 				m->deformSurface<float,unsigned int>(image, dof.value(), w_im.value(), w_tan.value(), w_tri.value(), w_norm.value(),thresh.value(),inmeshname.value());//iteration, image weighting, tangential weighting, max_triangle weighting, normal weigthing
 				m->save(outname.value());
-				delete m;	
-					
+				delete m;
+
 			}else if (doMeshReg_LeastSq.value()){
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 				meshUtils* mtarg = new meshUtils(inmeshname2.value(),static_cast<meshUtils::DataType>(0));
 				Matrix Points_src=m->getPointsAsMatrix();
-				
+
 				Matrix fmat=mtarg->reg_leastsq(Points_src, dof.value());
 				delete mtarg;
 
@@ -1349,7 +1349,7 @@ int main(int argc,char *argv[])
 					delete mout;
 			}else if (doVertexLDA_LOO.value())
 			{
-				
+
 				//load target
 				ifstream ftarg;
 				ftarg.open(inname.value().c_str());
@@ -1357,8 +1357,8 @@ int main(int argc,char *argv[])
 				unsigned int count=0;
 				while (ftarg>>temp)
 					count++;
-				ftarg.close();	
-				
+				ftarg.close();
+
 				ColumnVector target(count);
 				ftarg.open(inname.value().c_str());
 				count=0;
@@ -1368,41 +1368,41 @@ int main(int argc,char *argv[])
 					cout<<"target "<<temp<<endl;
 					count++;
 				}
-				ftarg.close();	
-				
+				ftarg.close();
+
 				//base is usually average mesh
 				meshUtils* mbase = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
-				
+
 	//creates mean target mesh from data
 //				Matrix alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),"nosave");
 //				for (int i=0;i<5;i++)
 //				{
-//					
+//
 //					if (i>0)
 //						alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),"nosave");
-//					
-//					
+//
+//
 //					Matrix meanPts(mbase->getPointsAsMatrix().Nrows(),3);
 //					for (unsigned int i=1;i<static_cast<unsigned int>(alignedPoints.Nrows());i+=3)
 //					{
 //						MVdisc* vertDisc = new MVdisc();
-//						Matrix m=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1);					
+//						Matrix m=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1);
 //						//cout<<"i "<<i<<" "<<m.Nrows()<<" "<<m.Ncols()<<endl;
 //						meanPts.Row((i-1)/3+1)=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1).t();
 //						delete vertDisc;
 //					}
 //					mbase->setPoints(meanPts);
-//					
+//
 //				}
-				
-				
+
+
 				Matrix alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),outname.value()+"_aligned.vtk");
-				
-				//do for each vertex 
+
+				//do for each vertex
 				vector<float> v_accuracy;
 				for (unsigned int i=1;i<static_cast<unsigned int>(alignedPoints.Nrows());i+=3)
 				{
-					MVdisc* vertDisc = new MVdisc();					
+					MVdisc* vertDisc = new MVdisc();
 					//Matrix test=alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols());
 					//	vertDisc->estimateLDAParams(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target);
 					Matrix discData=alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols());
@@ -1415,14 +1415,14 @@ int main(int argc,char *argv[])
 					cout<<"discData "<<discData.Nrows()<<" "<<discData.Ncols()<<endl;
 					float accuracy = vertDisc->run_LOO_LDA(discData,target);
 					cout<<"accuracy "<<accuracy<<endl;
-					v_accuracy.push_back(accuracy);	
+					v_accuracy.push_back(accuracy);
 					delete vertDisc;
 				}
 				mbase->setScalars<float>(v_accuracy);
 				mbase->save(outname.value());
 			}else if (doVertexLDA_save.value())
 			{
-						
+
 				//load target
 				ifstream ftarg;
 				ftarg.open(inname.value().c_str());
@@ -1430,8 +1430,8 @@ int main(int argc,char *argv[])
 				unsigned int count=0;
 				while (ftarg>>temp)
 					count++;
-				ftarg.close();	
-				
+				ftarg.close();
+
 				ColumnVector target(count);
 				ftarg.open(inname.value().c_str());
 				count=0;
@@ -1441,37 +1441,37 @@ int main(int argc,char *argv[])
 					cout<<"target "<<temp<<endl;
 					count++;
 				}
-				ftarg.close();	
-			
+				ftarg.close();
+
 				//base is usually average mesh
 				meshUtils* mbase = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 //				Matrix alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),"nosave");
 //				for (int i=0;i<5;i++)
 //				{
-//					
+//
 //					if (i>0)
 //						alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),"nosave");
-//					
-//					
+//
+//
 //					Matrix meanPts(mbase->getPointsAsMatrix().Nrows(),3);
 //					for (unsigned int i=1;i<static_cast<unsigned int>(alignedPoints.Nrows());i+=3)
 //					{
 //						MVdisc* vertDisc = new MVdisc();
-//						Matrix m=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1);					
+//						Matrix m=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1);
 //						//cout<<"i "<<i<<" "<<m.Nrows()<<" "<<m.Ncols()<<endl;
 //						meanPts.Row((i-1)/3+1)=(vertDisc->getGroupMeans(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target)).Column(1).t();
 //						delete vertDisc;
 //					}
 //					mbase->setPoints(meanPts);
-//					
+//
 //				}
-				
+
 //				cout<<"done looping align"<<endl;
 				Matrix alignedPoints=mbase->alignSurfaces(inmeshname2.value(),dof.value(),outname.value()+"_aligned.vtk");
 
-				//do for each vertex 
+				//do for each vertex
 //				vector<float> v_accuracy;
-				MVdisc* vertDisc = new MVdisc();					
+				MVdisc* vertDisc = new MVdisc();
 
 				for (unsigned int i=1;i<static_cast<unsigned int>(alignedPoints.Nrows());i+=3)
 				{
@@ -1490,15 +1490,15 @@ int main(int argc,char *argv[])
 				else
 					vertDisc->estimateAndAppendLDAParams(discData,target);
 				//	cout<<"accuracy "<<accuracy<<endl;
-				//	 v_accuracy.push_back(accuracy);	
+				//	 v_accuracy.push_back(accuracy);
 				//	 delete vertDisc;
 				}
 			//	mbase->setScalars<float>(v_accuracy);
 				vertDisc->saveLDAParams(outname.value(),mbase->getPolygons());
-				
+
 				delete vertDisc;
 				delete mbase;
-				
+
 			}else if (doVertexLDA_loadAndApply.value())
 			{
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
@@ -1507,34 +1507,34 @@ int main(int argc,char *argv[])
 				Matrix Cov_vecs_all=m->getField("Covariance_EigVecs");
 				Matrix Cov_vals_all=m->getField("Covariance_EigVals");
 				vector<unsigned int> nsub_all=first_newmat_vector::vectorToVector<unsigned int>(m->getField("number_of_subjects"));
-				
+
 				Matrix alignedPoints=m->alignSurfaces(inmeshname2.value(),dof.value(),outname.value()+"_aligned.vtk");
 
 				//unsigned int subject=1;
 				vector<int> v_class;
 				fslvtkIO* fout = new fslvtkIO();
-				
+
 				for (unsigned int subject=1; subject<=(unsigned)alignedPoints.Ncols() ;subject++)
 				{
 					//do for each vertex
-					int p_count=1; 
+					int p_count=1;
 					for (unsigned int i=1;i<static_cast<unsigned int>(alignedPoints.Nrows());i+=3,p_count++)
 					{
-						MVdisc* vertDisc = new MVdisc();					
+						MVdisc* vertDisc = new MVdisc();
 						//Matrix test=alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols());
 						//	vertDisc->estimateLDAParams(alignedPoints.SubMatrix(i,i+2,1,alignedPoints.Ncols()),target);
 						//cout<<"i apply "<<i<<" "<<p_count<<" "<<Mean2_all.Nrows()<<" "<<Mean2_all.Ncols()<<" "<<Cov_vecs_all.Nrows()<<" "<<Cov_vecs_all.Nrows()<<" "<<endl;
-						
+
 						vertDisc->set_LDA_Params( ( Mean1_all.SubMatrix(p_count,p_count,1,3).t() | Mean2_all.SubMatrix(p_count,p_count,1,3).t() ) ,\
 												  Cov_vecs_all.SubMatrix(i,i+2,1,3), \
 												  first_newmat_vector::vectorToVector<float>( Cov_vals_all.SubMatrix(i,i+2,1,1) ), \
 												  nsub_all );
 						ColumnVector discData=alignedPoints.SubMatrix(i,i+2,subject,subject);
-						v_class.push_back( static_cast<int>(vertDisc->applyLDA(discData, 0.0 )) );						
-						
+						v_class.push_back( static_cast<int>(vertDisc->applyLDA(discData, 0.0 )) );
+
 						delete vertDisc;
 					}
-					
+
 					if (subject==1)
 					{
 						fout->setPoints(alignedPoints.Column(subject));
@@ -1561,21 +1561,21 @@ int main(int argc,char *argv[])
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 				cout<<m->meanScalar()<<endl;
 				delete m;
-				
+
 			}else if (doDisplayNumericField.value())
 			{
-				
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 				m->displayNumericField(inname.value());
 				delete m;
-				
+
 			}else if (doDisplayNumericFieldNames.value())
 			{
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 				m->displayNumericFieldDataNames();
 				delete m;
 			}else{
-			
+
 				//load target
 				ifstream ftarg;
 				ftarg.open(inname.value().c_str());
@@ -1583,8 +1583,8 @@ int main(int argc,char *argv[])
 				unsigned int count=0;
 				while (ftarg>>temp)
 					count++;
-				ftarg.close();	
-				
+				ftarg.close();
+
 				ColumnVector target(count);
 				ftarg.open(inname.value().c_str());
 				count=0;
@@ -1594,12 +1594,12 @@ int main(int argc,char *argv[])
 					cout<<"target "<<temp<<endl;
 					count++;
 				}
-				ftarg.close();	
-				
-				
+				ftarg.close();
+
+
 				meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 				Matrix Sc=m->getScalars();
-		
+
 				unsigned int npts=642;
 						Matrix Sc_rate=Sc.SubMatrix(1,npts,1,1);
 				Sc_rate=0;
@@ -1614,19 +1614,19 @@ int main(int argc,char *argv[])
 					}
 					cout<<"j frac "<<j<<" "<<frac/npts<<endl;
 				}
-				
+
 				Matrix tempM;
 				tempM=m->getPointsAsMatrix().SubMatrix(1,npts,1,3);
 				m->setPoints(tempM);
 				m->setScalars(Sc_rate/(Sc.Nrows()/npts));
 				m->save(outname.value());
 				delete m;
-			
+
 			}
 			/*else if (doAddModesUsingScalars.value())
 			{
 			cout<<"sample grid"<<endl;
-			
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix sc=m->getScalars();
 			vector<bool> vsc;
@@ -1640,47 +1640,47 @@ int main(int argc,char *argv[])
 			}
 			shapeModel* model1 = new shapeModel;
 			model1->load_bmv_binaryInfo(inname.value(),1);
-			model1->load_bmv_binary(inname.value(),1);	
-	
+			model1->load_bmv_binary(inname.value(),1);
+
 			meshUtils::addModesToModelUsingMask(model1, vsc);
 						cout<<"new model "<<model1->getNumberOfModes()<<endl;
 
 			model1->save_binary(outname.value(),0,model1->getNumberOfModes());
 			cout<<"new model "<<model1->getNumberOfModes()<<endl;
-			delete m; 
+			delete m;
 			delete model1;
-			
-			
+
+
 		}else if (doWriteConditionalIntensity.value())
 		{
-									
+
 			shapeModel* model1 = new shapeModel;
 			model1->load_bmv_binaryInfo(inmeshname.value(),1);
-			model1->load_bmv_binary(inmeshname.value(),1);	
+			model1->load_bmv_binary(inmeshname.value(),1);
 			model1->setImageParameters(182,218,182, 1.0, 1.0,1.0);
 
 			volume4D<float> imean;
 			volume4D<float> ivar;
 			volume<float> imtemp;
 			read_volume(imtemp,inname.value());
-			
+
 			meshUtils::getConditionalMeanAndVariance(model1, imean, ivar, imtemp, 0, -3, 3, 0.5, 210);
 
 			save_volume4D(imean, outname.value()+"_mean");
 						save_volume4D(ivar, outname.value()+"_var");
 
 			delete model1;
-			
-			
+
+
 		}else if (doMeshToBvars.value()){
 			vector<float> vars;
 			shapeModel* model1 = new shapeModel;
 			model1->load_bmv_binaryInfo(inname.value(),1);
-			model1->load_bmv_binary(inname.value(),1);	
-			
+			model1->load_bmv_binary(inname.value(),1);
+
 			model1->setImageParameters(182,218,182, 1.0, 1.0,1.0);
 			Mesh m2=model1->getTranslatedMesh(0);
-					
+
 			meshUtils* m = new meshUtils(inmeshname.value(),static_cast<meshUtils::DataType>(0));
 			Matrix vpts=m->getPointsAsMatrix();
 			int count=0;
@@ -1690,7 +1690,7 @@ int main(int argc,char *argv[])
 				vpts.element(count,0)-=(*i)->get_coord().X;
 				vpts.element(count,1)-=(*i)->get_coord().Y;
 				vpts.element(count,2)-=(*i)->get_coord().Z;
-			
+
 
 				}
 			cout<<vpts<<endl;
@@ -1702,10 +1702,10 @@ int main(int argc,char *argv[])
 				for (unsigned int j=0;j<smode.size() ; j++)
 				{
 					var+=smode.at(j).X*vpts.element(j,0)+smode.at(j).Y*vpts.element(j,1)+smode.at(j).Z*vpts.element(j,2);
-					
+
 				}
 				vars.push_back(var/model1->getEigenValue(i));
-				
+
 				//subtract the mode from the points
 				for (unsigned int j=0;j<smode.size() ; j++)
 				{
@@ -1714,8 +1714,8 @@ int main(int argc,char *argv[])
 				vpts.element(j,2)-=vars.at(i)*model1->getEigenValue(i)*smode.at(j).Z ;
 
 				}
-				
-				
+
+
 			//	cout<<"MODE "<<var<<" "<<model1->getEigenValue(i)<<" "<<var/model1->getEigenValue(i)<<endl;
 			}
 			ofstream fout;
@@ -1727,22 +1727,22 @@ fout<<"group1 "<<model1->getNumberOfModes()<<" ";
 				for (unsigned int i=0;i<vars.size() ; i++)
 					fout<<vars.at(i)<<" ";
 			fout<<endl;
-		
+
 		}*/
 			}catch(exception& e){
-				
+
 				cout<<e.what()<<endl;
 				return 1;
 			}
-			
+
 		}catch(X_OptionError& e) {
 	options.usage();
 		cerr << endl << e.what() << endl;
 			exit(EXIT_FAILURE);
 		} catch(std::exception &e) {
 			cerr << e.what() << endl;
-		} 
-		
+		}
+
   return 0;// do_work(argc,argv);
 }
 

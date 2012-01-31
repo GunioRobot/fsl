@@ -2,7 +2,7 @@ include ${FSLCONFDIR}/default.mk
 
 PROJNAME = cluster
 
-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -I${INC_BOOST} 
+USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -I${INC_BOOST}
 USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_PROB} -L${LIB_ZLIB}
 
 LIBS = -lutils -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lprob -lfslio -lniftiio -lznz -lnewmat -lz
@@ -33,7 +33,7 @@ infertest: ${IOBJS}
 	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${IOBJS} ${ILIBS}
 
 cluster: ${COBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${COBJS} ${CLIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${COBJS} ${CLIBS}
 
 connectedcomp: ${CCOBJS}
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${CCOBJS} ${LIBS} 
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${CCOBJS} ${LIBS}

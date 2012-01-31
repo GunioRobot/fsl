@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -97,7 +97,7 @@ Mesh::Mesh(const Mesh&m)
     }
 }
 
- 
+
 
 Mesh Mesh::operator=(const Mesh&m)
 {
@@ -120,7 +120,7 @@ Mesh Mesh::operator=(const Mesh&m)
       Triangle * tr = new Triangle(get_point(v0), get_point(v1), get_point(v2));
       _triangles.push_back(tr);
     }
-  
+
   return *this;
 }
 
@@ -149,7 +149,7 @@ void Mesh::clear() {
 void make_mesh_from_octa(int n, Mesh& m)
 {
   m.clear();
-  
+
   Mpoint *XPLUS = new Mpoint( 1,  0,  0, 0);
   Mpoint *XMIN  = new Mpoint(-1,  0,  0, 1);
   Mpoint *YPLUS = new Mpoint( 0,  1,  0, 2);
@@ -172,7 +172,7 @@ void make_mesh_from_octa(int n, Mesh& m)
   m._points.push_back(YMIN);
   m._points.push_back(ZPLUS);
   m._points.push_back(ZMIN);
-  
+
   m._triangles.push_back(t0);
   m._triangles.push_back(t1);
   m._triangles.push_back(t2);
@@ -181,12 +181,12 @@ void make_mesh_from_octa(int n, Mesh& m)
   m._triangles.push_back(t5);
   m._triangles.push_back(t6);
   m._triangles.push_back(t7);
-   
+
   for (int i = 1; i<n ; i++)
     {
       //re-tesselates
       m.retessellate();
-      
+
       for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++)
 	{
 	  double norm = sqrt((*i)->get_coord().X * (*i)->get_coord().X + (*i)->get_coord().Y * (*i)->get_coord().Y + (*i)->get_coord().Z * (*i)->get_coord().Z);
@@ -201,8 +201,8 @@ void make_mesh_from_octa(int n, Mesh& m)
 void make_mesh_from_icosa(int n, Mesh& m)
 {
   m.clear();
-  
-  const double tau=0.8506508084;	
+
+  const double tau=0.8506508084;
   const double one=0.5257311121;
   Mpoint *ZA=new Mpoint( tau , one,  0,    0);
   Mpoint *ZB=new Mpoint( -tau, one,  0,    1);
@@ -279,7 +279,7 @@ void make_mesh_from_icosa(int n, Mesh& m)
     {
       //re-tesselates
       m.retessellate();
-      
+
       for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++)
 	{
 	  double norm = sqrt((*i)->get_coord().X * (*i)->get_coord().X + (*i)->get_coord().Y * (*i)->get_coord().Y + (*i)->get_coord().Z * (*i)->get_coord().Z);
@@ -298,9 +298,9 @@ void make_mesh_from_tetra(int n, Mesh& m)
   const Pt MMP(  -sqrt_3,  -sqrt_3,  sqrt_3);
   const Pt MPM(  -sqrt_3,  sqrt_3,  -sqrt_3);
   const Pt PMM(  sqrt_3,  -sqrt_3,  -sqrt_3);
-  
+
   m.clear();
-  
+
   Mpoint *p0=new Mpoint(PPP, 0);
   Mpoint *p1=new Mpoint(MMP, 1);
   Mpoint *p2=new Mpoint(MPM, 2);
@@ -317,13 +317,13 @@ void make_mesh_from_tetra(int n, Mesh& m)
   m._triangles.push_back(t1);
   m._triangles.push_back(t2);
   m._triangles.push_back(t3);
-  
-  
+
+
   for (int i = 1; i<n ; i++)
     {
       //re-tesselates
       m.retessellate();
-      
+
       for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++)
 	{
 	  double norm = sqrt((*i)->get_coord().X * (*i)->get_coord().X + (*i)->get_coord().Y * (*i)->get_coord().Y + (*i)->get_coord().Z * (*i)->get_coord().Z);
@@ -335,11 +335,11 @@ void make_mesh_from_tetra(int n, Mesh& m)
 }
 
 int Mesh::load(string s) {
-  //loads a mesh - 
-  //  returns: 
-  // -1 if load fails, 
+  //loads a mesh -
+  //  returns:
+  // -1 if load fails,
   // 0 if load is cancelled
-  //  1 if load succeeds and file is a .off file, 
+  //  1 if load succeeds and file is a .off file,
   //  2 if load succeeds and file is a freesurfer file
   // 3 if load succeed and file is a .vtk file
   clear();
@@ -354,7 +354,7 @@ int Mesh::load(string s) {
 	  getline(cin, input);
 	  s = input;
 	}
-    }  
+    }
   //find out if it is an off file
   bool is_off=true;
   bool is_vtk=false;
@@ -363,7 +363,7 @@ int Mesh::load(string s) {
     {
       ifstream f(s.c_str());
       if (f.is_open())
-	{	
+	{
 	  //reading the header
 	  string header;
 	  getline(f, header);
@@ -375,10 +375,10 @@ int Mesh::load(string s) {
 	    is_vtk=true;
 	    if (pos == string::npos) {
 	      is_vtk=false;
-	    } 	  
-	    
+	    }
+
 	  }
-	  
+
 	  f.close();
 	  if(is_off){
 	    //cout<<"Reading OFF file";
@@ -390,7 +390,7 @@ int Mesh::load(string s) {
 	    load_vtk_ASCII(s);
 	    ret=3;
 	  }
-	  
+
 	  else{
 	    cout<<"Read other";
 	    load_fs(s);
@@ -417,19 +417,19 @@ void Mesh::load_off(string s) {//loads a .off format mesh
 	  getline(cin, input);
 	  s = input;
 	}
-    }  
+    }
 
   // reads the data
   if (s!="c")
     {
       ifstream f(s.c_str());
       if (f.is_open())
-	{	
+	{
 	  //reading the header
 	  string header;
 	  getline(f, header);
 	  string::size_type pos = header.find("OFF");
-	  if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);}; 
+	  if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);};
 	  pos = header.find("n");
 	  if (pos != string::npos) {int N; f>>N; if (N!=3) {cerr<<"this program only handles triangles meshes"<<endl; exit(-1);}};
 
@@ -445,7 +445,7 @@ void Mesh::load_off(string s) {//loads a .off format mesh
 	      Mpoint * m = new Mpoint(x, y, z, i);
 	      _points.push_back(m);
 	    }
-	  
+
 	  //reading the triangles
 	  for (int i=0; i<NFaces; i++)
 	    {
@@ -459,7 +459,7 @@ void Mesh::load_off(string s) {//loads a .off format mesh
 	}
       else {cout<<"error opening file"<<endl; exit(-1);}
     }
-  else cout<<"cancelled"<<endl; 
+  else cout<<"cancelled"<<endl;
 }
 
 void Mesh::load_vtk_ASCII(string s) {//loads a .vtk format mesh
@@ -475,14 +475,14 @@ void Mesh::load_vtk_ASCII(string s) {//loads a .vtk format mesh
 	  getline(cin, input);
 	  s = input;
 	}
-    }  
+    }
 
   // reads the data
   if (s!="c")
     {
       ifstream f(s.c_str());
       if (f.is_open())
-	{	
+	{
 	  //reading the header
 	  string header;
 	  getline(f, header);
@@ -497,7 +497,7 @@ void Mesh::load_vtk_ASCII(string s) {//loads a .vtk format mesh
 	  int NVertices, NFaces;
 	  f>>header>>NVertices>>header;
 	  // cout<<"load vtkmesh npts:"<<NVertices;
-	  
+
 	  //reading the points
 	  for (int i=0; i<NVertices; i++)
 	    {
@@ -520,7 +520,7 @@ void Mesh::load_vtk_ASCII(string s) {//loads a .vtk format mesh
 	}
       else {cout<<"error opening file"<<endl; exit(-1);}
     }
-  else cout<<"cancelled"<<endl; 
+  else cout<<"cancelled"<<endl;
 }
 
 void Mesh::load_fs(string s) { //load a freesurfer ascii mesh
@@ -537,18 +537,18 @@ void Mesh::load_fs(string s) { //load a freesurfer ascii mesh
 	  getline(cin, input);
 	  s = input;
 	}
-    }  
+    }
   // reads the data
   if (s!="c")
     {
       ifstream f(s.c_str());
       if (f.is_open())
-	{	
+	{
 	  //reading the header
 	  string header;
 	  getline(f, header);
 	  // string::size_type pos = header.find("OFF");
-	  // if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);}; 
+	  // if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);};
 	  // pos = header.find("n");
 	  // if (pos != string::npos) {int N; f>>N; if (N!=3) {cerr<<"this program only handles triangles meshes"<<endl; exit(-1);}};
 
@@ -565,7 +565,7 @@ void Mesh::load_fs(string s) { //load a freesurfer ascii mesh
 	      Mpoint * m = new Mpoint(x, y, z, i, val);
 	      _points.push_back(m);
 	    }
-	  
+
 	  //reading the triangles
 	  for (int i=0; i<NFaces; i++)
 	    {
@@ -580,7 +580,7 @@ void Mesh::load_fs(string s) { //load a freesurfer ascii mesh
 	}
       else {cout<<"error opening file"<<endl; exit(-1);}
     }
-  else cout<<"cancelled"<<endl; 
+  else cout<<"cancelled"<<endl;
 }
 
 
@@ -596,18 +596,18 @@ void Mesh::load_fs_label(string s,const int& value){
 	  getline(cin, input);
 	  s = input;
 	}
-    }  
+    }
    // reads the data
   if (s!="c")
     {
       ifstream f(s.c_str());
       if (f.is_open())
-	{	
+	{
 	  //reading the header
 	  string header;
 	  getline(f, header);
 	  // string::size_type pos = header.find("OFF");
-	  // if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);}; 
+	  // if (pos == string::npos) {cerr<<"error in the header"<<endl;exit(-1);};
 	  // pos = header.find("n");
 	  // if (pos != string::npos) {int N; f>>N; if (N!=3) {cerr<<"this program only handles triangles meshes"<<endl; exit(-1);}};
 
@@ -624,12 +624,12 @@ void Mesh::load_fs_label(string s,const int& value){
 	      f>>num>>x>>y>>z>>tmp; //NB - can't work out when Freesurfer sets the 5th value in label
 	      _points[num]->set_value(value);
 	    }
-	  
+
 	  f.close();
 	}
       else {cout<<"error opening file"<<endl; exit(-1);}
     }
-  else cout<<"cancelled"<<endl; 
+  else cout<<"cancelled"<<endl;
 }
 
 
@@ -646,7 +646,7 @@ void Mesh::save(string s,int type) const {//type is 1 for an off file, 2 for a F
       else cerr<<"error opening file "<<s<<endl;
     }
   else cerr<<"cancelled"<<endl;
-  
+
 }
 
 void Mesh::save_fs_label(string s, bool RAS) const { //save an fs label of all points whos value greater than 0
@@ -662,17 +662,17 @@ void Mesh::save_fs_label(string s, bool RAS) const { //save an fs label of all p
 	  if(!RAS)
 	    flot<<ptcount<<" "<<0<<" "<<0<<" "<<0<<" "<<(*i)->get_value()<<endl; //Don't know RAS coordinate of point
 	  else
-	    flot<<ptcount<<" "<<(*i)->get_coord().X<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_value()<<endl; 
-	  
+	    flot<<ptcount<<" "<<(*i)->get_coord().X<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_value()<<endl;
+
 	  labcount++;
 	}
-	
+
 	ptcount++;
-	
-	
+
+
       }
       f<<"#!ascii label , from subject"<<endl;
-      f<<labcount<<endl<<flot.str();      
+      f<<labcount<<endl<<flot.str();
       f.close();
     }
   else cerr<<"error opening file "<<s<<endl;
@@ -713,9 +713,9 @@ void Mesh::reorientate() {
 	      int m;
 	      {m = *(*i)<current;}
 	      switch (m) {
-	      case 0: 
+	      case 0:
 		break;
-	      case 1: 
+	      case 1:
 		if (!(*i)->oriented) prov.push_front(*i);
 		break;
 	      case 2:
@@ -778,20 +778,20 @@ void Mesh::retessellate() {
       Mpoint* v0=(*t)->get_vertice(0);
       Mpoint* v1=(*t)->get_vertice(1);
       Mpoint* v2=(*t)->get_vertice(2);
-      Pt pt0((v1->get_coord().X + v2->get_coord().X)/2, 
+      Pt pt0((v1->get_coord().X + v2->get_coord().X)/2,
 	     (v1->get_coord().Y + v2->get_coord().Y)/2,
 	     (v1->get_coord().Z + v2->get_coord().Z)/2);
-      Pt pt2((v0->get_coord().X + v1->get_coord().X)/2, 
+      Pt pt2((v0->get_coord().X + v1->get_coord().X)/2,
 	     (v0->get_coord().Y + v1->get_coord().Y)/2,
 	     (v0->get_coord().Z + v1->get_coord().Z)/2);
-      Pt pt1((v0->get_coord().X + v2->get_coord().X)/2, 
+      Pt pt1((v0->get_coord().X + v2->get_coord().X)/2,
 	     (v0->get_coord().Y + v2->get_coord().Y)/2,
 	     (v0->get_coord().Z + v2->get_coord().Z)/2);
 
       Mpoint* p1 = NULL;
       Mpoint* p2 = NULL;
       Mpoint* p0 = NULL;
-      
+
       int count=0;
 
       bool b0=true, b1=true, b2=true;
@@ -807,22 +807,22 @@ void Mesh::retessellate() {
 
       if (b0) {p0=new Mpoint(pt0, nvertices() + count); count++;};
       if (b1) {p1=new Mpoint(pt1, nvertices() + count); count++;};
-      if (b2) {p2=new Mpoint(pt2, nvertices() + count); count++;}; 
-      
+      if (b2) {p2=new Mpoint(pt2, nvertices() + count); count++;};
+
       Triangle* t0 = new Triangle(p2, p0, p1);
       Triangle* t1 = new Triangle(p1, v0, p2);
       Triangle* t2 = new Triangle(p0, v2, p1);
       Triangle* t3 = new Triangle(p2, v1, p0);
-      
+
       _triangles.push_back(t0);
       _triangles.push_back(t1);
       _triangles.push_back(t2);
       _triangles.push_back(t3);
-      
+
       if (b0) {_points.push_back(p0);added_points.push_back(p0);}
       if (b1) {_points.push_back(p1);added_points.push_back(p1);}
       if (b2) {_points.push_back(p2);added_points.push_back(p2);}
-      
+
       v0->_neighbours.remove(v1);
       v0->_neighbours.remove(v2);
       v1->_neighbours.remove(v0);
@@ -848,14 +848,14 @@ double Mesh::distance(const Pt& p) const
   Mpoint * nearest_point = NULL;
   Triangle * nearest_triangle = NULL;
   double min = 50000; // ...
-  
+
   for (vector<Mpoint *>::const_iterator i = _points.begin(); i != _points.end(); i++)
     if (((**i) - p).norm() < min)
       {
 	min = ((**i) - p).norm();
 	nearest_point = (*i);
       }
-  
+
   for (list<Triangle *>::const_iterator i = _triangles.begin(); i!=_triangles.end(); i++)
     {
       Pt pp; //projection of p on the triangle
@@ -867,26 +867,26 @@ double Mesh::distance(const Pt& p) const
       pp.Z =p.Z + c* (a* (xm - p.X) + b* (ym - p.Y) + c* (zm - p.Z));
       pp.X =p.X + a* (a* (xm - p.X) + b* (ym - p.Y) + c* (zm - p.Z));
       pp.Y =p.Y + b* (a* (xm - p.X) + b* (ym - p.Y) + c* (zm - p.Z));
-      
+
       Vec n0, n1, n2;
       n0 = (*(*i)->get_vertice(2) - *(*i)->get_vertice(1))*(*(*i)->get_vertice(2) - pp);
       n1 = (*(*i)->get_vertice(0) - *(*i)->get_vertice(2))*(*(*i)->get_vertice(0) - pp);
       n2 = (*(*i)->get_vertice(1) - *(*i)->get_vertice(0))*(*(*i)->get_vertice(1) - pp);
       if ((n0|n1) >= 0 && (n0|n2) >= 0) d = (pp - p).norm();
-      
+
       if (d<min)
 	{
 	  min = d;
 	  nearest_triangle = (*i);
 	  triangle = true;
 	}
-      
+
     }
- 
+
   if (triangle) {if ((nearest_triangle->normal()|(nearest_triangle->centroid() - p))>0) min=-min;}
   else {if ((nearest_point->local_normal()|(*nearest_point - p))>0) min=-min;}
-  
-  
+
+
   return min;
 }
 
@@ -895,9 +895,9 @@ const double Mesh::self_intersection(const Mesh& original) const
 {
   double intersection = 0;
   if (original._points.size() != _points.size()) {cerr<<"error, parameter for self_intersection should be the original mesh"<<endl; return -1;};
-  
+
   vector<Mpoint*>::const_iterator io = original._points.begin();
-  
+
   double ml = 0, mlo = 0;
   int counter = 0;
   for (vector<Mpoint*>::const_iterator i = _points.begin(); i!=_points.end(); i++, io++ )
@@ -912,7 +912,7 @@ const double Mesh::self_intersection(const Mesh& original) const
 
   io = original._points.begin();
   vector<Mpoint*>::const_iterator jo = original._points.begin();
-  
+
    for (vector<Mpoint*>::const_iterator i = _points.begin(); i!=_points.end(); i++, io++)
      {
        jo = original._points.begin();
@@ -928,25 +928,25 @@ const double Mesh::self_intersection(const Mesh& original) const
    return intersection;
 }
 
-void Mesh::stream_mesh(ostream& flot,int type) const{ 
+void Mesh::stream_mesh(ostream& flot,int type) const{
 	flot.setf(ios::fixed);// 6 decimal places - matches freesurfer..
 	flot.precision(6);
 #ifdef PPC64
     int n=0;
 #endif
-	
+
 	if(type==1){
 		flot<<"OFF"<<endl;
 		flot<<_points.size()<<" "<<_triangles.size()<<" "<<"0"<<endl;
-		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)  
-		{ 
+		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)
+		{
 			//	flot.precision(6);
 			flot<<(*i)->get_coord().X<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_coord().Z<<endl;
 #ifdef PPC64
 			if ((n++ % 20) == 0) flot.flush();
 #endif
 		}
-		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++) 
+		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++)
 			flot<<"3 "<<(*i)->get_vertice(0)->get_no()<<" "<<(*i)->get_vertice(1)->get_no()<<" "<<(*i)->get_vertice(2)->get_no()<<" "<<endl;
 #ifdef PPC64
         if ((n++ % 20) == 0) flot.flush();
@@ -955,15 +955,15 @@ void Mesh::stream_mesh(ostream& flot,int type) const{
 	else if(type==2){
 		flot<<"#ascii FS mesh"<<endl;
 		flot<<_points.size()<<" "<<_triangles.size()<<endl;
-		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)  
-		{ 
+		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)
+		{
 			//	flot.precision(6);
 			flot<<(*i)->get_coord().X<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_coord().Z<<" "<<(*i)->get_value()<<endl;
 #ifdef PPC64
 			if ((n++ % 20) == 0) flot.flush();
 #endif
 		}
-		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++) 
+		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++)
 			flot<<(*i)->get_vertice(0)->get_no()<<" "<<(*i)->get_vertice(1)->get_no()<<" "<<(*i)->get_vertice(2)->get_no()<<" "<<(*i)->get_value()<<endl;
 #ifdef PPC64
         if ((n++ % 20) == 0) flot.flush();
@@ -971,9 +971,9 @@ void Mesh::stream_mesh(ostream& flot,int type) const{
 	} else if(type==3){
 		flot<<"# vtk DataFile Version 3.0"<<endl<<"surface file"<<endl<<"ASCII"<<endl<<"DATASET POLYDATA"<<endl<<"POINTS ";
 		flot<<_points.size()<<"  float"<<endl;
-		
-		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)  
-		{ 
+
+		for (vector<Mpoint *>::const_iterator i =_points.begin(); i!=_points.end(); i++)
+		{
 			//	flot.precision(6);
 			flot<<(*i)->get_coord().X<<" "<<(*i)->get_coord().Y<<" "<<(*i)->get_coord().Z<<endl;
 #ifdef PPC64
@@ -981,13 +981,13 @@ void Mesh::stream_mesh(ostream& flot,int type) const{
 #endif
 		}
 		flot<<"POLYGONS "<<_triangles.size()<<" "<<_triangles.size()*4<<endl;
-		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++) 
+		for ( list<Triangle*>::const_iterator i=_triangles.begin(); i!=_triangles.end(); i++)
 			flot<<"3 "<<(*i)->get_vertice(0)->get_no()<<" "<<(*i)->get_vertice(1)->get_no()<<" "<<(*i)->get_vertice(2)->get_no()<<" "<<endl;
 #ifdef PPC64
         if ((n++ % 20) == 0) flot.flush();
 #endif
 	}
-	
+
 	else{cout<<"Invalid file Type"<<endl;exit(-1);}
 }
 
@@ -1003,13 +1003,13 @@ const bool Mesh::real_self_intersection()
   vector<Pt_special *> v;
   for (vector<Mpoint *>::const_iterator i = this->_points.begin(); i != this->_points.end(); i++)
     {
-      Pt_special * p = new (Pt_special); 
+      Pt_special * p = new (Pt_special);
       p->P = (*i);
       for (list<Triangle *>::const_iterator i2 = (*i)->_triangles.begin(); i2 != (*i)->_triangles.end(); i2++)
 	{p->T.push_back(*i2);}
-      v.push_back(p); 
+      v.push_back(p);
     }
-  
+
 
 
   for (list<Triangle *>::const_iterator i = this->_triangles.begin(); i != this->_triangles.end(); i++)
@@ -1027,7 +1027,7 @@ const bool Mesh::real_self_intersection()
       (*i)->data.push_back(centre.X);
       (*i)->data.push_back(centre.Y);
       (*i)->data.push_back(centre.Z);
-      
+
       //compute the max distance to the center
       double max = 0;
       for (int e = 0; e < 3; e++)
@@ -1036,12 +1036,12 @@ const bool Mesh::real_self_intersection()
 	  if (c > max) max = c;
 	}
       (*i)->data.push_back(max);
-      
+
     }
   sort(v.begin(), v.end(), compPt());
-  
+
   bool result = false;
-  
+
   //swipping
   list<Triangle *> l;
   l.clear();
@@ -1066,7 +1066,7 @@ const bool Mesh::real_self_intersection()
 		    {
 		      double d = ((*tr)->data[1] - (*tr2)->data[1]) * ((*tr)->data[1] - (*tr2)->data[1]) + ((*tr)->data[2] - (*tr2)->data[2]) * ((*tr)->data[2] - (*tr2)->data[2]) + ((*tr)->data[3] - (*tr2)->data[3]) * ((*tr)->data[3] - (*tr2)->data[3]);
 		      if (d < (*tr)->data[4] + (*tr2)->data[4] )
-			
+
 			{
 			  result = result | (*tr)->intersect(**tr2);
 			}
@@ -1075,8 +1075,8 @@ const bool Mesh::real_self_intersection()
 	      l.push_back(*tr);
 	      (*tr)->data[0] = 1;
 	    }
-	  else 
-	    if ((*tr)->data[0] == 1) (*tr)->data[0] = 2; 
+	  else
+	    if ((*tr)->data[0] == 1) (*tr)->data[0] = 2;
 	    else if ((*tr)->data[0] == 2) {l.remove(*tr);}
 	}
     }

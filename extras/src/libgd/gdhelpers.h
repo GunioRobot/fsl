@@ -21,7 +21,7 @@ void *gdMalloc (size_t size);
 void *gdRealloc (void *ptr, size_t size);
 
 /* Returns nonzero if multiplying the two quantities will
-	result in integer overflow. Also returns nonzero if 
+	result in integer overflow. Also returns nonzero if
 	either quantity is negative. By Phil Knirsch based on
 	netpbm fixes by Alan Cox. */
 
@@ -47,10 +47,10 @@ int overflow2(int a, int b);
 #define gdMutexUnlock(x) pthread_mutex_unlock(&x)
 #else
 #define gdMutexDeclare(x)
-#define gdMutexSetup(x) 
-#define gdMutexShutdown(x) 
-#define gdMutexLock(x) 
-#define gdMutexUnlock(x) 
+#define gdMutexSetup(x)
+#define gdMutexShutdown(x)
+#define gdMutexLock(x)
+#define gdMutexUnlock(x)
 #endif /* HAVE_PTHREAD */
 #endif /* WIN32 */
 

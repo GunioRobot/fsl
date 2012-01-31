@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -19,7 +19,7 @@
 
 struct TriggerData::Implementation
 {
-  Implementation(unsigned int n, float duration): m_n(n), m_duration(duration) 
+  Implementation(unsigned int n, float duration): m_n(n), m_duration(duration)
   {
     m_epochs.resize(m_n);
   }
@@ -44,7 +44,7 @@ void TriggerData::scanFrom(std::istream& is)
   char buffer[1000];
 
   is.getline(buffer, 1000);
-  
+
   typedef boost::tokenizer<> tokenizer;
   tokenizer tokens(std:sting(buffer)); // Splits the line into seperate strings
 

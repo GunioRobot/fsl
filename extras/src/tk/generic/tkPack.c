@@ -1,4 +1,4 @@
-/* 
+/*
  * tkPack.c --
  *
  *	This file contains code to implement the "packer"
@@ -48,7 +48,7 @@ typedef struct Packer {
 				 * than window needs, this indicates how
 				 * where to position window in frame. */
     int padX, padY;		/* Total additional pixels to leave around the
-				 * window.  Some is of this space is on each 
+				 * window.  Some is of this space is on each
 				 * side.  This is space *outside* the window:
 				 * we'll allocate extra space in frame but
 				 * won't enlarge window). */
@@ -157,7 +157,7 @@ static int		YExpansion _ANSI_ARGS_((Packer *slavePtr,
  *
  *--------------------------------------------------------------
  */
-void 
+void
 TkPrintPadAmount(interp, switchName, halfSpace, allSpace)
     Tcl_Interp *interp;		/* The interpreter into which the result
 				 * is written. */
@@ -548,7 +548,7 @@ ArrangePacking(clientData)
 				 * are to be re-layed out. */
 {
     register Packer *masterPtr = (Packer *) clientData;
-    register Packer *slavePtr;	
+    register Packer *slavePtr;
     int cavityX, cavityY, cavityWidth, cavityHeight;
 				/* These variables keep track of the
 				 * as-yet-unallocated space remaining in
@@ -579,7 +579,7 @@ ArrangePacking(clientData)
     /*
      * Abort any nested call to ArrangePacking for this window, since
      * we'll do everything necessary here, and set up so this call
-     * can be aborted if necessary.  
+     * can be aborted if necessary.
      */
 
     if (masterPtr->abortPtr != NULL) {
@@ -1019,7 +1019,7 @@ GetPacker(tkwin)
      * then create a new one.
      */
 
-    hPtr = Tcl_CreateHashEntry(&dispPtr->packerHashTable, (char *) tkwin, 
+    hPtr = Tcl_CreateHashEntry(&dispPtr->packerHashTable, (char *) tkwin,
             &new);
     if (!new) {
 	return (Packer *) Tcl_GetHashValue(hPtr);
@@ -1234,7 +1234,7 @@ PackAfter(interp, prevPtr, masterPtr, objc, objv)
 		}
 		Unlink(packPtr);
 	    }
-	
+
 	    /*
 	     * Add the window in the correct place in its parent's
 	     * packing order, then make sure that the window is
@@ -1687,13 +1687,13 @@ ConfigureSlaves(interp, tkwin, objc, objv)
 	    masterPtr = slavePtr->masterPtr;
 	    goto scheduleLayout;
 	}
-    
+
 	/*
 	 * If none of the "-in", "-before", or "-after" options has
 	 * been specified, arrange for the slave to go at the end of
 	 * the order for its parent.
 	 */
-    
+
 	if (!positionGiven) {
 	    masterPtr = GetPacker(Tk_Parent(slave));
 	    prevPtr = masterPtr->slavePtr;
@@ -1709,7 +1709,7 @@ ConfigureSlaves(interp, tkwin, objc, objv)
 	 * an ancestor of the master, and that the master and slave
 	 * aren't the same.
 	 */
-    
+
 	parent = Tk_Parent(slave);
 	for (ancestor = masterPtr->tkwin; ; ancestor = Tk_Parent(ancestor)) {
 	    if (ancestor == parent) {

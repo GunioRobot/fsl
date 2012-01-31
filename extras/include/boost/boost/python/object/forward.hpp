@@ -18,9 +18,9 @@
 #  include <boost/mpl/not.hpp>
 # else
 #  include <boost/mpl/or.hpp>
-# endif 
+# endif
 
-namespace boost { namespace python { namespace objects { 
+namespace boost { namespace python { namespace objects {
 
 // Very much like boost::reference_wrapper<T>, except that in this
 // case T can be a reference already without causing a
@@ -29,7 +29,7 @@ template <class T>
 struct reference_to_value
 {
     typedef typename add_reference<typename add_const<T>::type>::type reference;
-    
+
     reference_to_value(reference x) : m_value(x) {}
     reference get() const { return m_value; }
  private:
@@ -46,13 +46,13 @@ struct forward
           // vc6 chokes on unforwarding enums nested in classes
           mpl::and_<
               is_scalar<T>
-            , mpl::not_< 
+            , mpl::not_<
                   is_enum<T>
               >
           >
-# else 
+# else
           mpl::or_<python::detail::copy_ctor_mutates_rhs<T>, is_scalar<T> >
-# endif 
+# endif
         , T
         , reference_to_value<T>
       >
@@ -92,7 +92,7 @@ namespace detail
 {
   typedef char (&yes_reference_to_value_t)[1];
   typedef char (&no_reference_to_value_t)[2];
-      
+
   no_reference_to_value_t is_reference_to_value_test(...);
 
   template<typename T>
@@ -126,10 +126,10 @@ namespace detail
         : python::detail::value_arg<
               typename unwrap_reference<T>::type
           >
-      {          
+      {
       };
   };
-      
+
   template<>
   struct cref_unforwarder<true>
   {

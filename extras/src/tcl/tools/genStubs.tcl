@@ -1,13 +1,13 @@
 # genStubs.tcl --
 #
 #	This script generates a set of stub files for a given
-#	interface.  
-#	
+#	interface.
+#
 #
 # Copyright (c) 1998-1999 by Scriptics Corporation.
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-# 
+#
 # RCS: @(#) $Id: genStubs.tcl,v 1.1.1.1 2007/07/10 15:04:24 duncan Exp $
 
 package require Tcl 8
@@ -222,7 +222,7 @@ proc genStubs::addPlatformGuard {plat text} {
 	}
 	unix {
 	    return "#if !defined(__WIN32__) && !defined(MAC_TCL) /* UNIX */\n${text}#endif /* UNIX */\n"
-	}		    
+	}
 	mac {
 	    return "#ifdef MAC_TCL\n${text}#endif /* MAC_TCL */\n"
 	}
@@ -396,7 +396,7 @@ proc genStubs::makeDecl {name decl index} {
 	}
     }
     append text $line
-    
+
     append text ");\n"
     return $text
 }
@@ -465,7 +465,7 @@ proc genStubs::makeStub {name decl index} {
     set arg1 [lindex $args 0]
 
     if {![string compare $arg1 "TCL_VARARGS"]} {
-	lassign [lindex $args 1] type argName 
+	lassign [lindex $args 1] type argName
 	append text " TCL_VARARGS_DEF($type,$argName)\n\{\n"
 	append text "    " $type " var;\n    va_list argList;\n"
 	if {[string compare $rtype "void"]} {
@@ -547,7 +547,7 @@ proc genStubs::makeSlot {name decl index} {
 	    append text ")"
 	}
     }
-    
+
     append text "); /* $index */\n"
     return $text
 }
@@ -625,9 +625,9 @@ proc genStubs::forAllStubs {name slotProc onAll textVar \
 		    }
 		}
                 #
-                # "aqua" and "macosx" and "x11" are special cases, 
-                # since "macosx" always implies "unix" and "aqua", 
-                # "macosx", so we need to be careful not to 
+                # "aqua" and "macosx" and "x11" are special cases,
+                # since "macosx" always implies "unix" and "aqua",
+                # "macosx", so we need to be careful not to
                 # emit duplicate stubs entries for the two.
                 #
 		if {[info exists stubs($name,aqua,$i)]
@@ -653,7 +653,7 @@ proc genStubs::forAllStubs {name slotProc onAll textVar \
 		eval {append text} $skipString
 	    }
 	}
-	
+
     } else {
 	# Emit separate stubs blocks per platform
 	foreach plat {unix win mac} {
@@ -754,7 +754,7 @@ proc genStubs::emitMacros {name textVar} {
     set upName [string toupper $libraryName]
     append text "\n#if defined(USE_${upName}_STUBS) && !defined(USE_${upName}_STUB_PROCS)\n"
     append text "\n/*\n * Inline function declarations:\n */\n\n"
-    
+
     forAllStubs $name makeMacro 0 text
 
     append text "\n#endif /* defined(USE_${upName}_STUBS) && !defined(USE_${upName}_STUB_PROCS) */\n"
@@ -826,7 +826,7 @@ proc genStubs::emitStubs {name} {
     forAllStubs $name makeStub 0 text
 
     rewriteFile [file join $outDir ${name}Stubs.c] $text
-    return    
+    return
 }
 
 # genStubs::emitInit --
@@ -864,7 +864,7 @@ proc genStubs::emitInit {name textVar} {
     } else {
 	append text "    NULL,\n"
     }
-    
+
     forAllStubs $name makeInit 1 text {"    NULL, /* $i */\n"}
 
     append text "\};\n"

@@ -1,10 +1,10 @@
 function save_avw_img(img,fname,vtype,endian);
 %  SAVE_AVW_IMG(img,fname,vtype,endian)
 %
-%  Save an array (img) as an analyse file (only the .img) 
+%  Save an array (img) as an analyse file (only the .img)
 %   for either a 2D or 3D or 4D array (automatically determined)
-% 
-%  vtype is a single character string: 'b' (unsigned) byte, 's' short, 
+%
+%  vtype is a single character string: 'b' (unsigned) byte, 's' short,
 %                                      'i' int, 'f' float, or 'd' double
 %
 %  The filename (fname) must be a basename (no extensions)

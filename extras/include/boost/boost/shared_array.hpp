@@ -86,7 +86,7 @@ public:
         BOOST_ASSERT(i >= 0);
         return px[i];
     }
-    
+
     T * get() const // never throws
     {
         return px;
@@ -103,13 +103,13 @@ public:
 
 #elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
     typedef T * (this_type::*unspecified_bool_type)() const;
-    
+
     operator unspecified_bool_type() const // never throws
     {
         return px == 0? 0: &this_type::get;
     }
 
-#else 
+#else
 
     typedef T * this_type::*unspecified_bool_type;
 

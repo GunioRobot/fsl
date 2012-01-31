@@ -11,7 +11,7 @@
 #
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-# 
+#
 # RCS: @(#) $Id: tclInt.decls,v 1.1.1.2 2009/03/23 15:10:41 duncan Exp $
 
 library tcl
@@ -39,7 +39,7 @@ declare 3 generic {
     void TclAllocateFreeObjects(void)
 }
 # Replaced by TclpChdir in 8.1:
-#  declare 4 generic {   
+#  declare 4 generic {
 #      int TclChdir(Tcl_Interp *interp, char *dirName)
 #  }
 declare 5 {unix win} {
@@ -65,7 +65,7 @@ declare 9 {unix win} {
 	    TclFile *errFilePtr)
 }
 declare 10 generic {
-    int TclCreateProc(Tcl_Interp *interp, Namespace *nsPtr, 
+    int TclCreateProc(Tcl_Interp *interp, Namespace *nsPtr,
 	    CONST char *procName,
 	    Tcl_Obj *argsPtr, Tcl_Obj *bodyPtr, Proc **procPtrPtr)
 }
@@ -120,7 +120,7 @@ declare 25 generic {
     void TclFreePackageInfo(Interp *iPtr)
 }
 # Removed in 8.1:
-#  declare 26 generic {	
+#  declare 26 generic {
 #      char * TclGetCwd(Tcl_Interp *interp)
 #  }
 declare 27 generic {
@@ -507,7 +507,7 @@ declare 128 generic {
 declare 129 generic {
     int Tcl_PushCallFrame(Tcl_Interp* interp, Tcl_CallFrame *framePtr,
 	    Tcl_Namespace *nsPtr, int isProcCallFrame)
-} 
+}
 declare 130 generic {
     int Tcl_RemoveInterpResolvers(Tcl_Interp *interp, CONST char *name)
 }
@@ -660,7 +660,7 @@ declare 165 generic {
 
 # New function due to TIP #33
 declare 166 generic {
-    int TclListObjSetElement(Tcl_Interp *interp, Tcl_Obj *listPtr, 
+    int TclListObjSetElement(Tcl_Interp *interp, Tcl_Obj *listPtr,
 	    int index, Tcl_Obj *valuePtr)
 }
 
@@ -803,10 +803,10 @@ declare 19 mac {
 declare 20 mac {
     int TclMacRegisterResourceFork(short fileRef, Tcl_Obj *tokenPtr,
 	    int insert)
-}	
+}
 declare 21 mac {
     short TclMacUnRegisterResourceFork(char *tokenPtr, Tcl_Obj *resultPtr)
-}	
+}
 declare 22 mac {
     int TclMacCreateEnv(void)
 }

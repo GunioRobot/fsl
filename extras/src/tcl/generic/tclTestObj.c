@@ -1,4 +1,4 @@
-/* 
+/*
  * tclTestObj.c --
  *
  *	This file contains C command procedures for the additional Tcl
@@ -90,11 +90,11 @@ TclObjTest_Init(interp)
     Tcl_Interp *interp;
 {
     register int i;
-    
+
     for (i = 0;  i < NUMBER_OF_OBJECT_VARS;  i++) {
         varPtr[i] = NULL;
     }
-	
+
     Tcl_CreateObjCommand(interp, "testbooleanobj", TestbooleanobjCmd,
 	    (ClientData) 0, (Tcl_CmdDeleteProc *) NULL);
     Tcl_CreateObjCommand(interp, "testconvertobj", TestconvertobjCmd,
@@ -291,7 +291,7 @@ TestdoubleobjCmd(clientData, interp, objc, objv)
     int varIndex;
     double doubleValue;
     char *index, *subCmd, *string;
-	
+
     if (objc < 3) {
 	wrongNumArgs:
 	Tcl_WrongNumArgs(interp, 1, objv, "option arg ?arg ...?");
@@ -457,7 +457,7 @@ TestindexobjCmd(clientData, interp, objc, objv)
 	argv[i-4] = Tcl_GetString(objv[i]);
     }
     argv[objc-4] = NULL;
-    
+
     /*
      * Tcl_GetIndexFromObj assumes that the table is statically-allocated
      * so that its address is different for each index object. If we
@@ -511,7 +511,7 @@ TestintobjCmd(clientData, interp, objc, objv)
     int intValue, varIndex, i;
     long longValue;
     char *index, *subCmd, *string;
-	
+
     if (objc < 3) {
 	wrongNumArgs:
 	Tcl_WrongNumArgs(interp, 1, objv, "option arg ?arg ...?");
@@ -623,13 +623,13 @@ TestintobjCmd(clientData, interp, objc, objv)
 	 * in an integer object's internal representation is too large
 	 * to fit in an int.
 	 */
-	
+
 	if (objc != 3) {
 	    goto wrongNumArgs;
 	}
 #if (INT_MAX == LONG_MAX)   /* int is same size as long int */
 	Tcl_AppendToObj(Tcl_GetObjResult(interp), "1", -1);
-#else 
+#else
 	if ((varPtr[varIndex] != NULL) && !Tcl_IsShared(varPtr[varIndex])) {
 	    Tcl_SetLongObj(varPtr[varIndex], LONG_MAX);
 	} else {
@@ -713,7 +713,7 @@ TestobjCmd(clientData, interp, objc, objv)
     int varIndex, destIndex, i;
     char *index, *subCmd, *string;
     Tcl_ObjType *targetType;
-	
+
     if (objc < 2) {
 	wrongNumArgs:
 	Tcl_WrongNumArgs(interp, 1, objv, "option arg ?arg ...?");
@@ -818,7 +818,7 @@ TestobjCmd(clientData, interp, objc, objv)
 	 * return an object containing the name of the argument's type
 	 * of internal rep.  If none exists, return "none".
 	 */
-	
+
         if (objc != 3) {
             goto wrongNumArgs;
         }
@@ -911,7 +911,7 @@ TeststringobjCmd(clientData, interp, objc, objv)
     TestString *strPtr;
     static CONST char *options[] = {
 	"append", "appendstrings", "get", "get2", "length", "length2",
-	"set", "set2", "setlength", "ualloc", "getunicode", 
+	"set", "set2", "setlength", "ualloc", "getunicode",
 	(char *) NULL
     };
 
@@ -941,12 +941,12 @@ TeststringobjCmd(clientData, interp, objc, objv)
 	    if (varPtr[varIndex] == NULL) {
 		SetVarToObj(varIndex, Tcl_NewObj());
 	    }
-	    
+
 	    /*
 	     * If the object bound to variable "varIndex" is shared, we must
-	     * "copy on write" and append to a copy of the object. 
+	     * "copy on write" and append to a copy of the object.
 	     */
-	    
+
 	    if (Tcl_IsShared(varPtr[varIndex])) {
 		SetVarToObj(varIndex, Tcl_DuplicateObj(varPtr[varIndex]));
 	    }
@@ -964,7 +964,7 @@ TeststringobjCmd(clientData, interp, objc, objv)
 
 	    /*
 	     * If the object bound to variable "varIndex" is shared, we must
-	     * "copy on write" and append to a copy of the object. 
+	     * "copy on write" and append to a copy of the object.
 	     */
 
 	    if (Tcl_IsShared(varPtr[varIndex])) {
@@ -1034,7 +1034,7 @@ TeststringobjCmd(clientData, interp, objc, objv)
 	     * modify/set and decrement the old formerly-shared object's
 	     * ref count. This is "copy on write".
 	     */
-    
+
 	    string = Tcl_GetStringFromObj(objv[3], &length);
 	    if ((varPtr[varIndex] != NULL)
 		    && !Tcl_IsShared(varPtr[varIndex])) {
@@ -1143,7 +1143,7 @@ GetVariableIndex(interp, string, indexPtr)
     int *indexPtr;              /* Place to store converted result. */
 {
     int index;
-    
+
     if (Tcl_GetInt(interp, string, &index) != TCL_OK) {
 	return TCL_ERROR;
     }
@@ -1182,7 +1182,7 @@ CheckIfVarUnset(interp, varIndex)
 {
     if (varPtr[varIndex] == NULL) {
 	char buf[32 + TCL_INTEGER_SPACE];
-	
+
 	sprintf(buf, "variable %d is unset (NULL)", varIndex);
 	Tcl_ResetResult(interp);
 	Tcl_AppendToObj(Tcl_GetObjResult(interp), buf, -1);

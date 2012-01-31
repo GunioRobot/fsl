@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -99,37 +99,37 @@ public:
 class FwdModel {
 public:
   // Virtual functions: common to all FwdModels
-  
-  virtual void Evaluate(const ColumnVector& params, 
+
+  virtual void Evaluate(const ColumnVector& params,
 			      ColumnVector& result) const = 0;
   // Evaluate the forward model
-                  
-  virtual string ModelVersion() const; 
+
+  virtual string ModelVersion() const;
   // Return a CVS version info string
   // See fwdmodel.cc for an example of how to implement this.
 
   virtual int NumParams() const = 0;
   // How long should the parameter vector be?
-  
+
   virtual int NumOutputs() const;
   // How long is output vector?  Default implementation uses Evaluate.
 
   // Various other useful functions:
   virtual void HardcodedInitialDists(MVNDist& prior, MVNDist& posterior) const = 0;
   // Load up some sensible suggestions for initial prior & posterior values
-  
+
   virtual void NameParams(vector<string>& names) const = 0;
   // Name each of the parameters -- see fwdmodel_linear.h for a generic implementation
-  
-  virtual void DumpParameters(const ColumnVector& params, 
+
+  virtual void DumpParameters(const ColumnVector& params,
                               const string& indent="") const;
   // Describe what a given parameter vector means (to LOG)
-  // Default implementation uses NameParams to give reasonably meaningful output 
-  
-  
+  // Default implementation uses NameParams to give reasonably meaningful output
+
+
   // Static member function, to pick a forward model from a name
   static FwdModel* NewFromName(const string& name, ArgsType& args);
-  
+
   // Usage information for this model
   static void ModelUsageFromName(const string& name, ArgsType& args);
 
@@ -138,13 +138,13 @@ public:
 
   // Steup function for the ARD process (forces the prior on the parameter that is subject to ARD to be correct) - really a worst case scenario if people are loading in their own priors
   virtual void SetupARD( const MVNDist& posterior, MVNDist& prior, double& Fard ) const { return; };
-  
+
   // For models that need the data values in the voxel to calculate
   virtual void pass_in_data( const ColumnVector& voxdata ) { };
 
   virtual ~FwdModel() { return; };
   // Virtual destructor
-  
+
   // Your derived classes should have storage for all constants that are
   // implicitly part of g() -- e.g. pulse sequence parameters, any parameters
   // that are assumed to take known values, and basis functions.  Given these

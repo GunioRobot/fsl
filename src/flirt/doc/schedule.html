@@ -13,13 +13,13 @@ file for <I>flirt</I> via the <FONT COLOR=PURPLE>-schedule</FONT> option.
 
 
 <A NAME="section1"></A><HR><H2>VARIABLES</H2>
- 
+
 
 There are two types of data variables that are manipulated in a schedule
 file: <B>scalar</B> and <B>matrix</B> data.
 
 <H3>Scalar data</H3>
- 
+
 
 Any constant can be used as a scalar value in the schedule file.  In addition
 token names can be used, and the following token names are currently defined:
@@ -27,7 +27,7 @@ token names can be used, and the following token names are currently defined:
 
 <LI><I></I> <FONT COLOR=RED>MAXDOF</FONT>
 <BR>
-the user-defined maximum degrees of freedom (via the 
+the user-defined maximum degrees of freedom (via the
 <FONT COLOR=PURPLE>-dof</FONT> option).
 <LI><I></I> <FONT COLOR=RED>MINSAMPLING</FONT>
 <BR>
@@ -42,7 +42,7 @@ input volumes - defined as Max(Min(refvol voxel dims),Min(testvol voxel dims)).
 
 
 <H3>Matrix data</H3>
- 
+
 
 Most data in a schedule file is manipulated in matrix form.  Each matrix
 has 17 columns, with the first column representing the cost function value
@@ -59,16 +59,16 @@ while <I></I> <FONT COLOR=RED>UA UB ... UZ</FONT> are provided for user manipula
 
 (paragraph:
 In addition, a subset of rows of a given matrix can be used in place
-of any matrix. 
+of any matrix.
 <BR>
 
-The form of this reference is: <I></I> <FONT COLOR=RED>mat:r1-r2</FONT> 
+The form of this reference is: <I></I> <FONT COLOR=RED>mat:r1-r2</FONT>
 <BR>
 
 where <I></I> <FONT COLOR=RED>mat</FONT> is the matrix name (e.g. <I></I> <FONT COLOR=RED>UB</FONT>), <I></I> <FONT COLOR=RED>r1</FONT>
 is the first row, and <I></I> <FONT COLOR=RED>r2</FONT> the last row to be used.  Note that
 some parts of this may be omitted so that <I></I> <FONT COLOR=RED>mat:r1- </FONT> specifies
-the matrix from row <I></I> <FONT COLOR=RED>r1</FONT> to the end, and <I></I> <FONT COLOR=RED>mat:r1</FONT> just 
+the matrix from row <I></I> <FONT COLOR=RED>r1</FONT> to the end, and <I></I> <FONT COLOR=RED>mat:r1</FONT> just
 specifies a single row (<I></I> <FONT COLOR=RED>r1</FONT>).
 <BR>
 NB: The first row of any matrix has an index of 1.
@@ -90,7 +90,7 @@ results of the 8mm search algorithm.
 
 
 <A NAME="section2"></A><HR><H2>COMMANDS</H2>
- 
+
 
 <UL>
 
@@ -104,7 +104,7 @@ Clears the matrix <I></I> <FONT COLOR=RED>mat</FONT>.
 
 <LI><B><I></I> copy</B><I></I> <FONT COLOR=RED>mat1</FONT> <I></I> <FONT COLOR=RED>mat2</FONT>
 <BR>
-Copies (appends) the contents of matrix <I></I> <FONT COLOR=RED>mat1</FONT> into matrix <I></I> <FONT COLOR=RED>mat2</FONT>.  
+Copies (appends) the contents of matrix <I></I> <FONT COLOR=RED>mat1</FONT> into matrix <I></I> <FONT COLOR=RED>mat2</FONT>.
 It does not affect the contents of matrix <I></I> <FONT COLOR=RED>mat1</FONT>.
 
 <LI><B><I></I> print</B><I></I> <FONT COLOR=RED>mat</FONT>
@@ -118,30 +118,30 @@ named by <I></I> <FONT COLOR=RED>filename</FONT>.
 
 <LI><B><I></I> read</B> <I></I> <FONT COLOR=RED>mat</FONT> <I></I> <FONT COLOR=RED>filename</FONT>
 <BR>
-Reads an ascii file (<I></I> <FONT COLOR=RED>filename</FONT>) and stores 
+Reads an ascii file (<I></I> <FONT COLOR=RED>filename</FONT>) and stores
 the contents in matrix <I></I> <FONT COLOR=RED>mat</FONT>.
 
 <LI><B><I></I> printparams</B> <I></I> <FONT COLOR=RED>mat</FONT>
 <BR>
-Prints the contents of matrix <I></I> <FONT COLOR=RED>mat</FONT> to the screen as parameter 
+Prints the contents of matrix <I></I> <FONT COLOR=RED>mat</FONT> to the screen as parameter
 values (rather than reshaped 4 by 4 affine matrices).
 
 <LI><B><I></I> saveparams</B> <I></I> <FONT COLOR=RED>mat</FONT>
 <I></I> <FONT COLOR=RED>filename</FONT>
 <BR>
-Saves an ascii copy of the contents of matrix <I></I> <FONT COLOR=RED>mat</FONT>, as parameter 
+Saves an ascii copy of the contents of matrix <I></I> <FONT COLOR=RED>mat</FONT>, as parameter
 values, to the file named by <I></I> <FONT COLOR=RED>filename</FONT>.
 
 <LI><B><I></I> readparams</B> <I></I> <FONT COLOR=RED>mat</FONT> <I></I> <FONT COLOR=RED>filename</FONT>
 <BR>
-Reads an ascii file (<I></I> <FONT COLOR=RED>filename</FONT>) where each line represents 
+Reads an ascii file (<I></I> <FONT COLOR=RED>filename</FONT>) where each line represents
 1 cost value followed by 12 parameter values.  It then converts these parameters
 to reshaped affine matrices and stores the contents in matrix <I></I> <FONT COLOR=RED>mat</FONT>.
 
 <LI><B><I></I> setrow</B> <I></I> <FONT COLOR=RED>mat</FONT> <I></I> <FONT COLOR=RED>v1 v2 ... v16</FONT>
 <BR>
-Adds a row to the end of matrix <I></I> <FONT COLOR=RED>mat</FONT> with the value given by the 
-reshaped matrix: <I></I> <FONT COLOR=RED>v1 v2 ... v16</FONT>.  Note that only the 16 matrix values 
+Adds a row to the end of matrix <I></I> <FONT COLOR=RED>mat</FONT> with the value given by the
+reshaped matrix: <I></I> <FONT COLOR=RED>v1 v2 ... v16</FONT>.  Note that only the 16 matrix values
 are used, not the cost value (which is initialised to 0).
 
 <LI><B><I></I> aligncog</B><I></I> <FONT COLOR=RED>mat</FONT>
@@ -169,18 +169,18 @@ based on the first column entries of each row (the cost function values).
 
 <LI><B><I></I> dualsort</B> <I></I> <FONT COLOR=RED>mat1 mat2</FONT>
 <BR>
-Sorts the rows of matrix <I></I> <FONT COLOR=RED>mat1</FONT> and <I></I> <FONT COLOR=RED>mat2</FONT> into 
-<B>ascending</B> order based on the first column entries <I></I> <FONT COLOR=RED>mat1</FONT> only 
+Sorts the rows of matrix <I></I> <FONT COLOR=RED>mat1</FONT> and <I></I> <FONT COLOR=RED>mat2</FONT> into
+<B>ascending</B> order based on the first column entries <I></I> <FONT COLOR=RED>mat1</FONT> only
 (the cost function values).
 
 <LI><B><I></I> search</B> [ <I></I> <FONT COLOR=RED>dof</FONT> ]
 <BR>
 Performs the 8mm search algorithm on the currently defined image pair.
 The result is returned in matrices <I></I> <FONT COLOR=RED>S</FONT> and <I></I> <FONT COLOR=RED>P</FONT> where
-<I></I> <FONT COLOR=RED>S</FONT> contains the optimised values (which are sorted), 
-and <I></I> <FONT COLOR=RED>P</FONT> the pre-optimised values from the search grid.  
+<I></I> <FONT COLOR=RED>S</FONT> contains the optimised values (which are sorted),
+and <I></I> <FONT COLOR=RED>P</FONT> the pre-optimised values from the search grid.
 The rows of the two matrices correspond to each other.  The optional argument
-<I></I> <FONT COLOR=RED>dof</FONT> specifies the number of degrees of freedom for the search (only 6 
+<I></I> <FONT COLOR=RED>dof</FONT> specifies the number of degrees of freedom for the search (only 6
 or 7 are currently sensible).
 
 <LI><B><I></I> optimise</B> <I></I> <FONT COLOR=RED>dof</FONT> <I></I> <FONT COLOR=RED>mat</FONT> [ <I></I> <FONT COLOR=RED>perturbation_vector</FONT> <I></I> <FONT COLOR=RED>rel/abs</FONT> <I></I> <FONT COLOR=RED>max_iterations</FONT> ]
@@ -219,7 +219,7 @@ values of <I></I> <FONT COLOR=RED>scale</FONT> are: 8, 4, 2 and 1.
 <BR>
 Determines whether the <B>next line only</B> is executed.  The test
 condition compares two scalars: <I></I> <FONT COLOR=RED>val1</FONT> and <I></I> <FONT COLOR=RED>val2</FONT> using
-the boolean operation <I></I> <FONT COLOR=RED>op</FONT>.  There are 6 permissable values for 
+the boolean operation <I></I> <FONT COLOR=RED>op</FONT>.  There are 6 permissable values for
 <I></I> <FONT COLOR=RED>op</FONT>, which are: <B> &lt; , &gt; , == , != , &lt;= , &gt;= </B>
 
 
@@ -231,7 +231,7 @@ the boolean operation <I></I> <FONT COLOR=RED>op</FONT>.  There are 6 permissabl
 
 
 <A NAME="section3"></A><HR><H2>EXAMPLE</H2>
- 
+
 The default flirt schedule file is:
 
 <PRE>
@@ -245,7 +245,7 @@ search
 # 4mm scale
 setscale 4
 clear U
-clear UA 
+clear UA
 clear UB
 clear US
 clear UP

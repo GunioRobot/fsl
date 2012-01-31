@@ -23,7 +23,7 @@
 #include <qmainwindow.h>
 #include "cursor.h"
 #include <qlist.h>
-#include "imagegroup.h" 
+#include "imagegroup.h"
 #include "overlaylist.h"
 #include "properties.h"
 #include "options.h"
@@ -48,7 +48,7 @@ class QAssistantClient;
 
 #include "applicationwindowbase.h"
 
-class ApplicationWindow: public ApplicationWindowBase, 
+class ApplicationWindow: public ApplicationWindowBase,
 			 public CursorObserver
 {
   Q_OBJECT
@@ -63,11 +63,11 @@ public:
 
   //public slots:
   //  void saveOverlay();
-  //  void addOverlay();  
+  //  void addOverlay();
   //  void remOverlay();
   //  void fileCreateMask();
   //  void fileCloseWindow();
-  
+
   void setFileMenuItemsState(void);
 
 private slots:
@@ -87,13 +87,13 @@ private slots:
   void viewLightbox();
   void viewSingle();
   void view3d();
-  void viewTimeseries();  
+  void viewTimeseries();
   void viewImageHistogram();
   void viewClusterBrowser();
 
   void filePreferences();
 
-  void fileMenuAboutToShow();  
+  void fileMenuAboutToShow();
   void viewMenuAboutToShow();
   void windowMenuAboutToShow();
   void windowMenuActivated( int id );
@@ -122,7 +122,7 @@ private:
 //   QPopupMenu* m_fileMenu;
 //   QPopupMenu* m_windowsMenu;
 //   QPopupMenu* m_toolsMenu;
-  
+
 //   int m_fileOpenID,m_fileCloseID,m_fileAddOverlayID,m_fileRemOverlayID,
 //     m_fileCreateMaskID, m_fileSaveOverlayID,m_fileOpenFeatID;
 //   int m_imageAddLutID;
@@ -141,7 +141,7 @@ private:
   bool tarnishCheck(Image::Handle &);
   bool tarnishCheck();
   void removeExtensions(QString & fileName);
-  bool checkFilesExist(const QString & baseName, bool justImg); 
+  bool checkFilesExist(const QString & baseName, bool justImg);
   bool checkSpecificFilesExist(const QString & baseName);
   bool checkForDuplicates(const QString & fn);
   OverlayList::Handle activeOverlayList();
@@ -164,9 +164,9 @@ private:
   OverlayList::Handle m_masterOverlayList;
 
   Properties::Handle m_properties;
-  
+
   ModelFit::Handle m_modelFit;
-  
+
   FileOpen* m_fileOpen;
 
   int m_toolbarMenuId;

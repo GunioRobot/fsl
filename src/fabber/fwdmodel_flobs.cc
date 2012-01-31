@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,18 +81,18 @@ string FlobsFwdModel::ModelVersion() const
   return "$Id: fwdmodel_flobs.cc,v 1.4 2008/04/03 13:22:39 adriang Exp $";
 }
 
-void FlobsFwdModel::HardcodedInitialDists(MVNDist& prior, 
+void FlobsFwdModel::HardcodedInitialDists(MVNDist& prior,
     MVNDist& posterior) const
 {
     Tracer_Plus tr("FlobsFwdModel::HardcodedInitialDists");
     assert(prior.means.Nrows() == NumParams());
-    
+
     // Set priors
     prior.means = 0;
     SymmetricMatrix precisions = IdentityMatrix(NumParams()) * 1e-12;
 
     prior.SetPrecisions(precisions);
-    
+
     posterior = prior;
     //    if (useSeparateScale)
     //      {
@@ -108,7 +108,7 @@ void FlobsFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
   Tracer_Plus tr("FlobsFwdModel::Evaluate");
 
   assert(params.Nrows() == NumParams());
-  
+
   //  if (useSeparateScale)
   //    {
   //      ColumnVector beta = params.Rows(1,basis.Ncols());
@@ -130,12 +130,12 @@ void FlobsFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
       assert(params.Nrows() == 2);
     }
   else
-    { 
+    {
       ColumnVector beta = params.Rows(1,basis.Ncols());
       double betaBar = params(1);
       beta(1) = 1.0; // fixed shape=1, scale=betaBar
       result = basis * beta * betaBar;
-      
+
       beta = params.Rows(basis.Ncols()+1,params.Nrows());
       result += nuisanceBasis * beta;
     }
@@ -152,8 +152,8 @@ void FlobsFwdModel::ModelUsage()
 	   << "  A scale parameter will automatically be added.\n"
 	   << "  Always use with the --flobs-prior-adjust option!!! \n"
 	   << "  (Future work: specify several scaling factors, for multi-event stimuli)\n\n";
-    } 
-    //  else 
+    }
+    //  else
     {
       cout << "Usage for --model=flobs5:\n"
 	   << "  --basis=<basis_functions>\n"
@@ -162,17 +162,17 @@ void FlobsFwdModel::ModelUsage()
     // TODO: add --nuisance= option
 }
 
-FlobsFwdModel::FlobsFwdModel(ArgsType& args, bool polar) 
+FlobsFwdModel::FlobsFwdModel(ArgsType& args, bool polar)
 //  : useSeparateScale(sepScale)
   : usePolarCoordinates(polar)
 {
-    string basisFile = args.Read("basis"); 
+    string basisFile = args.Read("basis");
     LOG_ERR( "    Reading basis functions: " << basisFile << endl );
     basis = read_vest(basisFile);
-    LOG_ERR( "    Read " << basis.Ncols() << " basis functions of length " 
+    LOG_ERR( "    Read " << basis.Ncols() << " basis functions of length "
 	     << basis.Nrows() << endl);
 
-    basisFile = args.ReadWithDefault("nuisance","null"); 
+    basisFile = args.ReadWithDefault("nuisance","null");
     if (basisFile == "null")
       {
 	nuisanceBasis.ReSize(basis.Nrows(), 0);
@@ -184,10 +184,10 @@ FlobsFwdModel::FlobsFwdModel(ArgsType& args, bool polar)
       }
     else
       {
-	LOG_ERR( "    Reading nuisance basis functions: " 
+	LOG_ERR( "    Reading nuisance basis functions: "
 		 << basisFile << endl );
 	nuisanceBasis = read_vest(basisFile);
-	LOG_ERR( "    Read " << nuisanceBasis.Ncols() 
+	LOG_ERR( "    Read " << nuisanceBasis.Ncols()
 		 << " nuisance basis functions of length "
 		 << nuisanceBasis.Nrows() << endl);
       }
@@ -211,15 +211,15 @@ void FlobsFwdModel::DumpParameters(const ColumnVector& vec,
 void FlobsFwdModel::NameParams(vector<string>& names) const
 {
     names.clear();
-    
+
     for (int i = 1; i <= basis.Ncols(); i++)
       names.push_back("basis_" + stringify(i));
-    
+
     //    if (useSeparateScale)
     //      names.push_back("scale");
 
     for (int i = 1; i <= nuisanceBasis.Ncols(); i++)
       names.push_back("nuisance_"+stringify(i));
-  
-    assert(names.size() == (unsigned)NumParams()); 
+
+    assert(names.size() == (unsigned)NumParams());
 }

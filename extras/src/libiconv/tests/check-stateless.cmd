@@ -23,7 +23,7 @@ IF exists(srcdir'\'charset'.IRREVERSIBLE.TXT') = 1 THEN
         'cat 'srcdir'\'charset'.TXT 'srcdir'\'charset'.IRREVERSIBLE.TXT | sort | uniq -u > tmp-orig-'charset'.INVERSE.TXT'
         'cmp tmp-orig-'charset'.INVERSE.TXT tmp-'charset'.INVERSE.TXT'
     END
-ELSE 
+ELSE
     DO
         'cmp 'srcdir'\'charset'.TXT tmp-'charset'.INVERSE.TXT'
     END

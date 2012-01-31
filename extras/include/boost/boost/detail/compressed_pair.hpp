@@ -101,7 +101,7 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {} 
+      compressed_pair_imp() {}
 
       compressed_pair_imp(first_param_type x, second_param_type y)
          : first_(x), second_(y) {}
@@ -405,7 +405,7 @@ public:
             compressed_pair() : base() {}
             compressed_pair(first_param_type x, second_param_type y) : base(x, y) {}
 #if !(defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x530))
-   explicit 
+   explicit
 #endif
       compressed_pair(first_param_type x) : base(x) {}
 

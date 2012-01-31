@@ -4,7 +4,7 @@
 #
 # Copyright (c) 1999 by Scriptics Corporation.
 # All rights reserved.
-# 
+#
 # RCS: @(#) $Id: genWinImage.tcl,v 1.1.1.1 2007/07/10 15:04:24 duncan Exp $
 
 
@@ -49,7 +49,7 @@ proc genWinImage::init {} {
     variable tkBuildDir
     variable toolsDir
     variable script
- 
+
     puts "\n--- $script started: \
 	    [clock format [clock seconds] -format "%Y%m%d-%H:%M"] --\n"
 
@@ -68,7 +68,7 @@ proc genWinImage::init {} {
     set toolsDir [lindex $argv 2]
 
     generateInstallers
- 
+
     puts "\n--- $script finished: \
 	    [clock format [clock seconds] -format "%Y%m%d-%H:%M"] --\n\n"
 }
@@ -125,7 +125,7 @@ proc genWinImage::generateInstallers {} {
     set s [read $f]
     close $f
     regexp {TCL_PATCH_LEVEL\s*\"([^\"]*)\"} $s dummy __TCL_PATCH_LEVEL__
-    
+
     set f [open tcl.wse.in r]
     set s [read $f]
     close $f

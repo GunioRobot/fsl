@@ -81,7 +81,7 @@ EXTERN void		TkpFreeColor _ANSI_ARGS_((TkColor *tkColPtr));
 EXTERN TkColor *	TkpGetColor _ANSI_ARGS_((Tk_Window tkwin,
 			    Tk_Uid name));
 EXTERN TkColor *	TkpGetColorByValue _ANSI_ARGS_((Tk_Window tkwin,
-			    XColor *colorPtr));	
+			    XColor *colorPtr));
 
 # undef TCL_STORAGE_CLASS
 # define TCL_STORAGE_CLASS DLLIMPORT

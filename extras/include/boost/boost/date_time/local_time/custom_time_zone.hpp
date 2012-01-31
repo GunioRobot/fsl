@@ -2,7 +2,7 @@
 #define LOCAL_TIME_CUSTOM_TIME_ZONE_HPP__
 
 /* Copyright (c) 2003-2005 CrystalClear Software, Inc.
- * Subject to the Boost Software License, Version 1.0. 
+ * Subject to the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $
@@ -30,7 +30,7 @@ namespace local_time {
     typedef time_zone base_type;
     typedef base_type::string_type string_type;
     typedef base_type::stringstream_type stringstream_type;
-    custom_time_zone(const time_zone_names& zone_names,   
+    custom_time_zone(const time_zone_names& zone_names,
                      const time_duration_type& base_utc_offset,
                      const dst_adjustment_offsets& dst_offset,
                      boost::shared_ptr<dst_calc_rule> calc_rule) :

@@ -5,12 +5,12 @@ setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0
 clear U
 clear UA
 setrow UA 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4 
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4
 
 # 4mm scale
 setscale 4
 setoption smoothing 4
-setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0 
+setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0
 clear UB
 clear UL
 clear UM
@@ -43,7 +43,7 @@ copy U UB
 # 2mm scale
 setscale 2
 setoption smoothing 2
-setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0 
+setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0
 clear U
 clear UC
 clear UD
@@ -73,7 +73,7 @@ copy U UF
 setscale 1
 setoption smoothing 1
 setoption boundguess 1
-setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0  
+setoption paramsubset 4  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 0 1 1 0 0 0 0
 clear U
 # also try the identity transform as a starting point at this resolution
 setrow UF  1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1

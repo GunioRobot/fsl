@@ -175,7 +175,7 @@ proc ::tk::FocusGroup_Destroy {t w} {
 
     if {$t eq $w} {
 	unset Priv(fg,$t)
-	unset Priv(focus,$t) 
+	unset Priv(focus,$t)
 
 	foreach name [array names FocusIn $t,*] {
 	    unset FocusIn($name)

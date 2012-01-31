@@ -9,7 +9,7 @@ MOBJS = mcflirt.o Globaloptions.o Log.o
 
 LIBS = -lnewimage -lmiscmaths -lutils -lfslio -lniftiio -lznz -lnewmat -lprob -lm -lz
 
-XFILES = mcflirt 
+XFILES = mcflirt
 
 all:	${XFILES}
 

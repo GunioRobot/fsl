@@ -32,16 +32,16 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
-namespace wave { 
+namespace wave {
 namespace grammars {
 
 namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  store_position 
+//  store_position
 //
-//      The store_position functor extracts the actual file position from the 
+//      The store_position functor extracts the actual file position from the
 //      supplied token.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,13 +50,13 @@ namespace impl {
     struct store_position {
 
         store_position(PositionT &pos_) : pos(pos_) {}
-        
+
         template <typename TokenT>
         void operator()(TokenT const &token) const
         {
             pos = token.get_position();
         }
-        
+
         PositionT &pos;
     };
 
@@ -64,7 +64,7 @@ namespace impl {
 //
 //  store_found_eof
 //
-//      The store_found_eof functor sets a given flag if the T_EOF token was 
+//      The store_found_eof functor sets a given flag if the T_EOF token was
 //      found during the parsing process
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,13 +72,13 @@ namespace impl {
     struct store_found_eof {
 
         store_found_eof(bool &found_eof_) : found_eof(found_eof_) {}
-        
+
         template <typename TokenT>
         void operator()(TokenT const &token) const
         {
             found_eof = true;
         }
-        
+
         bool &found_eof;
     };
 
@@ -93,15 +93,15 @@ namespace impl {
 
     struct store_found_directive {
 
-        store_found_directive(boost::wave::token_id &found_directive_) 
+        store_found_directive(boost::wave::token_id &found_directive_)
         :   found_directive(found_directive_) {}
-        
+
         template <typename TokenT>
         void operator()(TokenT const &token) const
         {
             found_directive = boost::wave::token_id(token);
         }
-        
+
         boost::wave::token_id &found_directive;
     };
 
@@ -126,11 +126,11 @@ namespace impl {
         parse(ScannerT const& scan) const
         {
             scan.first.clear_queue();
-            return scan.empty_match();  
+            return scan.empty_match();
         }
     };
 
-    flush_underlying_parser const 
+    flush_underlying_parser const
         flush_underlying_parser_p = flush_underlying_parser();
 
 }   // anonymous namespace
@@ -144,14 +144,14 @@ namespace impl {
 ///////////////////////////////////////////////////////////////////////////////
 // Encapsulation of the C++ preprocessor grammar.
 template <typename PositionT>
-struct cpp_grammar : 
+struct cpp_grammar :
     public boost::spirit::grammar<cpp_grammar<PositionT> >
 {
     typedef cpp_grammar<PositionT>          grammar_t;
     typedef impl::store_position<PositionT> store_pos_t;
     typedef impl::store_found_eof           store_found_eof_t;
     typedef impl::store_found_directive     store_found_directive_t;
-    
+
     template <typename ScannerT>
     struct definition
     {
@@ -159,12 +159,12 @@ struct cpp_grammar :
         typedef typename ScannerT::iteration_policy_t iteration_policy_t;
         typedef boost::spirit::match_policy match_policy_t;
         typedef typename ScannerT::action_policy_t action_policy_t;
-        typedef 
+        typedef
             boost::spirit::scanner_policies<
-                iteration_policy_t, match_policy_t, action_policy_t> 
+                iteration_policy_t, match_policy_t, action_policy_t>
             policies_t;
-        typedef 
-            boost::spirit::scanner<typename ScannerT::iterator_t, policies_t> 
+        typedef
+            boost::spirit::scanner<typename ScannerT::iterator_t, policies_t>
             non_tree_scanner_t;
         typedef boost::spirit::rule<non_tree_scanner_t> no_tree_rule_t;
 
@@ -176,7 +176,7 @@ struct cpp_grammar :
         rule_t plain_define, macro_definition, macro_parameters;
         rule_t undefine;
         rule_t ppifdef, ppifndef, ppif, ppelse, ppelif, ppendif;
-        rule_t ppline; 
+        rule_t ppline;
         rule_t pperror;
         rule_t ppwarning;
         rule_t pppragma;
@@ -189,7 +189,7 @@ struct cpp_grammar :
         rule_t ppendregion;
 #endif
 
-        definition(cpp_grammar const &self) 
+        definition(cpp_grammar const &self)
         {
         // import the spirit and cpplexer namespaces here
             using namespace boost::spirit;
@@ -225,16 +225,16 @@ struct cpp_grammar :
 
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
             self.map_rule_id_to_name.init_rule_id_to_name_map(self);
-#endif 
+#endif
 
         // recognizes preprocessor directives only
 
-        // C++ standard 16.1: A preprocessing directive consists of a sequence 
-        // of preprocessing tokens. The first token in the sequence is # 
-        // preprocessing token that is either the first character in the source 
-        // file (optionally after white space containing no new-line 
-        // characters) or that follows white space containing at least one 
-        // new-line character. The last token in the sequence is the first 
+        // C++ standard 16.1: A preprocessing directive consists of a sequence
+        // of preprocessing tokens. The first token in the sequence is #
+        // preprocessing token that is either the first character in the source
+        // file (optionally after white space containing no new-line
+        // characters) or that follows white space containing at least one
+        // new-line character. The last token in the sequence is the first
         // new-line character that follows the first token in the sequence.
 
             pp_statement
@@ -273,21 +273,21 @@ struct cpp_grammar :
 
         // #include ...
             include_file            // include "..."
-                =   ch_p(T_PP_QHEADER) 
+                =   ch_p(T_PP_QHEADER)
                     [ store_found_directive_t(self.found_directive) ]
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                 |   ch_p(T_PP_QHEADER_NEXT)
                     [ store_found_directive_t(self.found_directive) ]
-#endif 
+#endif
                 ;
 
             system_include_file     // include <...>
-                =   ch_p(T_PP_HHEADER) 
+                =   ch_p(T_PP_HHEADER)
                     [ store_found_directive_t(self.found_directive) ]
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                 |   ch_p(T_PP_HHEADER_NEXT)
                     [ store_found_directive_t(self.found_directive) ]
-#endif 
+#endif
                 ;
 
             macro_include_file      // include ...anything else...
@@ -301,7 +301,7 @@ struct cpp_grammar :
 #endif
                     ]
                     >> *(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
@@ -309,20 +309,20 @@ struct cpp_grammar :
             plain_define
                 =   no_node_d
                     [
-                        ch_p(T_PP_DEFINE) 
+                        ch_p(T_PP_DEFINE)
                         [ store_found_directive_t(self.found_directive) ]
                         >> +ppsp
                     ]
-                    >>  (   ch_p(T_IDENTIFIER) 
+                    >>  (   ch_p(T_IDENTIFIER)
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
-                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                        |   pattern_p(OperatorTokenType|AltExtTokenType,
                                 ExtTokenTypeMask)   // and, bit_and etc.
                         )
                     >>  (   (   no_node_d[eps_p(ch_p(T_LEFTPAREN))]
                                 >>  macro_parameters
                                 >> !macro_definition
                             )
-                        |  !(   no_node_d[+ppsp] 
+                        |  !(   no_node_d[+ppsp]
                                 >>  macro_definition
                             )
                         )
@@ -334,39 +334,39 @@ struct cpp_grammar :
                 =   confix_p(
                         no_node_d[ch_p(T_LEFTPAREN) >> *ppsp],
                         !list_p(
-                            (   ch_p(T_IDENTIFIER) 
+                            (   ch_p(T_IDENTIFIER)
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
-                            |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                            |   pattern_p(OperatorTokenType|AltExtTokenType,
                                     ExtTokenTypeMask)   // and, bit_and etc.
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             |   ch_p(T_ELLIPSIS)
 #endif
-                            ), 
+                            ),
                             no_node_d[*ppsp >> ch_p(T_COMMA) >> *ppsp]
                         ),
                         no_node_d[*ppsp >> ch_p(T_RIGHTPAREN)]
                     )
                 ;
-            
+
         // macro body (anything left until eol)
             macro_definition
                 =   no_node_d[*ppsp]
                     >> *(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
-        // #undef FOO 
+        // #undef FOO
             undefine
                 =   no_node_d
                     [
-                        ch_p(T_PP_UNDEF) 
+                        ch_p(T_PP_UNDEF)
                         [ store_found_directive_t(self.found_directive) ]
                         >> +ppsp
                     ]
-                    >>  (   ch_p(T_IDENTIFIER) 
+                    >>  (   ch_p(T_IDENTIFIER)
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
-                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                        |   pattern_p(OperatorTokenType|AltExtTokenType,
                                 ExtTokenTypeMask)   // and, bit_and etc.
                         )
                 ;
@@ -375,7 +375,7 @@ struct cpp_grammar :
             ppifdef
                 =   no_node_d
                     [
-                        ch_p(T_PP_IFDEF) 
+                        ch_p(T_PP_IFDEF)
                         [ store_found_directive_t(self.found_directive) ]
                         >> +ppsp
                     ]
@@ -385,7 +385,7 @@ struct cpp_grammar :
             ppifndef
                 =   no_node_d
                     [
-                        ch_p(T_PP_IFNDEF) 
+                        ch_p(T_PP_IFNDEF)
                         [ store_found_directive_t(self.found_directive) ]
                         >> +ppsp
                     ]
@@ -395,12 +395,12 @@ struct cpp_grammar :
             ppif
                 =   no_node_d
                     [
-                        ch_p(T_PP_IF) 
+                        ch_p(T_PP_IF)
                         [ store_found_directive_t(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
@@ -415,12 +415,12 @@ struct cpp_grammar :
             ppelif
                 =   no_node_d
                     [
-                        ch_p(T_PP_ELIF) 
+                        ch_p(T_PP_ELIF)
                         [ store_found_directive_t(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
@@ -433,24 +433,24 @@ struct cpp_grammar :
                 ;
 
         // #line ...
-            ppline 
+            ppline
                 =   no_node_d
                     [
-                        ch_p(T_PP_LINE) 
+                        ch_p(T_PP_LINE)
                         [ store_found_directive_t(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
-                
+
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
         // #region ...
             ppregion
                 =   no_node_d
                     [
-                        ch_p(T_MSEXT_PP_REGION) 
+                        ch_p(T_MSEXT_PP_REGION)
                         [ store_found_directive_t(self.found_directive) ]
                         >> +ppsp
                     ]
@@ -461,7 +461,7 @@ struct cpp_grammar :
             ppendregion
                 =   no_node_d
                     [
-                        ch_p(T_MSEXT_PP_ENDREGION) 
+                        ch_p(T_MSEXT_PP_ENDREGION)
                         [ store_found_directive_t(self.found_directive) ]
                     ]
                 ;
@@ -471,16 +471,16 @@ struct cpp_grammar :
             illformed           // for error reporting
                 =   no_node_d
                     [
-                        pattern_p(T_POUND, MainTokenMask) 
+                        pattern_p(T_POUND, MainTokenMask)
                         >> *ppsp
                     ]
                     >>  (   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                     >>  no_node_d
                         [
                            *(   anychar_p -
-                                (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                                (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                             )
                         ]
                 ;
@@ -489,12 +489,12 @@ struct cpp_grammar :
             pperror
                 =   no_node_d
                     [
-                        ch_p(T_PP_ERROR) 
+                        ch_p(T_PP_ERROR)
                         [ store_found_directive_t(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> *(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
@@ -502,12 +502,12 @@ struct cpp_grammar :
             ppwarning
                 =   no_node_d
                     [
-                        ch_p(T_PP_WARNING) 
+                        ch_p(T_PP_WARNING)
                         [ store_found_directive_t(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> *(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
@@ -517,19 +517,19 @@ struct cpp_grammar :
                     [
                         ch_p(T_PP_PRAGMA)
                         [ store_found_directive_t(self.found_directive) ]
-                    ] 
+                    ]
                     >> *(   anychar_p -
-                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
+                            (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF))
                         )
                 ;
 
             ppqualifiedname
                 =   no_node_d[*ppsp]
-                    >>  (   ch_p(T_IDENTIFIER) 
+                    >>  (   ch_p(T_IDENTIFIER)
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
-                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                        |   pattern_p(OperatorTokenType|AltExtTokenType,
                                 ExtTokenTypeMask)   // and, bit_and etc.
-                        ) 
+                        )
                 ;
 
         // auxiliary helper rules
@@ -538,10 +538,10 @@ struct cpp_grammar :
                 ;
 
         // end of line tokens
-            eol_tokens 
+            eol_tokens
                 =   no_node_d
                     [
-                        *ppsp 
+                        *ppsp
                         >>  (   ch_p(T_NEWLINE)
                                 [ store_pos_t(self.pos_of_newline) ]
                             |   ch_p(T_CPPCOMMENT)
@@ -588,20 +588,20 @@ struct cpp_grammar :
     PositionT &pos_of_newline;
     bool &found_eof;
     boost::wave::token_id &found_directive;
-    
+
     cpp_grammar(cpp_grammar_rule_ids &rule_ids_, PositionT &pos_of_newline_,
             bool &found_eof_, boost::wave::token_id &found_directive_)
-    :   rule_ids(rule_ids_), pos_of_newline(pos_of_newline_), 
+    :   rule_ids(rule_ids_), pos_of_newline(pos_of_newline_),
         found_eof(found_eof_), found_directive(found_directive_)
-    { 
-        BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, "cpp_grammar", 
-            TRACE_CPP_GRAMMAR); 
+    {
+        BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, "cpp_grammar",
+            TRACE_CPP_GRAMMAR);
     }
 
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
 // helper function and data to get readable names of the rules known to us
     struct map_ruleid_to_name :
-        public std::map<boost::spirit::parser_id, std::string> 
+        public std::map<boost::spirit::parser_id, std::string>
     {
         typedef std::map<boost::spirit::parser_id, std::string> base_t;
 
@@ -610,7 +610,7 @@ struct cpp_grammar :
             struct {
                 int parser_id;
                 char const *rule_name;
-            } 
+            }
             init_ruleid_name_map[] = {
                 { self.rule_ids.pp_statement_id, "pp_statement" },
                 { self.rule_ids.include_file_id, "include_file" },
@@ -642,7 +642,7 @@ struct cpp_grammar :
         // initialize parser_id to rule_name map
             for (int i = 0; 0 != init_ruleid_name_map[i].parser_id; ++i)
                 base_t::insert(base_t::value_type(
-                    boost::spirit::parser_id(init_ruleid_name_map[i].parser_id), 
+                    boost::spirit::parser_id(init_ruleid_name_map[i].parser_id),
                     std::string(init_ruleid_name_map[i].rule_name))
                 );
         }
@@ -655,17 +655,17 @@ struct cpp_grammar :
 #undef TRACE_CPP_GRAMMAR
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
-//  The following parse function is defined here, to allow the separation of 
+//
+//  The following parse function is defined here, to allow the separation of
 //  the compilation of the cpp_grammar from the function using it.
-//  
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 #define BOOST_WAVE_GRAMMAR_GEN_INLINE
 #else
 #define BOOST_WAVE_GRAMMAR_GEN_INLINE inline
-#endif 
+#endif
 
 namespace {
 
@@ -695,7 +695,7 @@ namespace {
 }
 
 template <typename LexIteratorT>
-BOOST_WAVE_GRAMMAR_GEN_INLINE 
+BOOST_WAVE_GRAMMAR_GEN_INLINE
 boost::spirit::tree_parse_info<LexIteratorT>
 cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     LexIteratorT const &first, LexIteratorT const &last,
@@ -703,20 +703,20 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
 {
     using namespace boost::spirit;
     using namespace boost::wave;
-    
+
     pos_of_newline = position_type();  // reset position
     found_eof = false;              // reset flag
     found_directive = T_EOF;        // reset found directive
-    
+
     cpp_grammar<position_type> g(
         rule_ids, pos_of_newline, found_eof, found_directive);
-    
+
     tree_parse_info<LexIteratorT> hit = pt_parse (first, last, g);
-    
+
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
     if (hit.match) {
-        tree_to_xml (BOOST_WAVE_DUMP_PARSE_TREE_OUT, hit.trees, "", 
-            g.map_rule_id_to_name, &token_type::get_token_id, 
+        tree_to_xml (BOOST_WAVE_DUMP_PARSE_TREE_OUT, hit.trees, "",
+            g.map_rule_id_to_name, &token_type::get_token_id,
             &token_type::get_token_value);
     }
 #endif
@@ -724,8 +724,8 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     if (!hit.match && found_directive != T_EOF) {
     // recognized invalid directive
     std::string directive = get_directivename(found_directive);
-    
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
+
+        BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive,
             directive.c_str(), act_pos);
     }
 
@@ -738,6 +738,6 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace grammars
 }   // namespace wave
-}   // namespace boost 
+}   // namespace boost
 
 #endif // !defined(CPP_GRAMMAR_HPP_FEAEBC2E_2734_428B_A7CA_85E5A415E23E_INCLUDED)

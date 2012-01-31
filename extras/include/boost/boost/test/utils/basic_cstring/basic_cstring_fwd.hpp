@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2004-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : basic_cstring class wrap C string and provide std_string like 
+//  Description : basic_cstring class wrap C string and provide std_string like
 //                interface
 // ***************************************************************************
 
@@ -38,7 +38,7 @@ typedef char const* const           c_literal_string;
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: basic_cstring_fwd.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

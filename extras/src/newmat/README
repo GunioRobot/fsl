@@ -16,7 +16,7 @@ Version 10D corrects an incompatibility with Gnu G++ 4.1.
 Version 10C makes the conditions of use compatible with Debian
 distribution, replaces include.h, myexcept.h, myexcept.cpp, precisio.h
 with recent versions, includes additional make files and makes a
-few minor corrections. 
+few minor corrections.
 
 Version 10B corrects incompatibilities with Gnu G++ version 3.4 and
 Intel C++ for Windows, 8.1. Include.h, myexcept.h, myexcept.cpp,

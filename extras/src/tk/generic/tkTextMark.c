@@ -1,4 +1,4 @@
-/* 
+/*
  * tkTextMark.c --
  *
  *	This file contains the procedure that implement marks for
@@ -672,7 +672,7 @@ MarkFindNext(interp, textPtr, string)
 	if (TkTextGetIndex(interp, textPtr, string, &index) != TCL_OK) {
 	    return TCL_ERROR;
 	}
-	for (offset = 0, segPtr = index.linePtr->segPtr; 
+	for (offset = 0, segPtr = index.linePtr->segPtr;
 		segPtr != NULL && offset < index.byteIndex;
 		offset += segPtr->size,	segPtr = segPtr->nextPtr) {
 	    /* Empty loop body */ ;
@@ -745,7 +745,7 @@ MarkFindPrev(interp, textPtr, string)
 	if (TkTextGetIndex(interp, textPtr, string, &index) != TCL_OK) {
 	    return TCL_ERROR;
 	}
-	for (offset = 0, segPtr = index.linePtr->segPtr; 
+	for (offset = 0, segPtr = index.linePtr->segPtr;
 		segPtr != NULL && offset < index.byteIndex;
 		offset += segPtr->size, segPtr = segPtr->nextPtr) {
 	    /* Empty loop body */ ;
@@ -756,7 +756,7 @@ MarkFindPrev(interp, textPtr, string)
 	 * segPtr points just past the first possible candidate,
 	 * or at the begining of the line.
 	 */
-	for (prevPtr = NULL, seg2Ptr = index.linePtr->segPtr; 
+	for (prevPtr = NULL, seg2Ptr = index.linePtr->segPtr;
 		seg2Ptr != NULL && seg2Ptr != segPtr;
 		seg2Ptr = seg2Ptr->nextPtr) {
 	    if (seg2Ptr->typePtr == &tkTextRightMarkType ||
@@ -765,7 +765,7 @@ MarkFindPrev(interp, textPtr, string)
 	    }
 	}
 	if (prevPtr != NULL) {
-	    Tcl_SetResult(interp, 
+	    Tcl_SetResult(interp,
 		Tcl_GetHashKey(&textPtr->markTable, prevPtr->body.mark.hPtr),
 		TCL_STATIC);
 	    return TCL_OK;

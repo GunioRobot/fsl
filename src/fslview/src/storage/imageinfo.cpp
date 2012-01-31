@@ -24,7 +24,7 @@ ImageInfo::Handle ImageInfo::clone()
   clone->m_sformcode = m_sformcode;
   clone->setRigidMat(inqRigidMat());
   clone->m_qformcode = m_qformcode;
-  
+
 //   if(m_sformcode != NIFTI_XFORM_UNKNOWN)
 //     // use sform
 //   else
@@ -110,7 +110,7 @@ ImageInfo::ImageInfo(FSLIO *avw,std::string filename):m_fileName(filename)
       basename = m_fileName.substr(pos);
     if (strstr(basename.c_str(),"stat")!=NULL) { m_intent=NIFTI_INTENT_ZSCORE; }
     if (strstr(basename.c_str(),"mask")!=NULL) { m_intent=NIFTI_INTENT_LABEL; }
-    if (strstr(basename.c_str(),"tensor")!=NULL) 
+    if (strstr(basename.c_str(),"tensor")!=NULL)
       { m_intent=NIFTI_INTENT_GENMATRIX; m_intentDescriptor="DTI"; setDtiImage(true); }
   }
   m_purpose = ImageIntent::Unknown;
@@ -191,8 +191,8 @@ void ImageInfo::setMax(float max) { m_max = max; }
 float ImageInfo::inqMin() const { return m_min; }
 float ImageInfo::inqMax() const { return m_max; }
 
-std::string ImageInfo::inqLutName() const 
-{ 
+std::string ImageInfo::inqLutName() const
+{
   return std::string(m_auxFile);
 }
 
@@ -249,7 +249,7 @@ std::string ImageInfo::extractName(std::string filename)
   result = filename.substr(filename.rfind('/')+ 1,filename.length()- 1);
 
   return result;
-} 
+}
 
 bool ImageInfo::isDtiCompatible() const
 {
@@ -290,8 +290,8 @@ bool ImageInfo::isMaskImage() const
 }
 
 bool ImageInfo::hasValidXfms() const
-{ 
-  return ! ( (m_sformcode == NIFTI_XFORM_UNKNOWN) && 
+{
+  return ! ( (m_sformcode == NIFTI_XFORM_UNKNOWN) &&
 	     (m_qformcode == NIFTI_XFORM_UNKNOWN) );
 }
 

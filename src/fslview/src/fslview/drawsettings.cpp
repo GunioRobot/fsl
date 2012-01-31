@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -31,7 +31,7 @@ DrawSettings::Handle DrawSettings::create()
 }
 
 //! @brief Attach a viewer to this cursor
-//! @param o handle of a viewer which requires notification of any 
+//! @param o handle of a viewer which requires notification of any
 //!          changes to this cursor
 void DrawSettings::attach(DrawSettingsObserver *o)
 {
@@ -45,7 +45,7 @@ void DrawSettings::detach(DrawSettingsObserver *o)
   m_observers.remove(o);
 }
 
-struct Update 
+struct Update
 {
   Update(const DrawSettings* s): m_settings(s) {}
 
@@ -74,17 +74,17 @@ void DrawSettings::switchPen()
 
 void DrawSettings::setMode(Mode m)
 {
-  m_prevMode = m_mode; 
-  m_mode = m; 
+  m_prevMode = m_mode;
+  m_mode = m;
   switchPen();
-  notify(); 
+  notify();
 }
 
 void DrawSettings::setPrevMode()
-{ 
-  m_mode = m_prevMode; 
+{
+  m_mode = m_prevMode;
   switchPen();
-  notify(); 
+  notify();
 }
 
 void DrawSettings::setPenSize(int s)     { m_currentPen->setSize(s);  notify(); }

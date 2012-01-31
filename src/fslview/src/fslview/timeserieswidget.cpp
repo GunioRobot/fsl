@@ -31,26 +31,26 @@
 class Singleserieswidget;
 
 
-TimeSeriesWidget::TimeSeriesWidget(QWidget *parent, 
-                                   Image::Handle& image, 
+TimeSeriesWidget::TimeSeriesWidget(QWidget *parent,
+                                   Image::Handle& image,
                                    Cursor::Handle& cursor):
   TimeSeriesWindowBase(parent, 0, WDestructiveClose), m_image(image),
   m_cursor(cursor)
-{  
+{
   m_options = PlotOptions::create();
 
   constructor();
 }
 
-TimeSeriesWidget::TimeSeriesWidget(QWidget *parent, 
-                                   Image::Handle& image, 
+TimeSeriesWidget::TimeSeriesWidget(QWidget *parent,
+                                   Image::Handle& image,
                                    Cursor::Handle& cursor,
                                    ModelFit::Handle& modelFit):
   TimeSeriesWindowBase(parent, 0, WDestructiveClose), m_image(image),
   m_cursor(cursor)
-{  
+{
   m_options = PlotOptions::create();
-  m_options->setModelFit(modelFit); 
+  m_options->setModelFit(modelFit);
   m_options->setFeedBack(true);
   constructor();
 }
@@ -61,8 +61,8 @@ void TimeSeriesWidget::closeEvent(QCloseEvent* e)
 }
 
 void TimeSeriesWidget::constructor()
-{  
-  TRACKER("TimeSeriesWidget::constructor");  
+{
+  TRACKER("TimeSeriesWidget::constructor");
 
   m_contrListIndex=0;
 
@@ -91,9 +91,9 @@ void TimeSeriesWidget::constructor()
 
   m_showAxes->setOn(true);
 
-  connect(m_displayWidget.get(), SIGNAL(intensityChanged(float, float)), 
+  connect(m_displayWidget.get(), SIGNAL(intensityChanged(float, float)),
 	  SLOT(intensityChanged(float, float)));
- 
+
   m_displayWidget->show();
   m_cursor->setCursor(m_cursor->inqX(),m_cursor->inqY(),m_cursor->inqZ());
 }
@@ -166,7 +166,7 @@ void TimeSeriesWidget::featModeToggled(bool y)
 void TimeSeriesWidget::modelComboActivated(int item)
 {
   TRACKER("TimeSeriesWidget::modelComboActivated(int curItem)");
-  
+
   MESSAGE(QString("curItem = %1").arg(item));
 
   ModelFit::Handle m(m_options->getModelFit());
@@ -211,7 +211,7 @@ void TimeSeriesWidget::demeanToggled(bool y)
 
 void TimeSeriesWidget::percentToggled(bool y)
 {
-  m_displayWidget->setPercent(y); 
+  m_displayWidget->setPercent(y);
   m_displayWidget->redraw();
 }
 

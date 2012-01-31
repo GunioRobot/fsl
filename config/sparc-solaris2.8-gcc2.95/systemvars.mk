@@ -8,7 +8,7 @@ SHELL = /bin/sh
 CC = gcc
 CXX = c++
 
-ARCHFLAGS = -mv8 -ffast-math -fomit-frame-pointer 
+ARCHFLAGS = -mv8 -ffast-math -fomit-frame-pointer
 
 DEPENDFLAGS = -MM
 

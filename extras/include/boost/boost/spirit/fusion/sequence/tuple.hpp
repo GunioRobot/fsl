@@ -61,7 +61,7 @@ namespace boost { namespace fusion
         }
 
         typedef detail::tuple_builder<BOOST_PP_ENUM_PARAMS(FUSION_MAX_TUPLE_SIZE, T)> builder;
-        
+
         typedef typename builder::begin begin;
         typedef typename builder::end end;
         typedef typename builder::size size;

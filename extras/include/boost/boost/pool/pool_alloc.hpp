@@ -172,7 +172,7 @@ class fast_pool_allocator
 
     static pointer allocate(const size_type n)
     {
-      const pointer ret = (n == 1) ? 
+      const pointer ret = (n == 1) ?
           static_cast<pointer>(
               singleton_pool<fast_pool_allocator_tag, sizeof(T),
                   UserAllocator, Mutex, NextSize>::malloc() ) :

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkText.c --
  *
  *	This module provides a big chunk of the implementation of
@@ -312,7 +312,7 @@ static void		TextWorldChanged _ANSI_ARGS_((
 			    ClientData instanceData));
 static int		TextDumpCmd _ANSI_ARGS_((TkText *textPtr,
 			    Tcl_Interp *interp, int argc, CONST char **argv));
-static void		DumpLine _ANSI_ARGS_((Tcl_Interp *interp, 
+static void		DumpLine _ANSI_ARGS_((Tcl_Interp *interp,
 			    TkText *textPtr, int what, TkTextLine *linePtr,
 			    int start, int end, int lineno,
 			    CONST char *command));
@@ -504,7 +504,7 @@ TextWidgetCmd(clientData, interp, argc, argv)
 	}
 	if (TkTextCharBbox(textPtr, &index1, &x, &y, &width, &height) == 0) {
 	    char buf[TCL_INTEGER_SPACE * 4];
-	    
+
 	    sprintf(buf, "%d %d %d %d", x, y, width, height);
 	    Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	}
@@ -721,7 +721,7 @@ TextWidgetCmd(clientData, interp, argc, argv)
 	if (TkTextDLineInfo(textPtr, &index1, &x, &y, &width, &height, &base)
 		== 0) {
 	    char buf[TCL_INTEGER_SPACE * 5];
-	    
+
 	    sprintf(buf, "%d %d %d %d %d", x, y, width, height, base);
 	    Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	}
@@ -755,7 +755,7 @@ TextWidgetCmd(clientData, interp, argc, argv)
 		goto done;
 	    }
 	    if (TkTextIndexCmp(&index1, &index2) < 0) {
-		/* 
+		/*
 		 * Place the text in a DString and move it to the result.
 		 * Since this could in principle be a megabyte or more, we
 		 * want to do it efficiently!
@@ -1187,7 +1187,7 @@ ConfigureText(interp, textPtr, argc, argv, flags)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 static void
 TextWorldChanged(instanceData)
     ClientData instanceData;	/* Information about widget. */
@@ -1915,7 +1915,7 @@ TkTextLostSelection(clientData)
 
 	/*
 	 * On Windows and Mac systems, we want to remember the selection
-	 * for the next time the focus enters the window.  On Unix, 
+	 * for the next time the focus enters the window.  On Unix,
 	 * just remove the "sel" tag from everything in the widget.
 	 */
 
@@ -2258,7 +2258,7 @@ TextSearchCmd(textPtr, interp, argc, argv)
 
 	    if (exact) {
 		p = strstr(startOfLine + firstByte,	/* INTL: Native. */
-			pattern); 
+			pattern);
 		if (p == NULL) {
 		    break;
 		}
@@ -2628,7 +2628,7 @@ TextDumpCmd(textPtr, interp, argc, argv)
      */
     if (atEnd) {
 	DumpLine(interp, textPtr, what & ~TK_DUMP_TEXT, index2.linePtr,
-		0, 1, lineno, command);			    
+		0, 1, lineno, command);
 
     }
     return TCL_OK;
@@ -2684,7 +2684,7 @@ DumpLine(interp, textPtr, what, linePtr, startByte, endByte, lineno, command)
 	    }
 	    savedChar = segPtr->body.chars[last];
 	    segPtr->body.chars[last] = '\0';
-	    
+
 	    TkTextMakeByteIndex(textPtr->tree, lineno, offset + first, &index);
 	    DumpSegment(interp, "text", segPtr->body.chars + first,
 		    command, &index, what);
@@ -2702,20 +2702,20 @@ DumpLine(interp, textPtr, what, linePtr, startByte, endByte, lineno, command)
 		DumpSegment(interp, "tagon",
 			segPtr->body.toggle.tagPtr->name,
 			command, &index, what);
-	    } else if ((what & TK_DUMP_TAG) && 
+	    } else if ((what & TK_DUMP_TAG) &&
 			(segPtr->typePtr == &tkTextToggleOffType)) {
 		TkTextMakeByteIndex(textPtr->tree, lineno, offset, &index);
 		DumpSegment(interp, "tagoff",
 			segPtr->body.toggle.tagPtr->name,
 			command, &index, what);
-	    } else if ((what & TK_DUMP_IMG) && 
+	    } else if ((what & TK_DUMP_IMG) &&
 			(segPtr->typePtr->name[0] == 'i')) {
 		TkTextEmbImage *eiPtr = (TkTextEmbImage *)&segPtr->body;
 		char *name = (eiPtr->name ==  NULL) ? "" : eiPtr->name;
 		TkTextMakeByteIndex(textPtr->tree, lineno, offset, &index);
 		DumpSegment(interp, "image", name,
 			command, &index, what);
-	    } else if ((what & TK_DUMP_WIN) && 
+	    } else if ((what & TK_DUMP_WIN) &&
 			(segPtr->typePtr->name[0] == 'w')) {
 		TkTextEmbWindow *ewPtr = (TkTextEmbWindow *)&segPtr->body;
 		char *pathname;
@@ -2953,7 +2953,7 @@ TextEditCmd(textPtr, interp, argc, argv)
 		(char *) NULL);
 	return TCL_ERROR;
     }
-    
+
     return TCL_OK;
 }
 
@@ -2969,7 +2969,7 @@ TextEditCmd(textPtr, interp, argc, argv)
  *    Memory will be allocated for the DString.  Remember to free it.
  */
 
-static void 
+static void
 TextGetText(indexPtr1,indexPtr2, dsPtr)
     TkTextIndex *indexPtr1;
     TkTextIndex *indexPtr2;
@@ -2977,7 +2977,7 @@ TextGetText(indexPtr1,indexPtr2, dsPtr)
 {
     TkTextIndex tmpIndex;
     Tcl_DStringInit(dsPtr);
-    
+
     TkTextMakeByteIndex(indexPtr1->tree, TkBTreeLineIndex(indexPtr1->linePtr),
 	    indexPtr1->byteIndex, &tmpIndex);
 

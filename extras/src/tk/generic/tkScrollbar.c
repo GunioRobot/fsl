@@ -1,4 +1,4 @@
-/* 
+/*
  * tkScrollbar.c --
  *
  *	This module implements a scrollbar widgets for the Tk
@@ -618,7 +618,7 @@ TkScrollbarEventProc(clientData, eventPtr)
 	 * let Tk_FreeOptions handle all the standard option-related
 	 * stuff.
 	 */
-	
+
 	Tk_FreeOptions(tkpScrollbarConfigSpecs, (char *) scrollPtr,
 		scrollPtr->display, 0);
 	Tcl_EventuallyFree((ClientData) scrollPtr, TCL_DYNAMIC);

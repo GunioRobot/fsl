@@ -124,7 +124,7 @@ comparisons across space.
 <BR>&nbsp;&nbsp;&nbsp;FMRIB technical report TR07JA2 from www.fmrib.ox.ac.uk/analysis/techrep
 
 <p>[Ashburner 2000] Ashburner, J., Friston, K.
-<BR>&nbsp;&nbsp;&nbsp;   Voxel-based morphometry - The methods. 
+<BR>&nbsp;&nbsp;&nbsp;   Voxel-based morphometry - The methods.
 <BR>&nbsp;&nbsp;&nbsp;   NeuroImage11, 805-821, 2000.
 
 <p>[Good 2001] Good, C., Johnsrude, I., Ashburner, J., Henson, R., Friston, K., Frackowiak, R.
@@ -139,20 +139,20 @@ comparisons across space.
 <BR>&nbsp;&nbsp;&nbsp;Improved optimisation for the robust and accurate linear registration and motion correction of brain images.
 <BR>&nbsp;&nbsp;&nbsp;NeuroImage, 17(2):825-841, 2002.
 
-<p>[Rueckert 1999] D. Rueckert, L. I. Sonoda, C. Hayes, D. L. G. Hill, M. O. Leach, and D. J. Hawkes. 
-<BR>&nbsp;&nbsp;&nbsp;   Non-rigid registration using free-form deformations: Application to breast MR images. 
+<p>[Rueckert 1999] D. Rueckert, L. I. Sonoda, C. Hayes, D. L. G. Hill, M. O. Leach, and D. J. Hawkes.
+<BR>&nbsp;&nbsp;&nbsp;   Non-rigid registration using free-form deformations: Application to breast MR images.
 <BR>&nbsp;&nbsp;&nbsp;   IEEE Transactions on Medical Imaging, 18(8):712-721, 1999.
 
-<p>[Smith 2002] S.M. Smith. 
-<BR>&nbsp;&nbsp;&nbsp;   Fast robust automated brain extraction. 
+<p>[Smith 2002] S.M. Smith.
+<BR>&nbsp;&nbsp;&nbsp;   Fast robust automated brain extraction.
 <BR>&nbsp;&nbsp;&nbsp;   Human Brain Mapping, 17(3):143-155, November 2002.
 
-<p>[Smith 2004] S.M. Smith, M. Jenkinson, M.W. Woolrich, C.F. Beckmann, T.E.J. Behrens, H. Johansen-Berg, P.R. Bannister, M. De Luca, I. Drobnjak, D.E. Flitney, R. Niazy, J. Saunders, J. Vickers, Y. Zhang, N. De Stefano, J.M. Brady, and P.M. Matthews. 
-<BR>&nbsp;&nbsp;&nbsp;   Advances in functional and structural MR image analysis and implementation as FSL. 
+<p>[Smith 2004] S.M. Smith, M. Jenkinson, M.W. Woolrich, C.F. Beckmann, T.E.J. Behrens, H. Johansen-Berg, P.R. Bannister, M. De Luca, I. Drobnjak, D.E. Flitney, R. Niazy, J. Saunders, J. Vickers, Y. Zhang, N. De Stefano, J.M. Brady, and P.M. Matthews.
+<BR>&nbsp;&nbsp;&nbsp;   Advances in functional and structural MR image analysis and implementation as FSL.
 <BR>&nbsp;&nbsp;&nbsp;   NeuroImage, 23(S1):208-219, 2004.
 
-<p>[Zhang 2001] Y. Zhang, M. Brady, and S. Smith. 
-<BR>&nbsp;&nbsp;&nbsp;   Segmentation of brain MR images through a hidden Markov random field model and the expectation maximization algorithm. 
+<p>[Zhang 2001] Y. Zhang, M. Brady, and S. Smith.
+<BR>&nbsp;&nbsp;&nbsp;   Segmentation of brain MR images through a hidden Markov random field model and the expectation maximization algorithm.
 <BR>&nbsp;&nbsp;&nbsp;   IEEE Trans. on Medical Imaging, 20(1):45-57, 2001.
 </em></font>
 
@@ -166,8 +166,8 @@ Running FSL-VBM involves a few simple steps:
 
 <UL>
 <LI>prepare your T1-weighted images in the right format
-<LI><b>fslvbm_1_bet</b> - carry out brain extraction on all T1 images 
-<LI><b>fslvbm_2_template</b> - create the study-specific symmetric GM template 
+<LI><b>fslvbm_1_bet</b> - carry out brain extraction on all T1 images
+<LI><b>fslvbm_2_template</b> - create the study-specific symmetric GM template
 <LI><b>fslvbm_3_proc</b> - register all the GM inages to the template, modulate and smooth them with different kernel sizes and finally runs an initial GLM analysis for qualitative evaluation
 <LI><b>randomise</b> - carry out voxelwise GLM analysis using permutation testing
 </UL>
@@ -225,13 +225,13 @@ done</pre>
 
 <p><pre>slicesdir `imglob *`</pre>
 
-<p>The <code>imglob</code> command lists all of your input images. 
+<p>The <code>imglob</code> command lists all of your input images.
   The <code>slicesdir</code> command takes the
   list of images and creates a simple web-page containing snapshots
   for each of the images. Once it has finished running it tells you
   the name of the web page to open in your web browser, to view the
   snapshots. Have a careful look.
-  
+
 <p>d) It's a good idea to consider your cross-subject statistical
   model <b>before</b> you run the FSL-VBM analysis. So you should at
   this point create your <code>design.mat</code> and <code>design.con</code> in your FSL-VBM
@@ -366,7 +366,7 @@ model.
   not generally appropriate in such analyses.
 
 <p><b>E1 - Displaying TFCE-based thresholding results</b>
-  
+
 <p>Once you have chosen the most appropriate smoothing (e.g. sigma =
 3mm) for the TFCE-based analysis, run randomise
 (see <a href="../randomise/index.html">randomise usage</a>), for
@@ -379,7 +379,7 @@ instance:
 <pre>fslview $FSLDIR/data/standard/MNI152_T1_2mm fslvbm_tfce_corrp_tstat1 -l Red-Yellow -b 0.949,1</pre>
 
 <p><b>E2 - Displaying cluster-based thresholding results</b>
-  
+
 <p>Once you have chosen the most appropriate smoothing (e.g. sigma = 3mm) and threshold (e.g. t &gt; 2.3) for the cluster-based correction, then feed them into a full run of
 randomise (see <a href="../randomise/index.html">randomise usage</a>), for instance:
 

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,7 +85,7 @@ using namespace std;
 
 namespace FILM {
 
-  ContrastMgr::ContrastMgr() :    
+  ContrastMgr::ContrastMgr() :
     tc(),
     fc(),
     c_counter(0),
@@ -110,11 +110,11 @@ namespace FILM {
     int count = 0;
 
     for(int c = 1; c <= parad.getTContrasts().Nrows(); c++)
-      {	
+      {
 	if(parad.getFContrasts()(p_num,c) == 1)
-	  {	    
+	  {
 	    count++;
-	    fc.Row(count) = parad.getTContrasts().Row(c);	
+	    fc.Row(count) = parad.getTContrasts().Row(c);
 	  }
       }
 
@@ -142,11 +142,11 @@ namespace FILM {
 	  }
 
 	SetTContrast(c, c+ContrastMgrOptions::getInstance().copenumber-1);
-	ComputeNeff();    
+	ComputeNeff();
 	ComputeCope();
 	ComputeVarCope();
 	ComputeZStat();
-	
+
 	SaveTContrast(ContrastMgrOptions::getInstance().suffix);
       }
 
@@ -163,7 +163,7 @@ namespace FILM {
 	  }
 
 	ComputeFStat();
-	
+
 	if(contrast_valid)
 	  SaveFContrast(ContrastMgrOptions::getInstance().suffix);
 
@@ -173,12 +173,12 @@ namespace FILM {
   void ContrastMgr::Load()
   {
     Tracer_Plus ts("ContrastMgr::Load");
-    // Need to read in b, sigmaSquareds, corrections and dof 
+    // Need to read in b, sigmaSquareds, corrections and dof
     Log& logger = LogSingleton::getInstance();
-    // Load contrasts:     
+    // Load contrasts:
     parad.load("", ContrastMgrOptions::getInstance().contrastfname, ContrastMgrOptions::getInstance().fcontrastfname, false, 0);
-       
-    numParams = parad.getTContrasts().Ncols(); 
+
+    numParams = parad.getTContrasts().Ncols();
     if(ContrastMgrOptions::getInstance().verbose)
       {
 	cerr << "T Contrasts:" << endl << parad.getTContrasts();
@@ -190,23 +190,23 @@ namespace FILM {
     mask=input_data[0];
     mask.binarise(0.0,mask.max()+1,exclusive);
     sigmaSquareds=input_data.matrix(mask).AsColumn();
-    numTS = sigmaSquareds.Nrows();    
+    numTS = sigmaSquareds.Nrows();
     // b:
     ColumnVector peVol;
     b.ReSize(numTS, numParams);
     for(int i = 1; i <= numParams; i++)
-      { 
+      {
 	// Add param number to "pe" to create filename:
 	ostringstream osc;
 	osc << i;
 	read_volume4D(input_data,logger.getDir() + "/pe" + osc.str().c_str());
 	peVol=input_data.matrix(mask).AsColumn();
-	b.Column(i) = peVol; 
+	b.Column(i) = peVol;
       }
 
     // dof: - maybe single value ASCII or avw file:
     ifstream in;
-    in.open(string(logger.getDir() + "/dof").c_str(), ios::in);    
+    in.open(string(logger.getDir() + "/dof").c_str(), ios::in);
     if(!in) //avw format
       {
 	read_volume4D(input_data,logger.getDir() + "/dof");
@@ -219,11 +219,11 @@ namespace FILM {
 	ColumnVector dofVec = MISCMATHS::read_ascii_matrix(logger.getDir() + "/dof");
 	dof = sigmaSquareds;
 	dof = dofVec(1);
-      }      
+      }
 
-    // corrections - maybe ASCII (old version) or avw file:    
+    // corrections - maybe ASCII (old version) or avw file:
     // corrections are the correlation matrix of the pes.
-    in.open(string(logger.getDir() + "/corrections").c_str(), ios::in);    
+    in.open(string(logger.getDir() + "/corrections").c_str(), ios::in);
     if(!in)
       {
 	// avw format
@@ -234,7 +234,7 @@ namespace FILM {
     else
       {
 	// old ascii format
-	in.close();      
+	in.close();
 	is_avw_corrections = false;
 	corrections.ReSize(numTS,numParams*numParams);
 	corrections=read_vest(logger.getDir() + "/corrections");
@@ -303,7 +303,7 @@ namespace FILM {
       {
 	for (int j = 1; j <= numParams; j++)
 	  {
-	    corr(i,j) = corrections((i-1)*numParams + j, ind); 
+	    corr(i,j) = corrections((i-1)*numParams + j, ind);
 	  }
       }
   }
@@ -325,7 +325,7 @@ namespace FILM {
 	else
 	  tstat(i) = 0.0;
       }
-      
+
     // Calculate tstat:
     zstat.ReSize(numTS);
     T2z::ComputeZStats(varcb, cb, dof, zstat);
@@ -345,19 +345,19 @@ namespace FILM {
 	probs(co) = p;
 	co++;
       }
-      
+
     write_ascii_matrix(logger.appendDir("ratios"), ratios);
     write_ascii_matrix(logger.appendDir("probs"), probs);
-      
+
   }
 
   void ContrastMgr::ComputeCope()
-  { 
+  {
     Tracer_Plus ts("ContrastMgr::ComputeCope");
     cb.ReSize(numTS);
 
     for(int i = 1; i <= numTS; i++)
-      {	
+      {
 	cb(i) = (tc.t()*b.Row(i).t()).AsScalar();
       }
   }
@@ -365,10 +365,10 @@ namespace FILM {
   void ContrastMgr::ComputeNeff()
   {
     Tracer_Plus ts("ContrastMgr::ComputeNeff");
-   
+
     //Log& logger = LogSingleton::getInstance();
     Matrix corr;
-      
+
     neff.ReSize(numTS);
     neff = 0;
 
@@ -376,26 +376,26 @@ namespace FILM {
     int maxNeff = 0;
 
     for(int i = 1; i <= numTS; i++)
-      {	
+      {
 	GetCorrection(corr, i);
 
 	neff(i) = 1/(tc.t()*corr*tc).AsScalar();
 
 	if(maxNeff < neff(i))
 	  maxNeff = (int)neff(i);
-	  
+
 	if(neff(i) < 0.0 && i > 1)
 	  {
 	    neff(i) = neff(i-1);
 	    numNegs++;
-	  }  
+	  }
       }
   }
 
   void ContrastMgr::ComputeFStat()
   {
     Tracer_Plus ts("ContrastMgr::ComputeFStat");
- 
+
     //Log& logger = LogSingleton::getInstance();
     Matrix corr;
 
@@ -407,26 +407,26 @@ namespace FILM {
 	GetCorrection(corr, i);
 
 	try
-	  {	    	    
+	  {
 	    fstat(i) = (b.Row(i)*fc.t()*(fc*corr*fc.t()*sigmaSquareds(i)).i()*fc*b.Row(i).t()).AsScalar()/num_Ccontrasts_in_Fcontrast;
 	  }
 	catch(SingularException& ex)
-	  {	    
+	  {
 	    cerr << ex.what() << endl;
-	    cerr << "F contrast no. " << contrast_num << " produces singular variance matrix." << endl; 
+	    cerr << "F contrast no. " << contrast_num << " produces singular variance matrix." << endl;
 	    cerr << "No results will be produced for this contrast"  << endl;
 	    contrast_valid = false;
-	    break;	    
+	    break;
 	  }
       }
-   
+
     // Calculate zstat:
     zstat.ReSize(numTS);
     F2z::ComputeFStats(fstat, num_Ccontrasts_in_Fcontrast, dof, zstat);
   }
 
   void ContrastMgr::ComputeVarCope()
-  { 
+  {
     Tracer_Plus ts("ContrastMgr::ComputeVarCope");
     varcb.ReSize(numTS);
 

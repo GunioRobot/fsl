@@ -13,7 +13,7 @@ void printValarray(const std::valarray<T>& va, const unsigned int n)
   std::cout << std::endl;
 }
 
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[])
 {
   try{
     Image::Handle         image = Image::load(argv[1]);
@@ -23,13 +23,13 @@ int main(int argc, char * argv[])
     std::cout << "BriCon range = " << image->getVolume(0)->inqMin() << " to " << image->getVolume(0)->inqMax() << std::endl;
 
     unsigned int voxels = volume->inqX() * volume->inqY() * volume->inqZ();
-  
+
     std::valarray<float> data(voxels);
 
     for(unsigned int i = 0; i < voxels; ++i)
       data[i] = volume->value(i);
 
-    // Now calculate the threshold limits and associated histograms. 
+    // Now calculate the threshold limits and associated histograms.
     float min(0), max(0);
     std::valarray<int> histogram;
 
@@ -43,7 +43,7 @@ int main(int argc, char * argv[])
     return 1;
 
   } catch(...) {
-    std::cout << "Oops. It's all gone wrong!" << std::endl; 
+    std::cout << "Oops. It's all gone wrong!" << std::endl;
     return 0;
   }
 }

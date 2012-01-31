@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixScrollbar.c --
  *
  *	This file implements the Unix specific portion of the scrollbar

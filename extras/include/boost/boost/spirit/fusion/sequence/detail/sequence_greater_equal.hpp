@@ -39,7 +39,7 @@ namespace boost { namespace fusion { namespace detail
             typename meta::equal_to<I1, end1_type>::type eq;
             return call(a, b, eq);
         }
-        
+
         template <typename I1, typename I2>
         static bool
         call(I1 const&, I2 const&, mpl::true_)

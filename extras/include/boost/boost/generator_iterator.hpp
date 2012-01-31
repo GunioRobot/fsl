@@ -33,7 +33,7 @@ class generator_iterator
       , single_pass_traversal_tag
       , typename Generator::result_type const&
     > super_t;
-    
+
  public:
     generator_iterator() {}
     generator_iterator(Generator* g) : m_g(g), m_value((*m_g)()) {}

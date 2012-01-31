@@ -9,7 +9,7 @@ Phase Region Expanding Labeller for Unwrapping Discrete Estimates
 
 
 <A NAME="section2"></A><HR><H2>PRELUDE</H2>
- 
+
 <I>prelude</I> performs 3D phase unwrapping of images.  This is useful
 for fieldmap acquisitions, susceptibility weighted imaging (SWI), or
 other applications involving phase in MR (or non-MR) images. The input
@@ -45,17 +45,17 @@ The three main forms of usage are:
 <P>
 Additional options that are useful are:
 <dl>
-<dt> <FONT COLOR=PURPLE>-m mask</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>-m mask</FONT> </dt>
 <dd>uses the user-defined mask (e.g. a BET mask - especially for high resolution images)</dd>
-<dt> <FONT COLOR=PURPLE>-n num</FONT> </dt> 
-<dd>specifies the number of phase partitions 
+<dt> <FONT COLOR=PURPLE>-n num</FONT> </dt>
+<dd>specifies the number of phase partitions
 the algorithm uses for initial labelling - a larger value is likely to be more
 robust but slower </dd>
-<dt> <FONT COLOR=PURPLE>-s</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>-s</FONT> </dt>
 <dd>unwrap in 2D, then stick slices together
 with appropriate offsets - this is less robust but fast - mainly used for
 very high-resolution images where optimising speed is an issue </dd>
-<dt> <FONT COLOR=PURPLE>--labelslices</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--labelslices</FONT> </dt>
 <dd>does labelling in 2D, but
 unwrapping in 3D - the default for high-res images </dd>
 </dl>

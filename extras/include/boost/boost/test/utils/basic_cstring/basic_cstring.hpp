@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2004-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : class basic_cstring wraps C string and provide std_string like 
+//  Description : class basic_cstring wraps C string and provide std_string like
 //                interface
 // ***************************************************************************
 
@@ -84,7 +84,7 @@ public:
     void            resize( size_type new_len );
 
     //!! only for STL container conformance use is_empty instead
-    bool            empty() const; 
+    bool            empty() const;
 
     // Trimming
     self_type&      trim_right( size_type trim_size );
@@ -309,7 +309,7 @@ basic_cstring<CharT>::trim_left( basic_cstring exclusions )
         if( traits_type::find( exclusions.begin(), exclusions.size(), *it ) == (pointer)0 )
             break;
     }
-    
+
     return trim_left( it );
 }
 
@@ -354,7 +354,7 @@ basic_cstring<CharT>::trim_right( basic_cstring exclusions )
         if( self_type::traits_type::find( exclusions.begin(),  exclusions.size(), *it ) == (pointer)0 )
             break;
     }
-    
+
     return trim_right( it+1 );
 }
 
@@ -586,7 +586,7 @@ inline bool
 operator==( basic_cstring<CharT1> const& s1, basic_cstring<CharT2> const& s2 )
 {
     typedef typename basic_cstring<CharT1>::traits_type traits_type;
-    return s1.size() == s2.size() && 
+    return s1.size() == s2.size() &&
                traits_type::compare( s1.begin(), s2.begin(), s1.size() ) == 0;
 }
 
@@ -734,7 +734,7 @@ assign_op( std::basic_string<CharT1>& target, basic_cstring<CharT2> src, int )
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: basic_cstring.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

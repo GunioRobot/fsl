@@ -11,7 +11,7 @@
 # include <boost/python/converter/as_to_python_function.hpp>
 # include <boost/python/type_id.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 template <class T, class Conversion>
 struct to_python_converter
@@ -29,7 +29,7 @@ to_python_converter<T,Conversion>::to_python_converter()
     typedef converter::as_to_python_function<
         T, Conversion
         > normalized;
-        
+
     converter::registry::insert(
         &normalized::convert
         , type_id<T>());

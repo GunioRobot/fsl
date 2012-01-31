@@ -1,4 +1,4 @@
-#{{{ copyright and setup 
+#{{{ copyright and setup
 
 #   GLM - setup GLM design files
 #
@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -69,7 +69,7 @@
 #   innovation@isis.ox.ac.uk quoting reference DE/1112.
 
 source [ file dirname [ info script ] ]/fslstart.tcl
- 
+
 set VARS(history) {}
 
 #}}}
@@ -78,7 +78,7 @@ set VARS(history) {}
 
 proc glm { w } {
     global fmri FSLDIR USER feat_files VARS PWD HOME tempSpin
- 
+
     #{{{ main window basic setup
 
 feat5:setupdefaults
@@ -107,15 +107,15 @@ optionMenu2 $w.level fmri(level) -command "glm:updatelevel $w"  1 "Timeseries de
 set fmri(npts) 100
 
 LabelSpinBox  $w.npts -textvariable fmri(npts) -label " # timepoints " -range {2 10000 1} -command "$w.npts.spin.e validate; glm:updatenpts $w" -modifycmd "glm:updatenpts $w"
-LabelSpinBox  $w.tr -textvariable fmri(tr) -label " TR (s) " -range {0.001 10000 0.25} 
-LabelSpinBox  $w.paradigm_hp -textvariable fmri(paradigm_hp) -label " High pass filter cutoff (s) " -range {1.0 10000 5} -width 5 
+LabelSpinBox  $w.tr -textvariable fmri(tr) -label " TR (s) " -range {0.001 10000 0.25}
+LabelSpinBox  $w.paradigm_hp -textvariable fmri(paradigm_hp) -label " High pass filter cutoff (s) " -range {1.0 10000 5} -width 5
 
 pack $w.level $w.npts -in $w -side top -anchor w -padx 3 -pady 3
 
 #{{{ button Frame
 
 frame $w.btns
-    
+
 button $w.btns.wizard -command "feat5:wizard $w" -text "Wizard"
 
 button $w.btns.save -command "feat_file:setup_dialog $w a a a [namespace current] *.fsf {Save Feat setup} {feat5:write $w 1 0 0} {}" -text "Save"
@@ -134,7 +134,7 @@ pack $w.btns -in $w -side bottom -fill x -padx 10 -pady 10
 
 #}}}
 
-    glm:updatelevel $w 
+    glm:updatelevel $w
 }
 
 #}}}
@@ -185,13 +185,13 @@ proc glm:updatenpts { w } {
     global fmri
 
     if { $fmri(level) == 2 && $fmri(multiple)!=$fmri(npts) } {
-	glm:updatelevel $w 
+	glm:updatelevel $w
     }
 }
 
 #}}}
 
-#{{{ call GUI 
+#{{{ call GUI
 
 if { ! [ info exists INGUI ] } {
     wm withdraw .

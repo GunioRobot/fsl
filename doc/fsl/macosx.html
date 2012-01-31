@@ -71,7 +71,7 @@ In addition to installing the FSL programs, the install script is also capable o
       </li>
       <li> Check the file with
 	<pre>fsl=`ls -1 fsl-4.*-macosx.tar.gz`; md5 $fsl | diff -q - $fsl.md5</pre>
-	<strong>NB</strong> ` is on the key to the left of Z on the UK Mac keyboard, or to the left of 1 on the US Mac keyboard 
+	<strong>NB</strong> ` is on the key to the left of Z on the UK Mac keyboard, or to the left of 1 on the US Mac keyboard
       </li>
       <li> If there is a problem with the download then you will receive a message like:
 	<pre>Files .... and .... differ</pre>
@@ -86,7 +86,7 @@ In addition to installing the FSL programs, the install script is also capable o
       <li> Unpack the fsl download file - for example, if you downloaded it onto your Downloads folder,
 	<pre>tar -zxvf ~/Downloads/fsl-*-macosx.tar.gz</pre>
 	(omit the z in the -zxvf if your computer has already uncompressed the tarfile for you).
-	This will create a directory called fsl in the current directory which will contain all the required files for FSL and FSLView. Note that you might need to add <i>sudo</i> to the start of the tar command if you don't automatically have the right to create files in <i>/usr/local</i>. 
+	This will create a directory called fsl in the current directory which will contain all the required files for FSL and FSLView. Note that you might need to add <i>sudo</i> to the start of the tar command if you don't automatically have the right to create files in <i>/usr/local</i>.
       </li>
     </ul>
     </li>
@@ -108,7 +108,7 @@ In addition to installing the FSL programs, the install script is also capable o
     <h3>If you are using the bash shell (the default)</h3>
     <ul>
       <li> In a running terminal type:
-	<pre>cd 
+	<pre>cd
 touch .bash_profile
 open -a TextEdit .bash_profile</pre>
 	This will bring up a TextEdit window
@@ -150,7 +150,7 @@ fi</pre>
   <h3>If you are using the tcsh or the csh shell</h3>
     <ul>
       <li> In a running terminal type:
-	<pre>cd 
+	<pre>cd
 touch .cshrc
 open -a TextEdit .cshrc</pre>
 	This will bring up a TextEdit window
@@ -174,7 +174,7 @@ if ( $?TERM_PROGRAM ) then
       else
         echo "Warning: DISPLAY not configured as X11 is not running"
       endif
-    endif 
+    endif
   endif
 endif
 	</pre>
@@ -197,7 +197,7 @@ endif
     <pre>flirt -version</pre>
     which should display a line like:
     <pre>FLIRT version 5.4.2</pre>
-    (although the version number might be different). 
+    (although the version number might be different).
   </li>
 </ul>
 <p>

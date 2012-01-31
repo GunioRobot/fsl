@@ -99,7 +99,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (size_) {
                 const iterator i_end = end();
                 for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_destroy (i); 
+                    iterator_destroy (i);
                 }
                 alloc_.deallocate (data_, size_);
             }
@@ -141,14 +141,14 @@ namespace boost { namespace numeric { namespace ublas {
                         for (pointer d = data; d != data + size; ++d)
                             new (d) value_type;
 #endif
-                    }                    
+                    }
                 }
                 else
                     data = 0;
                 if (size_) {
                     const iterator i_end = end();
                     for (iterator i = begin(); i != i_end; ++i) {
-                        iterator_destroy (i); 
+                        iterator_destroy (i);
                     }
                     alloc_.deallocate (data_, size_);
                 }
@@ -165,7 +165,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, value_type init) {
             resize_internal (size, init, true);
         }
-                    
+
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -309,7 +309,7 @@ namespace boost { namespace numeric { namespace ublas {
             // ISSUE elements should be copy constructed here, but we must copy instead as already default constructed
             std::copy (c.data_, c.data_ + c.size_, data_);
         }
-        
+
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
@@ -351,7 +351,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        bounded_array &assign_temporary (bounded_array &a) { 
+        bounded_array &assign_temporary (bounded_array &a) {
             *this = a;
             return *this;
         }
@@ -1069,7 +1069,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const basic_slice &s) const {
-            return start_ == s.start_ && stride_ == s.stride_ && size_ == s.size_; 
+            return start_ == s.start_ && stride_ == s.stride_ && size_ == s.size_;
         }
         BOOST_UBLAS_INLINE
         bool operator != (const basic_slice &s) const {

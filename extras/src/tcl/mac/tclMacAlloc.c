@@ -56,7 +56,7 @@ static int tclUseMemTracking = 0; /* Are we tracking memory allocations?
 								   * is no longer necessary, as we can use
 								   * temporary memory which is freed by the
 								   * OS after a quit or crash. */
-								   
+
 static size_t tclExtraHdlSize = 0; /* Size of extra memory allocated at the start
 									* of each block when using memory tracking
 									* ( == 0 otherwise) */
@@ -165,12 +165,12 @@ TclpSysAlloc(
     ListEl * newMemoryRecord;
 	int isSysMem = 0;
 	static int initialized=0;
-	
+
 	if (!initialized) {
 	long response = 0;
 	OSErr err = noErr;
 	int useTempMem = 0;
-	
+
 	/* Check if we can use temporary memory */
 	initialized=1;
 	err = Gestalt(gestaltOSAttr, &response);
@@ -182,7 +182,7 @@ TclpSysAlloc(
 	    tclExtraHdlSize = sizeof(ListEl);
 	    /*
 	     * We are allocating memory directly from the system
-	     * heap. We need to install an exit handle 
+	     * heap. We need to install an exit handle
 	     * to ensure the memory is cleaned up.
 	     */
 	    TclMacInstallExitToShellPatch(CleanUpExitProc);
@@ -267,7 +267,7 @@ TclpSysAlloc(
 	newMemoryRecord->next->prec=newMemoryRecord;
 	}
 	}
-	
+
     return (*hand + tclExtraHdlSize);
 }
 

@@ -3,7 +3,7 @@
 
 class TestImageImpl;
 
-class TestImage 
+class TestImage
 {
 public:
 	TestImage();

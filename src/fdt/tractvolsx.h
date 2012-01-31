@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -92,7 +92,7 @@ namespace TRACTVOLSX{
       bool init_sample;
       int fibst;
       bool usef;
-      
+
     public:
       //constructors::
       Tractvolsx(const bool& usefin=false):opts(probtrackxOptions::getInstance()),init_sample(true),fibst(0),usef(usefin){}
@@ -106,14 +106,14 @@ namespace TRACTVOLSX{
 	    delete fsamples[m];
       }
       inline int nfibres()const{return (int)thsamples.size();}
-      
+
       void reset(const int& fibst_in){
 	init_sample=true;
 	fibst=fibst_in;
       }
       //Initialise
       void initialise(const string& basename){
-	
+
 
 	if(fsl_imageexists(basename+"_thsamples")){
 	  volume4D<float> *tmpthptr= new volume4D<float>;
@@ -155,12 +155,12 @@ namespace TRACTVOLSX{
 	      fib_existed=false;
 	    }
 	  }
-	  
+
 	}
 	cout<<"7"<<endl;
       }
-      
-      
+
+
       ColumnVector sample(const float& x,const float& y,const float&z,const float& r_x,const float& r_y,const float& r_z,
 			  float& prefer_x,float& prefer_y,float& prefer_z){
 
@@ -168,45 +168,45 @@ namespace TRACTVOLSX{
 	int cx =(int) ceil(x),fx=(int) floor(x);
 	int cy =(int) ceil(y),fy=(int) floor(y);
 	int cz =(int) ceil(z),fz=(int) floor(z);
-	
+
 	//cerr<<x<<" "<<y<<" "<<z<<" "<<cx<<" "<<cy<<" "<<cz<<" "<<fx<<" "<<fy<<" "<<fz<<endl;
 	float pcx,pcy,pcz;
 	if(cx==fx)
 	  pcx=1;
 	else
 	  pcx=(x-fx)/(cx-fx);
-	
+
 	if(cy==fy)
 	  pcy=1;
 	else
 	  pcy=(y-fy)/(cy-fy);
-	
+
 	if(cz==fz)
 	  pcz=1;
 	else
 	  pcz=(z-fz)/(cz-fz);
-	
+
 	///////new xyz values from probabilistic interpolation
-	int newx,newy,newz; 
+	int newx,newy,newz;
 	float tmp=(float)rand()/float(RAND_MAX);
 	if(tmp>pcx)
 	  newx=fx;
 	else
 	  newx=cx;
-	
+
 	tmp=(float)rand()/float(RAND_MAX);
 	if(tmp>pcy)
 	  newy=fy;
 	else
 	  newy=cy;
-	
+
 	tmp=(float)rand()/float(RAND_MAX);
 	if(tmp>pcz)
 	  newz=fz;
 	else
 	  newz=cz;
- 
-	ColumnVector th_ph_f(3);	
+
+	ColumnVector th_ph_f(3);
 	float samp=(float)rand()/float(RAND_MAX);
 	samp=round(samp*((*thsamples[0]).tsize()-1));
 	float theta=0,phi=0;
@@ -216,39 +216,39 @@ namespace TRACTVOLSX{
 	  if(init_sample){//go for the specified fibre on the first jump or generate at random
 	    if(opts.randfib.value()==1){//this generates startfib at random (except for fibres where f<fibthresh)
 	      vector<int> fibvec;
-	      for(unsigned int fib=0;fib<thsamples.size();fib++){	    
+	      for(unsigned int fib=0;fib<thsamples.size();fib++){
 		float ft=(*fsamples[fib])(int(newx),int(newy),int(newz),int(samp));
 		if(ft>opts.fibthresh.value()){
 		  fibvec.push_back(fib);
 		}
 	      }
-	      
+
 	      if(fibvec.size()==0){
 		fibst=0;
 	      }
 	      else{
 		float rtmp=(float)rand()/float(RAND_MAX) * float(fibvec.size()-1);
-		fibst = fibvec[ (int)round(rtmp) ];	      
+		fibst = fibvec[ (int)round(rtmp) ];
 	      }
-	      
+
 	    }
-	    else if(opts.randfib.value()==2){ //this generates startfib with probability proportional to f (except for fibres where f<fibthresh). 
-	      //this chooses at random but in proportion to fsamples. 
+	    else if(opts.randfib.value()==2){ //this generates startfib with probability proportional to f (except for fibres where f<fibthresh).
+	      //this chooses at random but in proportion to fsamples.
 	      float fsumtmp=0;
-	      for(unsigned int fib=0;fib<thsamples.size();fib++){	    
+	      for(unsigned int fib=0;fib<thsamples.size();fib++){
 		float ft=(*fsamples[fib])(int(newx),int(newy),int(newz),int(samp));
 		if(ft>opts.fibthresh.value()){
-		  fsumtmp+=ft;  //count total weight of f in this voxel. 
+		  fsumtmp+=ft;  //count total weight of f in this voxel.
 		}
 	      }
-	      
+
 	      if(fsumtmp==0){
 		fibst=0;
 	      }
 	      else{
 		float ft,fsumtmp2=0;
 		float rtmp=fsumtmp * (float)rand()/float(RAND_MAX);
-		
+
 		for(unsigned int fib=0;fib<thsamples.size();fib++){
 		  ft=(*fsamples[fib])(int(newx),int(newy),int(newz),int(samp));
 		  if(ft>opts.fibthresh.value())
@@ -257,9 +257,9 @@ namespace TRACTVOLSX{
 		    fibst=(int)fib;
 		    break;
 		  }
-		}		
+		}
 	      }
-	    }  
+	    }
 
 	    theta=(*thsamples[fibst])(int(newx),int(newy),int(newz),int(samp));
 	    phi=(*phsamples[fibst])(int(newx),int(newy),int(newz),int(samp));
@@ -280,9 +280,9 @@ namespace TRACTVOLSX{
 		  phi=phtmp;
 		  fibind=fib;
 		}
-		
+
 	      }
-	      
+
 	    }
 	    if(dotmax==0){
 	      theta=(*thsamples[0])(int(newx),int(newy),int(newz),int(samp));
@@ -295,15 +295,15 @@ namespace TRACTVOLSX{
 	  phi=(*phsamples[0])(int(newx),int(newy),int(newz),int(samp));
 	}
 
-	
+
 	float f;
-	
+
 	if(usef){
 	  f = (*fsamples[fibind])(int(newx),int(newy),int(newz),int(samp));
 	}
 	else
 	  f=1;
-	
+
 	th_ph_f(1)=theta;
 	th_ph_f(2)=phi;
 	th_ph_f(3)=f;

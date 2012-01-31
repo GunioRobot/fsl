@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -31,14 +31,14 @@ namespace boost{
 
 template <class BidiIterator, class Allocator>
 class match_results
-{ 
+{
 private:
 #ifndef BOOST_NO_STD_ALLOCATOR
    typedef          std::vector<sub_match<BidiIterator>, Allocator> vector_type;
 #else
    typedef          std::vector<sub_match<BidiIterator> >           vector_type;
 #endif
-public: 
+public:
    typedef          sub_match<BidiIterator>                         value_type;
 #if  !defined(BOOST_NO_STD_ALLOCATOR) && !(defined(BOOST_MSVC) && defined(_STLPORT_VERSION))
    typedef typename Allocator::const_reference                              const_reference;
@@ -304,7 +304,7 @@ void BOOST_REGEX_CALL match_results<BidiIterator, Allocator>::maybe_assign(const
    // Distances are measured from the start of *this* match, unless this isn't
    // a valid match in which case we use the start of the whole sequence.  Note that
    // no subsequent match-candidate can ever be to the left of the first match found.
-   // This ensures that when we are using bidirectional iterators, that distances 
+   // This ensures that when we are using bidirectional iterators, that distances
    // measured are as short as possible, and therefore as efficient as possible
    // to compute.  Finally note that we don't use the "matched" data member to test
    // whether a sub-expression is a valid match, because partial matches set this

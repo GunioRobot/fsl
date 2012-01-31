@@ -280,8 +280,8 @@ template <typename From, typename To>
 struct is_convertible_impl_dispatch_base
 {
 #ifndef __HP_aCC
-   typedef is_convertible_impl_select< 
-      ::boost::is_arithmetic<From>::value, 
+   typedef is_convertible_impl_select<
+      ::boost::is_arithmetic<From>::value,
       ::boost::is_arithmetic<To>::value,
 #ifndef BOOST_NO_IS_ABSTRACT
       ::boost::is_abstract<To>::value
@@ -297,7 +297,7 @@ struct is_convertible_impl_dispatch_base
 };
 
 template <typename From, typename To>
-struct is_convertible_impl_dispatch 
+struct is_convertible_impl_dispatch
    : public is_convertible_impl_dispatch_base<From, To>::type
 {};
 

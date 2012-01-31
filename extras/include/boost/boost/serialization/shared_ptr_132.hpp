@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // shared_ptr.hpp: serialization for boost shared pointer
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -39,7 +39,7 @@ BOOST_IS_ABSTRACT(boost_132::detail::sp_counted_base)
 // Maintain a couple of lists of loaded shared pointers of the old previous
 // version (1.32)
 
-namespace boost_132 { 
+namespace boost_132 {
 namespace serialization {
 namespace detail {
 
@@ -73,7 +73,7 @@ public:
 /////////////////////////////////////////////////////////////
 // sp_counted_base_impl serialization
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class P, class D>
@@ -86,7 +86,7 @@ inline void serialize(
     // its polymorphic base
     boost::serialization::void_cast_register<
         boost_132::detail::sp_counted_base_impl<P, D>,
-        boost_132::detail::sp_counted_base 
+        boost_132::detail::sp_counted_base
     >(
         static_cast<boost_132::detail::sp_counted_base_impl<P, D> *>(NULL),
         static_cast<boost_132::detail::sp_counted_base *>(NULL)
@@ -96,7 +96,7 @@ inline void serialize(
 template<class Archive, class P, class D>
 inline void save_construct_data(
     Archive & ar,
-    const boost_132::detail::sp_counted_base_impl<P, D> *t, 
+    const boost_132::detail::sp_counted_base_impl<P, D> *t,
     const unsigned int /* file_version */
 ){
     // variables used for construction
@@ -106,7 +106,7 @@ inline void save_construct_data(
 template<class Archive, class P, class D>
 inline void load_construct_data(
     Archive & ar,
-    boost_132::detail::sp_counted_base_impl<P, D> * t, 
+    boost_132::detail::sp_counted_base_impl<P, D> * t,
     const unsigned int /* file_version */
 ){
     P ptr_;
@@ -115,15 +115,15 @@ inline void load_construct_data(
     // note: the original ::new... above is replaced by the one here.  This one
     // creates all new objects with a null_deleter so that after the archive
     // is finished loading and the shared_ptrs are destroyed - the underlying
-    // raw pointers are NOT deleted.  This is necessary as they are used by the 
+    // raw pointers are NOT deleted.  This is necessary as they are used by the
     // new system as well.
     ::new(t)boost_132::detail::sp_counted_base_impl<
-        P, 
+        P,
         boost_132::serialization::detail::null_deleter
     >(
         ptr_,  boost_132::serialization::detail::null_deleter()
     ); // placement new
-    // compensate for that fact that a new shared count always is 
+    // compensate for that fact that a new shared count always is
     // initialized with one. the add_ref_copy below will increment it
     // every time its serialized so without this adjustment
     // the use and weak counts will be off by one.
@@ -136,7 +136,7 @@ inline void load_construct_data(
 /////////////////////////////////////////////////////////////
 // shared_count serialization
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive>
@@ -167,7 +167,7 @@ BOOST_SERIALIZATION_SPLIT_FREE(boost_132::detail::shared_count)
 /////////////////////////////////////////////////////////////
 // implement serialization for shared_ptr<T>
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class T>
@@ -218,7 +218,7 @@ inline void serialize(
 } // serialization
 } // namespace boost
 
-// note: change below uses null_deleter 
+// note: change below uses null_deleter
 // This macro is used to export GUIDS for shared pointers to allow
 // the serialization system to export them properly. David Tonge
 #define BOOST_SHARED_POINTER_EXPORT_GUID(T, K)                     \

@@ -66,7 +66,7 @@ typedef struct TkMacWindowList {
 /*
  * Defines use for the flags field of the MacDrawable data structure.
  */
- 
+
 #define TK_SCROLLBAR_GROW	1
 #define TK_CLIP_INVALID		2
 #define TK_HOST_EXISTS		4
@@ -76,7 +76,7 @@ typedef struct TkMacWindowList {
  * I am reserving TK_EMBEDDED = 0x100 in the MacDrawable flags
  * This is defined in tk.h. We need to duplicate the TK_EMBEDDED flag in the
  * TkWindow structure for the window,  but in the MacWin.  This way we can still tell
- * what the correct port is after the TKWindow  structure has been freed.  This 
+ * what the correct port is after the TKWindow  structure has been freed.  This
  * actually happens when you bind destroy of a toplevel to Destroy of a child.
  */
 
@@ -101,21 +101,21 @@ extern TkMacEmbedHandler *gMacEmbedHandler;
 /*
  * Defines used for TkMacInvalidateWindow
  */
- 
+
 #define TK_WINDOW_ONLY 0
 #define TK_PARENT_WINDOW 1
 
 /*
  * Accessor for the privatePtr flags field for the TK_HOST_EXISTS field
  */
- 
+
 #define TkMacHostToplevelExists(tkwin) \
     (((TkWindow *) (tkwin))->privatePtr->toplevel->flags & TK_HOST_EXISTS)
 
 /*
  * Defines use for the flags argument to TkGenWMConfigureEvent.
  */
- 
+
 #define TK_LOCATION_CHANGED	1
 #define TK_SIZE_CHANGED		2
 #define TK_BOTH_CHANGED		3
@@ -124,13 +124,13 @@ extern TkMacEmbedHandler *gMacEmbedHandler;
  * Variables shared among various Mac Tk modules but are not
  * exported to the outside world.
  */
- 
+
 extern int tkMacAppInFront;
 
 /*
  * Globals shared among Macintosh Tk
  */
- 
+
 extern MenuHandle tkAppleMenu;		/* Handle to the Apple Menu */
 extern MenuHandle tkFileMenu;		/* Handles to menus */
 extern MenuHandle tkEditMenu;		/* Handles to menus */

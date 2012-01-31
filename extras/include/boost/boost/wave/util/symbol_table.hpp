@@ -20,15 +20,15 @@ namespace util {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The symbol_table class is used for the storage of defined macros. 
+//  The symbol_table class is used for the storage of defined macros.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename StringT, typename MacroDefT>
-struct symbol_table 
-:   public std::map<StringT, boost::shared_ptr<MacroDefT> > 
+struct symbol_table
+:   public std::map<StringT, boost::shared_ptr<MacroDefT> >
 {
-    symbol_table(long uid_) 
+    symbol_table(long uid_)
     {}
 };
 

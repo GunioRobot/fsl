@@ -25,7 +25,7 @@
 # include <boost/mpl/if.hpp>
 # include <boost/mpl/or.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {
@@ -33,7 +33,7 @@ namespace detail
   struct object_manager_to_python_value
   {
       typedef typename value_arg<T>::type argument_type;
-    
+
       PyObject* operator()(argument_type) const;
 
       // This information helps make_getter() decide whether to try to
@@ -42,12 +42,12 @@ namespace detail
       BOOST_STATIC_CONSTANT(bool, uses_registry = false);
   };
 
-  
+
   template <class T>
   struct registry_to_python_value
   {
       typedef typename value_arg<T>::type argument_type;
-    
+
       PyObject* operator()(argument_type) const;
 
       // This information helps make_getter() decide whether to try to
@@ -60,7 +60,7 @@ namespace detail
   struct shared_ptr_to_python_value
   {
       typedef typename value_arg<T>::type argument_type;
-    
+
       PyObject* operator()(argument_type) const;
 
       // This information helps make_getter() decide whether to try to
@@ -88,7 +88,7 @@ struct to_python_value
 };
 
 //
-// implementation 
+// implementation
 //
 namespace detail
 {
@@ -99,7 +99,7 @@ namespace detail
 # if BOOST_WORKAROUND(__GNUC__, < 3)
       // suppresses an ICE, somehow
       (void)r::converters;
-# endif 
+# endif
       return converter::registered<argument_type>::converters.to_python(&x);
   }
 

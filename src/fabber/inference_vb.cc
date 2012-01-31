@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -69,8 +69,8 @@
 #include "inference_vb.h"
 #include "convergence.h"
 
-void VariationalBayesInferenceTechnique::Setup(ArgsType& args) 
-{ 
+void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
+{
   Tracer_Plus tr("VariationalBayesInferenceTechnique::Setup");
 
   // Call ancestor, which does most of the real work
@@ -81,20 +81,20 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
   MVNDist* loadPosterior = new MVNDist( model->NumParams() );
   NoiseParams* loadNoisePrior = noise->NewParams();
   NoiseParams* loadNoisePosterior = noise->NewParams();
-  
+
   string filePrior = args.ReadWithDefault("fwd-initial-prior", "modeldefault");
   string filePosterior = args.ReadWithDefault("fwd-initial-posterior", "modeldefault");
   if (filePrior == "modeldefault" || filePosterior == "modeldefault")
       model->HardcodedInitialDists(*loadPrior, *loadPosterior);
   if (filePrior != "modeldefault") loadPrior->Load(filePrior);
   if (filePosterior != "modeldefault") loadPosterior->Load(filePosterior);
- 
-  if ( (loadPosterior->GetSize() != model->NumParams()) 
+
+  if ( (loadPosterior->GetSize() != model->NumParams())
     || (loadPrior->GetSize() != model->NumParams()) )
-      throw Invalid_option("Size mismatch: model wants " 
+      throw Invalid_option("Size mismatch: model wants "
       	+ stringify(model->NumParams())
-	+ ", initial prior (" + filePrior + ") is " 
-	+ stringify(loadPrior->GetSize()) 
+	+ ", initial prior (" + filePrior + ") is "
+	+ stringify(loadPrior->GetSize())
 	+ ", initial posterior (" + filePosterior + ") is "
         + stringify(loadPosterior->GetSize())
 	+ "\n");
@@ -103,16 +103,16 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
   filePosterior = args.ReadWithDefault("noise-initial-posterior", "modeldefault");
   if (filePrior == "modeldefault" || filePosterior == "modeldefault")
       noise->HardcodedInitialDists(*loadNoisePrior, *loadNoisePosterior);
-  if (filePrior != "modeldefault") 
+  if (filePrior != "modeldefault")
       loadNoisePrior->InputFromMVN( MVNDist(filePrior) );
-  if (filePosterior != "modeldefault") 
+  if (filePosterior != "modeldefault")
       loadNoisePosterior->InputFromMVN( MVNDist(filePosterior) );
 
   // Make these distributions constant:
   assert(initialFwdPrior == NULL);
-  assert(initialFwdPosterior == NULL);    
+  assert(initialFwdPosterior == NULL);
   assert(initialNoisePrior == NULL);
-  assert(initialNoisePosterior == NULL);    
+  assert(initialNoisePosterior == NULL);
   initialFwdPrior = loadPrior;
   initialFwdPosterior = loadPosterior;
   initialNoisePrior = loadNoisePrior;
@@ -120,17 +120,17 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
   loadPrior = loadPosterior = NULL;
   loadNoisePrior = loadNoisePosterior = NULL; // now, only accessible as consts.
 
-  // Resume from a previous run? 
+  // Resume from a previous run?
   continueFromFile = args.ReadWithDefault("continue-from-mvn", "");
   if (continueFromFile != "")
   {
     // Won't need these any more.  They don't hurt, but why leave them around?
     // They can only cause trouble (if used by mistake).
     delete initialFwdPosterior; initialFwdPosterior = NULL;
-    
+
     if ( !args.ReadBool("continue-fwd-only") )
     {
-        delete initialNoisePosterior; 
+        delete initialNoisePosterior;
         initialNoisePosterior = NULL;
     }
   }
@@ -141,11 +141,11 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
   // Maximum iterations allowed:
   string maxIterations = args.ReadWithDefault("max-iterations","10");
   if (maxIterations.find_first_not_of("0123456789") != string::npos)
-    throw Invalid_option("--convergence=its=?? parameter must be a positive number");    
+    throw Invalid_option("--convergence=its=?? parameter must be a positive number");
   int its = atol(maxIterations.c_str());
   if (its<=0)
     throw Invalid_option("--convergence=its=?? paramter must be positive");
-  
+
   // Figure out convergence-testing method:
   string convergence = args.ReadWithDefault("convergence", "maxits");
   if (convergence == "maxits")
@@ -157,7 +157,7 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
   else if (convergence == "trialmode")
     conv = new TrialModeConvergenceDetector(its, 10, 0.01);
   else
-    throw Invalid_option("Unrecognized convergence detector: '" 
+    throw Invalid_option("Unrecognized convergence detector: '"
                            + convergence + "'");
 
   // Figure out if F needs to be calculated every iteration
@@ -174,21 +174,21 @@ void VariationalBayesInferenceTechnique::Setup(ArgsType& args)
 	<< "Check log for 'Going on to the next voxel' messages.\n"
 	<< "Note that you should get very few (if any) exceptions like this;"
 	<< "they are probably due to bugs or a numerically unstable model.";
-  
+
 }
 
-void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData) 
+void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 {
   Tracer_Plus tr("VariationalBayesInferenceTechnique::DoCalculations");
-  
+
   const Matrix& data = allData.GetVoxelData();
   // Rows are volumes
   // Columns are (time) series
   // num Rows is size of (time) series
-  // num Cols is size of volumes       
+  // num Cols is size of volumes
   int Nvoxels = data.Ncols();
   if (data.Nrows() != model->NumOutputs())
-    throw Invalid_option("Data length (" 
+    throw Invalid_option("Data length ("
       + stringify(data.Nrows())
       + ") does not match model's output length ("
       + stringify(model->NumOutputs())
@@ -206,33 +206,33 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
   if (continuingFromFile)
   {
     MVNDist::Load(continueFromDists, continueFromFile, allData.GetMask());
-  } 
+  }
 
   if (lockedLinearFile != "")
     throw Invalid_option("The option --locked-linear-from-mvn doesn't work with --method=vb yet, but should be pretty easy to implement.\n");
-    
+
 
   const int nFwdParams = initialFwdPrior->GetSize();
-  const int nNoiseParams = initialNoisePrior->OutputAsMVN().GetSize(); 
+  const int nNoiseParams = initialNoisePrior->OutputAsMVN().GetSize();
 
   // Reverse order (to test that everything is being properly reset):
-  //for (int voxel = Nvoxels; voxel >=1; voxel--) 
-  
+  //for (int voxel = Nvoxels; voxel >=1; voxel--)
+
   for (int voxel = 1; voxel <= Nvoxels; voxel++)
     {
       ColumnVector y = data.Column(voxel);
       model->pass_in_data( y );
       NoiseParams* noiseVox = NULL;
-      
+
       // if (continuingFromFile)
-      if (initialNoisePosterior == NULL) // continuing noise params from file 
+      if (initialNoisePosterior == NULL) // continuing noise params from file
       {
         assert(continuingFromFile);
         assert(continueFromDists.at(voxel-1)->GetSize() == nFwdParams+nNoiseParams);
         noiseVox = noise->NewParams();
         noiseVox->InputFromMVN( continueFromDists.at(voxel-1)
             ->GetSubmatrix(nFwdParams+1, nFwdParams+nNoiseParams) );
-      }  
+      }
       else
       {
         noiseVox = initialNoisePosterior->Clone();
@@ -241,8 +241,8 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
       }
       const NoiseParams* noiseVoxPrior = initialNoisePrior;
       NoiseParams* const noiseVoxSave = noiseVox->Clone();
-      
-      LOG_ERR("  Voxel " << voxel << " of " << Nvoxels << endl); 
+
+      LOG_ERR("  Voxel " << voxel << " of " << Nvoxels << endl);
       //  << " sumsquares = " << (y.t() * y).AsScalar() << endl;
       double F = 1234.5678;
 
@@ -254,19 +254,19 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
         fwdPosterior = continueFromDists.at(voxel-1)->GetSubmatrix(1, nFwdParams);
       }
       else
-      { 
+      {
         assert(initialFwdPosterior != NULL);
         fwdPosterior = *initialFwdPosterior;
       }
       MVNDist fwdPosteriorSave(fwdPosterior);
 
-      
+
       LinearizedFwdModel linear( model );
-      
+
       // Setup for ARD (fwdmodel will decide if there is anything to be done)
       double Fard = 0;
       model->SetupARD( fwdPosterior, fwdPrior, Fard );
-      
+
 
       try
 	{
@@ -276,16 +276,16 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	  noise->Precalculate( *noiseVox, *noiseVoxPrior, y );
 
 	  int iteration = 0; //count the iterations
-	  do 
+	  do
 	    {
-	      if (needF) { 
-		F = noise->CalcFreeEnergy( *noiseVox, 
+	      if (needF) {
+		F = noise->CalcFreeEnergy( *noiseVox,
 					   *noiseVoxPrior, fwdPosterior, fwdPrior, linear, y);
 		F = F + Fard; }
-	      if (printF) 
+	      if (printF)
 		LOG << "      Fbefore == " << F << endl;
 
- 
+
               // Save old values if called for
 	      if ( conv->NeedSave() )
               {
@@ -300,23 +300,23 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	      noise->UpdateTheta( *noiseVox, fwdPosterior, fwdPrior, linear, y );
 
 
-      
+
 	      if (needF) {
-		F = noise->CalcFreeEnergy( *noiseVox, 
+		F = noise->CalcFreeEnergy( *noiseVox,
 					   *noiseVoxPrior, fwdPosterior, fwdPrior, linear, y);
 		F = F + Fard; }
-	      if (printF) 
+	      if (printF)
 		LOG << "      Ftheta == " << F << endl;
-	      
-	      
+
+
 	      // Alpha & Phi updates
 	      noise->UpdateNoise( *noiseVox, *noiseVoxPrior, fwdPosterior, linear, y );
 
 	      if (needF) {
-		F = noise->CalcFreeEnergy( *noiseVox, 
+		F = noise->CalcFreeEnergy( *noiseVox,
 					   *noiseVoxPrior, fwdPosterior, fwdPrior, linear, y);
 		F = F + Fard; }
-	      if (printF) 
+	      if (printF)
 	      LOG << "      Fphi == " << F << endl;
 
 	      // Test of NoiseModel cloning:
@@ -325,17 +325,17 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	      // Linearization update
 	      // Update the linear model before doing Free eneergy calculation (and ready for next round of theta and phi updates)
 	      linear.ReCentre( fwdPosterior.means );
-	      
-	      
+
+
 	      if (needF) {
-		F = noise->CalcFreeEnergy( *noiseVox, 
+		F = noise->CalcFreeEnergy( *noiseVox,
 					   *noiseVoxPrior, fwdPosterior, fwdPrior, linear, y);
 		F = F + Fard; }
-	      if (printF) 
+	      if (printF)
 		LOG << "      Fnoise == " << F << endl;
 
 	      iteration++;
-	    }           
+	    }
 	  while ( !conv->Test( F ) );
 
 	  // Revert to old values at last stage if required
@@ -345,7 +345,7 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
             fwdPosterior = fwdPosteriorSave;
 	  }
 	  conv->DumpTo(LOG, "    ");
-	} 
+	}
       catch (const overflow_error& e)
 	{
 	  LOG_ERR("    Went infinite!  Reason:" << endl
@@ -359,7 +359,7 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	  LOG_ERR("    NEWMAT Exception in this voxel:\n"
 		  << Exception::what() << endl);
 	  if (haltOnBadVoxel) throw;
-	  LOG_ERR("    Going on to the next voxel." << endl);  
+	  LOG_ERR("    Going on to the next voxel." << endl);
 	}
       catch (...)
 	{
@@ -368,12 +368,12 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	  if (haltOnBadVoxel) throw;
 	  LOG_ERR("    Going on to the next voxel" << endl);
 	}
-      
+
       try {
 
 	LOG << "    Final parameter estimates are:" << endl;
 	linear.DumpParameters(fwdPosterior.means, "      ");
-	
+
 	assert(resultMVNs.at(voxel-1) == NULL);
 	resultMVNs.at(voxel-1) = new MVNDist(
 	  fwdPosterior, noiseVox->OutputAsMVN() );
@@ -392,7 +392,7 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
 	if (needF)
 	  resultFs.at(voxel-1) = F;
       }
-      
+
       delete noiseVox; noiseVox = NULL;
       delete noiseVoxSave;
     }
@@ -404,8 +404,8 @@ void VariationalBayesInferenceTechnique::DoCalculations(const DataSet& allData)
     }
 }
 
-VariationalBayesInferenceTechnique::~VariationalBayesInferenceTechnique() 
-{ 
+VariationalBayesInferenceTechnique::~VariationalBayesInferenceTechnique()
+{
   delete conv;
   delete initialFwdPrior;
   delete initialFwdPosterior;

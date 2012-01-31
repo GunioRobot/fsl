@@ -312,21 +312,21 @@ if test "$withval" != no; then
       [LIBS="-lpng12 $LIBS"
        FEATURES="GD_PNG $FEATURES"
        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-      [LDFLAGS="$_ldflags"  
+      [LDFLAGS="$_ldflags"
        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
   elif test -n "$LIBPNG_CONFIG"; then
     AC_CHECK_LIB(png,png_create_read_struct,
-      [LIBS="-lpng $LIBS" 
+      [LIBS="-lpng $LIBS"
        FEATURES="GD_PNG $FEATURES"
        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-      [LDFLAGS="$_ldflags"  
+      [LDFLAGS="$_ldflags"
        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
   else
     AC_CHECK_LIB(png,png_create_read_struct,
-      [LIBS="-lpng $LIBS" 
+      [LIBS="-lpng $LIBS"
        FEATURES="GD_PNG $FEATURES"
        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-      [LDFLAGS="$_ldflags"  
+      [LDFLAGS="$_ldflags"
        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
   fi
 else
@@ -334,11 +334,11 @@ else
   AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])
 fi
 
-#TBB: png12's png_create_read_struct is just as good 
-#2.0.23: should be = not ==  
+#TBB: png12's png_create_read_struct is just as good
+#2.0.23: should be = not ==
 if test "$ac_cv_lib_png12_png_create_read_struct" = yes; then
   ac_cv_lib_png_png_create_read_struct=yes
-fi 
+fi
 
 dnl FreeType configure tests snarfed from libwmf ..
 AC_ARG_WITH(freetype,dnl
@@ -381,7 +381,7 @@ if test "$withval" != no; then
   LDFLAGS="$libft_LDFLAGS $LDFLAGS"
   SAVE_FEATURES=$FEATURES
   AC_CHECK_LIB(freetype,FT_Init_FreeType,
-    [LIBS="-lfreetype $LIBS" 
+    [LIBS="-lfreetype $LIBS"
      FEATURES="GD_FREETYPE $FEATURES"
      AC_DEFINE(HAVE_LIBFREETYPE, 1, [ Define if you have the freetype library. ])],
     [LDFLAGS="$_ldflags"
@@ -410,7 +410,7 @@ AC_ARG_WITH(fontconfig,dnl
 
 if test "$withval" != no; then
   AC_CHECK_LIB(fontconfig,FcInit,
-    [LIBS="-lfontconfig $LIBS" 
+    [LIBS="-lfontconfig $LIBS"
      FEATURES="GD_FONTCONFIG $FEATURES"
      AC_DEFINE(HAVE_LIBFONTCONFIG, 1, [ Define if you have the fontconfig library. ])])
 else
@@ -428,7 +428,7 @@ AC_ARG_WITH(jpeg,dnl
 
 if test "$withval" != no; then
   AC_CHECK_LIB(jpeg,jpeg_set_defaults,
-    [LIBS="-ljpeg $LIBS" 
+    [LIBS="-ljpeg $LIBS"
      FEATURES="GD_JPEG $FEATURES"
      AC_DEFINE(HAVE_LIBJPEG, 1, [ Define if you have the jpeg library. ])])
 else

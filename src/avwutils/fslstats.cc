@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -74,8 +74,8 @@
 using namespace NEWIMAGE;
 
 void print_usage(const string& progname) {
-  cout << "Usage: fslstats [-t] <input> [options]" << endl << endl; 
-  cout << "-t will give a separate output line for each 3D volume of a 4D timeseries" << endl; 
+  cout << "Usage: fslstats [-t] <input> [options]" << endl << endl;
+  cout << "-t will give a separate output line for each 3D volume of a 4D timeseries" << endl;
   cout << "Note - options are applied in order, e.g. -M -l 10 -M will report the non-zero mean, apply a threshold and then report the new nonzero mean" << endl << endl;
   cout << "-l <lthresh> : set lower threshold" << endl;
   cout << "-u <uthresh> : set upper threshold" << endl;
@@ -99,7 +99,7 @@ void print_usage(const string& progname) {
   cout << "-a           : use absolute values of all image intensities"<< endl;
   cout << "-n           : treat NaN or Inf as zero for subsequent stats" << endl;
   cout << "-k <mask>    : use the specified image (filename) for masking - overrides lower and upper thresholds" << endl;
-  cout << "-h <nbins>   : output a histogram (for the thresholded/masked voxels only) with nbins" << endl; 
+  cout << "-h <nbins>   : output a histogram (for the thresholded/masked voxels only) with nbins" << endl;
   cout << "-H <nbins> <min> <max>   : output a histogram (for the thresholded/masked voxels only) with nbins and histogram limits of min and max" << endl << endl;
   cout << "Note - thresholds are not inclusive ie lthresh<allowed<uthresh" << endl;
 }
@@ -176,30 +176,30 @@ double nonzerostddev(const volume4D<float>& vol)
 int generateNonZeroMask(const volume4D<float> &mask, volume4D<float> &masknz, const volume4D<float> &input)
 {
   masknz.reinitialize(mask.xsize(),mask.ysize(),mask.zsize(),input.tsize());
-  for (int t=input.mint(); t<=input.maxt(); t++) 
+  for (int t=input.mint(); t<=input.maxt(); t++)
     masknz[t]=((binarise(input[t],0.0f, 0.0f)-1.0f)*-1.0f*mask[t % mask.tsize()]);
   return 0;
 }
 
-int generate_masks(volume4D<float>& mask, volume4D<float>& masknz, const volume4D<float>& input, const float& lthr, const float& uthr) 
+int generate_masks(volume4D<float>& mask, volume4D<float>& masknz, const volume4D<float>& input, const float& lthr, const float& uthr)
 {
   mask = binarise(input,lthr,uthr,exclusive);
   return generateNonZeroMask(mask,masknz,input);
 }
 
-int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode) 
+int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
 {
-  cout.setf(ios::dec); 
-  cout.setf(ios::fixed, ios::floatfield); 
-  cout.setf(ios::left, ios::adjustfield); 
-  cout.precision(6);  
+  cout.setf(ios::dec);
+  cout.setf(ios::fixed, ios::floatfield);
+  cout.setf(ios::left, ios::adjustfield);
+  cout.precision(6);
 
   int nTimepoints(1);
   volume4D<float> vol, inputMaster;
   if ( timeseriesMode) {
     read_volume4D(inputMaster,argv[1]);
     nTimepoints=inputMaster.tsize();
-  } else 
+  } else
     read_volume4D(vol,argv[1]);
 
   for ( int timepoint=0; timepoint < nTimepoints ; timepoint++ )
@@ -208,9 +208,9 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       vol=inputMaster[timepoint];
     volume4D<float> mask, masknz;
     float lthr(vol.min()-1);
-    float uthr=(vol.max()+1);    
+    float uthr=(vol.max()+1);
     int narg(2);
- 
+
   while (narg<argc) {
     string sarg(argv[narg]);
     if (sarg=="-n") {
@@ -243,9 +243,9 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
 	coord(3) = vol.mincoordz();
       }
       coord = (vol[0].niftivox2newimagevox_mat()).i() * coord;
-      cout << MISCMATHS::round(coord(1)) << " " << 
+      cout << MISCMATHS::round(coord(1)) << " " <<
 	MISCMATHS::round(coord(2)) << " " << MISCMATHS::round(coord(3)) << " ";
-    } else if (sarg=="-x") { 
+    } else if (sarg=="-x") {
       ColumnVector coord(4);
       coord(4)=1.0;
       if (mask.nvoxels()>0) {
@@ -258,15 +258,15 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
 	coord(3) = vol.maxcoordz();
       }
       coord = (vol[0].niftivox2newimagevox_mat()).i() * coord;
-      cout << MISCMATHS::round(coord(1)) << " " << 
+      cout << MISCMATHS::round(coord(1)) << " " <<
 	MISCMATHS::round(coord(2)) << " " << MISCMATHS::round(coord(3)) << " ";
     } else if (sarg=="-w") {
-	if (masknz.nvoxels()<1) { //Need to generate non-zeromask 
-	  generate_masks(mask,masknz,vol,lthr,uthr); 
-	  vol*=mask; 
+	if (masknz.nvoxels()<1) { //Need to generate non-zeromask
+	  generate_masks(mask,masknz,vol,lthr,uthr);
+	  vol*=mask;
 	}
       int xmin=masknz.maxx(),xmax=masknz.minx(),ymin=masknz.maxy(),ymax=masknz.miny(),zmin=masknz.maxz(),zmax=masknz.minz(),tmin=masknz.maxt(),tmax=masknz.mint();
-      
+
       for(int t=masknz.mint();t<=masknz.maxt();t++) {
 	for(int z=masknz.minz();z<=masknz.maxz();z++) {
 	  for(int y=masknz.miny();y<=masknz.maxy();y++) {
@@ -305,8 +305,8 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       cout << xmin << " " << 1+xmax-xmin << " " << ymin << " " << 1+ymax-ymin << " " << zmin << " " << 1+zmax-zmin << " " << tmin << " " << 1+tmax-tmin << " ";
       } else if (sarg=="-e") {
 	if (mask.nvoxels()<1) {
-	  generate_masks(mask,masknz,vol,lthr,uthr); 
-	  vol*=mask; 
+	  generate_masks(mask,masknz,vol,lthr,uthr);
+	  vol*=mask;
 	}
       ColumnVector hist;
       int nbins=1000;
@@ -315,24 +315,24 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       double ntot = hist.Sum();
       for (int j=1; j<=nbins; j++) {
 	if (hist(j)>0) {
-	  entropy -= (hist(j)/ntot) * log(hist(j)/ntot);	
+	  entropy -= (hist(j)/ntot) * log(hist(j)/ntot);
 	}
       }
       entropy /= log((double) nbins);
       cout << entropy << " ";
-      } else if (sarg=="-E") { 
+      } else if (sarg=="-E") {
       ColumnVector hist;
       int nbins=1000;
       double entropy=0;
       if (mask.nvoxels()<1) {
-	generate_masks(mask,masknz,vol,lthr,uthr); 
-	vol*=mask; 
+	generate_masks(mask,masknz,vol,lthr,uthr);
+	vol*=mask;
       }
       hist = vol.histogram(nbins,masknz);
       double ntot = hist.Sum();
       for (int j=1; j<=nbins; j++) {
 	if (hist(j)>0) {
-	  entropy -= (hist(j)/ntot) * log(hist(j)/ntot);	
+	  entropy -= (hist(j)/ntot) * log(hist(j)/ntot);
 	}
       }
       entropy /= log((double) nbins);
@@ -358,10 +358,10 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
    	  mask.addvolume(mask[mask.maxt()]);
         }
       }
-      
+
       mask.binarise(0.5);
       generateNonZeroMask(mask,masknz,vol);
-        if (mask.tsize()!=1) vol*=mask; 
+        if (mask.tsize()!=1) vol*=mask;
 	else vol*=mask[0];
     } else if (sarg=="-l") {
       narg++;
@@ -387,7 +387,7 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       vol = abs(vol);
     } else if (sarg=="-v") {
       if (mask.nvoxels()>0) {
-	cout << (long int) mask.sum() << " " 
+	cout << (long int) mask.sum() << " "
 	     << mask.sum() * vol.xdim() * vol.ydim() * vol.zdim() << " ";
       } else {
 	cout << (long int) vol.nvoxels() * vol.tsize() << " "
@@ -395,12 +395,12 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       }
     } else if (sarg=="-V") {
       if (masknz.nvoxels()>0) {
-	cout << (long int) masknz.sum() << " " 
+	cout << (long int) masknz.sum() << " "
 	     << masknz.sum() * vol.xdim() * vol.ydim() * vol.zdim() << " ";
       } else {
 	long int nzvox;
 	nzvox = nonzerocount(vol);
-	cout << nzvox << " " 
+	cout << nzvox << " "
 	     << nzvox * vol.xdim() * vol.ydim() * vol.zdim() << " ";
       }
     } else if (sarg=="-d") {
@@ -426,7 +426,7 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
 	// convert from fsl mm to voxel to nifti sform coord
 	cog.SubMatrix(1,3,1,1) = vol[0].cog();
 	cog(4) = 1.0;
-	cog = vol[0].newimagevox2mm_mat() * cog; 
+	cog = vol[0].newimagevox2mm_mat() * cog;
 	cout << cog(1) << " " << cog(2) << " " << cog(3) << " " ;
     } else if (sarg=="-C") {
     ColumnVector cog(4);
@@ -450,7 +450,7 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
       }
       if (mask.nvoxels()>0) cout << vol.percentile((float) n/100.0, mask) << " ";
       else cout << vol.percentile((float) n/100.0) << " ";
-    } else if (sarg=="-P") { 
+    } else if (sarg=="-P") {
       float n;
       narg++;
       if (narg<argc) {
@@ -464,8 +464,8 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
     	exit(1);
       }
       if (mask.nvoxels()<1) {
-	generate_masks(mask,masknz,vol,lthr,uthr); 
-	vol*=mask; 
+	generate_masks(mask,masknz,vol,lthr,uthr);
+	vol*=mask;
       }
       cout << vol.percentile((float) n/100.0,masknz) << " ";
     } else if (sarg=="-h") {
@@ -526,7 +526,7 @@ int fmrib_main_float(int argc, char* argv[],const bool timeseriesMode)
 	cerr << "Unrecognised option: " << sarg << endl;
 	exit(3);
     }
-  
+
     narg++;
   }
   cout << endl;
@@ -548,12 +548,12 @@ int main(int argc,char *argv[])
     argc--;
     timeseriesMode=true;
   }
-  
+
 
   try {
-    if (argc < 3 ) { 
+    if (argc < 3 ) {
       print_usage(progname);
-      return 1; 
+      return 1;
     }
     retval = fmrib_main_float(argc,argv,timeseriesMode);
   } catch(std::exception &e) {
@@ -563,6 +563,6 @@ int main(int argc,char *argv[])
   }
 
   return retval;
-  
+
 }
 

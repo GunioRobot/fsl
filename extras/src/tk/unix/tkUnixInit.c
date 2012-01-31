@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixInit.c --
  *
  *	This file contains Unix-specific interpreter initialization
@@ -149,7 +149,7 @@ MacOSXGetLibraryPath(Tcl_Interp *interp)
     int foundInFramework = TCL_ERROR;
 #ifdef TK_FRAMEWORK
     char tkLibPath[PATH_MAX + 1];
-    foundInFramework = Tcl_MacOSXOpenVersionedBundleResources(interp, 
+    foundInFramework = Tcl_MacOSXOpenVersionedBundleResources(interp,
 	"com.tcltk.tklibrary", TK_FRAMEWORK_VERSION, 0, PATH_MAX, tkLibPath);
     if (tkLibPath[0] != '\0') {
         Tcl_SetVar(interp, "tk_library", tkLibPath, TCL_GLOBAL_ONLY);

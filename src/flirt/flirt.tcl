@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -92,7 +92,7 @@ proc flirt { w } {
     wm iconbitmap $w @${FSLDIR}/tcl/fmrib.xbm
     frame $w.f
 
-    TitleFrame $w.f.basic -relief groove 
+    TitleFrame $w.f.basic -relief groove
     set lfbasic [ $w.f.basic getframe ]
 
 	set PADY 3
@@ -102,7 +102,7 @@ proc flirt { w } {
 #}}}
     #{{{ number of secondary images
 
-TitleFrame $w.f.stats -relief groove 
+TitleFrame $w.f.stats -relief groove
 set lfstats [ $w.f.stats getframe ]
 
 set reg($w,nstats) 0
@@ -121,7 +121,7 @@ FileEntry  $w.f.ref -textvariable entries($w,1) -label "Reference image   " -tit
     #{{{ DOF
   LabelFrame $w.f.dof -text "  Model/DOF (input to ref)"
   optionMenu2 $w.f.dof.menu reg($w,dof) 2Dmenu  "   2D to 2D registration" 2D "Rigid Body (3 parameter model)" 3Dmenu "   3D to 3D registration" TRANS "Translation Only (3 parameter model)" 6 "Rigid Body (6 parameter model)" 7 "Global Rescale (7 parameter model)" 9 "Traditional (9 parameter model)" 12 "Affine (12 parameter model)"
-  pack $w.f.dof.menu 
+  pack $w.f.dof.menu
 
   $w.f.dof.menu.menu entryconfigure 0 -state disabled -background black
   $w.f.dof.menu.menu entryconfigure 2 -state disabled -background black
@@ -142,7 +142,7 @@ FileEntry  $w.f.test2 -textvariable entries($w,3) -label "Low res image     " -t
 # DOF 2
 LabelFrame $w.f.doftwo -text "  Model/DOF (lowres to highres)"
 optionMenu2 $w.f.doftwo.menu reg($w,doftwo) 2Dmenu  "   2D to 2D registration" 2D "Rigid Body (3 parameter model)" 3Dmenu "   3D to 3D registration" TRANS "Translation Only (3 parameter model)" 6 "Rigid Body (6 parameter model)" 7 "Global Rescale (7 parameter model)" 9 "Traditional (9 parameter model)" 12 "Affine (12 parameter model)"
-pack $w.f.doftwo.menu 
+pack $w.f.doftwo.menu
 
 $w.f.doftwo.menu.menu entryconfigure 0 -state disabled -background black
 $w.f.doftwo.menu.menu entryconfigure 2 -state disabled -background black
@@ -151,9 +151,9 @@ set reg($w,doftwo) 12
 #}}}
     #{{{ mode
 set reg($w,mode) 1
-LabelFrame $w.f.mode -text "Mode " 
+LabelFrame $w.f.mode -text "Mode "
 optionMenu2 $w.f.mode.menu  reg($w,mode)  -command "flirt:updatemode $w" 1 "Input $IG -> Reference image" 2 "Low res $IG -> High res $IG -> Reference image"
-pack $w.f.mode.menu 
+pack $w.f.mode.menu
 #}}}
     #{{{ output image
 
@@ -177,7 +177,7 @@ while { $i <= $reg($w,maxnstats) } {
 
     # ---- Optional stuff ----
 
-    collapsible frame $w.f.opts -title "Advanced Options"    
+    collapsible frame $w.f.opts -title "Advanced Options"
 
 
    NoteBook $w.nb -side top -bd 2 -tabpady {5 10} -arcradius 3
@@ -198,13 +198,13 @@ while { $i <= $reg($w,maxnstats) } {
     frame  $w.searchf
 
     label $w.searchf.angleslabel -text "Search Angles"
-    LabelSpinBox  $w.searchf.rxmin -label "X-axis (degrees): min " -textvariable reg($w,searchrxmin) -range {-180.0 180 1 } 
-    LabelSpinBox  $w.searchf.rxmax -label  "  max" -textvariable reg($w,searchrxmax) -range {-180.0 180 1 } 
-    LabelSpinBox  $w.searchf.rymin -label "Y-axis (degrees): min " -textvariable reg($w,searchrymin) -range {-180.0 180 1 } 
-    LabelSpinBox  $w.searchf.rymax -label  "  max" -textvariable reg($w,searchrymax) -range {-180.0 180 1 }   
-    LabelSpinBox  $w.searchf.rzmin -label "Z-axis (degrees): min " -textvariable reg($w,searchrzmin) -range {-180.0 180 1 } 
-    LabelSpinBox  $w.searchf.rzmax -label  "  max" -textvariable reg($w,searchrzmax) -range {-180.0 180 1 }  
-    
+    LabelSpinBox  $w.searchf.rxmin -label "X-axis (degrees): min " -textvariable reg($w,searchrxmin) -range {-180.0 180 1 }
+    LabelSpinBox  $w.searchf.rxmax -label  "  max" -textvariable reg($w,searchrxmax) -range {-180.0 180 1 }
+    LabelSpinBox  $w.searchf.rymin -label "Y-axis (degrees): min " -textvariable reg($w,searchrymin) -range {-180.0 180 1 }
+    LabelSpinBox  $w.searchf.rymax -label  "  max" -textvariable reg($w,searchrymax) -range {-180.0 180 1 }
+    LabelSpinBox  $w.searchf.rzmin -label "Z-axis (degrees): min " -textvariable reg($w,searchrzmin) -range {-180.0 180 1 }
+    LabelSpinBox  $w.searchf.rzmax -label  "  max" -textvariable reg($w,searchrzmax) -range {-180.0 180 1 }
+
     grid  $w.searchf.angleslabel -row 1 -column 1 -padx 3 -pady 3 -sticky w
     grid  $w.searchf.rxmin -row 2 -column 1 -padx 3 -pady 3
     grid  $w.searchf.rxmax -row 2 -column 2 -padx 3 -pady 3
@@ -213,10 +213,10 @@ while { $i <= $reg($w,maxnstats) } {
     grid  $w.searchf.rzmin -row 4 -column 1 -padx 3 -pady 3
     grid  $w.searchf.rzmax -row 4 -column 2 -padx 3 -pady 3
 
-   
-    LabelFrame  $w.searchrange -text "Images" 
+
+    LabelFrame  $w.searchrange -text "Images"
     optionMenu2 $w.searchrange.menu reg($w,search) -command "flirt:updatesearch $w $lf" 0 "Already virtually aligned (no search)" 1 "Not aligned, but same orientation" 2 "Incorrectly oriented"
-    pack  $w.searchrange.menu 
+    pack  $w.searchrange.menu
 #-in  [$w.searchrange getframe ]
 
     set reg($w,search) 1
@@ -242,7 +242,7 @@ $w.nb raise search
     radiobutton $w.leastsq -text "Least Squares (intra-modal)" \
 	    -variable reg($w,cost) -value leastsq -anchor w -command "flirt:updatecost $w $costlf"
     set reg($w,bins) 256
-    LabelSpinBox  $w.bins -label "Number of Histogram Bins " -textvariable reg($w,bins) -range {1 5000 1 } 
+    LabelSpinBox  $w.bins -label "Number of Histogram Bins " -textvariable reg($w,bins) -range {1 5000 1 }
     # ---- pack ----
     pack $w.corratio $w.mutualinfo $w.nmi $w.normcorr $w.leastsq $w.bins -in $costlf -side top -anchor w -padx 3
     set reg($w,cost) corratio
@@ -260,7 +260,7 @@ $w.nb raise search
     radiobutton $w.sinc -text "Sinc" \
 	    -variable reg($w,interp) -value sinc -anchor w -command "flirt:updateinterp $w $interplf"
     set reg($w,sincwidth) 7
-    LabelSpinBox $w.sincwidth -label " Width of Sinc Window (full width - voxels)" -textvariable reg($w,sincwidth) -range {1 5000 1 } 
+    LabelSpinBox $w.sincwidth -label " Width of Sinc Window (full width - voxels)" -textvariable reg($w,sincwidth) -range {1 5000 1 }
     frame $w.swinopt
     label $w.swinbanner -text "Sinc Window Options"
     radiobutton $w.rectangular -text "Rectangular" \
@@ -270,7 +270,7 @@ $w.nb raise search
     radiobutton $w.blackman -text "Blackman" \
 	    -variable reg($w,sincwindow) -value blackman -anchor w
     set reg($w,sincwindow) hanning
-    
+
     # ---- pack ----
     pack $w.interpbanner $w.trilinear -in $interplf -side top -anchor w -padx 3
     pack $w.nearestneighbour $w.sinc -in $interplf -side top -anchor w -padx 3
@@ -312,7 +312,7 @@ pack $w.wgt $w.iwgt -in $weightlf -side top -anchor w -padx 3 -pady $PADY
 
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
-    
+
     button $w.apply     -command "flirt:apply $w keep" \
 	    -text "Go" -width 5
     bind $w.apply <Return> {
@@ -343,7 +343,7 @@ $w.utils.menu add command -label "Invert FLIRT transform" -command { exec sh -c 
     pack $w.btns.b -side bottom -fill x
     pack $w.apply $w.cancel $w.help $w.utils -in $w.btns.b \
 	    -side left -expand yes -padx 3 -pady 10 -fill y
-    
+
     pack $w.f $w.btns -expand yes -fill both
 
 #}}}
@@ -368,7 +368,7 @@ proc flirt:apply { w dialog } {
     set status [ flirt:proc $reg($w,mode) $entries($w,1) $entries($w,2) $entries($w,3) $reg($w,nstats) $statslist $entries($w,4) $reg($w,dof) $reg($w,doftwo) $reg($w,bins) $reg($w,searchrxmin) $reg($w,searchrxmax) $reg($w,searchrymin) $reg($w,searchrymax) $reg($w,searchrzmin) $reg($w,searchrzmax) $reg($w,disablesearch_yn) $reg($w,cost) $reg($w,interp) $reg($w,sincwidth) $reg($w,sincwindow) $entries($w,35) $entries($w,36) $entries($w,37) 1 ]
 
     update idletasks
-    
+
     # destroy if the OK button was used AND a normal exit occurred
     if { $dialog == "destroy" && $status == 0 } {
 	flirt:destroy $w
@@ -471,7 +471,7 @@ proc flirt:updatesearch { w lf } {
 proc flirt:updatecost { w costlf } {
     global reg
 
-    if { [ string match $reg($w,cost) "normcorr" ] == 1  || 
+    if { [ string match $reg($w,cost) "normcorr" ] == 1  ||
          [ string match $reg($w,cost) "leastsq" ] == 1 } {
 	pack forget $w.bins
     } else {

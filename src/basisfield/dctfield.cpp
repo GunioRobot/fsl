@@ -4,25 +4,25 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -109,10 +109,10 @@ dctfield::dctfield(const std::vector<unsigned int>& psz, const std::vector<doubl
 
   boost::shared_ptr<NEWMAT::ColumnVector>  lcoef(new NEWMAT::ColumnVector(CoefSz()));
   *lcoef = 0.0;
-  set_coef_ptr(lcoef);  
+  set_coef_ptr(lcoef);
 }
 
-dctfield::dctfield(const dctfield& inf) 
+dctfield::dctfield(const dctfield& inf)
 : basisfield(inf), dctbas(3)
 {
   basisfield::assign(inf);
@@ -160,17 +160,17 @@ std::vector<double> dctfield::SubsampledVoxelSize(const std::vector<unsigned int
 {
   std::vector<unsigned int>     osize(3), nsize(3);
   if (isize.size()) nsize = SubsampledMatrixSize(subsampling,osize=isize);
-  else { 
+  else {
     osize[0] = FieldSz_x(); osize[1] = FieldSz_y(); osize[2] = FieldSz_z();
     nsize = SubsampledMatrixSize(subsampling,osize);
   }
-    
+
   std::vector<double>  nvxs(ovxs);
   if (!nvxs.size()) {nvxs.resize(3); nvxs[0]=Vxs_x(); nvxs[1]=Vxs_y(); nvxs[2]=Vxs_z();}
   for (int i=0; i<int(nvxs.size()); i++) {
     nvxs[i] = nvxs[i]*double(osize[i]+1)/double(nsize[i]+1);
   }
-  return(nvxs); 
+  return(nvxs);
 }
 
 std::vector<unsigned int> dctfield::SubsampledMatrixSize(const std::vector<unsigned int>&   subsampling,
@@ -203,8 +203,8 @@ void dctfield::Update(FieldIndex fi)
 }
 
 //
-// All the Jte and JtJ routines are presently just stubs. However, all the 
-// functionality has been properly implemented. Have a look at the 
+// All the Jte and JtJ routines are presently just stubs. However, all the
+// functionality has been properly implemented. Have a look at the
 // deprecated ColumnVector versions of these routines in dead_code.cpp
 // to see how to get these routines functional again.
 //
@@ -263,7 +263,7 @@ boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const NEWIMAGE::volume<floa
   return(H);
 }
 
-boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const std::vector<unsigned int>&       deriv, 
+boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const std::vector<unsigned int>&       deriv,
                                                      const NEWIMAGE::volume<float>&         ima,
                                                      const NEWIMAGE::volume<char>           *mask,
                                                      MISCMATHS::BFMatrixPrecisionType       prec) const
@@ -272,7 +272,7 @@ boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const std::vector<unsigned 
   return(H);
 }
 
-boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const std::vector<unsigned int>&       deriv, 
+boost::shared_ptr<MISCMATHS::BFMatrix> dctfield::JtJ(const std::vector<unsigned int>&       deriv,
                                                      const NEWIMAGE::volume<float>&         ima1,
                                                      const NEWIMAGE::volume<float>&         ima2,
                                                      const NEWIMAGE::volume<char>           *mask,
@@ -326,15 +326,15 @@ NEWMAT::ReturnMatrix dctfield::MemEnergyGrad() const // Gradient of the membrane
   grad.Release();
   return(grad);
 }
- 
+
 boost::shared_ptr<BFMatrix> dctfield::MemEnergyHess(MISCMATHS::BFMatrixPrecisionType prec) const // Hessian of membrane energy
 {
-  if (prec!=BFMatrixDoublePrecision) throw BasisfieldException("dctfield::MemEnergyHess: Hessian must be double precision"); 
+  if (prec!=BFMatrixDoublePrecision) throw BasisfieldException("dctfield::MemEnergyHess: Hessian must be double precision");
 
   boost::shared_ptr<FullBFMatrix>     H(new FullBFMatrix);
   NEWMAT::DiagonalMatrix              tmp(CoefSz());
   memen_H(tmp);
-  boost::shared_ptr<NEWMAT::Matrix>   mp(new Matrix(tmp));   // Wasteful, but can't make it work any other way. 
+  boost::shared_ptr<NEWMAT::Matrix>   mp(new Matrix(tmp));   // Wasteful, but can't make it work any other way.
   H->SetMatrixPtr(mp);
 
   return(H);
@@ -347,8 +347,8 @@ boost::shared_ptr<BASISFIELD::basisfield> dctfield::ZoomField(const std::vector<
   // Make sure requested matrix-size is valid
   for (int i=0; i<3; i++) {
     if (!valid_size(psz[i],pvxs[i],porder[i],i)) throw BasisfieldException("dctfield::ZoomField: Invalid zoom requsted");
-  }  
- 
+  }
+
   boost::shared_ptr<BASISFIELD::dctfield> tptr(new BASISFIELD::dctfield(psz,pvxs,porder));
 
   const boost::shared_ptr<NEWMAT::ColumnVector> ocptr = GetCoef();
@@ -422,23 +422,23 @@ bool dctfield::valid_size(unsigned int psz, double pvxs, unsigned int porder, un
     std::vector<double> nvxs(1,pvxs);
     nsz[0] = psz;
     nvxs = SubsampledVoxelSize(ss,nvxs,nsz);
-    valid = (fabs(nvxs[0]-ovxs[pdim]) < eps); 
+    valid = (fabs(nvxs[0]-ovxs[pdim]) < eps);
   }
   return(valid);
 }
 
 //
 // Calculates (AkBkC)*b where A, B and C are matrices, k denotes
-// Kronecker tensor product and b is a colum vector with 
+// Kronecker tensor product and b is a colum vector with
 // A.Ncols()*B.Ncols()*C.Ncols() rows.
 //
 // Useful for calulating the field, and also for calculating the
 // gradient.
-// 
-void dctfield::AkBkCxb(const NEWMAT::Matrix&                   A, 
-                       const NEWMAT::Matrix&                   B, 
-                       const NEWMAT::Matrix&                   C, 
-                       const NEWMAT::ColumnVector&             b, 
+//
+void dctfield::AkBkCxb(const NEWMAT::Matrix&                   A,
+                       const NEWMAT::Matrix&                   B,
+                       const NEWMAT::Matrix&                   C,
+                       const NEWMAT::ColumnVector&             b,
                        NEWMAT::ColumnVector&                   ret) const
 {
   ret = 0.0;
@@ -454,14 +454,14 @@ void dctfield::AkBkCxb(const NEWMAT::Matrix&                   A,
     for (int nk=0; nk<C.Nrows(); nk++) {
       ret.Rows(nk*A.Nrows()*B.Nrows()+1,(nk+1)*A.Nrows()*B.Nrows()) += C.element(nk,mk) * tmpV;
     }
-  }    
+  }
 }
 
 //
-// The following routines could be written much more clearly if I 
+// The following routines could be written much more clearly if I
 // used the capabilities of the NEWMAT classes. But it would also
 // mean that a LOT of constructors would be invoked, and a lot of
-// bounds would be checked. So I have chosen to (partly) revert to 
+// bounds would be checked. So I have chosen to (partly) revert to
 // good ole C programming.
 //
 
@@ -519,8 +519,8 @@ void dctfield::AtA(const NEWMAT::Matrix&        Bx,
 	}
       }
     }
-  }  
-  
+  }
+
   delete[] AtA1p;
 }
 
@@ -584,7 +584,7 @@ void dctfield::one_slice_AtA(const NEWMAT::Matrix&   Bx,
   /*
   NEWMAT::Matrix  AA(AtAsz,AtAsz);
   AA << AtA;
-  cout << std::setprecision(20) << AA << endl;      
+  cout << std::setprecision(20) << AA << endl;
   */
 }
 
@@ -642,7 +642,7 @@ void dctfield::one_slice_AtB(const NEWMAT::Matrix&   Ax,
   for (int my=0; my<By.Nrows(); my++) {
     const double *iptr = &(ima[my*Ax.Nrows()]);
     pima << iptr;
-    XtX = Axt*pima*Bx;     
+    XtX = Axt*pima*Bx;
     double *XtXp = XtX.Store();
     // Now we tile scaled versions of XtX
     for (int yr=0; yr<ync; yr++) {
@@ -660,7 +660,7 @@ void dctfield::one_slice_AtB(const NEWMAT::Matrix&   Ax,
 
 void dctfield::memen_H(NEWMAT::DiagonalMatrix&  mH) const
 {
-  
+
   mH = 0.0;
   for (int d=0; d<3; d++) {
     std::vector<int>  dv(3,0);
@@ -668,13 +668,13 @@ void dctfield::memen_H(NEWMAT::DiagonalMatrix&  mH) const
     std::vector<DiagonalMatrix> AtAv(3);
     int csz[] = {CoefSz_x(), CoefSz_y(), CoefSz_z()};
     for (int dim=0; dim<3; dim++) {
-      AtAv[dim] = NEWMAT::DiagonalMatrix(CoefSz_x());	
+      AtAv[dim] = NEWMAT::DiagonalMatrix(CoefSz_x());
       for (int i=1; i<=csz[dim]; i++) {
         AtAv[dim](i) = DotProduct(dctbas[dim][dv[0]]->Column(i),dctbas[dim][dv[0]]->Column(i));
       }
     }
     mH += KP(AtAv[2],KP(AtAv[1],AtAv[0]));
-  }      
+  }
 }
 
 } // End namespace BASISFIELD

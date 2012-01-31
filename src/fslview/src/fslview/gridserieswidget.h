@@ -31,10 +31,10 @@ public:
 private:
   std::list<TimeSeriesDisplay::Handle> m_plots;
   QGridLayout*        m_grid;
-  
+
 
 public  slots:
-   void addTimeSeries();  
+   void addTimeSeries();
    void remTimeSeries();
    void demeanButtonToggle(bool);
    void setEnabled(bool);

@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -49,10 +49,10 @@ public:
   int inqInterpMode() const { return m_interpMode; }
   void setInterpMode(int t) { m_interpMode = t; notify(); }
 
-  float inqStdDev() const 
+  float inqStdDev() const
   { return m_stdDev; }
 
-  void setStdDev(float sd) 
+  void setStdDev(float sd)
   { m_stdDev = sd; notify(); }
 
   float inqRadius() const
@@ -132,8 +132,8 @@ class VTKWidget : public ImageWidget, public VTKPropertiesObserver, public BriCo
 {
   Q_OBJECT
 public:
-  VTKWidget(QWidget *parent, 
-	    ImageGroup::Handle i, 
+  VTKWidget(QWidget *parent,
+	    ImageGroup::Handle i,
 	    OverlayList::Handle ol,
 	    Cursor::Handle c);
   virtual ~VTKWidget();
@@ -147,10 +147,10 @@ private slots:
   void options();
   void addMesh();
   void meshOptions();
-  
+
 
 private:
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 
   ImageGroup::Handle m_image;

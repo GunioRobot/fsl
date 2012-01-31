@@ -117,7 +117,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Generic accessors
         template<unsigned dimension>
         struct dimension_properties {};
-        
+
         template<>
         struct dimension_properties<1> {
             template <class E>

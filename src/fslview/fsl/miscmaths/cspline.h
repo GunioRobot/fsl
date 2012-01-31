@@ -1,5 +1,5 @@
 /*  cspline
-    
+
     Cubic spline fitting and interpolation
     Tim Behrens, FMRIB Image Analysis Group
 
@@ -26,9 +26,9 @@ using namespace std;
 ///////////////////////////////////////////////////////
 
 
-namespace MISCMATHS { 
+namespace MISCMATHS {
   class Cspline{
-  public: 
+  public:
     Cspline(){}
     Cspline(ColumnVector& pnodes,ColumnVector& pvals):
       nodes(pnodes),
@@ -39,7 +39,7 @@ namespace MISCMATHS {
       fitted=true;
     }
 
-    Cspline(ColumnVector& pnodes, Matrix& pcoefs) : 
+    Cspline(ColumnVector& pnodes, Matrix& pcoefs) :
       nodes(pnodes),
       coefs(pcoefs),
       n(nodes.Nrows())
@@ -48,16 +48,16 @@ namespace MISCMATHS {
     ~Cspline(){
       fitted=false;
     };
-    
+
     void set(ColumnVector& pnodes,ColumnVector& pvals);
     void set(ColumnVector& pnodes, Matrix& pcoefs);
-    
+
     void fit();
     float interpolate(float xx) const;
     float interpolate(float xx,int ind) const;
     ColumnVector interpolate(const ColumnVector& x) const;
     ColumnVector interpolate(const ColumnVector& x, const ColumnVector& indvec) const;
-    
+
   protected:
 
     bool fitted;

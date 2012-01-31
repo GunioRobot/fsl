@@ -61,7 +61,7 @@ struct keyword : noncopyable
         typedef typename aux::tag<Tag, T const>::type result;
         return result(x);
     }
-#endif 
+#endif
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // avoid partial ordering bugs
     template <class Default>
@@ -69,7 +69,7 @@ struct keyword : noncopyable
     operator|(const Default& default_) const
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
         volatile
-#endif 
+#endif
     {
         return aux::default_<Tag, const Default>(default_);
     }
@@ -79,26 +79,26 @@ struct keyword : noncopyable
     operator||(Default const& default_) const
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
         volatile
-#endif 
+#endif
     {
         return aux::lazy_default<Tag, Default>(default_);
     }
 #endif
 
  public: // Insurance against ODR violations
-    
+
     // People will need to define these keywords in header files.  To
     // prevent ODR violations, it's important that the keyword used in
     // every instantiation of a function template is the same object.
     // We provide a reference to a common instance of each keyword
     // object and prevent construction by users.
-    
+
     static keyword<Tag>& get()
     {
         static keyword<Tag> result;
         return result;
     }
-    
+
  private:
     keyword() {}
 };

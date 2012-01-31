@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -80,7 +80,7 @@ namespace MISCMATHS {
       Tracer ts("Histogram::generate");
 
       int size = sourceData.Nrows();
-      
+
       if(calcRange)
 	{
 	  // calculate range automatically
@@ -93,11 +93,11 @@ namespace MISCMATHS {
 		histMin=sourceData(i);
 	    }
 	}
-      
+
       // zero histogram
       histogram.ReSize(bins);
       histogram=0;
-      
+
       // create histogram; the MIN is so that the maximum value falls in the
       // last valid bin, not the (last+1) bin
       for(int i=1; i<=size; i++)
@@ -114,19 +114,19 @@ namespace MISCMATHS {
 
       // smooth in i direction
       newhist=0;
-      ColumnVector kernel(3); 
+      ColumnVector kernel(3);
       // corresponds to Gaussian with sigma=0.8 voxels
       //       kernel(1)=0.5;
-      //       kernel(2)=0.2283;      
+      //       kernel(2)=0.2283;
       //       kernel(3)=0.0219;
       // corresponds to Gaussian with sigma=0.6 voxels
       //       kernel(1)=0.6638;
-      //       kernel(2)=0.1655;      
+      //       kernel(2)=0.1655;
       //       kernel(3)=0.0026;
 
       //gauss(0.5,5,1)
       kernel(1)=0.7866;
-      kernel(2)=0.1065;      
+      kernel(2)=0.1065;
       kernel(3)=0.0003;
 
       for(int i=1; i<=bins; i++)
@@ -142,7 +142,7 @@ namespace MISCMATHS {
 	    if(i>2)
 	      {
 		val+=kernel(3)*(histogram(i-2));
-		norm+=kernel(3);		
+		norm+=kernel(3);
 	      }
 	    if(i<bins)
 	      {
@@ -152,7 +152,7 @@ namespace MISCMATHS {
 	    if(i<bins-1)
 	      {
 		val+=kernel(3)*(histogram(i+2));
-		norm+=kernel(3);		
+		norm+=kernel(3);
 	      }
 	    val/=norm;
 

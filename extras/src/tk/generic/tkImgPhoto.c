@@ -337,9 +337,9 @@ Tk_ImageType tkPhotoImageType = {
 };
 
 typedef struct ThreadSpecificData {
-    Tk_PhotoImageFormat *formatList;  /* Pointer to the first in the 
+    Tk_PhotoImageFormat *formatList;  /* Pointer to the first in the
 				       * list of known photo image formats.*/
-    Tk_PhotoImageFormat *oldFormatList;  /* Pointer to the first in the 
+    Tk_PhotoImageFormat *oldFormatList;  /* Pointer to the first in the
 				       * list of known photo image formats.*/
     int initialized;	/* set to 1 if we've initialized the strucuture */
 } ThreadSpecificData;
@@ -480,7 +480,7 @@ PhotoFormatThreadExitProc(clientData)
     ClientData clientData;	/* not used */
 {
     Tk_PhotoImageFormat *freePtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     while (tsdPtr->oldFormatList != NULL) {
@@ -525,7 +525,7 @@ Tk_CreateOldPhotoImageFormat(formatPtr)
 				 * to Tk_CreatePhotoImageFormat previously. */
 {
     Tk_PhotoImageFormat *copyPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!tsdPtr->initialized) {
@@ -549,7 +549,7 @@ Tk_CreatePhotoImageFormat(formatPtr)
 				 * to Tk_CreatePhotoImageFormat previously. */
 {
     Tk_PhotoImageFormat *copyPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!tsdPtr->initialized) {
@@ -684,7 +684,7 @@ ImgPhotoCmd(clientData, interp, objc, objv)
     int length, matched;
     Tcl_Channel chan;
     Tk_PhotoHandle srcHandle;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (objc < 2) {
@@ -1085,7 +1085,7 @@ ImgPhotoCmd(clientData, interp, objc, objv)
 	    return TCL_ERROR;
 	}
 
-	if (MatchStringFormat(interp, options.name ? objv[2]:NULL, 
+	if (MatchStringFormat(interp, options.name ? objv[2]:NULL,
 		options.format, &imageFormat, &imageWidth,
 		&imageHeight, &oldformat) == TCL_OK) {
 	    Tcl_Obj *format, *data;
@@ -1231,7 +1231,7 @@ ImgPhotoCmd(clientData, interp, objc, objv)
 		    " safe interpreter", (char *) NULL);
             return TCL_ERROR;
         }
-        
+
 	/*
 	 * Open the image file and look for a handler for it.
 	 */
@@ -1251,7 +1251,7 @@ ImgPhotoCmd(clientData, interp, objc, objv)
 	    Tcl_Close(NULL, chan);
             return TCL_ERROR;
         }
-    
+
 	if (MatchFileFormat(interp, chan,
 		Tcl_GetString(options.name), options.format, &imageFormat,
 		&imageWidth, &imageHeight, &oldformat) != TCL_OK) {
@@ -1480,7 +1480,7 @@ ImgPhotoCmd(clientData, interp, objc, objv)
 		    " safe interpreter", (char *) NULL);
             return TCL_ERROR;
         }
-        
+
 	/*
 	 * photo write command - first parse and check any options given.
 	 */
@@ -2045,7 +2045,7 @@ ImgPhotoConfigureMaster(interp, masterPtr, objc, objv, flags)
 		    (char *) NULL);
 	    goto errorExit;
         }
-        
+
 	chan = Tcl_OpenFileChannel(interp, masterPtr->fileString, "r", 0);
 	if (chan == NULL) {
 	    goto errorExit;
@@ -2447,7 +2447,7 @@ ImgPhotoGet(tkwin, masterData)
 		    mono = 0;
 		} else if (visInfoPtr->depth >= 3) {
 		    int *ip = paletteChoice[visInfoPtr->depth - 3];
-    
+
 		    nRed = ip[0];
 		    nGreen = ip[1];
 		    nBlue = ip[2];
@@ -2873,7 +2873,7 @@ ImgPhotoFree(clientData, display)
     if (colorPtr != NULL) {
 	colorPtr->liveRefCount -= 1;
     }
-    
+
     Tcl_DoWhenIdle(DisposeInstance, (ClientData) instancePtr);
 }
 
@@ -3753,7 +3753,7 @@ AllocateColors(colorPtr)
 	    nRed = nRed / 2;
 	}
     }
-    
+
     /*
      * We have allocated all of the necessary colors:
      * fill in various fields of the ColorTable record.
@@ -3769,7 +3769,7 @@ AllocateColors(colorPtr)
 	 * the value since we will be passing the color table into the
 	 * TkPutImage call.
 	 */
-	
+
 #ifndef __WIN32__
 	if ((colorPtr->visualInfo.class != DirectColor)
 		&& (colorPtr->visualInfo.class != TrueColor)) {
@@ -4061,7 +4061,7 @@ MatchFileFormat(interp, chan, fileName, formatObj, imageFormatPtr,
     int matched;
     int useoldformat = 0;
     Tk_PhotoImageFormat *formatPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     char *formatString = NULL;
 
@@ -4091,7 +4091,7 @@ MatchFileFormat(interp, chan, fileName, formatObj, imageFormatPtr,
 	}
 	if (formatPtr->fileMatchProc != NULL) {
 	    (void) Tcl_Seek(chan, Tcl_LongAsWide(0L), SEEK_SET);
-	    
+
 	    if ((*formatPtr->fileMatchProc)(chan, fileName, formatObj,
 		    widthPtr, heightPtr, interp)) {
 		if (*widthPtr < 1) {
@@ -4193,10 +4193,10 @@ MatchStringFormat(interp, data, formatObj, imageFormatPtr,
     int matched;
     int useoldformat = 0;
     Tk_PhotoImageFormat *formatPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     char *formatString = NULL;
-    
+
     if (formatObj) {
 	formatString = Tcl_GetString(formatObj);
     }
@@ -4447,7 +4447,7 @@ Tk_PhotoPutBlock(handle, blockPtr, x, y, width, height, compRule)
 			srcPtr = srcLinePtr;
 			for (; wCopy > 0; --wCopy) {
 			    alpha = srcPtr[alphaOffset];
-			    
+
 			    /*
 			     * In the easy case, we can just copy.
 			     */
@@ -5035,7 +5035,7 @@ Tk_DitherPhoto(photo, x, y, width, height)
 	}
     }
 
-}    
+}
 
 /*
  *----------------------------------------------------------------------
@@ -5168,7 +5168,7 @@ DitherInstance(instancePtr, xStart, yStart, width, height)
 			     * computes round(c / 16), and works correctly on
 			     * machines without a sign-extending right shift.
 			     */
-			    
+
 			    c = (x > 0) ? errPtr[-3] * 7: 0;
 			    if (y > 0) {
 				if (x > 0) {
@@ -5179,13 +5179,13 @@ DitherInstance(instancePtr, xStart, yStart, width, height)
 				    c += errPtr[-lineLength+3] * 3;
 				}
 			    }
-			    
+
 			    /*
 			     * Add the propagated error to the value of this
 			     * component, quantize it, and store the
 			     * quantization error.
 			     */
-			    
+
 			    c = ((c + 2056) >> 4) - 128 + *srcPtr++;
 			    if (c < 0) {
 				c = 0;
@@ -5196,7 +5196,7 @@ DitherInstance(instancePtr, xStart, yStart, width, height)
 			    *errPtr++ = c - col[i];
 			}
 		    } else {
-			/* 
+			/*
 			 * Output is virtually continuous in this case,
 			 * so don't bother dithering.
 			 */
@@ -5371,7 +5371,7 @@ DitherInstance(instancePtr, xStart, yStart, width, height)
 		instancePtr->gc, imagePtr, 0, 0, xStart, yStart,
 		(unsigned) width, (unsigned) nLines);
 	yStart = yEnd;
-	
+
     }
 
     ckfree(imagePtr->data);

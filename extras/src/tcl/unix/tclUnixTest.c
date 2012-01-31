@@ -1,4 +1,4 @@
-/* 
+/*
  * tclUnixTest.c --
  *
  *	Contains platform specific test commands for the Unix platform.
@@ -163,7 +163,7 @@ TestfilehandlerCmd(clientData, interp, argc, argv)
      * NOTE: When we make this code work on Windows also, the following
      * variable needs to be made Unix-only.
      */
-    
+
     if (!initialized) {
 	for (i = 0; i < MAX_PIPES; i++) {
 	    testPipes[i].readFile = NULL;
@@ -206,7 +206,7 @@ TestfilehandlerCmd(clientData, interp, argc, argv)
 	pipePtr->readCount = pipePtr->writeCount = 0;
     } else if (strcmp(argv[1], "counts") == 0) {
 	char buf[TCL_INTEGER_SPACE * 2];
-	
+
 	if (argc != 3) {
 	    Tcl_AppendResult(interp, "wrong # arguments: should be \"",
                     argv[0], " counts index\"", (char *) NULL);
@@ -288,7 +288,7 @@ TestfilehandlerCmd(clientData, interp, argc, argv)
         }
     } else if (strcmp(argv[1], "fillpartial") == 0) {
 	char buf[TCL_INTEGER_SPACE];
-	
+
 	if (argc != 3) {
 	    Tcl_AppendResult(interp, "wrong # arguments: should be \"",
                     argv[0], " fillpartial index\"", (char *) NULL);
@@ -405,7 +405,7 @@ TestfilewaitCmd(clientData, interp, argc, argv)
 		"\": must be readable, writable, or both", (char *) NULL);
 	return TCL_ERROR;
     }
-    if (Tcl_GetChannelHandle(channel, 
+    if (Tcl_GetChannelHandle(channel,
 	    (mask & TCL_READABLE) ? TCL_READABLE : TCL_WRITABLE,
 	    (ClientData*) &data) != TCL_OK) {
 	Tcl_SetResult(interp, "couldn't get channel file", TCL_STATIC);

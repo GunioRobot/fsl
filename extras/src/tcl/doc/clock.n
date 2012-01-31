@@ -6,12 +6,12 @@
 '\"
 '\" This documentation is derived from the time and date facilities of
 '\" TclX, by Mark Diekhans and Karl Lehenbauer.
-'\" 
+'\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: clock.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH clock n 8.4 Tcl "Tcl Built-In Commands"
 .BS
@@ -149,7 +149,7 @@ locale for Unix/Mac is "%m/%d/%y".
 On Windows, this value is the locale specific short date format, as
 specified in the Regional Options control panel settings.
 .IP \fB%X\fR
-Locale specific 24-hour time format.  The format for a 
+Locale specific 24-hour time format.  The format for a
 24-hour time in the default "C" locale for Unix/Mac is "%H:%M:%S".
 On Windows, this value is the locale specific time format, as
 specified in the Regional Options control panel settings.
@@ -189,7 +189,7 @@ Time zone name.
 '\".sp
 .VE 8.4
 .RS
-If the \fB\-format\fR argument is not specified, the format string 
+If the \fB\-format\fR argument is not specified, the format string
 \fB"%a %b %d %H:%M:%S %Z %Y"\fR is used.  If the \fB\-gmt\fR argument
 is present the next argument must be a boolean which if true specifies
 that the time will be formatted as Greenwich Mean Time. If false
@@ -202,7 +202,7 @@ Convert \fIdateString\fR to an integer clock value (see \fBclock seconds\fR).
 This command can parse and convert virtually any standard date and/or time
 string, which can include standard time zone mnemonics.  If only a time is
 specified, the current date is assumed.  If the string does not contain a
-time zone mnemonic, the local time zone is assumed, unless the \fB\-gmt\fR 
+time zone mnemonic, the local time zone is assumed, unless the \fB\-gmt\fR
 argument is true, in which case the clock value is calculated assuming
 that the specified time is relative to Greenwich Mean Time.
 \fB-gmt\fR, if specified, affects only the computed time value; it does not
@@ -218,8 +218,8 @@ following form:
 .RS
 .TP
 \fItime\fR
-A time of day, which is of the form: \fIhh\fR?\fI:mm\fR?\fI:ss\fR?? 
-?\fImeridian\fR? ?\fIzone\fR? or \fIhhmm \fR?\fImeridian\fR? 
+A time of day, which is of the form: \fIhh\fR?\fI:mm\fR?\fI:ss\fR??
+?\fImeridian\fR? ?\fIzone\fR? or \fIhhmm \fR?\fImeridian\fR?
 ?\fIzone\fR?. If no meridian is specified, \fIhh\fR is interpreted on
 a 24-hour clock.
 .TP
@@ -237,7 +237,7 @@ an error may result if these years are used.
 .TP
 \fIISO 8601 point-in-time\fR
 An ISO 8601 point-in-time specification, such as \fICCyymmddThhmmss\fR, where
-T is the literal T, \fICCyymmdd hhmmss\fR, or 
+T is the literal T, \fICCyymmdd hhmmss\fR, or
 \fICCyymmddThh:mm:ss\fR.  Note that only these three formats are accepted.
 The command does \fInot\fR accept the full range of point-in-time
 specifications specified in ISO8601.  Other formats can be recognized by

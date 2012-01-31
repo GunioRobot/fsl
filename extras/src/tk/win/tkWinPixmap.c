@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinPixmap.c --
  *
  *	This file contains the Xlib emulation functions pertaining to
@@ -42,7 +42,7 @@ Tk_GetPixmap(display, d, width, height, depth)
     TkWinDrawable *newTwdPtr, *twdPtr;
     int planes;
     Screen *screen;
-    
+
     display->request++;
 
     newTwdPtr = (TkWinDrawable*) ckalloc(sizeof(TkWinDrawable));
@@ -71,7 +71,7 @@ Tk_GetPixmap(display, d, width, height, depth)
 	ckfree((char *) newTwdPtr);
 	return None;
     }
-    
+
     return (Pixmap)newTwdPtr;
 }
 

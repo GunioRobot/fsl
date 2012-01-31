@@ -1,10 +1,10 @@
-/* 
+/*
  * tkWinFont.c --
  *
  *	Contains the Windows implementation of the platform-independant
  *	font package interface.
  *
- * Copyright (c) 1994 Software Research Associates, Inc. 
+ * Copyright (c) 1994 Software Research Associates, Inc.
  * Copyright (c) 1995-1997 Sun Microsystems, Inc.
  * Copyright (c) 1998-1999 by Scriptics Corporation.
  *
@@ -41,24 +41,24 @@ typedef struct FontFamily {
     /*
      * Key.
      */
-     
+
     Tk_Uid faceName;		/* Face name key for this FontFamily. */
 
     /*
      * Derived properties.
      */
-     
+
     Tcl_Encoding encoding;	/* Encoding for this font family. */
     int isSymbolFont;		/* Non-zero if this is a symbol font. */
-    int isWideFont;		/* 1 if this is a double-byte font, 0 
+    int isWideFont;		/* 1 if this is a double-byte font, 0
 				 * otherwise. */
     BOOL (WINAPI *textOutProc)(HDC, int, int, TCHAR *, int);
 				/* The procedure to use to draw text after
-				 * it has been converted from UTF-8 to the 
+				 * it has been converted from UTF-8 to the
 				 * encoding of this font. */
     BOOL (WINAPI *getTextExtentPoint32Proc)(HDC, TCHAR *, int, LPSIZE);
 				/* The procedure to use to measure text after
-				 * it has been converted from UTF-8 to the 
+				 * it has been converted from UTF-8 to the
 				 * encoding of this font. */
 
     char *fontMap[FONTMAP_PAGES];
@@ -77,13 +77,13 @@ typedef struct FontFamily {
     /*
      * Cached Truetype font info.
      */
-     
+
     int segCount;		/* The length of the following arrays. */
     USHORT *startCount;		/* Truetype information about the font, */
     USHORT *endCount;		/* indicating which characters this font
 				 * can display (malloced).  The format of
 				 * this information is (relatively) compact,
-				 * but would take longer to search than 
+				 * but would take longer to search than
 				 * indexing into the fontMap[][] table. */
 } FontFamily;
 
@@ -94,7 +94,7 @@ typedef struct FontFamily {
  */
 
 typedef struct SubFont {
-    char **fontMap;		/* Pointer to font map from the FontFamily, 
+    char **fontMap;		/* Pointer to font map from the FontFamily,
 				 * cached here to save a dereference. */
     HFONT hFont;		/* The specific screen font that will be
 				 * used when displaying/measuring chars
@@ -168,9 +168,9 @@ static TkStateMap systemMap[] = {
 };
 
 typedef struct ThreadSpecificData {
-    FontFamily *fontFamilyList; /* The list of font families that are 
+    FontFamily *fontFamilyList; /* The list of font families that are
 				 * currently loaded.  As screen fonts
-				 * are loaded, this list grows to hold 
+				 * are loaded, this list grows to hold
 				 * information about what characters
 				 * exist in each font family.  */
     Tcl_HashTable uidTable;
@@ -180,7 +180,7 @@ static Tcl_ThreadDataKey dataKey;
 /*
  * Information cached about the system at startup time.
  */
- 
+
 static Tcl_Encoding systemEncoding;
 
 /*
@@ -188,10 +188,10 @@ static Tcl_Encoding systemEncoding;
  */
 
 static FontFamily *	AllocFontFamily(HDC hdc, HFONT hFont, int base);
-static SubFont *	CanUseFallback(HDC hdc, WinFont *fontPtr, 
+static SubFont *	CanUseFallback(HDC hdc, WinFont *fontPtr,
 			    char *fallbackName,	int ch,
 			    SubFont **subFontPtrPtr);
-static SubFont *	CanUseFallbackWithAliases(HDC hdc, WinFont *fontPtr, 
+static SubFont *	CanUseFallbackWithAliases(HDC hdc, WinFont *fontPtr,
 			    char *faceName, int ch, Tcl_DString *nameTriedPtr,
 			    SubFont **subFontPtrPtr);
 static int		FamilyExists(HDC hdc, CONST char *faceName);
@@ -204,44 +204,44 @@ static int		FontMapLookup(SubFont *subFontPtr, int ch);
 static void		FreeFontFamily(FontFamily *familyPtr);
 static HFONT		GetScreenFont(CONST TkFontAttributes *faPtr,
 			    CONST char *faceName, int pixelSize);
-static void		InitFont(Tk_Window tkwin, HFONT hFont, 
+static void		InitFont(Tk_Window tkwin, HFONT hFont,
 			    int overstrike, WinFont *tkFontPtr);
-static void		InitSubFont(HDC hdc, HFONT hFont, int base, 
+static void		InitSubFont(HDC hdc, HFONT hFont, int base,
 			    SubFont *subFontPtr);
-static int		LoadFontRanges(HDC hdc, HFONT hFont, 
+static int		LoadFontRanges(HDC hdc, HFONT hFont,
 			    USHORT **startCount, USHORT **endCount,
 			    int *symbolPtr);
-static void		MultiFontTextOut(HDC hdc, WinFont *fontPtr, 
+static void		MultiFontTextOut(HDC hdc, WinFont *fontPtr,
 			    CONST char *source, int numBytes, int x, int y);
 static void		ReleaseFont(WinFont *fontPtr);
 static void		ReleaseSubFont(SubFont *subFontPtr);
 static int		SeenName(CONST char *name, Tcl_DString *dsPtr);
 static void		SwapLong(PULONG p);
 static void		SwapShort(USHORT *p);
-static int CALLBACK	WinFontCanUseProc(ENUMLOGFONT *lfPtr, 
-			    NEWTEXTMETRIC *tmPtr, int fontType, 
+static int CALLBACK	WinFontCanUseProc(ENUMLOGFONT *lfPtr,
+			    NEWTEXTMETRIC *tmPtr, int fontType,
 			    LPARAM lParam);
-static int CALLBACK	WinFontExistProc(ENUMLOGFONT *lfPtr, 
-			    NEWTEXTMETRIC *tmPtr, int fontType, 
+static int CALLBACK	WinFontExistProc(ENUMLOGFONT *lfPtr,
+			    NEWTEXTMETRIC *tmPtr, int fontType,
 			    LPARAM lParam);
-static int CALLBACK	WinFontFamilyEnumProc(ENUMLOGFONT *lfPtr, 
-			    NEWTEXTMETRIC *tmPtr, int fontType, 
+static int CALLBACK	WinFontFamilyEnumProc(ENUMLOGFONT *lfPtr,
+			    NEWTEXTMETRIC *tmPtr, int fontType,
 			    LPARAM lParam);
 
 /*
  *-------------------------------------------------------------------------
- * 
+ *
  * TkpFontPkgInit --
  *
  *	This procedure is called when an application is created.  It
- *	initializes all the structures that are used by the 
+ *	initializes all the structures that are used by the
  *	platform-dependent code on a per application basis.
  *
  * Results:
- *	None.  
+ *	None.
  *
  * Side effects:
- *	
+ *
  *	None.
  *
  *-------------------------------------------------------------------------
@@ -253,9 +253,9 @@ TkpFontPkgInit(
 {
     if (TkWinGetPlatformId() == VER_PLATFORM_WIN32_NT) {
 	/*
-	 * If running NT, then we will be calling some Unicode functions 
-	 * explictly.  So, even if the Tcl system encoding isn't Unicode, 
-	 * make sure we convert to/from the Unicode char set. 
+	 * If running NT, then we will be calling some Unicode functions
+	 * explictly.  So, even if the Tcl system encoding isn't Unicode,
+	 * make sure we convert to/from the Unicode char set.
 	 */
 
 	systemEncoding = TkWinGetUnicodeEncoding();
@@ -272,7 +272,7 @@ TkpFontPkgInit(
  * Results:
  * 	The return value is a pointer to a TkFont that represents the
  *	native font.  If a native font by the given name could not be
- *	found, the return value is NULL.  
+ *	found, the return value is NULL.
  *
  *	Every call to this procedure returns a new TkFont structure,
  *	even if the name has already been seen before.  The caller should
@@ -311,7 +311,7 @@ TkpGetNativeFont(
 /*
  *---------------------------------------------------------------------------
  *
- * TkpGetFontFromAttributes -- 
+ * TkpGetFontFromAttributes --
  *
  *	Given a desired set of attributes for a font, find a font with
  *	the closest matching attributes.
@@ -325,7 +325,7 @@ TkpGetNativeFont(
  *	Every call to this procedure returns a new TkFont structure,
  *	even if the specified attributes have already been seen before.
  *	The caller should call TkpDeleteFont() to free the platform-
- *	specific data when the font is no longer needed.  
+ *	specific data when the font is no longer needed.
  *
  *	The caller is responsible for initializing the memory associated
  *	with the generic TkFont when this function returns and releasing
@@ -460,12 +460,12 @@ TkpDeleteFont(
  *
  *---------------------------------------------------------------------------
  */
- 
+
 void
 TkpGetFontFamilies(
     Tcl_Interp *interp,		/* Interp to hold result. */
     Tk_Window tkwin)		/* For display to query. */
-{    
+{
     HDC hdc;
     HWND hwnd;
     Window window;
@@ -475,17 +475,17 @@ TkpGetFontFamilies(
     hdc	    = GetDC(hwnd);
 
     /*
-     * On any version NT, there may fonts with international names.  
-     * Use the NT-only Unicode version of EnumFontFamilies to get the 
-     * font names.  If we used the ANSI version on a non-internationalized 
-     * version of NT, we would get font names with '?' replacing all 
+     * On any version NT, there may fonts with international names.
+     * Use the NT-only Unicode version of EnumFontFamilies to get the
+     * font names.  If we used the ANSI version on a non-internationalized
+     * version of NT, we would get font names with '?' replacing all
      * the international characters.
      *
      * On a non-internationalized verson of 95, fonts with international
-     * names are not allowed, so the ANSI version of EnumFontFamilies will 
-     * work.  On an internationalized version of 95, there may be fonts with 
-     * international names; the ANSI version will work, fetching the 
-     * name in the system code page.  Can't use the Unicode version of 
+     * names are not allowed, so the ANSI version of EnumFontFamilies will
+     * work.  On an internationalized version of 95, there may be fonts with
+     * international names; the ANSI version will work, fetching the
+     * name in the system code page.  Can't use the Unicode version of
      * EnumFontFamilies because it only exists under NT.
      */
 
@@ -495,7 +495,7 @@ TkpGetFontFamilies(
     } else {
 	EnumFontFamiliesA(hdc, NULL, (FONTENUMPROCA) WinFontFamilyEnumProc,
 		(LPARAM) interp);
-    }	    
+    }
     ReleaseDC(hwnd, hdc);
 }
 
@@ -526,11 +526,11 @@ WinFontFamilyEnumProc(
  *
  * TkpGetSubFonts --
  *
- *	A function used by the testing package for querying the actual 
+ *	A function used by the testing package for querying the actual
  *	screen fonts that make up a font object.
  *
  * Results:
- *	Modifies interp's result object to hold a list containing the 
+ *	Modifies interp's result object to hold a list containing the
  *	names of the screen fonts that make up the given font object.
  *
  * Side effects:
@@ -538,7 +538,7 @@ WinFontFamilyEnumProc(
  *
  *-------------------------------------------------------------------------
  */
-	
+
 void
 TkpGetSubFonts(
     Tcl_Interp *interp,		/* Interp to hold result. */
@@ -549,7 +549,7 @@ TkpGetSubFonts(
     FontFamily *familyPtr;
     Tcl_Obj *resultPtr, *strPtr;
 
-    resultPtr = Tcl_GetObjResult(interp);    
+    resultPtr = Tcl_GetObjResult(interp);
     fontPtr = (WinFont *) tkfont;
     for (i = 0; i < fontPtr->numSubFonts; i++) {
 	familyPtr = fontPtr->subFontArray[i].familyPtr;
@@ -647,10 +647,10 @@ Tk_MeasureChars(
         thisSubFontPtr = FindSubFontForChar(fontPtr, ch, &lastSubFontPtr);
         if (thisSubFontPtr != lastSubFontPtr) {
             familyPtr = lastSubFontPtr->familyPtr;
-            Tcl_UtfToExternalDString(familyPtr->encoding, start, 
+            Tcl_UtfToExternalDString(familyPtr->encoding, start,
                     (int) (p - start), &runString);
             size.cx = 0;
-            (*familyPtr->getTextExtentPoint32Proc)(hdc, 
+            (*familyPtr->getTextExtentPoint32Proc)(hdc,
                     Tcl_DStringValue(&runString),
                     Tcl_DStringLength(&runString) >> familyPtr->isWideFont,
                     &size);
@@ -662,7 +662,7 @@ Tk_MeasureChars(
             curX += size.cx;
             lastSubFontPtr = thisSubFontPtr;
             start = p;
-                
+
             SelectObject(hdc, lastSubFontPtr->hFont);
         }
         p = next;
@@ -681,7 +681,7 @@ Tk_MeasureChars(
         size.cx = 0;
 	(*familyPtr->getTextExtentPoint32Proc)(hdc,
 		Tcl_DStringValue(&runString),
-		Tcl_DStringLength(&runString) >> familyPtr->isWideFont, 
+		Tcl_DStringLength(&runString) >> familyPtr->isWideFont,
 		&size);
         Tcl_DStringFree(&runString);
         if (maxLength >= 0 && (curX+size.cx) > maxLength) {
@@ -713,7 +713,7 @@ Tk_MeasureChars(
                     &dstWrote, NULL);
             Tcl_DStringAppend(&runString,buf,dstWrote);
             size.cx = 0;
-            (*familyPtr->getTextExtentPoint32Proc)(hdc, 
+            (*familyPtr->getTextExtentPoint32Proc)(hdc,
                     Tcl_DStringValue(&runString),
                     Tcl_DStringLength(&runString) >> familyPtr->isWideFont,
                     &size);
@@ -796,7 +796,7 @@ Tk_MeasureChars(
  *
  * Tk_DrawChars --
  *
- *	Draw a string of characters on the screen.  
+ *	Draw a string of characters on the screen.
  *
  * Results:
  *	None.
@@ -839,8 +839,8 @@ Tk_DrawChars(
     dc = TkWinGetDrawableDC(display, drawable, &state);
 
     SetROP2(dc, tkpWinRopModes[gc->function]);
-    
-    if ((gc->clip_mask != None) && 
+
+    if ((gc->clip_mask != None) &&
             ((TkpClipMask*)gc->clip_mask)->type == TKP_CLIP_REGION) {
         SelectClipRgn(dc, (HRGN)((TkpClipMask*)gc->clip_mask)->value.region);
     }
@@ -862,7 +862,7 @@ Tk_DrawChars(
 	/*
 	 * Select stipple pattern into destination dc.
 	 */
-	
+
 	dcMem = CreateCompatibleDC(dc);
 
 	stipple = CreatePatternBrush(twdPtr->bitmap.handle);
@@ -958,7 +958,7 @@ Tk_DrawChars(
  *
  * MultiFontTextOut --
  *
- *	Helper function for Tk_DrawChars.  Draws characters, using the 
+ *	Helper function for Tk_DrawChars.  Draws characters, using the
  *	various screen fonts in fontPtr to draw multilingual characters.
  *	Note: No bidirectional support.
  *
@@ -966,9 +966,9 @@ Tk_DrawChars(
  *	None.
  *
  * Side effects:
- *	Information gets drawn on the screen.  
- *	Contents of fontPtr may be modified if more subfonts were loaded 
- *	in order to draw all the multilingual characters in the given 
+ *	Information gets drawn on the screen.
+ *	Contents of fontPtr may be modified if more subfonts were loaded
+ *	in order to draw all the multilingual characters in the given
  *	string.
  *
  *-------------------------------------------------------------------------
@@ -1006,12 +1006,12 @@ MultiFontTextOut(
 		familyPtr = lastSubFontPtr->familyPtr;
  		Tcl_UtfToExternalDString(familyPtr->encoding, source,
 			(int) (p - source), &runString);
-		(*familyPtr->textOutProc)(hdc, x-(tm.tmOverhang/2), y, 
+		(*familyPtr->textOutProc)(hdc, x-(tm.tmOverhang/2), y,
 			Tcl_DStringValue(&runString),
 			Tcl_DStringLength(&runString) >> familyPtr->isWideFont);
-		(*familyPtr->getTextExtentPoint32Proc)(hdc, 
+		(*familyPtr->getTextExtentPoint32Proc)(hdc,
 			Tcl_DStringValue(&runString),
-			Tcl_DStringLength(&runString) >> familyPtr->isWideFont, 
+			Tcl_DStringLength(&runString) >> familyPtr->isWideFont,
 			&size);
 		x += size.cx;
 		Tcl_DStringFree(&runString);
@@ -1041,7 +1041,7 @@ MultiFontTextOut(
  * InitFont --
  *
  *	Helper for TkpGetNativeFont() and TkpGetFontFromAttributes().
- *	Initializes the memory for a new WinFont that wraps the 
+ *	Initializes the memory for a new WinFont that wraps the
  *	platform-specific data.
  *
  *	The caller is responsible for initializing the fields of the
@@ -1055,11 +1055,11 @@ MultiFontTextOut(
  *	Memory allocated.
  *
  *---------------------------------------------------------------------------
- */ 
+ */
 
 static void
 InitFont(
-    Tk_Window tkwin,		/* Main window of interp in which font will 
+    Tk_Window tkwin,		/* Main window of interp in which font will
 				 * be used, for getting HDC. */
     HFONT hFont,		/* Windows token for font. */
     int overstrike,		/* The overstrike attribute of logfont used
@@ -1079,7 +1079,7 @@ InitFont(
     Tcl_DString faceString;
     TkFontAttributes *faPtr;
     char buf[LF_FACESIZE * sizeof(WCHAR)];
- 
+
     window  = Tk_WindowId(tkwin);
     hwnd    = (window == None) ? NULL : TkWinGetHWND(window);
     hdc	    = GetDC(hwnd);
@@ -1088,17 +1088,17 @@ InitFont(
     GetTextMetrics(hdc, &tm);
 
     /*
-     * On any version NT, there may fonts with international names.  
-     * Use the NT-only Unicode version of GetTextFace to get the font's 
-     * name.  If we used the ANSI version on a non-internationalized 
-     * version of NT, we would get a font name with '?' replacing all 
+     * On any version NT, there may fonts with international names.
+     * Use the NT-only Unicode version of GetTextFace to get the font's
+     * name.  If we used the ANSI version on a non-internationalized
+     * version of NT, we would get a font name with '?' replacing all
      * the international characters.
      *
      * On a non-internationalized verson of 95, fonts with international
      * names are not allowed, so the ANSI version of GetTextFace will work.
-     * On an internationalized version of 95, there may be fonts with 
-     * international names; the ANSI version will work, fetching the 
-     * name in the international system code page.  Can't use the Unicode 
+     * On an internationalized version of 95, there may be fonts with
+     * international names; the ANSI version will work, fetching the
+     * name in the international system code page.  Can't use the Unicode
      * version of GetTextFace because it only exists under NT.
      */
 
@@ -1118,7 +1118,7 @@ InitFont(
     faPtr->slant	= (tm.tmItalic != 0) ? TK_FS_ITALIC : TK_FS_ROMAN;
     faPtr->underline	= (tm.tmUnderlined != 0) ? 1 : 0;
     faPtr->overstrike	= overstrike;
-    
+
     fmPtr		= &fontPtr->font.fm;
     fmPtr->ascent	= tm.tmAscent;
     fmPtr->descent	= tm.tmDescent;
@@ -1137,7 +1137,7 @@ InitFont(
 	GetCharWidthW(hdc, 0, BASE_CHARS - 1, fontPtr->widths);
     } else {
 	GetCharWidthA(hdc, 0, BASE_CHARS - 1, fontPtr->widths);
-    } 
+    }
     Tcl_DStringFree(&faceString);
 
     SelectObject(hdc, oldFont);
@@ -1148,7 +1148,7 @@ InitFont(
  *-------------------------------------------------------------------------
  *
  * ReleaseFont --
- * 
+ *
  *	Called to release the windows-specific contents of a TkFont.
  *	The caller is responsible for freeing the memory used by the
  *	font itself.
@@ -1161,7 +1161,7 @@ InitFont(
  *
  *---------------------------------------------------------------------------
  */
- 
+
 static void
 ReleaseFont(
     WinFont *fontPtr)		/* The font to delete. */
@@ -1200,7 +1200,7 @@ InitSubFont(
     HFONT hFont,		/* The screen font. */
     int base,			/* Non-zero if this SubFont is being used
 				 * as the base font for a font object. */
-    SubFont *subFontPtr)	/* Filled with SubFont constructed from 
+    SubFont *subFontPtr)	/* Filled with SubFont constructed from
     				 * above attributes. */
 {
     subFontPtr->hFont	    = hFont;
@@ -1213,7 +1213,7 @@ InitSubFont(
  *
  * ReleaseSubFont --
  *
- *	Called to release the contents of a SubFont.  The caller is 
+ *	Called to release the contents of a SubFont.  The caller is
  *	responsible for freeing the memory used by the SubFont itself.
  *
  * Results:
@@ -1239,11 +1239,11 @@ ReleaseSubFont(
  * AllocFontFamily --
  *
  *	Find the FontFamily structure associated with the given font
- *	name.  The information should be stored by the caller in a 
- *	SubFont and used when determining if that SubFont supports a 
+ *	name.  The information should be stored by the caller in a
+ *	SubFont and used when determining if that SubFont supports a
  *	character.
  *
- *	Cannot use the string name used to construct the font as the 
+ *	Cannot use the string name used to construct the font as the
  *	key, because the capitalization may not be canonical.  Therefore
  *	use the face name actually retrieved from the font metrics as
  *	the key.
@@ -1275,7 +1275,7 @@ AllocFontFamily(
     Tcl_DString faceString;
     Tcl_Encoding encoding;
     char buf[LF_FACESIZE * sizeof(WCHAR)];
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     hFont = SelectObject(hdc, hFont);
@@ -1289,7 +1289,7 @@ AllocFontFamily(
     Tcl_DStringFree(&faceString);
     hFont = SelectObject(hdc, hFont);
 
-    familyPtr = tsdPtr->fontFamilyList; 
+    familyPtr = tsdPtr->fontFamilyList;
     for ( ; familyPtr != NULL; familyPtr = familyPtr->nextPtr) {
 	if (familyPtr->faceName == faceName) {
 	    familyPtr->refCount++;
@@ -1302,13 +1302,13 @@ AllocFontFamily(
     familyPtr->nextPtr = tsdPtr->fontFamilyList;
     tsdPtr->fontFamilyList = familyPtr;
 
-    /* 
-     * Set key for this FontFamily. 
+    /*
+     * Set key for this FontFamily.
      */
 
     familyPtr->faceName = faceName;
 
-    /* 
+    /*
      * An initial refCount of 2 means that FontFamily information will
      * persist even when the SubFont that loaded the FontFamily is released.
      * Change it to 1 to cause FontFamilies to be unloaded when not in use.
@@ -1316,7 +1316,7 @@ AllocFontFamily(
 
     familyPtr->refCount = 2;
 
-    familyPtr->segCount = LoadFontRanges(hdc, hFont, &familyPtr->startCount, 
+    familyPtr->segCount = LoadFontRanges(hdc, hFont, &familyPtr->startCount,
 	    &familyPtr->endCount, &familyPtr->isSymbolFont);
 
     encoding = NULL;
@@ -1328,7 +1328,7 @@ AllocFontFamily(
 	 * GREEK CAPITAL GAMMA at location 0393.  If Tk interpreted the
 	 * Symbol font using the Unicode encoding, it would decide that
 	 * the Symbol font has no GREEK CAPITAL GAMMA, because the Symbol
-	 * encoding (of course) reports that character 0393 doesn't exist.  
+	 * encoding (of course) reports that character 0393 doesn't exist.
 	 *
 	 * With non-symbol Windows fonts, such as Times New Roman, if the
 	 * font has a GREEK CAPITAL GAMMA, it will be found in the correct
@@ -1343,16 +1343,16 @@ AllocFontFamily(
 	encoding = Tcl_GetEncoding(NULL, "unicode");
 	familyPtr->textOutProc =
 	    (BOOL (WINAPI *)(HDC, int, int, TCHAR *, int)) TextOutW;
-	familyPtr->getTextExtentPoint32Proc = 
+	familyPtr->getTextExtentPoint32Proc =
 	    (BOOL (WINAPI *)(HDC, TCHAR *, int, LPSIZE)) GetTextExtentPoint32W;
 	familyPtr->isWideFont = 1;
     } else {
-	familyPtr->textOutProc = 
+	familyPtr->textOutProc =
 	    (BOOL (WINAPI *)(HDC, int, int, TCHAR *, int)) TextOutA;
-	familyPtr->getTextExtentPoint32Proc = 
+	familyPtr->getTextExtentPoint32Proc =
 	    (BOOL (WINAPI *)(HDC, TCHAR *, int, LPSIZE)) GetTextExtentPoint32A;
 	familyPtr->isWideFont = 0;
-    } 
+    }
 
     familyPtr->encoding = encoding;
 
@@ -1376,14 +1376,14 @@ AllocFontFamily(
  *
  *-------------------------------------------------------------------------
  */
- 
+
 static void
 FreeFontFamily(
     FontFamily *familyPtr)	/* The FontFamily to delete. */
 {
     int i;
     FontFamily **familyPtrPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (familyPtr == NULL) {
@@ -1407,11 +1407,11 @@ FreeFontFamily(
     if (familyPtr->encoding != TkWinGetUnicodeEncoding()) {
 	Tcl_FreeEncoding(familyPtr->encoding);
     }
-    
-    /* 
-     * Delete from list. 
+
+    /*
+     * Delete from list.
      */
-         
+
     for (familyPtrPtr = &tsdPtr->fontFamilyList; ; ) {
         if (*familyPtrPtr == familyPtr) {
   	    *familyPtrPtr = familyPtr->nextPtr;
@@ -1419,7 +1419,7 @@ FreeFontFamily(
 	}
 	familyPtrPtr = &(*familyPtrPtr)->nextPtr;
     }
-    
+
     ckfree((char *) familyPtr);
 }
 
@@ -1428,18 +1428,18 @@ FreeFontFamily(
  *
  * FindSubFontForChar --
  *
- *	Determine which screen font is necessary to use to display the 
- *	given character.  If the font object does not have a screen font 
- *	that can display the character, another screen font may be loaded 
+ *	Determine which screen font is necessary to use to display the
+ *	given character.  If the font object does not have a screen font
+ *	that can display the character, another screen font may be loaded
  *	into the font object, following a set of preferred fallback rules.
  *
  * Results:
- *	The return value is the SubFont to use to display the given 
- *	character. 
+ *	The return value is the SubFont to use to display the given
+ *	character.
  *
  * Side effects:
  *	The contents of fontPtr are modified to cache the results
- *	of the lookup and remember any SubFonts that were dynamically 
+ *	of the lookup and remember any SubFonts that were dynamically
  *	loaded.
  *
  *-------------------------------------------------------------------------
@@ -1461,7 +1461,7 @@ FindSubFontForChar(
     char *fallbackName;
     SubFont *subFontPtr;
     Tcl_DString ds;
-    
+
     if (ch < BASE_CHARS) {
 	return &fontPtr->subFontArray[0];
     }
@@ -1476,10 +1476,10 @@ FindSubFontForChar(
      * Keep track of all face names that we check, so we don't check some
      * name multiple times if it can be reached by multiple paths.
      */
-     
+
     Tcl_DStringInit(&ds);
     hdc = GetDC(fontPtr->hwnd);
-        
+
     aliases = TkFontGetAliasList(fontPtr->font.fa.family);
 
     fontFallbacks = TkFontGetFallbacks();
@@ -1493,7 +1493,7 @@ FindSubFontForChar(
 
 		goto tryfallbacks;
 	    } else if (aliases != NULL) {
-		/* 
+		/*
 		 * Or if an alias for the base font has a fallback...
 		 */
 
@@ -1506,7 +1506,7 @@ FindSubFontForChar(
 	}
 	continue;
 
-	/* 
+	/*
 	 * ...then see if we can use one of the fallbacks, or an
 	 * alias for one of the fallbacks.
 	 */
@@ -1523,13 +1523,13 @@ FindSubFontForChar(
     }
 
     /*
-     * See if we can use something from the global fallback list. 
+     * See if we can use something from the global fallback list.
      */
 
     anyFallbacks = TkFontGetGlobalClass();
     for (i = 0; anyFallbacks[i] != NULL; i++) {
 	fallbackName = anyFallbacks[i];
-	subFontPtr = CanUseFallbackWithAliases(hdc, fontPtr, fallbackName, 
+	subFontPtr = CanUseFallbackWithAliases(hdc, fontPtr, fallbackName,
 		ch, &ds, subFontPtrPtr);
 	if (subFontPtr != NULL) {
 	    goto end;
@@ -1558,9 +1558,9 @@ FindSubFontForChar(
 
     end:
     Tcl_DStringFree(&ds);
-    
+
     if (subFontPtr == NULL) {
-        /* 
+        /*
          * No font can display this character.  We will use the base font
          * and have it display the "unknown" character.
          */
@@ -1655,7 +1655,7 @@ FontMapLookup(
  *
  *	Tell the font mapping cache that the given screen font should be
  *	used to display the specified character.  This is called when no
- *	font on the system can be be found that can display that 
+ *	font on the system can be be found that can display that
  *	character; we lie to the font and tell it that it can display
  *	the character, otherwise we would end up re-searching the entire
  *	fallback hierarchy every time that character was seen.
@@ -1675,7 +1675,7 @@ FontMapLookup(
 
 static void
 FontMapInsert(
-    SubFont *subFontPtr,	/* Contains font mapping cache to be 
+    SubFont *subFontPtr,	/* Contains font mapping cache to be
 				 * updated. */
     int ch)			/* Character to be added to cache. */
 {
@@ -1707,11 +1707,11 @@ FontMapInsert(
  *
  *-------------------------------------------------------------------------
  */
-static void 
+static void
 FontMapLoadPage(
-    SubFont *subFontPtr,	/* Contains font mapping cache to be 
+    SubFont *subFontPtr,	/* Contains font mapping cache to be
 				 * updated. */
-    int row)			/* Index of the page to be loaded into 
+    int row)			/* Index of the page to be loaded into
 				 * the cache. */
 {
     FontFamily *familyPtr;
@@ -1728,8 +1728,8 @@ FontMapLoadPage(
 
     if (familyPtr->encoding == TkWinGetUnicodeEncoding()) {
 	/*
-	 * Font is Unicode.  Few fonts are going to have all characters, so 
-	 * examine the TrueType character existence metrics to determine 
+	 * Font is Unicode.  Few fonts are going to have all characters, so
+	 * examine the TrueType character existence metrics to determine
 	 * what characters actually exist in this font.
 	 */
 
@@ -1752,12 +1752,12 @@ FontMapLoadPage(
 	}
     } else if (familyPtr->isSymbolFont) {
 	/*
-	 * Assume that a symbol font with a known encoding has all the 
-	 * characters that its encoding claims it supports.  
-	 *	 
+	 * Assume that a symbol font with a known encoding has all the
+	 * characters that its encoding claims it supports.
+	 *
 	 * The test for "encoding == unicodeEncoding"
-	 * must occur before this case, to catch all symbol fonts (such 
-	 * as {Comic Sans MS} or Wingdings) for which we don't have 
+	 * must occur before this case, to catch all symbol fonts (such
+	 * as {Comic Sans MS} or Wingdings) for which we don't have
 	 * encoding information; those symbol fonts are treated as if
 	 * they were in the Unicode encoding and their symbolic
 	 * character existence metrics are treated as if they were Unicode
@@ -1768,8 +1768,8 @@ FontMapLoadPage(
 
         end = (row + 1) << FONTMAP_SHIFT;
 	for (i = row << FONTMAP_SHIFT; i < end; i++) {
-	    if (Tcl_UtfToExternal(NULL, encoding, src, 
-		    Tcl_UniCharToUtf(i, src), TCL_ENCODING_STOPONERROR, NULL, 
+	    if (Tcl_UtfToExternal(NULL, encoding, src,
+		    Tcl_UniCharToUtf(i, src), TCL_ENCODING_STOPONERROR, NULL,
 		    buf, sizeof(buf), NULL, NULL, NULL) != TCL_OK) {
 		continue;
 	    }
@@ -1818,7 +1818,7 @@ CanUseFallbackWithAliases(
     int i;
     char **aliases;
     SubFont *subFontPtr;
-    
+
     if (SeenName(faceName, nameTriedPtr) == 0) {
 	subFontPtr = CanUseFallback(hdc, fontPtr, faceName, ch, subFontPtrPtr);
 	if (subFontPtr != NULL) {
@@ -1884,19 +1884,19 @@ SeenName(
  *
  * CanUseFallback --
  *
- *	If the specified screen font has not already been loaded into 
+ *	If the specified screen font has not already been loaded into
  *	the font object, determine if it can display the given character.
  *
  * Results:
  *	The return value is a pointer to a newly allocated SubFont, owned
  *	by the font object.  This SubFont can be used to display the given
- *	character.  The SubFont represents the screen font with the base set 
- *	of font attributes from the font object, but using the specified 
+ *	character.  The SubFont represents the screen font with the base set
+ *	of font attributes from the font object, but using the specified
  *	font name.  NULL is returned if the font object already holds
- *	a reference to the specified physical font or if the specified 
+ *	a reference to the specified physical font or if the specified
  *	physical font cannot display the given character.
  *
- * Side effects:				       
+ * Side effects:
  *	The font object's subFontArray is updated to contain a reference
  *	to the newly allocated SubFont.
  *
@@ -1922,10 +1922,10 @@ CanUseFallback(
 	return NULL;
     }
 
-    /* 
+    /*
      * Skip all fonts we've already used.
      */
-     
+
     for (i = 0; i < fontPtr->numSubFonts; i++) {
 	if (faceName == fontPtr->subFontArray[i].familyPtr->faceName) {
 	    return NULL;
@@ -1938,7 +1938,7 @@ CanUseFallback(
 
     hFont = GetScreenFont(&fontPtr->font.fa, faceName, fontPtr->pixelSize);
     InitSubFont(hdc, hFont, 0, &subFont);
-    if (((ch < 256) && (subFont.familyPtr->isSymbolFont)) 
+    if (((ch < 256) && (subFont.familyPtr->isSymbolFont))
 	    || (FontMapLookup(&subFont, ch) == 0)) {
 	/*
 	 * Don't use a symbol font as a fallback font for characters below
@@ -1952,7 +1952,7 @@ CanUseFallback(
     if (fontPtr->numSubFonts >= SUBFONT_SPACE) {
 	SubFont *newPtr;
 
-    	newPtr = (SubFont *) ckalloc(sizeof(SubFont) 
+    	newPtr = (SubFont *) ckalloc(sizeof(SubFont)
 		* (fontPtr->numSubFonts + 1));
 	memcpy((char *) newPtr, fontPtr->subFontArray,
 		fontPtr->numSubFonts * sizeof(SubFont));
@@ -1989,13 +1989,13 @@ CanUseFallback(
  *---------------------------------------------------------------------------
  */
 
-static HFONT 
+static HFONT
 GetScreenFont(
     CONST TkFontAttributes *faPtr,
 				/* Desired font attributes for new HFONT. */
     CONST char *faceName,	/* Overrides font family specified in font
 				 * attributes. */
-    int pixelSize)		/* Overrides size specified in font 
+    int pixelSize)		/* Overrides size specified in font
 				 * attributes. */
 {
     Tcl_DString ds;
@@ -2054,7 +2054,7 @@ GetScreenFont(
  *
  * FamilyExists, FamilyOrAliasExists, WinFontExistsProc --
  *
- *	Determines if any physical screen font exists on the system with 
+ *	Determines if any physical screen font exists on the system with
  *	the given family name.  If the family exists, then it should be
  *	possible to construct some physical screen font with that family
  *	name.
@@ -2092,13 +2092,13 @@ FamilyExists(
     if (strcasecmp(faceName, "Helvetica") == 0) {
 	return 0;
     }
-    
+
     Tcl_UtfToExternalDString(systemEncoding, faceName, -1, &faceString);
 
     /*
-     * If the family exists, WinFontExistProc() will be called and 
-     * EnumFontFamilies() will return whatever WinFontExistProc() returns.  
-     * If the family doesn't exist, EnumFontFamilies() will just return a 
+     * If the family exists, WinFontExistProc() will be called and
+     * EnumFontFamilies() will return whatever WinFontExistProc() returns.
+     * If the family doesn't exist, EnumFontFamilies() will just return a
      * non-zero value.
      */
 
@@ -2115,7 +2115,7 @@ FamilyExists(
 
 static char *
 FamilyOrAliasExists(
-    HDC hdc, 
+    HDC hdc,
     CONST char *faceName)
 {
     char **aliases;
@@ -2160,25 +2160,25 @@ typedef struct CMAPTABLE {
 } CMAPTABLE;
 
 typedef struct ENCODINGTABLE {
-    USHORT platform;		/* Platform for which data is targeted.  
+    USHORT platform;		/* Platform for which data is targeted.
 				 * 3 means data is for Windows. */
-    USHORT encoding;		/* How characters in font are encoded.  
-				 * 1 means that the following subtable is 
+    USHORT encoding;		/* How characters in font are encoded.
+				 * 1 means that the following subtable is
 				 * keyed based on Unicode. */
-    ULONG offset;		/* Byte offset from beginning of CMAPTABLE 
+    ULONG offset;		/* Byte offset from beginning of CMAPTABLE
 				 * to the subtable for this encoding. */
 } ENCODINGTABLE;
 
 typedef struct ANYTABLE {
     USHORT format;		/* Format number. */
-    USHORT length;		/* The actual length in bytes of this 
+    USHORT length;		/* The actual length in bytes of this
 				 * subtable. */
     USHORT version;		/* Version number (starts at 0). */
 } ANYTABLE;
 
 typedef struct BYTETABLE {
     USHORT format;		/* Format number is set to 0. */
-    USHORT length;		/* The actual length in bytes of this 
+    USHORT length;		/* The actual length in bytes of this
 				 * subtable. */
     USHORT version;		/* Version number (starts at 0). */
     BYTE glyphIdArray[256];	/* Array that maps up to 256 single-byte char
@@ -2189,7 +2189,7 @@ typedef struct SUBHEADER {
     USHORT firstCode;		/* First valid low byte for subHeader. */
     USHORT entryCount;		/* Number valid low bytes for subHeader. */
     SHORT idDelta;		/* Constant adder to get base glyph index. */
-    USHORT idRangeOffset;	/* Byte offset from here to appropriate 
+    USHORT idRangeOffset;	/* Byte offset from here to appropriate
 				 * glyphIndexArray. */
 } SUBHEADER;
 
@@ -2198,12 +2198,12 @@ typedef struct HIBYTETABLE {
     USHORT length;		/* The actual length in bytes of this
 				 * subtable. */
     USHORT version;		/* Version number (starts at 0). */
-    USHORT subHeaderKeys[256];	/* Maps high bytes to subHeaders: value is 
+    USHORT subHeaderKeys[256];	/* Maps high bytes to subHeaders: value is
 				 * subHeader index * 8. */
 #if 0
     SUBHEADER subHeaders[];	/* Variable-length array of SUBHEADERs. */
-    USHORT glyphIndexArray[];	/* Variable-length array containing subarrays 
-				 * used for mapping the low byte of 2-byte 
+    USHORT glyphIndexArray[];	/* Variable-length array containing subarrays
+				 * used for mapping the low byte of 2-byte
 				 * characters. */
 #endif
 } HIBYTETABLE;
@@ -2235,7 +2235,7 @@ typedef struct TRIMMEDTABLE {
     USHORT firstCode;		/* First character code of subrange. */
     USHORT entryCount;		/* Number of character codes in subrange. */
 #if 0
-    USHORT glyphIdArray[];	/* Array of glyph index values for 
+    USHORT glyphIdArray[];	/* Array of glyph index values for
 				        character codes in the range. */
 #endif
 } TRIMMEDTABLE;
@@ -2255,15 +2255,15 @@ typedef union SUBTABLE {
  *
  * LoadFontRanges --
  *
- *	Given an HFONT, get the information about the characters that 
+ *	Given an HFONT, get the information about the characters that
  *	this font can display.
  *
  * Results:
  *	If the font has no Unicode character information, the return value
- *	is 0 and *startCountPtr and *endCountPtr are filled with NULL.  
- *	Otherwise, *startCountPtr and *endCountPtr are set to pointers to 
- *	arrays of TrueType character existence information and the return 
- *	value is the length of the arrays (the two arrays are always the 
+ *	is 0 and *startCountPtr and *endCountPtr are filled with NULL.
+ *	Otherwise, *startCountPtr and *endCountPtr are set to pointers to
+ *	arrays of TrueType character existence information and the return
+ *	value is the length of the arrays (the two arrays are always the
  *	same length as each other).
  *
  * Side effects:
@@ -2276,9 +2276,9 @@ static int
 LoadFontRanges(
     HDC hdc,			/* HDC into which font can be selected. */
     HFONT hFont,		/* HFONT to query. */
-    USHORT **startCountPtr,	/* Filled with malloced pointer to 
+    USHORT **startCountPtr,	/* Filled with malloced pointer to
 				 * character range information. */
-    USHORT **endCountPtr,	/* Filled with malloced pointer to 
+    USHORT **endCountPtr,	/* Filled with malloced pointer to
 				 * character range information. */
     int *symbolPtr)
  {
@@ -2325,7 +2325,7 @@ LoadFontRanges(
 		SwapLong(&encTable.offset);
 	    }
 	    if (encTable.platform != 3) {
-		/* 
+		/*
 		 * Not Microsoft encoding.
 		 */
 
@@ -2337,7 +2337,7 @@ LoadFontRanges(
 		continue;
 	    }
 
-	    GetFontData(hdc, cmapKey, encTable.offset, &subTable, 
+	    GetFontData(hdc, cmapKey, encTable.offset, &subTable,
 		    sizeof(subTable));
 	    if (swapped) {
 		SwapShort(&subTable.any.format);
@@ -2407,7 +2407,7 @@ LoadFontRanges(
 
 /*
  *-------------------------------------------------------------------------
- * 
+ *
  * SwapShort, SwapLong --
  *
  *	Helper functions to convert the data loaded from TrueType font
@@ -2428,9 +2428,9 @@ SwapShort(PUSHORT p)
     *p = (SHORT)(HIBYTE(*p) + (LOBYTE(*p) << 8));
 }
 
-static void 
+static void
 SwapLong(PULONG p)
-{					     
+{
     ULONG temp;
 
     temp = (LONG) ((BYTE) *p);

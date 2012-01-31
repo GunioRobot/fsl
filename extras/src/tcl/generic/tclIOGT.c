@@ -718,7 +718,7 @@ TransformInputProc (instanceData, buf, toRead, errorCodePtr)
 	    }
 
 	    *errorCodePtr = Tcl_GetErrno();
-	    return -1;      
+	    return -1;
 	}
 
 	if (read == 0) {
@@ -1158,7 +1158,7 @@ TransformWatchProc (instanceData, mask)
  *
  *	Result:
  *		The appropriate Tcl_File or NULL if not
- *		present. 
+ *		present.
  *
  *------------------------------------------------------*
  */

@@ -16,58 +16,58 @@ SET(srcs
   logger.cpp
   application.cpp
   assistantclient.cpp
-  splashscreen.cpp 
+  splashscreen.cpp
   version.cpp
   tracker.cpp
   cursor.cpp
   bricon.cpp
-  imagegroup.cpp 
-  overlaylist.cpp 
-  metaimage.cpp 
-  imagedata.cpp 
-  drawsettings.cpp 
-  imagedisplaysetting.cpp 
+  imagegroup.cpp
+  overlaylist.cpp
+  metaimage.cpp
+  imagedata.cpp
+  drawsettings.cpp
+  imagedisplaysetting.cpp
   lookuptable.cpp
-  curvedatalist.cpp 
-  imagedatastore.cpp 
-  imagebuffer.cpp 
-  graphmanager.cpp 
-  briconwidget.cpp 
-  cursorwidget.cpp 
-  drawwidget.cpp 
-  imagewidget.cpp 
-  viewwidget.cpp 
-  orthowidget.cpp 
-  singlewidget.cpp 
-  lightboxwidget.cpp 
-  slicewidget.cpp 
-  sliceview.cpp 
-  timeserieswidget.cpp 
-  singleserieswidget.cpp 
-  overlaywidget.cpp 
-  histogramwidget.cpp 
+  curvedatalist.cpp
+  imagedatastore.cpp
+  imagebuffer.cpp
+  graphmanager.cpp
+  briconwidget.cpp
+  cursorwidget.cpp
+  drawwidget.cpp
+  imagewidget.cpp
+  viewwidget.cpp
+  orthowidget.cpp
+  singlewidget.cpp
+  lightboxwidget.cpp
+  slicewidget.cpp
+  sliceview.cpp
+  timeserieswidget.cpp
+  singleserieswidget.cpp
+  overlaywidget.cpp
+  histogramwidget.cpp
   clusterbrowser.cpp
-  histogramtoolbar.cpp 
+  histogramtoolbar.cpp
   overlayinfodialog.cpp
   meshoptionsdialog.cpp
   atlasoptionsdialog.cpp
   atlasselectiondialog.cpp
   viewoptionsdialog.cpp
-  histogramoptionsdialogimpl.cpp 
-  properties.cpp 
-  propertiesdialogimpl.cpp 
-  vtkpropertydialog.cpp 
-  vtktoolbar.cpp 
+  histogramoptionsdialogimpl.cpp
+  properties.cpp
+  propertiesdialogimpl.cpp
+  vtkpropertydialog.cpp
+  vtktoolbar.cpp
   timeseriestoolbar.cpp
   talairachwidget.cpp
-  shape.cpp 
-  rect.cpp 
-  command.cpp 
+  shape.cpp
+  rect.cpp
+  command.cpp
   modelfit.cpp
   clusterdata.cpp
-  tsplotcode.cpp 
-  maintoolbar.cpp 
-  modetoolbar.cpp 
+  tsplotcode.cpp
+  maintoolbar.cpp
+  modetoolbar.cpp
   vtkmeshsurface.cpp
   vtkwidget.cpp)
 
@@ -104,24 +104,24 @@ QT_WRAP_UI(ui ui_hdrs ui_srcs
   sliceviewbase.ui
   applicationwindowbase.ui
   clusterbrowserbase.ui
-  histogramoptionsdialog.ui 
-  histogramtoolbarbase.ui 
-  meshoptionsdialogbase.ui 
-  atlasoptionsdialogbase.ui 
-  atlasselectiondialogbase.ui 
-  viewoptionsdialogbase.ui 
-  talairachwidgetbase.ui 
-  propertiesdialog.ui 
-  overlaywidgetbase.ui 
-  createmaskdialog.ui 
-  overlayinfodialogbase.ui 
-  timeseriestoolbarbase.ui 
+  histogramoptionsdialog.ui
+  histogramtoolbarbase.ui
+  meshoptionsdialogbase.ui
+  atlasoptionsdialogbase.ui
+  atlasselectiondialogbase.ui
+  viewoptionsdialogbase.ui
+  talairachwidgetbase.ui
+  propertiesdialog.ui
+  overlaywidgetbase.ui
+  createmaskdialog.ui
+  overlayinfodialogbase.ui
+  timeseriestoolbarbase.ui
   smartpendialogbase.ui
-  maintoolbarbase.ui 
-  modetoolbarbase.ui 
-  vtktoolbarbase.ui 
-  vtkpropertydialogbase.ui 
-  drawtoolbarbase.ui 
+  maintoolbarbase.ui
+  modetoolbarbase.ui
+  vtktoolbarbase.ui
+  vtkpropertydialogbase.ui
+  drawtoolbarbase.ui
   cursorwidgetbase.ui
   briconwidgetbase.ui
   timeserieswindowbase.ui)
@@ -132,8 +132,8 @@ FIND_PATH( BOOST_DIR boost/shared_ptr.hpp
 	   /Developer/boost
 	   /usr/local/boost
 	   /usr/local/boost_1_33_0 )
-FIND_PATH( QWT_DIR include/qwt_wheel.h 
-	   /Developer/qwt 
+FIND_PATH( QWT_DIR include/qwt_wheel.h
+	   /Developer/qwt
 	   /usr/local/qwt
 	   /usr/local/qwt-4.2.0)
 IF(NOT WINDOWS)
@@ -181,7 +181,7 @@ IF(APPLE)
   FILE( GLOB qtlibs ${QT_INCLUDE_DIR}/../lib/*.dylib* )
   INSTALL(FILES ${vtklibs} ${qtlibs} ${qwtlibs} DESTINATION bin/fslview.app/Contents/Frameworks)
 #  INSTALL(DIRECTORY $ENV{QTDIR}/bin/assistant.app DESTINATION lib)
-#   INSTALL(TARGETS fslview atlasquery 
+#   INSTALL(TARGETS fslview atlasquery
 # 	RUNTIME DESTINATION /bin
 # 	LIBRARY DESTINATION /lib
 # 	ARCHIVE DESTINATION /lib )
@@ -203,7 +203,7 @@ TARGET_LINK_LIBRARIES( fslview miscmaths newmat utils )
 TARGET_LINK_LIBRARIES( fslview qassistantclient qwt )
 TARGET_LINK_LIBRARIES( fslview vtkHybrid vtkWidgets QVTK )
 
-INSTALL(TARGETS fslview atlasquery 
+INSTALL(TARGETS fslview atlasquery
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib )

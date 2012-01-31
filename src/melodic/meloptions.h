@@ -1,30 +1,30 @@
 
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     meloptions.h - class for command line options
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -36,13 +36,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -53,7 +53,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -93,13 +93,13 @@ class MelodicOptions {
 	public:
   	static MelodicOptions& getInstance();
   	~MelodicOptions() { delete gopt; }
-  
+
   	string version;
   	string binpath;
   	string logfname;
   	bool   filtermode;
   	bool   explicitnums;
-  
+
   	Option<string> logdir;
   	Option< std::vector<string> > inputfname;
 
@@ -135,9 +135,9 @@ class MelodicOptions {
   	Option<string> mmthresh;
   	Option<bool>   perf_mm;
   	Option<string> ICsfname;
-  	Option<string> filtermix; 
-  	Option<string> smodename; 
-  	Option<string> filter; 
+  	Option<string> filtermix;
+  	Option<string> smodename;
+  	Option<string> filter;
 
   	Option<bool>   genreport;
 		Option<string> guireport;
@@ -153,9 +153,9 @@ class MelodicOptions {
 		Option<string> fn_Tcon;
 		Option<string> fn_TconF;
 		Option<string> fn_Sdesign;
-		Option<string> fn_Scon;	
-		Option<string> fn_SconF;	
-	
+		Option<string> fn_Scon;
+		Option<string> fn_SconF;
+
   	Option<bool>   output_all;
   	Option<bool>   output_unmix;
   	Option<bool>   output_MMstats;
@@ -164,7 +164,7 @@ class MelodicOptions {
   	Option<bool>   output_origIC;
   	Option<bool>   output_mean;
 
-  	Option<bool> verbose;  
+  	Option<bool> verbose;
   	Option<bool> vers;
   	Option<bool> copyright;
   	Option<bool> help;
@@ -193,16 +193,16 @@ class MelodicOptions {
   	void parse_command_line(int argc, char** argv, Log& logger,  const string &p_version);
 
  	private:
-  	MelodicOptions();  
+  	MelodicOptions();
   	const MelodicOptions& operator=(MelodicOptions&);
   	MelodicOptions(MelodicOptions&);
 
-  	OptionParser options; 
-      
+  	OptionParser options;
+
   	static MelodicOptions* gopt;
 
-  	void print_usage(int argc, char *argv[]);  
-  	void print_version(); 
+  	void print_usage(int argc, char *argv[]);
+  	void print_version();
   	void print_copyright();
   	void status();
 
@@ -211,136 +211,136 @@ class MelodicOptions {
  inline MelodicOptions& MelodicOptions::getInstance(){
    if(gopt == NULL)
      gopt = new MelodicOptions();
-   
+
    return *gopt;
  }
 
  inline MelodicOptions::MelodicOptions() :
    logdir(string("-o,--outdir"), string("log.txt"),
-	   string("output directory name\n"), 
+	   string("output directory name\n"),
 	   false, requires_argument),
    inputfname(string("-i,--in"), std::vector<string>(),
-	   string("input file names (either single file name or comma-separated list or text file)"), 
+	   string("input file names (either single file name or comma-separated list or text file)"),
 	   true, requires_argument),
    outputfname(string("-O,--out"), string("melodic"),
-	   string("output file name"), 
+	   string("output file name"),
 	   false, requires_argument,false),
    maskfname(string("-m,--mask"), string(""),
-	   string("file name of mask for thresholding"), 
+	   string("file name of mask for thresholding"),
 	   false, requires_argument),
    use_mask(string("--nomask"), true,
-	   string("switch off masking"), 
+	   string("switch off masking"),
 	   false, no_argument),
    update_mask(string("--update_mask"), true,
-	   string("switch off mask updating"), 
+	   string("switch off mask updating"),
 	   false, no_argument),
    perf_bet(string("--nobet"), true,
-	   string("\tswitch off BET"), 
+	   string("\tswitch off BET"),
 	   false, no_argument),
    threshold(string("--bgthreshold"),  0.01,
-	   string("brain / non-brain threshold (only if --nobet selected)\n"), 
+	   string("brain / non-brain threshold (only if --nobet selected)\n"),
 	   false, requires_argument),
    pca_dim(string("-d,--dim"), 0,
-	   string("dimensionality reduction into #num dimensions (default: automatic estimation)"), 
+	   string("dimensionality reduction into #num dimensions (default: automatic estimation)"),
 	   false, requires_argument),
    pca_est(string("--dimest"), string("lap"),
-	   string("use specific dim. estimation technique: lap, bic, mdl, aic, mean (default: lap)"), 
+	   string("use specific dim. estimation technique: lap, bic, mdl, aic, mean (default: lap)"),
 	   false, requires_argument),
    joined_whiten(string("--sep_whiten"), true,
-	   string("switch on separate whitening"), 
+	   string("switch on separate whitening"),
 	   false, no_argument),
    joined_vn(string("--sep_vn"), true,
-   	   string("switch off joined variance nomalisation"), 
+   	   string("switch off joined variance nomalisation"),
        false, no_argument),
    dr_pca(string("--mod_pca"), true,
 	   string("switch off modified PCA for concat ICA"),
 	   false, no_argument, false),
    vn_level(string("--vn_level"), float(2.3),
-	   string("variance nomalisation threshold level (Z> value is ignored)"), 
+	   string("variance nomalisation threshold level (Z> value is ignored)"),
 	   false, requires_argument, false),
    numICs(string("-n,--numICs"), -1,
-	   string("numer of IC's to extract (for deflation approach)"), 
+	   string("numer of IC's to extract (for deflation approach)"),
 	   false, requires_argument),
    approach(string("-a,--approach"),  string("symm"),
 	   string("approach for decomposition, 2D: defl, symm (default), 3D: tica (default), concat"),
 	   false, requires_argument),
    nonlinearity(string("--nl"), string("pow3"),
-	   string("\tnonlinearity: gauss, tanh, pow3, pow4"), 
+	   string("\tnonlinearity: gauss, tanh, pow3, pow4"),
 	   false, requires_argument),
    varnorm(string("--vn,--varnorm"), true,
-	   string("switch off variance normalisation"), 
+	   string("switch off variance normalisation"),
 	   false, no_argument),
    pbsc(string("--pbsc"), false,
-	   string("        switch off conversion to percent BOLD signal change"), 
+	   string("        switch off conversion to percent BOLD signal change"),
 	   false, no_argument),
    pspec(string("--pspec"), false,
-	   string("        switch on conversion to powerspectra"), 
+	   string("        switch on conversion to powerspectra"),
 	   false, no_argument, false),
    segment(string("--covarweight"), string(""),
 	   string("voxel-wise weights for the covariance matrix (e.g. segmentation information)"),
 	   false, requires_argument),
    tsmooth(string("--spca"),  false,
-	   string("smooth the eigenvectors prior to IC decomposition"), 
+	   string("smooth the eigenvectors prior to IC decomposition"),
 	    false, no_argument, false),
    epsilon(string("--eps,--epsilon"), 0.00005,
-	   string("minimum error change"), 
+	   string("minimum error change"),
 	   false, requires_argument),
    epsilonS(string("--epsS,--epsilonS"), 0.03,
-	   string("minimum error change for rank-1 approximation in TICA"), 
+	   string("minimum error change for rank-1 approximation in TICA"),
 	   false, requires_argument),
    maxNumItt(string("--maxit"),  500,
-	   string("\tmaximum number of iterations before restart"), 
+	   string("\tmaximum number of iterations before restart"),
 	   false, requires_argument),
    maxRestart(string("--maxrestart"),  6,
-	   string("maximum number of restarts\n"), 
+	   string("maximum number of restarts\n"),
 	   false, requires_argument),
    rank1interval(string("--rank1interval"),  10,
-	   string("number of iterations between rank-1 approximation (TICA)\n"), 
+	   string("number of iterations between rank-1 approximation (TICA)\n"),
 		 false, requires_argument,false),
    mmthresh(string("--mmthresh"), string("0.5"),
-	   string("threshold for Mixture Model based inference"), 
+	   string("threshold for Mixture Model based inference"),
 	   false, requires_argument),
    perf_mm(string("--no_mm"), true,
-	   string("\tswitch off mixture modelling on IC maps\n "), 
+	   string("\tswitch off mixture modelling on IC maps\n "),
 	   false, no_argument),
    ICsfname(string("--ICs"), string(""),
-	   string("\tfilename of the IC components file for mixture modelling"), 
+	   string("\tfilename of the IC components file for mixture modelling"),
 	   false, requires_argument),
    filtermix(string("--mix"),  string(""),
-	   string("\tmixing matrix for mixture modelling / filtering"), 
+	   string("\tmixing matrix for mixture modelling / filtering"),
 	   false, requires_argument),
    smodename(string("--smode"),  string(""),
-	   string("\tmatrix of session modes for report generation"), 
+	   string("\tmatrix of session modes for report generation"),
 	   false, requires_argument),
    filter(string("-f,--filter"),  string(""),
-	   string("component numbers to remove\n "), 
+	   string("component numbers to remove\n "),
 	   false, requires_argument),
    genreport(string("--report"), false,
-	   string("generate Melodic web report"), 
+	   string("generate Melodic web report"),
 	   false, no_argument),
    guireport(string("--guireport"), string(""),
-	   string("modify report for GUI use"), 
+	   string("modify report for GUI use"),
 	   false, requires_argument, false),
    bgimage(string("--bgimage"),  string(""),
-	   string("specify background image for report (default: mean image)\n "), 
+	   string("specify background image for report (default: mean image)\n "),
 	   false, requires_argument),
    tr(string("--tr"),  0.0,
-	   string("\tTR in seconds"), 
+	   string("\tTR in seconds"),
 	   false, requires_argument),
    logPower(string("--logPower"),  false,
-	   string("calculate log of power for frequency spectrum\n"), 
+	   string("calculate log of power for frequency spectrum\n"),
 	   false, no_argument),
    addsigchng(string("--sigchng"),  false,
-	   string("add signal change estimates to report pages\n"), 
+	   string("add signal change estimates to report pages\n"),
        false, no_argument, false),
    allPPCA(string("--allPPCA"),  false,
-	   string("add all PPCA plots\n"), 
+	   string("add all PPCA plots\n"),
 	   false, no_argument, false),
    varplots(string("--varplots"),  false,
-	   string("add std error envelopes to time course plots\n"), 
+	   string("add std error envelopes to time course plots\n"),
 	   false, no_argument, false),
    varvals(string("--varvals"),  false,
-	   string("add rank1 values after plots\n"), 
+	   string("add rank1 values after plots\n"),
 	   false, no_argument, false),
    fn_Tdesign(string("--Tdes"), string(""),
 	   string("        design matrix across time-domain"),
@@ -356,92 +356,92 @@ class MelodicOptions {
 	   false, requires_argument),
    fn_Scon(string("--Scon"), string(""),
 	   string("        t-contrast matrix across subject-domain"),
-	   false, requires_argument),	
+	   false, requires_argument),
    fn_SconF(string("--Sconf"), string(""),
 	   string("        F-contrast matrix across subject-domain"),
-	   false, requires_argument,false),	
+	   false, requires_argument,false),
    output_all(string("--Oall"),  false,
-	   string("        output everything"), 
+	   string("        output everything"),
 	   false, no_argument),
    output_unmix(string("--Ounmix"),  false,
-	   string("output unmixing matrix"), 
+	   string("output unmixing matrix"),
 	   false, no_argument),
    output_MMstats(string("--Ostats"),  false,
-	   string("output thresholded maps and probability maps"), 
+	   string("output thresholded maps and probability maps"),
 	   false, no_argument),
    output_pca(string("--Opca"),  false,
-	   string("\toutput PCA results"), 
+	   string("\toutput PCA results"),
 	   false, no_argument),
    output_white(string("--Owhite"),  false,
-	   string("output whitening/dewhitening matrices"), 
+	   string("output whitening/dewhitening matrices"),
 	   false, no_argument),
    output_origIC(string("--Oorig"),  false,
-	   string("\toutput the original ICs"), 
+	   string("\toutput the original ICs"),
 	   false, no_argument),
    output_mean(string("--Omean"),  false,
-	   string("\toutput mean volume\n"), 
+	   string("\toutput mean volume\n"),
 	   false, no_argument),
    verbose(string("-v,--verbose"), false,
-	   string("switch on diagnostic messages"), 
+	   string("switch on diagnostic messages"),
 	   false, no_argument),
    vers(string("-V,--version"), false,
-	   string("prints version information"), 
+	   string("prints version information"),
 	   false, no_argument),
    copyright(string("--copyright"), false,
-	   string("prints copyright information"), 
+	   string("prints copyright information"),
 	   false, no_argument),
    help(string("-h,--help"),  false,
-	   string("prints this help message"), 
+	   string("prints this help message"),
 	   false, no_argument),
    debug(string("--debug"),  false,
-	   string("        switch on debug messages"), 
+	   string("        switch on debug messages"),
 	   false, no_argument),
    guessfname(string("--init_ica"), string(""),
-	   string("file name of FEAT paradigm file (design.mat) for ICA initialisation"), 
+	   string("file name of FEAT paradigm file (design.mat) for ICA initialisation"),
 	   false, requires_argument, false),
    paradigmfname(string("--init_pca"),  string(""),
-	   string("file name of FEAT paradigm file (design.mat) for PCA initialisation"), 
+	   string("file name of FEAT paradigm file (design.mat) for PCA initialisation"),
 	   false, requires_argument, false),
    axials_str(string("--report_maps"),  string(" -s 2 -A 950 "),
-		   string("control string for spatial map images (see slicer)"), 
+		   string("control string for spatial map images (see slicer)"),
 		   false, requires_argument),
    dummy(string("--dummy"),  0,
-	   string("number of dummy volumes"), 
+	   string("number of dummy volumes"),
 	   false, requires_argument,false),
    repeats(string("--repeats"), 1,
-	   string("number of repeats (multistart)"), 
+	   string("number of repeats (multistart)"),
 	   false, requires_argument, false),
    nlconst1(string("--nl1,--nlconst1"),  1.0,
-	   string("nonlinear constant 1"), 
+	   string("nonlinear constant 1"),
 	   false, requires_argument, false),
    nlconst2(string("--nl2,--nlconst2"),  1.0,
-	   string("nonlinear constant 2"), 
+	   string("nonlinear constant 2"),
 	   false, requires_argument, false),
    smooth_probmap(string("--smooth_pm"),  0.0,
-	   string("width of smoothing kernel for probability maps"), 
+	   string("width of smoothing kernel for probability maps"),
 	   false, requires_argument, false),
    remove_meanvol(string("--keep_meanvol"), true,
-	   string("do not subtract mean volume"), 
+	   string("do not subtract mean volume"),
 	   false, no_argument, false),
    remove_meantc(string("--remove_meantc"), false,
-	   string("remove mean time course"), 
+	   string("remove mean time course"),
 	   false, no_argument, false),
    remove_endslices(string("--remEndslices"),  false,
-	   string("delete end slices (motion correction artefacts)"), 
+	   string("delete end slices (motion correction artefacts)"),
 	   false, no_argument,false),
    rescale_nht(string("--rescale_nht"),  true,
-	   string("switch off map rescaling after mixture-modelling"), 
+	   string("switch off map rescaling after mixture-modelling"),
 	   false, no_argument,false),
    guess_remderiv(string("--remove_deriv"),  false,
-	   string("removes every second entry in paradigm file (EV derivatives)"), 
+	   string("removes every second entry in paradigm file (EV derivatives)"),
 	   false, no_argument),
    temporal(string("--temporal"),  false,
-	   string("perform temporal ICA"), 
+	   string("perform temporal ICA"),
 	   false, no_argument, false),
    retrystep(3),
    options(title, usageexmpl)
    {
-     try {  
+     try {
       options.add(logdir);
 	    options.add(inputfname);
 	    options.add(outputfname);
@@ -503,10 +503,10 @@ class MelodicOptions {
 	    options.add(copyright);
 	    options.add(help);
 	    options.add(debug);
-	   
+
 	    options.add(guessfname);
-	    options.add(paradigmfname); 
-	    options.add(axials_str); 
+	    options.add(paradigmfname);
+	    options.add(axials_str);
 	    options.add(dummy);
 	    options.add(repeats);
 	    options.add(nlconst1);
@@ -522,11 +522,11 @@ class MelodicOptions {
      catch(X_OptionError& e) {
        options.usage();
        cerr << endl << e.what() << endl;
-     } 
+     }
      catch(std::exception &e) {
        cerr << e.what() << endl;
-     }    
-     
+     }
+
    }
 }
 

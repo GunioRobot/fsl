@@ -1,6 +1,6 @@
 /*
  *  shapeModel.cpp
- *  
+ *
  *
  *  Created by Brian Patenaude on 23/06/2008.
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
@@ -25,10 +25,10 @@ using namespace std;
 using namespace NEWMAT;
 using namespace FIRST_LIB;
 namespace SHAPE_MODEL_NAME{
-	
+
 	shapeModel::shapeModel()
 	{
-	
+
 	}
 	shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float> > & modesshape, const vector<float> & se, \
 							const vector<float> & ishape, const vector< vector<float> > & modesint, const vector<float> & ie, \
@@ -53,7 +53,7 @@ namespace SHAPE_MODEL_NAME{
 		MODE_FOUND=false;
 		mode=0;
 	STORE_REG_XFM=true;
-		
+
 }
 
 shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float> > & modesshape, const vector<float> & se, \
@@ -65,7 +65,7 @@ shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float
 	smodes=modesshape;
 	seigs=se;
 	sqrtseigs=se;
-	
+
 	for (vector<float>::iterator i=sqrtseigs.begin();i!=sqrtseigs.end();i++)
 		*i = sqrt(*i);
 	sqrtseigsi=sqrtseigs;
@@ -92,15 +92,15 @@ shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float
 			{
 				if ((*k)==i)
 				{
-					inds.push_back(count); 
+					inds.push_back(count);
 					break;
 				}
 			}
 		}
 		localTri.push_back(inds);
 	}
-	
-	
+
+
 }
 
 shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float> > & modesshape, const vector<float> & se, \
@@ -121,15 +121,15 @@ shapeModel::shapeModel( const vector<float> & mshape, const vector< vector<float
 	STORE_REG_XFM=true;
 
 }
-	void shapeModel::printLabel( const unsigned int & i) const 
+	void shapeModel::printLabel( const unsigned int & i) const
 	{ cout<<"get labvel "<< labels.at(i) <<endl;}
-	
-	
-//	int shapeModel::getLabel( const unsigned int & i) const 
+
+
+//	int shapeModel::getLabel( const unsigned int & i) const
 //	{ cout<<"get labvel "<< labels.at(i) <<endl; return labels.at(i); }
 
 
-std::vector<float> shapeModel::getDeformedGrid( const std::vector<float>  & vars ) const 
+std::vector<float> shapeModel::getDeformedGrid( const std::vector<float>  & vars ) const
 {
 
 	std::vector<float> newshape=smean;
@@ -139,9 +139,9 @@ std::vector<float> shapeModel::getDeformedGrid( const std::vector<float>  & vars
 	{
 		std::vector<float>::iterator new_i=newshape.begin();
 		for (std::vector<float>::const_iterator smodes_j= smodes_i->begin(); smodes_j!= smodes_i->end(); smodes_j++,new_i++)
-			*new_i += (*vars_i) * (*sqrtseigs_i) * (*smodes_j);//* 
+			*new_i += (*vars_i) * (*sqrtseigs_i) * (*smodes_j);//*
 	}
-	
+
 	return newshape;
 }
 
@@ -162,23 +162,23 @@ vector<float> shapeModel::getDeformedIGrid( const vector<float> & vars) const {
 		vector< vector<float> > reg_modes = vmodes;
 		for (unsigned int i=0; i<vmodes.size();i++){
 			for (unsigned int j=0; j<vmodes.at(0).size();j+=3){
-				//exclude translation from mode of variation so that it is compatible with implementation	
+				//exclude translation from mode of variation so that it is compatible with implementation
 				float x= flirtmat.at(0).at(0)*vmodes.at(i).at(j)  + flirtmat.at(0).at(1)*vmodes.at(i).at(j+1) + flirtmat.at(0).at(2)*vmodes.at(i).at(j+2);// +  flirtmat.at(0).at(3);
 				float y= flirtmat.at(1).at(0)*vmodes.at(i).at(j)  + flirtmat.at(1).at(1)*vmodes.at(i).at(j+1) + flirtmat.at(1).at(2)*vmodes.at(i).at(j+2) ;//+  flirtmat.at(1).at(3);
 				float z= flirtmat.at(2).at(0)*vmodes.at(i).at(j)  + flirtmat.at(2).at(1)*vmodes.at(i).at(j+1) + flirtmat.at(2).at(2)*vmodes.at(i).at(j+2) ;//+  flirtmat.at(2).at(3);
-				
+
 				 reg_modes.at(i).at(j)=x;
 				 reg_modes.at(i).at(j+1)=y;
-				 reg_modes.at(i).at(j+2)=z;	
+				 reg_modes.at(i).at(j+2)=z;
 			}
-			
+
 		}
 		return reg_modes;
 	}
-	
+
 	void shapeModel::registerModel(const vector< vector<float> > & flirtmat)
 	{
-		//start by registering mesh 
+		//start by registering mesh
 		float f_11= flirtmat.at(0).at(0);
 		float f_12= flirtmat.at(0).at(1);
 		float f_13= flirtmat.at(0).at(2);
@@ -197,17 +197,17 @@ vector<float> shapeModel::getDeformedIGrid( const vector<float> & vars) const {
 			float x= f_11 * (*i)  + f_12 * (*(i+1)) + f_13 * (*(i+2)) +  f_14;
 			float y= f_21 * (*i)  + f_22 * (*(i+1)) + f_23 * (*(i+2)) +  f_24;
 			float z= f_31 * (*i)  + f_32 * (*(i+1)) + f_33 * (*(i+2)) +  f_34;
-		
+
 			(*i)=x;
 			(*(i+1))=y;
-			(*(i+2))=z;				
+			(*(i+2))=z;
 		}
-		
+
 		vector< vector<float> > smodesAinv;
 		//Matrix M_smodes_mni= first_newmat_vector::vectorOfVectorsToMatrix<float>(smodes);
 		Matrix M_smodesPre= first_newmat_vector::vectorOfVectorsToMatrix<float>(smodes).t();
 		smodes=registerModeVectors(smodes,flirtmat);
-		
+
 		Matrix M_smodes= first_newmat_vector::vectorOfVectorsToMatrix<float>(smodes).t();
 
 			Matrix U,U2,V;
@@ -229,40 +229,40 @@ vector<float> shapeModel::getDeformedIGrid( const vector<float> & vars) const {
 		Matrix A(M_smodes.Nrows(),M_smodes.Nrows());
 		A=0;
 		for (int i=0;i<A.Nrows()/3;i++)
-			A.SubMatrix(3*i+1, 3*(i+1),3*i+1, 3*(i+1))=Mfmat; 
-		
-		
+			A.SubMatrix(3*i+1, 3*(i+1),3*i+1, 3*(i+1))=Mfmat;
+
+
 		if (STORE_REG_XFM)
 		{
 			u_xfm = first_newmat_vector:: matrixToVectorOfVectors<float>(M_smodesPre.t()*A);
 			d_xfm=sqrtseigs;
 		}
-		
+
 			SVD(M_smodes,D,U,V);
 			DiagonalMatrix Eigs= first_newmat_vector::vectorToDiagonalMatrix(seigs);
-			
+
 			//DiagonalMatrix SqrtEigs= first_newmat_vector::vectorToDiagonalMatrix(sqrtseigs);
 			SVD(D*V.t()*Eigs*V*D,D2,U2);
 
 //		cout<<"st ore reg xfm "<<A.Nrows()<<" "<<A.Ncols()<<" "<<M_smodes.Nrows()<<" "<<M_smodes.Ncols()<<endl;
-	
-		
-		
+
+
+
 			smodes= first_newmat_vector::matrixToVector<float>((U*U2).SubMatrix(1,U.Nrows(),1,D2.Nrows()));
 			vector<float> veigs, vsqrt_eigs;
 			for (unsigned int i=0;i<D2.Nrows();i++)//static_cast<unsigned int>(D2.Nrows());i++)
 			{
 				veigs.push_back(D2.element(i));
 				vsqrt_eigs.push_back(sqrt(D2.element(i)));
-			}			
+			}
 			seigs=veigs;
 			sqrtseigs=vsqrt_eigs;
 
-		
-	
 
-		
-		
+
+
+
+
 		Matrix M_imodes= first_newmat_vector::vectorOfVectorsToMatrix<float>(imodes).t();
 
 //		cout<<"Transform imodes "<<M_imodes.Nrows()<<" "<<M_imodes.Ncols()<<" "<<M_smodes.Nrows()<<" "<<M_smodes.Ncols()<<A.Nrows()<<" "<<A.Ncols()<<endl;
@@ -274,43 +274,43 @@ vector<float> shapeModel::getDeformedIGrid( const vector<float> & vars) const {
 //		cout<<"Transform imodes "<<M_imodes.Nrows()<<" "<<M_imodes.Ncols()<<" "<<M_smodes.Nrows()<<" "<<M_smodes.Ncols()<<A.Nrows()<<" "<<A.Ncols()<<endl;
 
 		imodes= first_newmat_vector::matrixToVector<float>((M_imodes*C*U2));
-			
+
 		cout<<"NEw done imodes transform"<<endl;
- 
+
 
 	}
 	std::vector<float> shapeModel::getOrigSpaceBvars(const std::vector<float> & bvars ) const
 	{
 		vector<float> bvars_orig;
 		if (STORE_REG_XFM)
-		{	
+		{
 			DiagonalMatrix D2=first_newmat_vector::vectorToDiagonalMatrix(sqrtseigs);
 			DiagonalMatrix D=first_newmat_vector::vectorToDiagonalMatrix(d_xfm);
 			Matrix UU2 = first_newmat_vector::vectorOfVectorsToMatrix<float>(u_xfm);
 			Matrix M_smodes= first_newmat_vector::vectorOfVectorsToMatrix<float>(smodes).t();
 			/*
-			
+
 			cout<<"Smodes2 "<<UU2.Ncols()<<endl;
 			for (int i=0;i<UU2.Ncols();i++)
 			{
 				cout<<UU2.element(0,i)<<" ";
 				cout<<endl;
 			}
-			
-		*/	
-			
-			ColumnVector Mbvars(D.Nrows()); 
+
+		*/
+
+			ColumnVector Mbvars(D.Nrows());
 			int count=0;
 			Mbvars=0;
 			for (vector<float>::const_iterator i=bvars.begin();i!=bvars.end();i++,count++)
 				Mbvars.element(count)=*i;
-			
+
 			cout<<"D "<<endl;//<<"di"<<endl<<endl;
 	//		for (int i=0;i<D.Nrows();i++)
 	//		{
 			//	if (abs(D.element(i)) < 1e-10)
 		//			D.element(i)=0;
-		//		else 
+		//		else
 	//			cout<<"pre "<<i<<" "<<D.element(i)<<" "<<1/D.element(i)<<endl;
 //
 //					D.element(i)=1/sqrt(D.element(i));
@@ -318,13 +318,13 @@ vector<float> shapeModel::getDeformedIGrid( const vector<float> & vars) const {
 //			}
 			cout<<UU2.Nrows()<<" "<<UU2.Ncols()<<" "<<M_smodes.Nrows()<<" "<<M_smodes.Ncols()<<endl;
 			ColumnVector MbvarsOrg = D.i()*UU2*M_smodes*D2*Mbvars;
-			
+
 			for (int i=0;i<MbvarsOrg.Nrows();i++)
 				bvars_orig.push_back(MbvarsOrg.element(i));
-			
+
 		}
 		return bvars_orig;
 	}
 
-	
+
 }

@@ -15,7 +15,7 @@
 # include <boost/mpl/bool.hpp>
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace iostreams { namespace detail { 
+namespace boost { namespace iostreams { namespace detail {
 
 // is_dereferenceable<T> metafunction
 //
@@ -29,7 +29,7 @@ namespace is_dereferenceable_
   // a type returned from operator* when no increment is found in the
   // type's own namespace
   struct tag {};
-  
+
   // any soaks up implicit conversions and makes the following
   // operator* less-preferred than any other such operator that
   // might be found via ADL.
@@ -41,18 +41,18 @@ namespace is_dereferenceable_
 # if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202)) \
     || BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 #  define BOOST_comma(a,b) (a)
-# else 
+# else
   // In case an operator++ is found that returns void, we'll use ++x,0
-  tag operator,(tag,int);  
+  tag operator,(tag,int);
 #  define BOOST_comma(a,b) (a,b)
-# endif 
-  
+# endif
+
   // two check overloads help us identify which operator++ was picked
   char (& check(tag) )[2];
-  
+
   template <class T>
   char check(T const&);
-  
+
   template <class T>
   struct impl
   {
@@ -67,15 +67,15 @@ namespace is_dereferenceable_
 
 # undef BOOST_comma
 
-template<typename T> 
-struct is_dereferenceable 
+template<typename T>
+struct is_dereferenceable
     BOOST_TT_AUX_BOOL_C_BASE(is_dereferenceable_::impl<T>::value)
-{ 
+{
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(is_dereferenceable_::impl<T>::value)
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_dereferenceable,(T))
 };
 
-} } 
+} }
 
 BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1, ::boost::iostreams::detail::is_dereferenceable)
 

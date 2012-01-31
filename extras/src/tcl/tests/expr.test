@@ -174,7 +174,7 @@ test expr-4.1 {CompileLorExpr: just land expr} {expr 1.3&&3.3} 1
 test expr-4.2 {CompileLorExpr: error in land expr} {
     catch {expr x&&3} msg
     set msg
-} {syntax error in expression "x&&3": variable references require preceding $} 
+} {syntax error in expression "x&&3": variable references require preceding $}
 test expr-4.3 {CompileLorExpr: simple lor exprs} {expr 0||1.0} 1
 test expr-4.4 {CompileLorExpr: simple lor exprs} {expr 3.0||0.0} 1
 test expr-4.5 {CompileLorExpr: simple lor exprs} {expr 0||0||1} 1
@@ -199,7 +199,7 @@ test expr-5.1 {CompileLandExpr: just bitor expr} {expr 7|0x13} 23
 test expr-5.2 {CompileLandExpr: error in bitor expr} {
     catch {expr x|3} msg
     set msg
-} {syntax error in expression "x|3": variable references require preceding $} 
+} {syntax error in expression "x|3": variable references require preceding $}
 test expr-5.3 {CompileLandExpr: simple land exprs} {expr 0&&1.0} 0
 test expr-5.4 {CompileLandExpr: simple land exprs} {expr 0&&0} 0
 test expr-5.5 {CompileLandExpr: simple land exprs} {expr 3.0&&1.2} 1
@@ -225,7 +225,7 @@ test expr-6.1 {CompileBitXorExpr: just bitand expr} {expr 7&0x13} 3
 test expr-6.2 {CompileBitXorExpr: error in bitand expr} {
     catch {expr x|3} msg
     set msg
-} {syntax error in expression "x|3": variable references require preceding $} 
+} {syntax error in expression "x|3": variable references require preceding $}
 test expr-6.3 {CompileBitXorExpr: simple bitxor exprs} {expr 7^0x13} 20
 test expr-6.4 {CompileBitXorExpr: simple bitxor exprs} {expr 3^0x10} 19
 test expr-6.5 {CompileBitXorExpr: simple bitxor exprs} {expr 0^7} 7
@@ -276,7 +276,7 @@ test expr-7.18 {CompileBitAndExpr: equality expr} {expr {"abc" eq "abd"}} 0
 test expr-7.20 {CompileBitAndExpr: error in equality expr} {
     catch {expr xne3} msg
     set msg
-} {syntax error in expression "xne3": variable references require preceding $} 
+} {syntax error in expression "xne3": variable references require preceding $}
 
 test expr-8.1 {CompileEqualityExpr: just relational expr} {expr 3>=2} 1
 test expr-8.2 {CompileEqualityExpr: just relational expr} {expr 2<=2.1} 1
@@ -309,7 +309,7 @@ test expr-8.19 {CompileBitAndExpr: equality expr} {expr {"abc" ne "abd"}} 1
 test expr-8.20 {CompileBitAndExpr: error in equality expr} {
     catch {expr x ne3} msg
     set msg
-} {syntax error in expression "x ne3": variable references require preceding $} 
+} {syntax error in expression "x ne3": variable references require preceding $}
 test expr-8.21 {CompileBitAndExpr: error in equality expr} {
     # These should be ""ed to avoid the error
     catch {expr a eq b} msg

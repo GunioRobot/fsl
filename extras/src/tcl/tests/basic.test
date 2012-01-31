@@ -246,7 +246,7 @@ test basic-18.1 {TclRenameCommand, name of existing cmd can have namespace quali
     }
     list [test_ns_basic::p] \
          [rename test_ns_basic::p test_ns_basic::q] \
-         [test_ns_basic::q] 
+         [test_ns_basic::q]
 } {{p in ::test_ns_basic} {} {p in ::test_ns_basic}}
 test basic-18.2 {TclRenameCommand, existing cmd must be found} {
     catch {eval namespace delete [namespace children :: test_ns_*]}
@@ -441,7 +441,7 @@ test basic-26.2 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} {
     # cause a segfault if [Bug 1119369] has not been fixed.
     #
 
-    set SRC [list foo 1] ;# pure-list command 
+    set SRC [list foo 1] ;# pure-list command
     proc foo str {
 	# Shimmer pure-list to cmdName, cleanup and error
 	proc $::SRC {} {}; $::SRC
@@ -626,7 +626,7 @@ test basic-46.2 {Tcl_AllowExceptions: exception return not allowed} -setup {
 invoked "break" outside of a loop
     while executing
 "break"
-    (file "*BREAKtest" line 3)}    
+    (file "*BREAKtest" line 3)}
 
 test basic-46.3 {Tcl_AllowExceptions: exception return not allowed} -setup {
     set fName [makeFile {
@@ -643,7 +643,7 @@ test basic-46.3 {Tcl_AllowExceptions: exception return not allowed} -setup {
 } -returnCodes error -match glob -result {invoked "break" outside of a loop
     while executing
 "break"
-    (file "*BREAKtest" line 4)}    
+    (file "*BREAKtest" line 4)}
 
 test basic-46.4 {Tcl_AllowExceptions: exception return not allowed} -setup {
     set fName [makeFile {
@@ -685,7 +685,7 @@ test basic-49.1 {Tcl_EvalEx: verify TCL_EVAL_GLOBAL operation} testevalex {
         variable x namespace
         testevalex {set x changed} global
         set ::result [list $::x $x]
-    } 
+    }
     namespace delete ns
     set ::result
 } {changed namespace}

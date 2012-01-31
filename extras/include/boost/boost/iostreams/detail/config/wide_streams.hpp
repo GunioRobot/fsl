@@ -16,7 +16,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif       
+#endif
 
 //------------------Templated stream support----------------------------------//
 
@@ -38,7 +38,7 @@
      /**/
 #  define BOOST_IOSTREAMS_NO_WIDE_STREAMS
 # endif
-#endif // #ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS   
+#endif // #ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
 
 //------------------Locale support--------------------------------------------//
 

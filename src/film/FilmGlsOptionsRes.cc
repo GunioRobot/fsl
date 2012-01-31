@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,12 +91,12 @@ void FilmGlsOptionsRes::parse_command_line(int argc, char** argv, ofstream& logf
     print_usage(argc,argv);
     exit(1);
   }
-  
+
   int inp = 1;
   int n=1;
   string arg;
   char first;
-  
+
   logfile << "Arguments: " << endl;
   while (n<argc) {
     arg=argv[n];
@@ -122,7 +122,7 @@ void FilmGlsOptionsRes::parse_command_line(int argc, char** argv, ofstream& logf
       inp++;
       continue;
     }
-    
+
     // put options without arguments here
     if ( arg == "-help" ) {
       print_usage(argc,argv);
@@ -165,14 +165,14 @@ void FilmGlsOptionsRes::parse_command_line(int argc, char** argv, ofstream& logf
       gopt->justprewhiten = true;
       n++;
       continue;
-    } 
+    }
 
 
 
-    if (n+1>=argc) 
-      { 
+    if (n+1>=argc)
+      {
 	cerr << "Lacking argument to option " << arg << endl;
-	break; 
+	break;
       }
 
     // put options with 1 argument here
@@ -185,7 +185,7 @@ void FilmGlsOptionsRes::parse_command_line(int argc, char** argv, ofstream& logf
       logfile << argv[n+1] << " ";
       n+=2;
     } else if ( arg == "-rn" ) {
-      gopt->datadir = argv[n+1];      
+      gopt->datadir = argv[n+1];
       logfile << argv[n+1] << " ";
       n+=2;
     } else if ( arg == "-tukey" ) {
@@ -201,13 +201,13 @@ void FilmGlsOptionsRes::parse_command_line(int argc, char** argv, ofstream& logf
       n+=2;
     }
     else if ( arg == "-epith" ) {
-      gopt->epith = atoi(argv[n+1]);      
+      gopt->epith = atoi(argv[n+1]);
       logfile << argv[n+1] << " ";
       n+=2;
-    } else { 
+    } else {
       cerr << "Unrecognised option " << arg << endl;
       n++;
-    } 
+    }
   }  // while (n<argc)
 
   logfile << endl << "---------------------------------------------" << endl << endl;
@@ -240,13 +240,13 @@ void FilmGlsOptionsRes::print_usage(int argc, char *argv[])
        << "        -epith <num>                       (set susan brightness threshold - otherwise it is estimated)\n"
        << "        -v                                 (outputs full data)\n"
        << "        -vdms                              (outputs prewhiten design matrices)\n"
-       << "        -ar                                (fits autoregressive model - default " 
+       << "        -ar                                (fits autoregressive model - default "
        << "is to use tukey with M=2*sqrt(numvols))\n"
        << "        -tukey <num>                       (uses tukey window to estimate autocorr with window size num - default "
        << "is to use tukey with M=2*sqrt(numvols))\n"
-       << "        -mt <num>                          (uses multitapering with slepian tapers and num is the time-bandwidth product - default " 
+       << "        -mt <num>                          (uses multitapering with slepian tapers and num is the time-bandwidth product - default "
        << "is to use tukey with M=2*sqrt(numvols))\n"
-       << "        -pava                              (estimates autocorr using PAVA - default " 
+       << "        -pava                              (estimates autocorr using PAVA - default "
        << "is to use tukey with M=2*sqrt(numvols))\n"
        << "        -noest                             (do not estimate auto corrs)\n"
        << "        -det                               (linear detrend data)\n"

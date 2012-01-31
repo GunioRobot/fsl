@@ -1,7 +1,7 @@
 /*  cspline
-   
+
     Cubic spline fitting and interpolation
-    
+
     Tim Behrens, FMRIB Image Analysis Group
 
     Copyright (C) 1999-2000 University of Oxford  */
@@ -9,20 +9,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -90,7 +90,7 @@ using namespace std;
 namespace MISCMATHS{
 
   //  void Cspline::Cspline(){}
-  
+
   void Cspline::set(ColumnVector& pnodes,ColumnVector& pvals){
     nodes=pnodes;vals=pvals;
     fitted=false;
@@ -101,16 +101,16 @@ namespace MISCMATHS{
     fitted=false;
     n=vals.Nrows();
   }
-  
+
   void Cspline::diff(const ColumnVector& x, ColumnVector& dx ){
     // dx should be of length length(x)-1
     dx.ReSize(x.Nrows()-1);
     for(int i=2;i<=x.Nrows();i++){
       dx(i-1)=x(i)-x(i-1);
-    }						    
+    }
   }
-  
-  
+
+
   void Cspline::fit(){
     if(vals.Nrows()<4){
       cerr<<"Cspline::fit - You have less than 4 data pts for spline fitting."<<endl;
@@ -125,7 +125,7 @@ namespace MISCMATHS{
     ColumnVector dx,dy,dydx(n-1);
     diff(nodes,dx);
     diff(vals,dy);
-    
+
     for(int i=1;i<=n-1;i++){
       dydx(i)=dy(i)/dx(i);
     }
@@ -134,11 +134,11 @@ namespace MISCMATHS{
     for(int i=2;i<=b.Nrows()-1;i++){
       b(i)=3*(dx(i)*dydx(i-1)+dx(i-1)*dydx(i));
     }
-    
+
     float x31=nodes(3)-nodes(1),xn=nodes(n)-nodes(n-2);
     b(1)=((dx(1)+2*x31)*dx(2)*dydx(1)+dx(1)*dx(1)*dydx(2))/x31;
     b(n)=(dx(n-1)*dx(n-1)*dydx(n-2)+(2*xn+dx(n-1))*dx(n-2)*dydx(n-1))/xn;
-    
+
     Matrix tridiag(n,n);
     tridiag=0;
     ColumnVector  y3(n);
@@ -149,15 +149,15 @@ namespace MISCMATHS{
     }
     tridiag(1,1)=dx(2);tridiag(1,2)=x31;
     tridiag(n,n-1)=xn;tridiag(n,n)=dx(n-2);
-    s=tridiag.i()*b; 
-    
-    
+    s=tridiag.i()*b;
+
+
     ColumnVector d(n-1),c(n-1);
     for(int j=1;j<n;j++){
       d(j)=(s(j)+s(j+1)-2*dydx(j))/dx(j);
       c(j)=(dydx(j)-s(j))/dx(j)-d(j);
     }
-    
+
     coefs.ReSize(n-1,4);
     for(int j=1;j<n;j++){
       coefs(j,1)=vals(j);
@@ -167,10 +167,10 @@ namespace MISCMATHS{
     }
     fitted=true;
   }
-  
- 
+
+
   float Cspline::interpolate(float xx) const{
-    // nodes must be monotonically increasing. I don't check this. 
+    // nodes must be monotonically increasing. I don't check this.
     // On your head be it if you don't.
     if(nodes.Nrows()!=vals.Nrows()){
       cerr<<"Cspline:interpolate: Nodes and Vals should be the same length"<<endl;
@@ -183,10 +183,10 @@ namespace MISCMATHS{
       exit(-1);
     }
     else{
-      
+
       bool stop=false;
       int ind=0;
-      
+
       if(xx<nodes(1)){
 	ind=1;
       }
@@ -203,16 +203,16 @@ namespace MISCMATHS{
 	  }
 	}
       }
-      
+
        float a=coefs(ind,1);
       float b=coefs(ind,2);
       float c=coefs(ind,3);
       float d=coefs(ind,4);
       float t=xx-nodes(ind);
       ret=a+b*t+c*t*t+d*t*t*t;
-      
+
     }
-    return ret;  
+    return ret;
 }
 
   float Cspline::interpolate(float xx, int ind) const{
@@ -242,15 +242,15 @@ namespace MISCMATHS{
 
 
   ColumnVector Cspline::interpolate(const ColumnVector& x) const{
-    // nodes must be monotonically increasing. I don't check this. 
+    // nodes must be monotonically increasing. I don't check this.
     // On your head be it if you don't.
-    
+
     if(nodes.Nrows()!=vals.Nrows()){
       cerr<<"Cspline::interpolate -  Nodes and Vals should be the same length"<<endl;
       exit(-1);
     }
-    
-    ColumnVector ret(x.Nrows());  
+
+    ColumnVector ret(x.Nrows());
 
     if(!fitted){
       cerr<<"Cspline::interpolate - Cspline has not been fitted"<<endl;
@@ -259,12 +259,12 @@ namespace MISCMATHS{
     else{
 
       for(int xnum=1;xnum<=x.Nrows();xnum++){
-	
+
 	float xx=x(xnum);
-	
+
 	bool stop=false;
 	int ind=0;
-	
+
 	if(xx<nodes(1)){
 	  ind=1;
 	}
@@ -290,20 +290,20 @@ namespace MISCMATHS{
 	ret(xnum)=a+b*t+c*t*t+d*t*t*t;
       }
     }
-    return ret;   
+    return ret;
   }
-  
- 
+
+
   ColumnVector Cspline::interpolate(const ColumnVector& x,const ColumnVector& indvec) const{
-    // nodes must be monotonically increasing. I don't check this. 
+    // nodes must be monotonically increasing. I don't check this.
     // On your head be it if you don't.
-    
+
     if(nodes.Nrows()!=vals.Nrows()){
       cerr<<"Cspline::interpolate - Nodes and Vals should be the same length"<<endl;
       exit(-1);
     }
-    
-    ColumnVector ret(x.Nrows());  
+
+    ColumnVector ret(x.Nrows());
 
     if(!fitted){
       cerr<<"Cspline::interpolate - Cspline has not been fitted"<<endl;
@@ -311,9 +311,9 @@ namespace MISCMATHS{
     }
     else{
       for(int xnum=1;xnum<=x.Nrows();xnum++){
-	
+
 	float xx=x(xnum);
-	
+
 	int ind=int(indvec(xnum));
 
 	float a=coefs(ind,1);
@@ -324,9 +324,9 @@ namespace MISCMATHS{
 	ret(xnum)=a+b*t+c*t*t+d*t*t*t;
       }
     }
-    return ret;   
+    return ret;
   }
-  
+
 
 
 

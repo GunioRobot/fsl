@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2008 University of Oxford 
+// Copyright (C) 2008 University of Oxford
 //
 
 #include <cstdlib>
@@ -98,7 +98,7 @@ ReturnMatrix MatchingPoints::SSD_Gradient(unsigned int dim, const basisfield& bf
     }
   }
   grad.Release();
-  return(grad);  
+  return(grad);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ shared_ptr<BFMatrix> MatchingPoints::SSD_Hessian(unsigned int dim, const basisfi
     if (prec == BFMatrixDoublePrecision) hess = shared_ptr<BFMatrix>(new SparseBFMatrix<double>(bf.CoefSz(),bf.CoefSz()));
     else hess = shared_ptr<BFMatrix>(new SparseBFMatrix<float>(bf.CoefSz(),bf.CoefSz()));
   }
-  
+
   for (unsigned int pti=0; pti<_in_ref->NPoints(); pti++) {
     ColumnVector rrp = _in_ref->RawPoint(pti);  // Raw Ref Point
     rrp = bf.mm2vox(3) * rrp;
@@ -145,5 +145,5 @@ shared_ptr<BFMatrix> MatchingPoints::SSD_Hessian(unsigned int dim, const basisfi
       }
     }
   }
-  return(hess);        
+  return(hess);
 }

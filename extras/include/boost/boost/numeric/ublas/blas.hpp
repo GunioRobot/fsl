@@ -46,7 +46,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
           /** \brief element with larges absolute value: \f$\max_i |x_i|\f$
                   \ingroup blas1
-          */                 
+          */
         template<class V>
         typename type_traits<typename V::value_type>::real_type
         amax (const V &v) {
@@ -55,7 +55,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief inner product of vectors \a v1 and \a v2
                   \ingroup blas1
-          */                 
+          */
         template<class V1, class V2>
         typename promote_traits<typename V1::value_type, typename V2::value_type>::promote_type
         dot (const V1 &v1, const V2 &v2) {
@@ -64,7 +64,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief copy vector \a v2 to \a v1
                   \ingroup blas1
-          */                 
+          */
         template<class V1, class V2>
         V1 &
         copy (V1 &v1, const V2 &v2) {
@@ -73,7 +73,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief swap vectors \a v1 and \a v2
                   \ingroup blas1
-          */                 
+          */
         template<class V1, class V2>
         void swap (V1 &v1, V2 &v2) {
             v1.swap (v2);
@@ -81,7 +81,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief scale vector \a v with scalar \a t
                   \ingroup blas1
-          */                 
+          */
         template<class V, class T>
         V &
         scal (V &v, const T &t) {
@@ -90,7 +90,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief compute \a v1 = \a v1 + \a t * \a v2
                   \ingroup blas1
-          */                 
+          */
         template<class V1, class T, class V2>
         V1 &
         axpy (V1 &v1, const T &t, const V2 &v2) {
@@ -99,7 +99,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief apply plane rotation
                   \ingroup blas1
-          */                 
+          */
         template<class T1, class V1, class T2, class V2>
         void
         rot (const T1 &t1, V1 &v1, const T2 &t2, V2 &v2) {
@@ -120,7 +120,7 @@ namespace boost { namespace numeric { namespace ublas {
           /** \brief multiply vector \a v with triangular matrix \a m
                   \ingroup blas2
                   \todo: check that matrix is really triangular
-          */                 
+          */
         template<class V, class M>
         V &
         tmv (V &v, const M &m) {
@@ -129,7 +129,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief solve \a m \a x = \a v in place, \a m is triangular matrix
                   \ingroup blas2
-          */                 
+          */
         template<class V, class M, class C>
         V &
         tsv (V &v, const M &m, C) {
@@ -138,7 +138,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief compute \a v1 = \a t1 * \a v1 + \a t2 * (\a m * \a v2)
                   \ingroup blas2
-          */                 
+          */
         template<class V1, class T1, class T2, class M, class V2>
         V1 &
         gmv (V1 &v1, const T1 &t1, const T2 &t2, const M &m, const V2 &v2) {
@@ -147,7 +147,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief rank 1 update: \a m = \a m + \a t * (\a v1 * \a v2<sup>T</sup>)
                   \ingroup blas2
-          */                 
+          */
         template<class M, class T, class V1, class V2>
         M &
         gr (M &m, const T &t, const V1 &v1, const V2 &v2) {
@@ -160,7 +160,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief symmetric rank 1 update: \a m = \a m + \a t * (\a v * \a v<sup>T</sup>)
                   \ingroup blas2
-          */                 
+          */
         template<class M, class T, class V>
         M &
         sr (M &m, const T &t, const V &v) {
@@ -172,7 +172,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
           /** \brief hermitian rank 1 update: \a m = \a m + \a t * (\a v * \a v<sup>H</sup>)
                   \ingroup blas2
-          */                 
+          */
         template<class M, class T, class V>
         M &
         hr (M &m, const T &t, const V &v) {
@@ -183,10 +183,10 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-          /** \brief symmetric rank 2 update: \a m = \a m + \a t * 
-                  (\a v1 * \a v2<sup>T</sup> + \a v2 * \a v1<sup>T</sup>) 
+          /** \brief symmetric rank 2 update: \a m = \a m + \a t *
+                  (\a v1 * \a v2<sup>T</sup> + \a v2 * \a v1<sup>T</sup>)
                   \ingroup blas2
-          */                 
+          */
         template<class M, class T, class V1, class V2>
         M &
         sr2 (M &m, const T &t, const V1 &v1, const V2 &v2) {
@@ -196,11 +196,11 @@ namespace boost { namespace numeric { namespace ublas {
             return m = m + t * (outer_prod (v1, v2) + outer_prod (v2, v1));
 #endif
         }
-          /** \brief hermitian rank 2 update: \a m = \a m + 
+          /** \brief hermitian rank 2 update: \a m = \a m +
                   \a t * (\a v1 * \a v2<sup>H</sup>)
-                  + \a v2 * (\a t * \a v1)<sup>H</sup>) 
+                  + \a v2 * (\a t * \a v1)<sup>H</sup>)
                   \ingroup blas2
-          */                 
+          */
         template<class M, class T, class V1, class V2>
         M &
         hr2 (M &m, const T &t, const V1 &v1, const V2 &v2) {
@@ -221,7 +221,7 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief triangular matrix multiplication
                   \ingroup blas3
-          */                 
+          */
         template<class M1, class T, class M2, class M3>
         M1 &
         tmm (M1 &m1, const T &t, const M2 &m2, const M3 &m3) {
@@ -231,7 +231,7 @@ namespace boost { namespace numeric { namespace ublas {
           /** \brief triangular solve \a m2 * \a x = \a t * \a m1 in place,
                   \a m2 is a triangular matrix
                   \ingroup blas3
-          */                 
+          */
         template<class M1, class T, class M2, class C>
         M1 &
         tsm (M1 &m1, const T &t, const M2 &m2, C) {
@@ -240,28 +240,28 @@ namespace boost { namespace numeric { namespace ublas {
 
           /** \brief general matrix multiplication
                   \ingroup blas3
-          */                 
+          */
         template<class M1, class T1, class T2, class M2, class M3>
         M1 &
         gmm (M1 &m1, const T1 &t1, const T2 &t2, const M2 &m2, const M3 &m3) {
             return m1 = t1 * m1 + t2 * prod (m2, m3);
         }
 
-          /** \brief symmetric rank k update: \a m1 = \a t * \a m1 + 
+          /** \brief symmetric rank k update: \a m1 = \a t * \a m1 +
                   \a t2 * (\a m2 * \a m2<sup>T</sup>)
                   \ingroup blas3
                   \todo use opb_prod()
-          */                 
+          */
         template<class M1, class T1, class T2, class M2>
         M1 &
         srk (M1 &m1, const T1 &t1, const T2 &t2, const M2 &m2) {
             return m1 = t1 * m1 + t2 * prod (m2, trans (m2));
         }
-          /** \brief hermitian rank k update: \a m1 = \a t * \a m1 + 
+          /** \brief hermitian rank k update: \a m1 = \a t * \a m1 +
                   \a t2 * (\a m2 * \a m2<sup>H</sup>)
                   \ingroup blas3
                   \todo use opb_prod()
-          */                 
+          */
         template<class M1, class T1, class T2, class M2>
         M1 &
         hrk (M1 &m1, const T1 &t1, const T2 &t2, const M2 &m2) {
@@ -273,7 +273,7 @@ namespace boost { namespace numeric { namespace ublas {
                   + \a t2 * (\a m3 * \a m2<sup>T</sup>)
                   \ingroup blas3
                   \todo use opb_prod()
-          */                 
+          */
         template<class M1, class T1, class T2, class M2, class M3>
         M1 &
         sr2k (M1 &m1, const T1 &t1, const T2 &t2, const M2 &m2, const M3 &m3) {
@@ -284,7 +284,7 @@ namespace boost { namespace numeric { namespace ublas {
                   + (\a m3 * (\a t2 * \a m2)<sup>H</sup>)
                   \ingroup blas3
                   \todo use opb_prod()
-          */                 
+          */
         template<class M1, class T1, class T2, class M2, class M3>
         M1 &
         hr2k (M1 &m1, const T1 &t1, const T2 &t2, const M2 &m2, const M3 &m3) {

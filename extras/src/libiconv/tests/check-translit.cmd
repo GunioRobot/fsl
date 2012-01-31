@@ -1,5 +1,5 @@
 /*
- * check-translit 
+ * check-translit
  *
  *      Simple check of transliteration facilities.
  *      Usage: check-translit SRCDIR FILE FROMCODE TOCODE

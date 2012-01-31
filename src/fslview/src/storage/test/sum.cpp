@@ -17,8 +17,8 @@ void Sum::calculate(VolumeStore<VoxelType>::WeakHandle target)
 {
 	total_ = 0;
 	count_ = 0;
-	
-	for(unsigned short z = 0; z < target->inqZ(); ++z) 
+
+	for(unsigned short z = 0; z < target->inqZ(); ++z)
 	{
 		unsigned int offset = z * target->inqY();
 

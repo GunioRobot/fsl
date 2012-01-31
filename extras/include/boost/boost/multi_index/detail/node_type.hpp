@@ -43,7 +43,7 @@ struct index_node_applier
     msvc_index_specifier< mpl::deref<IndexSpecifierIterator>::type >::
       template result_node_class<Super>
   {
-  }; 
+  };
 };
 #else
 struct index_node_applier
@@ -54,7 +54,7 @@ struct index_node_applier
     typedef typename mpl::deref<IndexSpecifierIterator>::type index_specifier;
     typedef typename index_specifier::
       BOOST_NESTED_TEMPLATE node_class<Super>::type type;
-  }; 
+  };
 };
 #endif
 

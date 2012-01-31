@@ -6,8 +6,8 @@ include ${FSLCONFDIR}/default.mk
 
 PROJNAME = basisfield
 
-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_BOOST} 
-USRLDFLAGS = -L${LIB_NEWMAT} 
+USRINCFLAGS = -I${INC_NEWMAT} -I${INC_BOOST}
+USRLDFLAGS = -L${LIB_NEWMAT}
 
 OBJS = dctfield.o splinefield.o basisfield.o splines.o
 

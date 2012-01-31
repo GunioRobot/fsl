@@ -39,7 +39,7 @@
 #else
 #define BFFM_VALIDATEFAILED 3
 #endif
-#endif 
+#endif
 
 /*
  * The following structure is used by the new Tk_ChooseDirectoryObjCmd
@@ -54,9 +54,9 @@ typedef struct ChooseDirData {
 } CHOOSEDIRDATA;
 #endif
 
-typedef struct ThreadSpecificData { 
-    int debugFlag;            /* Flags whether we should output debugging 
-			       * information while displaying a builtin 
+typedef struct ThreadSpecificData {
+    int debugFlag;            /* Flags whether we should output debugging
+			       * information while displaying a builtin
 			       * dialog. */
     Tcl_Interp *debugInterp;  /* Interpreter to used for debugging. */
     UINT WM_LBSELCHANGED;     /* Holds a registered windows event used for
@@ -69,7 +69,7 @@ typedef struct ThreadSpecificData {
 static Tcl_ThreadDataKey dataKey;
 
 /*
- * The following structures are used by Tk_MessageBoxCmd() to parse 
+ * The following structures are used by Tk_MessageBoxCmd() to parse
  * arguments and return results.
  */
 
@@ -80,7 +80,7 @@ static const TkStateMap iconMap[] = {
     {MB_ICONWARNING,		"warning"},
     {-1,			NULL}
 };
-	  
+
 static const TkStateMap typeMap[] = {
     {MB_ABORTRETRYIGNORE,	"abortretryignore"},
     {MB_OK, 			"ok"},
@@ -133,19 +133,19 @@ static const struct {int type; int btnIds[3];} allowedTypes[] = {
  */
 
 typedef struct ChooseDir {
-    Tcl_Interp *interp;		/* Interp, used only if debug is turned on, 
+    Tcl_Interp *interp;		/* Interp, used only if debug is turned on,
 				 * for setting the "tk_dialog" variable. */
     int lastCtrl;		/* Used by hook proc to keep track of last
 				 * control that had input focus, so when OK
 				 * is pressed we know whether to browse a
 				 * new directory or return. */
-    int lastIdx;		/* Last item that was selected in directory 
+    int lastIdx;		/* Last item that was selected in directory
 				 * browser listbox. */
-    TCHAR path[MAX_PATH];	/* On return from choose directory dialog, 
-				 * holds the selected path.  Cannot return 
+    TCHAR path[MAX_PATH];	/* On return from choose directory dialog,
+				 * holds the selected path.  Cannot return
 				 * selected path in ofnPtr->lpstrFile because
-				 * the default dialog proc stores a '\0' in 
-				 * it, since, of course, no _file_ was 
+				 * the default dialog proc stores a '\0' in
+				 * it, since, of course, no _file_ was
 				 * selected. */
     OPENFILENAME *ofnPtr;	/* pointer to the OFN structure */
 } ChooseDir;
@@ -158,22 +158,22 @@ typedef struct ChooseDir {
 static UINT APIENTRY	ChooseDirectoryValidateProc(HWND hdlg, UINT uMsg,
 			    LPARAM wParam, LPARAM lParam);
 #else
-static UINT APIENTRY	ChooseDirectoryHookProc(HWND hdlg, UINT uMsg, 
+static UINT APIENTRY	ChooseDirectoryHookProc(HWND hdlg, UINT uMsg,
 			    WPARAM wParam, LPARAM lParam);
 #endif
 static UINT CALLBACK	ColorDlgHookProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 			    LPARAM lParam);
-static int 		GetFileNameA(ClientData clientData, 
-			    Tcl_Interp *interp, int objc, 
+static int 		GetFileNameA(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *CONST objv[], int isOpen);
-static int 		GetFileNameW(ClientData clientData, 
-			    Tcl_Interp *interp, int objc, 
+static int 		GetFileNameW(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *CONST objv[], int isOpen);
-static int 		MakeFilter(Tcl_Interp *interp, char *string, 
+static int 		MakeFilter(Tcl_Interp *interp, char *string,
 			    Tcl_DString *dsPtr);
-static UINT APIENTRY	OFNHookProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
+static UINT APIENTRY	OFNHookProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 			    LPARAM lParam);
-static UINT APIENTRY	OFNHookProcW(HWND hdlg, UINT uMsg, WPARAM wParam, 
+static UINT APIENTRY	OFNHookProcW(HWND hdlg, UINT uMsg, WPARAM wParam,
 			    LPARAM lParam);
 static LRESULT CALLBACK MsgBoxCBTProc(int nCode, WPARAM wParam, LPARAM lParam);
 static void		SetTkDialog(ClientData clientData);
@@ -231,7 +231,7 @@ EatSpuriousMessageBugFix(void)
  *
  *	Function to turn on/off debugging support for common dialogs under
  *	windows.  The variable "tk_debug" is set to the identifier of the
- *	dialog window when the modal dialog window pops up and it is safe to 
+ *	dialog window when the modal dialog window pops up and it is safe to
  *	send messages to the dialog.
  *
  * Results:
@@ -243,11 +243,11 @@ EatSpuriousMessageBugFix(void)
  *-------------------------------------------------------------------------
  */
 
-void	    	
+void
 TkWinDialogDebug(
     int debug)
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     tsdPtr->debugFlag = debug;
@@ -313,7 +313,7 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
 
     parent			= tkwin;
     chooseColor.lStructSize	= sizeof(CHOOSECOLOR);
-    chooseColor.hwndOwner	= NULL;			
+    chooseColor.hwndOwner	= NULL;
     chooseColor.hInstance	= NULL;
     chooseColor.rgbResult	= oldColor;
     chooseColor.lpCustColors	= dwCustColors;
@@ -336,7 +336,7 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
 	}
 	if (i + 1 == objc) {
 	    string = Tcl_GetStringFromObj(optionPtr, NULL);
-	    Tcl_AppendResult(interp, "value for \"", string, "\" missing", 
+	    Tcl_AppendResult(interp, "value for \"", string, "\" missing",
 		    (char *) NULL);
 	    return TCL_ERROR;
 	}
@@ -350,7 +350,7 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
 		if (colorPtr == NULL) {
 		    return TCL_ERROR;
 		}
-		chooseColor.rgbResult = RGB(colorPtr->red / 0x100, 
+		chooseColor.rgbResult = RGB(colorPtr->red / 0x100,
 			colorPtr->green / 0x100, colorPtr->blue / 0x100);
 		break;
 	    }
@@ -372,7 +372,7 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
     chooseColor.hwndOwner = NULL;
     hWnd = Tk_GetHWND(Tk_WindowId(parent));
     chooseColor.hwndOwner = hWnd;
-    
+
     oldMode = Tcl_SetServiceMode(TCL_SERVICE_ALL);
     winCode = ChooseColor(&chooseColor);
     (void) Tcl_SetServiceMode(oldMode);
@@ -402,8 +402,8 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
 	char color[100];
 
 	sprintf(color, "#%02x%02x%02x",
-		GetRValue(chooseColor.rgbResult), 
-	        GetGValue(chooseColor.rgbResult), 
+		GetRValue(chooseColor.rgbResult),
+	        GetGValue(chooseColor.rgbResult),
 		GetBValue(chooseColor.rgbResult));
         Tcl_AppendResult(interp, color, NULL);
 	oldColor = chooseColor.rgbResult;
@@ -423,7 +423,7 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
  *
  * Results:
  *	The return value is 0 if the default dialog box procedure should
- *	handle the message, non-zero otherwise. 
+ *	handle the message, non-zero otherwise.
  *
  * Side effects:
  *	Changes the title of the dialog window.
@@ -431,14 +431,14 @@ Tk_ChooseColorObjCmd(clientData, interp, objc, objv)
  *----------------------------------------------------------------------
  */
 
-static UINT CALLBACK 
+static UINT CALLBACK
 ColorDlgHookProc(hDlg, uMsg, wParam, lParam)
     HWND hDlg;			/* Handle to the color dialog. */
     UINT uMsg;			/* Type of message. */
     WPARAM wParam;		/* First message parameter. */
     LPARAM lParam;		/* Second message parameter. */
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     switch (uMsg) {
@@ -447,7 +447,7 @@ ColorDlgHookProc(hDlg, uMsg, wParam, lParam)
 	    CHOOSECOLOR *ccPtr;
 	    Tcl_DString ds;
 
-	    /* 
+	    /*
 	     * Set the title string of the dialog.
 	     */
 
@@ -547,13 +547,13 @@ Tk_GetSaveFileObjCmd(clientData, interp, objc, objv)
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 GetFileNameW(clientData, interp, objc, objv, open)
     ClientData clientData;	/* Main window associated with interpreter. */
     Tcl_Interp *interp;		/* Current interpreter. */
     int objc;			/* Number of arguments. */
     Tcl_Obj *CONST objv[];	/* Argument objects. */
-    int open;			/* 1 to call GetOpenFileName(), 0 to 
+    int open;			/* 1 to call GetOpenFileName(), 0 to
 				 * call GetSaveFileName(). */
 {
     OPENFILENAMEW ofn;
@@ -565,7 +565,7 @@ GetFileNameW(clientData, interp, objc, objv, open)
     Tcl_DString utfFilterString, utfDirString;
     Tcl_DString extString, filterString, dirString, titleString;
     Tcl_Encoding unicodeEncoding = TkWinGetUnicodeEncoding();
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     static CONST char *saveOptionStrings[] = {
 	"-defaultextension", "-filetypes", "-initialdir", "-initialfile",
@@ -630,7 +630,7 @@ GetFileNameW(clientData, interp, objc, objv, open)
 	}
 	if (i + 1 == objc) {
 	    string = Tcl_GetStringFromObj(optionPtr, NULL);
-	    Tcl_AppendResult(interp, "value for \"", string, "\" missing", 
+	    Tcl_AppendResult(interp, "value for \"", string, "\" missing",
 		    (char *) NULL);
 	    goto end;
 	}
@@ -705,15 +705,15 @@ GetFileNameW(clientData, interp, objc, objv, open)
     ofn.lStructSize		= sizeof(OPENFILENAMEW);
     ofn.hwndOwner		= hWnd;
 #ifdef _WIN64
-    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner,
 					GWLP_HINSTANCE);
 #else
-    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner,
 					GWL_HINSTANCE);
 #endif
     ofn.lpstrFile		= (WCHAR *) file;
     ofn.nMaxFile		= TK_MULTI_MAX_PATH;
-    ofn.Flags			= OFN_HIDEREADONLY | OFN_PATHMUSTEXIST 
+    ofn.Flags			= OFN_HIDEREADONLY | OFN_PATHMUSTEXIST
 				  | OFN_NOCHANGEDIR | OFN_EXPLORER;
     ofn.lpfnHook		= (LPOFNHOOKPROC) OFNHookProcW;
     ofn.lCustData		= (LPARAM) interp;
@@ -876,7 +876,7 @@ GetFileNameW(clientData, interp, objc, objv, open)
 	} else {
 	    char *p;
 	    Tcl_DString ds;
-	    
+
 	    Tcl_ExternalToUtfDString(unicodeEncoding,
 		    (char *) ofn.lpstrFile, -1, &ds);
 	    for (p = Tcl_DStringValue(&ds); *p != '\0'; p++) {
@@ -908,7 +908,7 @@ GetFileNameW(clientData, interp, objc, objv, open)
 	if (CommDlgExtendedError() == FNERR_INVALIDFILENAME) {
 	    char *p;
 	    Tcl_DString ds;
-	    
+
 	    Tcl_ExternalToUtfDString(unicodeEncoding,
 		    (char *) ofn.lpstrFile, -1, &ds);
 	    for (p = Tcl_DStringValue(&ds); *p != '\0'; p++) {
@@ -927,7 +927,7 @@ GetFileNameW(clientData, interp, objc, objv, open)
 	    result = TCL_OK;
 	}
     }
-    
+
     if (ofn.lpstrTitle != NULL) {
 	Tcl_DStringFree(&titleString);
     }
@@ -964,14 +964,14 @@ GetFileNameW(clientData, interp, objc, objv, open)
  *-------------------------------------------------------------------------
  */
 
-static UINT APIENTRY 
+static UINT APIENTRY
 OFNHookProcW(
     HWND hdlg,		// handle to child dialog window
     UINT uMsg,		// message identifier
     WPARAM wParam,	// message parameter
     LPARAM lParam) 	// message parameter
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     OPENFILENAMEW *ofnPtr;
 
@@ -984,8 +984,8 @@ OFNHookProcW(
     } else if (uMsg == WM_WINDOWPOSCHANGED) {
 	/*
 	 * This message is delivered at the right time to enable Tk
-	 * to set the debug information.  Unhooks itself so it 
-	 * won't set the debug information every time it gets a 
+	 * to set the debug information.  Unhooks itself so it
+	 * won't set the debug information every time it gets a
 	 * WM_WINDOWPOSCHANGED message.
 	 */
 
@@ -1024,13 +1024,13 @@ OFNHookProcW(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 GetFileNameA(clientData, interp, objc, objv, open)
     ClientData clientData;	/* Main window associated with interpreter. */
     Tcl_Interp *interp;		/* Current interpreter. */
     int objc;			/* Number of arguments. */
     Tcl_Obj *CONST objv[];	/* Argument objects. */
-    int open;			/* 1 to call GetOpenFileName(), 0 to 
+    int open;			/* 1 to call GetOpenFileName(), 0 to
 				 * call GetSaveFileName(). */
 {
     OPENFILENAME ofn;
@@ -1041,7 +1041,7 @@ GetFileNameA(clientData, interp, objc, objv, open)
     HWND hWnd;
     Tcl_DString utfFilterString, utfDirString;
     Tcl_DString extString, filterString, dirString, titleString;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     static CONST char *saveOptionStrings[] = {
 	"-defaultextension", "-filetypes", "-initialdir", "-initialfile",
@@ -1106,7 +1106,7 @@ GetFileNameA(clientData, interp, objc, objv, open)
 	}
 	if (i + 1 == objc) {
 	    string = Tcl_GetStringFromObj(optionPtr, NULL);
-	    Tcl_AppendResult(interp, "value for \"", string, "\" missing", 
+	    Tcl_AppendResult(interp, "value for \"", string, "\" missing",
 		    (char *) NULL);
 	    goto end;
 	}
@@ -1142,8 +1142,8 @@ GetFileNameA(clientData, interp, objc, objv, open)
 		if (Tcl_TranslateFileName(interp, string, &ds) == NULL) {
 		    goto end;
 		}
-		Tcl_UtfToExternal(NULL, NULL, Tcl_DStringValue(&ds), 
-			Tcl_DStringLength(&ds), 0, NULL, (char *) file, 
+		Tcl_UtfToExternal(NULL, NULL, Tcl_DStringValue(&ds),
+			Tcl_DStringLength(&ds), 0, NULL, (char *) file,
 			sizeof(file), NULL, NULL, NULL);
 		break;
 	    }
@@ -1180,10 +1180,10 @@ GetFileNameA(clientData, interp, objc, objv, open)
     ofn.lStructSize		= sizeof(ofn);
     ofn.hwndOwner		= hWnd;
 #ifdef _WIN64
-    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner,
 					GWLP_HINSTANCE);
 #else
-    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner,
 					GWL_HINSTANCE);
 #endif
     ofn.lpstrFilter		= NULL;
@@ -1196,7 +1196,7 @@ GetFileNameA(clientData, interp, objc, objv, open)
     ofn.nMaxFileTitle		= 0;
     ofn.lpstrInitialDir		= NULL;
     ofn.lpstrTitle		= NULL;
-    ofn.Flags			= OFN_HIDEREADONLY | OFN_PATHMUSTEXIST 
+    ofn.Flags			= OFN_HIDEREADONLY | OFN_PATHMUSTEXIST
 				  | OFN_NOCHANGEDIR | OFN_EXPLORER;
     ofn.nFileOffset		= 0;
     ofn.nFileExtension		= 0;
@@ -1447,14 +1447,14 @@ GetFileNameA(clientData, interp, objc, objv, open)
  *-------------------------------------------------------------------------
  */
 
-static UINT APIENTRY 
+static UINT APIENTRY
 OFNHookProc(
     HWND hdlg,		// handle to child dialog window
     UINT uMsg,		// message identifier
     WPARAM wParam,	// message parameter
     LPARAM lParam) 	// message parameter
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     OPENFILENAME *ofnPtr;
 
@@ -1466,10 +1466,10 @@ OFNHookProc(
 #endif
     } else if (uMsg == WM_WINDOWPOSCHANGED) {
 	/*
-	 * This message is delivered at the right time to both 
+	 * This message is delivered at the right time to both
 	 * old-style and explorer-style hook procs to enable Tk
-	 * to set the debug information.  Unhooks itself so it 
-	 * won't set the debug information every time it gets a 
+	 * to set the debug information.  Unhooks itself so it
+	 * won't set the debug information every time it gets a
 	 * WM_WINDOWPOSCHANGED message.
 	 */
 
@@ -1510,8 +1510,8 @@ OFNHookProc(
  *
  *----------------------------------------------------------------------
  */
-static int 
-MakeFilter(interp, string, dsPtr) 
+static int
+MakeFilter(interp, string, dsPtr)
     Tcl_Interp *interp;		/* Current interpreter. */
     char *string;		/* String value of the -filetypes option */
     Tcl_DString *dsPtr;		/* Filled with windows filter string. */
@@ -1576,7 +1576,7 @@ MakeFilter(interp, string, dsPtr)
 
 	    for (pass = 1; pass <= 2; pass++) {
 		/*
-		 * In the first pass, we format the extensions in the 
+		 * In the first pass, we format the extensions in the
 		 * name field. In the second pass, we format the extensions in
 		 * the filter pattern field
 		 */
@@ -1584,7 +1584,7 @@ MakeFilter(interp, string, dsPtr)
 		for (clausePtr=filterPtr->clauses;clausePtr;
 		         clausePtr=clausePtr->next) {
 		    GlobPattern *globPtr;
-		
+
 
 		    for (globPtr=clausePtr->patterns; globPtr;
 			    globPtr=globPtr->next) {
@@ -2058,8 +2058,8 @@ ChooseDirectoryValidateProc (
  *
  * Tk_ChooseDirectoryObjCmd --
  *
- *	This procedure implements the "tk_chooseDirectory" dialog box 
- *	for the Windows platform. See the user documentation for details 
+ *	This procedure implements the "tk_chooseDirectory" dialog box
+ *	for the Windows platform. See the user documentation for details
  *	on what it does.
  *
  * Results:
@@ -2088,7 +2088,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
     char *utfTitle;
     Tcl_DString utfDirString;
     Tcl_DString titleString, dirString;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     static CONST char *optionStrings[] = {
 	"-initialdir",	"-mustexist",	"-parent",	"-title",
@@ -2101,7 +2101,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
     if (tsdPtr->WM_LBSELCHANGED == 0) {
         tsdPtr->WM_LBSELCHANGED = RegisterWindowMessage(LBSELCHSTRING);
     }
-   
+
     result = TCL_ERROR;
     path[0] = '\0';
 
@@ -2124,7 +2124,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
 	}
 	if (i + 1 == objc) {
 	    string = Tcl_GetStringFromObj(optionPtr, NULL);
-	    Tcl_AppendResult(interp, "value for \"", string, "\" missing", 
+	    Tcl_AppendResult(interp, "value for \"", string, "\" missing",
 		    (char *) NULL);
 	    goto cleanup;
 	}
@@ -2133,7 +2133,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
 	switch ((enum options) index) {
 	    case DIR_INITIAL: {
 		Tcl_DStringFree(&utfDirString);
-		if (Tcl_TranslateFileName(interp, string, 
+		if (Tcl_TranslateFileName(interp, string,
 			&utfDirString) == NULL) {
 		    goto cleanup;
 		}
@@ -2168,10 +2168,10 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
     ofn.lStructSize		= sizeof(ofn);
     ofn.hwndOwner		= hWnd;
 #ifdef _WIN64
-    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLongPtr(ofn.hwndOwner,
 					GWLP_HINSTANCE);
 #else
-    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner, 
+    ofn.hInstance		= (HINSTANCE) GetWindowLong(ofn.hwndOwner,
 					GWL_HINSTANCE);
 #endif
     ofn.lpstrFilter		= NULL;
@@ -2194,7 +2194,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
     ofn.lpTemplateName		= MAKEINTRESOURCE(FILEOPENORD);
 
     if (Tcl_DStringValue(&utfDirString)[0] != '\0') {
-	Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&utfDirString), 
+	Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&utfDirString),
 		Tcl_DStringLength(&utfDirString), &dirString);
     } else {
 	/*
@@ -2229,7 +2229,7 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
      * Display dialog.  The choose directory dialog doesn't preserve the
      * current directory, so it must be saved and restored here.
      */
-    
+
     GetCurrentDirectory(MAX_PATH, savePath);
     mode = Tcl_SetServiceMode(TCL_SERVICE_ALL);
     code = GetOpenFileName(&ofn);
@@ -2285,12 +2285,12 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
  *	Hook procedure called by the ChooseDirectory dialog to modify
  *	its default behavior.  The ChooseDirectory dialog is really an
  *	OpenFile dialog with certain controls rearranged and certain
- *	behaviors changed.  For instance, typing a name in the 
- *	ChooseDirectory dialog selects a directory, rather than 
+ *	behaviors changed.  For instance, typing a name in the
+ *	ChooseDirectory dialog selects a directory, rather than
  *	selecting a file.
  *
  * Results:
- *	Returns 0 to allow default processing of message, or 1 to 
+ *	Returns 0 to allow default processing of message, or 1 to
  *	tell default dialog procedure not to process the message.
  *
  * Side effects:
@@ -2302,14 +2302,14 @@ Tk_ChooseDirectoryObjCmd(clientData, interp, objc, objv)
  *----------------------------------------------------------------------
  */
 
-static UINT APIENTRY 
+static UINT APIENTRY
 ChooseDirectoryHookProc(
     HWND hwnd,
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     OPENFILENAME *ofnPtr;
     ChooseDir *cdPtr;
@@ -2343,7 +2343,7 @@ ChooseDirectoryHookProc(
     /*
      * GWL_USERDATA keeps track of cdPtr.
      */
-    
+
 #ifdef _WIN64
     cdPtr = (ChooseDir *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 #else
@@ -2394,18 +2394,18 @@ ChooseDirectoryHookProc(
 	}
 
 	/*
-	 * Dialogs also get the message that OK was clicked when Enter 
+	 * Dialogs also get the message that OK was clicked when Enter
 	 * is pressed in some other control.  Find out what window
-	 * we were really in when we got the supposed "OK", because the 
+	 * we were really in when we got the supposed "OK", because the
 	 * behavior is different.
 	 */
 
 	if (cdPtr->lastCtrl == edt10) {
 	    /*
-	     * Hit Enter or clicked OK while typing a directory name in the 
+	     * Hit Enter or clicked OK while typing a directory name in the
 	     * edit control.
 	     * If it's a new name, try to go to that directory.
-	     * If the name hasn't changed since last time, return selected 
+	     * If the name hasn't changed since last time, return selected
 	     * directory.
 	     */
 
@@ -2434,14 +2434,14 @@ ChooseDirectoryHookProc(
 		    MessageBox(hwnd, tmp, NULL, MB_OK);
 		    SendDlgItemMessage(hwnd, edt10, EM_SETSEL, 0, -1);
 		    return 0;
-		} 
+		}
 		if (changed) {
 		    /*
 		     * Directory was invalid, but we want to keep displaying
-		     * this name.  Don't update the listbox that displays the 
+		     * this name.  Don't update the listbox that displays the
 		     * current directory heirarchy, or it'll erase the name.
 		     */
-		    
+
 		    SendDlgItemMessage(hwnd, edt10, EM_SETSEL, 0, -1);
 		    return 0;
 		}
@@ -2455,23 +2455,23 @@ ChooseDirectoryHookProc(
 		EndDialog(hwnd, IDOK);
 		return 1;
 	    }
-	    
+
 	    cdPtr->lastCtrl = IDOK;
 
 	    /*
-	     * The following is the magic code, determined by running 
-	     * Spy++ on some other directory chooser, that it takes to 
-	     * get this dialog to update the listbox to display the 
+	     * The following is the magic code, determined by running
+	     * Spy++ on some other directory chooser, that it takes to
+	     * get this dialog to update the listbox to display the
 	     * current directory.
 	     */
 
 	    SetDlgItemText(hwnd, edt1, cdPtr->path);
-	    SendMessage(hwnd, WM_COMMAND, (WPARAM) MAKELONG(cmb2, 0x8003), 
+	    SendMessage(hwnd, WM_COMMAND, (WPARAM) MAKELONG(cmb2, 0x8003),
 		    (LPARAM) GetDlgItem(hwnd, cmb2));
 	    return 0;
 	} else if (idCtrl == lst2) {
 	    /*
-	     * Enter key was pressed while in listbox.  
+	     * Enter key was pressed while in listbox.
 	     * If it's a new directory, allow default behavior to open dir.
 	     * If the directory hasn't changed, return selected directory.
 	     */
@@ -2485,7 +2485,7 @@ ChooseDirectoryHookProc(
 		return 1;
 	    }
 	} else if (idCtrl == IDOK) {
-	    /* 
+	    /*
 	     * The OK button was clicked. Return the value currently selected
              * in the entry.
 	     */
@@ -2541,7 +2541,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 	MSG_DEFAULT,	MSG_ICON,	MSG_MESSAGE,	MSG_PARENT,
 	MSG_TITLE,	MSG_TYPE
     };
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     tkwin = (Tk_Window) clientData;
@@ -2567,7 +2567,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 	}
 	if (i + 1 == objc) {
 	    string = Tcl_GetStringFromObj(optionPtr, NULL);
-	    Tcl_AppendResult(interp, "value for \"", string, "\" missing", 
+	    Tcl_AppendResult(interp, "value for \"", string, "\" missing",
 		    (char *) NULL);
 	    return TCL_ERROR;
 	}
@@ -2575,7 +2575,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
         string = Tcl_GetStringFromObj(valuePtr, NULL);
 	switch ((enum options) index) {
         case MSG_DEFAULT:
-	    defaultBtn = TkFindStateNumObj(interp, optionPtr, buttonMap, 
+	    defaultBtn = TkFindStateNumObj(interp, optionPtr, buttonMap,
 		    valuePtr);
 	    if (defaultBtn < 0) {
 		return TCL_ERROR;
@@ -2593,7 +2593,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 	    message = string;
 	    break;
 
-	case MSG_PARENT: 
+	case MSG_PARENT:
 	    parent = Tk_NameToWindow(interp, string, tkwin);
 	    if (parent == NULL) {
 		return TCL_ERROR;
@@ -2616,7 +2616,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 
     Tk_MakeWindowExist(parent);
     hWnd = Tk_GetHWND(Tk_WindowId(parent));
-    
+
     flags = 0;
     if (defaultBtn >= 0) {
 	int defaultBtnIdx;
@@ -2634,7 +2634,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 		}
 		if (defaultBtnIdx < 0) {
 		    Tcl_AppendResult(interp, "invalid default button \"",
-			    TkFindStateString(buttonMap, defaultBtn), 
+			    TkFindStateString(buttonMap, defaultBtn),
 			    "\"", NULL);
 		    return TCL_ERROR;
 		}
@@ -2685,7 +2685,7 @@ Tk_MessageBoxObjCmd(clientData, interp, objc, objv)
 static LRESULT CALLBACK
 MsgBoxCBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (nCode == HCBT_CREATEWND) {
@@ -2713,10 +2713,10 @@ MsgBoxCBTProc(int nCode, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(tsdPtr->hMsgBoxHook, nCode, wParam, lParam);
 }
 
-static void 
+static void
 SetTkDialog(ClientData clientData)
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     char buf[32];
 

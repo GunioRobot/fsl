@@ -19,12 +19,12 @@ namespace boost
 template< class ElementIterator
         , class IndexIterator>
 class permutation_iterator
-  : public iterator_adaptor< 
+  : public iterator_adaptor<
              permutation_iterator<ElementIterator, IndexIterator>
            , IndexIterator, typename detail::iterator_traits<ElementIterator>::value_type
            , use_default, typename detail::iterator_traits<ElementIterator>::reference>
 {
-  typedef iterator_adaptor< 
+  typedef iterator_adaptor<
             permutation_iterator<ElementIterator, IndexIterator>
           , IndexIterator, typename detail::iterator_traits<ElementIterator>::value_type
           , use_default, typename detail::iterator_traits<ElementIterator>::reference> super_t;
@@ -34,7 +34,7 @@ class permutation_iterator
 public:
   permutation_iterator() : m_elt_iter() {}
 
-  explicit permutation_iterator(ElementIterator x, IndexIterator y) 
+  explicit permutation_iterator(ElementIterator x, IndexIterator y)
       : super_t(y), m_elt_iter(x) {}
 
   template<class OtherElementIterator, class OtherIndexIterator>
@@ -55,7 +55,7 @@ private:
 
 
 template <class ElementIterator, class IndexIterator>
-permutation_iterator<ElementIterator, IndexIterator> 
+permutation_iterator<ElementIterator, IndexIterator>
 make_permutation_iterator( ElementIterator e, IndexIterator i )
 {
     return permutation_iterator<ElementIterator, IndexIterator>( e, i );

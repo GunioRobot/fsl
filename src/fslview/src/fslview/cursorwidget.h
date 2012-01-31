@@ -30,7 +30,7 @@ public:
 
   virtual void update(const Cursor::Handle& c);
   virtual void update(const OverlayList* ol, OverlayListMsg msg);
-  
+
   inline void enableVolumeSpinBox(bool on) { m_volumeBox->setEnabled(on);     }
 
   void setValBoxState(bool);
@@ -51,7 +51,7 @@ private:
   void blockBoxSignals(bool);
   void updateValBox();
   void setInputValidators();
-  
+
   QString fixMmBoxVal(QDoubleValidator*,QString &);
   int m_xVox,m_yVox,m_zVox;
   int m_xMm, m_yMm, m_zMm;

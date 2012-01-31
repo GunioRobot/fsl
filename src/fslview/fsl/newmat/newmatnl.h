@@ -245,7 +245,7 @@ private:
 
 // The next class is the prototype class for calculating the
 // log-likelihood.
-// I assume first derivatives are available and something like the 
+// I assume first derivatives are available and something like the
 // Fisher Information or variance/covariance matrix of the first
 // derivatives or minus the matrix of second derivatives is
 // available. This matrix must be positive definite.

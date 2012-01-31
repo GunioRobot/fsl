@@ -2,7 +2,7 @@
 #define LOCAL_TIME_LOCAL_TIME_TYPES_HPP__
 
 /* Copyright (c) 2003-2004 CrystalClear Software, Inc.
- * Subject to the Boost Software License, Version 1.0. 
+ * Subject to the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $
@@ -20,16 +20,16 @@
 namespace boost {
 namespace local_time {
 
-  typedef boost::date_time::period<local_date_time, 
+  typedef boost::date_time::period<local_date_time,
                                    boost::posix_time::time_duration> local_time_period;
 
   typedef date_time::time_itr<local_date_time> local_time_iterator;
 
-  typedef date_time::second_clock<local_date_time> local_sec_clock; 
+  typedef date_time::second_clock<local_date_time> local_sec_clock;
   typedef date_time::microsec_clock<local_date_time> local_microsec_clock;
   //! Shared Pointer for time_zone and posix_time_zone objects
   typedef boost::shared_ptr<time_zone> time_zone_ptr;
-  
+
   //bring special enum values into the namespace
   using date_time::special_values;
   using date_time::not_special;

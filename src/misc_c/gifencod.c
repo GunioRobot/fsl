@@ -47,7 +47,7 @@
  * well as the first couple of nodes which need at least one alternative
  * color, will be among the ones with many nodes ("... whatever that
  * means", as my tutor in Num. Analysis and programming used to say).
- *  - The number of possible LOOKUP nodes depends on the size of the color 
+ *  - The number of possible LOOKUP nodes depends on the size of the color
  * map.  Large color maps will have many SEARCH nodes; small color maps
  * will probably have many LOOKUP nodes.
 */

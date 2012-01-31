@@ -1,4 +1,4 @@
-/* 
+/*
  * tkOldConfig.c --
  *
  *	This file contains the Tk_ConfigureWidget procedure. THIS FILE
@@ -322,7 +322,7 @@ FindConfigSpec(interp, specs, argvName, needFlags, hateFlags)
 			argvName, "\"", (char *) NULL);
 		return (Tk_ConfigSpec *) NULL;
 	    }
-	    if ((specPtr->dbName == matchPtr->dbName) 
+	    if ((specPtr->dbName == matchPtr->dbName)
 		    && (specPtr->type != TK_CONFIG_SYNONYM)
 		    && ((specPtr->specFlags & needFlags) == needFlags)
 		    && !(specPtr->specFlags & hateFlags)) {
@@ -899,7 +899,7 @@ FormatConfigValue(interp, tkwin, specPtr, widgRec, buffer, freeProcPtr)
 		    specPtr->customPtr->clientData, tkwin, widgRec,
 		    specPtr->offset, freeProcPtr);
 	    break;
-	default: 
+	default:
 	    result = "?? unknown type ??";
     }
     return result;

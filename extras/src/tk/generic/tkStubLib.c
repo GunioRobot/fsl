@@ -1,4 +1,4 @@
-/* 
+/*
  * tkStubLib.c --
  *
  *	Stub object that will be statically linked into extensions that wish
@@ -109,11 +109,11 @@ Tk_InitStubs(interp, version, exact)
 		TCL_STATIC);
 	return NULL;
     }
-    
+
     tkPlatStubsPtr = tkStubsPtr->hooks->tkPlatStubs;
     tkIntStubsPtr = tkStubsPtr->hooks->tkIntStubs;
     tkIntPlatStubsPtr = tkStubsPtr->hooks->tkIntPlatStubs;
     tkIntXlibStubsPtr = tkStubsPtr->hooks->tkIntXlibStubs;
-    
+
     return actualVersion;
 }

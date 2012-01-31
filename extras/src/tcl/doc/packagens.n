@@ -1,9 +1,9 @@
 '\"
 '\" Copyright (c) 1998-2000 by Scriptics Corporation.
 '\" All rights reserved.
-'\" 
+'\"
 '\" RCS: @(#) $Id: packagens.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH pkg::create n 8.3 Tcl "Tcl Built-In Commands"
 .BS

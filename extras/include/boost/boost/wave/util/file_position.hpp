@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Definition of the position_iterator and file_position templates
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -39,11 +39,11 @@ struct file_position {
 
 public:
     typedef StringT string_type;
-    
+
     file_position()
     :   file(), line(1), column(1)
     {}
-    explicit file_position(string_type const& file_, int line_ = 1, 
+    explicit file_position(string_type const& file_, int line_ = 1,
             int column_ = 1)
     :   file(file_), line(line_), column(column_)
     {}
@@ -52,11 +52,11 @@ public:
     string_type const &get_file() const { return file; }
     unsigned int get_line() const { return line; }
     unsigned int get_column() const { return column; }
-    
+
     void set_file(string_type const &file_) { file = file_; }
     void set_line(unsigned int line_) { line = line_; }
     void set_column(unsigned int column_) { column = column_; }
-    
+
 private:
     string_type file;
     unsigned int line;
@@ -64,10 +64,10 @@ private:
 };
 
 template <typename StringT>
-bool operator== (file_position<StringT> const &lhs, 
+bool operator== (file_position<StringT> const &lhs,
     file_position<StringT> const &rhs)
 {
-    return lhs.get_column() == rhs.get_column() && 
+    return lhs.get_column() == rhs.get_column() &&
         lhs.get_line() == rhs.get_line() && lhs.get_file() == rhs.get_file();
 }
 
@@ -85,23 +85,23 @@ typedef file_position<BOOST_WAVE_STRINGTYPE> file_position_type;
 //
 //  position_iterator
 //
-//  The position_iterator used by Wave is now based on the corresponding Spirit 
+//  The position_iterator used by Wave is now based on the corresponding Spirit
 //  type. This type is used with our own file_position though. The needed
-//  specialization of the boost::spirit::position_policy class is provided 
+//  specialization of the boost::spirit::position_policy class is provided
 //  below.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename IteratorT, typename PositionT>
-struct position_iterator 
+struct position_iterator
 :   boost::spirit::position_iterator<IteratorT, PositionT>
 {
     typedef boost::spirit::position_iterator<IteratorT, PositionT> base_type;
-    
+
     position_iterator()
     {
     }
-    
+
     position_iterator(IteratorT const &begin, IteratorT const &end,
             PositionT const &pos)
     :   base_type(begin, end, pos)
@@ -117,11 +117,11 @@ struct position_iterator
 
 #if SPIRIT_VERSION >= 0x1700
 
-namespace spirit { 
+namespace spirit {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The boost::spirit::position_policy has to be specialized for our 
+//  The boost::spirit::position_policy has to be specialized for our
 //  file_position class
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,9 +150,9 @@ namespace spirit {
             pos.set_column(pos.get_column() + 1);
         }
 
-        void tabulation(boost::wave::util::file_position_type &pos)   
+        void tabulation(boost::wave::util::file_position_type &pos)
         {
-            pos.set_column(pos.get_column() + m_CharsPerTab - 
+            pos.set_column(pos.get_column() + m_CharsPerTab -
                 (pos.get_column() - 1) % m_CharsPerTab);
         }
 
@@ -161,10 +161,10 @@ namespace spirit {
     };
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace spirit 
+}   // namespace spirit
 
 #endif // SPIRIT_VERSION >= 0x1700
 
-}   // namespace boost 
+}   // namespace boost
 
 #endif // !defined(FILE_POSITION_H_52BDEDF7_DAD3_4F24_802F_E66BB8098F68_INCLUDED)

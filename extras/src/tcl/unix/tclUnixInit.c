@@ -1,4 +1,4 @@
-/* 
+/*
  * tclUnixInit.c --
  *
  *	Contains the Unix-specific interpreter initialization functions.
@@ -121,8 +121,8 @@ static CONST LocaleTable localeTable[] = {
     {"Jp_JP",		"shiftjis"},
     {"japan",		"euc-jp"},
 #ifdef hpux
-    {"japanese",	"shiftjis"},	
-    {"ja",		"shiftjis"},	
+    {"japanese",	"shiftjis"},
+    {"ja",		"shiftjis"},
 #else
     {"japanese",	"euc-jp"},
     {"ja",		"euc-jp"},
@@ -139,9 +139,9 @@ static CONST LocaleTable localeTable[] = {
     {"ko_KR.eucKR",     "euc-kr"},
     {"korean",          "euc-kr"},
 
-    {"ru",		"iso8859-5"},		
-    {"ru_RU",		"iso8859-5"},		
-    {"ru_SU",		"iso8859-5"},		
+    {"ru",		"iso8859-5"},
+    {"ru_RU",		"iso8859-5"},
+    {"ru_SU",		"iso8859-5"},
 
     {"zh",		"cp936"},
     {"zh_CN.gb2312",	"euc-cn"},
@@ -296,7 +296,7 @@ TclpInitPlatform()
 
 int
 TclpInitLibraryPath(path)
-CONST char *path;		/* Path to the executable in native 
+CONST char *path;		/* Path to the executable in native
 				 * multi-byte encoding. */
 {
 #define LIBRARY_SIZE	    32
@@ -316,7 +316,7 @@ CONST char *path;		/* Path to the executable in native
      * is installed.  The developLib computes the path as though the
      * executable is run from a develpment directory.
      */
-     
+
     sprintf(installLib, "lib/tcl%s", TCL_VERSION);
     sprintf(developLib, "tcl%s/library", TCL_PATCH_LEVEL);
 
@@ -345,7 +345,7 @@ CONST char *path;		/* Path to the executable in native
 	/*
 	 * If TCL_LIBRARY is set, search there.
 	 */
-	 
+
 	objPtr = Tcl_NewStringObj(str, -1);
 	Tcl_ListObjAppendElement(NULL, pathPtr, objPtr);
 
@@ -358,7 +358,7 @@ CONST char *path;		/* Path to the executable in native
 	     * removing the old "tclX.Y" and substituting the current
 	     * version string.
 	     */
-	    
+
 	    pathv[pathc - 1] = installLib + 4;
 	    str = Tcl_JoinPath(pathc, pathv, &ds);
 	    objPtr = Tcl_NewStringObj(str, Tcl_DStringLength(&ds));
@@ -387,7 +387,7 @@ CONST char *path;		/* Path to the executable in native
      *	<bindir>/../../../<developLib>
      *	  (e.g. /usr/src/tcl8.4.0/unix/solaris-sparc/../../../tcl8.4.0/library)
      */
-     
+
 
      /*
       * The variable path holds an absolute path.  Take care not to
@@ -495,7 +495,7 @@ CONST char *path;		/* Path to the executable in native
     }
     }
 
-    TclSetLibraryPath(pathPtr);    
+    TclSetLibraryPath(pathPtr);
     Tcl_DStringFree(&buffer);
 
     return 1; /* 1 indicates that pathPtr may be dirty utf (needs cleaning) */
@@ -702,9 +702,9 @@ TclpSetInitialEncodings()
 	 * actually in the native multi-byte encoding, and not really UTF-8
 	 * as advertised.  We cheated as follows:
 	 *
-	 * 1. It was safe to allow the Tcl_SetSystemEncoding() call to 
-	 * append the ASCII chars that make up the encoding's filename to 
-	 * the names (in the native encoding) of directories in the library 
+	 * 1. It was safe to allow the Tcl_SetSystemEncoding() call to
+	 * append the ASCII chars that make up the encoding's filename to
+	 * the names (in the native encoding) of directories in the library
 	 * path, since all Unix multi-byte encodings have ASCII in the
 	 * beginning.
 	 *
@@ -714,8 +714,8 @@ TclpSetInitialEncodings()
 	 *
 	 * Now that the system encoding was actually successfully set,
 	 * translate all the names in the library path to UTF-8.  That way,
-	 * next time we search the library path, we'll translate the names 
-	 * from UTF-8 to the system encoding which will be the native 
+	 * next time we search the library path, we'll translate the names
+	 * from UTF-8 to the system encoding which will be the native
 	 * encoding.
 	 */
 
@@ -723,7 +723,7 @@ TclpSetInitialEncodings()
 	if (pathPtr != NULL) {
 	    int objc;
 	    Tcl_Obj **objv;
-	    
+
 	    objc = 0;
 	    Tcl_ListObjGetElements(NULL, pathPtr, &objc, &objv);
 	    for (i = 0; i < objc; i++) {
@@ -733,7 +733,7 @@ TclpSetInitialEncodings()
 
 		string = Tcl_GetStringFromObj(objv[i], &length);
 		Tcl_ExternalToUtfDString(NULL, string, length, &ds);
-		Tcl_SetStringObj(objv[i], Tcl_DStringValue(&ds), 
+		Tcl_SetStringObj(objv[i], Tcl_DStringValue(&ds),
 			Tcl_DStringLength(&ds));
 		Tcl_DStringFree(&ds);
 	    }
@@ -741,7 +741,7 @@ TclpSetInitialEncodings()
 
 	libraryPathEncodingFixed = 1;
     }
-    
+
     /* This is only ever called from the startup thread */
     if (binaryEncoding == NULL) {
 	/*
@@ -790,7 +790,7 @@ TclpSetVariables(interp)
      * Set msgcat fallback locale to current CFLocale identifier.
      */
     CFLocaleRef localeRef;
-    
+
     if (CFLocaleCopyCurrent != NULL && CFLocaleGetIdentifier != NULL &&
 	    (localeRef = CFLocaleCopyCurrent())) {
 	CFStringRef locale = CFLocaleGetIdentifier(localeRef);
@@ -814,7 +814,7 @@ TclpSetVariables(interp)
         Tcl_DString ds;
         CFBundleRef bundleRef;
 
-        Tcl_SetVar(interp, "tclDefaultLibrary", tclLibPath, 
+        Tcl_SetVar(interp, "tclDefaultLibrary", tclLibPath,
                 TCL_GLOBAL_ONLY);
         Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
                 TCL_GLOBAL_ONLY);
@@ -866,7 +866,7 @@ TclpSetVariables(interp)
     } else
 #endif /* HAVE_COREFOUNDATION */
     {
-        Tcl_SetVar(interp, "tclDefaultLibrary", defaultLibraryDir, 
+        Tcl_SetVar(interp, "tclDefaultLibrary", defaultLibraryDir,
                 TCL_GLOBAL_ONLY);
         Tcl_SetVar(interp, "tcl_pkgPath", pkgPath, TCL_GLOBAL_ONLY);
     }
@@ -880,13 +880,13 @@ TclpSetVariables(interp)
 #ifndef NO_UNAME
     if (uname(&name) >= 0) {
 	CONST char *native;
-	
+
 	unameOK = 1;
 
 	native = Tcl_ExternalToUtfDString(NULL, name.sysname, -1, &ds);
 	Tcl_SetVar2(interp, "tcl_platform", "os", native, TCL_GLOBAL_ONLY);
 	Tcl_DStringFree(&ds);
-	
+
 	/*
 	 * The following code is a special hack to handle differences in
 	 * the way version information is returned by uname.  On most
@@ -939,7 +939,7 @@ TclpSetVariables(interp)
  *
  * TclpFindVariable --
  *
- *	Locate the entry in environ for a given name.  On Unix this 
+ *	Locate the entry in environ for a given name.  On Unix this
  *	routine is case sensetive, on Windows this matches mixed case.
  *
  * Results:
@@ -981,10 +981,10 @@ TclpFindVariable(name, lengthPtr)
 	    result = i;
 	    goto done;
 	}
-	
+
 	Tcl_DStringFree(&envString);
     }
-    
+
     *lengthPtr = i;
 
     done:
@@ -1022,7 +1022,7 @@ Tcl_Init(interp)
 	    return (TCL_ERROR);
 	};
     }
-    
+
     pathPtr = TclGetLibraryPath();
     if (pathPtr == NULL) {
 	pathPtr = Tcl_NewObj();
@@ -1100,7 +1100,7 @@ Tcl_SourceRCFile(interp)
  *
  * TclpCheckStackSpace --
  *
- *	Detect if we are about to blow the stack.  Called before an 
+ *	Detect if we are about to blow the stack.  Called before an
  *	evaluation can happen when nesting depth is checked.
  *
  * Results:
@@ -1146,7 +1146,7 @@ MacOSXGetLibraryPath(Tcl_Interp *interp, int maxPathLen, char *tclLibPath)
 {
     int foundInFramework = TCL_ERROR;
 #ifdef TCL_FRAMEWORK
-    foundInFramework = Tcl_MacOSXOpenVersionedBundleResources(interp, 
+    foundInFramework = Tcl_MacOSXOpenVersionedBundleResources(interp,
 	"com.tcltk.tcllibrary", TCL_FRAMEWORK_VERSION, 0, maxPathLen, tclLibPath);
 #endif
     return foundInFramework;

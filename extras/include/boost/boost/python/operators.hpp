@@ -21,7 +21,7 @@
 # include <string>
 # include <complex>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {
@@ -39,7 +39,7 @@ namespace detail
   {
       template <class L, class R> struct apply;
   };
-  
+
   template <operator_id> struct operator_r
   {
       template <class L, class R> struct apply;
@@ -57,7 +57,7 @@ namespace detail
   struct operator_l_inner
       : operator_l<id>::template apply<L,R>
   {};
-      
+
   template <operator_id id, class L, class R>
   struct operator_r_inner
       : operator_r<id>::template apply<L,R>
@@ -67,13 +67,13 @@ namespace detail
   struct operator_1_inner
       : operator_1<id>::template apply<T>
   {};
-      
+
   // Define three different binary_op templates which take care of
   // these cases:
   //    self op self
   //    self op R
   //    L op self
-  // 
+  //
   // The inner apply metafunction is used to adjust the operator to
   // the class type being defined. Inheritance of the outer class is
   // simply used to provide convenient access to the operation's
@@ -147,7 +147,7 @@ namespace detail
                   >
               >
           >::type generator;
-      
+
           cl.def(
               generator::name()
             , &generator::template apply<
@@ -155,7 +155,7 @@ namespace detail
               >::execute
           );
       }
-    
+
       friend class python::def_visitor_access;
   };
 }
@@ -190,7 +190,7 @@ namespace detail                                            \
       };                                                    \
       static char const* name() { return "__" #rid "__"; }  \
   };                                                        \
-} 
+}
 
 # define BOOST_PYTHON_BINARY_OPERATOR(id, rid, op)      \
 BOOST_PYTHON_BINARY_OPERATION(id, rid, l op r)          \
@@ -203,7 +203,7 @@ namespace self_ns                                       \
       return detail::operator_<detail::op_##id,L,R>();  \
   }                                                     \
 }
-  
+
 BOOST_PYTHON_BINARY_OPERATOR(add, radd, +)
 BOOST_PYTHON_BINARY_OPERATOR(sub, rsub, -)
 BOOST_PYTHON_BINARY_OPERATOR(mul, rmul, *)
@@ -221,11 +221,11 @@ BOOST_PYTHON_BINARY_OPERATOR(le, ge, <=)
 BOOST_PYTHON_BINARY_OPERATOR(eq, eq, ==)
 BOOST_PYTHON_BINARY_OPERATOR(ne, ne, !=)
 # undef BOOST_PYTHON_BINARY_OPERATOR
-    
+
 // pow isn't an operator in C++; handle it specially.
 BOOST_PYTHON_BINARY_OPERATION(pow, rpow, pow(l,r))
 # undef BOOST_PYTHON_BINARY_OPERATION
-    
+
 namespace self_ns
 {
 # ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -258,7 +258,7 @@ namespace self_ns
   {
       return detail::operator_<detail::op_pow,L,self_t>();
   }
-# endif 
+# endif
 }
 
 
@@ -301,7 +301,7 @@ BOOST_PYTHON_INPLACE_OPERATOR(irshift,>>=)
 BOOST_PYTHON_INPLACE_OPERATOR(iand,&=)
 BOOST_PYTHON_INPLACE_OPERATOR(ixor,^=)
 BOOST_PYTHON_INPLACE_OPERATOR(ior,|=)
-    
+
 # define BOOST_PYTHON_UNARY_OPERATOR(id, op, func_name)         \
 namespace detail                                                \
 {                                                               \

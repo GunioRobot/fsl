@@ -5,7 +5,7 @@
 # Copyright (c) 1999 by Unifix
 # Copyright (c) 2000 by Ajuba Solutions
 # All rights reserved.
-# 
+#
 # RCS: @(#) $Id: spinbox.tcl,v 1.4 2008/07/21 09:59:14 mwebster Exp $
 # -----------------------------------------------------------------------------
 #  Index of commands:
@@ -86,7 +86,7 @@ proc SpinBox::create { path args } {
 			 -armcommand    [list SpinBox::_modify_value $path previous arm] \
 			 -disarmcommand [list SpinBox::_modify_value $path previous disarm]]]
 
-     #These are new lines to allow correct background and defaults for FEAT             
+     #These are new lines to allow correct background and defaults for FEAT
      $path.e configure -background grey95 -highlightbackground grey95
     if { "[Widget::getMegawidgetOption $path -vcmd2]" != "" && [$path.e cget -vcmd] == {} && [Widget::getMegawidgetOption $path -range] != {} } {$path.e configure -vcmd [Widget::getMegawidgetOption $path -vcmd2] }
     if { "[Widget::getMegawidgetOption $path -invcmd2]" != "" &&  [$path.e cget -invcmd] == {} &&  [Widget::getMegawidgetOption $path -range] !={} } {$path.e configure -invcmd [Widget::getMegawidgetOption $path -invcmd2] }
@@ -147,7 +147,7 @@ proc SpinBox::setvalue { path index } {
 
     set values [Widget::getMegawidgetOption $path -values]
     set value  [Entry::cget $path.e -text]
-    
+
     if { [llength $values] } {
         # --- -values SpinBox ---
         switch -- $index {

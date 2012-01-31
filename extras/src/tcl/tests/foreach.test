@@ -163,7 +163,7 @@ test foreach-3.1 {compiled foreach backward jump works correctly} {
 test foreach-4.1 {noncompiled foreach and shared variable or value list objects that are converted to another type} {
     catch {unset x}
     foreach {12.0} {a b c} {
-        set x 12.0  
+        set x 12.0
         set x [expr $x + 1]
     }
     set x
@@ -210,7 +210,7 @@ test foreach-6.4 {break tests} {
     catch {break foo} msg
     set msg
 } {wrong # args: should be "break"}
-# Check for bug #406709 
+# Check for bug #406709
 test foreach-6.5 {break tests} {
     proc a {} {
 	set a 1

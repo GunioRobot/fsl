@@ -16,7 +16,7 @@ Version::Version(){}
 Version::~Version(){}
 
 //! \mainpage FSLView
-//! 
+//!
 //! \section Installation
 //!
 //! \subsection Sources
@@ -81,7 +81,7 @@ Version::~Version(){}
 //Improved font selection
 
 //Version 2.3.5
-//Fixes 
+//Fixes
 // Override fatal error if FSLOUTPUTTYPE not present.
 // Poor design of OverlayWidget causing bad display under MacOSX Aqua.
 // RT1327: masks in fslview.
@@ -110,7 +110,7 @@ Version::~Version(){}
 // 1) Implemented DTI functionality: RGB, Lines and modulation.
 // 2) Changed blendImage to copy with transparency modulation.
 // 3) Got rid of references to mainImage. All images now in lists.
-// 4) Made metaimage , imagedata and imagestore classes to 
+// 4) Made metaimage , imagedata and imagestore classes to
 //    cope with collections of data.
 // 5) Moved all pixel manipulation code into imagebuffer.cpp
 // 6) Second slider now appears on overlaywidget for DTI mod images.
@@ -157,7 +157,7 @@ Version::~Version(){}
 
 //Version 2.2.2
 
-//Is a version with .dsw file altered so that it will build on windows.  
+//Is a version with .dsw file altered so that it will build on windows.
 //This version is the first one to use the licenced Qt3 for windows!!!
 
 //Version 2.3.0
@@ -181,7 +181,7 @@ Version::~Version(){}
 
 //Version 2.3.4
 
-//New features 
+//New features
 //ImageLeftRightEncoding preserved on screen (radiological view)
 // Better support for voxel-mm translations
 // Improved LookUpTable selection on startup:
@@ -192,7 +192,7 @@ Version::~Version(){}
 //Improved font selection
 
 //Version 2.3.5
-//Fixes 
+//Fixes
 // Override fatal error if FSLOUTPUTTYPE not present.
 // Poor design of OverlayWidget causing bad display under MacOSX Aqua.
 // RT1327: masks in fslview.
@@ -237,5 +237,5 @@ Version::~Version(){}
 
 //Version 3.1.7
 //Fixes
-//  VTK mode crashing on startup - back out some changes to vtkwidget.cpp from 3.1.6 
+//  VTK mode crashing on startup - back out some changes to vtkwidget.cpp from 3.1.6
 

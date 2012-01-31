@@ -12,13 +12,13 @@
 # include <boost/python/extract.hpp>
 
 namespace boost { namespace python { namespace container_utils {
-        
+
     template <typename Container>
     void
     extend_container(Container& container, object l)
     {
         typedef typename Container::value_type data_type;
-        
+
         //  l must be a list or some container
 
         for (int i = 0; i < l.attr("__len__")(); i++)
@@ -44,7 +44,7 @@ namespace boost { namespace python { namespace container_utils {
                     throw_error_already_set();
                 }
             }
-        }          
+        }
     }
 
 }}} // namespace boost::python::container_utils

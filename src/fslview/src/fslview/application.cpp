@@ -1,5 +1,5 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
- 
+
     V Rama Aravind, James Saunders, David Flitney, Mark Jenkinson,
 
     Christian Beckmann and Stephen Smith, FMRIB Image Analysis Group
@@ -89,7 +89,7 @@ bool ComparePaths(const Image::Handle im1, const Image::Handle im2)
 
 // void FileOpen::execute(void)
 // {
-//   QString fn = QFileDialog::getOpenFileName( QDir::currentDirPath(), "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)", 
+//   QString fn = QFileDialog::getOpenFileName( QDir::currentDirPath(), "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)",
 // 					     m_applicationWindow );
 
 //   if(ModelFit::isFeatDir(fn))
@@ -108,11 +108,11 @@ bool ComparePaths(const Image::Handle im1, const Image::Handle im2)
 // "You can also select the <b>Open command</b> from the File menu.";
 
 ApplicationWindow::ApplicationWindow(ApplicationOptions& options):
-  ApplicationWindowBase( 0, "FslView", WDestructiveClose ), 
-  m_properties(Properties::create()), 
+  ApplicationWindowBase( 0, "FslView", WDestructiveClose ),
+  m_properties(Properties::create()),
   m_toolbarMenuId(0),
   m_options(options)
-{  
+{
   TRACKER("ApplicationWindow::ApplicationWindow");
   qApp->setMainWidget(this);
 
@@ -128,7 +128,7 @@ ApplicationWindow::ApplicationWindow(ApplicationOptions& options):
   Preferences p;
   setGeometry(p.inqGeometry(dw, dh));
 
-  setupStatusBar(); 
+  setupStatusBar();
 
   m_ws = new QWorkspace(this);
   m_ws->setBackgroundMode( PaletteMidlight );
@@ -136,18 +136,18 @@ ApplicationWindow::ApplicationWindow(ApplicationOptions& options):
   m_ws->setScrollBarsEnabled(true);
 
   setCentralWidget(m_ws);
-  buildMenus(); 
-  connectControls(); 
+  buildMenus();
+  connectControls();
   show();
-  
-  emit message( "Ready", 2000 ); 
-  
+
+  emit message( "Ready", 2000 );
+
   // do not want fslview to crash if multiple files found!
   FslSetIgnoreMFQ(1);
   if (getenv("FSLOUTPUTTYPE")==NULL) {
     FslSetOverrideOutputType(FSL_TYPE_ANALYZE);
   }
-  
+
   if(!m_options.empty())
     {
       OverlayOptionList::const_iterator it = m_options.begin();
@@ -186,10 +186,10 @@ ApplicationWindow::ApplicationWindow(ApplicationOptions& options):
 	  Image::Handle image = m_modelFit->getFilteredFuncImage();
 
 	  // Need to add this image iff not already in image group
-	  ImageGroup::ImageList::iterator it = 
+	  ImageGroup::ImageList::iterator it =
 	    std::find_if( m_imageGroup->begin(), m_imageGroup->end(),
 			  boost::bind(ComparePaths, _1, image) );
-      
+
 	  if( it ==  m_imageGroup->end() ) {
 	    m_imageGroup->addOverlay(image);
 	    activeOverlayList()->setVisibility(false);
@@ -219,27 +219,27 @@ ApplicationWindow::ApplicationWindow(ApplicationOptions& options):
 	  }
 	} else
 	  viewOrthographic();
-	
+
 	if(m_modelFit) {
 	  Image::Handle image = m_modelFit->getFilteredFuncImage();
 	  // And display it as a timeseries with model viewing capabilities
 	  TimeSeriesWidget* timeseries = new TimeSeriesWidget(m_ws, image, m_cursor, m_modelFit);
-	  connect( timeseries, SIGNAL(windowClose(QCloseEvent*)), 
+	  connect( timeseries, SIGNAL(windowClose(QCloseEvent*)),
 		   this, SLOT(childWindowClose(QCloseEvent*)));
 	  timeseries->setCaption("Feat data");
 	  timeseries->resize(250,250);
 	  viewShow(timeseries);
 	}
-    
+
 	/*
-	 * set menu items to appropriate states after image has been 
+	 * set menu items to appropriate states after image has been
 	 * loaded, as they were set to some
 	 * states, initially, when no images were loaded
 	 */
 	setFileMenuItemsState();
 	setViewMenuItemsState();
 
-	setCurrentDir(m_options.begin()->fileInfo().absFilePath());      
+	setCurrentDir(m_options.begin()->fileInfo().absFilePath());
       } else
 	QMessageBox::warning( this, "FSLView", "Failed to load base image. Command line processing aborted." );
     }
@@ -259,14 +259,14 @@ ApplicationWindow::~ApplicationWindow()
 
 //! @brief load an image file
 //!
-//! This method is used to load a given file into the application. 
+//! This method is used to load a given file into the application.
 //! It can be called from event handlers as well as directly from client code.
-//! 
+//!
 //! @param absFilePath the path to the file to be loaded
 //!
 //! @return true if operation succeeded
 bool ApplicationWindow::loadFile(const QString & absFilePath)
-{ 
+{
   bool status(true);
 
   try {
@@ -282,12 +282,12 @@ bool ApplicationWindow::loadFile(const QString & absFilePath)
       m_imageGroup.reset();
 
       QApplication::setOverrideCursor(Qt::waitCursor);
-      emit message(QString("Loading.... %1").arg(fn), 5000);  
+      emit message(QString("Loading.... %1").arg(fn), 5000);
       qApp->processEvents();
- 
+
       m_imageGroup = ImageGroup::create( Image::load((const char *)fn) );
       ImageInfo::Handle info(m_imageGroup->getMainImage()->getInfo());
-      m_cursor = Cursor::create(info->inqX(),info->inqY(),info->inqZ(), 
+      m_cursor = Cursor::create(info->inqX(),info->inqY(),info->inqZ(),
                                 info->inqNumVolumes());
 
       OverlayList::Handle ol(activeOverlayList());
@@ -308,17 +308,17 @@ bool ApplicationWindow::loadFile(const QString & absFilePath)
 
       setCaption( fn );
 
-      m_cursor->setCursor( info->inqX()/2, info->inqY()/2, info->inqZ()/2 ); 
+      m_cursor->setCursor( info->inqX()/2, info->inqY()/2, info->inqZ()/2 );
 
-      QApplication::restoreOverrideCursor();      
- 
+      QApplication::restoreOverrideCursor();
+
       if(checkForDuplicates(fn))
         {
           QMessageBox::warning(this,"FSLView",
           "Warning: Multiple versions of the image files exist!");
         }
-      }  
-    else 
+      }
+    else
       {
         if(!checkFilesExist(fn,false))
           {
@@ -390,7 +390,7 @@ void ApplicationWindow::helpAboutQt()
 }
 
 void ApplicationWindow::windowMenuAboutToShow()
-{ 
+{
   TRACKER("ApplicationWindow::windowMenuAboutToShow()");
 
   // Remove any sub-window items
@@ -447,7 +447,7 @@ void ApplicationWindow::fileMenuAboutToShow()
 }
 
 void ApplicationWindow::viewMenuAboutToShow()
-{  
+{
   TRACKER("ApplicationWindow::viewMenuAboutToShow");
   setViewMenuItemsState();
 
@@ -469,7 +469,7 @@ void ApplicationWindow::setupStatusBar()
 void ApplicationWindow::setFileMenuItemsState(void)
 {
   bool remEnabled(false);
-  bool state(windowListEmpty());  
+  bool state(windowListEmpty());
   ViewWidget *view = dynamic_cast<ViewWidget*>(m_ws->activeWindow());
 
   if (!state && view)
@@ -489,8 +489,8 @@ void ApplicationWindow::setFileMenuItemsState(void)
 void ApplicationWindow::setViewMenuItemsState(void)
 {
   TRACKER("ApplicationWindow::setViewMenuItemsState(void)");
-  bool state(!windowListEmpty());      
-  bool multiVolume(false); 
+  bool state(!windowListEmpty());
+  bool multiVolume(false);
   bool validImage(false);
 
   if(ViewWidget *view = dynamic_cast<ViewWidget*>(m_ws->activeWindow()))
@@ -515,11 +515,11 @@ void ApplicationWindow::setViewMenuItemsState(void)
    *  original code above commented; Rama 3/11/04
    */
   initViewMenuItems(state);
-  viewImageHistogramAction->setEnabled(state && validImage);  
+  viewImageHistogramAction->setEnabled(state && validImage);
   viewTimeseriesAction->setEnabled(state && multiVolume && validImage);
   viewClusterBrowserAction->setEnabled(state && m_modelFit);
 }
-  
+
 void ApplicationWindow::initFileMenuItems(bool state)
 {
   fileCreateMaskAction->setEnabled(!state);
@@ -548,7 +548,7 @@ void ApplicationWindow::setMenuItems_NoImages(void)
 void ApplicationWindow::fileOpen(void)
 {
   QString fn = QFileDialog::getOpenFileName(QDir::currentDirPath(),
-					    "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)", 
+					    "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)",
 					    this );
   if(!fn.isEmpty()) {
     loadFile(fn);
@@ -560,19 +560,19 @@ void ApplicationWindow::fileOpen(void)
 
     if(m_modelFit) {
       Image::Handle image = m_modelFit->getFilteredFuncImage();
-  
+
       // Need to add this image iff not already in image group
-      ImageGroup::ImageList::iterator it = 
+      ImageGroup::ImageList::iterator it =
 	std::find_if( m_imageGroup->begin(), m_imageGroup->end(),
 		      boost::bind(ComparePaths, _1, image) );
-      
+
       if( it ==  m_imageGroup->end() ) {
 	m_imageGroup->addOverlay(image);
 	activeOverlayList()->setVisibility(false);
       }
-      // And display it as a timeseries with model viewing capabilities      
+      // And display it as a timeseries with model viewing capabilities
       TimeSeriesWidget* timeseries = new TimeSeriesWidget(m_ws, image, m_cursor, m_modelFit);
-      connect( timeseries, SIGNAL(windowClose(QCloseEvent*)), 
+      connect( timeseries, SIGNAL(windowClose(QCloseEvent*)),
 	       this, SLOT(childWindowClose(QCloseEvent*)));
       timeseries->setCaption("Feat data");
       timeseries->resize(250,250);
@@ -580,7 +580,7 @@ void ApplicationWindow::fileOpen(void)
     }
 
     /*
-     * set menu items to appropriate states after image has been 
+     * set menu items to appropriate states after image has been
      * loaded, as they were set to some
      * states, initially, when no images were loaded
      */
@@ -599,7 +599,7 @@ void ApplicationWindow::fileAdd()
     loadOverlay(fn);
 
     /*
-     * set menu items to appropriate states after image has been 
+     * set menu items to appropriate states after image has been
      * loaded, as they were set to some
      * states, initially, when no images were loaded
      */
@@ -612,7 +612,7 @@ void ApplicationWindow::fileOpen152(void)
 {
   Preferences p;
   QString fn(QFileDialog::getOpenFileName(p.inqMni152().c_str(),
-					  "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)", 
+					  "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)",
 					  this ));
 
   if(!fn.isEmpty()) {
@@ -620,7 +620,7 @@ void ApplicationWindow::fileOpen152(void)
       viewOrthographic();
 
     /*
-     * set menu items to appropriate states after image has been 
+     * set menu items to appropriate states after image has been
      * loaded, as they were set to some
      * states, initially, when no images were loaded
      */
@@ -633,14 +633,14 @@ void ApplicationWindow::fileAdd152(void)
 {
   Preferences p;
   QString fn(QFileDialog::getOpenFileName(p.inqMni152().c_str(),
-					  "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)", 
+					  "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)",
 					  this ));
 
   if(!fn.isEmpty()) {
     loadOverlay(fn);
 
     /*
-     * set menu items to appropriate states after image has been 
+     * set menu items to appropriate states after image has been
      * loaded, as they were set to some
      * states, initially, when no images were loaded
      */
@@ -669,7 +669,7 @@ void ApplicationWindow::buildMenus()
 	   m_ws, SLOT( tile() ));
 
   Window->setCheckable(true);
-  
+
   connect( Tools, SIGNAL( aboutToShow() ),
 	   this, SLOT( viewMenuAboutToShow() ) );
 
@@ -691,7 +691,7 @@ void ApplicationWindow::filePreferences()
 }
 
 void ApplicationWindow::connectControls()
-{  
+{
   connect( this, SIGNAL(      message(const QString&, int)),
            this, SLOT( displayMessage(const QString&, int)));
   connect( this, SIGNAL(workSpaceEmpty(void)),
@@ -708,7 +708,7 @@ void ApplicationWindow::fileSaveAs()
 {
   OverlayList::Handle ol = activeOverlayList();
   QString fn;
-	
+
   if(!ol)
     {
       QMessageBox::warning(this, "FSLView",
@@ -717,43 +717,43 @@ void ApplicationWindow::fileSaveAs()
     }
 
   Image::Handle image = ol->inqActiveImage();
-    
+
   if(!isValidImage(image))
     {
       QMessageBox::warning(this,"FSLView",
 			   "No image selected in Active window");
       return;
     }
-   
+
   // Okay can go ahead and try to save it then
   QString initFileName;
   // use basename only
   initFileName = QString(image->getInfo()->inqImageName().c_str());
 
-  fn = QFileDialog::getSaveFileName(initFileName, 
+  fn = QFileDialog::getSaveFileName(initFileName,
                                     "Image files (*.hdr *.hdr.gz *.nii *.nii.gz)", this,
                                     "save file dialog",
                                     "Select a filename for saving");
-  	
 
-  if(!fn.isNull())setCurrentDir(fn);    
 
-  if(checkSpecificFilesExist(fn))   
+  if(!fn.isNull())setCurrentDir(fn);
+
+  if(checkSpecificFilesExist(fn))
     {
       if(QMessageBox::warning( this,
                                "FSLView",
                                "File already exists. Do you want to overwrite it?",
-                               "Cancel","OK","",1,0) == 0) 
-	{      
+                               "Cancel","OK","",1,0) == 0)
+	{
 	  return;
 	}
     }
-  
-  if ( !fn.isEmpty() ) 
+
+  if ( !fn.isEmpty() )
     {
       if(image->save((const char *)fn))
 	{
-	  image->getInfo()->setTarnished(false);  
+	  image->getInfo()->setTarnished(false);
 	  if(checkForDuplicates(fn))
 	    {
 	      QMessageBox::warning(this,"FSLView",
@@ -776,8 +776,8 @@ void ApplicationWindow::fileSaveAs()
 }
 
 void ApplicationWindow::fileRemove()
-{  
-  
+{
+
  OverlayList::Handle ol = activeOverlayList();
  if(!ol)
    {
@@ -788,7 +788,7 @@ void ApplicationWindow::fileRemove()
   {
     Image::Handle mainImg = ol->getMainImage();
     Image::Handle image = ol->inqActiveImage();
-    
+
     if(!isValidImage(image))
       {
         QMessageBox::warning(this,
@@ -813,10 +813,10 @@ bool ApplicationWindow::loadOverlay(const QString & absFilePath)
   try{
     QString fn(absFilePath);
     QFileInfo fi(absFilePath);
-    
+
     removeExtensions(fn);
 
-    if ( !fn.isEmpty() && checkFilesExist(fn,false) ) 
+    if ( !fn.isEmpty() && checkFilesExist(fn,false) )
       {
         QApplication::setOverrideCursor(Qt::waitCursor);
         emit message( QString("Loading.... %1").arg(fn), 5000);
@@ -837,7 +837,7 @@ bool ApplicationWindow::loadOverlay(const QString & absFilePath)
             emit message( "Loading aborted", 2000 );
 	    status = false;
           }
-        
+
 	QApplication::restoreOverrideCursor();
 
         if(checkForDuplicates(fn))
@@ -845,15 +845,15 @@ bool ApplicationWindow::loadOverlay(const QString & absFilePath)
           QMessageBox::warning(this,"FSLView",
           "Warning: Multiple versions of the image files exist!");
         }
-      } 
-    else 
-      {        
+      }
+    else
+      {
         if(!checkFilesExist(fn,false))
           {
             QMessageBox::warning( this, "FSLView",
                                   "Missing header/image file" );
 
-	    emit message( QString("Could not open %1").arg(fn), 2000 );            
+	    emit message( QString("Could not open %1").arg(fn), 2000 );
 	    if(!checkFilesExist(fn,true))
 	      {
 		emit message( QString("Missing image file %1").arg(fn), 2000 );
@@ -896,7 +896,7 @@ void ApplicationWindow::addLookUpTable()
 
 void ApplicationWindow::fileCreateMask()
 {
- TRACKER("ApplicationWindow::createMask");      
+ TRACKER("ApplicationWindow::createMask");
  OverlayList::Handle ol = activeOverlayList();
 
  if(!ol)
@@ -909,7 +909,7 @@ void ApplicationWindow::fileCreateMask()
   {
     Image::Handle mainImg = ol->getMainImage();
     Image::Handle image = ol->inqActiveImage(), ci;
-    
+
     if(!isValidImage(image))
       {
         QMessageBox::warning(this,
@@ -928,7 +928,7 @@ void ApplicationWindow::fileCreateMask()
       if(info->inqNumVolumes()>1)
       {
         std::auto_ptr<CreateMaskDialog> cd(new CreateMaskDialog(this));
-        
+
         cd->setFixedSize(300, 100);
 
         cd->m_create4dMask->setChecked(m_properties->inqCreate4dMask());
@@ -965,11 +965,11 @@ void ApplicationWindow::fileCreateMask()
 }
 
 void ApplicationWindow::viewOrthographic()
-{  
+{
   ViewWidget* view = new OrthoWidget(m_ws, m_imageGroup,
                                      copyActiveOverlayList(), m_cursor);
 
-  connect( view, SIGNAL(message(const QString&, int)), 
+  connect( view, SIGNAL(message(const QString&, int)),
            this, SIGNAL(message(const QString&, int)) );
   connect( view, SIGNAL(addLookUpTable()),
            this, SLOT(addLookUpTable()));
@@ -990,19 +990,19 @@ void ApplicationWindow::viewOrthographic()
 void ApplicationWindow::viewLightbox()
 {
   ViewWidget* view = new LightboxWidget(m_ws, m_imageGroup,
-                                        copyActiveOverlayList(), m_cursor); 
+                                        copyActiveOverlayList(), m_cursor);
 
-  connect( view, SIGNAL(message(const QString&, int)), 
-           this, SIGNAL(message(const QString&, int)));   
+  connect( view, SIGNAL(message(const QString&, int)),
+           this, SIGNAL(message(const QString&, int)));
   connect( view, SIGNAL(addLookUpTable()),
-           this, SLOT(addLookUpTable()));  
+           this, SLOT(addLookUpTable()));
   connect( view, SIGNAL(windowClose(QCloseEvent*)),
            this, SLOT(childWindowClose(QCloseEvent*)));
 
   connect( view, SIGNAL(overlayEvent()),
            this, SLOT(menusUpdate()) );
 
-  view->setCaption("Lightbox view");  
+  view->setCaption("Lightbox view");
 
   view->resize(580,500);
 
@@ -1013,46 +1013,46 @@ void ApplicationWindow::viewLightbox()
 void ApplicationWindow::viewSingle()
 {
   ViewWidget* view = new SingleWidget(m_ws, m_imageGroup,
-                                     copyActiveOverlayList(), m_cursor); 
+                                     copyActiveOverlayList(), m_cursor);
 
-  connect( view, SIGNAL(message(const QString&, int)), 
-           this, SIGNAL(message(const QString&, int)) );   
+  connect( view, SIGNAL(message(const QString&, int)),
+           this, SIGNAL(message(const QString&, int)) );
   connect( view, SIGNAL(addLookUpTable()),
-           this, SLOT(addLookUpTable()));  
+           this, SLOT(addLookUpTable()));
   connect( view, SIGNAL(windowClose(QCloseEvent*)),
            this, SLOT(childWindowClose(QCloseEvent*)));
 
   connect( view, SIGNAL(overlayEvent()),
            this, SLOT(menusUpdate()) );
 
-  view->setCaption("Single view");  
+  view->setCaption("Single view");
 
   view->resize(210,345);
 
-  viewShow(view);  
+  viewShow(view);
 }
 
 void ApplicationWindow::view3d()
 {
   ViewWidget* view = new VTKWidget(m_ws, m_imageGroup,
 				   copyActiveOverlayList(),
-				   m_cursor); 
+				   m_cursor);
 
-  connect( view, SIGNAL(message(const QString&, int)), 
-           this, SIGNAL(message(const QString&, int)) );   
+  connect( view, SIGNAL(message(const QString&, int)),
+           this, SIGNAL(message(const QString&, int)) );
   connect( view, SIGNAL(addLookUpTable()),
-           this, SLOT(addLookUpTable()));  
+           this, SLOT(addLookUpTable()));
   connect( view, SIGNAL(windowClose(QCloseEvent*)),
            this, SLOT(childWindowClose(QCloseEvent*)));
 
   connect( view, SIGNAL(overlayEvent()),
            this, SLOT(menusUpdate()) );
 
-  view->setCaption("3D view");  
+  view->setCaption("3D view");
 
   view->resize(210,345);
 
-  viewShow(view);  
+  viewShow(view);
   m_cursor->repaint();
 }
 
@@ -1060,15 +1060,15 @@ void ApplicationWindow::viewClusterBrowser()
 {
   try {
     if(m_modelFit) {
-      ClusterBrowser *cb = 
-	new ClusterBrowser(m_ws, m_imageGroup->getMainImage(), 
+      ClusterBrowser *cb =
+	new ClusterBrowser(m_ws, m_imageGroup->getMainImage(),
 			   m_cursor, m_modelFit);
       connect( cb,   SIGNAL(windowClose(QCloseEvent*)),
 	       this, SLOT(childWindowClose(QCloseEvent*)));
       cb->setCaption("Cluster Browser");
       cb->showNormal();
     } else {
-      QMessageBox::warning( this, "Cluster Browser", "Unable to open browser: no valid model!"); 
+      QMessageBox::warning( this, "Cluster Browser", "Unable to open browser: no valid model!");
     }
   } catch(const ClusterBrowser::Exception& e) {
     QMessageBox::warning( this, "Cluster Browser", e.what());
@@ -1078,13 +1078,13 @@ void ApplicationWindow::viewClusterBrowser()
 void ApplicationWindow::viewTimeseries()
 {
   if(m_imageGroup.use_count())
-  {  
+  {
     OverlayList::Handle ol = activeOverlayList();
-    
+
     if(ol)
     {
       Image::Handle image = ol->inqActiveImage();
-    
+
       if(isValidImage(image))
         {
           if(image->getAvw() == NULL)
@@ -1098,7 +1098,7 @@ void ApplicationWindow::viewTimeseries()
 	      TimeSeriesWidget* timeseries = new TimeSeriesWidget(m_ws, image, m_cursor, m_modelFit);
               connect( timeseries, SIGNAL(windowClose(QCloseEvent*)),
                        this, SLOT(childWindowClose(QCloseEvent*)));
-              timeseries->setCaption("Timeseries");    
+              timeseries->setCaption("Timeseries");
               timeseries->resize(250,250);
               viewShow(timeseries);
             }
@@ -1111,22 +1111,22 @@ void ApplicationWindow::viewTimeseries()
 void ApplicationWindow::viewImageHistogram()
 {
   if(m_imageGroup.use_count())
-  {  
+  {
     if(ViewWidget *view = dynamic_cast<ViewWidget*>(m_ws->activeWindow())) {
       if(OverlayList::Handle ol = view->getOverlayList()) {
 	if(Image::Handle image = ol->inqActiveImage()) {
 	  unsigned int v = m_cursor->inqV();
-	  HistogramWidget* histogram = 
+	  HistogramWidget* histogram =
 	    new HistogramWidget(m_ws, image->getVolume(v),
 				image->getInfo()->inqImageName(),
-				v, image->getInfo()->isInteger());   
+				v, image->getInfo()->isInteger());
           connect( histogram, SIGNAL(windowClose(QCloseEvent*)),
-                   this, SLOT(childWindowClose(QCloseEvent*))); 
+                   this, SLOT(childWindowClose(QCloseEvent*)));
           viewShow(histogram);
         }
       }
     }
-  }  
+  }
 }
 
 void ApplicationWindow::catchFileError(FileError f)
@@ -1134,7 +1134,7 @@ void ApplicationWindow::catchFileError(FileError f)
   emit message( QString("Error loading %1, %2")
                         .arg(f.inqFileName().c_str())
                         .arg(f.inqMessage().c_str()),
-                         3000 ); 
+                         3000 );
 }
 
 bool ApplicationWindow::checkAbsFilePath(const QString & absFilePath,
@@ -1167,11 +1167,11 @@ OverlayList::Handle ApplicationWindow::copyActiveOverlayList()
 {
   OverlayList::Handle null;
   OverlayList::Handle ol(activeOverlayList());
-  
+
   if(ol) {return ol->clone();}
   else   {return null;}
 }
- 
+
 void ApplicationWindow::displayMessage(const QString & msg, int time)
 {
   if(time == -1)  statusBar()->message(msg);
@@ -1181,15 +1181,15 @@ void ApplicationWindow::displayMessage(const QString & msg, int time)
 void ApplicationWindow::viewShow(QWidget* v)
 {
   if(windowListEmpty())
-    { 
+    {
       v->showMaximized();
     }
-  else if(m_ws->windowList().count() == 1) 
+  else if(m_ws->windowList().count() == 1)
     {
       m_ws->windowList().at(0)->showNormal();
       v->showNormal();
       m_ws->tile();
-    } 
+    }
   else
     {
       v->show();
@@ -1204,7 +1204,7 @@ bool ApplicationWindow::tarnishCheck(Image::Handle& image)
     {
         QString imageMessage = QString("Continuing this action will lose changes to %1?")
           .arg(image->getInfo()->inqImageName().c_str());
-        
+
         switch(QMessageBox::warning( this,
                                "FSLView",
                                imageMessage,"Cancel","OK","",0,0))
@@ -1213,7 +1213,7 @@ bool ApplicationWindow::tarnishCheck(Image::Handle& image)
           case 1:result = true ;break;
           }
     }
-  
+
   return result;
 }
 
@@ -1225,7 +1225,7 @@ bool ApplicationWindow::tarnishCheck()
   if(m_imageGroup->inqTarnished())
     {
          switch(QMessageBox::warning( this,
-				      "FSLView", 
+				      "FSLView",
 				      QString("Continuing this action will lose unsaved data."),
 				      "Cancel","OK","",0,0))
           {
@@ -1233,7 +1233,7 @@ bool ApplicationWindow::tarnishCheck()
           case 1:result = true;break;
           }
     }
-  
+
   return result;
 }
 
@@ -1280,21 +1280,21 @@ void ApplicationWindow::removeExtensions(QString & fileName)
   // MJ NOTE: not using FSLIO code as I don't know to integrate it with Q* calls
 
   QFileInfo fiA(fileName);
-  if(fiA.extension(false) == "gz")  
+  if(fiA.extension(false) == "gz")
     fileName.remove( fileName.findRev("."), 3 );
 
   QFileInfo fiB(fileName);
-  if((fiB.extension(false) == "img") || (fiB.extension(false) == "hdr") || 
+  if((fiB.extension(false) == "img") || (fiB.extension(false) == "hdr") ||
      (fiB.extension(false) == "nii"))
     fileName.remove( fileName.findRev("."), 4 );
 }
-  
+
 bool ApplicationWindow::checkFilesExist(const QString & fn, bool justImg)// why is bool necessary here?
 {
   //Checks that files exist
   return (FslFileExists(fn.ascii())>0);
 }
-  
+
 
 bool ApplicationWindow::checkSpecificFilesExist(const QString & fn)
 {
@@ -1311,10 +1311,10 @@ bool ApplicationWindow::checkForDuplicates(const QString & fn)
 void ApplicationWindow::loadFeat(const QString &fn)
 {
   QFileInfo  fi(fn);
-  
+
   try {
     m_modelFit = ModelFit::create(fi.dirPath(true));
-  
+
     emit message("*File Opened is a FEAT analysis Directory*", 2000);
   } catch (std::ios::failure& e) {
     QMessageBox::warning(this, "Attempting to load FEAT model", e.what());

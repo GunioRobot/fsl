@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCmds.c --
  *
  *	This file contains a collection of Tk-related Tcl commands
@@ -21,7 +21,7 @@
 #include "tkWinInt.h"
 #elif defined(MAC_TCL)
 #include "tkMacInt.h"
-#elif defined(MAC_OSX_TK) 
+#elif defined(MAC_OSX_TK)
 #include "tkMacOSXInt.h"
 #else
 #include "tkUnixInt.h"
@@ -132,13 +132,13 @@ Tk_BindObjCmd(clientData, interp, objc, objv)
     TkWindow *winPtr;
     ClientData object;
     char *string;
-    
+
     if ((objc < 2) || (objc > 4)) {
 	Tcl_WrongNumArgs(interp, 1, objv, "window ?pattern? ?command?");
 	return TCL_ERROR;
     }
     string = Tcl_GetString(objv[1]);
-    
+
     /*
      * Bind tags either a window name or a tag name for the first argument.
      * If the argument starts with ".", assume it is a window; otherwise, it
@@ -169,7 +169,7 @@ Tk_BindObjCmd(clientData, interp, objc, objv)
 	char *sequence, *script;
 	sequence	= Tcl_GetString(objv[2]);
 	script		= Tcl_GetString(objv[3]);
-	
+
 	/*
 	 * If the script is null, just delete the binding.
 	 */
@@ -183,7 +183,7 @@ Tk_BindObjCmd(clientData, interp, objc, objv)
 	 * If the script begins with "+", append this script to the existing
 	 * binding.
 	 */
-	
+
 	if (script[0] == '+') {
 	    script++;
 	    append = 1;
@@ -319,7 +319,7 @@ Tk_BindtagsObjCmd(clientData, interp, objc, objv)
     int i, length;
     char *p;
     Tcl_Obj *listPtr, **tags;
-    
+
     if ((objc < 2) || (objc > 3)) {
 	Tcl_WrongNumArgs(interp, 1, objv, "window ?taglist?");
 	return TCL_ERROR;
@@ -424,7 +424,7 @@ TkFreeBindingTags(winPtr)
 	     * Names starting with "." are malloced rather than Uids, so
 	     * they have to be freed.
 	     */
-    
+
 	    ckfree(p);
 	}
     }
@@ -773,7 +773,7 @@ Tk_TkObjCmd(clientData, interp, objc, objv)
 		if (width <= 0) {
 		    width = 1;
 		}
-		height = (int) (d * HeightOfScreen(screenPtr) + 0.5); 
+		height = (int) (d * HeightOfScreen(screenPtr) + 0.5);
 		if (height <= 0) {
 		    height = 1;
 		}
@@ -832,7 +832,7 @@ Tk_TkObjCmd(clientData, interp, objc, objv)
 	}
         case TK_WINDOWINGSYSTEM: {
 	    CONST char *windowingsystem;
-	    
+
 	    if (objc != 2) {
 	        Tcl_WrongNumArgs(interp, 2, objv, NULL);
 		return TCL_ERROR;
@@ -884,7 +884,7 @@ Tk_TkwaitObjCmd(clientData, interp, objc, objv)
     static CONST char *optionStrings[] = { "variable", "visibility", "window",
 					 (char *) NULL };
     enum options { TKWAIT_VARIABLE, TKWAIT_VISIBILITY, TKWAIT_WINDOW };
-    
+
     if (objc != 3) {
 	Tcl_WrongNumArgs(interp, 1, objv, "variable|visibility|window name");
 	return TCL_ERROR;
@@ -911,7 +911,7 @@ Tk_TkwaitObjCmd(clientData, interp, objc, objv)
 		    WaitVariableProc, (ClientData) &done);
 	    break;
 	}
-	
+
 	case TKWAIT_VISIBILITY: {
 	    Tk_Window window;
 
@@ -931,7 +931,7 @@ Tk_TkwaitObjCmd(clientData, interp, objc, objv)
 		 * Note that we do not delete the event handler because it
 		 * was deleted automatically when the window was destroyed.
 		 */
-		
+
 		Tcl_ResetResult(interp);
 		Tcl_AppendResult(interp, "window \"", Tcl_GetString(objv[2]),
 			"\" was deleted before its visibility changed",
@@ -943,10 +943,10 @@ Tk_TkwaitObjCmd(clientData, interp, objc, objv)
 		    WaitVisibilityProc, (ClientData) &done);
 	    break;
 	}
-	
+
 	case TKWAIT_WINDOW: {
 	    Tk_Window window;
-	    
+
 	    window = Tk_NameToWindow(interp, Tcl_GetString(objv[2]), tkwin);
 	    if (window == NULL) {
 		return TCL_ERROR;
@@ -1068,7 +1068,7 @@ Tk_UpdateObjCmd(clientData, interp, objc, objv)
      * Thus, don't use any information from tkwin after calling
      * Tcl_DoOneEvent.
      */
-  
+
     while (1) {
 	while (Tcl_DoOneEvent(flags) != 0) {
 	    /* Empty loop body */
@@ -1142,7 +1142,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	"toplevel",	"viewable",	"visual",	"visualid",
 	"vrootheight",	"vrootwidth",	"vrootx",	"vrooty",
 	"width",	"x",		"y",
-	
+
 	"atom",		"atomname",	"containing",	"interps",
 	"pathname",
 
@@ -1162,7 +1162,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	WIN_TOPLEVEL,	WIN_VIEWABLE,	WIN_VISUAL,	WIN_VISUALID,
 	WIN_VROOTHEIGHT,WIN_VROOTWIDTH,	WIN_VROOTX,	WIN_VROOTY,
 	WIN_WIDTH,	WIN_X,		WIN_Y,
-	
+
 	WIN_ATOM,	WIN_ATOMNAME,	WIN_CONTAINING,	WIN_INTERPS,
 	WIN_PATHNAME,
 
@@ -1171,7 +1171,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
     };
 
     tkwin = (Tk_Window) clientData;
-    
+
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "option ?arg?");
 	return TCL_ERROR;
@@ -1239,7 +1239,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	}
 	case WIN_ID: {
 	    char buf[TCL_INTEGER_SPACE];
-	    
+
 	    Tk_MakeWindowExist(tkwin);
 	    TkpPrintWindowId(buf, Tk_WindowId(tkwin));
 	    /*
@@ -1293,7 +1293,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	    }
 	    if (useX & useY) {
 		char buf[TCL_INTEGER_SPACE * 2];
-		
+
 		sprintf(buf, "%d %d", x, y);
 		Tcl_SetStringObj(resultPtr, buf, -1);
 	    } else if (useX) {
@@ -1323,7 +1323,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	}
 	case WIN_SCREEN: {
 	    char buf[TCL_INTEGER_SPACE];
-	    
+
 	    sprintf(buf, "%d", Tk_ScreenNumber(tkwin));
 	    Tcl_AppendStringsToObj(resultPtr, Tk_DisplayName(tkwin), ".",
 		    buf, NULL);
@@ -1438,7 +1438,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	/*
 	 * Uses -displayof.
 	 */
-	 
+
 	case WIN_ATOM: {
 	    skip = TkGetDisplayOf(interp, objc - 2, objv + 2, &tkwin);
 	    if (skip < 0) {
@@ -1456,7 +1456,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	case WIN_ATOMNAME: {
 	    CONST char *name;
 	    long id;
-	    
+
 	    skip = TkGetDisplayOf(interp, objc - 2, objv + 2, &tkwin);
 	    if (skip < 0) {
 		return TCL_ERROR;
@@ -1472,7 +1472,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	    name = Tk_GetAtomName(tkwin, (Atom) id);
 	    if (strcmp(name, "?bad atom?") == 0) {
 		string = Tcl_GetStringFromObj(objv[2], NULL);
-		Tcl_AppendStringsToObj(resultPtr, 
+		Tcl_AppendStringsToObj(resultPtr,
 			"no atom exists with id \"", string, "\"", NULL);
 		return TCL_ERROR;
 	    }
@@ -1506,7 +1506,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	}
 	case WIN_INTERPS: {
 	    int result;
-	    
+
 	    skip = TkGetDisplayOf(interp, objc - 2, objv + 2, &tkwin);
 	    if (skip < 0) {
 		return TCL_ERROR;
@@ -1600,7 +1600,7 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	}
 	case WIN_PIXELS: {
 	    int pixels;
-	    
+
 	    if (objc != 4) {
 		Tcl_WrongNumArgs(interp, 2, objv, "window number");
 		return TCL_ERROR;
@@ -1661,9 +1661,9 @@ Tk_WinfoObjCmd(clientData, interp, objc, objv)
 	    }
 
 	    string = Tcl_GetStringFromObj(objv[2], NULL);
-	    tkwin = Tk_NameToWindow(interp, string, tkwin); 
-	    if (tkwin == NULL) { 
-		return TCL_ERROR; 
+	    tkwin = Tk_NameToWindow(interp, string, tkwin);
+	    if (tkwin == NULL) {
+		return TCL_ERROR;
 	    }
 
 	    template.screen = Tk_ScreenNumber(tkwin);
@@ -1964,7 +1964,7 @@ TkGetDisplayOf(interp, objc, objv, tkwinPtr)
 {
     char *string;
     int length;
-    
+
     if (objc < 1) {
 	return 0;
     }

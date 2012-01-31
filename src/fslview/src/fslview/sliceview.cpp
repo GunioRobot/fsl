@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -48,7 +48,7 @@ void SliceView::setLabelsState(LabelState s)
       m_westLabel->setText("");
    default:
       break;
-    }      
+    }
 }
 
 void SliceView::setSliceWidget(SliceWidget* slice)

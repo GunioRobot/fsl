@@ -21,10 +21,10 @@
 namespace boost { namespace python {
 
 template<class Ptr> class pointer_wrapper
-{ 
+{
  public:
     typedef Ptr type;
-    
+
     explicit pointer_wrapper(Ptr x): p_(x) {}
     operator Ptr() const { return p_; }
     Ptr get() const { return p_; }
@@ -34,7 +34,7 @@ template<class Ptr> class pointer_wrapper
 
 template<class T>
 inline pointer_wrapper<T> ptr(T t)
-{ 
+{
     return pointer_wrapper<T>(t);
 }
 
@@ -76,7 +76,7 @@ namespace detail
 {
   typedef char (&yes_pointer_wrapper_t)[1];
   typedef char (&no_pointer_wrapper_t)[2];
-      
+
   no_pointer_wrapper_t is_pointer_wrapper_test(...);
 
   template<typename T>

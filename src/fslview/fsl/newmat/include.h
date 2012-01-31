@@ -1,4 +1,4 @@
-/// \defgroup rbd_common RBD common library 
+/// \defgroup rbd_common RBD common library
 ///@{
 
 /// \file include.h
@@ -42,7 +42,7 @@
 
 //#define HAS_INT64                     // if unsigned _int64 is recognised
                                         // used by newran03
-                                        
+
 // comment out next line if Exception causes a problem
 #define TypeDefException
 

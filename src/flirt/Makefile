@@ -9,7 +9,7 @@ USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_ZLIB}
 
 LIBS = -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lprob -lfslio -lniftiio -lznz -lnewmat -lutils -lm -lz
 
-FL_OBJS = globaloptions.o flirt.o 
+FL_OBJS = globaloptions.o flirt.o
 C_OBJS = convert_xfm.o
 A_OBJS = avscale.o
 R_OBJS = rmsdiff.o
@@ -24,7 +24,7 @@ I_OBJS = imapper.o
 RUNTCLS = Flirt InvertXFM ApplyXFM ConcatXFM Nudge
 XFILES = flirt convert_xfm avscale rmsdiff std2imgcoord img2stdcoord \
 	img2imgcoord applyxfm4D pointflirt makerot
-TESTXFILES = 
+TESTXFILES =
 HFILES =
 SCRIPTS = extracttxt pairreg standard_space_roi flirt_average
 

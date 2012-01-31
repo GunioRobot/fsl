@@ -21,7 +21,7 @@ struct default_
 };
 
 //
-// lazy_default -- 
+// lazy_default --
 //
 //    A wrapper for the default value computation function passed by
 //    the user when resolving the value of the parameter with the
@@ -49,7 +49,7 @@ struct lazy_default
       {}
   };
 # define BOOST_PARAMETER_lazy_default_fallback lazy_default_base
-#else 
+#else
 template <class KW, class DefaultComputer>
 struct lazy_default
 {
@@ -59,7 +59,7 @@ struct lazy_default
     DefaultComputer const& compute_default;
 };
 # define BOOST_PARAMETER_lazy_default_fallback lazy_default
-#endif 
+#endif
 
 }}} // namespace boost::parameter::aux
 

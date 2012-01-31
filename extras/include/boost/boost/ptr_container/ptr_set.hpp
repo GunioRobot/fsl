@@ -24,14 +24,14 @@ namespace boost
 {
 
     template
-    < 
-        class Key, 
+    <
+        class Key,
         class Compare        = std::less<Key>,
         class CloneAllocator = heap_clone_allocator,
         class Allocator      = std::allocator<void*>
     >
-    class ptr_set : 
-        public ptr_set_adapter< Key, 
+    class ptr_set :
+        public ptr_set_adapter< Key,
                                 std::set<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                 CloneAllocator >
     {
@@ -40,17 +40,17 @@ namespace boost
              base_type;
 
         typedef ptr_set<Key,Compare,CloneAllocator,Allocator> this_type;
-        
+
     public:
         explicit ptr_set( const Compare& comp = Compare(),
-                          const Allocator& a = Allocator() ) 
-         : base_type( comp, a ) 
+                          const Allocator& a = Allocator() )
+         : base_type( comp, a )
         { }
-        
+
         template< typename InputIterator >
-        ptr_set( InputIterator first, InputIterator last, 
+        ptr_set( InputIterator first, InputIterator last,
                  const Compare& comp = Compare(),
-                 const Allocator& a = Allocator() ) 
+                 const Allocator& a = Allocator() )
          : base_type( first, last, comp, a )
         { }
 
@@ -59,17 +59,17 @@ namespace boost
                                                       this_type );
 
     };
-        
-        
-        
+
+
+
     template
-    < 
-        class Key, 
+    <
+        class Key,
         class Compare        = std::less<Key>,
         class CloneAllocator = heap_clone_allocator,
         class Allocator      = std::allocator<void*>
     >
-    class ptr_multiset : 
+    class ptr_multiset :
         public ptr_multiset_adapter< Key,
                                      std::multiset<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                      CloneAllocator >
@@ -79,23 +79,23 @@ namespace boost
                                       CloneAllocator >
               base_type;
         typedef ptr_multiset<Key,Compare,CloneAllocator,Allocator> this_type;
-        
+
     public:
         explicit ptr_multiset( const Compare&   comp = Compare(),
                                const Allocator& a    = Allocator() )
-         : base_type( comp, a ) 
+         : base_type( comp, a )
         { }
-        
+
         template< typename InputIterator >
         ptr_multiset( InputIterator first, InputIterator last,
                       const Compare& comp = Compare(),
                       const Allocator& a  = Allocator() )
-         : base_type( first, last, comp, a ) 
+         : base_type( first, last, comp, a )
         { }
 
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset, 
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset,
                                                       base_type,
-                                                      this_type );        
+                                                      this_type );
 
     };
 
@@ -113,7 +113,7 @@ namespace boost
     {
         return r.clone().release();
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // swap
 

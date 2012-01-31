@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -39,7 +39,7 @@ public:
       setText( 0, m_cluster->inqIndex());
       setText( 1, m_cluster->inqSize());
       setText( 2, m_cluster->inqP());
-      setText( 3, m_cluster->inqMinusLog10P()); 
+      setText( 3, m_cluster->inqMinusLog10P());
       setText( 4, m_cluster->inqMaxZ());
       setText(11, m_cluster->inqMaxCOPE());
       setText(15, m_cluster->inqMeanCOPE());
@@ -81,7 +81,7 @@ public:
 private:
 
   bool m_showTalairach;
-  Cluster::Handle m_cluster; 
+  Cluster::Handle m_cluster;
   TalairachCluster::Handle m_talCluster;
 };
 
@@ -126,13 +126,13 @@ ClusterBrowser::ClusterBrowser(QWidget* parent, Image::Handle i,
 	FileManager::readTalairachClusters(basename.str() + "_tal.txt", tclusters);
 
       ClusterListPair cp(std::make_pair(clusters, tclusters));
-      
+
       ostringstream name;
       name << "zstatf" << i;
       m_clusterTables.push_back(std::make_pair(name.str(), cp));
       m_statComboBox->insertItem(name.str());
     }
-    
+
     selectStatistic(0);
 
   } catch (const std::ios::failure& e) {
@@ -170,19 +170,19 @@ void ClusterBrowser::selectStatistic(int n)
 
   ClusterList::iterator ti = tclusters.begin();
   ClusterList::iterator ci = clusters.begin();
-  
+
   while( (ci != clusters.end()) ||
 	 (ti != tclusters.end()) ) {
 
     bool allowPlain(false);
-    Cluster::Handle c = Cluster::create();     
+    Cluster::Handle c = Cluster::create();
     if( ci != clusters.end() ) {
       c = boost::dynamic_pointer_cast<Cluster>(*ci);
       ++ci;
       allowPlain = true;
     }
 
-    bool allowTal(false); 
+    bool allowTal(false);
     TalairachCluster::Handle t = TalairachCluster::create();
     if( ti != tclusters.end() ) {
       t = boost::dynamic_pointer_cast<TalairachCluster>(*ti);

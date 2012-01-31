@@ -96,7 +96,7 @@ proc httpdRead { sock } {
 	}
 	0,mime,HEAD	-
 	0,mime,GET	-
-	0,query,POST	{ 
+	0,query,POST	{
 	    # Empty line at end of headers,
 	    # or eof after query data
 	    httpdRespond $sock
@@ -192,7 +192,7 @@ proc httpdRespond { sock } {
 	    append html </body></html>
 	}
     }
-    
+
     # Catch errors from premature client closes
 
     catch {

@@ -7,7 +7,7 @@
 
 # include <memory>
 
-namespace boost { 
+namespace boost {
 
 // get_pointer(p) extracts a ->* capable pointer from p
 

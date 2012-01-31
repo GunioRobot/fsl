@@ -1,6 +1,6 @@
 /*
  *  first_newmat_vec.cpp
- *  
+ *
  *
  *  Created by Brian Patenaude on 12/08/2008.
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
@@ -25,7 +25,7 @@ first_newmat_vector::~first_newmat_vector(){
 template<class T>
 std::vector<T> first_newmat_vector::vectorToVector( const Matrix & sm, const int & MaxModes)
 {
-	std::vector<T> vecM;	
+	std::vector<T> vecM;
 	if (sm.Nrows()==1){
 		for (int i=0;i<  MaxModes ; i++){
 			vecM.push_back(static_cast<T>(sm.element(0,i)));
@@ -34,10 +34,10 @@ std::vector<T> first_newmat_vector::vectorToVector( const Matrix & sm, const int
 		for (int i=0;i<  MaxModes ; i++){
 			vecM.push_back(static_cast<T>(sm.element(i,0)));
 		}
-		
-		
+
+
 	}
-	
+
 	return vecM;
 }
 
@@ -49,7 +49,7 @@ template std::vector<double> first_newmat_vector::vectorToVector<double>( const 
 template<class T>
 std::vector<T> first_newmat_vector::vectorToVector( const Matrix & sm)
 {
-	vector<T> vecM;	
+	vector<T> vecM;
 	if (sm.Nrows()==1){
 		for (int i=0;i< sm.Ncols() ; i++){
 			vecM.push_back(static_cast<T>(sm.element(0,i)));
@@ -58,10 +58,10 @@ std::vector<T> first_newmat_vector::vectorToVector( const Matrix & sm)
 		for (int i=0;i< sm.Nrows() ; i++){
 			vecM.push_back(static_cast<T>(sm.element(i,0)));
 		}
-		
-		
+
+
 	}
-	
+
 	return vecM;
 }
 
@@ -82,7 +82,7 @@ ReturnMatrix first_newmat_vector::vectorOfVectorsToMatrix( const vector< vector<
 		unsigned int col=0;
 		for (typename vector<T>::const_iterator j=i->begin() ; j!=i->end();j++,col++)
 			out.element(row,col)=*j;
-	}		
+	}
 	out.Release();
 	return out;
 }
@@ -100,7 +100,7 @@ ReturnMatrix first_newmat_vector::vectorToDiagonalMatrix( const vector<T> & vec)
 
 	for (typename vector<T> ::const_iterator i=vec.begin() ; i!=vec.end();i++, row++)
 		out.element(row)=*i;
-		
+
 	out.Release();
 	return out;
 }
@@ -114,15 +114,15 @@ template ReturnMatrix first_newmat_vector::vectorToDiagonalMatrix<double>( const
 template<class T>
 vector< vector<T> > first_newmat_vector::matrixToVector( const Matrix & sm, const int & MaxModes)
 {
-	vector< vector<T> > vecM;	
+	vector< vector<T> > vecM;
     for (int j=0;j< MaxModes ; j++){
 		vector<T> mode;
 	    for (int i=0;i< sm.Nrows() ; i++){
 			mode.push_back(sm.element(i,j));
 		}
 		vecM.push_back(mode);
-	}   
-	
+	}
+
 	return vecM;
 }
 
@@ -135,14 +135,14 @@ template vector< vector<double> > first_newmat_vector::matrixToVector<double>( c
 template<class T>
 vector< vector<T> > first_newmat_vector::matrixToVector( const Matrix & sm)
 {
-	vector< vector<T> > vecM;	
+	vector< vector<T> > vecM;
     for (int j=0;j< sm.Ncols() ; j++)
 	{
 		vector<T> mode;
 	    for (int i=0;i< sm.Nrows() ; i++)
 			mode.push_back(static_cast<T>(sm.element(i,j)));
 		vecM.push_back(mode);
-	}   
+	}
 
 	return vecM;
 }

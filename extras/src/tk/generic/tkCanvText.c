@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvText.c --
  *
  *	This file implements text items for canvas widgets.
@@ -34,7 +34,7 @@ typedef struct TextItem  {
     /*
      * Fields that are set by widget commands other than "configure".
      */
-     
+
     double x, y;		/* Positioning point for text. */
     int insertPos;		/* Character index of character just before
 				 * which the insertion cursor is displayed. */
@@ -357,7 +357,7 @@ TextCoords(interp, canvas, itemPtr, objc, objv)
 	ComputeTextBbox(canvas, textPtr);
     } else {
 	char buf[64 + TCL_INTEGER_SPACE];
-	
+
 	sprintf(buf, "wrong # coordinates: expected 0 or 2, got %d", objc);
 	Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	return TCL_ERROR;
@@ -506,7 +506,7 @@ ConfigureText(interp, canvas, itemPtr, objc, objv, flags)
     textPtr->numBytes = strlen(textPtr->text);
     textPtr->numChars = Tcl_NumUtfChars(textPtr->text, textPtr->numBytes);
     if (textInfoPtr->selItemPtr == itemPtr) {
-	
+
 	if (textInfoPtr->selectFirst >= textPtr->numChars) {
 	    textInfoPtr->selItemPtr = NULL;
 	} else {
@@ -794,7 +794,7 @@ DisplayCanvText(canvas, itemPtr, display, drawable, x, y, width, height)
 	    for (y = yFirst ; y <= yLast; y += height) {
 		if (y == yLast) {
 		    width = xLast + wLast - x;
-		} else {	    
+		} else {
 		    width = textPtr->rightEdge - textPtr->leftEdge - x;
 		}
 		Tk_CanvasDrawableCoords(canvas,
@@ -1014,7 +1014,7 @@ TextDeleteChars(canvas, itemPtr, first, last)
     byteIndex = Tcl_UtfAtIndex(text, first) - text;
     byteCount = Tcl_UtfAtIndex(text + byteIndex, charsRemoved)
 	- (text + byteIndex);
-    
+
     new = (char *) ckalloc((unsigned) (textPtr->numBytes + 1 - byteCount));
     memcpy(new, text, (size_t) byteIndex);
     strcpy(new + byteIndex, text + byteIndex + byteCount);
@@ -1384,7 +1384,7 @@ GetSelText(canvas, itemPtr, offset, buffer, maxBytes)
 				 * character. */
 {
     TextItem *textPtr = (TextItem *) itemPtr;
-    int byteCount; 
+    int byteCount;
     char *text;
     CONST char *selStart, *selEnd;
     Tk_CanvasTextInfo *textInfoPtr = textPtr->textInfoPtr;

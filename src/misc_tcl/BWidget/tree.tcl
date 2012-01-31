@@ -222,7 +222,7 @@ proc Tree::create { path args } {
     Tree::bindText  $path <Control-Button-1> [list $selectcmd $path toggle]
     Tree::bindImage $path <Control-Button-1> [list $selectcmd $path toggle]
 
-    # Add sentinal bindings for double-clicking on items, to handle the 
+    # Add sentinal bindings for double-clicking on items, to handle the
     # gnarly Tk bug wherein:
     # ButtonClick
     # ButtonClick
@@ -2029,7 +2029,7 @@ proc Tree::_keynav {which win} {
 # Tree::_get_current_node --
 #
 #	Get the current node for either single or multiple
-#	node selection trees.  If the tree allows for 
+#	node selection trees.  If the tree allows for
 #	multiple selection, return the cursor node.  Otherwise,
 #	if there is a selection, return the first node in the
 #	list.  If there is no selection, return the root node.
@@ -2077,7 +2077,7 @@ proc Tree::_set_current_node {win node} {
 #
 # Arguments:
 #	path		tree to query
-#	item		Optional canvas item to examine; if omitted, 
+#	item		Optional canvas item to examine; if omitted,
 #			defaults to "current"
 #	tagindex	Optional tag index, since the n:nodename tag is not
 #			in the same spot for all canvas items.  If omitted,

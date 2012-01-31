@@ -1,6 +1,6 @@
-//  (C) Copyright John Maddock 2005. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2005.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPE_TRAITS_INTEGRAL_CONSTANT_HPP
@@ -49,15 +49,15 @@ public:
    typedef integral_constant<T, ( BOOST_MPL_AUX_STATIC_CAST(T, (value - 1)) )> prior;
 #endif
 
-   // enables uniform function call syntax for families of overloaded 
+   // enables uniform function call syntax for families of overloaded
    // functions that return objects of both arithmetic ('int', 'long',
-   // 'double', etc.) and wrapped integral types (for an example, see 
+   // 'double', etc.) and wrapped integral types (for an example, see
    // "mpl/example/power.cpp")
-   operator T() const { return static_cast<T>(this->value); } 
+   operator T() const { return static_cast<T>(this->value); }
 #endif
 };
 
-template<> struct integral_constant<bool,true> : public mpl::true_ 
+template<> struct integral_constant<bool,true> : public mpl::true_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
    typedef mpl::true_ base_;
@@ -65,7 +65,7 @@ template<> struct integral_constant<bool,true> : public mpl::true_
 #endif
    typedef integral_constant<bool,true> type;
 };
-template<> struct integral_constant<bool,false> : public mpl::false_ 
+template<> struct integral_constant<bool,false> : public mpl::false_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
    typedef mpl::false_ base_;

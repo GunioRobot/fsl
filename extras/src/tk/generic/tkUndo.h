@@ -58,7 +58,7 @@ EXTERN void TkUndoPushStack  _ANSI_ARGS_((TkUndoAtom ** stack,
     TkUndoAtom *  elem));
 
 EXTERN TkUndoAtom * TkUndoPopStack _ANSI_ARGS_((TkUndoAtom ** stack));
- 
+
 EXTERN int TkUndoInsertSeparator _ANSI_ARGS_((TkUndoAtom ** stack));
 
 EXTERN void TkUndoClearStack _ANSI_ARGS_((TkUndoAtom ** stack));
@@ -81,7 +81,7 @@ EXTERN void TkUndoPushAction _ANSI_ARGS_((TkUndoRedoStack * stack,
     Tcl_DString * actionScript, Tcl_DString * revertScript));
 
 EXTERN int TkUndoRevert _ANSI_ARGS_((TkUndoRedoStack *  stack));
- 
+
 EXTERN int TkUndoApply _ANSI_ARGS_((TkUndoRedoStack *  stack));
 
 # undef TCL_STORAGE_CLASS

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -86,10 +86,10 @@ using namespace MISCMATHS;
 
 namespace MISCMATHS {
 
-  SparseMatrix::SparseMatrix(int pnrows, int pncols) : 
+  SparseMatrix::SparseMatrix(int pnrows, int pncols) :
 	nrows(pnrows),
 	ncols(pncols),
-	data(pnrows) 
+	data(pnrows)
   {
   }
 
@@ -97,12 +97,12 @@ namespace MISCMATHS {
   {
     nrows = pnrows;
     ncols = pncols;
-    
+
     data.clear();
     data.resize(nrows);
   }
 
-  const SparseMatrix& SparseMatrix::operator=(const Matrix& pmatin) 
+  const SparseMatrix& SparseMatrix::operator=(const Matrix& pmatin)
   {
     data.clear();
     data.resize(pmatin.Nrows());
@@ -110,7 +110,7 @@ namespace MISCMATHS {
     ncols = pmatin.Ncols();
 
     for(int r=1; r <= pmatin.Nrows(); r++)
-      {	
+      {
 	for(int c=1; c <= pmatin.Ncols(); c++)
 	  {
 	    if(pmatin(r,c)!=0)
@@ -118,20 +118,20 @@ namespace MISCMATHS {
 	  }
       }
     return *this;
-  }     
- 
+  }
+
   void SparseMatrix::transpose(SparseMatrix& ret)
   {
     Tracer_Plus tr("SparseMatrix::transpose");
 
     ret.ReSize(ncols,nrows);
-    
+
     for(int r=1; r <= nrows; r++)
       for(map<int,double>::const_iterator it=data[r-1].begin(); it!=data[r-1].end(); it++)
 	ret.insert((*it).first+1, r, (*it).second);
-    
+
   }
-  
+
   int SparseMatrix::maxnonzerosinrow() const
   {
     int mx = 0;
@@ -143,39 +143,39 @@ namespace MISCMATHS {
       }
     return mx;
   }
-  
+
   void SparseMatrix::permute(const ColumnVector& p, SparseMatrix& pA)
   {
     Tracer_Plus tr("SparseMatrix::permute");
 
     pA.ReSize(nrows,ncols);
-    
+
     ColumnVector ip(p.Nrows());
     for(int r=1; r <= nrows; r++)
       ip(int(p(r))) = r;
-    
+
     for(int r=1; r <= nrows; r++)
       for(map<int,double>::const_iterator it=data[r-1].begin(); it!=data[r-1].end(); it++)
 	{
-	  pA.insert(int(ip(r)), int(ip((*it).first+1)), (*it).second); 
+	  pA.insert(int(ip(r)), int(ip((*it).first+1)), (*it).second);
 	}
   }
-  
+
   ReturnMatrix SparseMatrix::AsMatrix() const
   {
     Matrix ret(nrows,ncols);
-    ret = 0;	  
-    
+    ret = 0;
+
     for(int r=1; r <= nrows; r++)
       for(map<int,double>::const_iterator it=data[r-1].begin(); it!=data[r-1].end(); it++)
 	ret(r,(*it).first+1) = (*it).second;
-    
+
     ret.Release();
     return ret;
   }
 
   float SparseMatrix::trace() const
-  {   
+  {
     float tr = 0.0;
     for(int k = 1; k<=Nrows(); k++)
       {
@@ -215,7 +215,7 @@ namespace MISCMATHS {
 
    nrows += A.Nrows();
  }
-  
+
  void SparseMatrix::horconcat2myright(const SparseMatrix& B)
  {
    Tracer_Plus tr("SparseMatrix::horconcat2myright");
@@ -247,7 +247,7 @@ namespace MISCMATHS {
      for (SparseMatrix::Row::const_iterator it=oldRow.begin(); it!=oldRow.end(); it++) {
        this->insert(i,A.Ncols()+int(it->first)+1,double(it->second));
      }
-   }     
+   }
    ncols += A.Ncols();
  }
 
@@ -258,19 +258,19 @@ namespace MISCMATHS {
     ColumnVector ret;
     ret.ReSize(ncols);
     ret = 0;
-    
+
     const SparseMatrix::Row& rowtmp = row(r);
     for(SparseMatrix::Row::const_iterator it=rowtmp.begin();it!=rowtmp.end();it++)
       {
-	int c = (*it).first+1;	     	      
+	int c = (*it).first+1;
 	double val = (*it).second;
 	ret(c) = val;
       }
-    
+
     ret.Release();
     return ret;
   }
-  
+
   void colvectosparserow(const ColumnVector& col, SparseMatrix::Row& row)
   {
     Tracer_Plus tr("SparseMatrix::colvectosparserow");
@@ -294,7 +294,7 @@ namespace MISCMATHS {
 	  }
       }
   }
-  
+
   void multiply(const SparseMatrix& lm, const SparseMatrix& rm, SparseMatrix& ret)
   {
     Tracer_Plus tr("SparseMatrix::multiply");
@@ -308,7 +308,7 @@ namespace MISCMATHS {
 
     for(int j = 1; j<=nrows; j++)
       {
-	const SparseMatrix::Row& row = lm.row(j);	
+	const SparseMatrix::Row& row = lm.row(j);
 	for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 	  {
 	    int c = (*it).first+1;
@@ -321,21 +321,21 @@ namespace MISCMATHS {
       }
 
   }
-  
+
   void multiply(const SparseMatrix& lm, const ColumnVector& rm, ColumnVector& ret)
   {
     Tracer_Plus tr("SparseMatrix::multiply2");
 
-    int nrows = lm.Nrows();   
-    
+    int nrows = lm.Nrows();
+
     if(lm.Ncols() != rm.Nrows()) throw Exception("Rows and cols don't match in SparseMatrix::multiply");
-    
+
     ret.ReSize(nrows);
-    
+
     for(int j = 1; j<=nrows; j++)
       {
 	float sum = 0.0;
-	const SparseMatrix::Row& row = lm.row(j);	
+	const SparseMatrix::Row& row = lm.row(j);
 	for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 	  {
 	    int c = (*it).first+1;
@@ -360,7 +360,7 @@ namespace MISCMATHS {
 
     for(int j = 1; j<=nrows; j++)
       {
-	const SparseMatrix::Row& row = rm.row(j);	
+	const SparseMatrix::Row& row = rm.row(j);
 	for(SparseMatrix::Row::const_iterator it=row.begin();it!=row.end();it++)
 	  {
 	    int c = (*it).first+1;
@@ -375,8 +375,8 @@ namespace MISCMATHS {
   {
     Tracer_Plus tr("SparseMatrix::multiply3");
 
-    int nrows = lm.Nrows();   
-       
+    int nrows = lm.Nrows();
+
     ret.ReSize(nrows);
 
     for(int j = 1; j<=nrows; j++)
@@ -418,7 +418,7 @@ namespace MISCMATHS {
     int nrows = lm.Nrows();
     int ncols = lm.Ncols();
 
-    if(lm.Ncols() != rm.Ncols() || lm.Nrows() != rm.Nrows()) throw Exception("Rows and cols don't match in SparseMatrix::add"); 
+    if(lm.Ncols() != rm.Ncols() || lm.Nrows() != rm.Nrows()) throw Exception("Rows and cols don't match in SparseMatrix::add");
 
     ret.ReSize(nrows,ncols);
 
@@ -435,7 +435,7 @@ namespace MISCMATHS {
 	while(lmit!=lmrow.end() || rmit!=rmrow.end())
 	  {
 	    if((lmc<rmc && lmit!=lmrow.end()) || rmit==rmrow.end())
-	      {		
+	      {
 		ret.insert(j,lmc,(*lmit).second+rm(j,lmc));
 		lmit++;
 		lmc = (*lmit).first+1;
@@ -459,13 +459,13 @@ namespace MISCMATHS {
       }
   }
 
-  // Concatenation. Note that these work also for concatenating sparse and full (newmat) 
+  // Concatenation. Note that these work also for concatenating sparse and full (newmat)
   // matrices by virtue of the Matrix->SparseMatrix constructor/converter.
 
   // ret = [A; B]; % Matlab lingo
   void vertconcat(const SparseMatrix& A, const SparseMatrix& B, SparseMatrix& ret)
   {
-    if (A.Ncols() != B.Ncols()) {throw Exception("Cols don't match in SparseMatrix::vertconcat");}     
+    if (A.Ncols() != B.Ncols()) {throw Exception("Cols don't match in SparseMatrix::vertconcat");}
 
     ret.ReSize(A.Nrows()+B.Nrows(),A.Ncols());
 
@@ -476,7 +476,7 @@ namespace MISCMATHS {
   // ret = [A B]; % Matlab lingo
   void horconcat(const SparseMatrix& A, const SparseMatrix& B, SparseMatrix& ret)
   {
-    if (A.Nrows() != B.Nrows()) {throw Exception("Rows don't match in SparseMatrix::horconcat");}     
+    if (A.Nrows() != B.Nrows()) {throw Exception("Rows don't match in SparseMatrix::horconcat");}
 
     ret.ReSize(A.Nrows(),A.Ncols()+B.Ncols());
 
@@ -486,7 +486,7 @@ namespace MISCMATHS {
       for (SparseMatrix::Row::const_iterator it=tmpRow.begin(); it!=tmpRow.end(); it++) {
         ret.insert(i,A.Ncols()+int(it->first)+1,double(it->second));
       }
-    }         
+    }
   }
 
 }

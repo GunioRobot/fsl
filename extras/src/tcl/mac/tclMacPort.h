@@ -64,11 +64,11 @@
 #if __MSL__ < 0x6000
 #   define isatty(arg) 		1
 
-/* 
+/*
  * Defines used by access function.  This function is provided
  * by Mac Tcl as the function TclpAccess.
  */
- 
+
 #   define F_OK			0	/* test for existence of file */
 #   define X_OK			0x01	/* test for execute or search permission */
 #   define W_OK			0x02	/* test for write permission */
@@ -155,13 +155,13 @@
 /*
  * Variables provided by the C library.
  */
- 
+
 extern char **environ;
 
 /*
  *---------------------------------------------------------------------------
- * The following macros and declarations represent the interface between 
- * generic and mac-specific parts of Tcl.  Some of the macros may override 
+ * The following macros and declarations represent the interface between
+ * generic and mac-specific parts of Tcl.  Some of the macros may override
  * functions declared in tclInt.h.
  *---------------------------------------------------------------------------
  */
@@ -184,15 +184,15 @@ extern char **environ;
  * the code that works around this fact does not compile on the Mac, since
  * it relies on the fact that time.h has a "timezone" variable, which the
  * Metrowerks time.h does not have...
- * 
+ *
  * The Mac timezone stuff is implemented via the TclpGetTZName() routine in
  * tclMacTime.c
- * 
+ *
  */
- 
-#define HAVE_TM_ZONE 
- 
- 
+
+#define HAVE_TM_ZONE
+
+
 /*
  * If we're using the Metrowerks MSL, we need to convert time_t values from
  * the mac epoch to the msl epoch (== unix epoch) by adding the offset from
@@ -211,12 +211,12 @@ extern char **environ;
 #else
 #define tcl_mac_epoch_offset 0L
 #endif
- 
+
 /*
- * The following macros have trivial definitions, allowing generic code to 
+ * The following macros have trivial definitions, allowing generic code to
  * address platform-specific issues.
  */
- 
+
 #define TclpGetPid(pid)	    	((unsigned long) (pid))
 #define TclSetSystemEnv(a,b)
 #define tzset()

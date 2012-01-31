@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     melhlprfns.cc - misc functions
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,7 +91,7 @@ namespace Melodic{
     tMmax = tmpMask2.max();
     double st_mean = DStDev.Sum()/DStDev.Ncols();
     double st_std  = stdev(DStDev.t()).AsScalar();
-      
+
     mask = binarise(tmpMask2,(float) max((float) st_mean-3*st_std,(float) 0.01*st_mean),tMmax);
 
     Data = RawData.matrix(mask);
@@ -101,14 +101,14 @@ namespace Melodic{
   {
     for(int ctr=1; ctr<=howmany; ctr++){
 	in.deletevolume(ctr);
-    }    
+    }
   }
 
   Matrix calc_FFT(const Matrix& Mat, const bool logpwr)
   {
     Matrix res;
       for(int ctr=1; ctr <= Mat.Ncols(); ctr++){
-	      ColumnVector tmpCol;  
+	      ColumnVector tmpCol;
 	      tmpCol=Mat.Column(ctr);
 	      ColumnVector FtmpCol_real;
 	      ColumnVector FtmpCol_imag;
@@ -132,19 +132,19 @@ namespace Melodic{
     int ctr1 = temp.Nrows();
     Matrix temp2(temp);
     temp2=0;
-    
-    temp = temp.Row(4) & temp.Row(3) & temp.Row(2) & temp & temp.Row(ctr1-1) 
+
+    temp = temp.Row(4) & temp.Row(3) & temp.Row(2) & temp & temp.Row(ctr1-1)
       & temp.Row(ctr1-2) &temp.Row(ctr1-3);
-    
+
     double kern[] ={0.0045 , 0.055, 0.25, 0.4, 0.25, 0.055, 0.0045};
     double fac = 0.9090909;
 
-    
+
     for(int cc=1;cc<=temp2.Ncols();cc++){
       for(int cr=1;cr<=temp2.Nrows();cr++){
-	temp2(cr,cc) = fac*( kern[0] * temp(cr,cc) + kern[1] * temp(cr+1,cc) + 
-			     kern[2] * temp(cr+2,cc) + kern[3] * temp(cr+3,cc) + 
-			     kern[4] * temp(cr+4,cc) + kern[5] * temp(cr+5,cc) + 
+	temp2(cr,cc) = fac*( kern[0] * temp(cr,cc) + kern[1] * temp(cr+1,cc) +
+			     kern[2] * temp(cr+2,cc) + kern[3] * temp(cr+3,cc) +
+			     kern[4] * temp(cr+4,cc) + kern[5] * temp(cr+5,cc) +
 			     kern[6] * temp(cr+6,cc));
       }
     }
@@ -158,19 +158,19 @@ namespace Melodic{
     float eps = 0.00001;
 
     for(int ctr=1; ctr <= inp.Ncols(); ctr++){
-      if(meanimg(1,ctr) < eps) 
+      if(meanimg(1,ctr) < eps)
 	meanimg(1,ctr) = eps;
     }
 
     for(int ctr=1; ctr <= inp.Nrows(); ctr++){
       Matrix tmp;
       tmp << inp.Row(ctr);
-      inp.Row(ctr) << 100 * SP((tmp - meanimg),pow(meanimg,-1));   
+      inp.Row(ctr) << 100 * SP((tmp - meanimg),pow(meanimg,-1));
     }
 
     inp = remmean(inp);
     return meanimg;
-  }  //void convert_to_pbsc   
+  }  //void convert_to_pbsc
 
   RowVector varnorm(Matrix& in, int dim, float level)
   {
@@ -186,15 +186,15 @@ namespace Melodic{
 		Matrix tmp = vars;
 		in = SP(in,pow(ones(in.Nrows(),1) * tmp,-1));
 	}
-	
+
   RowVector varnorm(Matrix& in, Matrix& Corr, int dim, float level)
-  { 
+  {
     Matrix tmpE, white, dewhite;
     RowVector tmpD, tmpD2;
 
     std_pca(remmean(in,2), Corr, tmpE, tmpD);
     calc_white(tmpE,tmpD, dim, white, dewhite);
-    
+
     Matrix ws = white * in;
     for(int ctr1 = 1; ctr1<=ws.Ncols(); ctr1++)
       for(int ctr2 = 1; ctr2<=ws.Nrows(); ctr2++)
@@ -238,12 +238,12 @@ namespace Melodic{
   }
 
   Matrix corrcoef(const Matrix& in1, const Matrix& in2, const Matrix& part){
-	Matrix tmp1 = in1, tmp2 = in2, out;	
+	Matrix tmp1 = in1, tmp2 = in2, out;
 	if(part.Storage()){
 		tmp1 = tmp1 - part * pinv(part) * tmp1;
 		tmp2 = tmp2 - part * pinv(part) * tmp2;
 	}
-	
+
 	out = corrcoef(tmp1,tmp2);
 	return out;
   }
@@ -285,7 +285,7 @@ namespace Melodic{
     }
     else{
       Res = SP2(in,localweights);
-      Res = calc_corr(Res, 0); 
+      Res = calc_corr(Res, 0);
     }
     return Res;
   }  //Matrix calc_corr
@@ -296,7 +296,7 @@ namespace Melodic{
 //	tmpD2= tmpD | tmpPD.AsRow().Columns(tmpPE.Ncols()-param.Ncols()+1,tmpPE.Ncols());
 //  cerr << tmpPD.AsRow().Columns(tmpPE.Ncols()-param.Ncols()+1,tmpPE.Ncols()) << endl;
 
-//    
+//
 
 //	Matrix tmpPE;
 //	tmpPE = SP(param,ones(param.Nrows(),1)*pow(stdev(param,1)*std::sqrt((float)param.Nrows()),-1));
@@ -323,9 +323,9 @@ namespace Melodic{
     RD << abs(diag(tmpD2.t()));
 
 //	cerr << " " <<tmpD2.Ncols() << " " << N << " " << dim << endl;
-    RD << RD.SymSubMatrix(N-dim+1+param.Ncols(),N+param.Ncols());    
+    RD << RD.SymSubMatrix(N-dim+1+param.Ncols(),N+param.Ncols());
 
-    float res = 1.0;    
+    float res = 1.0;
     white = sqrt(abs(RD.i()))*RE.t();
     dewhite = RE*sqrt(RD);
 
@@ -342,9 +342,9 @@ namespace Melodic{
     dim = std::min(dim,N);
     RE = tmpE.Columns(N-dim+1,N);
     RD << abs(diag(tmpD.t()));
-    RD << RD.SymSubMatrix(N-dim+1,N);    
+    RD << RD.SymSubMatrix(N-dim+1,N);
 
-    float res = 1.0;    
+    float res = 1.0;
     white = sqrt(abs(RD.i()))*RE.t();
     dewhite = RE*sqrt(RD);
 
@@ -357,14 +357,14 @@ namespace Melodic{
   {
     RowVector tmp(tmpE.Ncols());
     float tmp2;
-    tmp2 = calc_white(tmpE,tmpD, tmp, dim, white, dewhite); 
+    tmp2 = calc_white(tmpE,tmpD, tmp, dim, white, dewhite);
   }  //Matrix calc_white
 
   void calc_white(const Matrix& tmpE, const RowVector& tmpD, int dim, Matrix& param, Matrix& paramS, Matrix& white, Matrix& dewhite)
   {
     RowVector tmp(tmpE.Ncols());
     float tmp2;
-    tmp2 = calc_white(tmpE,tmpD, tmp, dim, param, paramS, white, dewhite); 
+    tmp2 = calc_white(tmpE,tmpD, tmp, dim, param, paramS, white, dewhite);
   }  //Matrix calc_white
 
   void calc_white(const Matrix& Corr, int dim, Matrix& white, Matrix& dewhite)
@@ -376,10 +376,10 @@ namespace Melodic{
     tmp << Corr;
     EigenValues(tmp,RD,RE);
     tmp2 = diag(RD).t();
-    calc_white(RE,tmp2, dim, white, dewhite); 
+    calc_white(RE,tmp2, dim, white, dewhite);
   }  //Matrix calc_white
-  
- 
+
+
   void std_pca(const Matrix& Mat, const Matrix& weights, Matrix& Corr, Matrix& evecs, RowVector& evals)
   {
     if(weights.Storage()>0)
@@ -429,7 +429,7 @@ namespace Melodic{
       tmp2 = Mat*tmp.t()*tmp2;
       C = tmp2;
     }
-    
+
     symm_orth(C);
     Matrix Evc, tmpC;
     RowVector Evl;
@@ -440,7 +440,7 @@ namespace Melodic{
   }  //void em_pca
 
   float rankapprox(const Matrix& Mat, Matrix& cols, Matrix& rows, int dim)
-  { 
+  {
     Matrix Corr, Evecs, tmpWM, tmpDWM, tmp;
     RowVector Evals;
     std_pca(Mat.t(), Corr, Evecs, Evals);
@@ -460,9 +460,9 @@ namespace Melodic{
     for(int ctr1 = 1; ctr1 <= Mat.Ncols(); ctr1++){
 			Matrix tmpVals(cols.Nrows(),rows.Nrows());
 			for(int ctr2 = 1; ctr2 <= rows.Nrows(); ctr2++)
-	  		tmpVals.Column(ctr2) << Mat.SubMatrix(cols.Nrows() * 
+	  		tmpVals.Column(ctr2) << Mat.SubMatrix(cols.Nrows() *
 				(ctr2 - 1) + 1,cols.Nrows()*ctr2 ,ctr1,ctr1);
-	
+
 			Matrix tmpcols, tmprows;
 	 		res(ctr1) =rankapprox(tmpVals, tmpcols, tmprows);
 			cols.Column(ctr1) = tmpcols;
@@ -517,12 +517,12 @@ namespace Melodic{
 
     for(int ctr=1;ctr<=CircleLaw.Ncols(); ctr++){
       if(CircleLaw(ctr)<5*10e-10){CircleLaw(ctr) = 5*10e-10;}
-    } 
+    }
 
     /*    float slope;
-    slope = CircleLaw.Columns(int(AdjEV.Ncols()/4),AdjEV.Ncols() - 
-			      int(AdjEV.Ncols()/4)).Sum() /  
-      AdjEV.Columns(int(AdjEV.Ncols()/4),AdjEV.Ncols() - 
+    slope = CircleLaw.Columns(int(AdjEV.Ncols()/4),AdjEV.Ncols() -
+			      int(AdjEV.Ncols()/4)).Sum() /
+      AdjEV.Columns(int(AdjEV.Ncols()/4),AdjEV.Ncols() -
       int(AdjEV.Ncols()/4)).Sum();*/
 
     RowVector PercEV(AdjEV);
@@ -533,7 +533,7 @@ namespace Melodic{
     SortDescending(AdjEV);
     int maxEV = 1;
     float threshold = 0.98;
-    for(int ctr_i = 1; ctr_i < PercEV.Ncols(); ctr_i++){ 
+    for(int ctr_i = 1; ctr_i < PercEV.Ncols(); ctr_i++){
       if((PercEV(ctr_i)<threshold)&&(PercEV(ctr_i+1)>=threshold)){maxEV=ctr_i;}
     }
 
@@ -556,7 +556,7 @@ namespace Melodic{
     RowVector AdjEV, PercEV;
     AdjEV = in.Reverse();
     SortDescending(AdjEV);
-  
+
     PercEV = cumsum(AdjEV / sum(AdjEV,2).AsScalar());
     AdjEV = (AdjEV - min(AdjEV).AsScalar())/(max(AdjEV).AsScalar() - min(AdjEV).AsScalar());
     out1 = AdjEV;
@@ -565,7 +565,7 @@ namespace Melodic{
 
   RowVector Feta(int n1, int n2)
   {
-    float nu = (float) n1/n2; 
+    float nu = (float) n1/n2;
     float bm = pow((1-sqrt(nu)),2.0);
     float bp = pow((1+sqrt(nu)),2.0);
 
@@ -573,21 +573,21 @@ namespace Melodic{
     float urange = 1.1*bp;
 
     RowVector eta(30*n1);
-    float rangestepsize = (urange - lrange) / eta.Ncols(); 
-    for(int ctr_i = 1; ctr_i <= eta.Ncols(); ctr_i++){ 
+    float rangestepsize = (urange - lrange) / eta.Ncols();
+    for(int ctr_i = 1; ctr_i <= eta.Ncols(); ctr_i++){
       eta(ctr_i) = lrange + rangestepsize * (ctr_i);
     }
 
     RowVector teta(10*n1);
     teta = 0;
     float stepsize = (bp - bm) / teta.Ncols();
-    for(int ctr_i = 1; ctr_i <= teta.Ncols(); ctr_i++){ 
+    for(int ctr_i = 1; ctr_i <= teta.Ncols(); ctr_i++){
       teta(ctr_i) = stepsize*(ctr_i);
-    }  
-    
+    }
+
     RowVector feta(teta);
     feta = SP(pow(2*M_PI*nu*(teta + bm),-1), pow(SP(teta, bp-bm-teta),0.5));
-   
+
     teta = teta + bm;
 
     RowVector claw(eta);
@@ -600,7 +600,7 @@ namespace Melodic{
       }
       claw(ctr_i) = n1*(1-stepsize*tmpval);
     }
-    
+
     RowVector Res(n1); //invert the CDF
     Res = 0;
     for(int ctr_i = 1; ctr_i < eta.Ncols(); ctr_i++){ //Should this be <= instead of <?
@@ -608,7 +608,7 @@ namespace Melodic{
 	Res(int(floor(claw(ctr_i)))) = eta(ctr_i);
       }
     }
- 
+
     return Res;
   }  //RowVector Feta
 
@@ -622,23 +622,23 @@ namespace Melodic{
   }  //RowVector cumsum
 
   int ppca_dim(const Matrix& in, const Matrix& weights, Matrix& PPCA, RowVector& AdjEV, RowVector& PercEV, Matrix& Corr, Matrix& tmpE, RowVector &tmpD, float resels, string which)
-  {   
+  {
     std_pca(in,weights,Corr,tmpE,tmpD);
 
     int maxEV = 1;
     RowVector NewEV;
     adj_eigspec(tmpD.AsRow(),AdjEV,PercEV,NewEV,maxEV,in.Ncols(),resels);
-    
+
     int res;
 		PPCA = ppca_est(NewEV, in.Ncols(),resels);
     ColumnVector tmp = ppca_select(PPCA, res, maxEV, which);
-		
+
 		PPCA = tmp | PPCA;
     return res;
   }  //int ppca_dim
 
   int ppca_dim(const Matrix& in, const Matrix& weights, Matrix& PPCA, RowVector& AdjEV, RowVector& PercEV, float resels, string which)
-  {   
+  {
     RowVector tmpD;
     Matrix tmpE;
     Matrix Corr;
@@ -659,14 +659,14 @@ namespace Melodic{
   {
     RowVector estimators(5);
     estimators = 1.0;
-    
+
     for(int ctr=1; ctr<=PPCAest.Ncols(); ctr++){
-      PPCAest.Column(ctr) = (PPCAest.Column(ctr) - 
-			   min(PPCAest.Column(ctr)).AsScalar()) / 
-	( max(PPCAest.Column(ctr)).AsScalar() - 
+      PPCAest.Column(ctr) = (PPCAest.Column(ctr) -
+			   min(PPCAest.Column(ctr)).AsScalar()) /
+	( max(PPCAest.Column(ctr)).AsScalar() -
 	  min(PPCAest.Column(ctr)).AsScalar());
     }
-    
+
     int ctr_i = 1;
     while((ctr_i< PPCAest.Nrows()-1)&&
 	  (PPCAest(ctr_i,2) < PPCAest(ctr_i+1,2))&&(ctr_i<maxEV))
@@ -694,14 +694,14 @@ namespace Melodic{
 	  PercEV = cumsum(PercEV / sum(PercEV,2).AsScalar());
 
 		if(which == string("aut"))
-			if(int(estimators(2)) < int(estimators(1)) && 
+			if(int(estimators(2)) < int(estimators(1)) &&
 				float(PercEV(int(estimators(2))))>0.8){
 				res=int(estimators(2));
 	      PPCA << PPCAest.Column(3);
 			}else{
 				res = int(estimators(1));
 	      PPCA << PPCAest.Column(2);
-			}				
+			}
     if(which == string("lap")){
       res = int(estimators(1));
       PPCA << PPCAest.Column(2);
@@ -723,11 +723,11 @@ namespace Melodic{
       PPCA << PPCAest.Column(6);
     }
 		if(which == string("median")){
-			RowVector unsorted(estimators);	
+			RowVector unsorted(estimators);
 			SortAscending(unsorted);
 			ctr_i=1;
 			res=int(unsorted(3));
-			while(res != int(estimators(ctr_i)))			
+			while(res != int(estimators(ctr_i)))
 				ctr_i++;
 			PPCA << PPCAest.Column(ctr_i);
 		}
@@ -741,7 +741,7 @@ namespace Melodic{
   }  //RowVector ppca_select
 
   Matrix ppca_est(const RowVector& eigenvalues, const int N1, const float N2)
-  { 
+  {
     Matrix Res;
     Res = ppca_est(eigenvalues, (int) floor(N1/(2.5*N2)));
     return Res;
@@ -758,16 +758,16 @@ namespace Melodic{
     for(int ctr_i = 1; ctr_i <=d; ctr_i++){
       k(ctr_i)=ctr_i;
     }
-   
+
     RowVector m(d);
-    m=d*k-0.5*SP(k,k+1); 
+    m=d*k-0.5*SP(k,k+1);
 
     RowVector loggam(d);
     loggam = 0.5*k.Reverse();
     for(int ctr_i = 1; ctr_i <=d; ctr_i++){
       loggam(ctr_i)=lgam(loggam(ctr_i));
     }
-    loggam = cumsum(loggam); 
+    loggam = cumsum(loggam);
 
     RowVector l_probU(d);
     l_probU = -log(2)*k + loggam - cumsum(0.5*log(M_PI)*k.Reverse());
@@ -787,7 +787,7 @@ namespace Melodic{
     tmp3(d) = 1.0;
 
     RowVector tmp4;
-    tmp4 = SP(tmp1,pow(tmp3,-1));    
+    tmp4 = SP(tmp1,pow(tmp3,-1));
     for(int ctr_i = 1; ctr_i <=d; ctr_i++){
       if(tmp4(ctr_i)<0.01){tmp4(ctr_i)=0.01;}
       if(tmp3(ctr_i)<0.01){tmp3(ctr_i)=0.01;}
@@ -818,13 +818,13 @@ namespace Melodic{
     for(int ctr_i = 1; ctr_i <= t1.Ncols(); ctr_i++){
       for(int ctr_j = 1; ctr_j <= t1.Nrows(); ctr_j++){
 	if(t1(ctr_j,ctr_i)<=0){t1(ctr_j,ctr_i)=1;}
-      } 
+      }
     }
     for(int ctr_i = 1; ctr_i <= t2.Ncols(); ctr_i++){
       for(int ctr_j = 1; ctr_j <= t2.Nrows(); ctr_j++){
 	if(t2(ctr_j,ctr_i)<=0){t2(ctr_j,ctr_i)=1;}
       }
-    } 
+    }
     t1 = cumsum(sum(log(t1),2).AsRow());
     t2 = cumsum(sum(log(t2),2).AsRow());
 
@@ -833,7 +833,7 @@ namespace Melodic{
 
     RowVector l_lap;
     l_lap = l_probU + l_nu +l_Az + l_lam + 0.5*log(2*M_PI)*(m+k)-0.5*log(N)*k;
- 
+
     RowVector l_BIC;
     l_BIC = l_lam + l_nu - 0.5*log(N)*(m+k);
 
@@ -856,8 +856,8 @@ namespace Melodic{
     Res |= l_MDL.t();
     Res |= l_RRN.t();
     Res |= l_AIC.t();
-    
-   
+
+
     return Res;
   }  //Matrix ppca_est
 
@@ -866,7 +866,7 @@ namespace Melodic{
     double meanval;
     meanval = mean(in).AsScalar();
     int tpoints = in.Nrows();
-    
+
     ColumnVector y, res;
     Matrix X, tmp;
 
@@ -887,11 +887,11 @@ namespace Melodic{
     ColumnVector res;
     res = acf(in, maxorder);
     for(int ctr1 = 1; ctr1 <= maxorder; ctr1++)
-      if ( res.Column(ctr1).AsScalar() <  (1/tpoint) + 2/(float)std::pow(tpoint,0.5)) 
+      if ( res.Column(ctr1).AsScalar() <  (1/tpoint) + 2/(float)std::pow(tpoint,0.5))
 	res.Column(ctr1) = 0;
     return res;
   }  //ColumnVector pacf
-  
+
   Matrix est_ar(const Matrix& Mat, int maxorder)
   {
     Matrix res;
@@ -926,7 +926,7 @@ namespace Melodic{
     for(int ctr=1; ctr <= in.Ncols(); ctr++){
       tmp = in.Column(ctr);
       res.Column(ctr) = gen_ar(tmp, maxorder);
-    } 
+    }
     return res;
   }  //Matrix gen_ar
 
@@ -943,39 +943,39 @@ namespace Melodic{
     return res;
   }  //Matrix gen_arCorr
 
-	void basicGLM::olsfit(const Matrix& data, const Matrix& design, 
+	void basicGLM::olsfit(const Matrix& data, const Matrix& design,
 		const Matrix& contrasts, int DOFadjust)
 	{
-		beta = zeros(design.Ncols(),1); 
-		residu = zeros(1); sigsq = -1.0*ones(1); varcb = -1.0*ones(1); 
+		beta = zeros(design.Ncols(),1);
+		residu = zeros(1); sigsq = -1.0*ones(1); varcb = -1.0*ones(1);
 		t = zeros(1); z = zeros(1); p=-1.0*ones(1);
-		dof = (int)-1; cbeta = -1.0*ones(1); 
+		dof = (int)-1; cbeta = -1.0*ones(1);
 
 		if(data.Nrows()==design.Nrows()){
 			Matrix dat = data;
 			Matrix tmp = design.t()*design;
 			Matrix pinvdes = tmp.i()*design.t();
-			
+
 			beta = pinvdes * dat;
 			residu = dat - design*beta;
 
 			dof = design.Nrows() - design.Ncols()-1;
 			sigsq = sum(SP(residu,residu))/dof;
-			
+
 			float fact = float(dof) / design.Ncols();
 			f_fmf =  SP(sum(SP(design*beta,design*beta)),pow(sum(SP(residu,residu)),-1)) * fact;
-		
-			pf_fmf = f_fmf.Row(1); 
+
+			pf_fmf = f_fmf.Row(1);
 			for(int ctr1=1;ctr1<=f_fmf.Ncols();ctr1++)
 				pf_fmf(1,ctr1) = 1.0-MISCMATHS::fdtr(design.Ncols(),
 				int(design.Nrows() -1 -design.Ncols()),f_fmf.Column(ctr1).AsScalar());
-				
+
 			if(contrasts.Storage()>0 && contrasts.Ncols()==beta.Nrows()){
 				cbeta = contrasts*beta;
 				Matrix tmp = contrasts*pinvdes*pinvdes.t()*contrasts.t();
 				varcb = diag(tmp)*sigsq;
 				t = SP(cbeta,pow(varcb,-0.5));
-				z = t; p=t; 
+				z = t; p=t;
 				for(int ctr1=1;ctr1<=t.Ncols();ctr1++){
 					ColumnVector tmp = t.Column(ctr1);
 					T2z::ComputeZStats(varcb.Column(ctr1),cbeta.Column(ctr1),dof, tmp);
@@ -984,8 +984,8 @@ namespace Melodic{
 					p.Column(ctr1) << exp(tmp);
 				}
 			}
-		}	
-	
+		}
+
 	}
 
 

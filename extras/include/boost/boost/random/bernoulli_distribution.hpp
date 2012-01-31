@@ -32,7 +32,7 @@ public:
   typedef int input_type;
   typedef bool result_type;
 
-  explicit bernoulli_distribution(const RealType& p = RealType(0.5)) 
+  explicit bernoulli_distribution(const RealType& p = RealType(0.5))
     : _p(p)
   {
     assert(p >= 0);

@@ -8,7 +8,7 @@
 # Copyright (c) 1998-1999 by Scriptics Corporation.
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-# 
+#
 # RCS: @(#) $Id: tkInt.decls,v 1.1.1.1 2007/07/10 15:05:17 duncan Exp $
 
 library tk
@@ -563,7 +563,7 @@ declare 119 {mac aqua win} {
 #}
 
 declare 121 {mac aqua} {
-    Pixmap TkpCreateNativeBitmap (Display *display, CONST char * source) 
+    Pixmap TkpCreateNativeBitmap (Display *display, CONST char * source)
 }
 
 declare 122 {mac aqua} {
@@ -621,7 +621,7 @@ declare 135 generic {
 }
 
 declare 136 generic {
-    void TkSetFocusWin (TkWindow *winPtr, int force) 
+    void TkSetFocusWin (TkWindow *winPtr, int force)
 }
 
 declare 137 generic {
@@ -1714,7 +1714,7 @@ declare 73 win {
 }
 
 declare 74 win {
-    void XUngrabPointer (Display* d, Time t) 
+    void XUngrabPointer (Display* d, Time t)
 }
 
 declare 75 win {
@@ -2113,7 +2113,7 @@ declare 54 {mac aqua} {
 }
 
 declare 55 {mac aqua} {
-    void XUngrabPointer (Display* d, Time t) 
+    void XUngrabPointer (Display* d, Time t)
 }
 
 declare 56 {mac aqua} {
@@ -2126,7 +2126,7 @@ declare 57 {mac aqua} {
 	    GC gc, XImage* image, int src_x, int src_y, \
 	    int dest_x, int dest_y, unsigned int width, \
 	    unsigned int height)
-} 
+}
 declare 58 {mac aqua} {
     Status XParseColor (Display *display, Colormap map, \
           _Xconst char* spec, XColor *colorPtr)

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -88,7 +88,7 @@ using namespace NEWIMAGE;
 int main(int argc, char *argv[])
 {
   try{
-    
+
     // Setup logging:
     Log& logger = LogSingleton::getInstance();
 
@@ -114,10 +114,10 @@ int main(int argc, char *argv[])
     mask*=variance; //convolved mask ensures that only super-threshold non-background voxels pass
 
     Matrix datam(input_data.matrix(mask));
-   
+
     int numTS = datam.Ncols();
     ColumnVector epivol = reference.matrix(mask).t();
-    
+
     // Load paradigm:
     Paradigm paradigm;
     if(!globalopts.ac_only)
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 
     if (globalopts.voxelwise_ev_numbers.size()>0 && globalopts.voxelwiseEvFilenames.size()>0)
       paradigm.loadVoxelwise(globalopts.voxelwise_ev_numbers,globalopts.voxelwiseEvFilenames,mask);
-    
+
 
     OUT(paradigm.getDesignMatrix().Nrows());
     OUT(paradigm.getDesignMatrix().Ncols());
@@ -151,16 +151,16 @@ int main(int argc, char *argv[])
 
     if(!globalopts.noest)
       {
-	cout << "Calculating residuals..." << endl; 
+	cout << "Calculating residuals..." << endl;
 	for(int i = 1; i <= numTS; i++)
-	  {						    
+	  {
             glimGls.setData(datam.Column(i), paradigm.getDesignMatrix(i), i);
 	    residuals.Column(i)=glimGls.getResiduals();
 	  }
-	cout << "Completed" << endl; 
-	
-	cout << "Estimating residual autocorrelation..." << endl; 
-		
+	cout << "Completed" << endl;
+
+	cout << "Estimating residual autocorrelation..." << endl;
+
 	if(globalopts.fitAutoRegressiveModel)
 	  {
 	    volume4D<float> beta;
@@ -170,16 +170,16 @@ int main(int argc, char *argv[])
 	    save_volume4D(beta,LogSingleton::getInstance().getDir() + "/betas");
 	  }
 	else if(globalopts.tukey)
-	  {    
+	  {
 	    if(globalopts.tukeysize == 0)
 	      globalopts.tukeysize = (int)(2*sqrt(sizeTS))/2;
 
 	    acEst.calcRaw();
 
 	    if(globalopts.smoothACEst)
-		acEst.spatiallySmooth(logger.getDir() + "/" + globalopts.epifname, epivol, globalopts.ms, globalopts.epifname, globalopts.epith, reference[0], globalopts.tukeysize);	
+		acEst.spatiallySmooth(logger.getDir() + "/" + globalopts.epifname, epivol, globalopts.ms, globalopts.epifname, globalopts.epith, reference[0], globalopts.tukeysize);
 
-		
+
 	    acEst.tukey(globalopts.tukeysize);
 	  }
 	else if(globalopts.multitaper)
@@ -193,12 +193,12 @@ int main(int argc, char *argv[])
 
 	    if(globalopts.smoothACEst)
 		acEst.spatiallySmooth(logger.getDir() + "/" + globalopts.epifname, epivol, globalopts.ms, globalopts.epifname, globalopts.epith, reference[0]);
-	    
+
 	    acEst.pava();
 	  }
-	    
+
       }
-    cout << "Completed" << endl; 
+    cout << "Completed" << endl;
 
     cout << "Prewhitening and Computing PEs..." << endl;
     cout << "Percentage done:" << endl;
@@ -207,26 +207,26 @@ int main(int argc, char *argv[])
     Matrix mean_prewhitened_dm(paradigm.getDesignMatrix().Nrows(),paradigm.getDesignMatrix().Ncols());
     mean_prewhitened_dm=0;
     for(int i = 1; i <= numTS; i++)
-    {	
+    {
       Matrix effectiveDesign(paradigm.getDesignMatrix(i));
       if ( (100.0*i)/numTS > co )
-        cout << co++ << "," << flush;	   
+        cout << co++ << "," << flush;
       if(!globalopts.noest) {
 	acEst.setDesignMatrix(effectiveDesign);
 	// Use autocorr estimate to prewhiten data and design:
 	ColumnVector xw;
-	acEst.preWhiten(datam.Column(i), xw, i, effectiveDesign);   
+	acEst.preWhiten(datam.Column(i), xw, i, effectiveDesign);
         datam.Column(i)=xw;
       }
       glimGls.setData(datam.Column(i), effectiveDesign, i);
       residuals.Column(i)=glimGls.getResiduals();
       if(globalopts.output_pwdata || globalopts.verbose)
-        mean_prewhitened_dm+=effectiveDesign;	
+        mean_prewhitened_dm+=effectiveDesign;
     }
 
-    if(globalopts.output_pwdata || globalopts.verbose) 
+    if(globalopts.output_pwdata || globalopts.verbose)
       mean_prewhitened_dm/=numTS;
-     
+
     cerr << "Completed" << endl << "Saving results... " << endl;
 
     input_data.setmatrix(residuals,mask);
@@ -241,14 +241,14 @@ int main(int argc, char *argv[])
         save_volume4D(input_data,logger.getDir() + "/prewhitened_data");
 	// Write out whitened design matrix
 	write_vest(logger.appendDir("mean_prewhitened_dm.mat"), mean_prewhitened_dm);
-		
+
       }
 
     // Write out threshac:
     Matrix& threshacm = acEst.getEstimates();
     int cutoff = sizeTS/2;
     if(globalopts.tukey) cutoff = globalopts.tukeysize;
-    threshacm = threshacm.Rows(1,MISCMATHS::Max(1,cutoff)); 
+    threshacm = threshacm.Rows(1,MISCMATHS::Max(1,cutoff));
 
     input_data.setmatrix(threshacm,mask);
     input_data.settdim(reference.tdim()); //Possibly just set to a constant 1?
@@ -263,8 +263,8 @@ int main(int argc, char *argv[])
     glimGls.CleanUp();
 
     cerr << "Completed" << endl;
-  }  
-  catch(Exception p_excp) 
+  }
+  catch(Exception p_excp)
   {
       cerr << p_excp.what() << endl;
       return 1;

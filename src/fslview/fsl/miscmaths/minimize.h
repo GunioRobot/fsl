@@ -1,5 +1,5 @@
 /*  minimize
- 
+
     Tim Behrens, FMRIB Image Analysis Group
 
     Copyright (C) 1999-2000 University of Oxford  */
@@ -38,7 +38,7 @@ public:
   bool operator()(const pair<float,ColumnVector>& p1,const pair<float,ColumnVector>& p2) const
   {
     return p1.first < p2.first;
-  }    
+  }
 };
 
   class EvalFunction;
@@ -50,7 +50,7 @@ float diff2(const ColumnVector& x, const EvalFunction& func, int i,float h,int e
 
 float diff2(const ColumnVector& x, const EvalFunction& func, int i,int j,float h,int errorord=4);// finite diff cross derivative
 
-ReturnMatrix gradient(const ColumnVector& x, const EvalFunction& func,float h,int errorord=4);// finite diff derivative vector 
+ReturnMatrix gradient(const ColumnVector& x, const EvalFunction& func,float h,int errorord=4);// finite diff derivative vector
 
 ReturnMatrix hessian(const ColumnVector& x, const EvalFunction& func,float h,int errorord=4);// finite diff hessian
 
@@ -87,7 +87,7 @@ class gEvalFunction : public EvalFunction
 public:
   gEvalFunction() : EvalFunction(){}
   // evaluate is inherited from EvalFunction
-  
+
   virtual ReturnMatrix g_evaluate(const ColumnVector& x) const = 0; //evaluate the gradient
   virtual ~gEvalFunction(){};
 
@@ -104,13 +104,13 @@ public:
   }
 
 private:
-    
+
   const gEvalFunction& operator=(gEvalFunction& par);
   gEvalFunction(const gEvalFunction&);
 };
 
 }
-   
+
 
 #endif
 

@@ -58,11 +58,11 @@ namespace boost {
 
     template <class Vertex, class Graph>
     void initialize_vertex(Vertex u, Graph& g) {
-      invoke_visitors(m_vis, u, g, on_initialize_vertex());      
+      invoke_visitors(m_vis, u, g, on_initialize_vertex());
     }
     template <class Vertex, class Graph>
     void discover_vertex(Vertex u, Graph& g) {
-      invoke_visitors(m_vis, u, g, on_discover_vertex());      
+      invoke_visitors(m_vis, u, g, on_discover_vertex());
     }
     template <class Vertex, class Graph>
     void examine_vertex(Vertex u, Graph& g) {
@@ -74,7 +74,7 @@ namespace boost {
     }
     template <class Edge, class Graph>
     void tree_out_edge(Edge e, Graph& g) {
-      invoke_visitors(m_vis, e, g, on_tree_edge());      
+      invoke_visitors(m_vis, e, g, on_tree_edge());
     }
     template <class Edge, class Graph>
     void non_tree_out_edge(Edge e, Graph& g) {
@@ -94,7 +94,7 @@ namespace boost {
     }
     template <class Edge, class Graph>
     void tree_in_edge(Edge e, Graph& g) {
-      invoke_visitors(m_vis, e, g, on_tree_edge());      
+      invoke_visitors(m_vis, e, g, on_tree_edge());
     }
     template <class Edge, class Graph>
     void non_tree_in_edge(Edge e, Graph& g) {
@@ -110,7 +110,7 @@ namespace boost {
     }
     template <class Vertex, class Graph>
     void finish_vertex(Vertex u, Graph& g) {
-      invoke_visitors(m_vis, u, g, on_finish_vertex());      
+      invoke_visitors(m_vis, u, g, on_finish_vertex());
     }
   protected:
     Visitors m_vis;
@@ -124,11 +124,11 @@ namespace boost {
 
   namespace detail {
 
-    template <class BidirectionalGraph, class Buffer, class BFSVisitor, 
+    template <class BidirectionalGraph, class Buffer, class BFSVisitor,
               class ColorMap>
     void neighbor_bfs_impl
-      (const BidirectionalGraph& g, 
-       typename graph_traits<BidirectionalGraph>::vertex_descriptor s, 
+      (const BidirectionalGraph& g,
+       typename graph_traits<BidirectionalGraph>::vertex_descriptor s,
        Buffer& Q, BFSVisitor vis, ColorMap color)
 
     {
@@ -136,12 +136,12 @@ namespace boost {
       typedef graph_traits<BidirectionalGraph> GTraits;
       typedef typename GTraits::vertex_descriptor Vertex;
       typedef typename GTraits::edge_descriptor Edge;
-      function_requires< 
+      function_requires<
         NeighborBFSVisitorConcept<BFSVisitor, BidirectionalGraph> >();
       function_requires< ReadWritePropertyMapConcept<ColorMap, Vertex> >();
       typedef typename property_traits<ColorMap>::value_type ColorValue;
       typedef color_traits<ColorValue> Color;
-      
+
       put(color, s, Color::gray());
       vis.discover_vertex(s, g);
       Q.push(s);
@@ -171,7 +171,7 @@ namespace boost {
         } // for out-edges
 
         typename GTraits::in_edge_iterator in_ei, in_ei_end;
-        for (tie(in_ei, in_ei_end) = in_edges(u, g); 
+        for (tie(in_ei, in_ei_end) = in_edges(u, g);
              in_ei != in_ei_end; ++in_ei) {
           Edge e = *in_ei;
           vis.examine_in_edge(e, g);
@@ -196,13 +196,13 @@ namespace boost {
       } // while
     }
 
-    
+
     template <class VertexListGraph, class ColorMap, class BFSVisitor,
       class P, class T, class R>
     void neighbor_bfs_helper
       (VertexListGraph& g,
        typename graph_traits<VertexListGraph>::vertex_descriptor s,
-       ColorMap color, 
+       ColorMap color,
        BFSVisitor vis,
        const bgl_named_params<P, T, R>& params)
     {
@@ -221,7 +221,7 @@ namespace boost {
         vis.initialize_vertex(*i, g);
       }
       neighbor_bfs_impl
-        (g, s, 
+        (g, s,
          choose_param(get_param(params, buffer_param_t()), Qref).ref,
          vis, color);
     }
@@ -259,12 +259,12 @@ namespace boost {
       {
         std::vector<default_color_type> color_vec(num_vertices(g));
         null_visitor null_vis;
-        
+
         neighbor_bfs_helper
-          (g, s, 
+          (g, s,
            make_iterator_property_map
-           (color_vec.begin(), 
-            choose_const_pmap(get_param(params, vertex_index), 
+           (color_vec.begin(),
+            choose_const_pmap(get_param(params, vertex_index),
                               g, vertex_index), color_vec[0]),
            choose_param(get_param(params, graph_visitor),
                         make_neighbor_bfs_visitor(null_vis)),
@@ -287,9 +287,9 @@ namespace boost {
     // graph is not really const since we may write to property maps
     // of the graph.
     VertexListGraph& ng = const_cast<VertexListGraph&>(g);
-    typedef typename property_value< bgl_named_params<P,T,R>, 
+    typedef typename property_value< bgl_named_params<P,T,R>,
       vertex_color_t>::type C;
-    detail::neighbor_bfs_dispatch<C>::apply(ng, s, params, 
+    detail::neighbor_bfs_dispatch<C>::apply(ng, s, params,
                                             get_param(params, vertex_color));
   }
 

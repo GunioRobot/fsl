@@ -10,7 +10,7 @@
 #include <qspinbox.h>
 #include "maintoolbar.h"
 
-MainToolBarWidget::MainToolBarWidget(QWidget *parent, int min, int max): 
+MainToolBarWidget::MainToolBarWidget(QWidget *parent, int min, int max):
   MainToolBarWidgetBase(parent)
 {
   m_jumpToMaxButton->hide();
@@ -29,10 +29,10 @@ MainToolBarWidget::~MainToolBarWidget()
 }
 
 void MainToolBarWidget::setCrossHairsMode(bool checked)
-{ 
-  m_crossHairsButton->blockSignals(true); 
-  m_crossHairsButton->setOn(checked); 
-  m_crossHairsButton->blockSignals(false); 
+{
+  m_crossHairsButton->blockSignals(true);
+  m_crossHairsButton->setOn(checked);
+  m_crossHairsButton->blockSignals(false);
 }
 
 void MainToolBarWidget::setZoomValue(int f)
@@ -42,27 +42,27 @@ void MainToolBarWidget::setZoomValue(int f)
   m_zoomSpinBox->blockSignals(false);
 }
 
-void MainToolBarWidget::setPanState(int state) 
-{ 
+void MainToolBarWidget::setPanState(int state)
+{
   if(state == QButton::On)
     emit modeChanged(SliceWidget::Pan);
 }
 
-void MainToolBarWidget::setCursorState(int state) 
-{ 
+void MainToolBarWidget::setCursorState(int state)
+{
   if(state == QButton::On)
-    emit modeChanged(SliceWidget::Cursing); 
+    emit modeChanged(SliceWidget::Cursing);
 }
 
-void MainToolBarWidget::setZoomState(int state) 
-{ 
+void MainToolBarWidget::setZoomState(int state)
+{
   if(state == QButton::On)
     emit modeChanged(SliceWidget::Zoom);
 }
 
-void MainToolBarWidget::setMaskState(int state) 
+void MainToolBarWidget::setMaskState(int state)
 {
   if(state == QButton::On)
-    emit modeChanged(SliceWidget::Masking); 
+    emit modeChanged(SliceWidget::Masking);
 }
 

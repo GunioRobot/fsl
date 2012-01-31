@@ -26,10 +26,10 @@ public:
 
 private:
   QTabWidget*         m_tabWidget;
-  
+
 
 public  slots:
-   void addTimeSeries();  
+   void addTimeSeries();
    void remTimeSeries();
    void demeanButtonToggle(bool);
    void setEnabled(bool);
@@ -41,8 +41,8 @@ signals:
    void setEnabledSignal(bool);
    void axisDisplaySignal();
 protected:
-  virtual void resizeEvent( QResizeEvent* );  
- 
+  virtual void resizeEvent( QResizeEvent* );
+
 
 };
 

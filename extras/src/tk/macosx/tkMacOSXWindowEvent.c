@@ -278,7 +278,7 @@ TkMacOSXProcessWindowEvent(
 	case kEventWindowExpanding:
 	    if (winPtr) {
 		winPtr->wmInfoPtr->hints.initial_state =
-			TkMacOSXIsWindowZoomed(winPtr) ? ZoomState : 
+			TkMacOSXIsWindowZoomed(winPtr) ? ZoomState :
 			NormalState;
 		Tk_MapWindow((Tk_Window) winPtr);
 		/*
@@ -335,7 +335,7 @@ TkMacOSXProcessWindowEvent(
 	    }
 	    break;
 	case kEventWindowDragStarted:
-	    if (!(TkMacOSXModifierState() & cmdKey)) { 
+	    if (!(TkMacOSXModifierState() & cmdKey)) {
 		TkMacOSXBringWindowForward(whichWindow);
 	    }
 	    TkMacOSXTrackingLoop(1);
@@ -949,7 +949,7 @@ Tk_MacOSXIsAppInFront(void)
     if (err == noErr) {
 	ChkErr(SameProcess, &frontPsn, &ourPsn, &isFrontProcess);
     }
-    
+
     return (isFrontProcess == true);
 }
 

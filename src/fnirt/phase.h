@@ -5,9 +5,9 @@
 
     Copyright (C) 2004 University of Oxford  */
 
- 
+
 // Monogenic - a class for computing the monogenic signal
-// 
+//
 
 #if !defined(__phase_h)
 #define __phase_h
@@ -19,7 +19,7 @@
  namespace MONOGENIC {
 
 class Monogenic{
- 
+
 
  public:
     // Publicly available calls
@@ -27,9 +27,9 @@ class Monogenic{
     Monogenic(const volume<float>& img, string& filter_type);
     Monogenic(const volume<float>& img, string& filter_type, float parameter_1, float parameter_2);
     ~Monogenic();
- 
+
     complexref operator()(int x,int y, int z);
-     
+
 
     int xsize();
     int ysize();
@@ -39,7 +39,7 @@ class Monogenic{
     volume<float> phase() const;
     volume<float>& re();
     volume<float>& im();
-  
+
 
  private:
     // private calls
@@ -53,7 +53,7 @@ class Monogenic{
     complexvolume transform;
     float f_parm1, f_parm2;
     string f_type;
- 
+
 };
 
    //////////////////////////////////////////////////////////////////////////

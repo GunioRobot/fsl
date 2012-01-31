@@ -22,9 +22,9 @@ using namespace std;
 
 struct ImageDisplaySetting::Implementation
 {
-  Implementation(LookUpTable::Handle lut,float trans, bool visible, Image::Handle image): 
-    m_transparency(trans), 
-    m_isVisible(visible), 
+  Implementation(LookUpTable::Handle lut,float trans, bool visible, Image::Handle image):
+    m_transparency(trans),
+    m_isVisible(visible),
     m_lookUpTable(lut),
     m_dtiDisplay(None),
     m_transMod(false),
@@ -39,16 +39,16 @@ struct ImageDisplaySetting::Implementation
 
   Implementation(LookUpTable::Handle lut,
 		 LookUpTable::Handle slut,
-                 float trans, 
-                 bool visible, 
+                 float trans,
+                 bool visible,
                  BriCon::Handle bricon,
                  int dti,
                  Image::Handle mod,
                  bool transMod,
                  float modTransVal,
-		 int vol=0): 
-    m_transparency(trans), 
-    m_isVisible(visible), 
+		 int vol=0):
+    m_transparency(trans),
+    m_isVisible(visible),
     m_lookUpTable(lut),
     m_secondaryLookUpTable(slut),
     m_bricon(bricon),
@@ -64,7 +64,7 @@ struct ImageDisplaySetting::Implementation
   bool                m_isVisible;
   LookUpTable::Handle m_lookUpTable;
   LookUpTable::Handle m_secondaryLookUpTable;
-  BriCon::Handle      m_bricon;  
+  BriCon::Handle      m_bricon;
   int                 m_dtiDisplay;
   Image::Handle       m_modImage;
   bool                m_transMod;
@@ -73,34 +73,34 @@ struct ImageDisplaySetting::Implementation
   unsigned int        m_currentVolume;
 };
 
-ImageDisplaySetting::Handle 
+ImageDisplaySetting::Handle
 ImageDisplaySetting::create(Image::Handle image,
 			    LookUpTable::Handle lut,
-			    float trans, 
+			    float trans,
 			    bool visible)
 {
   return Handle(new ImageDisplaySetting(image, lut, trans, visible));
 }
 
-ImageDisplaySetting::ImageDisplaySetting(Image::Handle image, 
-                                         LookUpTable::Handle lut, 
-                                         float trans, 
+ImageDisplaySetting::ImageDisplaySetting(Image::Handle image,
+                                         LookUpTable::Handle lut,
+                                         float trans,
                                          bool visible) :
   m_impl(new Implementation(lut, trans, visible, image))
 {
 }
 
-ImageDisplaySetting::ImageDisplaySetting(BriCon::Handle bricon, 
-                                         LookUpTable::Handle lut, 
-                                         LookUpTable::Handle slut, 
-                                         float trans, 
+ImageDisplaySetting::ImageDisplaySetting(BriCon::Handle bricon,
+                                         LookUpTable::Handle lut,
+                                         LookUpTable::Handle slut,
+                                         float trans,
                                          bool visible,
                                          int dti,
                                          Image::Handle mod,
                                          bool transMod,
                                          float modTransVal,
 					 int vol) :
-  m_impl(new Implementation(lut, slut, trans, visible, 
+  m_impl(new Implementation(lut, slut, trans, visible,
                             bricon,dti,mod,
                             transMod,modTransVal, vol))
 {
@@ -110,31 +110,31 @@ ImageDisplaySetting::~ImageDisplaySetting()
 {
 }
 
-void 
+void
 ImageDisplaySetting::setTransparency(float trans)
 {
   m_impl->m_transparency = trans;
 }
 
-void 
+void
 ImageDisplaySetting::setModTransparency(float trans)
 {
   m_impl->m_modTransparency = trans;
 }
 
-void 
+void
 ImageDisplaySetting::setVisibility(bool visible)
 {
   m_impl->m_isVisible = visible;
 }
 
-void 
+void
 ImageDisplaySetting::setTransMod(bool state)
 {
   m_impl->m_transMod = state;
 }
 
-void 
+void
 ImageDisplaySetting::setLookUpTable(LookUpTable::Handle lut)
 {
   TRACKER("ImageDisplaySetting::setLookUpTable(LookUpTable::Handle lut)");
@@ -142,13 +142,13 @@ ImageDisplaySetting::setLookUpTable(LookUpTable::Handle lut)
   m_impl->m_lookUpTable = lut;
 }
 
-void 
+void
 ImageDisplaySetting::setSecondaryLookUpTable(LookUpTable::Handle lut)
 {
   m_impl->m_secondaryLookUpTable = lut;
 }
 
-void 
+void
 ImageDisplaySetting::setModImage(Image::Handle img)
 {
   m_impl->m_modImage = img;
@@ -162,85 +162,85 @@ ImageDisplaySetting::inqTransMod() const
   return result;
 }
 
-Image::Handle 
+Image::Handle
 ImageDisplaySetting::inqModImage() const
 {
   return m_impl->m_modImage;
 }
 
-unsigned int 
+unsigned int
 ImageDisplaySetting::inqCurrentVolume() const
 {
   return m_impl->m_currentVolume;
 }
 
-void 
+void
 ImageDisplaySetting::setCurrentVolume(unsigned int v)
 {
   m_impl->m_currentVolume = v;
 }
 
-float 
+float
 ImageDisplaySetting::inqTransparency() const
 {
   return m_impl->m_transparency;
 }
 
-float 
+float
 ImageDisplaySetting::inqModTransparency() const
 {
   return m_impl->m_modTransparency;
 }
 
-bool 
+bool
 ImageDisplaySetting::inqVisibility() const
 {
   return m_impl->m_isVisible;
 }
 
-LookUpTable::Handle  
+LookUpTable::Handle
 ImageDisplaySetting::inqLookUpTable() const
 {
   return  m_impl->m_lookUpTable;
 }
 
-void 
+void
 ImageDisplaySetting::setUseSecondaryLookUpTable(bool yn)
 {
   m_impl->m_useSlut = yn;
 }
 
-bool 
+bool
 ImageDisplaySetting::inqUseSecondaryLookUpTable() const
 {
   return m_impl->m_useSlut;
 }
 
-LookUpTable::Handle  
+LookUpTable::Handle
 ImageDisplaySetting::inqSecondaryLookUpTable() const
 {
   return m_impl->m_secondaryLookUpTable;
 }
 
-BriCon::Handle  
+BriCon::Handle
 ImageDisplaySetting::inqBriCon()
 {
   return  m_impl->m_bricon;
 }
 
-int  
+int
 ImageDisplaySetting::inqDtiDisplay() const
-{  
+{
   return  m_impl->m_dtiDisplay;
 }
 
-void  
+void
 ImageDisplaySetting::setDtiDisplay(DtiDisplay mode)
-{  
+{
   m_impl->m_dtiDisplay = mode;
 }
 
-ImageDisplaySetting::Handle  
+ImageDisplaySetting::Handle
 ImageDisplaySetting::clone()
 {
   Handle clone(new ImageDisplaySetting(m_impl->m_bricon->clone(),

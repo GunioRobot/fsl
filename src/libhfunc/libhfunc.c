@@ -7,7 +7,7 @@ int avw_read(char* filename,struct dsr *header)
 {
   FILE *fp;
   char fname[1024];
-		
+
   xtrt_filepath(filename,fname);
   strcat(fname,".hdr");
   if((fp=fopen(fname,"rb"))==NULL)
@@ -27,7 +27,7 @@ int avw_write(char* filename,struct dsr *header)
   xtrt_filepath(filename,fname);
   strcat(fname,".hdr");
   if((fp=fopen(fname,"w+b"))==NULL)
-    return(-1);	
+    return(-1);
 
   if(fwrite(header,sizeof(*header),1,fp)!=1)
     return(-1);
@@ -63,7 +63,7 @@ void avw_get_dim(struct dsr *header,int *x,int *y,int *z,int *v)
 }
 void avw_set_dt(struct dsr *header,int dt)
 {
-  switch(dt){	
+  switch(dt){
   case(DT_UNSIGNED_CHAR):
     header->dime.datatype=DT_UNSIGNED_CHAR;
     header->dime.bitpix=8;
@@ -195,7 +195,7 @@ void avw_init(struct dsr *header,int x,int y,int z,int v,int t)
   short *sbuf;
 
   header->hk.sizeof_hdr=348;
-  strcpy(header->hk.data_type,"");		
+  strcpy(header->hk.data_type,"");
   strcpy(header->hk.db_name,"");
   header->hk.extents=16384;
   header->hk.session_error=0;
@@ -231,7 +231,7 @@ void avw_init(struct dsr *header,int x,int y,int z,int v,int t)
   header->dime.compressed=0;
   header->dime.verified=0;
   header->dime.datatype=t;
-  switch(t){	
+  switch(t){
   case(DT_UNSIGNED_CHAR):
     header->dime.datatype=DT_UNSIGNED_CHAR;
     header->dime.bitpix=8;
@@ -277,11 +277,11 @@ void avw_init(struct dsr *header,int x,int y,int z,int v,int t)
   header->hist.omax=0;
   header->hist.omin=0;
   header->hist.smax=0;
-  header->hist.smin=0;  
+  header->hist.smin=0;
 }
 void xtrt_filepath(char *in,char *out)
 {
-  int len;	
+  int len;
   len=strlen(in);
   if(!strcmp(in+len-4,".img"))len-=4;
   if(!strcmp(in+len-4,".hdr"))len-=4;

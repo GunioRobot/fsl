@@ -56,7 +56,7 @@ struct iterator_range
           , typename traits_t::reference
           , typename traits_t::value_type
         >::type result_type;
-        
+
         result_type
         operator()(iterator_range<NextPolicies,Iterator>& self)
         {
@@ -68,9 +68,9 @@ struct iterator_range
 # if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
         // CWPro8 has a codegen problem when this is an empty class
         int garbage;
-# endif 
+# endif
     };
-    
+
 # ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     // for compilers which can't deduce the value_type of pointers, we
     // have a special implementation of next.  This takes advantage of
@@ -79,7 +79,7 @@ struct iterator_range
     struct next_ptr
     {
         typedef Iterator result_type;
-        
+
         result_type
         operator()(iterator_range<NextPolicies,Iterator>& self)
         {
@@ -88,7 +88,7 @@ struct iterator_range
             return self.m_start++;
         }
     };
-    
+
     typedef mpl::if_<
         is_same<
             boost::detail::please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<Iterator>
@@ -100,7 +100,7 @@ struct iterator_range
 # else
     typedef next next_fn;
 # endif
-    
+
     object m_sequence; // Keeps the sequence alive while iterating.
     Iterator m_start;
     Iterator m_finish;
@@ -119,13 +119,13 @@ namespace detail
       // Check the registry. If one is already registered, return it.
       handle<> class_obj(
           objects::registered_class_object(python::type_id<range_>()));
-        
+
       if (class_obj.get() != 0)
           return object(class_obj);
 
       typedef typename range_::next_fn next_fn;
       typedef typename next_fn::result_type result_type;
-      
+
       return class_<range_>(name, no_init)
           .def("__iter__", identity_function())
           .def(
@@ -151,7 +151,7 @@ namespace detail
         : m_get_start(get_start)
         , m_get_finish(get_finish)
       {}
-      
+
       // Extract an object x of the Target type from the first Python
       // argument, and invoke get_start(x)/get_finish(x) to produce
       // iterators, which are used to construct a new iterator_range<>
@@ -161,7 +161,7 @@ namespace detail
       {
           // Make sure the Python class is instantiated.
           detail::demand_iterator_class("iterator", (Iterator*)0, NextPolicies());
-          
+
           return iterator_range<NextPolicies,Iterator>(
               x.source()
             , m_get_start(x.get())
@@ -216,7 +216,7 @@ namespace detail
 // iterator. The Python iterator uses get_start(x) and get_finish(x)
 // (where x is an instance of Target) to produce begin and end
 // iterators for the range, and an instance of NextPolicies is used as
-// CallPolicies for the Python iterator's next() function. 
+// CallPolicies for the Python iterator's next() function.
 template <class Target, class NextPolicies, class Accessor1, class Accessor2>
 inline object make_iterator_function(
     Accessor1 const& get_start
@@ -228,7 +228,7 @@ inline object make_iterator_function(
     typedef typename Accessor1::result_type iterator;
     typedef typename add_const<iterator>::type iterator_const;
     typedef typename add_reference<iterator_const>::type iterator_cref;
-      
+
     return detail::make_iterator_function(
         get_start
       , get_finish

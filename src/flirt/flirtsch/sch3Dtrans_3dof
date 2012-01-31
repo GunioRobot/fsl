@@ -10,47 +10,47 @@ setoption paramsubset 1  0 0 0 1 0 0 0 0 0 0 0 0
 clear U
 clear UA
 setrow UA 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
-optimise 12 UA:1   0.0   0.0   0.0    0.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0    8.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   -8.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   16.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -16.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   24.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -24.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   32.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -32.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   40.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -40.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   48.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -48.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   56.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -56.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   64.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -64.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   72.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -72.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   80.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -80.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   88.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -88.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   96.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  -96.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  104.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -104.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  112.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -112.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  120.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -120.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  128.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -128.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  136.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -136.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  144.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -144.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  152.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -152.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0  160.0   0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0 -160.0   0.0   0.0   0.0   abs 4 
+optimise 12 UA:1   0.0   0.0   0.0    0.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0    8.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   -8.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   16.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -16.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   24.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -24.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   32.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -32.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   40.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -40.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   48.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -48.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   56.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -56.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   64.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -64.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   72.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -72.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   80.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -80.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   88.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -88.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   96.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  -96.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  104.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -104.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  112.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -112.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  120.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -120.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  128.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -128.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  136.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -136.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  144.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -144.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  152.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -152.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0  160.0   0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0 -160.0   0.0   0.0   0.0   abs 4
 clear UA
 copy U UA
 
@@ -116,47 +116,47 @@ setoption paramsubset 1  0 0 0 0 1 0 0 0 0 0 0 0
 clear U
 clear UA
 setrow UA 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
-optimise 12 UA:1   0.0   0.0   0.0   0.0    0.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0    8.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   -8.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   16.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -16.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   24.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -24.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   32.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -32.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   40.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -40.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   48.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -48.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   56.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -56.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   64.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -64.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   72.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -72.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   80.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -80.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   88.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -88.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0   96.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  -96.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  104.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -104.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  112.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -112.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  120.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -120.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  128.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -128.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  136.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -136.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  144.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -144.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  152.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -152.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0  160.0   0.0   0.0   abs 4 
-optimise 12 UA:1   0.0   0.0   0.0   0.0 -160.0   0.0   0.0   abs 4 
+optimise 12 UA:1   0.0   0.0   0.0   0.0    0.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0    8.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   -8.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   16.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -16.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   24.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -24.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   32.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -32.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   40.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -40.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   48.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -48.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   56.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -56.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   64.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -64.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   72.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -72.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   80.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -80.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   88.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -88.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0   96.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  -96.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  104.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -104.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  112.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -112.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  120.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -120.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  128.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -128.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  136.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -136.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  144.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -144.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  152.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -152.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0  160.0   0.0   0.0   abs 4
+optimise 12 UA:1   0.0   0.0   0.0   0.0 -160.0   0.0   0.0   abs 4
 clear UA
 copy U UA
 
@@ -223,47 +223,47 @@ setoption paramsubset 1  0 0 0 0 0 1 0 0 0 0 0 0
 clear U
 clear UA
 setrow UA 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0    0.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0    8.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   -8.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   16.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -16.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   24.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -24.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   32.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -32.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   40.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -40.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   48.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -48.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   56.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -56.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   64.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -64.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   72.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -72.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   80.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -80.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   88.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -88.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   96.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -96.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  104.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -104.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  112.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -112.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  120.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -120.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  128.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -128.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  136.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -136.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  144.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -144.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  152.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -152.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  160.0   0.0   abs 4 
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -160.0   0.0   abs 4 
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0    0.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0    8.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   -8.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   16.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -16.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   24.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -24.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   32.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -32.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   40.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -40.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   48.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -48.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   56.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -56.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   64.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -64.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   72.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -72.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   80.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -80.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   88.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -88.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   96.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  -96.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  104.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -104.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  112.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -112.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  120.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -120.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  128.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -128.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  136.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -136.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  144.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -144.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  152.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -152.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0  160.0   0.0   abs 4
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0 -160.0   0.0   abs 4
 clear UA
 copy U UA
 
@@ -332,7 +332,7 @@ setscale 8
 setoption smoothing 8
 setoption paramsubset 3  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 1 0 0 0 0 0 0
 clear U
-optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4 
+optimise 12 UA:1  0.0   0.0   0.0   0.0   0.0   0.0   0.0  rel 4
 
 # 4mm scale
 setscale 4

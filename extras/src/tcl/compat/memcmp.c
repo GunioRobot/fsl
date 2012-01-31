@@ -1,4 +1,4 @@
-/* 
+/*
  * memcmp.c --
  *
  *	Source code for the "memcmp" library routine.

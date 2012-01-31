@@ -1,4 +1,4 @@
-/* 
+/*
  * tclPosixStr.c --
  *
  *	This file contains procedures that generate strings

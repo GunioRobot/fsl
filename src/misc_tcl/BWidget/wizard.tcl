@@ -241,7 +241,7 @@ proc Wizard::itemcget { path item option } {
     if {![exists $path $item]} {
 	## It's not an item.  Just pass the configure to the widget.
 	set item [$path widgets get $item]
-	return [eval $item configure $args] 
+	return [eval $item configure $args]
     }
 
     if {[_is_step $path $item]} {
@@ -272,7 +272,7 @@ proc Wizard::itemconfigure { path item args } {
     if {![exists $path $item]} {
 	## It's not an item.  Just pass the configure to the widget.
 	set item [$path widgets get $item]
-	return [eval $item configure $args] 
+	return [eval $item configure $args]
     }
 
     if {[info exists steps($item)]} {
@@ -427,7 +427,7 @@ proc Wizard::finish { path } {
             if {!$res} { return }
         }
     }
-        
+
     event generate $path <<WizardFinish>>
 }
 
@@ -441,7 +441,7 @@ proc Wizard::help { path } {
             uplevel #0 $cmd
         }
     }
-        
+
     event generate $path <<WizardHelp>>
 }
 
@@ -467,7 +467,7 @@ proc Wizard::step { path node {start ""} {traverse 1} } {
             set item [$path step next]
             while {![string equal $item ""]} {
                 set last $item
-                set item [$path step next $item] 
+                set item [$path step next $item]
             }
             set item $last
         }
@@ -948,7 +948,7 @@ proc Wizard::layout::simple { wizard step } {
     }
 
     grid $titleframe  -row 0 -column 0 -sticky nsew -padx 0
-    grid $layout.sep1 -row 1 -sticky ew 
+    grid $layout.sep1 -row 1 -sticky ew
     grid $pretext     -row 2 -sticky nsew -padx 8 -pady 8
     grid $clientArea  -row 3 -sticky nsew -padx 8 -pady 8
     grid $posttext    -row 4 -sticky nsew -padx 8 -pady 8
@@ -975,7 +975,7 @@ proc Wizard::layout::classic { wizard step } {
 
     # Client area. This is where the caller places its widgets.
     frame $clientArea -bd 8 -relief flat
-    
+
     Separator $layout.sep1 -relief groove -orient vertical
 
     # title and subtitle
@@ -987,7 +987,7 @@ proc Wizard::layout::classic { wizard step } {
     set  labelfont(-weight) bold
     $title configure -font [array get labelfont]
 
-    # pre and post text. 
+    # pre and post text.
     label $pretext  -textvariable [$wizard variable $step -text3]
     label $posttext -textvariable [$wizard variable $step -text4]
 

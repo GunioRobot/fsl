@@ -1,32 +1,32 @@
 //*****************************************************************
 // Iterative template routine -- GMRES
 //
-// GMRES solves the unsymmetric linear system Ax = b using the 
+// GMRES solves the unsymmetric linear system Ax = b using the
 // Generalized Minimum Residual method
 //
-// GMRES follows the algorithm described on p. 20 of the 
+// GMRES follows the algorithm described on p. 20 of the
 // SIAM Templates book.
 //
 // The return value indicates convergence within max_iter (input)
 // iterations (0), or no convergence within max_iter iterations (1).
 //
 // Upon successful return, output arguments have the following values:
-//  
+//
 //        x  --  approximate solution to Ax = b
 // max_iter  --  the number of iterations performed before the
 //               tolerance was reached
 //      tol  --  the residual after the final iteration
-//  
+//
 //*****************************************************************
 
 
 template < class Matrix, class Vector >
-void 
+void
 Update(Vector &x, int k, Matrix &h, Vector &s, Vector v[])
 {
   Vector y(s);
 
-  // Backsolve:  
+  // Backsolve:
   for (int i = k; i >= 0; i--) {
     y(i) /= h(i,i);
     for (int j = i - 1; j >= 0; j--)
@@ -39,7 +39,7 @@ Update(Vector &x, int k, Matrix &h, Vector &s, Vector v[])
 
 
 template < class Real >
-Real 
+Real
 abs(Real x)
 {
   return (x > 0 ? x : -x);
@@ -48,7 +48,7 @@ abs(Real x)
 
 template < class Operator, class Vector, class Preconditioner,
            class Matrix, class Real >
-int 
+int
 GMRES(const Operator &A, Vector &x, const Vector &b,
       const Preconditioner &M, Matrix &H, int &m, int &max_iter,
       Real &tol)
@@ -56,14 +56,14 @@ GMRES(const Operator &A, Vector &x, const Vector &b,
   Real resid;
   int i, j = 1, k;
   Vector s(m+1), cs(m+1), sn(m+1), w;
-  
+
   Real normb = norm(M.solve(b));
   Vector r = M.solve(b - A * x);
   Real beta = norm(r);
-  
+
   if (normb == 0.0)
     normb = 1;
-  
+
   if ((resid = norm(r) / normb) <= tol) {
     tol = resid;
     max_iter = 0;
@@ -76,7 +76,7 @@ GMRES(const Operator &A, Vector &x, const Vector &b,
     v[0] = r * (1.0 / beta);    // ??? r / beta
     s = 0.0;
     s(0) = beta;
-    
+
     for (i = 0; i < m && j <= max_iter; i++, j++) {
       w = M.solve(A * v[i]);
       for (k = 0; k <= i; k++) {
@@ -88,11 +88,11 @@ GMRES(const Operator &A, Vector &x, const Vector &b,
 
       for (k = 0; k < i; k++)
         ApplyPlaneRotation(H(k,i), H(k+1,i), cs(k), sn(k));
-      
+
       GeneratePlaneRotation(H(i,i), H(i+1,i), cs(i), sn(i));
       ApplyPlaneRotation(H(i,i), H(i+1,i), cs(i), sn(i));
       ApplyPlaneRotation(s(i), s(i+1), cs(i), sn(i));
-      
+
       if ((resid = abs(s(i+1)) / normb) < tol) {
         Update(x, i, H, s, v);
         tol = resid;
@@ -111,17 +111,17 @@ GMRES(const Operator &A, Vector &x, const Vector &b,
       return 0;
     }
   }
-  
+
   tol = resid;
   delete [] v;
   return 1;
 }
 
 
-#include <math.h> 
+#include <math.h>
 
 
-template<class Real> 
+template<class Real>
 void GeneratePlaneRotation(Real &dx, Real &dy, Real &cs, Real &sn)
 {
   if (dy == 0.0) {
@@ -139,7 +139,7 @@ void GeneratePlaneRotation(Real &dx, Real &dy, Real &cs, Real &sn)
 }
 
 
-template<class Real> 
+template<class Real>
 void ApplyPlaneRotation(Real &dx, Real &dy, Real &cs, Real &sn)
 {
   Real temp  =  cs * dx + sn * dy;

@@ -6,7 +6,7 @@
  * See http://www.boost.org/libs/multi_index for library home page.
  *
  * The internal implementation of red-black trees is based on that of SGI STL
- * stl_tree.h file: 
+ * stl_tree.h file:
  *
  * Copyright (c) 1996,1997
  * Silicon Graphics Computer Systems, Inc.
@@ -60,7 +60,7 @@ inline Node* ordered_index_find(
 {
   Node* y=header;
   Node* z=Node::from_impl(header->parent());
-    
+
   while (z){
     if(!comp(key(z->value),x)){
       y=z;
@@ -68,7 +68,7 @@ inline Node* ordered_index_find(
     }
     else z=Node::from_impl(z->right());
   }
-    
+
   return (y==header||comp(x,key(y->value)))?header:y;
 }
 

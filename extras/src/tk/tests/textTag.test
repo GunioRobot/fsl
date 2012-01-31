@@ -25,7 +25,7 @@ update
 .t debug on
 wm geometry . {}
 set bigFont {Helvetica 24}
-  
+
 # The statements below reset the main window;  it's needed if the window
 # manager is mwm, to make mwm forget about a previous minimum size setting.
 

@@ -239,7 +239,7 @@ proc BWidget::XLFDfont { cmd args } {
 #  to pass the remainder unchanged so the Windows manager then handles -200
 #  which is a position on the left hand monitor.
 #  I've tested this for left, right, above and below the primary monitor.
-#  Currently there is no way to ask Tk the extent of the Windows desktop in 
+#  Currently there is no way to ask Tk the extent of the Windows desktop in
 #  a multi monitor system. Nor what the legal co-ordinate range might be.
 #
 proc BWidget::place { path w h args } {
@@ -447,7 +447,7 @@ proc BWidget::focus { option path {refocus 1} } {
 
 # BWidget::refocus --
 #
-#	Helper function used to redirect focus from a container frame in 
+#	Helper function used to redirect focus from a container frame in
 #	a megawidget to a component widget.  Only redirects focus if
 #	focus is already on the container.
 #

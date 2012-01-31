@@ -316,7 +316,7 @@ struct msvc_never_true
 
 #endif
 
-namespace boost {namespace fusion { 
+namespace boost {namespace fusion {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 namespace aux {
@@ -345,7 +345,7 @@ struct fusion_apply2
     typedef typename aux::msvc_apply2<A>::template result_<B,C>::type type;
 };
 
-#else 
+#else
 template<typename A,typename B>
 struct fusion_apply1
 {
@@ -373,9 +373,9 @@ namespace boost {namespace fusion {namespace detail {
 #endif
 }}}
 
-//VC 6 has serious problems with mpl::int_ in tuple_iterator_base. 
-//It ICEs because operator int() const on mpl::int_ is inlined. 
-//At the same time, another test using integral_c<T,N> ICEs because operator int() is not inlined. 
+//VC 6 has serious problems with mpl::int_ in tuple_iterator_base.
+//It ICEs because operator int() const on mpl::int_ is inlined.
+//At the same time, another test using integral_c<T,N> ICEs because operator int() is not inlined.
 //Only solution seems to be to define a special msvc_fusion_int for VC 6 to be used in tuple_iterator_base
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 namespace boost {namespace fusion {namespace detail{
@@ -397,7 +397,7 @@ struct msvc_fusion_int
 template<int N>
 msvc_fusion_int<N>::operator int() const
 {
-    return static_cast<int>(this->value); 
+    return static_cast<int>(this->value);
 }
 
 }}}

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinRegion.c --
  *
  *	Tk Region emulation code.

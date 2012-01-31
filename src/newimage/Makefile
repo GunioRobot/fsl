@@ -12,11 +12,11 @@ LIBS =-lmiscmaths -lfslio -lniftiio -lutils -lnewmat -lznz -lm -lz
 OBJS = lazy.o newimage.o generalio.o newimagefns.o complexvolume.o imfft.o
 NOBJS = ${OBJS} costfns.o
 
-TOBJS = ${NOBJS} testprog.o  
-SOBJS = ${NOBJS} skeletonapp.o  
+TOBJS = ${NOBJS} testprog.o
+SOBJS = ${NOBJS} skeletonapp.o
 
 TESTXFILES = testprog skeletonapp
-XFILES = 
+XFILES =
 
 all: libnewimage.a
 

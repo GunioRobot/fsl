@@ -81,7 +81,7 @@ namespace boost {
     template <typename PredecessorMap>
     bgl_named_params<PredecessorMap, vertex_predecessor_t, self>
     predecessor_map(const PredecessorMap& pmap) const {
-      typedef bgl_named_params<PredecessorMap, vertex_predecessor_t, self> 
+      typedef bgl_named_params<PredecessorMap, vertex_predecessor_t, self>
         Params;
       return Params(pmap, *this);
     }
@@ -89,7 +89,7 @@ namespace boost {
     template <typename RankMap>
     bgl_named_params<RankMap, vertex_rank_t, self>
     rank_map(const RankMap& pmap) const {
-      typedef bgl_named_params<RankMap, vertex_rank_t, self> 
+      typedef bgl_named_params<RankMap, vertex_rank_t, self>
         Params;
       return Params(pmap, *this);
     }
@@ -97,7 +97,7 @@ namespace boost {
     template <typename RootMap>
     bgl_named_params<RootMap, vertex_root_t, self>
     root_map(const RootMap& pmap) const {
-      typedef bgl_named_params<RootMap, vertex_root_t, self> 
+      typedef bgl_named_params<RootMap, vertex_root_t, self>
         Params;
       return Params(pmap, *this);
     }
@@ -154,7 +154,7 @@ namespace boost {
     template <typename Residual_CapacityMap>
     bgl_named_params<Residual_CapacityMap, edge_residual_capacity_t, self>
     residual_capacity_map(Residual_CapacityMap pmap) {
-      typedef bgl_named_params<Residual_CapacityMap, 
+      typedef bgl_named_params<Residual_CapacityMap,
         edge_residual_capacity_t, self>
         Params;
       return Params(pmap, *this);
@@ -163,7 +163,7 @@ namespace boost {
     template <typename ReverseMap>
     bgl_named_params<ReverseMap, edge_reverse_t, self>
     reverse_edge_map(ReverseMap pmap) {
-      typedef bgl_named_params<ReverseMap, 
+      typedef bgl_named_params<ReverseMap,
         edge_reverse_t, self>
         Params;
       return Params(pmap, *this);
@@ -236,7 +236,7 @@ namespace boost {
     template <typename Buffer>
     bgl_named_params<detail::wrap_ref<Buffer>, buffer_param_t, self>
     buffer(Buffer& b) const {
-      typedef bgl_named_params<detail::wrap_ref<Buffer>, buffer_param_t, self> 
+      typedef bgl_named_params<detail::wrap_ref<Buffer>, buffer_param_t, self>
         Params;
       return Params(detail::wrap_ref<Buffer>(b), *this);
     }
@@ -289,14 +289,14 @@ namespace boost {
       typedef bgl_named_params<AttractiveForce, attractive_force_t, self> Params;
       return Params(c, *this);
     }
-    
+
     template <typename RepulsiveForce>
     bgl_named_params<RepulsiveForce, repulsive_force_t, self>
     repulsive_force(const RepulsiveForce& c) {
       typedef bgl_named_params<RepulsiveForce, repulsive_force_t, self> Params;
       return Params(c, *this);
     }
-    
+
     template <typename ForcePairs>
     bgl_named_params<ForcePairs, force_pairs_t, self>
     force_pairs(const ForcePairs& c) {
@@ -316,7 +316,7 @@ namespace boost {
     iterations(const TP& c) {
       typedef bgl_named_params<TP, iterations_t, self> Params;
       return Params(c, *this);
-    }    
+    }
 
     template<typename TP>
     bgl_named_params<std::pair<TP, TP>, diameter_range_t, self>
@@ -572,15 +572,15 @@ namespace boost {
   iterations(const T& c) {
     typedef bgl_named_params<T, iterations_t> Params;
     return Params(c);
-  }    
-  
+  }
+
   template<typename T>
   bgl_named_params<std::pair<T, T>, diameter_range_t>
   diameter_range(const std::pair<T, T>& c) {
     typedef bgl_named_params<std::pair<T, T>, diameter_range_t> Params;
     return Params(c);
   }
-  
+
   template<typename T>
   bgl_named_params<std::pair<T, T>, learning_constant_range_t>
   learning_constant_range(const std::pair<T, T>& c) {
@@ -623,9 +623,9 @@ namespace boost {
     };
   } // namespace detail
 
-  template <class P, class Default> 
+  template <class P, class Default>
   const typename detail::choose_param_helper<P>::template result<Default>::type&
-  choose_param(const P& param, const Default& d) { 
+  choose_param(const P& param, const Default& d) {
     return detail::choose_param_helper<P>::apply(param, d);
   }
 
@@ -647,35 +647,35 @@ namespace boost {
 
       template <class P, class Graph, class Tag>
       static typename bind_<P, Graph, Tag>::const_result_type
-      const_apply(const P& p, const Graph&, Tag&) 
+      const_apply(const P& p, const Graph&, Tag&)
       { return p; }
 
       template <class P, class Graph, class Tag>
       static typename bind_<P, Graph, Tag>::result_type
-      apply(const P& p, Graph&, Tag&) 
+      apply(const P& p, Graph&, Tag&)
       { return p; }
     };
 
     struct choose_default_param {
       template <class P, class Graph, class Tag>
       struct bind_ {
-        typedef typename property_map<Graph, Tag>::type 
+        typedef typename property_map<Graph, Tag>::type
           result_type;
-        typedef typename property_map<Graph, Tag>::const_type 
+        typedef typename property_map<Graph, Tag>::const_type
           const_result_type;
-        typedef typename property_map<Graph, Tag>::const_type 
+        typedef typename property_map<Graph, Tag>::const_type
           type;
       };
 
       template <class P, class Graph, class Tag>
       static typename bind_<P, Graph, Tag>::const_result_type
-      const_apply(const P&, const Graph& g, Tag tag) { 
-        return get(tag, g); 
+      const_apply(const P&, const Graph& g, Tag tag) {
+        return get(tag, g);
       }
       template <class P, class Graph, class Tag>
       static typename bind_<P, Graph, Tag>::result_type
-      apply(const P&, Graph& g, Tag tag) { 
-        return get(tag, g); 
+      apply(const P&, Graph& g, Tag tag) {
+        return get(tag, g);
       }
     };
 
@@ -710,16 +710,16 @@ namespace boost {
     };
 
   } // namespace detail
-  
+
 
   // Use this function instead of choose_param() when you want
-  // to avoid requiring get(tag, g) when it is not used. 
+  // to avoid requiring get(tag, g) when it is not used.
   template <typename Param, typename Graph, typename PropertyTag>
   typename
     detail::choose_pmap_helper<Param,Graph,PropertyTag>::const_result_type
   choose_const_pmap(const Param& p, const Graph& g, PropertyTag tag)
-  { 
-    typedef typename 
+  {
+    typedef typename
       detail::choose_pmap_helper<Param,Graph,PropertyTag>::Selector Choice;
     return Choice::const_apply(p, g, tag);
   }
@@ -727,8 +727,8 @@ namespace boost {
   template <typename Param, typename Graph, typename PropertyTag>
   typename detail::choose_pmap_helper<Param,Graph,PropertyTag>::result_type
   choose_pmap(const Param& p, Graph& g, PropertyTag tag)
-  { 
-    typedef typename 
+  {
+    typedef typename
       detail::choose_pmap_helper<Param,Graph,PropertyTag>::Selector Choice;
     return Choice::apply(p, g, tag);
   }

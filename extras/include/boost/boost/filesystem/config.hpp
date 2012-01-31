@@ -7,7 +7,7 @@
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_CONFIG_HPP
 #define BOOST_FILESYSTEM_CONFIG_HPP
@@ -43,7 +43,7 @@
 #define BOOST_FILESYSTEM_DECL
 #endif
 
-//  enable automatic library variant selection  ------------------------------// 
+//  enable automatic library variant selection  ------------------------------//
 
 #if !defined(BOOST_FILESYSTEM_SOURCE) && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_FILESYSTEM_NO_LIB)
 //

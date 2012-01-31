@@ -29,10 +29,10 @@ namespace boost
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     // --------------------------------------------------------------------------
     // The following traits classes allow us to avoid the need for ptr_fun
-    // because the types of arguments and the result of a function can be 
+    // because the types of arguments and the result of a function can be
     // deduced.
     //
-    // In addition to the standard types defined in unary_function and 
+    // In addition to the standard types defined in unary_function and
     // binary_function, we add
     //
     // - function_type, the type of the function or function object itself.
@@ -44,7 +44,7 @@ namespace boost
     {
         template <class Operation>
         struct unary_traits_imp;
-        
+
         template <class Operation>
         struct unary_traits_imp<Operation*>
         {
@@ -75,7 +75,7 @@ namespace boost
             typedef typename Operation::first_argument_type  first_argument_type;
             typedef typename Operation::second_argument_type second_argument_type;
         };
-        
+
         template <class R, class A1, class A2>
         struct binary_traits_imp<R(*)(A1,A2)>
         {
@@ -86,7 +86,7 @@ namespace boost
             typedef A2 second_argument_type;
         };
     } // namespace detail
-    
+
     template <class Operation>
     struct unary_traits
     {
@@ -94,7 +94,7 @@ namespace boost
         typedef typename detail::unary_traits_imp<Operation*>::param_type    param_type;
         typedef typename detail::unary_traits_imp<Operation*>::result_type   result_type;
         typedef typename detail::unary_traits_imp<Operation*>::argument_type argument_type;
-    }; 
+    };
 
     template <class R, class A>
     struct unary_traits<R(*)(A)>
@@ -114,7 +114,7 @@ namespace boost
         typedef typename detail::binary_traits_imp<Operation*>::first_argument_type  first_argument_type;
         typedef typename detail::binary_traits_imp<Operation*>::second_argument_type second_argument_type;
     };
-    
+
     template <class R, class A1, class A2>
     struct binary_traits<R(*)(A1,A2)>
     {
@@ -137,8 +137,8 @@ namespace boost
         typedef const Operation&                  param_type;
         typedef typename Operation::result_type   result_type;
         typedef typename Operation::argument_type argument_type;
-    }; 
-    
+    };
+
     template <class Operation>
     struct binary_traits
     {
@@ -147,9 +147,9 @@ namespace boost
         typedef typename Operation::result_type          result_type;
         typedef typename Operation::first_argument_type  first_argument_type;
         typedef typename Operation::second_argument_type second_argument_type;
-    };    
+    };
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    
+
     // --------------------------------------------------------------------------
     // unary_negate, not1
     // --------------------------------------------------------------------------
@@ -220,7 +220,7 @@ namespace boost
     {
         return binary_negate<Predicate>(pred);
     }
-        
+
     // --------------------------------------------------------------------------
     // binder1st, bind1st
     // --------------------------------------------------------------------------
@@ -228,20 +228,20 @@ namespace boost
     class binder1st
         : public std::unary_function<typename binary_traits<Operation>::second_argument_type,
                                      typename binary_traits<Operation>::result_type>
-    {       
+    {
       public:
         binder1st(typename binary_traits<Operation>::param_type x,
                   typename call_traits<typename binary_traits<Operation>::first_argument_type>::param_type y)
             :
             op(x), value(y)
         {}
-        
+
         typename binary_traits<Operation>::result_type
         operator()(typename call_traits<typename binary_traits<Operation>::second_argument_type>::param_type x) const
         {
             return op(value, x);
         }
-        
+
       protected:
         typename binary_traits<Operation>::function_type op;
         typename binary_traits<Operation>::first_argument_type value;
@@ -281,13 +281,13 @@ namespace boost
             :
             op(x), value(y)
         {}
-        
+
         typename binary_traits<Operation>::result_type
         operator()(typename call_traits<typename binary_traits<Operation>::first_argument_type>::param_type x) const
         {
             return op(x, value);
-        }               
-        
+        }
+
       protected:
         typename binary_traits<Operation>::function_type op;
         typename binary_traits<Operation>::second_argument_type value;
@@ -335,7 +335,7 @@ namespace boost
     template <class S, class T, class A>
     class mem_fun1_t : public std::binary_function<T*, A, S>
     {
-      public:   
+      public:
         explicit mem_fun1_t(S (T::*p)(A))
             :
             ptr(p)
@@ -361,7 +361,7 @@ namespace boost
             return (p->*ptr)();
         }
       private:
-        S (T::*ptr)() const;        
+        S (T::*ptr)() const;
     };
 
     template <class S, class T, class A>
@@ -379,13 +379,13 @@ namespace boost
       private:
         S (T::*ptr)(A) const;
     };
-    
+
     template<class S, class T>
     inline mem_fun_t<S,T> mem_fun(S (T::*f)())
     {
         return mem_fun_t<S,T>(f);
     }
-    
+
     template<class S, class T, class A>
     inline mem_fun1_t<S,T,A> mem_fun(S (T::*f)(A))
     {
@@ -398,7 +398,7 @@ namespace boost
     {
         return const_mem_fun_t<S,T>(f);
     }
-    
+
     template<class S, class T, class A>
     inline const_mem_fun1_t<S,T,A> mem_fun(S (T::*f)(A) const)
     {
@@ -440,7 +440,7 @@ namespace boost
       private:
         S (T::*ptr)(A);
     };
-    
+
     template <class S, class T>
     class const_mem_fun_ref_t : public std::unary_function<const T&, S>
     {
@@ -449,7 +449,7 @@ namespace boost
             :
             ptr(p)
         {}
-        
+
         S operator()(const T &p) const
         {
             return (p.*ptr)();
@@ -474,7 +474,7 @@ namespace boost
       private:
         S (T::*ptr)(A) const;
     };
-    
+
     template<class S, class T>
     inline mem_fun_ref_t<S,T> mem_fun_ref(S (T::*f)())
     {
@@ -498,7 +498,7 @@ namespace boost
     inline const_mem_fun1_ref_t<S,T,A> mem_fun_ref(S (T::*f)(A) const)
     {
         return const_mem_fun1_ref_t<S,T,A>(f);
-    }   
+    }
 #endif // BOOST_NO_POINTER_TO_MEMBER_CONST
 
     // --------------------------------------------------------------------------
@@ -517,7 +517,7 @@ namespace boost
         {
             return func(x);
         }
-        
+
       private:
         Result (*func)(Arg);
     };
@@ -536,12 +536,12 @@ namespace boost
             :
             func(f)
         {}
-        
+
         Result operator()(typename call_traits<Arg1>::param_type x, typename call_traits<Arg2>::param_type y) const
         {
             return func(x,y);
         }
-        
+
       private:
         Result (*func)(Arg1, Arg2);
     };

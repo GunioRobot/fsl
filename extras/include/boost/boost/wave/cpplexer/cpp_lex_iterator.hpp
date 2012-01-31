@@ -1,8 +1,8 @@
 /*=============================================================================
     Boost.Wave: A Standard compliant C++ preprocessor library
 
-    Definition of the lexer iterator 
-    
+    Definition of the lexer iterator
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -29,7 +29,7 @@
 #if 0 != __COMO_VERSION__
 #define BOOST_WAVE_EOF_PREFIX static
 #else
-#define BOOST_WAVE_EOF_PREFIX 
+#define BOOST_WAVE_EOF_PREFIX
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,21 +39,21 @@ namespace cpplexer {
 namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  lex_iterator_functor_shim
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename TokenT> 
-class lex_iterator_functor_shim 
+template <typename TokenT>
+class lex_iterator_functor_shim
 {
 public:
     template <typename IteratorT>
-    lex_iterator_functor_shim(IteratorT const &first, IteratorT const &last, 
-            typename TokenT::position_type const &pos, 
+    lex_iterator_functor_shim(IteratorT const &first, IteratorT const &last,
+            typename TokenT::position_type const &pos,
             boost::wave::language_support language)
     :   functor_ptr(lex_input_interface<TokenT>
-            ::new_lexer(first, last, pos, language)) 
+            ::new_lexer(first, last, pos, language))
 #if 0 != __DECCXX_VER
       , eof()
 #endif // 0 != __DECCXX_VER
@@ -63,18 +63,18 @@ public:
     typedef TokenT result_type;
 
     BOOST_WAVE_EOF_PREFIX result_type const eof;
-    
-    result_type operator()() 
-    { 
+
+    result_type operator()()
+    {
         BOOST_ASSERT(0 != functor_ptr.get());
-        return functor_ptr->get(); 
+        return functor_ptr->get();
     }
     void set_position(typename TokenT::position_type const &pos)
     {
         BOOST_ASSERT(0 != functor_ptr.get());
         functor_ptr->set_position(pos);
     }
-    
+
 private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
@@ -91,12 +91,12 @@ typename lex_iterator_functor_shim<TokenT>::result_type const
 }   // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  lex_iterator
 //
 //      A generic C++ lexer interface class, which allows to plug in different
-//      lexer implementations. The interface between the lexer type used and 
-//      the preprocessor component depends on the token type only (template 
+//      lexer implementations. The interface between the lexer type used and
+//      the preprocessor component depends on the token type only (template
 //      parameter TokenT).
 //      Additionally, the following requirements apply:
 //
@@ -107,7 +107,7 @@ typename lex_iterator_functor_shim<TokenT>::result_type const
 //            eof token equivalent
 //          - the lexer should implement a constructor taking two iterators
 //            pointing to the beginning and the end of the input stream,
-//            a third parameter containing the name of the parsed input file 
+//            a third parameter containing the name of the parsed input file
 //            and a 4th parameter of the type boost::wave::language_support
 //            which specifies, which language subset should be supported (C++,
 //            C99, C++0x etc.).
@@ -115,27 +115,27 @@ typename lex_iterator_functor_shim<TokenT>::result_type const
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TokenT>
-class lex_iterator 
+class lex_iterator
 :   public boost::spirit::multi_pass<
         impl::lex_iterator_functor_shim<TokenT>,
         boost::wave::util::functor_input
     >
 {
     typedef impl::lex_iterator_functor_shim<TokenT> input_policy_type;
-    typedef 
-        boost::spirit::multi_pass<input_policy_type, 
+    typedef
+        boost::spirit::multi_pass<input_policy_type,
                 boost::wave::util::functor_input>
         base_type;
-    
+
 public:
     typedef TokenT token_type;
-    
+
     lex_iterator()
     {}
-    
+
     template <typename IteratorT>
-    lex_iterator(IteratorT const &first, IteratorT const &last, 
-            typename TokenT::position_type const &pos, 
+    lex_iterator(IteratorT const &first, IteratorT const &last,
+            typename TokenT::position_type const &pos,
             boost::wave::language_support language)
     :   base_type(input_policy_type(first, last, pos, language))
     {}
@@ -143,7 +143,7 @@ public:
     void set_position(typename TokenT::position_type const &pos)
     {
         typedef typename TokenT::position_type position_type;
-        
+
     // set the new position in the current token
     token_type& currtoken = base_type::get_input();
     position_type currpos = currtoken.get_position();
@@ -151,9 +151,9 @@ public:
         currpos.set_file(pos.get_file());
         currpos.set_line(pos.get_line());
         currtoken.set_position(currpos);
-        
+
     // set the new position for future tokens as well
-        if (token_type::string_type::npos != 
+        if (token_type::string_type::npos !=
             currtoken.get_value().find_first_of('\n'))
         {
             currpos.set_line(pos.get_line() + 1);

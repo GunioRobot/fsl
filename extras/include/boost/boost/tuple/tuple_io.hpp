@@ -6,7 +6,7 @@
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-// For more information, see http://www.boost.org 
+// For more information, see http://www.boost.org
 
 // ----------------------------------------------------------------------------
 
@@ -17,23 +17,23 @@
 // add to boost/config.hpp
 // for now
 # if defined __GNUC__
-#   if (__GNUC__ == 2 && __GNUC_MINOR__ <= 97) 
+#   if (__GNUC__ == 2 && __GNUC_MINOR__ <= 97)
 #define BOOST_NO_TEMPLATED_STREAMS
 #endif
 #endif // __GNUC__
 
 #if defined BOOST_NO_TEMPLATED_STREAMS
 #include <iostream>
-#else 
+#else
 #include <istream>
 #include <ostream>
-#endif  
+#endif
 
 #include "boost/tuple/tuple.hpp"
 
 // This is ugly: one should be using twoargument isspace since whitspace can
 // be locale dependent, in theory at least.
-// not all libraries implement have the two-arg version, so we need to 
+// not all libraries implement have the two-arg version, so we need to
 // use the one-arg one, which one should get with <cctype> but there seem
 // to be exceptions to this.
 
@@ -41,9 +41,9 @@
 
 #include <locale> // for two-arg isspace
 
-#else 
+#else
 
-#include <cctype> // for one-arg (old) isspace 
+#include <cctype> // for one-arg (old) isspace
 #include <ctype.h> // Metrowerks does not find one-arg isspace from cctype
 
 #endif
@@ -54,12 +54,12 @@ namespace tuples {
 namespace detail {
 
 class format_info {
-public:   
+public:
 
    enum manipulator_type { open, close, delimiter };
    BOOST_STATIC_CONSTANT(int, number_of_manipulators = delimiter + 1);
 private:
-   
+
    static int get_stream_index (int m)
    {
      static const int stream_index[number_of_manipulators]
@@ -69,15 +69,15 @@ private:
    }
 
    format_info(const format_info&);
-   format_info();   
+   format_info();
 
 
 public:
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
    static char get_manipulator(std::ios& i, manipulator_type m) {
-     char c = static_cast<char>(i.iword(get_stream_index(m))); 
-     
+     char c = static_cast<char>(i.iword(get_stream_index(m)));
+
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
@@ -94,13 +94,13 @@ public:
    }
 #else
    template<class CharType, class CharTrait>
-   static CharType get_manipulator(std::basic_ios<CharType, CharTrait>& i, 
+   static CharType get_manipulator(std::basic_ios<CharType, CharTrait>& i,
                                    manipulator_type m) {
      // The manipulators are stored as long.
      // A valid instanitation of basic_stream allows CharType to be any POD,
-     // hence, the static_cast may fail (it fails if long is not convertible 
+     // hence, the static_cast may fail (it fails if long is not convertible
      // to CharType
-     CharType c = static_cast<CharType>(i.iword(get_stream_index(m)) ); 
+     CharType c = static_cast<CharType>(i.iword(get_stream_index(m)) );
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
@@ -114,11 +114,11 @@ public:
 
 
    template<class CharType, class CharTrait>
-   static void set_manipulator(std::basic_ios<CharType, CharTrait>& i, 
+   static void set_manipulator(std::basic_ios<CharType, CharTrait>& i,
                                manipulator_type m, CharType c) {
      // The manipulators are stored as long.
      // A valid instanitation of basic_stream allows CharType to be any POD,
-     // hence, the static_cast may fail (it fails if CharType is not 
+     // hence, the static_cast may fail (it fails if CharType is not
      // convertible long.
       i.iword(get_stream_index(m)) = static_cast<long>(c);
    }
@@ -126,16 +126,16 @@ public:
 };
 
 } // end of namespace detail
- 
-template<class CharType>    
+
+template<class CharType>
 class tuple_manipulator {
   const detail::format_info::manipulator_type mt;
   CharType f_c;
 public:
-  explicit tuple_manipulator(detail::format_info::manipulator_type m, 
+  explicit tuple_manipulator(detail::format_info::manipulator_type m,
                              const char c = 0)
      : mt(m), f_c(c) {}
-  
+
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
   void set(std::ios &io) const {
      detail::format_info::set_manipulator(io, mt, f_c);
@@ -185,7 +185,7 @@ operator>>(std::basic_istream<CharType, CharTrait>& i, const tuple_manipulator<C
 }
 
 #endif   // BOOST_NO_TEMPLATED_STREAMS
-   
+
 template<class CharType>
 inline tuple_manipulator<CharType> set_open(const CharType c) {
    return tuple_manipulator<CharType>(detail::format_info::open, c);
@@ -203,16 +203,16 @@ inline tuple_manipulator<CharType> set_delimiter(const CharType c) {
 
 
 
-   
-   
+
+
 // -------------------------------------------------------------
 // printing tuples to ostream in format (a b c)
 // parentheses and space are defaults, but can be overriden with manipulators
 // set_open, set_close and set_delimiter
-   
+
 namespace detail {
 
-// Note: The order of the print functions is critical 
+// Note: The order of the print functions is critical
 // to let a conforming compiler  find and select the correct one.
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
@@ -223,15 +223,15 @@ inline std::ostream& print(std::ostream& o, const cons<T1, null_type>& t) {
   return o << t.head;
 }
 #endif // BOOST_NO_TEMPLATED_STREAMS
- 
+
 inline std::ostream& print(std::ostream& o, const null_type&) { return o; }
 
 template<class T1, class T2>
-inline std::ostream& 
+inline std::ostream&
 print(std::ostream& o, const cons<T1, T2>& t) {
-  
+
   const char d = format_info::get_manipulator(o, format_info::delimiter);
-   
+
   o << t.head;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -239,7 +239,7 @@ print(std::ostream& o, const cons<T1, T2>& t) {
     return o;
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   o << d;
-  
+
   return print(o, t.tail );
 
 }
@@ -250,25 +250,25 @@ print(std::ostream& o, const cons<T1, T2>& t) {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<class CharType, class CharTrait, class T1>
-inline std::basic_ostream<CharType, CharTrait>& 
+inline std::basic_ostream<CharType, CharTrait>&
 print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, null_type>& t) {
   return o << t.head;
 }
 #endif  // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
- 
+
 template<class CharType, class CharTrait>
-inline std::basic_ostream<CharType, CharTrait>& 
-print(std::basic_ostream<CharType, CharTrait>& o, const null_type&) { 
-  return o; 
+inline std::basic_ostream<CharType, CharTrait>&
+print(std::basic_ostream<CharType, CharTrait>& o, const null_type&) {
+  return o;
 }
 
 template<class CharType, class CharTrait, class T1, class T2>
-inline std::basic_ostream<CharType, CharTrait>& 
+inline std::basic_ostream<CharType, CharTrait>&
 print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, T2>& t) {
-  
+
   const CharType d = format_info::get_manipulator(o, format_info::delimiter);
-   
+
   o << t.head;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -288,15 +288,15 @@ print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, T2>& t) {
 template<class T1, class T2>
 inline std::ostream& operator<<(std::ostream& o, const cons<T1, T2>& t) {
   if (!o.good() ) return o;
- 
-  const char l = 
+
+  const char l =
     detail::format_info::get_manipulator(o, detail::format_info::open);
-  const char r = 
+  const char r =
     detail::format_info::get_manipulator(o, detail::format_info::close);
-   
+
   o << l;
-  
-  detail::print(o, t);  
+
+  detail::print(o, t);
 
   o << r;
 
@@ -306,19 +306,19 @@ inline std::ostream& operator<<(std::ostream& o, const cons<T1, T2>& t) {
 #else
 
 template<class CharType, class CharTrait, class T1, class T2>
-inline std::basic_ostream<CharType, CharTrait>& 
-operator<<(std::basic_ostream<CharType, CharTrait>& o, 
+inline std::basic_ostream<CharType, CharTrait>&
+operator<<(std::basic_ostream<CharType, CharTrait>& o,
            const cons<T1, T2>& t) {
   if (!o.good() ) return o;
- 
-  const CharType l = 
-    detail::format_info::get_manipulator(o, detail::format_info::open);
-  const CharType r = 
-    detail::format_info::get_manipulator(o, detail::format_info::close);
-   
-  o << l;   
 
-  detail::print(o, t);  
+  const CharType l =
+    detail::format_info::get_manipulator(o, detail::format_info::open);
+  const CharType r =
+    detail::format_info::get_manipulator(o, detail::format_info::close);
+
+  o << l;
+
+  detail::print(o, t);
 
   o << r;
 
@@ -326,7 +326,7 @@ operator<<(std::basic_ostream<CharType, CharTrait>& o,
 }
 #endif // BOOST_NO_TEMPLATED_STREAMS
 
-   
+
 // -------------------------------------------------------------
 // input stream operators
 
@@ -334,7 +334,7 @@ namespace detail {
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
 
-inline std::istream& 
+inline std::istream&
 extract_and_check_delimiter(
   std::istream& is, format_info::manipulator_type del)
 {
@@ -343,42 +343,42 @@ extract_and_check_delimiter(
 #if defined (BOOST_NO_STD_LOCALE)
   const bool is_delimiter = !isspace(d);
 #else
-  const bool is_delimiter = (!std::isspace(d, is.getloc()) );            
+  const bool is_delimiter = (!std::isspace(d, is.getloc()) );
 #endif
 
   char c;
-  if (is_delimiter) { 
-    is >> c; 
+  if (is_delimiter) {
+    is >> c;
     if (c!=d) {
       is.setstate(std::ios::failbit);
-    } 
+    }
   }
   return is;
 }
 
 
-// Note: The order of the read functions is critical to let a 
+// Note: The order of the read functions is critical to let a
 // (conforming?) compiler find and select the correct one.
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<class T1>
-inline  std::istream & 
+inline  std::istream &
 read (std::istream &is, cons<T1, null_type>& t1) {
 
-  if (!is.good()) return is;   
-   
+  if (!is.good()) return is;
+
   return is >> t1.head ;
 }
 #else
 inline std::istream& read(std::istream& i, const null_type&) { return i; }
 #endif // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-   
+
 template<class T1, class T2>
-inline std::istream& 
+inline std::istream&
 read(std::istream &is, cons<T1, T2>& t1) {
 
   if (!is.good()) return is;
-   
+
   is >> t1.head;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -393,7 +393,7 @@ read(std::istream &is, cons<T1, T2>& t1) {
 
 } // end namespace detail
 
-inline std::istream& 
+inline std::istream&
 operator>>(std::istream &is, null_type&) {
 
   if (!is.good() ) return is;
@@ -406,15 +406,15 @@ operator>>(std::istream &is, null_type&) {
 
 
 template<class T1, class T2>
-inline std::istream& 
+inline std::istream&
 operator>>(std::istream& is, cons<T1, T2>& t1) {
 
   if (!is.good() ) return is;
 
   detail::extract_and_check_delimiter(is, detail::format_info::open);
-                      
+
   detail::read(is, t1);
-   
+
   detail::extract_and_check_delimiter(is, detail::format_info::close);
 
   return is;
@@ -425,7 +425,7 @@ operator>>(std::istream& is, cons<T1, T2>& t1) {
 #else
 
 template<class CharType, class CharTrait>
-inline std::basic_istream<CharType, CharTrait>& 
+inline std::basic_istream<CharType, CharTrait>&
 extract_and_check_delimiter(
   std::basic_istream<CharType, CharTrait> &is, format_info::manipulator_type del)
 {
@@ -437,42 +437,42 @@ extract_and_check_delimiter(
   const bool is_delimiter = !std::use_facet< std::ctype< CharType > >
     (is.getloc() ).is( std::ctype_base::space, d);
 #else
-  const bool is_delimiter = (!std::isspace(d, is.getloc()) );            
+  const bool is_delimiter = (!std::isspace(d, is.getloc()) );
 #endif
 
   CharType c;
-  if (is_delimiter) { 
+  if (is_delimiter) {
     is >> c;
-    if (c!=d) { 
+    if (c!=d) {
       is.setstate(std::ios::failbit);
     }
   }
   return is;
 }
 
-   
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<class CharType, class CharTrait, class T1>
-inline  std::basic_istream<CharType, CharTrait> & 
+inline  std::basic_istream<CharType, CharTrait> &
 read (std::basic_istream<CharType, CharTrait> &is, cons<T1, null_type>& t1) {
 
-  if (!is.good()) return is;   
-   
-  return is >> t1.head; 
+  if (!is.good()) return is;
+
+  return is >> t1.head;
 }
 #else
 template<class CharType, class CharTrait>
-inline std::basic_istream<CharType, CharTrait>& 
+inline std::basic_istream<CharType, CharTrait>&
 read(std::basic_istream<CharType, CharTrait>& i, const null_type&) { return i; }
 
 #endif // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template<class CharType, class CharTrait, class T1, class T2>
-inline std::basic_istream<CharType, CharTrait>& 
+inline std::basic_istream<CharType, CharTrait>&
 read(std::basic_istream<CharType, CharTrait> &is, cons<T1, T2>& t1) {
 
   if (!is.good()) return is;
-   
+
   is >> t1.head;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -489,7 +489,7 @@ read(std::basic_istream<CharType, CharTrait> &is, cons<T1, T2>& t1) {
 
 
 template<class CharType, class CharTrait>
-inline std::basic_istream<CharType, CharTrait>& 
+inline std::basic_istream<CharType, CharTrait>&
 operator>>(std::basic_istream<CharType, CharTrait> &is, null_type&) {
 
   if (!is.good() ) return is;
@@ -501,15 +501,15 @@ operator>>(std::basic_istream<CharType, CharTrait> &is, null_type&) {
 }
 
 template<class CharType, class CharTrait, class T1, class T2>
-inline std::basic_istream<CharType, CharTrait>& 
+inline std::basic_istream<CharType, CharTrait>&
 operator>>(std::basic_istream<CharType, CharTrait>& is, cons<T1, T2>& t1) {
 
   if (!is.good() ) return is;
 
   detail::extract_and_check_delimiter(is, detail::format_info::open);
-                      
+
   detail::read(is, t1);
-   
+
   detail::extract_and_check_delimiter(is, detail::format_info::close);
 
   return is;

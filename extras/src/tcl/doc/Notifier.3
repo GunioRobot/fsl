@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: Notifier.3,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH Notifier 3 8.1 Tcl "Tcl Library Procedures"
 .BS
@@ -65,7 +65,7 @@ int
 int
 \fBTcl_GetServiceMode\fR()
 .sp
-int		
+int
 \fBTcl_SetServiceMode\fR(\fImode\fR)
 .VE
 
@@ -143,7 +143,7 @@ Threaded applications work in a
 similar manner, except that there is a separate event queue for
 each thread containing a Tcl interpreter.
 \fBTcl_QueueEvent\fR is used (primarily
-by event sources) to add events to the event queue and 
+by event sources) to add events to the event queue and
 \fBTcl_DeleteEvents\fR is used to remove events from the queue without
 processing them.  In a threaded application, \fBTcl_QueueEvent\fR adds
 an event to the current thread's queue, and \fBTcl_ThreadQueueEvent\fR
@@ -457,7 +457,7 @@ available on all platforms, and \fBTcl_CreateFileHandler\fR and
 \fBTcl_DeleteFileHandler\fR, which are Unix-specific.  Most of these
 procedures are generic, in that they are the same for all notifiers.
 However, eight of the procedures are notifier-dependent:
-\fBTcl_InitNotifier\fR, \fBTcl_AlertNotifier\fR, \fBTcl_FinalizeNotifier\fR, 
+\fBTcl_InitNotifier\fR, \fBTcl_AlertNotifier\fR, \fBTcl_FinalizeNotifier\fR,
 \fBTcl_SetTimer\fR, \fBTcl_Sleep\fR, \fBTcl_WaitForEvent\fR,
 \fBTcl_CreateFileHandler\fR and \fBTcl_DeleteFileHandler\fR.  To
 support a new platform or to integrate Tcl with an

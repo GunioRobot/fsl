@@ -30,7 +30,7 @@
 
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
-    defined(BOOST_NO_STD_LOCALE) 
+    defined(BOOST_NO_STD_LOCALE)
 #define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
@@ -119,7 +119,7 @@ namespace boost
             typedef wchar_t type;
         };
     }
-    
+
     namespace detail // stream wrapper for handling lexical conversions
     {
         template<typename Target, typename Source>
@@ -160,7 +160,7 @@ namespace boost
 // GCC 2.9x lacks std::char_traits<>::eof().
 // We use BOOST_NO_STD_WSTRING to filter out STLport and libstdc++-v3
 // configurations, which do provide std::char_traits<>::eof().
-    
+
                            EOF;
 #else
                            std::char_traits<char_type>::eof();

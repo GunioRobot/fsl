@@ -168,7 +168,7 @@ for( i=0; i<100; i++ )
 		else if( dir > 3 )
 			di = 1.0 - (1.0 - di) * (1.0 - di);
 		else if( dir > 1 )
-			di = 0.5 * di + 0.5; 
+			di = 0.5 * di + 0.5;
 		else
 			di = (y0 - y)/(yh - yl);
 		dir += 1;

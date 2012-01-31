@@ -4,7 +4,7 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
     Authors:    Brian Patenaude
-                David Flitney 
+                David Flitney
 
     FMRIB Image Analysis Group
 
@@ -49,7 +49,7 @@ public:
   float inqOpacity() const { return m_lower; }
   void  setGlyphScaleFactor(float f);
   float inqGlyphScaleFactor() const { return m_glyphScaleFactor; }
-  
+
   virtual ~VTKMeshSurface();
 
   vtkActor* getActor() { return m_actor; }
@@ -57,7 +57,7 @@ public:
 
 private:
   VTKMeshSurface(vtkRenderer *, const std::string&, float);
-  
+
   void forceRedraw();
 
   float m_warpFactor, m_glyphScaleFactor;

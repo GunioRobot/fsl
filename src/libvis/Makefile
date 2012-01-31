@@ -11,11 +11,11 @@ USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_PROB} -L${LIB_GD} -L${LIB_GDC} -L${LIB_PNG}
 
 LIBS = -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lfslio -lniftiio -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
 
-PLOTOBJS =  miscplot.o  
+PLOTOBJS =  miscplot.o
 
 PICOBJS  =  miscpic.o
 
-TOBJS = test.o  
+TOBJS = test.o
 
 TESTXFILES = test
 

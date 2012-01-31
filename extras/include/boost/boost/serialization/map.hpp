@@ -10,7 +10,7 @@
 // serialization/map.hpp:
 // serialization for stl map templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -34,7 +34,7 @@
 #define STD std
 #endif
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class Type, class Key, class Compare, class Allocator >
@@ -44,8 +44,8 @@ inline void save(
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::map<Key, Type, Compare, Allocator> 
+        Archive,
+        STD::map<Key, Type, Compare, Allocator>
     >(ar, t);
 }
 
@@ -86,8 +86,8 @@ inline void save(
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::multimap<Key, Type, Compare, Allocator> 
+        Archive,
+        STD::multimap<Key, Type, Compare, Allocator>
     >(ar, t);
 }
 
@@ -101,10 +101,10 @@ inline void load(
         Archive,
         STD::multimap<Key, Type, Compare, Allocator>,
         boost::serialization::stl::archive_input_multimap<
-            Archive, STD::multimap<Key, Type, Compare, Allocator> 
+            Archive, STD::multimap<Key, Type, Compare, Allocator>
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::multimap<Key, Type, Compare, Allocator> 
+            STD::multimap<Key, Type, Compare, Allocator>
         >
     >(ar, t);
 }

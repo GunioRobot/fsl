@@ -212,7 +212,7 @@ n = 0;
 thresh = 3.0 * MACHEP;
 do
 	{
-	
+
 	xk = -( x * k1 * k2 )/( k3 * k4 );
 	pk = pkm1 +  pkm2 * xk;
 	qk = qkm1 +  qkm2 * xk;
@@ -305,7 +305,7 @@ n = 0;
 thresh = 3.0 * MACHEP;
 do
 	{
-	
+
 	xk = -( z * k1 * k2 )/( k3 * k4 );
 	pk = pkm1 +  pkm2 * xk;
 	qk = qkm1 +  qkm2 * xk;
@@ -385,7 +385,7 @@ while( fabs(v) > z )
 	u = (n - b) * x / n;
 	t *= u;
 	v = t / (a + n);
-	s += v; 
+	s += v;
 	n += 1.0;
 	}
 s += t1;

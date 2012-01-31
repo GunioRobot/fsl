@@ -33,7 +33,7 @@ class QToolButton;
 
 //! @brief Behavioural  implementation of drawing palette toolbar
 //! @author Dave Flitney
-class DrawWidget : public DrawToolbarBase, 
+class DrawWidget : public DrawToolbarBase,
 		   public DrawSettingsObserver,
 		   public BriConObserver,
 		   public OverlayListObserver
@@ -43,24 +43,24 @@ public:
 
   DrawWidget(QWidget *parent, OverlayList::Handle ol, DrawSettings::Handle ds);
   virtual ~DrawWidget();
- 
+
   void update(const OverlayList* ol, OverlayListMsg msg);
   void update(const BriCon* b);
   void update(const DrawSettings*);
 
   void updateControls();
   void setCurComboBoxColor(void);
-  
+
 signals:
   void undoButtonClicked();
   void redoButtonClicked();
 
 private:
-  
+
   QToolButton *m_lutColInd;
-  
+
   QPopupMenu *popUpMenu;
-    
+
   OverlayList::Handle  m_overlayList;
   BriCon::Handle       m_bricon;
   DrawSettings::Handle m_drawSettings;

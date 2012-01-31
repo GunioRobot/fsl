@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvImg.c --
  *
  *	This file implements image items for canvas widgets.
@@ -273,7 +273,7 @@ ImageCoords(interp, canvas, itemPtr, objc, objv)
 	ComputeImageBbox(canvas, imgPtr);
     } else {
 	char buf[64];
-	
+
 	sprintf(buf, "wrong # coordinates: expected 0 or 2, got %d", objc);
 	Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	return TCL_ERROR;
@@ -887,7 +887,7 @@ ImageChangedProc(clientData, x, y, width, height, imgWidth, imgHeight)
 	height = imgHeight;
 	Tk_CanvasEventuallyRedraw(imgPtr->canvas, imgPtr->header.x1,
 		imgPtr->header.y1, imgPtr->header.x2, imgPtr->header.y2);
-    } 
+    }
     ComputeImageBbox(imgPtr->canvas, imgPtr);
     Tk_CanvasEventuallyRedraw(imgPtr->canvas, imgPtr->header.x1 + x,
 	    imgPtr->header.y1 + y, (int) (imgPtr->header.x1 + x + width),

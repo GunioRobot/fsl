@@ -14,7 +14,7 @@
 #include "tracker.h"
 
 Cursor::Cursor(CursorObserver *o,
-               short xMax, short yMax, short zMax, short vMax): 
+               short xMax, short yMax, short zMax, short vMax):
                m_xMax(xMax), m_yMax(yMax), m_zMax(zMax),m_vMax(vMax),
                m_repaint(false)
 {
@@ -43,14 +43,14 @@ Cursor::Cursor(short x, short y, short z, short v,
 //! @param maxY the extent of the cursor [0,maxY] in y
 //! @param maxZ the extent of the cursor [0,maxZ] in z
 //! @param maxV the extent of the cursor [0,maxV] in volumes
-Cursor::Handle Cursor::create(CursorObserver *o, 
-                              short maxX, short maxY, short maxZ, short maxV) 
+Cursor::Handle Cursor::create(CursorObserver *o,
+                              short maxX, short maxY, short maxZ, short maxV)
 {
   STATIC_TRACKER("Cursor::create(...) first form");
 
   Handle c = Handle(new Cursor(o,maxX,maxY,maxZ,maxV));
   c->setCountedThis(c);
-      
+
   return c;
 }
 
@@ -59,13 +59,13 @@ Cursor::Handle Cursor::create(CursorObserver *o,
 //! @param maxY the extent of the cursor [0,maxY] in y
 //! @param maxZ the extent of the cursor [0,maxZ] in z
 //! @param maxV the extent of the cursor [0,maxV] in volumes
-Cursor::Handle Cursor::create(short maxX, short maxY, short maxZ, short maxV) 
+Cursor::Handle Cursor::create(short maxX, short maxY, short maxZ, short maxV)
 {
   STATIC_TRACKER("Cursor::create(...) second form");
 
   Handle c = Handle(new Cursor(0, 0, 0, 0, maxX,maxY,maxZ,maxV));
   c->setCountedThis(c);
-      
+
   return c;
 }
 
@@ -99,7 +99,7 @@ void Cursor::setCursorRepaint(short x, short y, short z)
 
 void Cursor::repaint()
 {
-  TRACKER("Cursor::repaint()");  
+  TRACKER("Cursor::repaint()");
 
   m_repaint = true;
   notify();
@@ -151,7 +151,7 @@ void Cursor::setVolume(short v)
 }
 
 //! @brief Attach a view to this cursor
-//! @param o handle of a view which requires notification of any 
+//! @param o handle of a view which requires notification of any
 //!          changes to this cursor
 void Cursor::attach(CursorObserver *o)
 {
@@ -186,7 +186,7 @@ void Cursor::notify() const
   TRACKER("Cursor::notify()");
   MESSAGE(QString("Notifying %1 observers").arg(m_observers.size()));
 
-  std::for_each(m_observers.begin(), m_observers.end(), 
+  std::for_each(m_observers.begin(), m_observers.end(),
 		Update(countedThis()));
 }
 

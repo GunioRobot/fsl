@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_archive_impl.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -46,7 +46,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_archive_impl
         shared_ptr<void> m_helper;
         const boost::serialization::extended_type_info * m_eti;
         helper_type(
-            shared_ptr<void> h, 
+            shared_ptr<void> h,
             const boost::serialization::extended_type_info * const eti
         ) :
             m_helper(h),
@@ -56,7 +56,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_archive_impl
 
     struct helper_compare {
         bool operator()(
-            const helper_type & lhs, 
+            const helper_type & lhs,
             const helper_type & rhs
         ) const {
             return lhs.m_eti < rhs.m_eti;

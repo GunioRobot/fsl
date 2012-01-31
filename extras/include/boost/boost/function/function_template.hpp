@@ -563,7 +563,7 @@ namespace boost {
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
            typename Allocator>
   typename BOOST_FUNCTION_FUNCTION<
-      R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS, 
+      R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS,
       Allocator>::result_type
    BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS,
 
@@ -572,7 +572,7 @@ namespace boost {
   {
     if (this->empty())
       boost::throw_exception(bad_function_call());
-    
+
     return invoker(this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
   }
 #endif

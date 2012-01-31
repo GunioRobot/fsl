@@ -26,16 +26,16 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     // default
     //////////////////////////////////////////////////////////////////////////
-    
+
     template< typename C >
     struct range_result_iterator
     {
-        typedef BOOST_RANGE_DEDUCED_TYPENAME 
-            mpl::if_< BOOST_DEDUCED_TYPENAME is_const<C>::type, 
+        typedef BOOST_RANGE_DEDUCED_TYPENAME
+            mpl::if_< BOOST_DEDUCED_TYPENAME is_const<C>::type,
                       BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type,
                       BOOST_DEDUCED_TYPENAME range_iterator<C>::type >::type type;
     };
-    
+
 } // namespace boost
 
 //#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

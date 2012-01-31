@@ -3,16 +3,16 @@ include ${FSLCONFDIR}/default.mk
 
 PROJNAME = first_lib
 
-USRINCFLAGS = -I${INC_NEWMAT} 
+USRINCFLAGS = -I${INC_NEWMAT}
 
-USRLDFLAGS = -L${LIB_NEWMAT} 
+USRLDFLAGS = -L${LIB_NEWMAT}
 
 
-LIBS= -lMVdisc -lmeshUtils -lfslvtkIO -lfirst_lib -lshapeModel -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz 
+LIBS= -lMVdisc -lmeshUtils -lfslvtkIO -lfirst_lib -lshapeModel -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lfslio -lniftiio -lznz -lnewmat  -lutils -lz
 
 XFILES=
 
-SCRIPTS = 
+SCRIPTS =
 
 all: ${XFILES} first_lib.a
 

@@ -11,7 +11,7 @@ namespace Utilities {
 
   void OptionParser::describe_options()
   {
-    for(Options::iterator option = options_.begin(); option != options_.end(); 
+    for(Options::iterator option = options_.begin(); option != options_.end();
 	option++)
       {
 	if((*option)->compulsory() && (*option)->visible()) {
@@ -25,7 +25,7 @@ namespace Utilities {
       }
 
 
-    for(Options::iterator optionx = options_.begin(); optionx != options_.end(); 
+    for(Options::iterator optionx = options_.begin(); optionx != options_.end();
 	optionx++)
       {
 	if(!(*optionx)->compulsory() && (*optionx)->visible()) {

@@ -55,7 +55,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 *p = s;
         }
-        
+
     public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -411,7 +411,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return;
             data ().erase (it);
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -541,7 +541,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base2<iterator2> reverse_iterator2;
 
         // Element lookup
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             const_subiterator_type it (data ().lower_bound (layout_type::address (i, size1_, j, size2_)));
             const_subiterator_type it_end (data ().end ());
@@ -570,7 +570,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return const_iterator1 (*this, rank, i, j, it);
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             subiterator_type it (data ().lower_bound (layout_type::address (i, size1_, j, size2_)));
             subiterator_type it_end (data ().end ());
@@ -599,7 +599,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return iterator1 (*this, rank, i, j, it);
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             const_subiterator_type it (data ().lower_bound (layout_type::address (i, size1_, j, size2_)));
             const_subiterator_type it_end (data ().end ());
@@ -628,7 +628,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return const_iterator2 (*this, rank, i, j, it);
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             subiterator_type it (data ().lower_bound (layout_type::address (i, size1_, j, size2_)));
             subiterator_type it_end (data ().end ());
@@ -1479,7 +1479,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return;
             (*itv).second.erase (it);
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -1602,7 +1602,7 @@ namespace boost { namespace numeric { namespace ublas {
             subiterator_type it ((*itv).second.find (element2));
             BOOST_UBLAS_CHECK (it != (*itv).second.end (), bad_index ());
             BOOST_UBLAS_CHECK ((*it).first == element2, internal_logic ());    // broken map
-            
+
             return it->second;
         }
 
@@ -1617,7 +1617,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base2<iterator2> reverse_iterator2;
 
         // Element lookup
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             BOOST_UBLAS_CHECK (data ().begin () != data ().end (), internal_logic ());
             for (;;) {
@@ -1656,7 +1656,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             BOOST_UBLAS_CHECK (data ().begin () != data ().end (), internal_logic ());
             for (;;) {
@@ -1695,7 +1695,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             BOOST_UBLAS_CHECK (data ().begin () != data ().end (), internal_logic ());
             for (;;) {
@@ -1734,7 +1734,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             BOOST_UBLAS_CHECK (data ().begin () != data ().end (), internal_logic ());
             for (;;) {
@@ -2554,7 +2554,7 @@ namespace boost { namespace numeric { namespace ublas {
             index1_data_ (m.index1_data_), index2_data_ (m.index2_data_), value_data_ (m.value_data_) {
             storage_invariants ();
         }
-         
+
         BOOST_UBLAS_INLINE
         compressed_matrix (const coordinate_matrix<T, L, IB, IA, TA> &m):
             matrix_container<self_type> (),
@@ -2609,7 +2609,7 @@ namespace boost { namespace numeric { namespace ublas {
         size_type nnz () const {
             return filled2_;
         }
-        
+
         // Storage accessors
         BOOST_UBLAS_INLINE
         static size_type index_base () {
@@ -2814,7 +2814,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             storage_invariants ();
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -2993,7 +2993,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base2<iterator2> reverse_iterator2;
 
         // Element lookup
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
                 array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
@@ -3033,7 +3033,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
                 array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
@@ -3073,7 +3073,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
                 array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
@@ -3113,7 +3113,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
                 array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
@@ -3820,7 +3820,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (filled2_ <= capacity_, internal_logic ());
             BOOST_UBLAS_CHECK (index1_data_ [filled1_ - 1] == k_based (filled2_), internal_logic ());
         }
-        
+
         size_type size1_;
         size_type size2_;
         array_size_type capacity_;
@@ -4061,7 +4061,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_pointer p = find_element (i, j);
             if (p)
                 return *p;
-            else 
+            else
                 return zero_;
         }
         BOOST_UBLAS_INLINE
@@ -4120,7 +4120,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             storage_invariants ();
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
@@ -4254,7 +4254,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // sort new elements and merge
                 std::sort (iunsorted, ita.end ());
                 std::inplace_merge (ita.begin (), iunsorted, ita.end ());
-                
+
                 // sum duplicates with += and remove
                 array_size_type filled = 0;
                 for (array_size_type i = 1; i < filled_; ++ i) {
@@ -4283,7 +4283,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type element1 = layout_type::element1 (i, size1_, j, size2_);
             size_type element2 = layout_type::element2 (i, size1_, j, size2_);
             // must maintain sort order
-            BOOST_UBLAS_CHECK (sorted_ && 
+            BOOST_UBLAS_CHECK (sorted_ &&
                     (filled_ == 0 ||
                     index1_data_ [filled_ - 1] < k_based (element1) ||
                     (index1_data_ [filled_ - 1] == k_based (element1) && index2_data_ [filled_ - 1] < k_based (element2)))
@@ -4334,7 +4334,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base2<iterator2> reverse_iterator2;
 
         // Element lookup
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             sort ();
             for (;;) {
@@ -4375,7 +4375,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             sort ();
             for (;;) {
@@ -4416,7 +4416,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             sort ();
             for (;;) {
@@ -4457,7 +4457,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             sort ();
             for (;;) {

@@ -10,7 +10,7 @@
 // on runtime typing (rtti - typeid) but uses a user specified string
 // as the portable class identifier.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -39,7 +39,7 @@ namespace serialization {
 
 namespace detail {
 
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 : 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 :
     public extended_type_info
 {
 private:
@@ -61,7 +61,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 // layer to fold T and const T into the same table entry.
 template<class T>
-class extended_type_info_typeid_1 : 
+class extended_type_info_typeid_1 :
     public detail::extended_type_info_typeid_0
 {
 private:
@@ -69,7 +69,7 @@ private:
         return typeid(T);
     }
 protected:
-    // private constructor to inhibit any existence other than the 
+    // private constructor to inhibit any existence other than the
     // static one
     extended_type_info_typeid_1() :
         detail::extended_type_info_typeid_0()
@@ -106,7 +106,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 template<class T>
-class extended_type_info_typeid : 
+class extended_type_info_typeid :
     public detail::extended_type_info_typeid_1<const T>
 {};
 
@@ -114,7 +114,7 @@ class extended_type_info_typeid :
 } // namespace boost
 
 ///////////////////////////////////////////////////////////////////////////////
-// If no other implementation has been designated as default, 
+// If no other implementation has been designated as default,
 // use this one.  To use this implementation as the default, specify it
 // before any of the other headers.
 

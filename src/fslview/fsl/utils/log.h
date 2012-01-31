@@ -9,7 +9,7 @@ either sharing directories or not. However, Logs can not share log files.
 Or you can work with the LogSIngleton class.
 
 A Log can open new logfiles in the same log directory or start on an
-entirely new directory. You can stream directly to a Log with flags   
+entirely new directory. You can stream directly to a Log with flags
 determining streaming to the Logfile and/or cout. */
 
 /*  CCOPYRIGHT  */
@@ -44,7 +44,7 @@ namespace Utilities{
     public:
       Log():logEstablished(false) {}
 
-      Log(const string& pdirname, const string& plogfilename = "logfile", bool pstream_to_logfile = true, bool pstream_to_cout = false, bool makedir = true):logEstablished(false) 
+      Log(const string& pdirname, const string& plogfilename = "logfile", bool pstream_to_logfile = true, bool pstream_to_cout = false, bool makedir = true):logEstablished(false)
 	{
 	  if(makedir)
 	    makeDir(pdirname, plogfilename, pstream_to_logfile, pstream_to_cout);
@@ -63,7 +63,7 @@ namespace Utilities{
 
       /** Sets an existing directory to place results into. */
       /** The stream_to* variables define the streaming behaviour */
-      void setDir(const string& pdirname, const string& plogfilename = "logfile", bool pstream_to_logfile = true, bool pstream_to_cout = false, ios_base::openmode mode=ios::app); 
+      void setDir(const string& pdirname, const string& plogfilename = "logfile", bool pstream_to_logfile = true, bool pstream_to_cout = false, ios_base::openmode mode=ios::app);
 
       /** Sets an existing directory to place results into. */
       /** If does not exist then makes it. */
@@ -80,27 +80,27 @@ namespace Utilities{
       /** returns passed in filename appended onto the end of the dir name */
       const string appendDir(const string& filename) const;
 
-      ofstream& get_logfile_ofstream() { return  logfileout;}     
+      ofstream& get_logfile_ofstream() { return  logfileout;}
 
-      inline void flush() { 
+      inline void flush() {
 	if(stream_to_logfile)
 	  logfileout.flush();
-	
+
 	if(stream_to_cout)
 	  cout.flush();
-      } 
+      }
 
       /** allows streaming into cout and/or logfile depending upon the */
       /** stream_to_cout and stream_to_logfile respectively */
       /** use like a normal ostream, e.g. log.str() << "hello" << endl */
       /** NOTE: can simply stream straight to Log instead, e.g. log << "hello" << endl */
       Log& str();
-            
+
       /** sets whether or not you stream to cout */
       void set_stream_to_cout(bool in = true) { stream_to_cout = in; }
 
       /** sets whether or not you stream to logfile */
-      void set_stream_to_logfile(bool in = true) { 
+      void set_stream_to_logfile(bool in = true) {
 	if(!stream_to_logfile && in)
 	  {
 	    if(logfileout.bad())
@@ -108,14 +108,14 @@ namespace Utilities{
 		cerr << "Warning: Unable to stream to logfile " << logfilename << ". Need to have called log.setLogFile. Therefore, no streaming to logfile will be performed" << endl;
 	      }
 	  }
-	else stream_to_logfile = in; 
+	else stream_to_logfile = in;
       }
 
-    private:      
-      
+    private:
+
       const Log& operator=(Log&);
       Log(Log&);
-      
+
       string dir;
       ofstream logfileout;
       string logfilename;
@@ -127,11 +127,11 @@ namespace Utilities{
 
       friend Log& operator<<(Log& log, ostream& (*obj) (ostream &));
 
-      template<class t> 
-	friend Log& operator<<(Log& log, const t& obj); 
+      template<class t>
+	friend Log& operator<<(Log& log, const t& obj);
 
-      template<class t> 
-	friend Log& operator<<(Log& log, t& obj); 
+      template<class t>
+	friend Log& operator<<(Log& log, t& obj);
     };
 
   template<class t> Log& operator<<(Log& log, const t& obj)
@@ -155,37 +155,37 @@ namespace Utilities{
 
       return log;
     }
-   
+
   class LogSingleton
     {
     public:
 
       static Log& getInstance();
 
-      ~LogSingleton() { delete logger; }      
+      ~LogSingleton() { delete logger; }
 
       /** hacked in utility provides a global counter for general use: */
       static int counter() { return count++; }
 
     private:
       LogSingleton() {}
-      
+
       const LogSingleton& operator=(LogSingleton&);
       LogSingleton(LogSingleton&);
-      
+
       static Log* logger;
-      
+
       static int count;
-      
+
     };
 
   inline Log& LogSingleton::getInstance(){
     if(logger == NULL)
       logger = new Log();
-  
+
     return *logger;
   }
-  
+
   inline void Log::setLogFile(const string& plogfilename, ios_base::openmode mode) {
 
     if(!logEstablished)
@@ -196,36 +196,36 @@ namespace Utilities{
     logfileout.close();
 
     logfilename = plogfilename;
-    
+
     // setup logfile
     logfileout.open((dir + "/" + logfilename).c_str(), mode);
     if(logfileout.bad())
       {
 	throw Exception(string(string("Unable to setup logfile ")+logfilename+string(" in directory ")+dir).c_str());
       }
-    
+
     stream_to_logfile = true;
 
     logEstablished = true;
   }
 
-  inline Log& Log::str() { 
-    
+  inline Log& Log::str() {
+
     if(!logEstablished)
       {
 	throw Exception("Log not setup");
       }
 
-    return *this; 
+    return *this;
   }
- 
-  inline const string Log::appendDir(const string& filename) const { 
+
+  inline const string Log::appendDir(const string& filename) const {
 
     if(!logEstablished)
       {
 	throw Exception("Log not setup");
       }
-  
+
     return dir + "/" + filename;
   }
 
@@ -234,13 +234,13 @@ namespace Utilities{
     {
       if(log.stream_to_logfile)
  	log.logfileout << obj;
-      
+
       if(log.stream_to_cout)
   	cout << obj;
-      
+
       return log;
     }
-  
+
 }
 
 #endif

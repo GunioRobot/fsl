@@ -60,7 +60,7 @@ public:
   virtual int   inqVolCount();
   virtual float inqMaxVal  ();
   virtual float inqMinVal  ();
-  
+
   void setMin(VoxelType min) { m_min = min; }
   void setMax(VoxelType max) { m_max = max; }
   void setCoordinates(short x, short y, short z){m_x = x; m_y = y; m_z = z;}
@@ -71,7 +71,7 @@ public:
   virtual short inqY(){return m_y;}
   virtual short inqZ(){return m_z;}
   virtual float mean() const;
-  
+
   static Handle create(short x, short y, short z, int n);
   static Handle getTimeSeries(FSLIO* avw, short x, short y, short z);
 

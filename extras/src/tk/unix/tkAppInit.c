@@ -1,4 +1,4 @@
-/* 
+/*
  * tkAppInit.c --
  *
  *	Provides a default version of the Tcl_AppInit procedure for
@@ -48,18 +48,18 @@ main(argc, argv)
      * of rewriting this entire file.  The #if checks for that
      * #define and uses Tcl_AppInit if it doesn't exist.
      */
-    
+
 #ifndef TK_LOCAL_APPINIT
-#define TK_LOCAL_APPINIT Tcl_AppInit    
+#define TK_LOCAL_APPINIT Tcl_AppInit
 #endif
     extern int TK_LOCAL_APPINIT _ANSI_ARGS_((Tcl_Interp *interp));
-    
+
     /*
      * The following #if block allows you to change how Tcl finds the startup
      * script, prime the library or encoding paths, fiddle with the argv,
      * etc., without needing to rewrite Tk_Main()
      */
-    
+
 #ifdef TK_LOCAL_MAIN_HOOK
     extern int TK_LOCAL_MAIN_HOOK _ANSI_ARGS_((int *argc, char ***argv));
     TK_LOCAL_MAIN_HOOK(&argc, &argv);

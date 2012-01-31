@@ -25,7 +25,7 @@ public:
   virtual ~MainToolBarWidget();
 
   void enableMaskMode(bool on)      { m_maskModeButton->setEnabled(on);    }
- 
+
   bool inqMaskMode()  { return m_maskModeButton->isOn();  }
   bool inqCrossHairState() { return m_crossHairsButton->isOn(); }
 
@@ -35,15 +35,15 @@ public:
   void setZoomMode()   { m_zoomModeButton->setOn(true);   }
   void setCrossHairsMode(bool on); // { m_crossHairsButton->setOn(true); }
 
-public slots: 
+public slots:
   void setZoomValue(int);
-  
+
 private slots:
   void setCursorState(int);
   void setPanState(int);
   void setZoomState(int);
   void setMaskState(int);
-  
+
 signals:
   void modeChanged(SliceWidget::Mode);
   void zoomValueChanged(int);

@@ -1,7 +1,7 @@
 //  (C) Copyright Gennadiy Rozental 2001-2005.
 //  (C) Copyright Beman Dawes 2001.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -77,9 +77,9 @@ protected:
 // ************************************************************************** //
 // **************              execution_exception             ************** //
 // ************************************************************************** //
-    
+
 //  design rationale: fear of being out (or nearly out) of memory.
-    
+
 class execution_exception {
     typedef boost::unit_test::const_string const_string;
 public:
@@ -89,7 +89,7 @@ public:
         //  commonly used program return codes: values < 100 are often user
         //  assigned, values > 255 are sometimes used to report system errors.
         //  Gaps in values allow for orderly expansion.
-        
+
         no_error               = 0,   // for completeness only; never returned
         user_error             = 200, // user reported non-fatal error
         cpp_exception_error    = 205, // see note (1) below
@@ -97,11 +97,11 @@ public:
         timeout_error          = 215, // only detectable on certain platforms
         user_fatal_error       = 220, // user reported fatal error
         system_fatal_error     = 225  // see note (2) below
-        
+
         //  Note 1: Only uncaught C++ exceptions are treated as errors.
         //  If the application catches a C++ exception, it will never reach
         //  the execution_monitor.
-        
+
         //  Note 2: These errors include Unix signals and Windows structured
         //  exceptions.  They are often initiated by hardware traps.
         //
@@ -110,7 +110,7 @@ public:
         //  machine state (like a stack overflow or addressing exception) that it
         //  is unreasonable to continue execution.
     };
-    
+
     // Constructor
     execution_exception( error_code ec_, const_string what_msg_ ) // max length 256 inc '\0'
     : m_error_code( ec_ ), m_what( what_msg_ ) {}
@@ -131,9 +131,9 @@ private:
 
 class execution_monitor {
 public:
-    int execute( unit_test::callback0<int> const& F, bool catch_system_errors = true, int timeout = 0 ); 
-    //  The catch_system_errors parameter specifies whether the monitor should 
-    //  try to catch system errors/exceptions that would cause program to crash 
+    int execute( unit_test::callback0<int> const& F, bool catch_system_errors = true, int timeout = 0 );
+    //  The catch_system_errors parameter specifies whether the monitor should
+    //  try to catch system errors/exceptions that would cause program to crash
     //  in regular case
     //  The timeout argument specifies the seconds that elapse before
     //  a timer_error occurs.  May be ignored on some platforms.
@@ -147,7 +147,7 @@ public:
     //  a hardware or software signal, trap, or other exception.
     //
     //  Note: execute() doesn't consider it an error for F to return a non-zero value.
-    
+
     // register custom (user supplied) exception translator
     template<typename Exception, typename ExceptionTranslator>
     void        register_exception_translator( ExceptionTranslator const& tr, boost::type<Exception>* = 0 );
@@ -195,7 +195,7 @@ template<typename Exception, typename ExceptionTranslator>
 void
 execution_monitor::register_exception_translator( ExceptionTranslator const& tr, boost::type<Exception>* )
 {
-    m_custom_translators.reset( 
+    m_custom_translators.reset(
         new detail::translate_exception<Exception,ExceptionTranslator>( tr,m_custom_translators ) );
 }
 
@@ -220,7 +220,7 @@ struct execution_aborted {};
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: execution_monitor.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

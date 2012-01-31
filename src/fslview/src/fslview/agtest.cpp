@@ -37,10 +37,10 @@ int agtest(int argc, char **argv)
   for(AtlasGroup::ConstAtlasIterator it = ag->begin(); it != ag->end(); it++)
     {
       Atlas::Handle b = it->second;
-      
+
       doLookups(b);
     }
-     
+
 //   Atlas::Handle b = ag->getAtlasByName("MNI Structural Probability Atlas");
 //   doLookups(b);
 //   cout << "*******" << endl;

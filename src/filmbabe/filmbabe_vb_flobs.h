@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -92,11 +92,11 @@ namespace Filmbabe {
       int z;
 
       Voxel(int px, int py, int pz) : x(px),y(py),z(pz){}
-	
-      bool operator==(const Voxel& r) const 
+
+      bool operator==(const Voxel& r) const
       {return (x==r.x && y==r.y && z==r.z);}
-	
-      bool is_neighbour(const Voxel& r) const 
+
+      bool is_neighbour(const Voxel& r) const
 	{return ((x==r.x-1 && y==r.y && z==r.z)||
 		 (x==r.x+1 && y==r.y && z==r.z)||
 		 (x==r.x && y==r.y-1 && z==r.z)||
@@ -108,26 +108,26 @@ namespace Filmbabe {
   class Filmbabe_Vb_Flobs
     {
     public:
-	
+
       // Constructor
       Filmbabe_Vb_Flobs(const volume4D<float>& pdata, const volume<int>& pmask, const Matrix& pdesignmatrix, const ColumnVector& pflobsregressors, const volume4D<float>& plocalweights, const vector<Connected_Offset>& pconnected_offsets, int pnum_superthreshold);
-	
+
       // setup
       void setup();
-	
+
       // run
       void run();
-	
+
       // save data to logger dir
       void save() ;
-	
+
       // Destructor
       virtual ~Filmbabe_Vb_Flobs(){}
-	
+
     private:
-	
+
       Filmbabe_Vb_Flobs();
-      const Filmbabe_Vb_Flobs& operator=(Filmbabe_Vb_Flobs&);     
+      const Filmbabe_Vb_Flobs& operator=(Filmbabe_Vb_Flobs&);
       Filmbabe_Vb_Flobs(Filmbabe_Vb_Flobs&);
 
       void process_flobsregressors();
@@ -137,7 +137,7 @@ namespace Filmbabe {
       void update_phie();
       void update_phiBeta();
 
-      int xsize; 
+      int xsize;
       int ysize;
       int zsize;
       int ntpts;
@@ -176,7 +176,7 @@ namespace Filmbabe {
 
       vector<ColumnVector> m_Beta_0;
       vector<SymmetricMatrix> lambda_Beta_0;
-      
+
       SparseMatrix D;
 
       ColumnVector trace_ilambdaDA;
@@ -194,7 +194,7 @@ namespace Filmbabe {
       // q(A_p)~MVN(m_A_p,lambda_A_p);
       // m_A[p](i)
       vector<ColumnVector> m_A;
-      
+
       // q(phi_Beta)~Ga(b_Beta,c_Beta);
       // gam_Beta = gam(c_Beta+1)/gam(c_Beta)
       // gam_Beta[i](e)
@@ -229,7 +229,7 @@ namespace Filmbabe {
       Matrix designmatrixQ;
 
       vector<float> gamAhist;
-    }; 
-  
+    };
+
 }
 #endif

@@ -10,20 +10,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -106,29 +106,29 @@ vector<float> empty_vector(0, 0);
 string title="BET (Brain Extraction Tool) v2.1 - FMRIB Analysis Group, Oxford";
 string examples="bet2 <input_fileroot> <output_fileroot> [options]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
-Option<bool> generate_mesh(string("-e,--mesh"), false, 
-		     string("generates brain surface as mesh in vtk format"), 
+Option<bool> generate_mesh(string("-e,--mesh"), false,
+		     string("generates brain surface as mesh in vtk format"),
 		     false, no_argument);
-Option<bool> help(string("-h,--help"), false, 
-		     string("displays this help, then exits"), 
+Option<bool> help(string("-h,--help"), false,
+		     string("displays this help, then exits"),
 		     false, no_argument);
-Option<bool> outline(string("-o,--outline"), false, 
-		     string("generate brain surface outline overlaid onto original image"), 
+Option<bool> outline(string("-o,--outline"), false,
+		     string("generate brain surface outline overlaid onto original image"),
 		     false, no_argument);
-Option<bool> skull(string("-s,--skull"), false, 
+Option<bool> skull(string("-s,--skull"), false,
 		   string("generate approximate skull image"),
 		   false, no_argument);
-Option<bool> mask(string("-m,--mask"), false, 
-		  string("generate binary brain mask"), 
+Option<bool> mask(string("-m,--mask"), false,
+		  string("generate binary brain mask"),
 		  false, no_argument);
-Option<bool> no_output(string("-n,--nooutput"), false, 
-		       string("don't generate segmented brain image output"), 
+Option<bool> no_output(string("-n,--nooutput"), false,
+		       string("don't generate segmented brain image output"),
 		       false, no_argument);
-Option<bool> apply_thresholding(string("-t,--threshold"), false, 
-				string("-apply thresholding to segmented brain image and mask"), 
+Option<bool> apply_thresholding(string("-t,--threshold"), false,
+				string("-apply thresholding to segmented brain image and mask"),
 				false, no_argument);
 Option<float> fractional_threshold(string("-f"), 0.5,
 				    string("~<f>\t\tfractional intensity threshold (0->1); default=0.5; smaller values give larger brain outline estimates"), false, requires_argument);
@@ -179,7 +179,7 @@ volume<short> draw_mesh(const volume<short>& image, const Mesh &m)
 	{
 	  Pt p = (*i)->get_vertice(1)->get_coord()  + j* n;
 	  draw_segment(res, p, (*i)->get_vertice(2)->get_coord());
-	} 
+	}
     }
   return res;
 }
@@ -221,7 +221,7 @@ volume<float> draw_mesh_bis(const volume<float>& image, const Mesh &m)
 	{
 	  Pt p = (*i)->get_vertice(1)->get_coord()  + j* n;
 	  draw_segment_bis(res, p, (*i)->get_vertice(2)->get_coord(), max);
-	} 
+	}
     }
   return res;
 }
@@ -239,13 +239,13 @@ volume<short> make_mask_from_mesh(const volume<float> & image, const Mesh& m)
 
   volume<short> mask;
   copyconvert(image,mask);
-  
+
   int xsize = mask.xsize();
   int ysize = mask.ysize();
   int zsize = mask.zsize();
-  
+
   mask = 1;
-  
+
   mask = draw_mesh(mask, m);
 
   vector<Pt> current;
@@ -272,7 +272,7 @@ volume<short> make_mask_from_mesh(const volume<float> & image, const Mesh& m)
       if (0<=z-1 && mask.value(x, y, z-1)==1) current.push_back(Pt(x, y, z-1));
       if (xsize>x+1 && mask.value(x+1, y, z)==1) current.push_back(Pt(x+1, y, z));
       if (ysize>y+1 && mask.value(x, y+1, z)==1) current.push_back(Pt(x, y+1, z));
-      if (zsize>z+1 && mask.value(x, y, z+1)==1) current.push_back(Pt(x, y, z+1)); 
+      if (zsize>z+1 && mask.value(x, y, z+1)==1) current.push_back(Pt(x, y, z+1));
     }
 
   //  cout<<"make_mask_from_mesh ends"<<endl;
@@ -314,17 +314,17 @@ bet_parameters adjust_initial_mesh(const volume<float> & image, Mesh& m, const d
   t98 = image.robustmax();
   //t2=32.;
   //t98=16121.;
-  
+
   //  cout<<"computing robust min && max ends"<<endl;
-  
+
   t = t2 + .1*(t98 - t2);
   bp.t98 = t98;
   bp.t2 = t2;
   bp.t = t;
   //  cout<<"t2 "<<t2<<" t98 "<<t98<<" t "<<t<<endl;
-  
+
   //  cout<<"computing center && radius begins"<<endl;
-  
+
   //finds the COG
   Pt center(0, 0, 0);
   double counter = 0;
@@ -338,7 +338,7 @@ bet_parameters adjust_initial_mesh(const volume<float> & image, Mesh& m, const d
 	      double c = image(i, j, k ) - t2;
 	      if (c > tmp)
 		{
-		  c = min(c, t98 - t2);   
+		  c = min(c, t98 - t2);
 		  counter+=c;
 		  center +=  Pt(c*i*xdim, c*j*ydim, c*k*zdim);
 		}
@@ -348,7 +348,7 @@ bet_parameters adjust_initial_mesh(const volume<float> & image, Mesh& m, const d
       //  cout<<"cog "<<center.X<<" "<<center.Y<<" "<<center.Z<<endl;
     }
   else center=Pt(xpara*xdim, ypara*ydim, zpara*zdim);
-  
+
   bp.cog = center;
 
   if (rad == 0.)
@@ -369,7 +369,7 @@ bet_parameters adjust_initial_mesh(const volume<float> & image, Mesh& m, const d
       radius = pow (.75 * counter*scale/M_PI, 1.0/3.0);
       //      cout<<radius<<endl;
       bp.radius = radius;
-    } 
+    }
   else (bp.radius = rad);
 
   m.translation(center.X, center.Y, center.Z);
@@ -399,7 +399,7 @@ bet_parameters adjust_initial_mesh(const volume<float> & image, Mesh& m, const d
   //  cout<<"tm "<<tm<<endl;
   bp.tm = tm;
   //  cout<<"computing tm ends"<<endl;
-  
+
   return bp;
 }
 
@@ -411,7 +411,7 @@ double step_of_computation(const volume<float> & image, Mesh & m, const double b
   double zdim = image.zdim();
   double dscale = Min(Min(Min(xdim,ydim),zdim),1.0);
   //cout << xdim << " " << ydim << " " << zdim << " " << dscale << endl;
-  
+
   if (iteration_number==50 || iteration_number%100 == 0 )
     {
       l = 0;
@@ -423,32 +423,32 @@ double step_of_computation(const volume<float> & image, Mesh & m, const double b
 	}
       l/=counter;
     }
-  
+
   for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++)
     {
       Vec sn, st, u1, u2, u3, u;
       double f2, f3=0;
-      
+
       Vec n = (*i)->local_normal();
       Vec dv = (*i)->difference_vector();
-      
+
       double tmp = dv|n;
       sn = n * tmp;
       st = dv - sn;
-      
+
       u1 = st*.5;
-      
+
       double rinv = (2 * fabs(sn|n))/(l*l);
-      
+
       f2 = (1+tanh(F*(rinv - E)))*0.5;
       if (pass > 0)
 	if (tmp > 0) {
 	  f2*=increase_smoothing;
 	  f2 = Min(f2, 1.);
 	}
-      
+
       u2 = f2 * sn;
-      
+
       //main term of bet
       {
 	double local_t = bet_main_parameter;
@@ -456,26 +456,26 @@ double step_of_computation(const volume<float> & image, Mesh & m, const double b
 	  {
 	    local_t = Min(1., Max(0., bet_main_parameter + local_th*((*i)->get_coord().Z - zcog)/radius));
 	  }
-	
+
 	double Imin = tm;
 	double Imax = t;
-	
+
 	Pt p = (*i)->get_coord() + (-1)*n;
-	double iv = p.X/xdim + .5, jv = p.Y/ydim +.5, kv = p.Z/zdim +.5; 
+	double iv = p.X/xdim + .5, jv = p.Y/ydim +.5, kv = p.Z/zdim +.5;
 	if (image.in_bounds((int)iv,(int) jv,(int) kv))
-	  {	
+	  {
 	    double im=image.value((int)iv,(int)jv,(int)kv);
 	    Imin = Min(Imin, im);
 	    Imax = Max(Imax,im);
-	    
+
 	    double nxv=n.X/xdim, nyv=n.Y/ydim, nzv=n.Z/zdim;
-	    int i2=(int)(iv-(d1-1)*nxv), j2 =(int) (jv-(d1-1)*nyv), k2 =(int)(kv-(d1-1)*nzv); 
+	    int i2=(int)(iv-(d1-1)*nxv), j2 =(int) (jv-(d1-1)*nyv), k2 =(int)(kv-(d1-1)*nzv);
 	    nxv*=dscale; nyv*=dscale; nzv*=dscale;
 	    if (image.in_bounds(i2, j2, k2))
-	      {	
+	      {
 		im=image.value(i2,j2,k2);
 		Imin = Min(Imin, im);
-		
+
 		for (double gi=2.0; gi<d1; gi+=dscale)
 		  {
 		    //cout << gi << " " << endl;
@@ -483,72 +483,72 @@ double step_of_computation(const volume<float> & image, Mesh & m, const double b
 		    iv-=nxv; jv-=nyv; kv-=nzv;
 		    im = image.value((int) (iv), (int) (jv), (int) (kv));
 		    Imin = Min(Imin, im);
-		
+
 		    if (gi<d2)
 		      Imax = Max(Imax,im);
 		  }
-		
+
 		Imin = Max (t2, Imin);
-		Imax = Min (tm, Imax);	
-		
+		Imax = Min (tm, Imax);
+
 		const double tl = (Imax - t2) * local_t + t2;
-		
+
 		if (Imax - t2 > 0)
 		  f3=2*(Imin - tl)/(Imax - t2);
 		else f3=(Imin - tl)*2;
 	      }
 	  }
-	
+
       }
-      
+
       f3 *= (normal_max_update_fraction * lambda_fit * l);
-      
+
       u3 = f3 * n;
-      
+
       u = u1 + u2 + u3;
-            
+
       //cout<<"l "<<l<<"u1 "<<((u1*n).norm())<<"u2 "<<(u2|n)<<"u3 "<<(u3|n)<<endl;
-      
+
       (*i)->_update_coord = (*i)->get_coord() + u;
     }
 
   m.update();
-  
-  return (0); 
+
+  return (0);
 }
 
 
 
 volume<float> find_skull (volume<float> & image, const Mesh & m, const double t2, double t, double t98)
-{ 
+{
   const double skull_search = 30;
   const double skull_start = -3;
-  
+
   volume<float> result = image;
   result=0;
 
   volume<short> volmesh;
-  copyconvert(image,volmesh);  
+  copyconvert(image,volmesh);
   int xsize = volmesh.xsize();
   int ysize = volmesh.ysize();
-  int zsize = volmesh.zsize();  
+  int zsize = volmesh.zsize();
   double xdim = volmesh.xdim();
   double ydim = volmesh.ydim();
-  double zdim = volmesh.zdim();  
-  double scale = Min(xdim, Min(ydim, zdim)); 
+  double zdim = volmesh.zdim();
+  double scale = Min(xdim, Min(ydim, zdim));
   volmesh = 1;
   volmesh = draw_mesh(volmesh, m);
-  
+
   image.setinterpolationmethod(trilinear);
 
   for (vector<Mpoint*>::const_iterator i = m._points.begin(); i != m._points.end(); i++)
     {
       double max_neighbour = 0;
       const Vec normal = (*i)->local_normal();
-      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);      
+      const Vec n = Vec(normal.X/xdim, normal.Y/ydim, normal.Z/zdim);
 
       for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour); 
+	max_neighbour = Max(((**i) - (**nei)).norm(), max_neighbour);
 
       max_neighbour = ceil((max_neighbour)/2);
 
@@ -560,21 +560,21 @@ volume<float> find_skull (volume<float> & image, const Mesh & m, const double t2
 	      bool compute = false;
 	      const Pt point(ci, cj, ck);
 	      const Pt realpoint(ci*xdim, cj*ydim, ck*zdim);
-	      if (volmesh(ci, cj, ck) == 0) 
+	      if (volmesh(ci, cj, ck) == 0)
 		{
 		  double mindist = 10000;
 		  for (list<Mpoint*>::const_iterator nei = (*i)->_neighbours.begin(); nei != (*i)->_neighbours.end(); nei++)
-		    mindist = Min(((realpoint) - (**nei)).norm(), mindist); 
+		    mindist = Min(((realpoint) - (**nei)).norm(), mindist);
 		  if (mindist >= ((realpoint) - (**i)).norm()) compute = true;
 		}
-	    
+
 
 	      if (compute)
 		{
 		  double maxval = t;
 		  double minval = image.interpolate(point.X, point.Y, point.Z);
 		  double d_max = 0;
-		  
+
 		  for (double d=0; d<skull_search; d+=scale*.5)
 		    {
 		      Pt current = point + d * n;
@@ -584,11 +584,11 @@ volume<float> find_skull (volume<float> & image, const Mesh & m, const double t2
 			  maxval=val;
 			  d_max=d;
 			}
-		      
+
 		      if (val<minval)
 			minval=val;
 		    }
-		  
+
 		  if (maxval > t)
 		    {
 		      double d_min=skull_start;
@@ -664,29 +664,29 @@ int main(int argc, char *argv[]) {
   options.add(generate_mesh);
   options.add(verbose);
   options.add(help);
-  
+
   if (argc < 3) {
     if (argc == 1) {options.usage(); exit(EXIT_FAILURE);};
     if (argc>1)
       {
 	string s = argv[1];
-	if (s.find("-h")!=string::npos | s.find("--help")!=string::npos ) 
+	if (s.find("-h")!=string::npos | s.find("--help")!=string::npos )
 	  {options.usage(); exit (0);}
       }
     cerr<<"error: not enough arguments, use bet -h for help"<<endl;
     exit (-1);
   }
-  
+
   vector<string> strarg;
   for (int i=0; i<argc; i++)
     strarg.push_back(argv[i]);
-  
+
   string inputname=strarg[1];
   string outputname=strarg[2];
-  
+
   if (inputname.find("-")==0 || outputname.find("-")==0 )
     {cerr<<"error : two first arguments should be input and output names, see bet -h for help"<<endl; exit(-1);};
- 
+
   /*
   int c=0;
   for (int i=0; i<argc; i++)
@@ -695,7 +695,7 @@ int main(int argc, char *argv[]) {
 	strcpy(argv[c], strarg[i].c_str());
 	c++;
       }
-  
+
   argc -=2;
   */
 
@@ -706,11 +706,11 @@ int main(int argc, char *argv[]) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
-  } 
+  }
   catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
-  
+  }
+
   if (help.value()) {options.usage(); return 0;};
 
   string out = outputname;
@@ -720,7 +720,7 @@ int main(int argc, char *argv[]) {
   if (in.find(".hdr")!=string::npos) in.erase(in.find(".hdr"), 4);
   if (in.find(".img")!=string::npos) in.erase(in.find(".hdr"), 4);
   if (out == "default__default") {out=in+"_brain";}
-  
+
 
   //set a memory hanlder that displays an error message
   set_new_handler(noMoreMemory);
@@ -729,7 +729,7 @@ int main(int argc, char *argv[]) {
   //the real program
 
   volume<float> testvol;
-  
+
   if (read_volume(testvol,in.c_str())<0)  return -1;
 
   double xarg = 0, yarg = 0, zarg = 0;
@@ -754,21 +754,21 @@ int main(int argc, char *argv[]) {
 	  xarg = v(1);  yarg = v(2);  zarg = v(3);
 	}
     }
-  
+
   const double bet_main_parameter = pow(fractional_threshold.value(), .275);
-  
+
 
   // 2D kludge (worked for bet, but not here in bet2, hohum)
   if (testvol.xsize()*testvol.xdim()<20) testvol.setxdim(200);
   if (testvol.ysize()*testvol.ydim()<20) testvol.setydim(200);
   if (testvol.zsize()*testvol.zdim()<20) testvol.setzdim(200);
-  
+
   Mesh m;
-  make_mesh_from_icosa(5, m); 
-  
-  
+  make_mesh_from_icosa(5, m);
+
+
   bet_parameters bp = adjust_initial_mesh(testvol, m, radiusarg.value(), xarg, yarg, zarg);
-  
+
   if (verbose.value())
     {
       cout<<"min "<<bp.min<<" thresh2 "<<bp.t2<<" thresh "<<bp.t<<" thresh98 "<<bp.t98<<" max "<<bp.max<<endl;
@@ -776,31 +776,31 @@ int main(int argc, char *argv[]) {
       cout<<"radius "<<bp.radius<<" mm"<<endl;
       cout<<"median within-brain intensity "<<bp.tm<<endl;
     }
-  
+
 
   Mesh moriginal=m;
-  
+
   const double rmin=3.33;
   const double rmax=10;
   const double E = (1/rmin + 1/rmax)/2.;
   const double F = 6./(1/rmin - 1/rmax);
   const int nb_iter = 1000;
   const double self_intersection_threshold = 4000;
-  
+
   double l = 0;
   for (int i=0; i<nb_iter; i++)
     {
       step_of_computation(testvol, m, bet_main_parameter, 0, 0, i, l, bp.t2, bp.tm, bp.t, E, F, bp.cog.Z, bp.radius, gradient_threshold.value());
     }
-  
+
   double tmp = m.self_intersection(moriginal);
   if (verbose.value() && !generate_mesh.value())
     cout<<"self-intersection total "<<tmp<<" (threshold=4000.0) "<<endl;
-  
+
   bool self_intersection;
-  if (!generate_mesh.value()) self_intersection = (tmp > self_intersection_threshold);  
+  if (!generate_mesh.value()) self_intersection = (tmp > self_intersection_threshold);
   else (self_intersection = m.real_self_intersection());
-  int pass = 0;  
+  int pass = 0;
 
   if (verbose.value() && generate_mesh.value() && self_intersection)
     cout<<"the mesh is self-intersecting "<<endl;
@@ -821,25 +821,25 @@ int main(int argc, char *argv[]) {
 	  step_of_computation(testvol, m, bet_main_parameter, pass, incfactor, i, l, bp.t2, bp.tm, bp.t, E, F, bp.cog.Z, bp.radius, gradient_threshold.value());
 	}
       double tmp = m.self_intersection(moriginal);
-  
+
       self_intersection = (tmp > self_intersection_threshold);
-      if (!generate_mesh.value()) self_intersection = (tmp > self_intersection_threshold);  
+      if (!generate_mesh.value()) self_intersection = (tmp > self_intersection_threshold);
       else (self_intersection = m.real_self_intersection());
-      
+
       if (verbose.value() && !generate_mesh.value())
 	cout<<"self-intersection total "<<tmp<<" (threshold=4000.0) "<<endl;
-      
+
       if (verbose.value() && generate_mesh.value() && self_intersection)
 	cout<<"the mesh is self-intersecting"<<endl;
-	
+
       if (pass==10) // give up
 	self_intersection=0;
     }
-  
+
 
   //display
   volume<short> brainmask = make_mask_from_mesh(testvol, m);
-  
+
   if (apply_thresholding.value())
     {
       int xsize = testvol.xsize();
@@ -850,7 +850,7 @@ int main(int argc, char *argv[]) {
 	  for (int i=0; i<xsize; i++)
 	    if (testvol.value(i, j, k) < bp.t) brainmask.value(i, j, k) = 1;
     }
-  
+
   if (!(no_output.value()))
     {
       int xsize = testvol.xsize();
@@ -862,14 +862,14 @@ int main(int argc, char *argv[]) {
 	  for (int i=0; i<xsize; i++)
 	    output.value(i, j, k) = (1-brainmask.value(i, j, k)) * output.value(i, j, k);
       if (save_volume(output,out.c_str())<0)  return -1;
-    }  
-  
+    }
+
   if (mask.value())
     {
       string maskstr = out+"_mask";
       if (save_volume((short)1-brainmask, maskstr.c_str())<0)  return -1;
     }
-  
+
   if (outline.value())
     {
       string outlinestr = out+"_overlay";
@@ -895,6 +895,6 @@ int main(int argc, char *argv[]) {
     }
 
   return 0;
-  
+
 }
 

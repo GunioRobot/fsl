@@ -39,7 +39,7 @@ namespace boost
         > type;
     };
   }
-  
+
   template <class Predicate, class Iterator>
   class filter_iterator
     : public detail::filter_iterator_base<Predicate, Iterator>::type
@@ -68,7 +68,7 @@ namespace boost
           // Don't allow use of this constructor if Predicate is a
           // function pointer type, since it will be 0.
           BOOST_STATIC_ASSERT(is_class<Predicate>::value);
-#endif 
+#endif
           satisfy_predicate();
       }
 
@@ -124,7 +124,7 @@ namespace boost
     , Iterator end = Iterator()
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
     , Predicate* = 0
-#endif 
+#endif
   )
   {
       return filter_iterator<Predicate,Iterator>(x,end);

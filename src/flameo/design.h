@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -68,7 +68,7 @@
 
 #if !defined(design_h)
 #define design_h
-  
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -88,12 +88,12 @@ namespace Gs{
     public:
 
       // constructor
-      Design() :	
+      Design() :
 	nevs(0),
 	ntpts(0),
 	ngs(0),
 	voxelwise_dm(false)
-	{ 
+	{
 	}
 
       // load design matrix in from file and set it up
@@ -108,7 +108,7 @@ namespace Gs{
 
      // returns full, global design matrix
       const Matrix& getdm() const { return dm; }
- 
+
       // returns voxelwise design matrix with any voxelwise zero evs removed
       ReturnMatrix getdm(int x, int y, int z) const;
 
@@ -116,25 +116,25 @@ namespace Gs{
       ReturnMatrix getdm(int x, int y, int z, int g) const;
 
       const Matrix& getcovsplit() const { return covsplit; }
-      
+
       ReturnMatrix gettcontrast(const int p_num) const { RowVector ret = tcontrasts.Row(p_num); ret.Release(); return ret; }
 
       const Matrix& getfcontrast(const int p_num) const { return fc[p_num-1]; }
 
-      int getgroup(int t) const { return int(group_index(t)); } 
-      int getglobalindex(int g, int within_t) const { return global_index[g-1][within_t-1]; } 
-      int getindexingroup(int g, int global_t) const { return index_in_group[g-1][global_t-1]; } 
+      int getgroup(int t) const { return int(group_index(t)); }
+      int getglobalindex(int g, int within_t) const { return global_index[g-1][within_t-1]; }
+      int getindexingroup(int g, int global_t) const { return index_in_group[g-1][global_t-1]; }
 
       int getntptsingroup(int g) const { return int(ntptsing(g)); }
       int getnevsingroup(int g) const { return int(nevsing(g)); }
- 
+
       bool tcontrast_has_zeroevs(int x, int y, int z,const RowVector& tcontrast)
       {
 // 	cout<< "evs_group" << evs_group<< endl;
 // 	cout<< "tcontrast" << tcontrast<< endl;
 	bool in=false;
 	for(int e=1; e<=tcontrast.Ncols() && !in; e++)
-	  {	    
+	  {
 	    in = (tcontrast(e)!=0 && zero_evs(x,y,z,e-1));
 	  }
 	return in;
@@ -146,7 +146,7 @@ namespace Gs{
 // 	cout<< "tcontrast" << tcontrast<< endl;
 	bool in=false;
 	for(int e=1; e<=tcontrast.Ncols() && !in; e++)
-	  {	    
+	  {
 	    in = (tcontrast(e)!=0 && evs_group(e)==g);
 	  }
 	return in;
@@ -158,9 +158,9 @@ namespace Gs{
 	for(int f=1; f<=fcontrast.Nrows() && !in; f++)
 	  {
 	    for(int e=1; e<=fcontrast.Ncols() && !in; e++)
-	      {	    
+	      {
 		in = (fcontrast(f,e)!=0 && zero_evs(x,y,z,e-1));
-	      }	    	    
+	      }
 	  }
 	return in;
       }
@@ -171,9 +171,9 @@ namespace Gs{
 	for(int f=1; f<=fcontrast.Nrows() && !in; f++)
 	  {
 	    for(int e=1; e<=fcontrast.Ncols() && !in; e++)
-	      {	    
+	      {
 		in = (fcontrast(f,e)!=0 && evs_group(e)==g);
-	      }	    	    
+	      }
 	  }
 	return in;
       }
@@ -190,7 +190,7 @@ namespace Gs{
       int getnumfcontrasts() const { return numFcontrasts; }
       int getnumtcontrasts() const { return numTcontrasts; }
       //const Matrix& getfreduceddm(const int p_num) const { return reduceddms[p_num-1]; }
-      
+
       const volume4D<float>& getcopedata() const {return copedata;}
       const volume4D<float>& getvarcopedata() const {return varcopedata;}
       const volume4D<float>& getdofvarcopedata() const {return dofvarcopedata;}
@@ -208,9 +208,9 @@ namespace Gs{
 
     private:
 
-      const Design& operator=(Design& par);     
+      const Design& operator=(Design& par);
       Design(Design& des) { operator=(des); }
-      
+
       void setupfcontrasts();
 
       int nevs;
@@ -254,7 +254,7 @@ namespace Gs{
       volume4D<int> zero_evs;
 
     };
-} 
+}
 #endif
 
 

@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -43,7 +43,7 @@ namespace tt_detail {
 
 template<typename FPT>
 inline FPT
-fpt_abs( FPT arg ) 
+fpt_abs( FPT arg )
 {
     return arg < 0 ? -arg : arg;
 }
@@ -52,7 +52,7 @@ fpt_abs( FPT arg )
 
 // both f1 and f2 are unsigned here
 template<typename FPT>
-inline FPT 
+inline FPT
 safe_fpt_division( FPT f1, FPT f2 )
 {
     return  (f2 < 1 && f1 > f2 * (std::numeric_limits<FPT>::max)())               ? (std::numeric_limits<FPT>::max)()
@@ -75,7 +75,7 @@ public:
     typedef bool result_type;
 
     // Constructor
-    explicit    close_at_tolerance( PersentType percentage_tolerance, floating_point_comparison_type fpc_type = FPC_STRONG ) 
+    explicit    close_at_tolerance( PersentType percentage_tolerance, floating_point_comparison_type fpc_type = FPC_STRONG )
     : p_fraction_tolerance( static_cast<FPT>(0.01)*percentage_tolerance ), p_strong_or_weak( fpc_type ==  FPC_STRONG ) {}
 
     bool        operator()( FPT left, FPT right ) const
@@ -83,8 +83,8 @@ public:
         FPT diff = tt_detail::fpt_abs( left - right );
         FPT d1   = tt_detail::safe_fpt_division( diff, tt_detail::fpt_abs( right ) );
         FPT d2   = tt_detail::safe_fpt_division( diff, tt_detail::fpt_abs( left ) );
-        
-        return p_strong_or_weak ? (d1 <= p_fraction_tolerance.get() && d2 <= p_fraction_tolerance.get()) 
+
+        return p_strong_or_weak ? (d1 <= p_fraction_tolerance.get() && d2 <= p_fraction_tolerance.get())
                                 : (d1 <= p_fraction_tolerance.get() || d2 <= p_fraction_tolerance.get());
     }
 
@@ -151,7 +151,7 @@ check_is_small_t check_is_small;
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: floating_point_comparison.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

@@ -25,7 +25,7 @@
 
 
 <A NAME="section1"></A><HR><H2>INTRODUCTION</H2>
- 
+
 (paragraph:
 To try and improve our FSL documentation I have written some XML
 translators for web, man and latex. It is hoped that authors will write XML
@@ -52,7 +52,7 @@ Desk</A> to discuss how to improve FSLML to suit your needs.
 
 
 <A NAME="section2"></A><HR><H2>DOCUMENTING FSL PROJECTS</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;manentry|refguide|usrguide&gt;</FONT></B>
 These tags select the different style of document. There is very
 little difference between each bar a bit of wording in the title
@@ -78,7 +78,7 @@ will be generated.
 
 
 <A NAME="section3"></A><HR><H2>DOCUMENTING C SOURCES</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;directive|include&gt;</FONT></B>
 The <FONT COLOR=BLUE>&lt;directive&gt;</FONT> tag allows you to format C pre-processor
 directives. Example: <FONT COLOR=BLUE>&lt;directive text="if"&gt;</FONT>defined(FSLDIR)<FONT COLOR=BLUE>&lt;/directive&gt;</FONT> becomes #if defined(FSLDIR).
@@ -120,7 +120,7 @@ the function.
 
 
 <H3>Example</H3>
- 
+
 
 (paragraph:
 The following XML might be used to document a C function:
@@ -179,7 +179,7 @@ Your descriptive text goes here.
 
 
 <A NAME="section4"></A><HR><H2>DOCUMENTING GUIS</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;guilabel&gt;</FONT></B>
 Use this tag to introduce a GUI element into the text. NB Indicate the
 hierarchical nature of menu item with arrows,
@@ -191,7 +191,7 @@ rendered as: <B><FONT COLOR=BROWN>File->Exit</FONT></B>.
 
 
 <A NAME="section5"></A><HR><H2>DOCUMENTING XML</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;tagdesc&gt;</FONT></B>
 For documenting XML tags.
 <UL>
@@ -216,7 +216,7 @@ generates <FONT COLOR=BLUE>&lt;tag-name&gt;</FONT>.
 
 
 <A NAME="section6"></A><HR><H2>GENERAL PURPOSE TAGS</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;section|subsection&gt;</FONT></B>
 <UL>
 
@@ -299,7 +299,7 @@ to which this entry belongs.
 
 
 <A NAME="section7"></A><HR><H2>GENERATING TABLES</H2>
- 
+
 <P><B><FONT COLOR=BLUE>&lt;table&gt;</FONT></B>Introduces a new table
 Use the <FONT COLOR=BLUE>&lt;col&gt;</FONT> tag to introduce columns into the table and
 <FONT COLOR=BLUE>&lt;row&gt;</FONT> elements to delimit the <FONT COLOR=BLUE>&lt;data&gt;</FONT> elements for
@@ -336,7 +336,7 @@ lines.
 
 
 <H3>Example</H3>
- 
+
 
 <PRE>
 &lt;table&gt;
@@ -376,7 +376,7 @@ which the data elements appear is not important.
 )
 
 <A NAME="section8"></A><HR><H2>LARGER EXAMPLE</H2>
- 
+
 (paragraph:
 The following is snippets of the XML which creates this document:
 )
@@ -416,7 +416,7 @@ write XML
 
 
 <A NAME="section9"></A><HR><H2>DOCUMENT TRANSLATORS</H2>
- 
+
 (paragraph:
 A combined document translator <I>fslml(n)</I> is being
 developed. It can translate FSLML documents into LaTeX, man entry, and
@@ -428,7 +428,7 @@ completion of the other two transltators is imminent.
 
 
 <A NAME="section10"></A><HR><H2>BUGS</H2>
- 
+
 <OL>
 
 <LI>

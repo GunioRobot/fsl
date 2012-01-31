@@ -65,7 +65,7 @@ namespace date_time {
   private:
     // we want this enum available for both platforms yet still private
     enum TZ_FOR_CREATE { LOCAL, GMT };
-    
+
   public:
 
 #ifdef BOOST_HAS_GETTIMEOFDAY
@@ -124,7 +124,7 @@ namespace date_time {
       #endif
       return create_time(ft, LOCAL);
     }
-    
+
     //! Return the UTC time based on computer settings
     static time_type universal_time() {
       FILETIME ft;
@@ -156,7 +156,7 @@ namespace date_time {
       boost::uint32_t sub_sec = (filetime % 10000000) / 10; // microseconds
 
       std::time_t t = static_cast<time_t>(filetime / 10000000); // seconds since epoch
-      
+
       std::tm curr, *curr_ptr = 0;
       if (tz == LOCAL) {
         curr_ptr = c_time::localtime(&t, &curr);

@@ -10,7 +10,7 @@ if [ -f ${configure_script} ]; then
     . ${configure_script}
 fi
 
-PATH=${FSLDEVDIR}/bin:${PATH} 
+PATH=${FSLDEVDIR}/bin:${PATH}
 echo "CFLAGS=\"${cflags}\" LDFLAGS=\"${ldflags}\" ./configure ${configure_opts}"
 CFLAGS="${cflags}" LDFLAGS="${ldflags}" ./configure ${configure_opts}
 

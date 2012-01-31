@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                           // swap.
 #include <memory>                              // allocator.
@@ -78,8 +78,8 @@ private:
     typedef basic_buffer<Ch, Alloc> base;
 public:
     typedef iostreams::char_traits<Ch> traits_type;
-    using base::resize; 
-    using base::data; 
+    using base::resize;
+    using base::data;
     using base::size;
     typedef Ch* const const_pointer;
     buffer(int buffer_size);
@@ -92,14 +92,14 @@ public:
 
     // Returns an int_type as a status code.
     template<typename Source>
-    typename int_type_of<Source>::type fill(Source& src) 
+    typename int_type_of<Source>::type fill(Source& src)
     {
         using namespace std;
         streamsize keep;
         if ((keep = static_cast<streamsize>(eptr_ - ptr_)) > 0)
             traits_type::move(this->data(), ptr_, keep);
         set(0, keep);
-        streamsize result = 
+        streamsize result =
             iostreams::read(src, this->data() + keep, this->size() - keep);
         if (result != -1)
             this->set(0, keep + result);
@@ -118,14 +118,14 @@ public:
 
     // Returns true if one or more characters were written.
     template<typename Sink>
-    bool flush(Sink& dest) 
+    bool flush(Sink& dest)
     {
         using namespace std;
         streamsize amt = static_cast<std::streamsize>(eptr_ - ptr_);
         streamsize result = iostreams::write_if(dest, ptr_, amt);
         if (result < amt) {
-            traits_type::move( this->data(), 
-                               ptr_ + result, 
+            traits_type::move( this->data(),
+                               ptr_ + result,
                                amt - result );
         }
         this->set(0, amt - result);
@@ -146,7 +146,7 @@ basic_buffer<Ch, Alloc>::basic_buffer() : buf_(0), size_(0) { }
 
 template<typename Ch, typename Alloc>
 basic_buffer<Ch, Alloc>::basic_buffer(int buffer_size)
-    : buf_(static_cast<Ch*>(allocator_type().allocate(buffer_size, 0))), 
+    : buf_(static_cast<Ch*>(allocator_type().allocate(buffer_size, 0))),
       size_(buffer_size) // Cast for SunPro 5.3.
     { }
 
@@ -165,10 +165,10 @@ inline void basic_buffer<Ch, Alloc>::resize(int buffer_size)
 }
 
 template<typename Ch, typename Alloc>
-void basic_buffer<Ch, Alloc>::swap(basic_buffer& rhs) 
-{ 
-    std::swap(buf_, rhs.buf_); 
-    std::swap(size_, rhs.size_); 
+void basic_buffer<Ch, Alloc>::swap(basic_buffer& rhs)
+{
+    std::swap(buf_, rhs.buf_);
+    std::swap(size_, rhs.size_);
 }
 
 //--------------Implementation of buffer--------------------------------------//
@@ -179,17 +179,17 @@ buffer<Ch, Alloc>::buffer(int buffer_size)
 
 template<typename Ch, typename Alloc>
 inline void buffer<Ch, Alloc>::set(std::streamsize ptr, std::streamsize end)
-{ 
-    ptr_ = data() + ptr; 
-    eptr_ = data() + end; 
+{
+    ptr_ = data() + ptr;
+    eptr_ = data() + end;
 }
 
 template<typename Ch, typename Alloc>
-inline void buffer<Ch, Alloc>::swap(buffer& rhs) 
-{ 
-    base::swap(rhs); 
-    std::swap(ptr_, rhs.ptr_); 
-    std::swap(eptr_, rhs.eptr_); 
+inline void buffer<Ch, Alloc>::swap(buffer& rhs)
+{
+    base::swap(rhs);
+    std::swap(ptr_, rhs.ptr_);
+    std::swap(eptr_, rhs.eptr_);
 }
 
 //----------------------------------------------------------------------------//

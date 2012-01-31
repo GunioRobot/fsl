@@ -1,4 +1,4 @@
-#{{{ copyright and setup 
+#{{{ copyright and setup
 
 #   FEAT TCL functions library
 #
@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -354,7 +354,7 @@ set fmri(regstandard_dof) $fmri(regstandard_dof)
 set fmri(regstandard_nonlinear_yn) $fmri(regstandard_nonlinear_yn)
 
 # Control nonlinear warp field resolution
-set fmri(regstandard_nonlinear_warpres) $fmri(regstandard_nonlinear_warpres) 
+set fmri(regstandard_nonlinear_warpres) $fmri(regstandard_nonlinear_warpres)
 
 # High pass filter cutoff
 set fmri(paradigm_hp) $fmri(paradigm_hp)"
@@ -365,7 +365,7 @@ set fmri(paradigm_hp) $fmri(paradigm_hp)"
 puts $channel "
 # Number of lower-level copes feeding into higher-level analysis
 set fmri(ncopeinputs) $fmri(ncopeinputs)"
-for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {   
+for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {
 	puts $channel "
 # Use lower-level cope $nci for higher-level analysis
 set fmri(copeinput.$nci) $fmri(copeinput.$nci)"
@@ -458,7 +458,7 @@ set highres_files($i) \"$highres_files($i)\""
     }
 }
 
-} else { 
+} else {
     if { $fmri(npts) < 1 } {
 	MxPause "Please either select input data or set the number of total volumes before attempting to view the design."
 	if { $exitoncheckfail } {
@@ -509,7 +509,7 @@ set fmri(tempfilt_yn$i) $fmri(tempfilt_yn$i)
 set fmri(deriv_yn$i) $fmri(deriv_yn$i)"
 
 		switch $fmri(shape$i) {
-		    0 { 
+		    0 {
 			puts $channel "
 # Skip (EV $i)
 set fmri(skip$i) $fmri(skip$i)
@@ -526,7 +526,7 @@ set fmri(phase$i) $fmri(phase$i)
 # Stop (EV $i)
 set fmri(stop$i) $fmri(stop$i)"
 		    }
-		    1 { 
+		    1 {
 			puts $channel "
 # Skip (EV $i)
 set fmri(skip$i) $fmri(skip$i)
@@ -538,7 +538,7 @@ set fmri(period$i) $fmri(period$i)
 set fmri(phase$i) $fmri(phase$i)
 
 # Sinusoid harmonics (EV $i)
-set fmri(nharmonics$i) $fmri(nharmonics$i) 
+set fmri(nharmonics$i) $fmri(nharmonics$i)
 
 # Stop (EV $i)
 set fmri(stop$i) $fmri(stop$i)"
@@ -560,10 +560,10 @@ set fmri(interactionsd${i}.$j) $fmri(interactionsd${i}.$j)"
 			}
 		    }
 		}
-		
+
 		switch $fmri(convolve$i) {
 		    0 { }
-		    1 { 
+		    1 {
 			puts $channel "
 # Gauss sigma (EV $i)
 set fmri(gausssigma$i) $fmri(gausssigma$i)
@@ -639,14 +639,14 @@ set fmri(ortho${i}.$j) $fmri(ortho${i}.$j)"
 set fmri(evg${j}.$i) $fmri(evg${j}.$i)"
 		    }
 		}
-		
+
 	    }
 	}
 
 	if { $fmri(level) > 1 } {
 	    if { [ info exists fmri(level2orth) ] } {
 		puts $channel "
-# Setup Orthogonalisation at higher level? 
+# Setup Orthogonalisation at higher level?
 set fmri(level2orth) $fmri(level2orth)"
 	    }
 
@@ -800,7 +800,7 @@ set fmri(overwrite_yn) $fmri(overwrite_yn)"
 #}}}
 
     close $channel
-    
+
     if { $w != -1 } {
 	set result 0
 	set fmri(donemodel) 1
@@ -833,7 +833,7 @@ proc feat5:load { w full filename } {
     if { $INMELODIC != 1 } {
 
 	set version [ exec sh -c "grep 'fmri(version)' $filename | awk '{ print \$3 }'" ]
-    
+
 	if { $version > 4.99 } {
 
 	    if { $w != -1 } {
@@ -853,10 +853,10 @@ proc feat5:load { w full filename } {
 	    if { $w != -1 && $fmri(analysis) != 4 && $fmri(analysis) != 0 } {
 		feat5:updateimageinfo $w 1 0
 	    }
-	    
+
 	    if { ! $full } {
 		if { $level != $fmri(level) } {
-		    feat5:updatelevel $w 
+		    feat5:updatelevel $w
 		    set fmri(level) $level
 		}
 
@@ -891,7 +891,7 @@ proc feat5:load { w full filename } {
 	    feat5:updateanalysis $w
 	}
     }
-    
+
     set fmri(version) $FEATVERSION
     set fmri(donemodel) 1
 }
@@ -957,7 +957,7 @@ proc feat5:setupdefaults { } {
 	exit 1
     }
 
-    # load user-specific defaults if they exist 
+    # load user-specific defaults if they exist
     if { [ file exists ${HOME}/.fslconf/feat.tcl ] } {
 	source ${HOME}/.fslconf/feat.tcl
     }
@@ -1091,21 +1091,21 @@ set pastevar feat_files
 for { set i 1 } { $i <= $fmri(multiple) } { incr i 1 } {
     if { $which_files < 1 } {
 	if { ( $fmri(level) == 1 && $fmri(analysis) != 4 && $fmri(analysis) != 0 ) || $fmri(inputtype) == 2 } {
-            FileEntry $w0.filename$i -textvariable feat_files($i) -filetypes IMAGE 
+            FileEntry $w0.filename$i -textvariable feat_files($i) -filetypes IMAGE
 	} else {
             FileEntry $w0.filename$i -textvariable feat_files($i) -filetypes *.feat -dirasfile design.fsf
 	}
     } elseif { $which_files == 1 } {
-        FileEntry $w0.filename$i -textvariable unwarp_files($i) -filetypes IMAGE 
+        FileEntry $w0.filename$i -textvariable unwarp_files($i) -filetypes IMAGE
 	set pastevar unwarp_files
     } elseif { $which_files == 2 } {
-         FileEntry $w0.filename$i -textvariable unwarp_files_mag($i) -filetypes IMAGE 
+         FileEntry $w0.filename$i -textvariable unwarp_files_mag($i) -filetypes IMAGE
 	set pastevar unwarp_files_mag
     } elseif { $which_files == 3 } {
-         FileEntry $w0.filename$i -textvariable initial_highres_files($i) -filetypes IMAGE 
+         FileEntry $w0.filename$i -textvariable initial_highres_files($i) -filetypes IMAGE
 	set pastevar initial_highres_files
     } elseif { $which_files == 4 } {
-        FileEntry $w0.filename$i -textvariable highres_files($i) -filetypes IMAGE 
+        FileEntry $w0.filename$i -textvariable highres_files($i) -filetypes IMAGE
 	set pastevar highres_files
     } elseif { $which_files == 20 } {
         FileEntry $w0.filename$i -textvariable confoundev_files($i) -filetypes *
@@ -1238,9 +1238,9 @@ Problem with FEAT unwarp file ($i): currently set to \"$unwarp_files($i)\""
 	    if { ! [ info exists unwarp_files_mag($i) ] } {
 		set unwarp_files_mag($i) ""
 	    }
-	    
+
 	    set unwarp_files_mag($i) [ remove_ext $unwarp_files_mag($i) ]
-	    if { [ exec sh -c "${FSLDIR}/bin/fslnvols $unwarp_files_mag($i) 2> /dev/null" ] < 1 } { 
+	    if { [ exec sh -c "${FSLDIR}/bin/fslnvols $unwarp_files_mag($i) 2> /dev/null" ] < 1 } {
 		set AllOK "${AllOK}
 Problem with FEAT unwarp magnitude file ($i): currently set to \"$unwarp_files_mag($i)\""
 	    }
@@ -1333,7 +1333,7 @@ scrollbar $w0.xsbar -command "$w0.text xview" -orient horizontal
 scrollbar $w0.ysbar -command "$w0.text yview" -orient vertical
 
 text $w0.text -xscrollcommand "$w0.xsbar set" -yscrollcommand "$w0.ysbar set" \
-  -width 60 -height 20 -wrap none 
+  -width 60 -height 20 -wrap none
 
 pack $w0.xsbar -side bottom -fill x
 pack $w0.ysbar -side right  -fill y
@@ -1441,8 +1441,8 @@ if { $fmri(level) > 1 && $fmri(analysis) != 4 } {
 	    set featdirname [ file dirname [ file dirname $featdirname ] ]
 	}
 
-	if { ! [ file exists $featdirname/reg/example_func2standard.mat ] && 
-	     ! [ file exists $featdirname/example_func2standard.mat ] && 
+	if { ! [ file exists $featdirname/reg/example_func2standard.mat ] &&
+	     ! [ file exists $featdirname/example_func2standard.mat ] &&
 	     ! [ file exists $featdirname/design.lev ] } {
 	    set problem 1
 	}
@@ -1473,7 +1473,7 @@ Please turn on and setup registration."
 
 proc feat5:updatelevel { w } {
     global fmri
-   
+
     if { $fmri(inmelodic) } {
 	return 0
     }
@@ -1564,7 +1564,7 @@ if { $fmri(level)==2 && $fmri(analysis)==4 } {
     set fmri(inputtype) 1
 }
 
-pack forget $fmri(dataf).inputtype $fmri(dataf).datamain $fmri(dataf).outputdir  
+pack forget $fmri(dataf).inputtype $fmri(dataf).datamain $fmri(dataf).outputdir
 if { $fmri(analysis) != 0 && $fmri(analysis) != 4 } {
     pack $fmri(dataf).outputdir -in $fmri(dataf) -anchor w -side top -pady 10
     if { $fmri(level) == 1  } {
@@ -1653,7 +1653,7 @@ set v $w0.f.viewport.f
 
 set statslist [ lsort -dictionary [ imglob $feat_files(1)/stats/cope*.* ] ]
 set fmri(ncopeinputs) [ llength $statslist ]
-    
+
 if { $fmri(ncopeinputs) < 1 } {
     MxPause "Warning: the first selected FEAT directory contains no stats/cope images"
     return 1
@@ -1662,7 +1662,7 @@ if { $fmri(ncopeinputs) < 1 } {
 label $v.0 -text "Use lower-level copes: "
 grid $v.0 -in $v -column 0 -row 0
 
-for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {   
+for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {
     if { ! [ info exists fmri(copeinput.$nci) ] } {
 	set fmri(copeinput.$nci) 1
     }
@@ -1684,7 +1684,7 @@ contrasts by turning off the appropriate button."
 #{{{ feat5:updatehelp
 
 proc feat5:updatehelp { w } {
-    global fmri 
+    global fmri
 
     balloonhelp_control $fmri(help_yn)
 }
@@ -1725,10 +1725,10 @@ proc feat5:updateprestats { w } {
     }
 
     if { $fmri(regunwarp_yn) } {
-	pack forget $fmri(unwarpf).label 
+	pack forget $fmri(unwarpf).label
 	pack $fmri(unwarpf).lf -in $fmri(unwarpf) -side left
     } else {
-	pack forget $fmri(unwarpf).lf 
+	pack forget $fmri(unwarpf).lf
 	pack $fmri(unwarpf).label -in $fmri(unwarpf) -side left -before $fmri(unwarpf).yn
     }
     if { [ winfo exists $w.nb ] } {
@@ -1822,7 +1822,7 @@ proc feat5:updatepoststats { w } {
 	if { $fmri(level) > 1 } {
 	    pack $w.bgimage -in $fmri(lfrendering) -before $fmri(lfrenderingtop) -anchor w -padx 3 -pady 3
 	}
-	
+
 	if { $fmri(zdisplay) } {
 	    pack $w.zmin $w.zmax -in $fmri(lfrenderingtop) -after $w.zmaxmenu -side left -anchor n -padx 3 -pady 5
 	}
@@ -1890,26 +1890,26 @@ proc feat5:updatereg { w } {
     }
 
     if { $fmri(reginitial_highres_yn) } {
-	pack forget $fmri(regf).initial_highres.label 
+	pack forget $fmri(regf).initial_highres.label
 	pack $fmri(regf).initial_highres.lf -in $fmri(regf).initial_highres -side left
     } else {
-	pack forget $fmri(regf).initial_highres.lf 
+	pack forget $fmri(regf).initial_highres.lf
 	pack $fmri(regf).initial_highres.label -in $fmri(regf).initial_highres -side left
     }
 
     if { $fmri(reghighres_yn) } {
-	pack forget $fmri(regf).highres.label 
+	pack forget $fmri(regf).highres.label
 	pack $fmri(regf).highres.lf -in $fmri(regf).highres -side left
     } else {
-	pack forget $fmri(regf).highres.lf 
+	pack forget $fmri(regf).highres.lf
 	pack $fmri(regf).highres.label -in $fmri(regf).highres -side left
     }
 
     if { $fmri(regstandard_yn) } {
-	pack forget $fmri(regf).standard.label 
+	pack forget $fmri(regf).standard.label
 	pack $fmri(regf).standard.lf -in $fmri(regf).standard -side left
     } else {
-	pack forget $fmri(regf).standard.lf 
+	pack forget $fmri(regf).standard.lf
 	pack $fmri(regf).standard.label -in $fmri(regf).standard -side left
     }
 
@@ -1940,7 +1940,7 @@ proc feat5:updateimageinfo { w i full } {
 	    set xfov [ expr abs([ exec sh -c "$FSLDIR/bin/fslval $thefile pixdim1" ] * [ exec sh -c "$FSLDIR/bin/fslval $thefile dim1" ]) ]
 	    set yfov [ expr abs([ exec sh -c "$FSLDIR/bin/fslval $thefile pixdim2" ] * [ exec sh -c "$FSLDIR/bin/fslval $thefile dim2" ]) ]
 	    set zfov [ expr abs([ exec sh -c "$FSLDIR/bin/fslval $thefile pixdim3" ] * [ exec sh -c "$FSLDIR/bin/fslval $thefile dim3" ]) ]
-	    
+
 	    set BETMINFOV 30
 	    if { $xfov < $BETMINFOV || $yfov < $BETMINFOV || $zfov < $BETMINFOV } {
 		set fmri(bet_yn) 0
@@ -2032,7 +2032,7 @@ proc feat5:wizard { w } {
 
 frame $w0.f.paradigm_type
 
-set fmri(wizard_type) 1	
+set fmri(wizard_type) 1
 
 radiobutton $w0.f.paradigm_type.jab -text "rArA..." -value 1 -variable fmri(wizard_type) -command "feat5:update_wizard $w0"
 radiobutton $w0.f.paradigm_type.jabac -text "rArBrArB..." -value 2 -variable fmri(wizard_type) -command "feat5:update_wizard $w0"
@@ -2054,9 +2054,9 @@ pack $w0.f.paradigm_type.jab $w0.f.paradigm_type.jabac $w0.f.paradigm_type.jperf
 frame $w0.f.ab
 
 set fmri(r_count) 30
-LabelSpinBox  $w0.f.ab.r_count -label "r (rest) period (s)" -textvariable fmri(r_count) -range {0.0 10000 1 } 
+LabelSpinBox  $w0.f.ab.r_count -label "r (rest) period (s)" -textvariable fmri(r_count) -range {0.0 10000 1 }
 set fmri(a_count) 30
-LabelSpinBox  $w0.f.ab.a_count -label "A period (s)" -textvariable fmri(a_count) -range {0.0 10000 1 } 
+LabelSpinBox  $w0.f.ab.a_count -label "A period (s)" -textvariable fmri(a_count) -range {0.0 10000 1 }
 set fmri(b_count) 30
 LabelSpinBox $w0.f.ab.b_count -label "B period (s)" -textvariable fmri(b_count) -range {0.0 10000 1 }
 
@@ -2075,7 +2075,7 @@ period."
 
 frame $w0.f.paradigm_type
 
-set fmri(wizard_type) 1	
+set fmri(wizard_type) 1
 
 radiobutton $w0.f.paradigm_type.onegroup -text "single group average" -value 1 -variable fmri(wizard_type) -command "feat5:update_wizard $w0"
 radiobutton $w0.f.paradigm_type.twogroupunpaired -text "two groups, unpaired" -value 2 -variable fmri(wizard_type) -command "feat5:update_wizard $w0"
@@ -2093,7 +2093,7 @@ pack $w0.f.paradigm_type.onegroup $w0.f.paradigm_type.twogroupunpaired $w0.f.par
 	#{{{ frame ab
 
 frame $w0.f.ab
-LabelSpinBox $w0.f.ab.a_count -label "Number of subjects in first group" -textvariable fmri(a_count) -range "1 [ expr $fmri(multiple) - 1 ] 1 " 
+LabelSpinBox $w0.f.ab.a_count -label "Number of subjects in first group" -textvariable fmri(a_count) -range "1 [ expr $fmri(multiple) - 1 ] 1 "
 balloonhelp_for $w0.f.ab.a_count "This is the number of subjects in the first group of subjects. The
 number of subjects in the second group is calculated automatically."
 
@@ -2104,7 +2104,7 @@ number of subjects in the second group is calculated automatically."
 button $w0.f.cancel -command "feat5:updatestats $w 1 ; destroy $w0" -text "Process"
 
 #}}}
- 
+
     pack $w0.f.paradigm_type $w0.f.ab $w0.f.cancel -in $w0.f -pady 5
 }
 
@@ -2176,7 +2176,7 @@ proc feat5:setup_model { w } {
 
     set fmri(notebook) [NoteBook $w0.f.viewport.f.nb  -side top -bd 2 -tabpady {5 10} -arcradius 3 ]
     if { $fmri(analysis) != 4 } {
-    $w0.f.viewport.f.nb insert 0 evs -text "EVs"    
+    $w0.f.viewport.f.nb insert 0 evs -text "EVs"
     }
     $w0.f.viewport.f.nb insert 1 contrasts     -text "Contrasts & F-tests"
     pack  $w0.f.viewport.f.nb -in $w0.f.viewport.f -expand true -fill both
@@ -2190,7 +2190,7 @@ if { $fmri(level) == 1 } {
 label  $fmri(contrastsf).label -text "Setup contrasts & F-tests for "
 
     optionMenu2 $fmri(contrastsf).con_men fmri(con_mode) -command "feat5:setup_model_update_contrasts_mode $w 1;feat5:setup_model_update_contrasts $w" orig "Original EVs" real "Real EVs"
-pack  $fmri(contrastsf).label $fmri(contrastsf).con_men -in $fmri(contrastsf).men -side left -anchor w -padx 5 -pady 0 
+pack  $fmri(contrastsf).label $fmri(contrastsf).con_men -in $fmri(contrastsf).men -side left -anchor w -padx 5 -pady 0
 balloonhelp_for $fmri(contrastsf).con_men "For first-level analyses, it is common for the final design matrix to
 have a greater number of \"real EVs\" than the \"original\" number; for
 example, when using basis functions, each \"original EV\" gives rise
@@ -2217,8 +2217,8 @@ the appropriate \"Real EVs\" settings."
 
 frame $fmri(contrastsf).num
 
-LabelSpinBox  $fmri(contrastsf).num.con -label "Contrasts " -textvariable fmri(ncon_$fmri(con_mode)) -range {1 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command "$fmri(contrastsf).num.con.spin.e validate;feat5:setup_model_update_contrasts $w" 
-LabelSpinBox  $fmri(contrastsf).num.ftests -label "   F-tests " -textvariable fmri(nftests_$fmri(con_mode)) -range {0 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command "$fmri(contrastsf).num.ftests.spin.e validate;feat5:setup_model_update_contrasts $w" 
+LabelSpinBox  $fmri(contrastsf).num.con -label "Contrasts " -textvariable fmri(ncon_$fmri(con_mode)) -range {1 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command "$fmri(contrastsf).num.con.spin.e validate;feat5:setup_model_update_contrasts $w"
+LabelSpinBox  $fmri(contrastsf).num.ftests -label "   F-tests " -textvariable fmri(nftests_$fmri(con_mode)) -range {0 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command "$fmri(contrastsf).num.ftests.spin.e validate;feat5:setup_model_update_contrasts $w"
 
 pack $fmri(contrastsf).num.con $fmri(contrastsf).num.ftests -in $fmri(contrastsf).num -side left -anchor n -padx 5 -pady 0
 pack $fmri(contrastsf).men $fmri(contrastsf).num -in $fmri(contrastsf) -side top -anchor w -padx 0 -pady 5
@@ -2289,7 +2289,7 @@ if { $fmri(analysis) != 4 } {
 	set ev_description " main"
     }
 
-    LabelSpinBox $fmri(evsf).evs -label " Number of$ev_description EVs " -textvariable fmri(evs_orig) -range {1 10000 1 } -modifycmd "feat5:setup_model_update_evs $w $fmri(evsf) 1" -command "$fmri(evsf).evs.spin.e validate; feat5:setup_model_update_evs $w $fmri(evsf) 1 "  
+    LabelSpinBox $fmri(evsf).evs -label " Number of$ev_description EVs " -textvariable fmri(evs_orig) -range {1 10000 1 } -modifycmd "feat5:setup_model_update_evs $w $fmri(evsf) 1" -command "$fmri(evsf).evs.spin.e validate; feat5:setup_model_update_evs $w $fmri(evsf) 1 "
 
 balloonhelp_for $fmri(evsf).evs "The basic number of explanatory variables in the design matrix; this
 means the number of different effects that you wish to model - one for
@@ -2302,7 +2302,7 @@ to several \"real EVs\"."
     pack $fmri(evsf).evs -in $fmri(evsf) -padx 2 -pady 2 -side top -anchor w
 
     if { $fmri(level) > 1 } {
-	LabelSpinBox $fmri(evsf).voxevs -label " Number of additional, voxel-dependent EVs " -textvariable fmri(evs_vox) -range {0 10000 1 } -modifycmd "feat5:setup_model_update_evs $w $fmri(evsf) 1" -command "$fmri(evsf).voxevs.spin.e validate; feat5:setup_model_update_evs $w $fmri(evsf) 1 "  
+	LabelSpinBox $fmri(evsf).voxevs -label " Number of additional, voxel-dependent EVs " -textvariable fmri(evs_vox) -range {0 10000 1 } -modifycmd "feat5:setup_model_update_evs $w $fmri(evsf) 1" -command "$fmri(evsf).voxevs.spin.e validate; feat5:setup_model_update_evs $w $fmri(evsf) 1 "
 	balloonhelp_for $fmri(evsf).voxevs "This allows you to add voxel-dependent EVs; every voxel will have a
 different higher-level model. For each additional EV that you ask for,
 you will need to provide the filename of a 4D image file whose first 3
@@ -2329,7 +2329,7 @@ analyses and before running the higher-level FEAT."
     }
 
     if { $fmri(level) == 1 } {
-        NoteBook $fmri(evsf).evsnb -side top -bd 2 -tabpady {5 10} -arcradius 3 
+        NoteBook $fmri(evsf).evsnb -side top -bd 2 -tabpady {5 10} -arcradius 3
         pack $fmri(evsf).evsnb -in $fmri(evsf) -padx 2 -pady 2 -side top -anchor w -expand true -fill both
     }
     feat5:setup_model_update_evs $w $fmri(evsf) 1
@@ -2431,7 +2431,7 @@ proc feat5:setup_model_vars_simple { w } {
 
 	set fmri(paradigm_hp) [ expr $fmri(r_count) + $fmri(a_count) ]
 
-#}}}   
+#}}}
 	} elseif { $fmri(wizard_type) == 2 } {
 	    #{{{ setup wizard type 2
 
@@ -2471,7 +2471,7 @@ proc feat5:setup_model_vars_simple { w } {
 	set fmri(ortho2.0) 0
 	set fmri(ortho2.1) 0
 	set fmri(ortho2.2) 0
-	
+
 	set fmri(ncon_orig) 4
 	set fmri(con_orig1.1) 1
 	set fmri(con_orig1.2) 0
@@ -2555,7 +2555,7 @@ proc feat5:setup_model_vars_simple { w } {
 	set fmri(ortho3.1) 0
 	set fmri(ortho3.2) 0
 	set fmri(ortho3.3) 0
-	
+
 	set fmri(ncon_orig) 6
 	set fmri(con_orig1.1) 0
 	set fmri(con_orig1.2) 0
@@ -2609,7 +2609,7 @@ set fmri(evs_real) 1
 
 set fmri(custom1) dummy
 set fmri(shape1) 2
-set fmri(convolve1)    0    
+set fmri(convolve1)    0
 set fmri(tempfilt_yn1) 0
 set fmri(deriv_yn1)    0
 set fmri(ortho1.0)     0
@@ -2639,10 +2639,10 @@ set fmri(custom1) dummy
 set fmri(custom2) dummy
 set fmri(shape1) 2
 set fmri(shape2) 2
-set fmri(convolve1) 0    
-set fmri(convolve2) 0    
-set fmri(convolve_phase1) 0    
-set fmri(convolve_phase2) 0    
+set fmri(convolve1) 0
+set fmri(convolve2) 0
+set fmri(convolve_phase1) 0
+set fmri(convolve_phase2) 0
 set fmri(tempfilt_yn1) 0
 set fmri(tempfilt_yn2) 0
 set fmri(deriv_yn1) 0
@@ -2697,8 +2697,8 @@ set fmri(evs_real) $fmri(evs_orig)
 for { set i 1 } { $i <=  $fmri(evs_orig) } { incr i 1 } {
     set fmri(custom${i}) dummy
     set fmri(shape${i}) 2
-    set fmri(convolve${i}) 0    
-    set fmri(convolve_phase${i}) 0    
+    set fmri(convolve${i}) 0
+    set fmri(convolve_phase${i}) 0
     set fmri(tempfilt_yn${i}) 0
     set fmri(deriv_yn${i}) 0
     set fmri(evtitle${i}) "s[ expr $i - 1 ]"
@@ -2719,7 +2719,7 @@ for { set i 1 } { $i <=  $fmri(multiple) } { incr i 1 } {
     }
 
     for { set j 2 } { $j <= $fmri(evs_orig) } { incr j 1 } {
-	set fmri(evg${i}.${j}) 0	
+	set fmri(evg${i}.${j}) 0
     }
 }
 
@@ -2840,7 +2840,7 @@ if { $whocalled == 1 } {
 
 if { $fmri(shape$i) != 10 } {
     pack $w0.evsnb.tempfilt$i -in $fmri(modelf$i) -padx 5 -pady 2 -side bottom -anchor w
-} else { 
+} else {
     pack forget $w0.evsnb.tempfilt$i
 }
 
@@ -2912,14 +2912,14 @@ the other."
 
 if { ( $fmri(shape$i) != 1 && $fmri(convolve$i) < 4 ) || $fmri(shape$i) == 10 } {
     pack $w0.evsnb.deriv$i -in $fmri(modelf$i) -padx 5 -pady 2 -side bottom -anchor w
-} else { 
+} else {
     set fmri(deriv_yn$i) 0
     pack forget $w0.evsnb.deriv$i
 }
 
 #}}}
     }
-    feat5:setup_model_update_contrasts $w 
+    feat5:setup_model_update_contrasts $w
 
     if {$resize != 0} {
 	$w0.evsnb compute_size
@@ -3007,7 +3007,7 @@ if { ! [ info exists fmri(gammadelay$i) ] } {
 }
 
 if { ! [ info exists fmri(bfcustom$i) ] } {
-    set fmri(bfcustom$i) $fmri(default_bfcustom) 
+    set fmri(bfcustom$i) $fmri(default_bfcustom)
 }
 
 if { ! [ info exists fmri(basisfnum$i) ] } {
@@ -3041,7 +3041,7 @@ if { ! [ info exists fmri(interactions${i}.1) ] && $i > 2 } {
 	} else {
 	    set fmri(custom$i) dummy
 	    set fmri(shape$i) 2
-	    set fmri(convolve$i) 0    
+	    set fmri(convolve$i) 0
 	    set fmri(convolve_phase$i) 0
 	    set fmri(tempfilt_yn$i) 0
 	    set fmri(deriv_yn$i) 0
@@ -3093,7 +3093,7 @@ if { $i > 2 } {
 } else {
     optionMenu2 $w0.evsnb.shape$i fmri(shape$i) -command "feat5:setup_model_update_ev_i $w $w0 $i 1 1" 10 "Empty (all zeros)" 0 "Square" 1 "Sinusoid" 2 "Custom (1 entry per volume)" 3 "Custom (3 column format)"
 }
-pack  $w0.evsnb.label$i $w0.evsnb.shape$i -in $w0.evsnb.shapemenu$i -side left 
+pack  $w0.evsnb.label$i $w0.evsnb.shape$i -in $w0.evsnb.shapemenu$i -side left
 
 set fmri(shape$i) $grot
 balloonhelp_for $w0.evsnb.shape$i "Choose the basic shape of the waveform that describes the stimulus or confound that you wish to model. The basic waveform should be exactly in time with the applied stimulation, i.e., not lagged at all. This is because the measured (time-series) response will be delayed with respect to the stimulation, and this delay is modelled in the design matrix by convolution of the basic waveform with a suitable haemodynamic response function (see appropriate bubble-help).
@@ -3119,29 +3119,29 @@ For PPI analyses, you should probably do something like: Set EV1 to your main ef
 
 frame $w0.evsnb.timings$i
 option add *evsnb.LabelSpinBox*labf*width 15
-LabelSpinBox $w0.evsnb.skip$i -textvariable fmri(skip$i) -label "    Skip (s)" -range {0.0 10000 1 } 
+LabelSpinBox $w0.evsnb.skip$i -textvariable fmri(skip$i) -label "    Skip (s)" -range {0.0 10000 1 }
 balloonhelp_for $w0.evsnb.skip$i "The initial period (seconds) before the waveform commences."
 
 LabelSpinBox $w0.evsnb.off$i -textvariable fmri(off$i) -label "    Off (s)" -range {0.0 10000 1 }
 balloonhelp_for $w0.evsnb.off$i "The duration (seconds) of the \"Off\" periods in the square wave."
 
-LabelSpinBox $w0.evsnb.on$i -textvariable fmri(on$i) -label "    On (s)" -range {0.0 10000 1 } 
+LabelSpinBox $w0.evsnb.on$i -textvariable fmri(on$i) -label "    On (s)" -range {0.0 10000 1 }
 balloonhelp_for $w0.evsnb.on$i "The duration (seconds) of the \"On\" periods in the square wave."
 
 LabelSpinBox $w0.evsnb.phase$i -textvariable fmri(phase$i) -label "    Phase (s)" -range {-10000.0 10000 1 }
 balloonhelp_for $w0.evsnb.phase$i "The phase shift (seconds) of the waveform. By default, after the \"Skip\" period, the square wave\nstarts with a full \"Off\" period and the \"Sinusoid\" starts by falling from zero. However, the\nwave can be brought forward in time according to the phase shift."
 
-LabelSpinBox $w0.evsnb.stop$i -textvariable fmri(stop$i) -label "    Stop after (s)" -range {-1.0 10000 1 } 
+LabelSpinBox $w0.evsnb.stop$i -textvariable fmri(stop$i) -label "    Stop after (s)" -range {-1.0 10000 1 }
 balloonhelp_for $w0.evsnb.stop$i "The active duration (seconds) of the waveform, starting\nafter the \"Skip\" period. \"-1\" means do not stop."
 
-LabelSpinBox $w0.evsnb.period$i -textvariable fmri(period$i) -label "    Period (s)"  -range {0.1 10000 1 } 
+LabelSpinBox $w0.evsnb.period$i -textvariable fmri(period$i) -label "    Period (s)"  -range {0.1 10000 1 }
 balloonhelp_for $w0.evsnb.period$i "The period (seconds) of the \"Sinusoid\" waveform."
 
-LabelSpinBox $w0.evsnb.nharmonics$i -textvariable fmri(nharmonics$i) -label "    Harmonics"  -range {0 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command " $w0.evsnb.nharmonics$i validate; feat5:setup_model_update_contrasts $w" 
+LabelSpinBox $w0.evsnb.nharmonics$i -textvariable fmri(nharmonics$i) -label "    Harmonics"  -range {0 10000 1 }  -modifycmd "feat5:setup_model_update_contrasts $w" -command " $w0.evsnb.nharmonics$i validate; feat5:setup_model_update_contrasts $w"
 balloonhelp_for $w0.evsnb.nharmonics$i "How many harmonics (sine waves with periods of half the primary sine
 wave, then quarter, etc) would you like?"
 
-FileEntry  $w0.evsnb.custom$i -textvariable fmri(custom$i) -label "    Filename" -title "Select an event file" -width 30 -filedialog directory  -filetypes * 
+FileEntry  $w0.evsnb.custom$i -textvariable fmri(custom$i) -label "    Filename" -title "Select an event file" -width 30 -filedialog directory  -filetypes *
 
 if { $i > 2 } {
     frame $w0.evsnb.interaction$i
@@ -3164,18 +3164,18 @@ if { $i > 2 } {
 
 frame $w0.evsnb.conv$i
 
-frame $w0.evsnb.convmenu$i 
+frame $w0.evsnb.convmenu$i
 pack forget  $w0.evsnb.labelconv$i $w0.evsnb.convolve$i $w0.evsnb.convmenu$i
 label $w0.evsnb.labelconv$i -text "Convolution: "
 optionMenu2 $w0.evsnb.convolve$i fmri(convolve$i) -command  "feat5:setup_model_update_ev_i $w $w0 $i 2 1" 0 "None" 1 "Gaussian" 2 "Gamma" 3 "Double-Gamma HRF" 7 "Optimal/custom basis functions" 4 "Gamma basis functions" 5 "Sine basis functions" 6 "FIR basis functions"
-pack $w0.evsnb.labelconv$i $w0.evsnb.convolve$i -in $w0.evsnb.convmenu$i -side left 
-pack $w0.evsnb.convmenu$i -in $w0.evsnb.conv$i -padx 0 -pady 2 -side top -anchor w 
+pack $w0.evsnb.labelconv$i $w0.evsnb.convolve$i -in $w0.evsnb.convmenu$i -side left
+pack $w0.evsnb.convmenu$i -in $w0.evsnb.conv$i -padx 0 -pady 2 -side top -anchor w
 
 balloonhelp_for $w0.evsnb.convolve$i "The form of the HRF (haemodynamic response function) convolution that
 will be applied to the basic waveform. This blurs and delays the
 original waveform, in an attempt to match the difference between the
 input function (original waveform, i.e., stimulus waveform) and the
-output function (measured FMRI haemodynamic response). 
+output function (measured FMRI haemodynamic response).
 
 If the original waveform is already in an appropriate form, e.g., was
 sampled from the data itself, \"None\" should be selected.
@@ -3187,7 +3187,7 @@ normalisation of the probability density function of the Gamma
 function); again, width and lag can be altered. \"Double-Gamma HRF\" is a
 preset function which is a mixture of two Gamma functions - a standard
 positive function at normal lag, and a small, delayed, inverted Gamma,
-which attempts to model the late undershoot. 
+which attempts to model the late undershoot.
 
 The remaining convolution options setup different \"basis
 functions\". This means that the original EV waveform will get
@@ -3222,17 +3222,17 @@ turned off."
 #}}}
 #{{{ convolution parameters
 
-LabelSpinBox  $w0.evsnb.convolve_phase$i -textvariable fmri(convolve_phase$i) -label "    Phase (s)"  -range {-10000.0 10000 1 } 
+LabelSpinBox  $w0.evsnb.convolve_phase$i -textvariable fmri(convolve_phase$i) -label "    Phase (s)"  -range {-10000.0 10000 1 }
 balloonhelp_for $w0.evsnb.convolve_phase$i "This sets the \"Phase\" of the convolution - i.e. phase shifts the
 convolved time series. Positive values shift the final time series
 earlier in time."
 LabelSpinBox  $w0.evsnb.gausssigma$i -textvariable fmri(gausssigma$i) -label "    Sigma (s)" -range {0.01 10000 0.1 }
 balloonhelp_for $w0.evsnb.gausssigma$i "This sets the half-width of the Gaussian smoothing of the input waveform."
-LabelSpinBox  $w0.evsnb.gaussdelay$i -textvariable fmri(gaussdelay$i) -label "    Peak lag (s)" -range {0.01 10000 0.1 }  
+LabelSpinBox  $w0.evsnb.gaussdelay$i -textvariable fmri(gaussdelay$i) -label "    Peak lag (s)" -range {0.01 10000 0.1 }
 balloonhelp_for $w0.evsnb.gaussdelay$i "This sets the peak lag of the Gaussian smoothing of the input waveform."
-LabelSpinBox  $w0.evsnb.gammasigma$i -textvariable fmri(gammasigma$i) -label "    Stddev (s)" -range {0.01 10000 0.1 } 
+LabelSpinBox  $w0.evsnb.gammasigma$i -textvariable fmri(gammasigma$i) -label "    Stddev (s)" -range {0.01 10000 0.1 }
 balloonhelp_for $w0.evsnb.gammasigma$i "This sets the half-width of the Gamma smoothing of the input waveform."
-LabelSpinBox  $w0.evsnb.gammadelay$i -textvariable fmri(gammadelay$i) -label "    Mean lag (s)" -range {0.01 10000 0.1 }  
+LabelSpinBox  $w0.evsnb.gammadelay$i -textvariable fmri(gammadelay$i) -label "    Mean lag (s)" -range {0.01 10000 0.1 }
 balloonhelp_for $w0.evsnb.gammadelay$i "This sets the mean lag of the Gamma smoothing of the input waveform."
 
 FileEntry $w0.evsnb.bfcustom$i -textvariable fmri(bfcustom$i) -label "    Filename" -title "Select a custom HRF convolution file" -width 30 -filedialog directory  -filetypes * -command "feat5:checkbfcustom $w $i dummy; feat5:setup_model_update_contrasts $w"
@@ -3244,16 +3244,16 @@ label $w0.evsnb.basisorth${i}.label -text "    Orthogonalise basis functions wrt
 checkbutton $w0.evsnb.basisorth${i}.cb -variable fmri(basisorth$i)
 pack $w0.evsnb.basisorth${i}.label $w0.evsnb.basisorth${i}.cb -in $w0.evsnb.basisorth$i -padx 0 -pady 2 -side left
 
-LabelSpinBox  $w0.evsnb.basisfnum$i -textvariable fmri(basisfnum$i) -label "    Number" -range {1 10000 1 }  -command "$w0.evsnb.basisfnum$i.spin.e validate;feat5:setup_model_update_contrasts $w" -modifycmd "feat5:setup_model_update_contrasts $w" 
+LabelSpinBox  $w0.evsnb.basisfnum$i -textvariable fmri(basisfnum$i) -label "    Number" -range {1 10000 1 }  -command "$w0.evsnb.basisfnum$i.spin.e validate;feat5:setup_model_update_contrasts $w" -modifycmd "feat5:setup_model_update_contrasts $w"
 balloonhelp_for $w0.evsnb.basisfnum$i "This sets the number of basis functions."
-LabelSpinBox  $w0.evsnb.basisfwidth$i -textvariable fmri(basisfwidth$i) -label "    Window (s)" -range {1.0 10000 1 } 
+LabelSpinBox  $w0.evsnb.basisfwidth$i -textvariable fmri(basisfwidth$i) -label "    Window (s)" -range {1.0 10000 1 }
 balloonhelp_for $w0.evsnb.basisfwidth$i "This sets the total period over which the basis functions are spread."
 
 #}}}
 
 #{{{ temporal filtering
 
-checkbutton $w0.evsnb.tempfilt$i -variable fmri(tempfilt_yn$i) -text "Apply temporal filtering" 
+checkbutton $w0.evsnb.tempfilt$i -variable fmri(tempfilt_yn$i) -text "Apply temporal filtering"
 balloonhelp_for $w0.evsnb.tempfilt$i "You should normally apply the same temporal filtering to the model as
 you have applied to the data, as the model is designed to look like
 the data before temporal filtering was applied. Thus long-time-scale
@@ -3344,10 +3344,10 @@ that, for each EV, only one of the sub-groups has non-zero
 values. Thus, for example, in the case of an unpaired t-test:
 
 GP EV1 EV2
-1   1    1 
-1   1    1 
-1   1    1 
-1   1    1 
+1   1    1
+1   1    1
+1   1    1
+1   1    1
 2   1   -1
 2   1   -1
 2   1   -1
@@ -3355,22 +3355,22 @@ GP EV1 EV2
 is wrong with respect to this issue, and the following is correct:
 
 GP EV1 EV2
-1   1    0 
-1   1    0 
-1   1    0 
-1   1    0 
+1   1    0
+1   1    0
+1   1    0
+1   1    0
 2   0    1
 2   0    1
 2   0    1
 
-Note that if you are using this to create input files for randomise then the 
-group numbers are use to specify exchangeability blocks, where randomise 
+Note that if you are using this to create input files for randomise then the
+group numbers are use to specify exchangeability blocks, where randomise
 permutes within blocks. A 0 is used to specify a static (unpermuted) block"
 
     for { set j 1 } { $j <= $fmri(evs_orig) } { incr j 1 } {
-        SpinBox   $w1.evg${i}_${j} -textvariable fmri(evg${i}.${j}) -width 3 
-        $w1.evg${i}_${j} configure  -range {-10000.0 10000 1 } -validate focusout -vcmd  {validNum %W %V %P %s [lindex [[string range %W 0 end-2] cget -range] 0] [lindex [[string range %W 0 end-2] cget -range] 1]} -invcmd { set [%W cget -textvariable] $tempSpin; %W config -validate %v } 
-        #need to do configure after declaration to get new Inputs initialising to 0 (could also put new init in to setup_var)... 
+        SpinBox   $w1.evg${i}_${j} -textvariable fmri(evg${i}.${j}) -width 3
+        $w1.evg${i}_${j} configure  -range {-10000.0 10000 1 } -validate focusout -vcmd  {validNum %W %V %P %s [lindex [[string range %W 0 end-2] cget -range] 0] [lindex [[string range %W 0 end-2] cget -range] 1]} -invcmd { set [%W cget -textvariable] $tempSpin; %W config -validate %v }
+        #need to do configure after declaration to get new Inputs initialising to 0 (could also put new init in to setup_var)...
 	grid $w1.evg${i}_${j} -in $w1 -row [ expr $i + 1 ] -column [ expr $j + 1 ]
         balloonhelp_for $w1.evg${i}_${j} "Design matrix value for Input (lower-level FEAT directory) $i and EV ${j}."
     }
@@ -3399,8 +3399,8 @@ for { set j 1 } { $j <= $fmri(evs_vox) } { incr j 1 } {
 	}
     }
     if {[winfo exists $w0.evsnb ]}  { $w0.evsnb compute_size }
-    feat5:setup_model_update_contrasts $w 
-}    
+    feat5:setup_model_update_contrasts $w
+}
 
 #}}}
 #{{{ feat5:setup_model_update_contrasts_real_per_orig
@@ -3428,7 +3428,7 @@ proc feat5:setup_model_update_contrasts_real_per_orig { w } {
 
     # so we're ok - return the number of BF or harmonics
 
-    return $fmri(evs_real.1)	
+    return $fmri(evs_real.1)
 }
 
 #}}}
@@ -3522,7 +3522,7 @@ for { set Con 1 } { $Con <= $fmri(ncon_orig) } { incr Con 1 } {
 	    set fmri(con_real${Con}.$ev_real) 0
 	    incr ev_real 1
 	}
-    }    
+    }
 
     for { set F 1 } { $F <= $fmri(nftests_orig) } { incr F 1 } {
 	set fmri(ftest_real${F}.${Con}) $fmri(ftest_orig${F}.${Con})
@@ -3557,9 +3557,9 @@ if { $fmri(level) == 1 } {
 
     for { set j 1 } { $j <= $fmri(evs_orig) } { incr j 1 } {
 	set fmri(evs_real.$j) 1
-	
+
 	incr fmri(evs_real.$j) $fmri(deriv_yn$j)
-	
+
 	if { $fmri(convolve$j) > 3 } {
 	    incr fmri(evs_real.$j) [ expr $fmri(basisfnum$j) - 1 ]
 	}
@@ -3653,7 +3653,7 @@ for { set j 1 } { $j <= $fmri(evs_$fmri(con_mode)) } { incr j 1 } {
 		}
 	    }
             SpinBox $w0.con${i}_${j} -textvariable fmri(con_$fmri(con_mode)${i}.${j}) -width 3
-	    $w0.con${i}_${j} configure -range {-10000.0 10000 1 } -validate focusout -vcmd  {validNum %W %V %P %s [lindex [[string range %W 0 end-2] cget -range] 0] [lindex [[string range %W 0 end-2] cget -range] 1]} -invcmd { set [%W cget -textvariable] $tempSpin; %W config -validate %v } 
+	    $w0.con${i}_${j} configure -range {-10000.0 10000 1 } -validate focusout -vcmd  {validNum %W %V %P %s [lindex [[string range %W 0 end-2] cget -range] 0] [lindex [[string range %W 0 end-2] cget -range] 1]} -invcmd { set [%W cget -textvariable] $tempSpin; %W config -validate %v }
 	    grid $w0.con${i}_${j} -in $w0 -row $i -column [ expr $j + 2 ]
             balloonhelp_for $w0.con${i}_${j} "The weight given to EV$j within contrast vector $i."
 	}
@@ -3682,9 +3682,9 @@ for { set i 1 } { $i <= $fmri(nftests_$fmri(con_mode)) } { incr i 1 } {
     label $w0.flabel$i -text "F$i "
     grid $w0.flabel$i -in $w0 -row 0 -column [ expr $i + $fmri(evs_real) + 3 ]
     balloonhelp_for $w0.flabel$i "F-test number $i - this will result in F statistic image number $i"
-	
+
     for { set j 1 } { $j <= $fmri(ncon_$fmri(con_mode)) } { incr j 1 } {
-	
+
 	if { ! [ info exists fmri(ftest_$fmri(con_mode)${i}.${j}) ] } {
 	    set fmri(ftest_$fmri(con_mode)${i}.${j}) 0
 	}
@@ -3847,7 +3847,7 @@ for { set C 1 } { $C <= $total } { incr C 1 } {
     } else {
 	label $v.tl$C -text "F[ expr $C - $fmri(ncon_real)]"
     }
-    balloonhelp_for $v.tl$C $fmri(conmask_help) 
+    balloonhelp_for $v.tl$C $fmri(conmask_help)
     grid $v.tl$C -in $v -column $C -row 0
 }
 
@@ -3858,14 +3858,14 @@ for { set c 1 } { $c <= $total } { incr c 1 } {
     } else {
 	label $v.l$c -text "Mask real F-test [ expr $c - $fmri(ncon_real)] with:    "
     }
-    balloonhelp_for $v.l$c $fmri(conmask_help) 
+    balloonhelp_for $v.l$c $fmri(conmask_help)
     grid $v.l$c -in $v -column 0 -row $c
 
     for { set C 1 } { $C <= $total } { incr C 1 } {
 
 	if { $C != $c } {
 	    checkbutton $v.cb${c}_$C -variable fmri(conmask${c}_${C})
-            balloonhelp_for $v.cb${c}_$C $fmri(conmask_help) 
+            balloonhelp_for $v.cb${c}_$C $fmri(conmask_help)
 	    grid $v.cb${c}_$C -in $v -column $C -row $c
 	}
     }
@@ -3874,8 +3874,8 @@ for { set c 1 } { $c <= $total } { incr c 1 } {
 #}}}
     #{{{ setup buttons
 
-checkbutton $w0.zeros -variable fmri(conmask_zerothresh_yn) -text "Mask using (Z>0) instead of (Z stats pass thresholding)" 
-balloonhelp_for $w0.zeros $fmri(conmask_help) 
+checkbutton $w0.zeros -variable fmri(conmask_zerothresh_yn) -text "Mask using (Z>0) instead of (Z stats pass thresholding)"
+balloonhelp_for $w0.zeros $fmri(conmask_help)
 
 button $w0.ok -command "destroy $w0" -text "OK"
 
@@ -3913,7 +3913,7 @@ proc feat5:setup_level2orth { w w1 } {
 
     set fmri(level2orth) 1
 
-    destroy $fmri(evsf).orthbutton $fmri(evsf).orthlabel 
+    destroy $fmri(evsf).orthbutton $fmri(evsf).orthlabel
 
     label $fmri(evsf).orthlabel -text "Orthogonalisations  "
     grid $fmri(evsf).orthlabel -in $w1 -row [ expr 2 + $fmri(multiple) ] -column 0 -columnspan 2
@@ -3928,7 +3928,7 @@ proc feat5:setup_level2orth { w w1 } {
                 balloonhelp_for $w1.doorth${i}_${j} "Orthogonalise EV$i wrt EV${j}?"
 	    }
 	}
-    } 
+    }
 }
 
 #}}}
@@ -3958,7 +3958,7 @@ balloonhelp_for $f.featwatcher "Start a web browser to watch the analysis progre
 #}}}
     #{{{ brain threshold
 
-LabelSpinBox $f.brain_thresh -label "Brain/background threshold, % " -textvariable fmri(brain_thresh) -range {0 100 1 } -width 3 
+LabelSpinBox $f.brain_thresh -label "Brain/background threshold, % " -textvariable fmri(brain_thresh) -range {0 100 1 } -width 3
 balloonhelp_for $f.brain_thresh "This is automatically calculated, as a % of the maximum input image
 intensity. It is used in intensity normalisation, brain mask
 generation and various other places in the analysis."
@@ -3966,17 +3966,17 @@ generation and various other places in the analysis."
 #}}}
     #{{{ design efficiency
 
-TitleFrame  $f.contrastest -text "Design efficiency" -relief groove 
+TitleFrame  $f.contrastest -text "Design efficiency" -relief groove
 set fmri(contrastest) $f.contrastest
 set cf [ $f.contrastest getframe ]
 
-LabelSpinBox $cf.noise -label "Noise level % " -textvariable fmri(noise) -range {0.0001 1000 .25 } -width 5 
+LabelSpinBox $cf.noise -label "Noise level % " -textvariable fmri(noise) -range {0.0001 1000 .25 } -width 5
 grid $cf.noise -in $cf -column 0 -row 0 -padx  3 -pady 3
 
-LabelSpinBox $cf.noisear -label "Temporal smoothness "  -textvariable fmri(noisear) -range {-0.99 0.99 .1 } -width 5 
+LabelSpinBox $cf.noisear -label "Temporal smoothness "  -textvariable fmri(noisear) -range {-0.99 0.99 .1 } -width 5
 grid $cf.noisear -in $cf -column 1 -row 0 -padx 3 -pady 3
 
-LabelSpinBox $cf.critical_z  -label "Z threshold " -textvariable fmri(critical_z) -range {0.0001 100 1 } -width 5 
+LabelSpinBox $cf.critical_z  -label "Z threshold " -textvariable fmri(critical_z) -range {0.0001 100 1 } -width 5
 grid $cf.critical_z -in $cf -column 1 -row 1 -padx 3 -pady 3
 balloonhelp_for $cf.critical_z "This is the Z value used to determine what level of activation would
 be statistically significant, to be used only in the design
@@ -4075,7 +4075,7 @@ the previous one), the chosen copes will automatically get transformed
 into standard space if necesary."
 
 #}}}
-    
+
     #{{{ multiple analyses
 
 frame $f.multiple
@@ -4165,7 +4165,7 @@ valid input data has been selected."
 #}}}
 #{{{ ndelete
 
-LabelSpinBox $f.datamain.nptsndelete.ndelete -label "       Delete volumes " -textvariable fmri(ndelete) -range {0 200000 1 } -width 3 
+LabelSpinBox $f.datamain.nptsndelete.ndelete -label "       Delete volumes " -textvariable fmri(ndelete) -range {0 200000 1 } -width 3
 
 if { ! $fmri(inmelodic) } {
     balloonhelp_for $f.datamain.nptsndelete.ndelete "The number of initial FMRI volumes to delete before any further
@@ -4205,13 +4205,13 @@ frame $f.datamain.trparadigm_hp
 
 #{{{ TR
 
-LabelSpinBox $f.datamain.trparadigm_hp.tr -label "TR (s) " -textvariable fmri(tr) -range {0.0001 200000 0.25 } 
+LabelSpinBox $f.datamain.trparadigm_hp.tr -label "TR (s) " -textvariable fmri(tr) -range {0.0001 200000 0.25 }
 balloonhelp_for $f.datamain.trparadigm_hp.tr "The time (in seconds) between scanning successive FMRI volumes."
 
 #}}}
 #{{{ High pass
 
-LabelSpinBox $f.datamain.trparadigm_hp.paradigm_hp -label "     High pass filter cutoff (s) " -textvariable fmri(paradigm_hp) -range {1.0 200000 5 } -width 5 
+LabelSpinBox $f.datamain.trparadigm_hp.paradigm_hp -label "     High pass filter cutoff (s) " -textvariable fmri(paradigm_hp) -range {1.0 200000 5 } -width 5
 balloonhelp_for $f.datamain.trparadigm_hp.paradigm_hp "The high pass frequency cutoff point (seconds), that is, the longest
 temporal period that you will allow.
 
@@ -4233,7 +4233,7 @@ pack $f.datamain.trparadigm_hp.tr $f.datamain.trparadigm_hp.paradigm_hp -in $f.d
 #}}}
 
     pack $f.datamain.nptsndelete $f.datamain.trparadigm_hp -in $f.datamain -side top -padx 5 -pady 3 -anchor w
-    
+
     pack $f.multiple $f.datamain -in $fmri(dataf) -anchor w -side top
 
     #{{{ FSL logo
@@ -4280,7 +4280,7 @@ label $fmri(unwarpf).label -text "B0 unwarping"
 
 checkbutton $fmri(unwarpf).yn -variable fmri(regunwarp_yn) -command "feat5:updateprestats $w"
 
-TitleFrame  $fmri(unwarpf).lf -text "B0 unwarping" -relief groove 
+TitleFrame  $fmri(unwarpf).lf -text "B0 unwarping" -relief groove
 set fmri(unwarpff) [ $fmri(unwarpf).lf getframe ]
 
 set unwarp_files(1) "~"
@@ -4297,8 +4297,8 @@ button $fmri(unwarpff).unwarpmagmultiple -text "Select the B0 fieldmap magnitude
 	-command "feat5:multiple_select $w 2 \"Select the B0 fieldmap magnitude images\" "
 
 frame $fmri(unwarpff).opts1
-LabelSpinBox $fmri(unwarpff).opts1.dwell -label "Effective EPI echo spacing (ms) " -textvariable fmri(dwell) -range { 0.000001 200000 0.1 } -width 5 
-LabelSpinBox $fmri(unwarpff).opts1.te -label "  EPI TE (ms) " -textvariable fmri(te) -range {0.000001 200000 1 } -width 5 
+LabelSpinBox $fmri(unwarpff).opts1.dwell -label "Effective EPI echo spacing (ms) " -textvariable fmri(dwell) -range { 0.000001 200000 0.1 } -width 5
+LabelSpinBox $fmri(unwarpff).opts1.te -label "  EPI TE (ms) " -textvariable fmri(te) -range {0.000001 200000 1 } -width 5
 
 
 frame $fmri(unwarpff).opts2
@@ -4318,7 +4318,7 @@ pack $fmri(unwarpff).unwarpsingle $fmri(unwarpff).opts1 $fmri(unwarpff).opts2 -i
 pack $fmri(unwarpf).label $fmri(unwarpf).yn -in $fmri(unwarpf) -side left
 balloonhelp_for $fmri(unwarpf) "B0 unwarping is carried out using FUGUE. Here you need to enter the B0 fieldmap images which usually require site/scanner/sequence specific processing.  See the PRELUDE/FUGUE documentation for more information on creating these images.   The fieldmap and functional (EPI) images _must_ be in the same orientation (LR/AP/SI labels the same in FSLView), although they do not need to be registered or have the same resolution or exact FOV.  In the GUI, the two images that are required are (1) a fieldmap image which must have units of rad/s, and (2) a brain-extracted and registered magnitude image (this is usually created by running BET on the standard magnitude-only reconstructed image from the fieldmap sequence data).
 
-Next you need to enter the \"Effective EPI echo spacing\" in milliseconds.  This is the time between echoes in successive k-space lines.  If you are using an accelerated sequence (parallel imaging) then the number you need here is the echo spacing for the acquired lines divided by the acceleration factor. The \"EPI TE\" (echo time) is also in milliseconds. Both of these values relate to your FMRI EPI data, not the fieldmap data. 
+Next you need to enter the \"Effective EPI echo spacing\" in milliseconds.  This is the time between echoes in successive k-space lines.  If you are using an accelerated sequence (parallel imaging) then the number you need here is the echo spacing for the acquired lines divided by the acceleration factor. The \"EPI TE\" (echo time) is also in milliseconds. Both of these values relate to your FMRI EPI data, not the fieldmap data.
 
 You also need to specify the \"Unwarp direction\", which is the phase-encoding direction of your FMRI EPI data. The sign of this direction will depend on both the sign of the phase encode blips in the EPI sequence and on the sign of the fieldmap.  As it can be difficult to predict this sign when using a particular site/scanner/sequence for the first time, it is usual to try both positive and negative values in turn and see which gives better undistortion (the wrong sign will increase the amount of distortion rather than decrease it).
 
@@ -4334,7 +4334,7 @@ Once this has run, you should definitely check the unwarping section of the Pre-
 frame $f.st
 set fmri(stf) $f.st
 
-FileEntry $fmri(stf).st_file -textvariable fmri(st_file) -label "" -title "Select a slice order/timings file" -width 20 -filedialog directory -filetypes * 
+FileEntry $fmri(stf).st_file -textvariable fmri(st_file) -label "" -title "Select a slice order/timings file" -width 20 -filedialog directory -filetypes *
 
 label $fmri(stf).label -text "Slice timing correction: "
 optionMenu2 $fmri(stf).menu fmri(st) -command "feat5:updateprestats $w" 0 "None" 1 "Regular up (0, 1, 2 ... n-1)" 2 "Regular down (n-1, n-2 ... 0)" 5 "Interleaved (0, 2, 4 ... 1, 3, 5 ... )" 3 "Use slice order file" 4 "Use slice timings file"
@@ -4351,7 +4351,7 @@ a TR relative to the middle of the TR period. It is necessary to know
 in what order the slices were acquired and set the appropriate option
 here.
 
-If slices were acquired from the bottom of the brain to the top select 
+If slices were acquired from the bottom of the brain to the top select
 \"Regular up\".  If slices were acquired from the top of the brain
 to the bottom select \"Regular down\".
 
@@ -4543,7 +4543,7 @@ checkbutton $f.initial_highres.yn -variable fmri(reginitial_highres_yn) -command
 
 label $f.initial_highres.label -text "Initial structural image"
 
-TitleFrame $f.initial_highres.lf -text "Initial structural image" -relief groove 
+TitleFrame $f.initial_highres.lf -text "Initial structural image" -relief groove
 set fmri(initial_highresf) [ $f.initial_highres.lf getframe ]
 
 FileEntry $fmri(initial_highresf).initial_highressingle -textvariable initial_highres_files(1) -label "" -title "Select initial structural image" -width 45 -filedialog directory  -filetypes IMAGE -command "feat5:multiple_check $w 3 1 0"
@@ -4565,7 +4565,7 @@ balloonhelp_for $f.initial_highres "This is the initial high resolution structur
 resolution functional data will be registered to, and this in turn
 will be registered to the main highres image. It only makes sense to
 have this initial highres image if a main highres image is also
-specified and used in the registration. 
+specified and used in the registration.
 
 One example of an initial highres structural image might be a
 medium-quality structural scan taken during a day's scanning, if a
@@ -4595,7 +4595,7 @@ checkbutton $f.highres.yn -variable fmri(reghighres_yn) -command "feat5:updatere
 
 label $f.highres.label -text "Main structural image"
 
-TitleFrame $f.highres.lf -text "Main structural image" -relief groove 
+TitleFrame $f.highres.lf -text "Main structural image" -relief groove
 set fmri(highresf) [ $f.highres.lf getframe ]
 
 FileEntry $fmri(highresf).highressingle -textvariable highres_files(1) -label "" -title "Select main structural image" -width 45 -filedialog directory  -filetypes IMAGE -command "feat5:multiple_check $w 4 1 0"
@@ -4639,7 +4639,7 @@ checkbutton $f.standard.yn -variable fmri(regstandard_yn) -command "feat5:update
 
 label $f.standard.label -text "Standard space"
 
-TitleFrame $f.standard.lf -text "Standard space" -relief groove 
+TitleFrame $f.standard.lf -text "Standard space" -relief groove
 set fmri(standardf) [ $f.standard.lf getframe ]
 
 FileEntry $fmri(standardf).standardentry -textvariable fmri(regstandard) -label "" -title "Select the standard image" -width 45 -filedialog directory  -filetypes IMAGE -command "feat5:multiple_check $w 10 1 0"
@@ -4766,7 +4766,7 @@ proc feat5:flirt { in ref dof search interp existing_mats report init in_weighti
     fsl:exec "${FSLDIR}/bin/convert_xfm -inverse -omat ${ref}2${in}.mat ${out}.mat"
 
     fsl:exec "${FSLDIR}/bin/slicer $out $ref -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${out}1.png ; ${FSLDIR}/bin/slicer $ref $out -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${out}2.png ; ${FSLDIR}/bin/pngappend ${out}1.png - ${out}2.png ${out}.png; /bin/rm -f sl?.png"
- 
+
     if { $report != "" } {
 	fsl:echo $report "<p>Registration of $in to $ref"
 	if { $in == "example_func_orig_distorted" } {
@@ -4846,7 +4846,7 @@ proc feat5:report_insert_stop { pagename sectionlabel } {
 	    fsl:echo $pagename $line
 	}
     }
-    
+
     close $iptr
     exec sh -c "rm -f tmp${pagename}"
 }
@@ -4863,7 +4863,7 @@ proc stringstrip { in ext } {
 
 	if { [ string compare [ string range $in [ expr $lengthin - $lengthext ] $lengthin ] $ext ] == 0 } {
 	    return [ string range $in 0 [ expr $lengthin - $lengthext - 1 ] ]
-	} else { 
+	} else {
 	    return $in
 	}
 
@@ -4945,10 +4945,10 @@ if { [ imtest $fmri(alternative_example_func) ] } {
     fsl:exec "${FSLDIR}/bin/fslmaths $fmri(alternative_example_func) example_func"
 } else {
     fsl:exec "${FSLDIR}/bin/fslroi $funcdata example_func $target_vol_number 1"
-} 
+}
 
 #}}}
-    
+
     if { $fmri(filtering_yn) } {
 
 	set ps "$ps The following pre-statistics processing was applied"
@@ -4971,12 +4971,12 @@ if { $fmri(mc) != 0 } {
     new_file mc
     fsl:exec "/bin/mkdir -p mc ; /bin/mv -f prefiltered_func_data_mcf.mat prefiltered_func_data_mcf.par prefiltered_func_data_mcf_abs.rms prefiltered_func_data_mcf_abs_mean.rms prefiltered_func_data_mcf_rel.rms prefiltered_func_data_mcf_rel_mean.rms mc"
     cd mc
-    
+
     #{{{ make plots
 
-fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf.par -t 'MCFLIRT estimated rotations (radians)' -u 1 --start=1 --finish=3 -a x,y,z -w 640 -h 144 -o rot.png " 
-fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf.par -t 'MCFLIRT estimated translations (mm)' -u 1 --start=4 --finish=6 -a x,y,z -w 640 -h 144 -o trans.png " 
-fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf_abs.rms,prefiltered_func_data_mcf_rel.rms -t 'MCFLIRT estimated mean displacement (mm)' -u 1 -w 640 -h 144 -a absolute,relative -o disp.png " 
+fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf.par -t 'MCFLIRT estimated rotations (radians)' -u 1 --start=1 --finish=3 -a x,y,z -w 640 -h 144 -o rot.png "
+fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf.par -t 'MCFLIRT estimated translations (mm)' -u 1 --start=4 --finish=6 -a x,y,z -w 640 -h 144 -o trans.png "
+fsl:exec "${FSLDIR}/bin/fsl_tsplot -i prefiltered_func_data_mcf_abs.rms,prefiltered_func_data_mcf_rel.rms -t 'MCFLIRT estimated mean displacement (mm)' -u 1 -w 640 -h 144 -a absolute,relative -o disp.png "
 
 #}}}
     #{{{ extract mean displacements
@@ -5059,12 +5059,12 @@ fsl:echo ${FD}/report_prestats.html "<hr><b>FUGUE fieldmap unwarping</b>"
 	# only do bet if 90% or more voxels are non-zero to start with
 	if { $frac_nzvox > 0.9 } {
 	    fsl:exec "${FSLDIR}/bin/bet2 FM_UD_fmap_mag FM_UD_fmap_mag_brain -m"
-	} 
+	}
     }
 
     # remask by the non-zero voxel mask of the fmap_rads image (as prelude may have masked this differently before)
     # NB: need to use cluster to fill in holes where fmap=0
-    fsl:exec "${FSLDIR}/bin/fslmaths FM_UD_fmap -abs -bin -mas FM_UD_fmap_mag_brain_mask -mul -1 -add 1 -bin FM_UD_fmap_mag_brain_mask_inv" 
+    fsl:exec "${FSLDIR}/bin/fslmaths FM_UD_fmap -abs -bin -mas FM_UD_fmap_mag_brain_mask -mul -1 -add 1 -bin FM_UD_fmap_mag_brain_mask_inv"
     fsl:exec "${FSLDIR}/bin/cluster -i FM_UD_fmap_mag_brain_mask_inv -t 0.5 --no_table -o FM_UD_fmap_mag_brain_mask_idx"
     set maxidx [ fsl:exec "${FSLDIR}/bin/fslstats FM_UD_fmap_mag_brain_mask_idx -R | awk '{ print \$2 }'" ]
     fsl:exec "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain_mask_idx -thr $maxidx -bin -mul -1 -add 1 -bin -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap_mag_brain_mask"
@@ -5082,7 +5082,7 @@ fsl:echo ${FD}/report_prestats.html "<hr><b>FUGUE fieldmap unwarping</b>"
     fsl:exec "$FSLDIR/bin/fugue --loadfmap=FM_UD_fmap --savefmap=FM_UD_fmap_tmp_fmapfilt -m FM_UD_fmap_mag_brain_mask --despike --despikethreshold=2.1"
     fsl:exec "$FSLDIR/bin/fslmaths FM_UD_fmap_tmp_fmapfilt -sub FM_UD_fmap -mas FM_UD_fmap_mag_brain_mask_ero -add FM_UD_fmap FM_UD_fmap"
     fsl:exec "/bin/rm -f FM_UD_fmap_tmp_fmapfilt* FM_UD_fmap_mag_brain_mask_ero* FM_UD_fmap_mag_brain_mask50* FM_UD_fmap_mag_brain_i*"
-    
+
     # now demean
     fsl:exec "${FSLDIR}/bin/fslmaths FM_UD_fmap -sub [ fsl:exec "${FSLDIR}/bin/fslstats FM_UD_fmap -k FM_UD_fmap_mag_brain_mask -P 50" ] FM_UD_fmap"
 
@@ -5198,7 +5198,7 @@ if { $fmri(st) > 0 } {
     set ps "$ps; slice-timing correction using Fourier-space time-series phase-shifting"
 
     set st_opts ""
-    
+
     switch $fmri(st) {
 	2 {
 	    set st_opts "--down"
@@ -5214,7 +5214,7 @@ if { $fmri(st) > 0 } {
 	}
     }
 
-    if { [ info exists fmri(st_opts_d) ] } { 
+    if { [ info exists fmri(st_opts_d) ] } {
 	fsl:exec "${FSLDIR}/bin/slicetimer -i $funcdata --out=prefiltered_func_data_st -r $fmri(tr) $st_opts -d $fmri(st_opts_d)"
     } else {
 	fsl:exec "${FSLDIR}/bin/slicetimer -i $funcdata --out=prefiltered_func_data_st -r $fmri(tr) $st_opts"
@@ -5385,11 +5385,11 @@ fsl:exec "${FSLDIR}/bin/fslmaths filtered_func_data -Tmean mean_func"
 
 if { $fmri(brain_thresh) == 0 } {
     set absbrainthresh [ fsl:exec "$FSLDIR/bin/fslstats filtered_func_data -R | awk '{ print \$1 }' -" ]
-} 
+}
 
 fsl:echo absbrainthresh.txt $absbrainthresh
 
-fsl:exec "/bin/rm -rf prefiltered_func_data*" 
+fsl:exec "/bin/rm -rf prefiltered_func_data*"
 
 if { $fmri(filtering_yn) } {
     feat5:report_insert report_prestats.html prestatsps $ps
@@ -5454,7 +5454,7 @@ proc feat5:proc_film { session } {
     } else {
         if { $fmri(motionevs) > 0 && [ file exists mc/prefiltered_func_data_mcf.par ] } {
             catch { fsl:exec "cp mc/prefiltered_func_data_mcf.par confoundevs.txt" } ErrMsg
-        }       
+        }
     }
     # apply the confounds using feat_model when they exist
     if { [ file exists confoundevs.txt ] } {
@@ -5472,7 +5472,7 @@ proc feat5:proc_film { session } {
     }
 
     new_file stats
-    
+
     fsl:exec "$FSLDIR/bin/film_gls -rn stats $film_opts filtered_func_data design.mat $absbrainthresh"
 
     if { ! [ imtest stats/pe1 ] } {
@@ -5559,7 +5559,7 @@ if { ! $rerunning } {
     }
 
     set maskcomments "<p>"
-    
+
     #{{{ setup raw stats list
 
 cd ${FD}/stats
@@ -5710,7 +5710,7 @@ if { $fmri(conmask1_1) } {
 		}
 
 		if { $fmri(conmask${I}_$C) } {
-		    
+
 		    set themask thresh_z${F}stat$c
 		    if { $fmri(conmask_zerothresh_yn) } {
 			set themask stats/z${F}stat$c
@@ -5729,7 +5729,7 @@ After all thresholding, $rawstats was masked with $themask.<br>"
 
 		    set theinput conmask/thresh_$rawstats
 		}
-		
+
 	    }
 	}
     }
@@ -5805,7 +5805,7 @@ if { $fmri(zdisplay) == 0 } {
     set fmri(zmax) -100000
 
     foreach rawstats $rawstatslist {
-    
+
 	set zminmax [ fsl:exec "${FSLDIR}/bin/fslstats thresh_$rawstats -l 0.0001 -R 2>/dev/null" ]
 	set zmin [ lindex $zminmax 0 ]
 	set zmax [ lindex $zminmax 1 ]
@@ -5838,9 +5838,9 @@ fsl:echo $logout "Rendering using zmin=$fmri(zmin) zmax=$fmri(zmax)"
 
     set firsttime 1
     foreach rawstats $rawstatslist {
-	
+
 	set i [ string trimleft $rawstats "abcdefghijklmnopqrstuvwxyz_" ]
-	
+
 	if { [ string first "zstat" $rawstats ] < 0 || $fmri(conpic_real.$i) == 1 } {
 	    #{{{ Rendering
 
@@ -5878,7 +5878,7 @@ if { $firsttime == 1 } {
     feat5:report_insert_start report_poststats.html poststatspics
     fsl:echo report_poststats.html "
 <hr><b>Thresholded activation images</b>
-&nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp;
 [ expr int($fmri(zmin)*10)/10.0 ]
 <IMG BORDER=0 SRC=\".ramp.gif\">
 [ expr int($fmri(zmax)*10)/10.0 ]
@@ -6000,7 +6000,7 @@ if { [ imtest ../unwarp/EF_UD_fmap_sigloss ] } {
 set doefd 0
 if { [ imtest ../example_func_orig_distorted ] } {
     set doefd 1
-    imcp ../example_func_orig_distorted example_func_orig_distorted 
+    imcp ../example_func_orig_distorted example_func_orig_distorted
 }
 
 #}}}
@@ -6027,7 +6027,7 @@ if { [ file exists $fmri(init_standard) ] } {
 if { $fmri(reginitial_highres_yn) } {
     if { [ info exists initial_highres_files($session) ] } {
 	fsl:exec "${FSLDIR}/bin/fslmaths [ remove_ext $initial_highres_files($session) ] initial_highres"
-    } else { 
+    } else {
 	if { ! [ imtest initial_highres ] } {
 	    fsl:echo $logout "Warning - registration to initial_highres turned on but
 no initial_highres image specified in setup file or in
@@ -6040,7 +6040,7 @@ FEAT directory! Will not register to initial_highres."
 if { $fmri(reghighres_yn) } {
     if { [ info exists highres_files($session) ] } {
 	fsl:exec "${FSLDIR}/bin/fslmaths [ remove_ext $highres_files($session) ] highres"
-    } else { 
+    } else {
 	if { ! [ imtest highres ] } {
 	    fsl:echo $logout "Warning - registration to highres turned on but
 no highres image specified in setup file or in
@@ -6343,7 +6343,7 @@ if { [ string length $mean_list ] == 0 } {
     if { $fmri(inputtype) == 1 } {
 	#{{{ create 4D inputs for "FEAT directories" option
 
-for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {   
+for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {
 
     if { $fmri(copeinput.$nci) } {
 
@@ -6389,7 +6389,7 @@ for { set nci 1 } { $nci <=  $fmri(ncopeinputs) } { incr nci 1 } {
 	}
 	fsl:exec "${FSLDIR}/bin/fslmerge -t varcope$nci $varcope_list"
 	fsl:exec "${FSLDIR}/bin/fslmaths varcope$nci -mas mask varcope$nci"
-	
+
 	#{{{ setup t_dof
 
 	set tdof_list ""
@@ -6855,7 +6855,7 @@ fsl:exec "$thecommand"
 #{{{ feat5:proc_stop
 
 proc feat5:proc_stop { } {
-    
+
     global fmri
 
     cd $fmri(outputdir)
@@ -6865,7 +6865,7 @@ proc feat5:proc_stop { } {
 
     cd $fmri(outputdir)
 
-    catch { exec sh -c "grep -i '\<error\>' logs/* | wc -l" } errorCount 
+    catch { exec sh -c "grep -i '\<error\>' logs/* | wc -l" } errorCount
     catch { exec sh -c "cat logs/* > report_log.html" } putserr
 
     if { $errorCount == 0 } { feat5:report_insert report.html running "Finished at [exec date]" } else {

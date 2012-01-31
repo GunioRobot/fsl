@@ -12,12 +12,12 @@ SRC="../images/fsl-logo.jpg"></a>
 <p><hr>
 <H2>Contents</H2>
 
-<a href="#intro">Introduction</a> - 
-<a href="#refs">References</a> - 
-<a href="#seg">Segmentation</a> - 
-<a href="#vertexana">Vertex Analysis</a> - 
+<a href="#intro">Introduction</a> -
+<a href="#refs">References</a> -
+<a href="#seg">Segmentation</a> -
+<a href="#vertexana">Vertex Analysis</a> -
 <!--- <a href="#volumeana">Volumetric Analysis</a> -  !--->
-<a href="#Models">Models</a> - 
+<a href="#Models">Models</a> -
 <a href="#advanced">Advanced Usage</a>
 
 <hr>
@@ -43,7 +43,7 @@ your T1 image.
 <p>For more information on FIRST, see the
 D.Phil. <A
 HREF="http://users.fmrib.ox.ac.uk/~brian/brianp_thesis.pdf">thesis</a> or the FMRIB technical <A
-HREF="http://www.fmrib.ox.ac.uk/analysis/techrep/tr07bp1/tr07bp1.pdf">report</a>. The thesis provides a more 
+HREF="http://www.fmrib.ox.ac.uk/analysis/techrep/tr07bp1/tr07bp1.pdf">report</a>. The thesis provides a more
 thorough and complete description.
 
 <hr><a name="refs"><h3>References</h3></a>
@@ -53,13 +53,13 @@ The following three references (thesis and two HBM abstracts) are the current be
 1. Brian Patenaude. Bayesian Statistical Models of Shape and Appearance for Subcortical Brain Segmentation. D.Phil. Thesis. University of Oxford. 2007.
 
 <p>
-2. Brian Patenaude, Stephen Smith, David Kennedy, and Mark Jenkinson. Improved Surface Models for FIRST. In Human 
+2. Brian Patenaude, Stephen Smith, David Kennedy, and Mark Jenkinson. Improved Surface Models for FIRST. In Human
 Brian Mapping Conference, 2008.
 
 <p>
-3. Brian Patenaude, Stephen Smith, David Kennedy, and Mark Jenkinson. FIRST - FMRIB's 
-integrated registration and segmentation tool. In Human Brain Mapping Conference, 
-2007. 
+3. Brian Patenaude, Stephen Smith, David Kennedy, and Mark Jenkinson. FIRST - FMRIB's
+integrated registration and segmentation tool. In Human Brain Mapping Conference,
+2007.
 
 <p><h4>FIRST Training Data Contributors</h4>
 
@@ -202,7 +202,7 @@ Example:
 <code>first_roi_slicesdir *_t1.nii.gz *_all_fast_firstseg.nii.gz</code>
 </UL>
 
-<a name="first_advice"></a><p><H3>General Advice and Workflow</H3> 
+<a name="first_advice"></a><p><H3>General Advice and Workflow</H3>
 Below is a recommendation for running FIRST in a systematic way. While
 it is only a recommendation, you may find that organizing your data in
 a different way than suggested below leads to complications further
@@ -214,7 +214,7 @@ carried out. The first step in analysis will be to copy all of the
 structural images to be segmented into this directory. All FIRST
 commands should be run in this directory. Subdirectories may be
 created to contain certain outputs (more later) but all input images
-should be placed in this main directory. 
+should be placed in this main directory.
 
 <p>The pathnames for files used as input options for all of the steps
 of FIRST should start in this directory and may include subdirectories
@@ -255,11 +255,11 @@ one big <code>for</code> loop, but it is usually simpler to separate them,
 especially if you have a different number of subjects in each group.
 
 <P><LI> You then need to verify that the registrations and subsequent
-segmentations were successful.  To start with, check that there are no 
-errors in the log files by doing: 
+segmentations were successful.  To start with, check that there are no
+errors in the log files by doing:
 <br><code>cat *.logs/*.e*</code><br>
-which will show no output if there are no errors.  Once you've verified that 
-there are no errors, then you can most easily check the results from a group of subjects 
+which will show no output if there are no errors.  Once you've verified that
+there are no errors, then you can most easily check the results from a group of subjects
 using the relevant <code>slicesdir</code> tools.
 
 <p><LI>To check the registrations:
@@ -498,7 +498,7 @@ include a constant EV (FIRST will do this too).
 difference in shape between the two groups "con" and "dis". Your
 design matrix would simply be an EV with 10 ones followed by 10
 zeroes. That is:
-<code> <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 
+<code> <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0 <br> 0
 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 <br> 1 </code>
 
 <p>
@@ -601,7 +601,7 @@ survived multiple comparison correction.
 <p><I>Correlation</i>
 
 <p>
-For correlation only (no group difference) you can create a design matrix 
+For correlation only (no group difference) you can create a design matrix
 with one column (EV) where each row contains the value of the
 correlating measure for each subject in the same order as the
 subject's bvars (in the concatenated bvars file). For example, to
@@ -617,7 +617,7 @@ vertex, while the vectors will display the direction of the
 correlation. Surface 0 on the slider is the mean surface for all of
 the subjects younger than the mean age, while surface 1 on the slider
 is the mean surface for all of the subjects older than the mean
-age. The vectors point from surface 0 to surface 1, which is from 
+age. The vectors point from surface 0 to surface 1, which is from
 the younger group to the older.
 
 <p>
@@ -639,13 +639,13 @@ two vtk files, with one file called <code>output_name1.vtk</code>,
 showing the areas of group difference <i>after</i> accounting for the
 covariate. The file called <code>output_name2.vtk</code>, on the other
 hand, will show the areas that correlate with the covariate
-(e.g. age) <i>after</i> accounting for group difference.  
+(e.g. age) <i>after</i> accounting for group difference.
 
 <p>
 Note that the mean surfaces and vectors will be the same in each case (although
 vectors only show at vertices where the statistics were significant, and
 these statistics will vary) since the mean surfaces and vectors are always
-defined by the grouping in the first column of the design matrix (EV1), 
+defined by the grouping in the first column of the design matrix (EV1),
 with the first group being all values below the mean and the second
 group being all values above the mean.
 
@@ -697,11 +697,11 @@ using <code>fslstats</code> and perform the statistics externally
 <p><a name="volumeana"><H2>Volumetric Analysis</H2></a>
 
 <UL>
-<p>Currently, to perform volumetric analysis 
+<p>Currently, to perform volumetric analysis
 it is necessary to determine the label number of the structure of interest and use <code>fslstats</code> to measure the volume.  Other software
 (e.g. SPSS or MATLAB) needs to be used to analyse the volume measurements.
 
-<p>To find the label number, load the <code>output_name_*_firstseg.nii.gz</code> image into FSLView, click on a voxel in the structure of interest and the label number will be the number in the Intensity box.  Alternatively, you can find the number from the 
+<p>To find the label number, load the <code>output_name_*_firstseg.nii.gz</code> image into FSLView, click on a voxel in the structure of interest and the label number will be the number in the Intensity box.  Alternatively, you can find the number from the
 <a href="./cma_subcortical_label.html">CMA standard labels</a>.
 
 <p>Once you have the label number you can measure the volume using <code>fslstats</code> with the threshold options to select out just the single label number (by using <code>-l</code> and <code>-u</code> with -/+0.5 from the desired label number).  For example, if the label number is 17 (Left Hippocampus) then you can use the following command:
@@ -722,7 +722,7 @@ children and adults, normals and subjects with pathologies.
 the intensities from within the <i>thalamus</i> to normalize the structures'
 intensities.
 
-<p><LI>The models in the <code>05mm/</code> subdirectory 
+<p><LI>The models in the <code>05mm/</code> subdirectory
 require no boundary correction (all boundary
 voxels are considered part of the structure).
 
@@ -755,7 +755,7 @@ identify and fix the problem.
   (re-running it for each further structure that you require). These
   are both run by <code>run_first_all</code> which also produces
   a summary segmentation image for all structures.
-  
+
   <p><b>Please note</b>, if the registration stage fails then the models
   fitting <i>will not</i> work, despite the fact that <code>run_first_all</code>
   continues to run and may produce outputs.
@@ -914,7 +914,7 @@ Caudate, Hippocampus, Lateral Ventricles and Amygdala can be segmented
 in this way using the Thalamus as reference, and the Cerebellum can be segmented using the Putamen as reference; the relevant models are located
 in <code>${FSLDIR}/data/first/models_336_bin/intref_thal/</code>, and
 in <code>${FSLDIR}/data/first/models_336_bin/intref_puta/</code>.  The
-<p>For example: 
+<p>For example:
 <br> <code>run_first -i con01 -t con01_to_std_sub.mat -n 30 -o con01_L_Hipp -m ${FSLDIR}/data/first/models_336_bin/intref_thal/L_Hipp.bmv -intref ${FSLDIR}/data/first/models_336_bin/05mm/L_Thal_05mm.bmv
 </code>
 
@@ -1011,7 +1011,7 @@ This is called automatically by <code>run_first</code>.
 <p><LI><b>-i</b> : This specifies the original T1-weighted image (either whole head or brain extracted)
 
 <p><LI><b>-c</b> : This specifies a 4D file containing the boundary corrected images of the segmented structures.
- 
+
 <p><LI><b>-u</b> : This specifies a 4D file containing the individual structure segmented images prior to any boundary correction, where the boundary voxels are labeled as 100 plus the interior label vallue.  The order of the structure images must be the same as the file specified by the <code>-c</code> option.
 
 <LI> <b>-o</b> : This specifies the name of the output.

@@ -1,7 +1,7 @@
-/* 
+/*
  * tkMacHLEvents.c --
  *
- *	Implements high level event support for the Macintosh.  Currently, 
+ *	Implements high level event support for the Macintosh.  Currently,
  *	the only event that really does anything is the Quit event.
  *
  * Copyright (c) 1995-1997 Sun Microsystems, Inc.
@@ -25,7 +25,7 @@
  * This is a Tcl_Event structure that the Quit AppleEvent handler
  * uses to schedule the tkReallyKillMe function.
  */
- 
+
 typedef struct KillEvent {
     Tcl_Event header;		/* Information that is standard for
 				 * all events. */
@@ -67,14 +67,14 @@ static int ReallyKillMe _ANSI_ARGS_((Tcl_Event *eventPtr, int flags));
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkMacInitAppleEvents(
     Tcl_Interp *interp)		/* Interp to handle basic events. */
 {
     OSErr err;
     AEEventHandlerUPP	OappHandlerUPP, OdocHandlerUPP,
 	PrintHandlerUPP, QuitHandlerUPP, ScriptHandlerUPP;
-	
+
     /*
      * Install event handlers for the core apple events.
      */
@@ -151,18 +151,18 @@ QuitHandler(
 {
     Tcl_Interp 	*interp = (Tcl_Interp *) handlerRefcon;
     KillEvent *eventPtr;
-    
+
     /*
      * Call the exit command from the event loop, since you are not supposed
      * to call ExitToShell in an Apple Event Handler.  We put this at the head
      * of Tcl's event queue because this message usually comes when the Mac is
      * shutting down, and we want to kill the shell as quickly as possible.
      */
-    
+
     eventPtr = (KillEvent *) ckalloc(sizeof(KillEvent));
     eventPtr->header.proc = ReallyKillMe;
     eventPtr->interp = interp;
-     
+
     Tcl_QueueEvent((Tcl_Event *) eventPtr, TCL_QUEUE_HEAD);
 
     return noErr;
@@ -201,11 +201,11 @@ OdocHandler(
      * the open document procedure doesn't exist.
      */
 
-    if ((interp == NULL) || 
+    if ((interp == NULL) ||
     	(Tcl_GetCommandInfo(interp, "::tk::mac::OpenDocument", &dummy)) == 0) {
     	return noErr;
     }
-    
+
     /*
      * If we get any errors wil retrieving our parameters
      * we just return with no error.
@@ -232,7 +232,7 @@ OdocHandler(
     for (index = 1; index <= count; index++) {
 	int length;
 	Handle fullPath;
-	
+
 	err = AEGetNthPtr(&fileSpecList, index, typeFSS,
 		&keyword, &type, (Ptr) &file, sizeof(FSSpec), &actual);
 	if ( err != noErr ) {
@@ -248,7 +248,7 @@ OdocHandler(
 	Tcl_DStringAppendElement(&command, Tcl_DStringValue(&pathName));
 	Tcl_DStringFree(&pathName);
     }
-    
+
     Tcl_GlobalEval(interp, Tcl_DStringValue(&command));
 
     Tcl_DStringFree(&command);
@@ -269,7 +269,7 @@ PrintHandler(
  *
  * DoScriptHandler --
  *
- *	This handler process the do script event.  
+ *	This handler process the do script event.
  *
  * Results:
  *	Scedules the given event to be processed.
@@ -279,8 +279,8 @@ PrintHandler(
  *
  *----------------------------------------------------------------------
  */
- 
-static pascal OSErr 
+
+static pascal OSErr
 ScriptHandler(
     AppleEvent *theAppleEvent,
     AppleEvent *reply,
@@ -312,7 +312,7 @@ ScriptHandler(
 	if (theDesc.descriptorType == (DescType)'TEXT') {
 	    Tcl_DString encodedText;
 	    short length, i;
-	    
+
 	    length = GetHandleSize(theDesc.dataHandle);
 	    SetHandleSize(theDesc.dataHandle, length + 1);
 	    *(*theDesc.dataHandle + length) = '\0';
@@ -333,7 +333,7 @@ ScriptHandler(
 	    FSSpec theFSS;
 	    Handle fullPath;
 	    int length;
-	    
+
 	    theErr = ResolveAlias(NULL, (AliasHandle)theDesc.dataHandle,
 		    &theFSS, &dummy);
 	    if (theErr == noErr) {
@@ -373,7 +373,7 @@ ScriptHandler(
 		(Ptr) &tclErr, sizeof(int));
 	}
     }
-	
+
     AEDisposeDesc(&theDesc);
 
     return theErr;
@@ -384,9 +384,9 @@ ScriptHandler(
  *
  * ReallyKillMe --
  *
- *	This proc tries to kill the shell by running exit, and if that 
- *      has not succeeded (e.g. because someone has renamed the exit 
- *      command), calls Tcl_Exit to really kill the shell.  Called from 
+ *	This proc tries to kill the shell by running exit, and if that
+ *      has not succeeded (e.g. because someone has renamed the exit
+ *      command), calls Tcl_Exit to really kill the shell.  Called from
  *      an event scheduled by the "Quit" AppleEvent handler.
  *
  * Results:
@@ -398,15 +398,15 @@ ScriptHandler(
  *----------------------------------------------------------------------
  */
 
-int 
-ReallyKillMe(Tcl_Event *eventPtr, int flags) 
+int
+ReallyKillMe(Tcl_Event *eventPtr, int flags)
 {
     Tcl_Interp *interp = ((KillEvent *) eventPtr)->interp;
     if (interp != NULL) {
         Tcl_GlobalEval(interp, "exit");
     }
     Tcl_Exit(0);
-    
+
     return 1;
 }
 
@@ -415,7 +415,7 @@ ReallyKillMe(Tcl_Event *eventPtr, int flags)
  *
  * MissedAnyParameters --
  *
- *	Checks to see if parameters are still left in the event.  
+ *	Checks to see if parameters are still left in the event.
  *
  * Results:
  *	True or false.
@@ -425,8 +425,8 @@ ReallyKillMe(Tcl_Event *eventPtr, int flags)
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 MissedAnyParameters(
     AppleEvent *theEvent)
 {
@@ -434,8 +434,8 @@ MissedAnyParameters(
    Size actualSize;
    OSErr err;
 
-   err = AEGetAttributePtr(theEvent, keyMissedKeywordAttr, typeWildCard, 
+   err = AEGetAttributePtr(theEvent, keyMissedKeywordAttr, typeWildCard,
    		&returnedType, NULL, 0, &actualSize);
-   
+
    return (err != errAEDescNotFound);
 }

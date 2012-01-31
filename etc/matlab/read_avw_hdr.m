@@ -1,8 +1,8 @@
 function [dims,scales,bpp,endian,datatype] = read_avw_hdr(fname)
 % [dims,scales,bpp,endian,datatype] = READ_AVW_HDR(fname)
 %
-%  Extracts the 4 dimensions (dims), 
-%   4 scales (scales) and bytes per pixel (bpp) for voxels 
+%  Extracts the 4 dimensions (dims),
+%   4 scales (scales) and bytes per pixel (bpp) for voxels
 %   contained in the Analyze or nifti header file (fname)
 %   Also returns endian = 'l' for little-endian or 'b' for big-endian
 %   NB: the name must be the basename of the file (no extensions)
@@ -33,7 +33,7 @@ end
   dims=fread(fid,4,'int16');
   dummy=fread(fid,3,'int16');
   dummy=fread(fid,14,'char');
-  datatype=fread(fid,1,'int16');  
+  datatype=fread(fid,1,'int16');
   bpp=fread(fid,1,'int16');
   dummy=fread(fid,2,'char');
   dummy=fread(fid,1,'float');

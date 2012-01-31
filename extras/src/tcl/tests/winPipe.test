@@ -1,9 +1,9 @@
-# 
+#
 # winPipe.test --
 #
 # This file contains a collection of tests for tclWinPipe.c
 #
-# Sourcing this file into Tcl runs the tests and generates output for 
+# Sourcing this file into Tcl runs the tests and generates output for
 # errors.  No output means no errors were found.
 #
 # Copyright (c) 1996 Sun Microsystems, Inc.
@@ -33,14 +33,14 @@ if {[catch {puts console1 ""}]} {
 
 set big bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n
 append big $big
-append big $big	
+append big $big
 append big $big
 append big $big
 append big $big
 append big $big
 
 set path(little) [makeFile {} little]
-set f [open $path(little) w] 
+set f [open $path(little) w]
 puts -nonewline $f "little"
 close $f
 
@@ -146,7 +146,7 @@ test winpipe-1.17 {32 bit comprehensive tests: to NUL} {pcOnly exec cat32} {
 } stderr32
 test winpipe-1.18 {32 bit comprehensive tests: to nowhere} \
 	{pcOnly exec cat32 .console} {
-    exec $cat32 < $path(big) >&@stdout 
+    exec $cat32 < $path(big) >&@stdout
 } {}
 test winpipe-1.19 {32 bit comprehensive tests: to file handle} {pcOnly exec cat32} {
     set f1 [open $path(stdout) w]
@@ -240,7 +240,7 @@ set env(TEMP) c:/
 test winpipe-5.1 {TclpCreateTempFile: cleanup temp files} {pcOnly exec} {
     set x {}
     set existing [glob -nocomplain c:/tcl*.tmp]
-    exec [interpreter] < nothing 
+    exec [interpreter] < nothing
     foreach p [glob -nocomplain c:/tcl*.tmp] {
 	if {[lsearch $existing $p] == -1} {
 	    lappend x $p

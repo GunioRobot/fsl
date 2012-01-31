@@ -27,10 +27,10 @@ namespace serialization {
         // default to false if not supported
         #ifdef BOOST_NO_IS_ABSTRACT
             typedef BOOST_DEDUCED_TYPENAME mpl::bool_<false> type;
-            BOOST_STATIC_CONSTANT(bool, value = false); 
+            BOOST_STATIC_CONSTANT(bool, value = false);
         #else
             typedef BOOST_DEDUCED_TYPENAME boost::is_abstract<T>::type type;
-            BOOST_STATIC_CONSTANT(bool, value = type::value); 
+            BOOST_STATIC_CONSTANT(bool, value = type::value);
         #endif
     };
 } // namespace serialization

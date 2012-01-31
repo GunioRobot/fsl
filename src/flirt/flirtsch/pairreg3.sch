@@ -1,7 +1,7 @@
 # 2mm scale
 setscale 2
 setoption smoothing 2
-setoption paramsubset 6  1 0 0 0 0 0 0 0 0 0 0 0  0 1 0 0 0 0 0 0 0 0 0 0  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 1 0 0 0 0 0 0 
+setoption paramsubset 6  1 0 0 0 0 0 0 0 0 0 0 0  0 1 0 0 0 0 0 0 0 0 0 0  0 0 1 0 0 0 0 0 0 0 0 0  0 0 0 1 0 0 0 0 0 0 0 0  0 0 0 0 1 0 0 0 0 0 0 0  0 0 0 0 0 1 0 0 0 0 0 0
 clear U
 clear UC
 clear UD

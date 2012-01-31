@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -80,7 +80,7 @@ string GraseFwdModel::ModelVersion() const
   return "$Id: fwdmodel_asl_grase.cc,v 1.14 2008/07/28 15:01:43 chappell Exp $";
 }
 
-void GraseFwdModel::HardcodedInitialDists(MVNDist& prior, 
+void GraseFwdModel::HardcodedInitialDists(MVNDist& prior,
     MVNDist& posterior) const
 {
     Tracer_Plus tr("GraseFwdModel::HardcodedInitialDists");
@@ -93,14 +93,14 @@ void GraseFwdModel::HardcodedInitialDists(MVNDist& prior,
      prior.means(tiss_index()) = 0;
      precisions(tiss_index(),tiss_index()) = 1e-12;
 
-     
+
      if (!singleti) {
        // Tissue bolus transit delay
        prior.means(tiss_index()+1) = 0.7;
        precisions(tiss_index()+1,tiss_index()+1) = 10;
      }
-    
-    
+
+
     // Tissue bolus length
      if (infertau) {
        prior.means(tau_index()) = seqtau;
@@ -123,12 +123,12 @@ void GraseFwdModel::HardcodedInitialDists(MVNDist& prior,
 	precisions(aidx+1,aidx+1) = 10;
 	precisions(aidx,aidx) = 1e-12;
       }
- 
+
     // T1 & T1b
     if (infert1) {
       int tidx = t1_index();
-      prior.means(tidx) = t1;  
-      prior.means(tidx+1) = t1b; 
+      prior.means(tidx) = t1;
+      prior.means(tidx+1) = t1b;
       precisions(tidx,tidx) = 100;
       precisions(tidx+1,tidx+1) = 100;
     }
@@ -145,7 +145,7 @@ void GraseFwdModel::HardcodedInitialDists(MVNDist& prior,
 
     // Set precsions on priors
     prior.SetPrecisions(precisions);
-    
+
     // Set initial posterior
     posterior = prior;
 
@@ -160,10 +160,10 @@ void GraseFwdModel::HardcodedInitialDists(MVNDist& prior,
 	precisions(art_index(),art_index()) = 1;
       }
     posterior.SetPrecisions(precisions);
-    
-}    
-    
-    
+
+}
+
+
 
 void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) const
 {
@@ -175,7 +175,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
    for (int i=1;i<=NumParams();i++) {
       if (params(i)<0) { paramcpy(i) = 0; }
       }
-  
+
      // sensible limits on transit times
    if (!singleti) {
   if (params(tiss_index()+1)>timax-0.2) { paramcpy(tiss_index()+1) = timax-0.2; }
@@ -205,12 +205,12 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
     delttiss = 0;
   }
 
-  if (infertau) { 
-    tauset=paramcpy(tau_index()); 
+  if (infertau) {
+    tauset=paramcpy(tau_index());
   }
   else { tauset = seqtau;
   }
-  
+
   if (infertaub) {
     taubset = paramcpy(taub_index());
   }
@@ -236,7 +236,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
   }
 
   if (inferinveff) { inveffslope = paramcpy(inveff_index()); }
-  else { inveffslope = 0; }  
+  else { inveffslope = 0; }
 
   if (infertrailing) { trailingperiod = paramcpy(trailing_index()); }
   else { trailingperiod = 1e-6; }
@@ -277,7 +277,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 	      { tau = tauset; }
 	    else
 	      { tau = ti - 0.1; }
-	    
+
 	    if(taubset < ti - 0.1)
 	      {taub = taubset; }
 	    else
@@ -302,8 +302,8 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 	    // define bolus trailgin edge start and stop times
 	    float bt1 = delttiss + tau ;
 	    float bt2 = delttiss + tau + trailingperiod;
-	    
-	    // tissue contribution 
+
+	    // tissue contribution
 	    if(ti < delttiss)
 	      { kctissue = 0;}
 
@@ -327,14 +327,14 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 		if (kctissue<0) { kctissue = 0; } //dont allow negative values
 	      }
 
-	
+
 	    // arterial contribution
 	    // calc the correct bt1 for the arterial bolus
 	    bt1 = deltblood + tau ;
 	    //bt2 = deltblood + tau + trailingperiod;
 
 	    if(ti < deltblood)
-	      { 
+	      {
 		//kcblood = 0;
 		/* use a artifical lead in period for arterial bolus to improve model fitting */
 		kcblood = fblood * exp(-deltblood/T_1b) * (0.98 * exp( (ti-deltblood)/0.1 ) + 0.02 * ti/deltblood );
@@ -345,11 +345,11 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 	      {
 		kcblood = fblood * exp(-ti/T_1b);
 	      }
-	
+
 	    // Once we are into the trailing edge of the bolus
 	    else if(ti >= bt1 && ti <= bt2)
-	      { 
-		kcblood = fblood * exp(-ti/T_1b); 
+	      {
+		kcblood = fblood * exp(-ti/T_1b);
 		kcblood = kcblood * (1 - 1/trailingperiod*(ti- bt1));
 		if (kcblood<0) { kcblood = 0; } //dont allow negative values
 	      }
@@ -370,7 +370,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 	    //deal with the case where the inveffslope is severe and cuts off the bolus)
 	    if (tau>bollen) tau=bollen;
 	    if (taub>bollen) taub=bollen;
-	    
+
 
 	    /* tissue contribution */
 	    if(ti < delttiss)
@@ -386,17 +386,17 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 		kctissue = F/R * ( (exp(R*(delttiss+tau)) - exp(R*delttiss))*(1 + inveffslope*delttiss + inveffslope/R) - inveffslope*((delttiss+tau)*exp(R*(delttiss+tau)) - delttiss*exp(R*delttiss)) );
 		if (kctissue<0) { kctissue = 0; } //dont allow negative values (should be redundant)
 	      }
-	
+
 	    /* arterial contribution */
 	    if(ti < deltblood)
-	      { 
+	      {
 		//kcblood = 0;
 		/* use a artifical lead in period for arterial bolus to improve model fitting */
 		kcblood = fblood * exp(-deltblood/T_1b) * (0.98 * exp( (ti-deltblood)/0.05 ) + 0.02 * ti/deltblood );
 	      }
 	    else if(ti >= deltblood && ti <= (deltblood + taub))
-	      { 
-		kcblood = fblood * exp(-ti/T_1b); 
+	      {
+		kcblood = fblood * exp(-ti/T_1b);
 		kcblood = kcblood * (1 - inveffslope*(ti-deltblood)); //deals with the case where we have a slope in inversion efficency
 		if (kcblood<0) { kcblood = 0; } //dont allow negative values
 	      }
@@ -406,7 +406,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 		/* artifical lead out period for taub model fitting */
 		kcblood = fblood * exp(-(deltblood+taub)/T_1b) * (1 - inveffslope*taub) * (0.98 * exp( -(ti - deltblood - taub)/0.05) + 0.02 * (1-(ti - deltblood - taub)/5));
 		if (kcblood<0) kcblood=0; //negative values are possible with the lead out period equation
-									   
+
 	      }
 	  }
 
@@ -417,10 +417,10 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 	    result( (it-1)*repeats+rpt ) = kctissue + kcblood;
 	  }
 
- 
+
       }
     //cout << result.t();
-    
+
 
   return;
 }
@@ -428,7 +428,7 @@ void GraseFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) c
 GraseFwdModel::GraseFwdModel(ArgsType& args)
 {
     string scanParams = args.ReadWithDefault("scan-params","cmdline");
-    
+
     if (scanParams == "cmdline")
     {
       // specify command line parameters here
@@ -456,7 +456,7 @@ GraseFwdModel::GraseFwdModel(ArgsType& args)
       doard=false;
       if (inferart==true && ardoff==false) { doard=true; }
 
-      
+
       if (infertrailing) {
 	if (!infertau) {
 	  // do not permit trailing edge inference without inferring on bolus length
@@ -470,13 +470,13 @@ GraseFwdModel::GraseFwdModel(ArgsType& args)
       // Deal with tis
       tis.ReSize(1); //will add extra values onto end as needed
       tis(1) = atof(args.Read("ti1").c_str());
-      
+
       while (true) //get the rest of the tis
 	{
 	  int N = tis.Nrows()+1;
 	  string tiString = args.ReadWithDefault("ti"+stringify(N), "stop!");
 	  if (tiString == "stop!") break; //we have run out of tis
-	 
+
 	  // append the new ti onto the end of the list
 	  ColumnVector tmp(1);
 	  tmp = convertTo<double>(tiString);
@@ -484,7 +484,7 @@ GraseFwdModel::GraseFwdModel(ArgsType& args)
 
 	}
       timax = tis.Maximum(); //dtermine the final TI
-      
+
       singleti = false; //normally we do multi TI ASL
       if (tis.Nrows()==1) {
 	//only one TI therefore only infer on CBF and ignore other inference options
@@ -496,7 +496,7 @@ GraseFwdModel::GraseFwdModel(ArgsType& args)
 	// force other inference options to be false
 	infertau = false; infert1 = false; inferart = false; inferinveff = false;
       }
-	
+
       // add information about the parameters to the log
       LOG << "Inference using Buxton Kinetic Curve model" << endl;
       if (grase) LOG << "Using modification for GRASE-ASL sequence" << endl;
@@ -518,17 +518,17 @@ GraseFwdModel::GraseFwdModel(ArgsType& args)
       for (int i=1; i <= tis.Nrows(); i++)
 	LOG << tis(i) << " ";
       LOG << endl;
-	  
+
     }
 
     else
-        throw invalid_argument("Only --scan-params=cmdline is accepted at the moment");    
-    
- 
+        throw invalid_argument("Only --scan-params=cmdline is accepted at the moment");
+
+
 }
 
 void GraseFwdModel::ModelUsage()
-{ 
+{
   cout << "\nUsage info for --model=grase:\n"
        << "Required parameters:\n"
        << "--repeats=<no. repeats in data>\n"
@@ -548,15 +548,15 @@ void GraseFwdModel::ModelUsage()
 void GraseFwdModel::DumpParameters(const ColumnVector& vec,
                                     const string& indent) const
 {
-    
+
 }
 
 void GraseFwdModel::NameParams(vector<string>& names) const
 {
   names.clear();
-  
+
   names.push_back("ftiss");
-  if (!singleti) 
+  if (!singleti)
     names.push_back("delttiss");
   if (infertau)
     {
@@ -585,7 +585,7 @@ void GraseFwdModel::SetupARD( const MVNDist& theta, MVNDist& thetaPrior, double&
 {
   Tracer_Plus tr("GraseFwdModel::SetupARD");
 
- 
+
 
   int ardindex = ard_index();
 
@@ -595,9 +595,9 @@ void GraseFwdModel::SetupARD( const MVNDist& theta, MVNDist& thetaPrior, double&
 
       SymmetricMatrix PriorPrec;
       PriorPrec = thetaPrior.GetPrecisions();
-      
+
       PriorPrec(ardindex,ardindex) = 1e-12; //set prior to be initally non-informative
-      
+
       thetaPrior.SetPrecisions(PriorPrec);
 
       thetaPrior.means(ardindex)=0;
@@ -616,7 +616,7 @@ void GraseFwdModel::UpdateARD(
 				MVNDist& thetaPrior, double& Fard) const
 {
   Tracer_Plus tr("GraseFwdModel::UpdateARD");
-  
+
   int ardindex = ard_index();
 
 
@@ -629,7 +629,7 @@ void GraseFwdModel::UpdateARD(
 
       PriorCov(ardindex,ardindex) = theta.means(ardindex)*theta.means(ardindex) + PostCov(ardindex,ardindex);
 
-      
+
       thetaPrior.SetCovariance(PriorCov);
 
       //Calculate the extra terms for the free energy

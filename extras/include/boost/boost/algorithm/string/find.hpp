@@ -40,17 +40,17 @@ namespace boost {
 
             \param Input A string which will be searched.
             \param Finder Finder object used for searching.
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c RangeT::iterator or 
-                \c RangeT::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c RangeT::iterator or
+                \c RangeT::const_iterator, depending on the constness of
                 the input parameter.
         */
         template<typename RangeT, typename FinderT>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
-        find( 
-            RangeT& Input, 
+        find(
+            RangeT& Input,
             FinderT Finder)
         {
             return Finder(begin(Input),end(Input));
@@ -60,23 +60,23 @@ namespace boost {
 
         //! Find first algorithm
         /*!
-            Search for the first occurence of the substring in the input. 
-            
+            Search for the first occurence of the substring in the input.
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c RangeT::iterator or 
-                \c RangeT::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c RangeT::iterator or
+                \c RangeT::const_iterator, depending on the constness of
                 the input parameter.
 
               \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        find_first( 
-            Range1T& Input, 
+        find_first(
+            Range1T& Input,
             const Range2T& Search)
         {
             return first_finder(Search)(
@@ -85,25 +85,25 @@ namespace boost {
 
         //! Find first algorithm ( case insensitive )
         /*!
-            Search for the first occurence of the substring in the input. 
+            Search for the first occurence of the substring in the input.
             Searching is case insensitive.
-            
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
             \param Loc A locale used for case insensitive comparison
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
 
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        ifind_first( 
-            Range1T& Input, 
+        ifind_first(
+            Range1T& Input,
             const Range2T& Search,
             const std::locale& Loc=std::locale())
         {
@@ -115,23 +115,23 @@ namespace boost {
 
         //! Find last algorithm
         /*!
-            Search for the last occurence of the substring in the input. 
-            
+            Search for the last occurence of the substring in the input.
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
 
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        find_last( 
-            Range1T& Input, 
+        find_last(
+            Range1T& Input,
             const Range2T& Search)
         {
             return last_finder(Search)(
@@ -140,25 +140,25 @@ namespace boost {
 
         //! Find last algorithm ( case insensitive )
         /*!
-            Search for the last match a string in the input. 
+            Search for the last match a string in the input.
             Searching is case insensitive.
-            
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
             \param Loc A locale used for case insensitive comparison
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
-        
-            \note This function provides the strong exception-safety guarantee    
+
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        ifind_last( 
-            Range1T& Input, 
+        ifind_last(
+            Range1T& Input,
             const Range2T& Search,
             const std::locale& Loc=std::locale())
         {
@@ -168,25 +168,25 @@ namespace boost {
 
 //  find_nth ----------------------------------------------------------------------//
 
-        //! Find n-th algorithm 
+        //! Find n-th algorithm
         /*!
-            Search for the n-th (zero-indexed) occurence of the substring in the 
-            input.         
-            
+            Search for the n-th (zero-indexed) occurence of the substring in the
+            input.
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
             \param Nth An index (zero-indexed) of the match to be found.
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        find_nth( 
-            Range1T& Input, 
+        find_nth(
+            Range1T& Input,
             const Range2T& Search,
             unsigned int Nth)
         {
@@ -196,27 +196,27 @@ namespace boost {
 
         //! Find n-th algorithm ( case insensitive ).
         /*!
-            Search for the n-th (zero-indexed) occurence of the substring in the 
+            Search for the n-th (zero-indexed) occurence of the substring in the
             input. Searching is case insensitive.
-            
+
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
             \param Nth An index (zero-indexed) of the match to be found.
             \param Loc A locale used for case insensitive comparison
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
 
 
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
-        ifind_nth( 
-            Range1T& Input, 
+        ifind_nth(
+            Range1T& Input,
             const Range2T& Search,
             unsigned int Nth,
             const std::locale& Loc=std::locale())
@@ -229,59 +229,59 @@ namespace boost {
 
         //! Find head algorithm
         /*!
-            Get the head of the input. Head is a prefix of the string of the 
-            given size. If the input is shorter then required, whole input if considered 
+            Get the head of the input. Head is a prefix of the string of the
+            given size. If the input is shorter then required, whole input if considered
             to be the head.
 
             \param Input An input string
             \param N Length of the head
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c Range1T::iterator or 
-                \c Range1T::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c Range1T::iterator or
+                \c Range1T::const_iterator, depending on the constness of
                 the input parameter.
 
             \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
-        find_head( 
-            RangeT& Input, 
+        find_head(
+            RangeT& Input,
             unsigned int N)
         {
             return head_finder(N)(
-                begin(Input),end(Input));      
+                begin(Input),end(Input));
         }
 
 //  find_tail ----------------------------------------------------------------------//
 
         //! Find tail algorithm
         /*!
-            Get the head of the input. Head is a suffix of the string of the 
-            given size. If the input is shorter then required, whole input if considered 
+            Get the head of the input. Head is a suffix of the string of the
+            given size. If the input is shorter then required, whole input if considered
             to be the tail.
 
             \param Input An input string
             \param N Length of the tail
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c RangeT::iterator or 
-                \c RangeT::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c RangeT::iterator or
+                \c RangeT::const_iterator, depending on the constness of
                 the input parameter.
 
 
             \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
-        find_tail( 
-            RangeT& Input, 
+        find_tail(
+            RangeT& Input,
             unsigned int N)
         {
             return tail_finder(N)(
-                begin(Input),end(Input));      
+                begin(Input),end(Input));
         }
 
 //  find_token --------------------------------------------------------------------//
@@ -291,28 +291,28 @@ namespace boost {
             Look for a given token in the string. Token is a character that matches the
             given predicate.
             If the "token compress mode" is enabled, adjacent tokens are considered to be one match.
-            
+
             \param Input A input string.
             \param Pred An unary predicate to identify a token
             \param eCompress Enable/Disable compressing of adjacent tokens
-            \return 
-                An \c iterator_range delimiting the match. 
-                Returned iterator is either \c RangeT::iterator or 
-                \c RangeT::const_iterator, depending on the constness of 
+            \return
+                An \c iterator_range delimiting the match.
+                Returned iterator is either \c RangeT::iterator or
+                \c RangeT::const_iterator, depending on the constness of
                 the input parameter.
-        
-            \note This function provides the strong exception-safety guarantee    
+
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT, typename PredicateT>
-        inline iterator_range< 
+        inline iterator_range<
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
-        find_token( 
+        find_token(
             RangeT& Input,
             PredicateT Pred,
             token_compress_mode_type eCompress=token_compress_off)
         {
             return token_finder(Pred, eCompress)(
-                begin(Input),end(Input));       
+                begin(Input),end(Input));
         }
 
     } // namespace algorithm

@@ -15,7 +15,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp> // STATIC_CONSTANT, STDC_NAMESPACE, 
+#include <boost/config.hpp> // STATIC_CONSTANT, STDC_NAMESPACE,
                             // DINKUMWARE_STDLIB, __STL_CONFIG_H.
 #include <algorithm>                      // min.
 #include <cstdio>                         // EOF.
@@ -33,7 +33,7 @@
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/pipeline.hpp>         
+#include <boost/iostreams/pipeline.hpp>
 
 // Must come last.
 #if defined(BOOST_MSVC)
@@ -220,7 +220,7 @@ public:
     std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         if (!(flags_ & f_header_done)) {
-            std::streamsize amt = 
+            std::streamsize amt =
                 static_cast<std::streamsize>(header_.size() - offset_);
             offset_ += boost::iostreams::write(snk, header_.data() + offset_, amt);
             if (offset_ == header_.size())
@@ -314,7 +314,7 @@ public:
 
         if ((flags_ & f_footer_read) != 0)
             return -1;
-        
+
         try {
             std::streamsize result = 0;
             std::streamsize amt;
@@ -427,7 +427,7 @@ private:
 
         // Skip extra field. (From J. Halleaux; see note at top.)
         if (flags & gzip::flags::extra) {
-            int length = 
+            int length =
                 static_cast<int>(
                     read_uint8(src, gzip::bad_header) +
                     (read_uint8(src, gzip::bad_header) << 8)
@@ -450,12 +450,12 @@ private:
     template<typename Source>
     void read_footer(Source& src)
     {
-        typename base_type::string_type footer = 
+        typename base_type::string_type footer =
             this->unconsumed_input();
         int c;
         while (!is_eof(c = boost::iostreams::get(src)))
             footer += c;
-        detail::range_adapter<input, std::string> 
+        detail::range_adapter<input, std::string>
             rng(footer.begin(), footer.end());
         if (read_uint32(rng, gzip::bad_footer) != this->crc())
             throw gzip_error(gzip::bad_crc);

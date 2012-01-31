@@ -30,7 +30,7 @@ public:
   static ColorRGBAHandle sagittalDtiBuffer(MetaImage::Handle, int slice);
 
   static void blendBuffers(ColorRGBAHandle dest, ColorRGBAHandle source,
-                           float trans, bool bottomLayer, 
+                           float trans, bool bottomLayer,
                            unsigned int length);
 
   static void setToZero(ColorRGBAHandle,unsigned int length);

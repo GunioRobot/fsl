@@ -166,7 +166,7 @@ GeneralMatrix* MatrixType::New(int nr, int nc, BaseMatrix* bm) const
    default:
       Throw(ProgramException("Invalid matrix type"));
    }
-   
+
    MatrixErrorNoSpace(gm); gm->Protect(); return gm;
 }
 

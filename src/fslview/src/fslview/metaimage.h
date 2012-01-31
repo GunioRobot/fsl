@@ -19,9 +19,9 @@
  * @date   Dec 2002
  *
  * @brief  MetaImage objects associate an Image with an ImageDisplaySetting.
- * 
+ *
  * Use MetaImage to record the display options for each image.
- */ 
+ */
 class MetaImage
 {
 public:
@@ -34,11 +34,11 @@ public:
   short inqX()const;
   short inqY()const;
   short inqZ()const;
-  bool  inqVisibility()const; 
+  bool  inqVisibility()const;
   bool  inqReadOnly()const;
   float inqTransparency()const;
-  std::string inqImageName()const;  
-  void  setVisibility(bool); 
+  std::string inqImageName()const;
+  void  setVisibility(bool);
   void  setReadOnly(bool);
   void  setTransparency(float);
   void setImageName(std::string);
@@ -48,7 +48,7 @@ public:
 private:
   MetaImage(Image::Handle i, ImageDisplaySetting::Handle d);
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

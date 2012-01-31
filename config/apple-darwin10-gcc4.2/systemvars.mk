@@ -5,8 +5,8 @@ SHELL = /bin/sh
 
 CC = cc
 CXX = c++
-CSTATICFLAGS = 
-CXXSTATICFLAGS = 
+CSTATICFLAGS =
+CXXSTATICFLAGS =
 
 ARCHFLAGS = -arch i386 -arch x86_64
 ARCHLDFLAGS = -Wl,-search_paths_first -arch i386 -arch x86_64
@@ -21,7 +21,7 @@ GNU_ANSI_FLAGS = -Wall -Wno-long-long -ansi -pedantic
 SGI_ANSI_FLAGS = -ansi -fullwarn
 ANSI_FLAGS = ${GNU_ANSI_FLAGS}
 
-# Variables determined with AUTOCONFIG: 
+# Variables determined with AUTOCONFIG:
 
 INSTALL = install -p -c
 RM = /bin/rm

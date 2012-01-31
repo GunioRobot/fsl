@@ -10,7 +10,7 @@ to developers.  This document should help clear up a few things.
 dnr.c
 -----
 
-We have found a way to work around some bugs in dnr.c that 
+We have found a way to work around some bugs in dnr.c that
 Apple has never fixed even though we sent in numerous bug reports.
 The file tclMacDNR.c simply set's some #pragma's and the includes
 the Apple dnr.c file.  This should work the problems that many of
@@ -32,7 +32,7 @@ The package can also be found at the home of Tcl/Tk for the mac:
 
 	ftp://ftp.sunlabs.com/pub/tcl/mac/
 
-I used to just link the More Files library in the Tcl projects.  
+I used to just link the More Files library in the Tcl projects.
 However, this caused problems when libraries wern't matched correctly.
 I'm now including the files in the Tcl project directly.  This
 solves the problem of missmatched libraries - but may not always

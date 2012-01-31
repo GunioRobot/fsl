@@ -1,5 +1,5 @@
 #ifndef _DATE_TIME_POSIX_TIME_ZONE__
-#define _DATE_TIME_POSIX_TIME_ZONE__ 
+#define _DATE_TIME_POSIX_TIME_ZONE__
 
 /* Copyright (c) 2003-2005 CrystalClear Software, Inc.
  * Subject to the Boost Software License, Version 1.0. (See accompanying
@@ -31,7 +31,7 @@ namespace local_time{
   {
     bad_adjustment(std::string _msg="") : std::out_of_range(std::string("Adjustment out of range: " + _msg)) {}
   };
-  
+
   typedef boost::date_time::time_zone_names time_zone_names;
   typedef boost::date_time::dst_adjustment_offsets<boost::posix_time::time_duration> dst_adjustment_offsets;
   typedef boost::date_time::time_zone_base<boost::posix_time::ptime> time_zone;
@@ -39,7 +39,7 @@ namespace local_time{
   //! A time zone class constructed from a POSIX time zone string
   /*! A POSIX time zone string takes the form of:<br>
    * "std offset dst [offset],start[/time],end[/time]" (w/no spaces)
-   * 'std' specifies the abbrev of the time zone.<br> 
+   * 'std' specifies the abbrev of the time zone.<br>
    * 'offset' is the offset from UTC.<br>
    * 'dst' specifies the abbrev of the time zone during daylight savings time.<br>
    * The second offset is how many hours changed during DST. Default=1<br>
@@ -69,9 +69,9 @@ namespace local_time{
     typedef base_type::stringstream_type stringstream_type;
 
     //! Construct from a POSIX time zone string
-    posix_time_zone(const std::string& s) : 
+    posix_time_zone(const std::string& s) :
       zone_names_("std_name","std_abbrev","no-dst","no-dst"),
-      has_dst_(false), 
+      has_dst_(false),
       base_utc_offset_(posix_time::hours(0)),
       dst_offsets_(posix_time::hours(0),posix_time::hours(0),posix_time::hours(0)),
       dst_calc_rules_()
@@ -84,7 +84,7 @@ namespace local_time{
         std::string tmp_str = *it++;
         calc_rules(tmp_str, *it);
       }
-    } 
+    }
     virtual ~posix_time_zone() {};
     //!String for the zone when not in daylight savings (eg: EST)
     virtual std::string std_zone_abbrev()const
@@ -98,15 +98,15 @@ namespace local_time{
       return zone_names_.dst_zone_abbrev();
     }
     //!String for the zone when not in daylight savings (eg: Eastern Standard Time)
-    /*! The full STD name is not extracted from the posix time zone string. 
+    /*! The full STD name is not extracted from the posix time zone string.
      * Therefore, the STD abbreviation is used in it's place */
     virtual std::string std_zone_name()const
     {
       return zone_names_.std_zone_name();
     }
     //!String for the timezone when in daylight savings (eg: Eastern Daylight Time)
-    /*! The full DST name is not extracted from the posix time zone string. 
-     * Therefore, the STD abbreviation is used in it's place. For time zones 
+    /*! The full DST name is not extracted from the posix time zone string.
+     * Therefore, the STD abbreviation is used in it's place. For time zones
      * that have no DST, an empty string is used */
     virtual std::string dst_zone_name()const
     {
@@ -226,7 +226,7 @@ namespace local_time{
       while(std::isalpha(*sit)){
         ss << *sit++;
       }
-      std_zone_abbrev = ss.str(); 
+      std_zone_abbrev = ss.str();
       ss.str("");
 
       // get UTC offset
@@ -235,7 +235,7 @@ namespace local_time{
         while(sit != obj.end() && !std::isalpha(*sit)){
         ss << *sit++;
         }
-        base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
+        base_utc_offset_ = posix_time::duration_from_string(ss.str());
         ss.str("");
 
         // base offset must be within range of -12 hours to +12 hours
@@ -249,12 +249,12 @@ namespace local_time{
       // get DST data if given
       if(sit != obj.end()){
         has_dst_ = true;
-    
+
         // get 'dst' name/abbrev
         while(sit != obj.end() && std::isalpha(*sit)){
           ss << *sit++;
         }
-        dst_zone_abbrev = ss.str(); 
+        dst_zone_abbrev = ss.str();
         ss.str("");
 
         // get DST offset if given
@@ -263,7 +263,7 @@ namespace local_time{
           while(sit != obj.end() && !std::isalpha(*sit)){
             ss << *sit++;
           }
-          dst_offsets_.dst_adjust_ = 
+          dst_offsets_.dst_adjust_ =
                 posix_time::duration_from_string(ss.str());
         ss.str("");
         }
@@ -344,12 +344,12 @@ namespace local_time{
       unsigned short sm=0,sw=0,sd=0,em=0,ew=0,ed=0; // start/end month,week,day
       char_separator<char> sep("M.");
       tokenizer stok(s, sep), etok(e, sep);
-      
+
       tokenizer::iterator it = stok.begin();
       sm = lexical_cast<unsigned short>(*it++);
       sw = lexical_cast<unsigned short>(*it++);
       sd = lexical_cast<unsigned short>(*it);
-     
+
       it = etok.begin();
       em = lexical_cast<unsigned short>(*it++);
       ew = lexical_cast<unsigned short>(*it++);
@@ -358,13 +358,13 @@ namespace local_time{
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
         new nth_kday_dst_rule(
           nth_last_dst_rule::start_rule(
-            static_cast<nkday::week_num>(sw),sd,sm), 
+            static_cast<nkday::week_num>(sw),sd,sm),
           nth_last_dst_rule::start_rule(
-            static_cast<nkday::week_num>(ew),ed,em) 
+            static_cast<nkday::week_num>(ew),ed,em)
           )
       );
     }
-    
+
     //! Julian day. Feb29 is never counted, even in leap years
     // expects range of 1-365
     void julian_no_leap(const std::string& s, const std::string& e){
@@ -386,9 +386,9 @@ namespace local_time{
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
         new partial_date_dst_rule(
           partial_date_dst_rule::start_rule(
-            sd, static_cast<date_time::months_of_year>(sm)), 
+            sd, static_cast<date_time::months_of_year>(sm)),
           partial_date_dst_rule::end_rule(
-            ed, static_cast<date_time::months_of_year>(em)) 
+            ed, static_cast<date_time::months_of_year>(em))
           )
       );
     }
@@ -425,4 +425,4 @@ namespace local_time{
 } } // namespace boost::local_time
 
 
-#endif // _DATE_TIME_POSIX_TIME_ZONE__ 
+#endif // _DATE_TIME_POSIX_TIME_ZONE__

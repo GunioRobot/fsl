@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacMenubutton.c --
  *
  *	This file implements the Macintosh specific portion of the
@@ -229,7 +229,7 @@ TkpDisplayMenuButton(
 		    imageXOffset, imageYOffset);
 	} else if (mbPtr->bitmap != None) {
 	    XCopyPlane(mbPtr->display, mbPtr->bitmap, Tk_WindowId(tkwin),
-		    gc, 0, 0, (unsigned) width, (unsigned) height, 
+		    gc, 0, 0, (unsigned) width, (unsigned) height,
 		    x, y, 1);
 	}
     } else {
@@ -252,7 +252,7 @@ TkpDisplayMenuButton(
 	Tk_SizeOfImage(mbPtr->image, &width, &height);
 
 	imageOrBitmap:
-	TkComputeAnchor(mbPtr->anchor, tkwin, 0, 0, 
+	TkComputeAnchor(mbPtr->anchor, tkwin, 0, 0,
 		width + mbPtr->indicatorWidth, height, &x, &y);
 	if (mbPtr->image != NULL) {
 	    Tk_RedrawImage(mbPtr->image, 0, 0, width, height,
@@ -332,7 +332,7 @@ TkpDisplayMenuButton(
     TkMacSetUpClippingRgn(Tk_WindowId(tkwin));
     if (mbPtr->borderWidth > 0) {
 	Rect r;
-	
+
 	r.left = macDraw->xOff + mbPtr->highlightWidth + mbPtr->borderWidth;
 	r.top = macDraw->yOff + mbPtr->highlightWidth + mbPtr->borderWidth;
 	r.right = macDraw->xOff + Tk_Width(tkwin) - mbPtr->highlightWidth
@@ -346,7 +346,7 @@ TkpDisplayMenuButton(
 	LineTo(r.right, r.bottom);
 	LineTo(r.left + kShadowOffset, r.bottom);
     }
-    
+
     if (mbPtr->highlightWidth != 0) {
 	GC fgGC, bgGC;
 
@@ -430,7 +430,7 @@ TkpComputeMenuButtonGeometry(mbPtr)
     } else {
     noimage=1;
     }
-    
+
     if ( noimage || mbPtr->compound != COMPOUND_NONE ) {
 	Tk_FreeTextLayout(mbPtr->textLayout);
 	mbPtr->textLayout = Tk_ComputeTextLayout(mbPtr->tkfont, mbPtr->text,
@@ -450,7 +450,7 @@ TkpComputeMenuButtonGeometry(mbPtr)
 	textwidth += 2*mbPtr->padX;
 	textheight +=  2*mbPtr->padY;
     }
-    
+
 	switch ((enum compound) mbPtr->compound) {
 	  case COMPOUND_TOP:
 	  case COMPOUND_BOTTOM: {

@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -73,34 +73,34 @@ using namespace std;
 namespace MISCMATHS {
 
 void rk(ColumnVector& ret, const ColumnVector& y, const ColumnVector& dy, float x, float h, const Derivative& deriv,const ColumnVector& paramvalues)
-{ 
-  Tracer tr("rk"); 
+{
+  Tracer tr("rk");
 
   float hh=h*0.5;
   float xh=x+hh;
-  
+
   //first step
   ColumnVector yt=y+hh*dy;
-  
+
   //second step
   ColumnVector dyt = deriv.evaluate(xh,yt,paramvalues);
   yt=y+hh*dyt;
-  
+
   //third step
   ColumnVector dym = deriv.evaluate(xh,yt,paramvalues);
   yt=y+h*dym;
   dym=dym+dyt;
-  
+
   //fourth step
   dyt = deriv.evaluate(x+h,yt,paramvalues);
-  
+
   //addup
   ret = y+h*(dy+dyt+2*dym)/6;
 }
 
 void rkqc(ColumnVector& y, float& x, float& hnext, ColumnVector& dy, float htry, float eps, const Derivative& deriv,const ColumnVector& paramvalues)
 {
-  Tracer tr("rkqc"); 
+  Tracer tr("rkqc");
 
   float xsav = x;
   ColumnVector dysav = dy;
@@ -112,12 +112,12 @@ void rkqc(ColumnVector& y, float& x, float& hnext, ColumnVector& dy, float htry,
   while(true)
     {
       // take 2 1/2 step sizes
-  
+
       // first 1/2 step
       float hh=h*0.5;
 
       rk(ytemp,ysav,dysav,xsav,hh,deriv,paramvalues);
-  
+
       // second 1/2 step
       x=xsav+hh;
       dy = deriv.evaluate(x,ytemp,paramvalues);
@@ -127,32 +127,32 @@ void rkqc(ColumnVector& y, float& x, float& hnext, ColumnVector& dy, float htry,
 
       // take large step size
       rk(ytemp,ysav,dysav,xsav,h,deriv,paramvalues);
-   
+
       // eval accuracy
       float errmax = 0.0;
       for(int i=1; i<=y.Nrows(); i++)
 	{
 	  //errmax=max(abs((y-ytemp)./y));
-	  
+
 	  float tmp = fabs((y(i)-ytemp(i))/y(i));
 	  if(tmp > errmax) errmax = tmp;
 	}
 
       errmax=errmax/eps;
-      
-      if(errmax <=1.0) 
+
+      if(errmax <=1.0)
 	{
 	  // step OK, compute step size for next step
 	  hdid=h;
-	  
+
 	  if(errmax>6e-4)
 	    hnext=h*std::exp(-0.2*std::log(errmax));
 	  else
 	    hnext=4*h;
-	  
+
 	  break;
       }
-      else 
+      else
 	{
 	  // step too large,
 	  h=h*std::exp(-0.25*std::log(errmax));
@@ -164,7 +164,7 @@ void rkqc(ColumnVector& y, float& x, float& hnext, ColumnVector& dy, float htry,
 
 void runge_kutta(Matrix& yp, ColumnVector& xp, ColumnVector& hp, const ColumnVector& ystart, float x1, float x2, float eps, float hmin, const Derivative& deriv,const ColumnVector& paramvalues)
 {
-  Tracer tr("runge_kutta"); 
+  Tracer tr("runge_kutta");
 
   int MAXSTEP=1000;
 
@@ -183,20 +183,20 @@ void runge_kutta(Matrix& yp, ColumnVector& xp, ColumnVector& hp, const ColumnVec
   yp = 0;
 
   int kout=1;
-  
+
   ColumnVector dy;
 
   for(int k=1; k <= MAXSTEP; k++)
-    { 
+    {
       dy = deriv.evaluate(x,y,paramvalues);
 
       // store results:
       xp(kout)=x;
       yp.Row(kout)=y;
       hp(kout)=h;
-  
+
       kout=kout+1;
-    
+
       // stop overshoot of step past x2:
       if((x+h-x2)*(x+h-x1)>0) h=x2-x;
 
@@ -209,7 +209,7 @@ void runge_kutta(Matrix& yp, ColumnVector& xp, ColumnVector& hp, const ColumnVec
 	yp.Row(kout)=y;
 	hp(kout)=h;
 	//kout=kout+1;
-	
+
         xp = xp.Rows(1,kout);
 	yp = yp.Rows(1,kout);
 
@@ -219,8 +219,8 @@ void runge_kutta(Matrix& yp, ColumnVector& xp, ColumnVector& hp, const ColumnVec
       {
 	if(hnext<=hmin) cerr << "step size too small" << endl;
 	h=hnext;
-      } 
-      
+      }
+
     }
   cerr << "too many steps" << endl;
 }

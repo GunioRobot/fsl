@@ -47,7 +47,7 @@ struct opaque_pointer_converter
 {
     BOOST_STATIC_CONSTANT(
         bool, ok = is_pointer<Pointer>::value);
-        
+
     typedef typename mpl::if_c<
         ok
         , Pointer
@@ -71,7 +71,7 @@ public:
     static PyObject* convert(ptr_type x)
     {
         PyObject *result = 0;
-        
+
         if (x != 0) {
             instance *o = PyObject_New (instance, &type_object);
 
@@ -80,7 +80,7 @@ public:
         } else {
             result = detail::none();
         }
-        
+
         return (result);
     }
 

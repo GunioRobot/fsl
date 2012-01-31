@@ -56,11 +56,11 @@ public:
   { set(min, max); }
 
   void set(result_type min, result_type max);
-  
+
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   base_type& base() const { return *_rng; }
-  
+
   result_type operator()()
   {
     // we must not use the low bits here, because LCGs get very bad then
@@ -77,7 +77,7 @@ private:
 
 template<class UniformRandomNumberGenerator, class IntType>
 void uniform_smallint_integer<UniformRandomNumberGenerator, IntType>::
-set(result_type min, result_type max) 
+set(result_type min, result_type max)
 {
   _min = min;
   _max = max;
@@ -85,7 +85,7 @@ set(result_type min, result_type max)
 
   _range = static_cast<base_result>(_max-_min)+1;
   base_result _factor = 1;
-  
+
   // LCGs get bad when only taking the low bits.
   // (probably put this logic into a partial template specialization)
   // Check how many low bits we can ignore before we get too much
@@ -181,7 +181,7 @@ public:
     typedef typename Engine::result_type base_result;
     base_result _range = static_cast<base_result>(_max-_min)+1;
     base_result _factor = 1;
-    
+
     // LCGs get bad when only taking the low bits.
     // (probably put this logic into a partial template specialization)
     // Check how many low bits we can ignore before we get too much

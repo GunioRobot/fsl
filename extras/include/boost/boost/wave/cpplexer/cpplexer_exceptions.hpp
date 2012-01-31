@@ -66,11 +66,11 @@ namespace util {
         severity_error,
         severity_fatal
     };
-    
+
     inline char const *
-    get_severity(severity level) 
+    get_severity(severity level)
     {
-        static char const *severity_text[] = 
+        static char const *severity_text[] =
         {
             "remark",           // severity_remark
             "warning",          // severity_warning
@@ -83,13 +83,13 @@ namespace util {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//  cpplexer_exception, the base class for all specific C++ lexer exceptions 
+//  cpplexer_exception, the base class for all specific C++ lexer exceptions
 class cpplexer_exception
 :   public std::exception
 {
 public:
-    cpplexer_exception(int line_, int column_, char const *filename_) throw() 
-    :   line(line_), column(column_) 
+    cpplexer_exception(int line_, int column_, char const *filename_) throw()
+    :   line(line_), column(column_)
     {
         unsigned int off = 0;
         while (off < sizeof(filename) && *filename_)
@@ -97,14 +97,14 @@ public:
         filename[off] = 0;
     }
     ~cpplexer_exception() throw() {}
-    
+
     virtual char const *what() const throw() = 0;   // to be overloaded
     virtual char const *description() const throw() = 0;
-    
+
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
     char const *file_name() const throw() { return filename; }
-    
+
 protected:
     char filename[512];
     int line;
@@ -126,9 +126,9 @@ public:
         generic_lexing_error = 5
     };
 
-    lexing_exception(char const *what_, error_code code, int line_, 
-        int column_, char const *filename_) throw() 
-    :   cpplexer_exception(line_, column_, filename_), 
+    lexing_exception(char const *what_, error_code code, int line_,
+        int column_, char const *filename_) throw()
+    :   cpplexer_exception(line_, column_, filename_),
         level(severity_level(code))
     {
         unsigned int off = 0;
@@ -137,7 +137,7 @@ public:
         buffer[off] = 0;
     }
     ~lexing_exception() throw() {}
-    
+
     virtual char const *what() const throw()
     {
         return "boost::wave::lexing_exception";
@@ -160,7 +160,7 @@ public:
             "universal character name specifies an invalid character",  // universal_char_invalid
             "a universal character name cannot designate a character in the "
                 "basic character set",                  // universal_char_base_charset
-            "this universal character is not allowed in an identifier", // universal_char_not_allowed 
+            "this universal character is not allowed in an identifier", // universal_char_not_allowed
             "long long suffixes are not allowed in pure C++ mode, "
             "enable long_long mode to allow these",     // invalid_long_long_literal
             "generic lexing error"                      // generic_lexing_error
@@ -176,7 +176,7 @@ public:
             util::severity_error,               // universal_char_base_charset
             util::severity_error,               // universal_char_not_allowed
             util::severity_warning,             // invalid_long_long_literal
-            util::severity_error                // generic_lexing_error                
+            util::severity_error                // generic_lexing_error
         };
         return preprocess_exception_severity[code];
     }
@@ -193,6 +193,6 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace cpplexer
 }   // namespace wave
-}   // namespace boost 
+}   // namespace boost
 
 #endif // !defined(CPPLEXER_EXCEPTIONS_HPP_1A09DE1A_6D1F_4091_AF7F_5F13AB0D31AB_INCLUDED)

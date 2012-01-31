@@ -185,7 +185,7 @@ test select-1.7.1 {Tk_CreateSelHandler procedure} {unixOnly} {
     selection handle -selection CLIPBOARD .f1 {handler TEST} TEST
     selection handle -selection PRIMARY .f1 {handler TEST2} STRING
     list [lsort [selection get -selection PRIMARY TARGETS]] \
-	[lsort [selection get -selection CLIPBOARD TARGETS]] 
+	[lsort [selection get -selection CLIPBOARD TARGETS]]
 } {{MULTIPLE STRING TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW UTF8_STRING} {MULTIPLE TARGETS TEST TIMESTAMP TK_APPLICATION TK_WINDOW}}
 test select-1.7.2 {Tk_CreateSelHandler procedure} {macOrPc} {
     setup
@@ -193,7 +193,7 @@ test select-1.7.2 {Tk_CreateSelHandler procedure} {macOrPc} {
     selection handle -selection CLIPBOARD .f1 {handler TEST} TEST
     selection handle -selection PRIMARY .f1 {handler TEST2} STRING
     list [lsort [selection get -selection PRIMARY TARGETS]] \
-	[lsort [selection get -selection CLIPBOARD TARGETS]] 
+	[lsort [selection get -selection CLIPBOARD TARGETS]]
 } {{MULTIPLE STRING TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW} {MULTIPLE TARGETS TEST TIMESTAMP TK_APPLICATION TK_WINDOW}}
 test select-1.8 {Tk_CreateSelHandler procedure} {
     setup
@@ -205,18 +205,18 @@ test select-1.8 {Tk_CreateSelHandler procedure} {
 
 test select-2.1 {Tk_DeleteSelHandler procedure} {unixOnly} {
     setup
-    selection handle .f1 {handler STRING} 
-    selection handle -type TEST .f1 {handler TEST} 
-    selection handle -type USER .f1 {handler USER} 
+    selection handle .f1 {handler STRING}
+    selection handle -type TEST .f1 {handler TEST}
+    selection handle -type USER .f1 {handler USER}
     set result [list [lsort [selection get TARGETS]]]
     selection handle -type TEST .f1 {}
     lappend result [lsort [selection get TARGETS]]
 } {{MULTIPLE STRING TARGETS TEST TIMESTAMP TK_APPLICATION TK_WINDOW USER UTF8_STRING} {MULTIPLE STRING TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW USER UTF8_STRING}}
 test select-2.2 {Tk_DeleteSelHandler procedure} {unixOnly} {
     setup
-    selection handle .f1 {handler STRING} 
-    selection handle -type TEST .f1 {handler TEST} 
-    selection handle -type USER .f1 {handler USER} 
+    selection handle .f1 {handler STRING}
+    selection handle -type TEST .f1 {handler TEST}
+    selection handle -type USER .f1 {handler USER}
     set result [list [lsort [selection get TARGETS]]]
     selection handle -type USER .f1 {}
     lappend result [lsort [selection get TARGETS]]
@@ -224,26 +224,26 @@ test select-2.2 {Tk_DeleteSelHandler procedure} {unixOnly} {
 test select-2.3 {Tk_DeleteSelHandler procedure} {unixOnly} {
     setup
     selection own -selection CLIPBOARD .f1
-    selection handle -selection PRIMARY .f1 {handler STRING} 
-    selection handle -selection CLIPBOARD .f1 {handler STRING} 
+    selection handle -selection PRIMARY .f1 {handler STRING}
+    selection handle -selection CLIPBOARD .f1 {handler STRING}
     selection handle -selection CLIPBOARD .f1 {}
     list [lsort [selection get TARGETS]] \
 	[lsort [selection get -selection CLIPBOARD TARGETS]]
 } {{MULTIPLE STRING TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW UTF8_STRING} {MULTIPLE TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW}}
 test select-2.4 {Tk_DeleteSelHandler procedure} {macOrPc} {
     setup
-    selection handle .f1 {handler STRING} 
-    selection handle -type TEST .f1 {handler TEST} 
-    selection handle -type USER .f1 {handler USER} 
+    selection handle .f1 {handler STRING}
+    selection handle -type TEST .f1 {handler TEST}
+    selection handle -type USER .f1 {handler USER}
     set result [list [lsort [selection get TARGETS]]]
     selection handle -type TEST .f1 {}
     lappend result [lsort [selection get TARGETS]]
 } {{MULTIPLE STRING TARGETS TEST TIMESTAMP TK_APPLICATION TK_WINDOW USER} {MULTIPLE STRING TARGETS TIMESTAMP TK_APPLICATION TK_WINDOW USER}}
 test select-2.5 {Tk_DeleteSelHandler procedure} {macOrPc} {
     setup
-    selection handle .f1 {handler STRING} 
-    selection handle -type TEST .f1 {handler TEST} 
-    selection handle -type USER .f1 {handler USER} 
+    selection handle .f1 {handler STRING}
+    selection handle -type TEST .f1 {handler TEST}
+    selection handle -type USER .f1 {handler USER}
     set result [list [lsort [selection get TARGETS]]]
     selection handle -type USER .f1 {}
     lappend result [lsort [selection get TARGETS]]
@@ -251,8 +251,8 @@ test select-2.5 {Tk_DeleteSelHandler procedure} {macOrPc} {
 test select-2.6 {Tk_DeleteSelHandler procedure} {macOrPc} {
     setup
     selection own -selection CLIPBOARD .f1
-    selection handle -selection PRIMARY .f1 {handler STRING} 
-    selection handle -selection CLIPBOARD .f1 {handler STRING} 
+    selection handle -selection PRIMARY .f1 {handler STRING}
+    selection handle -selection CLIPBOARD .f1 {handler STRING}
     selection handle -selection CLIPBOARD .f1 {}
     list [lsort [selection get TARGETS]] \
 	[lsort [selection get -selection CLIPBOARD TARGETS]]
@@ -261,7 +261,7 @@ test select-2.7 {Tk_DeleteSelHandler procedure} {
     setup
     selection handle .f1 {handler STRING}
     list [selection handle .f1 {}] [selection handle .f1 {}]
-} {{} {}}   
+} {{} {}}
 
 ##############################################################################
 

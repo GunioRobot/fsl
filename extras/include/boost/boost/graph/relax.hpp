@@ -53,13 +53,13 @@ namespace boost {
         return a + b;
       }
     };
-    
-    template <class Graph, class WeightMap, 
-            class PredecessorMap, class DistanceMap, 
+
+    template <class Graph, class WeightMap,
+            class PredecessorMap, class DistanceMap,
             class BinaryFunction, class BinaryPredicate>
-    bool relax(typename graph_traits<Graph>::edge_descriptor e, 
-               const Graph& g, const WeightMap& w, 
-               PredecessorMap& p, DistanceMap& d, 
+    bool relax(typename graph_traits<Graph>::edge_descriptor e,
+               const Graph& g, const WeightMap& w,
+               PredecessorMap& p, DistanceMap& d,
                const BinaryFunction& combine, const BinaryPredicate& compare)
     {
       typedef typename graph_traits<Graph>::directed_category DirCat;
@@ -70,7 +70,7 @@ namespace boost {
       typedef typename property_traits<WeightMap>::value_type W;
       D d_u = get(d, u), d_v = get(d, v);
       W w_e = get(w, e);
-      
+
       if ( compare(combine(d_u, w_e), d_v) ) {
         put(d, v, combine(d_u, w_e));
         put(p, v, u);
@@ -82,8 +82,8 @@ namespace boost {
       } else
         return false;
     }
-    
-    template <class Graph, class WeightMap, 
+
+    template <class Graph, class WeightMap,
       class PredecessorMap, class DistanceMap>
     bool relax(typename graph_traits<Graph>::edge_descriptor e,
                const Graph& g, WeightMap w, PredecessorMap p, DistanceMap d)

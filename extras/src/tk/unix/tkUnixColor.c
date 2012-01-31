@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixColor.c --
  *
  *	This file contains the platform specific color routines
@@ -310,7 +310,7 @@ FindClosestColor(tkwin, desiredColorPtr, actualColorPtr)
 	     * as the objective function;  this accounts for differences
 	     * in the color sensitivity of the eye.
 	     */
-    
+
 	    tmp = .30*(((int) desiredColorPtr->red) - (int) colorPtr->red);
 	    distance = tmp*tmp;
 	    tmp = .61*(((int) desiredColorPtr->green) - (int) colorPtr->green);

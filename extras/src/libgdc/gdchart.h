@@ -208,7 +208,7 @@ int GDC_out_graph( short		IMGWIDTH,		/* no check for a image that's too small to
 				   float		*combo_data );	/* only used on COMBO chart types             */
 /* ----- backward compatible var arg interface ----- */
 int out_graph( short		imgwidth,
-			   short		imgheight,  
+			   short		imgheight,
 			   FILE			*img_fptr,		/* open file pointer (image out) */
 			   GDC_CHART_T	type,
 			   int			num_points,		/* points along x axis (even iterval) */

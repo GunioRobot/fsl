@@ -1,4 +1,4 @@
-/* 
+/*
  * tclDate.c --
  *
  *	This file is generated from a yacc grammar defined in
@@ -538,7 +538,7 @@ NamedMonth(Start, MonthOrdinal, MonthNumber)
     struct tm *tm;
     time_t now;
     int result;
-    
+
     now = Start;
     tm = TclpGetDate((TclpTime_t)&now, 0);
     /* To compute the next n'th month, we use this alg:
@@ -584,7 +584,7 @@ RelativeMonth(Start, RelMonth, TimePtr)
 	    MER24, DSTmaybe, &Julian);
 
     /*
-     * The Julian time returned above is behind by one day, if "month" 
+     * The Julian time returned above is behind by one day, if "month"
      * or "year" is used to specify relative time and the GMT flag is true.
      * This problem occurs only when the current time is closer to
      * midnight, the difference being not more than its time difference
@@ -766,7 +766,7 @@ LookupWord(buff)
             }
 	}
     }
-    
+
     return tID;
 }
 
@@ -880,7 +880,7 @@ TclGetDate(p, now, zone, timePtr)
 	    TclDateHaveDay > 1 || TclDateHaveOrdinalMonth > 1) {
         return -1;
     }
-    
+
     if (TclDateHaveDate || TclDateHaveTime || TclDateHaveDay) {
 	if (TclDateYear < 0) {
 	    TclDateYear = -TclDateYear;
@@ -924,7 +924,7 @@ TclGetDate(p, now, zone, timePtr)
 	return -1;
     }
     Start += Time;
-    
+
     if (TclDateHaveDay && !TclDateHaveDate) {
         tod = NamedDay(Start, TclDateDayOrdinal, TclDateDayNumber);
         Start += tod;
@@ -934,7 +934,7 @@ TclGetDate(p, now, zone, timePtr)
 	tod = NamedMonth(Start, TclDateMonthOrdinal, TclDateMonth);
 	Start += tod;
     }
-    
+
     *timePtr = Start;
     return 0;
 }
@@ -1187,7 +1187,7 @@ int TclDatechar;			/* current input token number */
 #define YYLEX()		TclDatecvtok(TclDatelex())
 /*
 ** TclDatecvtok - return a token if i is a wchar_t value that exceeds 255.
-**	If i<255, i itself is the token.  If i>255 but the neither 
+**	If i<255, i itself is the token.  If i>255 but the neither
 **	of the 30th or 31st bit is on, i is already a token.
 */
 #if defined(__STDC__) || defined(__cplusplus)
@@ -1208,7 +1208,7 @@ int TclDatecvtok(i) int i;
 		while ((last>=first)&&(first>=0)) {/*Binary search loop*/
 			mid = (first+last)/2;
 			j = TclDatembchars[mid].character;
-			if( j==i ){/*Found*/ 
+			if( j==i ){/*Found*/
 				return TclDatembchars[mid].tvalue;
 			}else if( j<i ){
 				first = mid + 1;
@@ -1647,7 +1647,7 @@ int TclDateparse()
 	*/
 	switch( TclDatetmp )
 	{
-		
+
 case 3:{
             TclDateHaveTime++;
         } break;

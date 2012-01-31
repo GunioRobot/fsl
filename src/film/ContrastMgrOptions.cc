@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -88,12 +88,12 @@ void ContrastMgrOptions::parse_command_line(int argc, char** argv, Log& logger)
     print_usage(argc,argv);
     exit(1);
   }
-  
+
   int inp = 1;
   int n=1;
   string arg;
   char first;
-  
+
   while (n<argc) {
     arg=argv[n];
 
@@ -103,7 +103,7 @@ void ContrastMgrOptions::parse_command_line(int argc, char** argv, Log& logger)
       if(inp == 1)
 	gopt->datadir = arg;
       else if(inp == 2)
-	gopt->contrastfname = arg;      
+	gopt->contrastfname = arg;
       else
 	{
 	  cerr << "Mismatched argument " << arg << endl;
@@ -113,7 +113,7 @@ void ContrastMgrOptions::parse_command_line(int argc, char** argv, Log& logger)
       inp++;
       continue;
     }
-    
+
     // put options without arguments here
     if ( arg == "-help" ) {
       print_usage(argc,argv);
@@ -132,22 +132,22 @@ void ContrastMgrOptions::parse_command_line(int argc, char** argv, Log& logger)
       gopt->copenumber = atoi(argv[n+1]);
       n+=2;
       continue;
-    } 
+    }
     else if ( arg == "-suffix") {
       gopt->suffix = argv[n+1];
       n+=2;
       continue;
-    } 
+    }
     else if (arg == "-f") {
       gopt->fcontrastfname = argv[n+1];
       n+=2;
       continue;
-    } 
+    }
 
-    if (n+1>=argc) 
-      { 
+    if (n+1>=argc)
+      {
 	cerr << "Lacking argument to option " << arg << endl;
-	break; 
+	break;
       }
   }  // while (n<argc)
 
@@ -164,7 +164,7 @@ void ContrastMgrOptions::parse_command_line(int argc, char** argv, Log& logger)
     print_usage(argc,argv);
     throw Exception("Contrast filename not found");
   }
- 
+
 }
 
 void ContrastMgrOptions::print_usage(int argc, char *argv[])

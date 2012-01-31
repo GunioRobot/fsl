@@ -40,7 +40,7 @@
 
 # include <boost/mpl/if.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace converter
 {
@@ -50,13 +50,13 @@ namespace converter
 // Put this in an inner namespace so that the generalized operators won't take over
 namespace api
 {
-  
+
 // This file contains the definition of the object class and enough to
 // construct/copy it, but not enough to do operations like
 // attribute/item access or addition.
 
   template <class Policies> class proxy;
-  
+
   struct const_attribute_policies;
   struct attribute_policies;
   struct const_item_policies;
@@ -78,17 +78,17 @@ namespace api
   BOOST_PYTHON_IS_XXX_DEF(proxy, boost::python::api::proxy, 1)
 
   template <class T> struct object_initializer;
-  
+
   class object;
   typedef PyObject* (object::*bool_type)() const;
-  
+
   template <class U>
   class object_operators : public def_visitor<U>
   {
    protected:
 # if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
       typedef object const& object_cref;
-# else 
+# else
       typedef object object_cref;
 # endif
    public:
@@ -113,24 +113,24 @@ namespace api
       //
       const_object_item operator[](object_cref) const;
       object_item operator[](object_cref);
-    
+
       template <class T>
       const_object_item
       operator[](T const& key) const
 # if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
           ;
-# else 
+# else
       {
           return (*this)[object(key)];
       }
-# endif 
-    
+# endif
+
       template <class T>
       object_item
       operator[](T const& key)
 # if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
           ;
-# else 
+# else
       {
           return (*this)[object(key)];
       }
@@ -143,7 +143,7 @@ namespace api
 
       const_object_slice slice(slice_nil, object_cref) const;
       object_slice slice(slice_nil, object_cref);
-                             
+
       const_object_slice slice(object_cref, slice_nil) const;
       object_slice slice(object_cref, slice_nil);
 
@@ -162,7 +162,7 @@ namespace api
               ,  slice_bound<V>::type(end));
       }
 # endif
-    
+
       template <class T, class V>
       object_slice
       slice(T const& start, V const& end)
@@ -175,9 +175,9 @@ namespace api
               , slice_bound<V>::type(end));
       }
 # endif
-      
+
    private: // def visitation for adding callable objects as class methods
-      
+
       template <class ClassT, class DocStringT>
       void visit(ClassT& cl, char const* name, python::detail::def_helper<DocStringT> const& helper) const
       {
@@ -186,12 +186,12 @@ namespace api
           BOOST_STATIC_ASSERT(
               (is_same<char const*,DocStringT>::value
                || detail::is_string_literal<DocStringT const>::value));
-        
+
           objects::add_to_namespace(cl, name, this->derived_visitor(), helper.doc());
       }
 
       friend class python::def_visitor_access;
-      
+
    private:
      // there is a confirmed CWPro8 codegen bug here. We prevent the
      // early destruction of a temporary by binding a named object
@@ -203,22 +203,22 @@ namespace api
 # endif
   };
 
-  
+
   // VC6 and VC7 require this base class in order to generate the
   // correct copy constructor for object. We can't define it there
   // explicitly or it will complain of ambiguity.
   struct object_base : object_operators<object>
   {
-      // copy constructor without NULL checking, for efficiency. 
+      // copy constructor without NULL checking, for efficiency.
       inline object_base(object_base const&);
       inline object_base(PyObject* ptr);
-      
+
       object_base& operator=(object_base const& rhs);
       ~object_base();
-        
+
       // Underlying object access -- returns a borrowed reference
       PyObject* ptr() const;
-      
+
    private:
       PyObject* m_ptr;
   };
@@ -230,14 +230,14 @@ namespace api
       static T x;
       template <class X>
       static X* to_pointer(X const&);
-      
+
       static char test(U const*);
       typedef char (&no)[2];
       static no test(...);
 
       BOOST_STATIC_CONSTANT(bool, value = sizeof(test(to_pointer(x))) == 1);
   };
-  
+
   template <class T, class U>
   struct is_derived
     : mpl::bool_<is_derived_impl<T,U>::value>
@@ -250,7 +250,7 @@ namespace api
         , U const*
       >
   {};
-# endif 
+# endif
 
   template <class T>
   typename objects::unforward_cref<T>::type do_unforward_cref(T const& x)
@@ -260,7 +260,7 @@ namespace api
       return ret(x);
 # else
       return x;
-# endif 
+# endif
   }
 
 # if BOOST_WORKAROUND(__GNUC__, == 2)
@@ -271,9 +271,9 @@ namespace api
       return x;
   }
 # endif
-  
+
   class object;
-  
+
   template <class T>
   PyObject* object_base_initializer(T const& x)
   {
@@ -289,13 +289,13 @@ namespace api
           , is_obj()
       );
   }
-  
+
   class object : public object_base
   {
    public:
       // default constructor creates a None object
       object();
-      
+
       // explicit conversion from any C++ object to Python
       template <class T>
       explicit object(
@@ -304,7 +304,7 @@ namespace api
           // use some SFINAE to un-confuse MSVC about its
           // copy-initialization ambiguity claim.
         , typename mpl::if_<is_proxy<T>,int&,int>::type* = 0
-# endif 
+# endif
       )
         : object_base(object_base_initializer(x))
       {
@@ -313,7 +313,7 @@ namespace api
       // Throw error_already_set() if the handle is null.
       BOOST_PYTHON_DECL explicit object(handle<> const&);
    private:
-      
+
    public: // implementation detail -- for internal use only
       explicit object(detail::borrowed_reference);
       explicit object(detail::new_reference);
@@ -360,7 +360,7 @@ namespace api
       {
           return python::incref(x.ptr());
       }
-      
+
       template <class T>
       static PyObject*
       get(T const& x, mpl::false_)
@@ -368,12 +368,12 @@ namespace api
           return python::incref(converter::arg_to_python<T>(x).get());
       }
   };
-      
+
   template <>
   struct object_initializer_impl<true, false>
   {
       template <class Policies>
-      static PyObject* 
+      static PyObject*
       get(proxy<Policies> const& x, mpl::false_)
       {
           return python::incref(x.operator object().ptr());
@@ -459,13 +459,13 @@ inline PyObject* api::object_base::ptr() const
 namespace converter
 {
   template <class T> struct object_manager_traits;
-  
+
   template <>
   struct object_manager_traits<object>
   {
       BOOST_STATIC_CONSTANT(bool, is_specialized = true);
       static bool check(PyObject*) { return true; }
-      
+
       static python::detail::new_non_null_reference adopt(PyObject* x)
       {
           return python::detail::new_non_null_reference(x);

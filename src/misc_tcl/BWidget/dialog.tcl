@@ -296,7 +296,7 @@ proc Dialog::draw { path {focus ""} {overrideredirect 0} {geometry ""}} {
 
     if { [set grab [Widget::cget $path -modal]] != "none" } {
         BWidget::grab $grab $path
-        if {[info exists _widget($path,result)]} { 
+        if {[info exists _widget($path,result)]} {
             unset _widget($path,result)
         }
         tkwait variable Dialog::_widget($path,result)

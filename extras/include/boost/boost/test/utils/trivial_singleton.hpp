@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -32,7 +32,7 @@ namespace unit_test {
 template<typename Derived>
 class singleton : private boost::noncopyable {
 public:
-    static Derived& instance() { static Derived the_inst; return the_inst; }    
+    static Derived& instance() { static Derived the_inst; return the_inst; }
 protected:
     singleton()  {}
     ~singleton() {}
@@ -66,7 +66,7 @@ namespace { BOOST_JOIN( inst, _t)& inst = BOOST_JOIN( inst, _t)::instance(); }
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: trivial_singleton.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

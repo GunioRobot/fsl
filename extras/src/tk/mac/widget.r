@@ -10,7 +10,7 @@ type 'TEXT'
 
 #define TK_LIBRARY_RESOURCES 3000
 
-resource 'TEXT' (TK_LIBRARY_RESOURCES+114, "tclshrc", purgeable) 
+resource 'TEXT' (TK_LIBRARY_RESOURCES+114, "tclshrc", purgeable)
 {
 "# read widgets demo script\n"
 "console hide\n"

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMain.c --
  *
  *	This file contains a generic main program for Tk-based applications.
@@ -42,7 +42,7 @@ typedef struct ThreadSpecificData {
 				 * into Tcl commands. */
     Tcl_DString line;           /* Used to read the next line from the
 				 * terminal input. */
-    int tty;                    /* Non-zero means standard input is a 
+    int tty;                    /* Non-zero means standard input is a
 				 * terminal-like device.  Zero means it's
 				 * a file. */
 } ThreadSpecificData;
@@ -121,9 +121,9 @@ Tk_MainEx(argc, argv, appInitProc, interp)
 	abort();
     }
 
-    tsdPtr = (ThreadSpecificData *) 
+    tsdPtr = (ThreadSpecificData *)
 	Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
-    
+
     Tcl_FindExecutable(argv[0]);
     tsdPtr->interp = interp;
     Tcl_Preserve((ClientData) interp);
@@ -137,7 +137,7 @@ Tk_MainEx(argc, argv, appInitProc, interp)
         TkMacOSXDefaultStartupScript();
     }
 #endif
-    
+
 #ifdef TCL_MEM_DEBUG
     Tcl_InitMemory(interp);
 #endif
@@ -163,7 +163,7 @@ Tk_MainEx(argc, argv, appInitProc, interp)
 	    argv++;
 	}
     }
-    
+
     /*
      * Make command-line arguments available in the Tcl variables "argc"
      * and "argv".
@@ -206,7 +206,7 @@ Tk_MainEx(argc, argv, appInitProc, interp)
 
     handle = GetStdHandle(STD_INPUT_HANDLE);
 
-    if ((handle == INVALID_HANDLE_VALUE) || (handle == 0) 
+    if ((handle == INVALID_HANDLE_VALUE) || (handle == 0)
 	     || (GetFileType(handle) == FILE_TYPE_UNKNOWN)) {
 	/*
 	 * If it's a bad or closed handle, then it's been connected
@@ -233,7 +233,7 @@ Tk_MainEx(argc, argv, appInitProc, interp)
      * of length 0, (e.g. /dev/null, which is what Finder sets when double
      * clicking Wish) then use the GUI console.
      */
-    
+
     if (!tsdPtr->tty) {
 	struct stat st;
 
@@ -344,7 +344,7 @@ StdinProc(clientData, mask)
     char *cmd;
     int code, count;
     Tcl_Channel chan = (Tcl_Channel) clientData;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     Tcl_Interp *interp = tsdPtr->interp;
 
@@ -358,7 +358,7 @@ StdinProc(clientData, mask)
 		Tcl_DeleteChannelHandler(chan, StdinProc, (ClientData) chan);
 	    }
 	    return;
-	} 
+	}
     }
 
     (void) Tcl_DStringAppend(&tsdPtr->command, Tcl_DStringValue(
@@ -381,7 +381,7 @@ StdinProc(clientData, mask)
 
     Tcl_CreateChannelHandler(chan, 0, StdinProc, (ClientData) chan);
     code = Tcl_RecordAndEval(interp, cmd, TCL_EVAL_GLOBAL);
-    
+
     chan = Tcl_GetStdChannel(TCL_STDIN);
     if (chan) {
 	Tcl_CreateChannelHandler(chan, TCL_READABLE, StdinProc,
@@ -465,7 +465,7 @@ defaultPrompt:
              * is possible that someone has transferred stderr out of
              * this interpreter with "interp transfer".
              */
-            
+
 	    errChannel = Tcl_GetChannel(interp, "stderr", NULL);
             if (errChannel != (Tcl_Channel) NULL) {
                 Tcl_WriteObj(errChannel, Tcl_GetObjResult(interp));

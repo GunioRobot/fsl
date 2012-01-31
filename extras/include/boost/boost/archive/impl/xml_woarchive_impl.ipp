@@ -14,17 +14,17 @@
 #include <algorithm>
 #include <locale>
 
-#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings 
+#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
                             // for BOOST_DEDUCED_TYPENAME
 #include <cstring> // strlen
 #include <cstdlib> // mbtowc
 #include <cwchar>  // wcslen
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::strlen; 
+namespace std{
+    using ::strlen;
     #if ! defined(BOOST_NO_INTRINSIC_WCHAR_T)
-        using ::mbtowc; 
+        using ::mbtowc;
         using ::wcslen;
     #endif
 } // namespace std

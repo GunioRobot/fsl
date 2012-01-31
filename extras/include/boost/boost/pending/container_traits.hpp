@@ -1,4 +1,4 @@
-//  (C) Copyright Jeremy Siek 2004 
+//  (C) Copyright Jeremy Siek 2004
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 
 // Sure would be nice to be able to forward declare these
 // instead of pulling in all the headers. Too bad that
-// is not legal. There ought to be a standard <stlfwd> header. -JGS 
+// is not legal. There ought to be a standard <stlfwd> header. -JGS
 
 #include <boost/next_prior.hpp>
 
@@ -26,7 +26,7 @@
 #endif
 
 // The content of this file is in 'graph_detail' because otherwise
-// there will be name clashes with 
+// there will be name clashes with
 // sandbox/boost/sequence_algo/container_traits.hpp
 // The 'detail' subnamespace will still cause problems.
 namespace boost { namespace graph_detail {
@@ -42,25 +42,25 @@ namespace boost { namespace graph_detail {
   struct reversible_container_tag : virtual public forward_container_tag { };
   struct random_access_container_tag
     : virtual public reversible_container_tag { };
-  
+
   struct sequence_tag : virtual public forward_container_tag { };
 
   struct associative_container_tag : virtual public forward_container_tag { };
 
-  struct sorted_associative_container_tag 
+  struct sorted_associative_container_tag
     : virtual public associative_container_tag,
       virtual public reversible_container_tag { };
 
   struct front_insertion_sequence_tag : virtual public sequence_tag { };
   struct back_insertion_sequence_tag : virtual public sequence_tag { };
 
-  struct unique_associative_container_tag 
+  struct unique_associative_container_tag
     : virtual public associative_container_tag { };
-  struct multiple_associative_container_tag 
+  struct multiple_associative_container_tag
     : virtual public associative_container_tag { };
-  struct simple_associative_container_tag 
+  struct simple_associative_container_tag
     : virtual public associative_container_tag { };
-  struct pair_associative_container_tag 
+  struct pair_associative_container_tag
     : virtual public associative_container_tag { };
 
 
@@ -77,7 +77,7 @@ namespace boost { namespace graph_detail {
   // Container Traits Class and container_category() function
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  // don't use this unless there is partial specialization 
+  // don't use this unless there is partial specialization
   template <class Container>
   struct container_traits {
     typedef typename Container::category category;
@@ -160,19 +160,19 @@ namespace boost { namespace graph_detail {
   struct set_tag :
     virtual public sorted_associative_container_tag,
     virtual public simple_associative_container_tag,
-    virtual public unique_associative_container_tag 
+    virtual public unique_associative_container_tag
     { };
 
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   set_tag container_category(const std::set<Key,Cmp,Alloc>&)
   { return set_tag(); }
 
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   stable_tag iterator_stability(const std::set<Key,Cmp,Alloc>&)
   { return stable_tag(); }
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   struct container_traits< std::set<Key,Cmp,Alloc> > {
     typedef set_tag category;
     typedef stable_tag iterator_stability;
@@ -183,19 +183,19 @@ namespace boost { namespace graph_detail {
   struct multiset_tag :
     virtual public sorted_associative_container_tag,
     virtual public simple_associative_container_tag,
-    virtual public multiple_associative_container_tag 
+    virtual public multiple_associative_container_tag
     { };
 
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   multiset_tag container_category(const std::multiset<Key,Cmp,Alloc>&)
   { return multiset_tag(); }
 
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   stable_tag iterator_stability(const std::multiset<Key,Cmp,Alloc>&)
   { return stable_tag(); }
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Key, class Cmp, class Alloc> 
+  template <class Key, class Cmp, class Alloc>
   struct container_traits< std::multiset<Key,Cmp,Alloc> > {
     typedef multiset_tag category;
     typedef stable_tag iterator_stability;
@@ -208,22 +208,22 @@ namespace boost { namespace graph_detail {
   struct map_tag :
     virtual public sorted_associative_container_tag,
     virtual public pair_associative_container_tag,
-    virtual public unique_associative_container_tag 
+    virtual public unique_associative_container_tag
     { };
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   struct container_traits< std::map<Key,T,Cmp,Alloc> > {
     typedef map_tag category;
     typedef stable_tag iterator_stability;
   };
 #endif
 
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   map_tag container_category(const std::map<Key,T,Cmp,Alloc>&)
   { return map_tag(); }
 
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   stable_tag iterator_stability(const std::map<Key,T,Cmp,Alloc>&)
   { return stable_tag(); }
 
@@ -231,22 +231,22 @@ namespace boost { namespace graph_detail {
   struct multimap_tag :
     virtual public sorted_associative_container_tag,
     virtual public pair_associative_container_tag,
-    virtual public multiple_associative_container_tag 
+    virtual public multiple_associative_container_tag
     { };
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   struct container_traits< std::multimap<Key,T,Cmp,Alloc> > {
     typedef multimap_tag category;
     typedef stable_tag iterator_stability;
   };
 #endif
 
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   multimap_tag container_category(const std::multimap<Key,T,Cmp,Alloc>&)
   { return multimap_tag(); }
 
-  template <class Key, class T, class Cmp, class Alloc> 
+  template <class Key, class T, class Cmp, class Alloc>
   stable_tag iterator_stability(const std::multimap<Key,T,Cmp,Alloc>&)
   { return stable_tag(); }
 
@@ -255,7 +255,7 @@ namespace boost { namespace graph_detail {
 
 #ifndef BOOST_NO_HASH
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Key, class Eq, class Hash, class Alloc> 
+  template <class Key, class Eq, class Hash, class Alloc>
   struct container_traits< BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key,Eq,Hash,Alloc> > {
     typedef set_tag category;
     typedef stable_tag iterator_stability; // is this right?
@@ -291,14 +291,14 @@ namespace boost { namespace graph_detail {
 
   // Erase
   template <class Sequence, class T>
-  void erase_dispatch(Sequence& c, const T& x, 
+  void erase_dispatch(Sequence& c, const T& x,
                       sequence_tag)
   {
     c.erase(std::remove(c.begin(), c.end(), x), c.end());
   }
 
   template <class AssociativeContainer, class T>
-  void erase_dispatch(AssociativeContainer& c, const T& x, 
+  void erase_dispatch(AssociativeContainer& c, const T& x,
                       associative_container_tag)
   {
     c.erase(x);
@@ -373,7 +373,7 @@ namespace boost { namespace graph_detail {
 
   template <class AssociativeContainer, class T>
   std::pair<typename AssociativeContainer::iterator, bool>
-  push_dispatch(AssociativeContainer& c, const T& v, 
+  push_dispatch(AssociativeContainer& c, const T& v,
                 unique_associative_container_tag)
   {
     return c.insert(v);

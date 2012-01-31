@@ -1,6 +1,6 @@
 BWidget ToolKit 1.8.0				October 2006
 Copyright (c) 1998-1999 UNIFIX.
-Copyright (c) 2001-2002 ActiveState Corp. 
+Copyright (c) 2001-2002 ActiveState Corp.
 
 See the file LICENSE.txt for license info (uses Tcl's BSD-style license).
 
@@ -26,7 +26,7 @@ community developers.  See the ChangeLog file for details.
 
 WIDGET LIST (1.8)
 
-Simple Widgets 
+Simple Widgets
       Label           Extended Label widget
       Entry           Extended Entry widget
       Button          Extended Button widget
@@ -35,8 +35,8 @@ Simple Widgets
       ScrollView      Display the visible area of a scrolled window
       Separator       3D separator widget
 
-Manager Widgets 
-      MainFrame       Manage toplevel with menu, toolbar and statusbar 
+Manager Widgets
+      MainFrame       Manage toplevel with menu, toolbar and statusbar
       LabelFrame      Frame with a Label
       TitleFrame      Frame with a title
       ScrolledWindow  Generic scrolled widget
@@ -47,8 +47,8 @@ Manager Widgets
       NoteBook        Notebook manager widget
       Dialog          Dialog abstraction with custom buttons
 
-Composite Widgets 
-      LabelEntry      LabelFrame containing an Entry widget. 
+Composite Widgets
+      LabelEntry      LabelFrame containing an Entry widget.
       ComboBox        ComboBox widget
       SpinBox         SpinBox widget
       Tree            Tree widget
@@ -59,7 +59,7 @@ Composite Widgets
       SelectFont      Font selection widget
       SelectColor     Color selection widget
 
-Commands Classes 
+Commands Classes
       Widget          The Widget base class
       DynamicHelp     Provide help to Tk widget or BWidget
       DragSite        Commands set for Drag facilities
@@ -108,7 +108,7 @@ BWidget-<version>   Root directory and BWidget Tcl sources
    images       images used by BWidget
    lang         Resources for language customization
    demo         Demo sources
-   tests        BWidgets test suite         
+   tests        BWidgets test suite
 
 
 --------------------------------------------------------------------------

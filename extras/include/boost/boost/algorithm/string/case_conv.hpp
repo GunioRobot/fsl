@@ -41,23 +41,23 @@ namespace boost {
             \param Output An output iterator to which the result will be copied
             \param Input An input range
             \param Loc A locale used for conversion
-            \return 
+            \return
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
             \note The second variant of this function provides the strong exception-safety guarantee
-                
+
         */
         template<typename OutputIteratorT, typename RangeT>
-        inline OutputIteratorT 
+        inline OutputIteratorT
         to_lower_copy(
             OutputIteratorT Output,
             const RangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            return std::transform( 
-                begin(Input), 
-                end(Input), 
+            return std::transform(
+                begin(Input),
+                end(Input),
                 Output,
                 ::boost::algorithm::detail::to_lowerF<
                     typename range_value<RangeT>::type >(Loc));
@@ -68,8 +68,8 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT to_lower_copy( 
-            const SequenceT& Input, 
+        inline SequenceT to_lower_copy(
+            const SequenceT& Input,
             const std::locale& Loc=std::locale())
         {
             return SequenceT(
@@ -78,7 +78,7 @@ namespace boost {
                     ::boost::algorithm::detail::to_lowerF<
                         typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
-                    end(Input), 
+                    end(Input),
                     ::boost::algorithm::detail::to_lowerF<
                         typename range_value<SequenceT>::type >(Loc)));
         }
@@ -92,18 +92,18 @@ namespace boost {
             \param Loc a locale used for conversion
         */
         template<typename WritableRangeT>
-        inline void to_lower( 
-            WritableRangeT& Input, 
+        inline void to_lower(
+            WritableRangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            std::transform( 
-                begin(Input), 
-                end(Input), 
-                begin(Input), 
+            std::transform(
+                begin(Input),
+                end(Input),
+                begin(Input),
                 ::boost::algorithm::detail::to_lowerF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
-        
+
 //  to_upper  -----------------------------------------------//
 
         //! Convert to upper case
@@ -115,22 +115,22 @@ namespace boost {
             \param Output An output iterator to which the result will be copied
             \param Input An input range
             \param Loc A locale used for conversion
-            \return 
+            \return
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename RangeT>
-        inline OutputIteratorT 
+        inline OutputIteratorT
         to_upper_copy(
             OutputIteratorT Output,
             const RangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            return std::transform( 
-                begin(Input), 
-                end(Input), 
+            return std::transform(
+                begin(Input),
+                end(Input),
                 Output,
                 ::boost::algorithm::detail::to_upperF<
                     typename range_value<RangeT>::type >(Loc));
@@ -141,8 +141,8 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT to_upper_copy( 
-            const SequenceT& Input, 
+        inline SequenceT to_upper_copy(
+            const SequenceT& Input,
             const std::locale& Loc=std::locale())
         {
             return SequenceT(
@@ -151,7 +151,7 @@ namespace boost {
                     ::boost::algorithm::detail::to_upperF<
                         typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
-                    end(Input), 
+                    end(Input),
                     ::boost::algorithm::detail::to_upperF<
                         typename range_value<SequenceT>::type >(Loc)));
 
@@ -166,14 +166,14 @@ namespace boost {
             \param Loc a locale used for conversion
         */
         template<typename WritableRangeT>
-        inline void to_upper( 
-            WritableRangeT& Input, 
+        inline void to_upper(
+            WritableRangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            std::transform( 
-                begin(Input), 
-                end(Input), 
-                begin(Input), 
+            std::transform(
+                begin(Input),
+                end(Input),
+                begin(Input),
                 ::boost::algorithm::detail::to_upperF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }

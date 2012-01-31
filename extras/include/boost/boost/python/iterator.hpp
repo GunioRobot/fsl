@@ -17,7 +17,7 @@
 # include <boost/bind.hpp>
 # include <boost/bind/protect.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {

@@ -8,7 +8,7 @@
 #include "gd.h"
 
 /* A neat little utility which adds freetype text to
-	existing JPEG images. Type annotate -h for instructions. 
+	existing JPEG images. Type annotate -h for instructions.
 	Thanks to Joel Dubiner for supporting this work. -TBB */
 
 enum

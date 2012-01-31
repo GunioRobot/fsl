@@ -419,7 +419,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find (0); 
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
@@ -454,7 +454,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // (- v) [i] = - v [i]
-    template<class E> 
+    template<class E>
     BOOST_UBLAS_INLINE
     typename vector_unary_traits<E, scalar_negate<typename E::value_type> >::result_type
     operator - (const vector_expression<E> &e) {
@@ -463,7 +463,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // (conj v) [i] = conj (v [i])
-    template<class E> 
+    template<class E>
     BOOST_UBLAS_INLINE
     typename vector_unary_traits<E, scalar_conj<typename E::value_type> >::result_type
     conj (const vector_expression<E> &e) {
@@ -544,8 +544,8 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size () const { 
-            return BOOST_UBLAS_SAME (e1_.size (), e2_.size ()); 
+        size_type size () const {
+            return BOOST_UBLAS_SAME (e1_.size (), e2_.size ());
         }
 
     private:
@@ -838,7 +838,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct vector_binary_traits {
         typedef vector_binary<E1, E2, F> expression_type;
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
-        typedef expression_type result_type; 
+        typedef expression_type result_type;
 #else
         typedef typename E1::vector_temporary_type result_type;
 #endif
@@ -847,7 +847,7 @@ namespace boost { namespace numeric { namespace ublas {
     // (v1 + v2) [i] = v1 [i] + v2 [i]
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_traits<E1, E2, scalar_plus<typename E1::value_type, 
+    typename vector_binary_traits<E1, E2, scalar_plus<typename E1::value_type,
                                                       typename E2::value_type> >::result_type
     operator + (const vector_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
@@ -1038,7 +1038,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1071,11 +1071,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find (0); 
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find (size ()); 
+            return find (size ());
         }
 
         // Reverse iterator
@@ -1147,7 +1147,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Accessors
         BOOST_UBLAS_INLINE
         size_type size () const {
-            return e1_.size (); 
+            return e1_.size ();
         }
 
     public:

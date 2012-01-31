@@ -13,7 +13,7 @@ LIB_OBJS = warpfns.o fnirt_file_reader.o fnirt_file_writer.o point_list.o
 
 TESTXFILES = test_NewimageCoord2NewimageCoord
 
-all: libwarpfns.a 
+all: libwarpfns.a
 
 libwarpfns.a: ${LIB_OBJS}
 	${AR} -r libwarpfns.a ${LIB_OBJS}

@@ -84,7 +84,7 @@ namespace utility { namespace impl {
             ptr->set(ch.ch + 1, (std::numeric_limits<CharT>::max)());
         }
     }
-    
+
     template <typename CharT, typename FakeT>
     void chset_negated_set(boost::shared_ptr<basic_chset<CharT> > &ptr,
             spirit::range<CharT> const &rng, FakeT)
@@ -253,7 +253,7 @@ inline void
 chset<CharT>::set(negated_char_parser<chlit<CharT> > const& arg_)
 {
     utility::impl::detach(ptr);
-    
+
     if(arg_.positive.ch != (std::numeric_limits<CharT>::min)()) {
         ptr->set((std::numeric_limits<CharT>::min)(), arg_.positive.ch - 1);
     }
@@ -267,7 +267,7 @@ inline void
 chset<CharT>::set(negated_char_parser<range<CharT> > const& arg_)
 {
     utility::impl::detach(ptr);
-    
+
     if(arg_.positive.first != (std::numeric_limits<CharT>::min)()) {
         ptr->set((std::numeric_limits<CharT>::min)(), arg_.positive.first - 1);
     }

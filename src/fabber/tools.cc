@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -72,18 +72,18 @@
 double DescendingZeroFinder::FindZero() const
 {
     Tracer_Plus tr("DescendingZeroFinder::FindZero");
-    
+
     double lower = searchMin;
     double upper = searchMax;
     double atLower, atUpper;
-    
+
     double atSearchGuess = fcn(searchGuess);
 
     if (verbosity >= 2)
-      LOG_ERR("IG: f(" << (searchGuess) 
+      LOG_ERR("IG: f(" << (searchGuess)
 	      << ") == " << atSearchGuess << endl);
 
-    if (atSearchGuess < 0) 
+    if (atSearchGuess < 0)
     {
         upper = searchGuess;
         atUpper = atSearchGuess;
@@ -103,21 +103,21 @@ double DescendingZeroFinder::FindZero() const
         if (atUpper >= 0)
             return upper; // hit the limit
     }
-    
+
     int evals = maxEvaluations - 2;
     double maxJump = searchScale;
     double guess, prevGuess = searchGuess;
     //    double nonlinearity = 10; // force a bisection first time
-    
+
     // Interpolation only
-    while ( (evals > 0) && 
-	    (upper-lower > tolX || 
-	     atLower-atUpper > tolY || 
+    while ( (evals > 0) &&
+	    (upper-lower > tolX ||
+	     atLower-atUpper > tolY ||
 	     upper/lower > ratioTolX ||
 	     atUpper/atLower > ratioTolY) )
     {
         guess = guesstimator->GetGuess(lower, upper, atLower, atUpper);
-	
+
 	if (lower == guess || guess == upper)
 	  {
 	    // This should only happen if we're near the limits of
@@ -132,7 +132,7 @@ double DescendingZeroFinder::FindZero() const
 
 	assert( lower < guess && guess < upper );
 	//cout << lower << "<" << guess << "<" << upper << endl;
-	if (!fcn.PickFasterGuess(&guess, lower, upper)) 
+	if (!fcn.PickFasterGuess(&guess, lower, upper))
 	  evals--; // only count the non-cached evaluations.
 	//cout << lower << "<" << guess << "<" << upper << endl;
 	assert(lower < guess && guess < upper);
@@ -141,10 +141,10 @@ double DescendingZeroFinder::FindZero() const
             guess = prevGuess + maxJump;
         else if ( guess-prevGuess < -maxJump )
             guess = prevGuess - maxJump;
-            
+
         maxJump *= searchScaleGrowth;
         prevGuess = guess;
-         
+
         // never mind -- already out of bounds
         // from checking the limits above.
 
@@ -158,21 +158,21 @@ double DescendingZeroFinder::FindZero() const
 	  LOG_ERR("NG: f(" << (guess) << ") == " << atGuess << endl);
 
 
-	//        double atGuessIfLinear = 
+	//        double atGuessIfLinear =
 	  //            ( atLower+(atUpper-atLower)*(guess-lower)/(upper-lower) - atGuess );
 	//        if (atGuess > atGuessIfLinear)
 	  //            nonlinearity = (atGuess-atGuessIfLinear)/(atGuess-atUpper);
 	//        else
 	  //            nonlinearity = (atGuessIfLinear-atGuess)/(atLower-atGuess);
-            
-   
+
+
 	//        cout << "Nonlinearity = " << nonlinearity << endl;
 	//        cout << "atGuess = " << atGuess
 	//             << "\natGuessIfLinear = " << atGuessIfLinear
 	//             << "\natLower = " << atLower
 	//             << "\natUpper = " << atUpper << endl;
-       
-        if (atGuess < 0) 
+
+        if (atGuess < 0)
         {
             upper = guess;
             atUpper = atGuess;
@@ -182,9 +182,9 @@ double DescendingZeroFinder::FindZero() const
             lower = guess;
             atLower = atGuess;
         }
-    } 
+    }
 
-    /*    
+    /*
     // One final interpolation -- not necessary, we could pick anything
     // between lower and upper really.
     guess = guesstimator->GetGuess(lower, upper, atLower, atUpper);
@@ -228,7 +228,7 @@ double RiddlersGuesstimator::GetGuess(double lower, double upper, double atLower
 	  x3 = lower;
 	  fx3 = atLower;
 	}
-      
+
       assert(x1 < x3 && x3 < x2);
       assert(fx2 < fx1);
 
@@ -244,7 +244,7 @@ double RiddlersGuesstimator::GetGuess(double lower, double upper, double atLower
 	{
 	  double s = (fx1-fx2 > 0) ? +1.0 : -1.0; // s = sign(fx1-fx2)
 	  double x4 = x3 + (x3-x1)*s*fx3/sqrt(fx3*fx3-fx1*fx2);
-      
+
 	  Warning::IssueAlways("Riddler's Method: phase two");
 
 	  assert(lower < x4 && x4 < upper);
@@ -256,16 +256,16 @@ double RiddlersGuesstimator::GetGuess(double lower, double upper, double atLower
 	  Warning::IssueAlways("Riddler's Method cheat: dropping back to the bisection method!");
 	}
     }
-  
+
   halfDone = true;
   // Phase one: just pick the midpoint, but save the values for phase two
   x1 = lower;
   fx1 = atLower;
   x2 = upper;
   fx2 = atUpper;
-  
+
   Warning::IssueAlways("Riddler's Method: phase one");
-  
+
   double x3 = (x1 + x2)/2;
   return x3;
 

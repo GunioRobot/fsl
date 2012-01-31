@@ -69,7 +69,7 @@ GetWidgetDemoPath(
     if (libpath) {
 	Tcl_Obj *demo[2] = {	Tcl_NewStringObj("demos", 5),
 				Tcl_NewStringObj("widget", 6) };
-	
+
 	Tcl_IncrRefCount(libpath);
 	result = Tcl_FSJoinToPath(libpath, 2, demo);
 	Tcl_DecrRefCount(libpath);
@@ -139,7 +139,7 @@ TkMacOSXHandleMenuSelect(
 				== TCL_OK) {
 			    Tcl_Obj *path = Tcl_GetObjResult(gInterp);
 			    int len;
-			    
+
 			    Tcl_GetStringFromObj(path, &len);
 			    if (len) {
 				Tcl_IncrRefCount(path);

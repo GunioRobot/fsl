@@ -1,26 +1,26 @@
 /*  Diffusion model fitting
 
     Timothy Behrens, Saad Jbabdi  - FMRIB Image Analysis Group
- 
+
     Copyright (C) 2005 University of Oxford  */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -99,7 +99,7 @@ using namespace MISCMATHS;
 ////////////////////////////////////////////////
 
 class DTI : public NonlinCF{
-public: 
+public:
   DTI(const ColumnVector& iY,
       const Matrix& ibvecs,const Matrix& ibvals){
     Y = iY;
@@ -175,8 +175,8 @@ public:
     x=m_v1;
     if(x(3)<0)x=-x;
     float _th,_ph;cart2sph(x,_th,_ph);
-    cout << "TH   :" << _th*180.0/M_PI << " deg" << endl; 
-    cout << "PH   :" << _ph*180.0/M_PI << " deg" << endl; 
+    cout << "TH   :" << _th*180.0/M_PI << " deg" << endl;
+    cout << "PH   :" << _ph*180.0/M_PI << " deg" << endl;
     cout << "V1   : " << x(1) << " " << x(2) << " " << x(3) << endl;
   }
   void form_Amat(){
@@ -223,11 +223,11 @@ public:
   boost::shared_ptr<BFMatrix> hess(const NEWMAT::ColumnVector&p,boost::shared_ptr<BFMatrix> iptr)const;
   double cf(const NEWMAT::ColumnVector& p)const;
   NEWMAT::ReturnMatrix forwardModel(const NEWMAT::ColumnVector& p)const;
-  
+
   ColumnVector rotproduct(const ColumnVector& x,const Matrix& R)const;
   ColumnVector rotproduct(const ColumnVector& x,const Matrix& R1,const Matrix& R2)const;
   float anisoterm(const int& pt,const ColumnVector& ls,const Matrix& xx)const;
-  
+
 private:
   Matrix bvecs;
   Matrix bvals;
@@ -252,28 +252,28 @@ public:
   PVM(const ColumnVector& iY,
       const Matrix& ibvecs, const Matrix& ibvals,
       const int& nfibres):Y(iY),bvecs(ibvecs),bvals(ibvals){
-    
+
     npts    = Y.Nrows();
     nfib    = nfibres;
-    
+
     cart2sph(ibvecs,alpha,beta);
-    
+
     cosalpha.ReSize(npts);
     sinalpha.ReSize(npts);
     for(int i=1;i<=npts;i++){
       sinalpha(i) = sin(alpha(i));
       cosalpha(i) = cos(alpha(i));
     }
-    
+
   }
   virtual ~PVM(){}
-  
+
   // PVM virtual routines
   virtual void fit()  = 0;
   virtual void sort() = 0;
   virtual void print()const = 0;
   virtual void print(const ColumnVector& p)const = 0;
-  
+
   virtual ReturnMatrix get_prediction()const = 0;
 
 protected:
@@ -284,7 +284,7 @@ protected:
   ColumnVector sinalpha;
   ColumnVector cosalpha;
   ColumnVector beta;
-  
+
   float npts;
   int   nfib;
 
@@ -325,8 +325,8 @@ public:
       x << sin(m_th(i))*cos(m_ph(i)) << sin(m_th(i))*sin(m_ph(i)) << cos(m_th(i));
       if(x(3)<0)x=-x;
       float _th,_ph;cart2sph(x,_th,_ph);
-      cout << "TH" << i << "  :" << _th*180.0/M_PI << " deg" << endl; 
-      cout << "PH" << i << "  :" << _ph*180.0/M_PI << " deg" << endl; 
+      cout << "TH" << i << "  :" << _th*180.0/M_PI << " deg" << endl;
+      cout << "PH" << i << "  :" << _ph*180.0/M_PI << " deg" << endl;
       cout << "DIR" << i << "   : " << x(1) << " " << x(2) << " " << x(3) << endl;
     }
   }
@@ -336,8 +336,8 @@ public:
     cout << "D    :" << p(2) << endl;
     for(int i=3,ii=1;ii<=nfib;i+=3,ii++){
       cout << "F" << ii << "   :" << x2f(p(i)) << endl;
-      cout << "TH" << ii << "  :" << p(i+1)*180.0/M_PI << " deg" << endl; 
-      cout << "PH" << ii << "  :" << p(i+2)*180.0/M_PI << " deg" << endl; 
+      cout << "TH" << ii << "  :" << p(i+1)*180.0/M_PI << " deg" << endl;
+      cout << "PH" << ii << "  :" << p(i+2)*180.0/M_PI << " deg" << endl;
     }
   }
 
@@ -372,7 +372,7 @@ public:
   float anisoterm_thph(const int& pt,const float& _d,const ColumnVector& x,const float& _th,const float& _ph)const;
 
 
-private:  
+private:
   int   nparams;
   float m_s0;
   float m_d;
@@ -422,8 +422,8 @@ public:
       ColumnVector x(3);
       x << sin(m_th(i))*cos(m_ph(i)) << sin(m_th(i))*sin(m_ph(i)) << cos(m_th(i));
       if(x(3)<0)x=-x;
-      cout << "TH" << i << "   :" << m_th(i) << endl; 
-      cout << "PH" << i << "   :" << m_ph(i) << endl; 
+      cout << "TH" << i << "   :" << m_th(i) << endl;
+      cout << "PH" << i << "   :" << m_ph(i) << endl;
       cout << "DIR" << i << "   : " << x(1) << " " << x(2) << " " << x(3) << endl;
     }
   }
@@ -434,8 +434,8 @@ public:
     cout << "D_STD :" << p(3) << endl;
     for(int i=3,ii=1;ii<=nfib;i+=3,ii++){
       cout << "F" << ii << "    :" << x2f(p(i)) << endl;
-      cout << "TH" << ii << "   :" << p(i+1) << endl; 
-      cout << "PH" << ii << "   :" << p(i+2) << endl; 
+      cout << "TH" << ii << "   :" << p(i+1) << endl;
+      cout << "PH" << ii << "   :" << p(i+2) << endl;
     }
   }
 
@@ -462,7 +462,7 @@ public:
   float anisoterm_b(const int& pt,const float& _a,const float& _b,const ColumnVector& x)const;
   float anisoterm_th(const int& pt,const float& _a,const float& _b,const ColumnVector& x,const float& _th,const float& _ph)const;
   float anisoterm_ph(const int& pt,const float& _a,const float& _b,const ColumnVector& x,const float& _th,const float& _ph)const;
-  
+
 private:
   int   nparams;
   float m_s0;

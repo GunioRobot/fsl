@@ -1,4 +1,4 @@
-# Irish translations for libiconv 
+# Irish translations for libiconv
 # Copyright (C) 2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the libiconv package.
 # Kevin Patrick Scannell <scannell@SLU.EDU>, 2003, 2006.

@@ -4,20 +4,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -29,13 +29,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -46,7 +46,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -75,7 +75,7 @@ using namespace mesh;
 
 
 void meshmask()
-{ 
+{
   probtrackxOptions& opts =probtrackxOptions::getInstance();
 
   // load seed mesh
@@ -94,7 +94,7 @@ void meshmask()
   seeds=0;
 
 
-  
+
   Matrix mm_to_vox(4,4);
   mm_to_vox << -1 << 0 << 0 <<  (seeds.xsize())/2
  	    <<  0 << 0 << -1 << (seeds.zsize())/2
@@ -112,20 +112,20 @@ void meshmask()
   seeds = 0;
   for(vector<Mpoint*>::iterator i = mseeds._points.begin();i!=mseeds._points.end();i++){
     if((*i)->get_value() > 0){
-    
-      fs_coord_mm<<(*i)->get_coord().X<<(*i)->get_coord().Y<<(*i)->get_coord().Z << 1.0; 
+
+      fs_coord_mm<<(*i)->get_coord().X<<(*i)->get_coord().Y<<(*i)->get_coord().Z << 1.0;
       xyz_vox = mm_to_vox*fs_coord_mm;
-      
+
       float x=xyz_vox(1);float y=xyz_vox(2);float z=xyz_vox(3);
       Pt newPt(x,y,z);
       (*i)->_update_coord = newPt;
 
       seeds(int(round(x)),int(round(y)),int(round(z))) = 1;
-	
+
     }
   }
 
-  
+
   ////////////////////////////////
   //  Log& logger = LogSingleton::getInstance();
   Streamliner stline(seeds);
@@ -136,31 +136,31 @@ void meshmask()
 
   for(vector<Mpoint*>::iterator i = mseeds._points.begin();i!=mseeds._points.end();i++){
     if((*i)->get_value() > 0){
-    
-      fs_coord_mm<<(*i)->get_coord().X<<(*i)->get_coord().Y<<(*i)->get_coord().Z << 1.0; 
+
+      fs_coord_mm<<(*i)->get_coord().X<<(*i)->get_coord().Y<<(*i)->get_coord().Z << 1.0;
       //      xyz_vox = seeds.qform_mat().i()*fs_coord_mm
             xyz_vox = mm_to_vox*fs_coord_mm;
 	    //xyz_vox = fs_coord_mm;
-      
+
 
       float x=xyz_vox(1);float y=xyz_vox(2);float z=xyz_vox(3);
       Pt newPt(x,y,z);
       (*i)->_update_coord = newPt;
 
 		//      seeds(round(x),round(y),round(z)) = 1;
-    
+
       cout <<"run"<<endl;
       dir << (*i)->local_normal().X << (*i)->local_normal().Y << (*i)->local_normal().Z;
- 
-     keeptotal += seedmanager.run(x,y,z,true,-1,dir); 
-	
+
+     keeptotal += seedmanager.run(x,y,z,true,-1,dir);
+
     }
   }
   mseeds.update();
   //  mseeds.save("test.vtk",3);
 
   //return;
-  
+
   //   for(int z=0;z<seeds.zsize();z++){
   //     cout <<"sl "<<z<<endl;
   //     for(int y=0;y<seeds.ysize();y++){
@@ -168,15 +168,15 @@ void meshmask()
   // 	if(seeds(x,y,z)>0){
   // 	  cout <<"run"<<endl;
   // 	  dir << (*i)->local_normal().X << (*i)->local_normal().Y << (*i)->local_normal().Z;
-  // 	  keeptotal += seedmanager.run(x,y,z,true,-1,dir); 
+  // 	  keeptotal += seedmanager.run(x,y,z,true,-1,dir);
   // 	}
   //       }
   //     }
   //   }
-  
-  counter.save_total(keeptotal);  
+
+  counter.save_total(keeptotal);
   counter.save();
-  
+
   cout<<"finished"<<endl;
 }
 

@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     ggmix.cc - Gaussian & Gaussian/Gamma Mixture Model
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -90,14 +90,14 @@ string float2str(float f,int width, int prec, bool scientif)
     os.setf(ios::internal, ios::adjustfield);
     os << f << '\0';
     return os.str();
-  } 
- 
+  }
+
 namespace GGMIX{
-  
-  void ggmix::setup(const RowVector& dat, 
+
+  void ggmix::setup(const RowVector& dat,
 		      const string dirname,
-		      int cnum, volume<float> themask, 
-		      volume<float> themean, 
+		      int cnum, volume<float> themask,
+		      volume<float> themean,
 		      int num_mix, float eps, bool fixit)
   {
     cnumber = cnum;
@@ -108,8 +108,8 @@ namespace GGMIX{
     fitted = false;
     nummix = num_mix;
     numdata = dat.Ncols();
-    
-    //normalise data 
+
+    //normalise data
     datamean = mean(dat,2).AsScalar();
     datastdev= stdev(dat,2).AsScalar();
     data=(dat - datamean)/datastdev;
@@ -130,9 +130,9 @@ namespace GGMIX{
     Dmin =  min(data).AsScalar(); Dmax = max(data).AsScalar();
     IntSize = Dmax / nummix;
 
-    means(1)=mean(data,2).AsScalar(); 
+    means(1)=mean(data,2).AsScalar();
     for (int ctr=2; ctr <= means.Ncols(); ctr++){
-      means(ctr) =  Dmax - (ctr - 1.5) * IntSize; 
+      means(ctr) =  Dmax - (ctr - 1.5) * IntSize;
     }
     means(2)=means(1)+2*sqrt(vars(1));
     //means(2)=means(1)+ 0.6*(Dmax-means(1));
@@ -149,7 +149,7 @@ namespace GGMIX{
 
 
   Matrix ggmix::threshold(const RowVector& dat, string levels)
-  { 
+  {
     Matrix Res;
     Res = 1.0;
     string tmpstr;
@@ -205,7 +205,7 @@ namespace GGMIX{
     if(fpr.Storage()>0){levls = levls | fpr;}
     if(fdr.Storage()>0){levls = levls | fdr;}
     if(nht.Storage()>0){levls = levls | nht;}
-    
+
 
     //cerr << " levles : " << levls << endl << endl;
     Res = threshold(data, levls);
@@ -215,7 +215,7 @@ namespace GGMIX{
   }
 
   Matrix ggmix::threshold(const RowVector& dat, Matrix& levels)
-  {  
+  {
     Matrix tests;
     tests=levels;
     Matrix Nprobs;
@@ -237,7 +237,7 @@ namespace GGMIX{
       }
     }
 
-    int numtests = int(tests(1,1)+tests(1,2)+tests(1,3)+tests(1,4));    
+    int numtests = int(tests(1,1)+tests(1,2)+tests(1,3)+tests(1,4));
 
     Matrix Res(numtests,numdata);
     Res = 0.0;
@@ -250,13 +250,13 @@ namespace GGMIX{
 	add_infstr(" alternative hypothesis test at p > "+float2str(tests(1,4+next),0,2,false));
 	Matrix tmpNull;
 	tmpNull = dat;
-	
+
 	float cutoffpos, cutoffneg;
 	//      cutoffpos = max(dat).AsScalar()+0.1;
 	//      cutoffneg = min(dat).AsScalar()-0.1;
 	cutoffpos = means(1)+6*std::sqrt(vars(1)+0.0000001);
 	cutoffneg = means(1)-6*std::sqrt(vars(1)+0.0000001);
-	
+
 	for(int ctr=1; ctr<=tmpNull.Ncols(); ctr++)
 	  if( probmap(ctr) > tests(1,4+next) ){
 	    if( dat(ctr) > means(1) )
@@ -264,9 +264,9 @@ namespace GGMIX{
 	    else
 	      cutoffneg = std::max(cutoffneg, float(dat(ctr)));
 	  }
-	
+
 	//      cerr << " Cutoff " << cutoffneg << "  " << cutoffpos << endl;
-	
+
 	for(int ctr=1; ctr<=tmpNull.Ncols(); ctr++)
 	  if( (dat(ctr) > cutoffneg) && (dat(ctr) < cutoffpos) )
 	    tmpNull(1,ctr)=0.0;
@@ -278,14 +278,14 @@ namespace GGMIX{
       }
       next++;
     }
-    
+
     for(int ctr1=1;ctr1<=tests(1,2);ctr1++){
       if(4+next <=tests.Ncols()){
 	cerr << " false positives control " << tests(1,4+next)<<endl;
 	Matrix tmp1;
 	tmp1 = normcdf(dat,means(1),vars(1));
 	Matrix tmpNull;
-	tmpNull = dat; 
+	tmpNull = dat;
 	for(int ctr=1; ctr<=tmp1.Ncols(); ctr++)
 	  if(tmp1(1,ctr) < tests(1,4+next))
 	    tmpNull(1,ctr)=0.0;
@@ -306,7 +306,7 @@ namespace GGMIX{
 	Matrix tmpAlt;
 	tmpAlt = sum(newcdf.Rows(2,Nprobs.Nrows()),1);
 	Matrix tmp;
-	tmp = dat; 
+	tmp = dat;
 	for(int ctr=1; ctr<=tmp.Ncols(); ctr++)
 	  if(tmpNull(1,ctr) > (1-tests(1,4+next)) * tmpAlt(1,ctr))
 	    tmp(1,ctr)=0.0;
@@ -325,7 +325,7 @@ namespace GGMIX{
 	Matrix tmp1;
 	tmp1 = normcdf(dat,mu,std::abs(sig));
 	Matrix tmpNull;
-	tmpNull = dat; 
+	tmpNull = dat;
 	for(int ctr=1; ctr<=tmp1.Ncols(); ctr++)
 	  if((tmp1(1,ctr) < 1-0.5*(tests(1,4+next))&&
 	      (tmp1(1,ctr) > 0.5*(tests(1,4+next)))))
@@ -334,7 +334,7 @@ namespace GGMIX{
       }
       next++;
     }
-   
+
     return Res;
   }
 
@@ -354,7 +354,7 @@ namespace GGMIX{
     Matrix kdata;
     RowVector prob_Y__theta;RowVector Nbar;
     RowVector mubar;RowVector sigmabar;RowVector pibar;
-    
+
     do{
       oldll = logprobY;
 
@@ -365,31 +365,31 @@ namespace GGMIX{
       	}
 
       tmp0 = normpdf(data,means,vars);
-      tmp1 = SP(props.t()*ones(1,numdata),tmp0);      
+      tmp1 = SP(props.t()*ones(1,numdata),tmp0);
       prob_Y__theta << sum(tmp1,1);
       logprobY = log(prob_Y__theta).Sum();
       prob_K__y_theta = SP(tmp1,pow(ones(nummix,1)*prob_Y__theta,-1));
       Nbar << sum(prob_K__y_theta,2).t();
       pibar = Nbar / numdata;
       kdata = ones(nummix,1)*data;
-      mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));    
+      mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
       kdata -= mubar.t()*ones(1,numdata);
       kdata = pow(kdata,2);
       sigmabar << SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
-      
+
       means = mubar;
       vars  = sigmabar;
       props = pibar;
 
-   
+
       if(epsilon<0){exitloop = it_ctr >= -epsilon;}
       else{exitloop = (((logprobY-oldll < epsilon)&&(it_ctr>20))
-		       ||(it_ctr>400));}      
+		       ||(it_ctr>400));}
       it_ctr++;
     }while(!exitloop);
   }
 
-  
+
   void ggmix::gmmfit()
   {
     int i,j;
@@ -414,31 +414,31 @@ namespace GGMIX{
       do{
 	//cerr << " fitting GMM with " << nummix << endl;
 	//cerr << means << " " << vars << " " << props << endl;
-    
+
 	gmmupdate();
 
 	//	cerr << means << " " << vars << " " << props << endl;
 
 	Score(nummix) = gmmevidence();
-       
+
 	int idx1,idx2;
 	RowVector pitmp = props;
-     
+
 	pitmp.MaximumAbsoluteValue1(idx1);
 	pitmp(idx1)=0.0;
 	pitmp.MaximumAbsoluteValue1(idx2);
-	
+
 	//status("   ");
 	if(props.MaximumAbsoluteValue1(i)<0.9){
 	  if((vars(idx2)>0.15)&&
 	     (std::abs(means(idx2)-means(idx1))<0.5*vars(idx1))){
 	    Score(nummix) = Score(nummix)/(2*(means(idx1)));
-	  }	     
+	  }
 	}
-	
+
 	add_params(means,vars,props,logprobY,MDL,Evi,true);
 	//cerr << " Evi : " << evidence() << "  ("<< nummix << ")" << endl;
-       
+
 	gmmreducemm();
 	means = means.Columns(1,nummix);
 	vars  = vars.Columns(1,nummix);
@@ -459,14 +459,14 @@ namespace GGMIX{
       vars.ReSize(j);
       props.ReSize(j);
       nummix = j;
-      int index; index = 3 + (j-1)*5; 
+      int index; index = 3 + (j-1)*5;
       means = Params.SubMatrix(index,index,1,j);
       vars  = Params.SubMatrix(index+1,index+1,1,j);
       props = Params.SubMatrix(index+2,index+2,1,j);
     }
 
     //make sure that maximum mode is first
-    //     cerr <<" Max Abs : " << props.MaximumAbsoluteValue2(i,j) << " " << j << endl; 
+    //     cerr <<" Max Abs : " << props.MaximumAbsoluteValue2(i,j) << " " << j << endl;
 
     props.MaximumAbsoluteValue2(i,j);
     if(j>1){
@@ -475,7 +475,7 @@ namespace GGMIX{
       tmp = vars(1);vars(1) = vars(j);vars(j)=tmp;
       tmp = props(1);props(1) = props(j);props(j)=tmp;
     }
-    
+
     add_params(means,vars,props,logprobY,MDL,Evi,true);
     //write_ascii_matrix(mainhtml.appendDir(prefix+"-GMM_params.txt"),Params);
 
@@ -490,7 +490,7 @@ namespace GGMIX{
       Nprobs = SP(tmp0,Nprobs);
       probmap << SP(sum(Nprobs.Rows(2,Nprobs.Nrows()),1),
 		    pow(sum(Nprobs,1),-1));
-    } 
+    }
    }
 
 
@@ -498,7 +498,7 @@ namespace GGMIX{
   {
     Matrix tmp0;
     if(means.Ncols()>1){
-      tmp0 = normpdf(data,means,vars); 
+      tmp0 = normpdf(data,means,vars);
     }else{
       tmp0 = normpdf(data,means.AsScalar(),vars.AsScalar());
     }
@@ -512,17 +512,17 @@ namespace GGMIX{
     }
     logH = logH + 2*sum(log(std::sqrt(2.0)*numdata*props),2).AsScalar();
     logH = logH - 2*sum(props,2).AsScalar();
-    
+
     RowVector prob_Y__theta;
     prob_Y__theta << sum(tmp1,1);
-    
-    logprobY = log(prob_Y__theta).Sum(); 
-    
+
+    logprobY = log(prob_Y__theta).Sum();
+
     MDL = -logprobY + (1.5*nummix-0.5)* std::log(float(numdata));
-    
+
     Evi = -logprobY +nummix*std::log(2.0)-std::log(MISCMATHS::gamma(nummix))
       -3*nummix/2*std::log(M_PI)+0.5*logH;
-  
+
     return Evi;
   }
 
@@ -537,13 +537,13 @@ namespace GGMIX{
 	mus(ctri,ctrj) = (props(ctri)*means(ctri)+props(ctrj)*means(ctrj))
 	                   /(props(ctri)+props(ctrj));
         rs(ctri,ctrj)  = (props(ctri)*(vars(ctri)+
-			  std::pow(means(ctri)-mus(ctri,ctrj),2) ) 
-                          + props(ctrj)*(vars(ctrj) 
-                          + std::pow(means(ctrj)-mus(ctri,ctrj),2))) 
+			  std::pow(means(ctri)-mus(ctri,ctrj),2) )
+                          + props(ctrj)*(vars(ctrj)
+                          + std::pow(means(ctrj)-mus(ctri,ctrj),2)))
 	                  / (props(ctri)+props(ctrj));
 	dlm(ctri,ctrj) = 0.5*numdata*(
 			 props(ctri)*std::log(
-                           std::abs(rs(ctri,ctrj))/std::abs(vars(ctri))) 
+                           std::abs(rs(ctri,ctrj))/std::abs(vars(ctri)))
 			 + props(ctrj)*std::log(std::abs(rs(ctri,ctrj))
                          / std::abs(vars(ctrj))));
       }
@@ -558,7 +558,7 @@ namespace GGMIX{
 
     nummix--;
     //cerr << "NumMix" << nummix << endl;
-    
+
     RowVector newmean(nummix);
     RowVector newvars(nummix);
     RowVector newprop(nummix);
@@ -577,8 +577,8 @@ namespace GGMIX{
       newmean(ctr0) = mus(i,j);
       newvars(ctr0) = rs(i,j);
       newprop(ctr0) = props(i)+props(j);
-      
-      means = newmean;    
+
+      means = newmean;
       vars=newvars;
       props=newprop;
     }
@@ -586,13 +586,13 @@ namespace GGMIX{
 
   void ggmix::ggmfit()
   {// fit a mixture of a Gaussian and multiple Gamma functions to the histogram
-  
+
     float log_p_y_theta = 1.0;
     float old_ll = 2.0;
     float g_eps = 0.000001;
     int it_ctr = 0;
     double Dmax, Dmin;
-   
+
     Dmax = 2 * data.Maximum();
     Dmin = -2 * data.Minimum();
 
@@ -618,7 +618,7 @@ namespace GGMIX{
     while((it_ctr<30) ||
 	  ((std::abs(old_ll - log_p_y_theta)>g_eps) && (it_ctr<500)))
       { // fit GGM
-	
+
  	it_ctr++;
 	//offset = (std::min(0.2,1-props(1)))*std::sqrt(vars(1));
 
@@ -630,17 +630,17 @@ namespace GGMIX{
 
  	p_ygx = 0.0;
  	p_ygx.Row(1) << normpdf(data,means(1),vars(1));
-       
+
  	const2 = (2.6-props(1))*sqrt(vars(1))+means(1); //min. nht level
- 
+
 	means(2) = (std::max(means(2), std::max(0.001,
 	   0.5 * ( const2 + std::sqrt( const2*const2 + 4*vars(2))))));
 	vars(2)  = std::max(std::min(vars(2), 0.5*std::pow(means(2),2)),0.0001);
 	p_ygx.Row(2) << gammapdf(data,means(2),vars(2));
-   
+
  	if(nummix>2){
 	  const2 = (2.6-props(1))*sqrt(vars(1))-means(1);
-	
+
 	  means(3) = -(std::max(-means(3), std::max(0.001,
 	      0.5 * ( const2 + std::sqrt( const2*const2 + 4*vars(3))))));
 	  vars(3)  = std::max(std::min(vars(3), 0.5*std::pow(means(3),2)),0.0001);
@@ -649,7 +649,7 @@ namespace GGMIX{
 
  	tmp1 = SP(props.t()*ones(1,numdata),p_ygx);
  	prob_Y__theta << sum(tmp1,1);
-	
+
 	//deal with non-modelled voxels
 	for(int ctr=1; ctr<=tmp1.Ncols(); ctr++)
 	  if(prob_Y__theta(ctr) < 0.0001)
@@ -658,11 +658,11 @@ namespace GGMIX{
  	old_ll = log_p_y_theta;
  	log_p_y_theta = log(prob_Y__theta).Sum();
 	// 	cerr << "calculated log_prob_Y__theta" <<endl;
-	// 	cerr << old_ll << "   " << log_p_y_theta << "   " 
+	// 	cerr << old_ll << "   " << log_p_y_theta << "   "
 	//	cerr << float(std::abs(old_ll - log_p_y_theta)) << endl;
  	if((it_ctr<30) ||
 	   ((std::abs(old_ll - log_p_y_theta)>g_eps) && (it_ctr<300))){//update
-	  
+
  	  prob_K__y_theta = SP(tmp1,pow(ones(nummix,1)*prob_Y__theta,-1));
  	  Nbar << sum(prob_K__y_theta,2).t();
 	  for(int ctr=1; ctr<=Nbar.Ncols(); ctr++)
@@ -671,13 +671,13 @@ namespace GGMIX{
  	  pibar= Nbar / numdata;
 	  // 	  cerr << "pibar :" << pibar << endl;
  	  kdata = ones(nummix,1)*data;
- 	  mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1)); 
+ 	  mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
 	  // 	  cerr << "mubar :" << mubar << endl;
 
  	  kdata -= mubar.t()*ones(1,numdata);
  	  kdata = pow(kdata,2);
  	  sigmabar << SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
-      
+
  	  means = mubar;
  	  vars  = sigmabar;
  	  props = pibar;
@@ -686,7 +686,7 @@ namespace GGMIX{
 
     props = props / sum(props,2).AsScalar();
     add_params(means,vars,props,logprobY,MDL,Evi,true);
-    
+
     probmap << SP(sum(tmp1.Rows(2,tmp1.Nrows()),1),
 		    pow(sum(tmp1,1),-1));
 
@@ -694,7 +694,7 @@ namespace GGMIX{
     //  message("    no Gamma survived " << endl);
     //  probmap << normcdf(data,means(1),vars(1));
     // }|| std::abs(mean(data,2).AsScalar()) > 1.0
-      
+
     if(props(1)<0.4 ){
       //set up GMM
       //      message("    try Gaussian Mixture Model " << endl);
@@ -703,7 +703,7 @@ namespace GGMIX{
       means=zeros(1,nummix);
       Params=zeros(1,nummix);
       logprobY = 1.0;
-      
+
       props = std::pow(float(nummix),float(-1.0));
 
       tmp1 = data * data.t() / numdata;
@@ -713,14 +713,14 @@ namespace GGMIX{
       Dmin = min(data).AsScalar(); Dmax = max(data).AsScalar();
       IntSize = Dmax / nummix;
 
-      means(1)=mean(data,2).AsScalar(); 
+      means(1)=mean(data,2).AsScalar();
       for (int ctr=2; ctr <= means.Ncols(); ctr++){
-	means(ctr) =  Dmax - (ctr - 1.5) * IntSize; 
+	means(ctr) =  Dmax - (ctr - 1.5) * IntSize;
       }
       means(2)=means(1)+sqrt(vars(1));
       if(nummix>2)
 	means(3)=means(1)-sqrt(vars(1));
-      
+
       fit(string("GMM"));
     }
 
@@ -730,38 +730,38 @@ namespace GGMIX{
 
   /*  INPUT / OUTPUT  */
 
-  void ggmix::add_params(Matrix& mu, Matrix& sig, Matrix& pi, 
+  void ggmix::add_params(Matrix& mu, Matrix& sig, Matrix& pi,
 		      float logLH, float MDL, float Evi, bool advance)
-  { 
+  {
     int size = Params.Ncols();
     if(size<2){size=2;}
     Matrix New(5,size);
     New = 0;
-    
+
     New.SubMatrix(3,3,1,mu.Ncols())=mu;
     New.SubMatrix(4,4,1,mu.Ncols())=sig;
     New.SubMatrix(5,5,1,mu.Ncols())=pi;
     New(1,1)=nummix;
-  
+
     New(1,2)=-logLH;
     New(2,1)=Evi;
     New(2,2)=MDL;
-    if(Params.Storage()>nummix){ 
+    if(Params.Storage()>nummix){
       Params = New & Params;
-    }else{ 
+    }else{
       Params =  New;
     }
   }
 
-  void ggmix::get_params(int index, Matrix& mu, Matrix& sig, Matrix& pi, 
+  void ggmix::get_params(int index, Matrix& mu, Matrix& sig, Matrix& pi,
 		      float logLH, float MDL, float Evi)
-  { 
-   
+  {
+
   }
 
   void ggmix::save()
   {
-    
+
   }
 
   void ggmix::status(const string &txt)

@@ -5,7 +5,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #ifndef fnirt_file_writer_h
@@ -40,11 +40,11 @@ class FnirtFileWriter
 {
 public:
   // Constructor for coefficient file
-  FnirtFileWriter(const std::string&                                               fname, 
+  FnirtFileWriter(const std::string&                                               fname,
                   const std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&   fields,
                   NEWMAT::Matrix                                                   aff=NEWMAT::IdentityMatrix(4));
   // "Simpler" constructor for coefficient file
-  FnirtFileWriter(const std::string&                   fname, 
+  FnirtFileWriter(const std::string&                   fname,
                   const BASISFIELD::basisfield&        fieldx,
                   const BASISFIELD::basisfield&        fieldy,
                   const BASISFIELD::basisfield&        fieldz,
@@ -55,29 +55,29 @@ public:
   // Constructor for field file
   FnirtFileWriter(const std::string&                   fname,
                   const NEWIMAGE::volume<float>&       ref,
-                  const NEWIMAGE::volume4D<float>&     vfields,                         
+                  const NEWIMAGE::volume4D<float>&     vfields,
                   NEWMAT::Matrix                       aff=NEWMAT::IdentityMatrix(4));
   // Another constructor for field file
   FnirtFileWriter(const std::string&                     fname,
                   const NEWIMAGE::volume4D<float>&       vfields);
   // Another constructor for field file
   FnirtFileWriter(const std::string&                   fname,
-		  const NEWIMAGE::volume<float>&       fieldx,                         
-		  const NEWIMAGE::volume<float>&       fieldy,                         
+		  const NEWIMAGE::volume<float>&       fieldx,
+		  const NEWIMAGE::volume<float>&       fieldy,
 		  const NEWIMAGE::volume<float>&       fieldz);
   // Another constructor for field file
   FnirtFileWriter(const std::string&                   fname,
                   const NEWIMAGE::volume<float>&       ref,
-                  const NEWIMAGE::volume<float>&       fieldx,                         
-                  const NEWIMAGE::volume<float>&       fieldy,                         
-                  const NEWIMAGE::volume<float>&       fieldz,                         
+                  const NEWIMAGE::volume<float>&       fieldx,
+                  const NEWIMAGE::volume<float>&       fieldy,
+                  const NEWIMAGE::volume<float>&       fieldz,
                   NEWMAT::Matrix                       aff=NEWMAT::IdentityMatrix(4))
   {
     common_field_construction(fname,ref,fieldx,fieldy,fieldz,aff);
   }
 
 protected:
-  void common_coef_construction(const std::string&                   fname, 
+  void common_coef_construction(const std::string&                   fname,
                                 const BASISFIELD::basisfield&        fieldx,
                                 const BASISFIELD::basisfield&        fieldy,
                                 const BASISFIELD::basisfield&        fieldz,
@@ -87,7 +87,7 @@ protected:
                                  const NEWIMAGE::volume<float>&     ref,
                                  const NEWIMAGE::volume<float>&     fieldx,
                                  const NEWIMAGE::volume<float>&     fieldy,
-                                 const NEWIMAGE::volume<float>&     fieldz, 
+                                 const NEWIMAGE::volume<float>&     fieldz,
 				 const NEWMAT::Matrix&              aff);
 private:
 };

@@ -86,10 +86,10 @@ HTML_DIR		= $(DISTDIR)/html
 HTML_INSTALL_DIR	= $(INSTALL_ROOT)$(HTML_DIR)
 
 # Package search path.
-TCL_PACKAGE_PATH	= /usr/people/duncan/src/fsldev/lib 
+TCL_PACKAGE_PATH	= /usr/people/duncan/src/fsldev/lib
 
 # Libraries built with optimization switches have this additional extension
-TCL_DBGX		= 
+TCL_DBGX		=
 
 # warning flags
 CFLAGS_WARNING		= -Wall -Wno-implicit-int -fno-strict-aliasing
@@ -106,8 +106,8 @@ CFLAGS_OPTIMIZE		= -O2
 CFLAGS			= $(CFLAGS_OPTIMIZE)  -pipe -I/usr/local/fsl/extras/include -DTCL_DBGX=$(TCL_DBGX)
 
 # Flags to pass to the linker
-LDFLAGS_DEBUG		= 
-LDFLAGS_OPTIMIZE	= 
+LDFLAGS_DEBUG		=
+LDFLAGS_OPTIMIZE	=
 LDFLAGS			= $(LDFLAGS_OPTIMIZE) -L/usr/local/fsl/extras/lib -Wl,--export-dynamic
 
 # To disable ANSI-C procedure prototypes reverse the comment characters
@@ -208,7 +208,7 @@ STLIB_LD		= ${AR} cr
 SHLIB_LD		= ${CC} -shared ${CFLAGS} ${LDFLAGS}
 SHLIB_CFLAGS		= -fPIC
 SHLIB_LD_LIBS		= ${LIBS}
-TCL_SHLIB_LD_EXTRAS	= 
+TCL_SHLIB_LD_EXTRAS	=
 
 SHLIB_SUFFIX		= .so
 #SHLIB_SUFFIX		=
@@ -238,8 +238,8 @@ LIB_FILE		= ${TCL_LIB_FILE}
 TCL_LIB_FLAG		= -ltcl8.4${TCL_DBGX}
 #TCL_LIB_FLAG		= -ltcl
 
-TCL_EXP_FILE		= 
-TCL_BUILD_EXP_FILE	= 
+TCL_EXP_FILE		=
+TCL_BUILD_EXP_FILE	=
 
 # support for embedded libraries on Darwin / Mac OS X
 DYLIB_INSTALL_DIR	= ${LIB_RUNTIME_DIR}
@@ -250,12 +250,12 @@ DYLIB_INSTALL_DIR	= ${LIB_RUNTIME_DIR}
 # modify any of this stuff by hand.
 #----------------------------------------------------------------
 
-COMPAT_OBJS		= 
+COMPAT_OBJS		=
 
-AC_FLAGS		= -DHAVE_LIMITS_H=1 -DHAVE_UNISTD_H=1 -DHAVE_SYS_PARAM_H=1 -DPEEK_XCLOSEIM=1 -D_LARGEFILE64_SOURCE=1 -DTCL_WIDE_INT_IS_LONG=1 -DHAVE_GETCWD=1 -DHAVE_OPENDIR=1 -DHAVE_STRSTR=1 -DHAVE_STRTOL=1 -DHAVE_STRTOLL=1 -DHAVE_STRTOULL=1 -DHAVE_TMPNAM=1 -DHAVE_WAITPID=1 -DUSE_TERMIOS=1 -DHAVE_SYS_TIME_H=1 -DTIME_WITH_SYS_TIME=1 -DHAVE_TM_ZONE=1 -DHAVE_GMTIME_R=1 -DHAVE_LOCALTIME_R=1 -DHAVE_TM_GMTOFF=1 -DHAVE_TIMEZONE_VAR=1 -DHAVE_ST_BLKSIZE=1 -DSTDC_HEADERS=1 -DHAVE_SIGNED_CHAR=1 -DHAVE_LANGINFO=1 -DHAVE_SYS_IOCTL_H=1 
+AC_FLAGS		= -DHAVE_LIMITS_H=1 -DHAVE_UNISTD_H=1 -DHAVE_SYS_PARAM_H=1 -DPEEK_XCLOSEIM=1 -D_LARGEFILE64_SOURCE=1 -DTCL_WIDE_INT_IS_LONG=1 -DHAVE_GETCWD=1 -DHAVE_OPENDIR=1 -DHAVE_STRSTR=1 -DHAVE_STRTOL=1 -DHAVE_STRTOLL=1 -DHAVE_STRTOULL=1 -DHAVE_TMPNAM=1 -DHAVE_WAITPID=1 -DUSE_TERMIOS=1 -DHAVE_SYS_TIME_H=1 -DTIME_WITH_SYS_TIME=1 -DHAVE_TM_ZONE=1 -DHAVE_GMTIME_R=1 -DHAVE_LOCALTIME_R=1 -DHAVE_TM_GMTOFF=1 -DHAVE_TIMEZONE_VAR=1 -DHAVE_ST_BLKSIZE=1 -DSTDC_HEADERS=1 -DHAVE_SIGNED_CHAR=1 -DHAVE_LANGINFO=1 -DHAVE_SYS_IOCTL_H=1
 AR			= ar
 RANLIB			= ranlib
-DTRACE			= 
+DTRACE			=
 SRC_DIR			= /usr/people/duncan/src/FMRIB/fsldev/tcl8.4.19/unix
 TOP_DIR			= $(SRC_DIR)/..
 GENERIC_DIR		= $(TOP_DIR)/generic
@@ -273,7 +273,7 @@ CC			= gcc
 
 # Flags to be passed to installManPage to control whether the manpages
 # should be compressed and linked with softlinks
-MAN_FLAGS               = 
+MAN_FLAGS               =
 
 #----------------------------------------------------------------
 # The information below is usually usable as is.  The configure
@@ -293,18 +293,18 @@ DDD			= ddd
 STUB_CC_SWITCHES = ${CFLAGS} ${CFLAGS_WARNING} ${SHLIB_CFLAGS} -I. \
 -I${GENERIC_DIR} -I${SRC_DIR} ${AC_FLAGS} ${MATH_FLAGS} ${GENERIC_FLAGS} \
 ${PROTO_FLAGS} ${MEM_DEBUG_FLAGS} ${COMPILE_DEBUG_FLAGS} ${ENV_FLAGS} \
--DTCL_SHLIB_EXT=\"${SHLIB_SUFFIX}\" 
+-DTCL_SHLIB_EXT=\"${SHLIB_SUFFIX}\"
 
 CC_SWITCHES =  $(STUB_CC_SWITCHES) ${NO_DEPRECATED_FLAGS}
 
-APP_CC_SWITCHES = $(CC_SWITCHES) 
+APP_CC_SWITCHES = $(CC_SWITCHES)
 
 LIBS		= -ldl  $(MATH_LIBS)
 
 DEPEND_SWITCHES	= ${CFLAGS} -I${GENERIC_DIR} -I${SRC_DIR} \
 ${AC_FLAGS} ${MATH_FLAGS} \
 ${GENERIC_FLAGS} ${PROTO_FLAGS} ${MEM_DEBUG_FLAGS} \
--DTCL_SHLIB_EXT=\"${SHLIB_SUFFIX}\" 
+-DTCL_SHLIB_EXT=\"${SHLIB_SUFFIX}\"
 
 TCLSH_OBJS = tclAppInit.o
 
@@ -312,7 +312,7 @@ TCLTEST_OBJS = tclTestInit.o tclTest.o tclTestObj.o tclTestProcBodyObj.o \
 	tclThreadTest.o	tclUnixTest.o
 
 XTTEST_OBJS = xtTestInit.o tclTest.o tclTestObj.o tclTestProcBodyObj.o \
-	tclThreadTest.o	tclUnixTest.o tclXtNotify.o tclXtTest.o 
+	tclThreadTest.o	tclUnixTest.o tclXtNotify.o tclXtTest.o
 
 GENERIC_OBJS = regcomp.o regexec.o regfree.o regerror.o tclAlloc.o \
 	tclAsync.o tclBasic.o tclBinary.o \
@@ -335,9 +335,9 @@ MAC_OSX_OBJS = tclMacOSXBundle.o tclMacOSXNotify.o
 DTRACE_OBJ = tclDTrace.o
 
 TCL_OBJS = ${GENERIC_OBJS} ${UNIX_OBJS} ${NOTIFY_OBJS} ${COMPAT_OBJS} \
-        tclLoadDl.o 
+        tclLoadDl.o
 
-OBJS = ${TCL_OBJS} 
+OBJS = ${TCL_OBJS}
 
 TCL_DECLS = \
 	$(GENERIC_DIR)/tcl.decls \
@@ -466,7 +466,7 @@ DTRACE_SRC = $(GENERIC_DIR)/tclDTrace.d
 # files won't compile on the current machine, and they will cause
 # problems for things like "make depend".
 
-SRCS = $(GENERIC_SRCS) $(UNIX_SRCS) $(NOTIFY_SRCS) $(STUB_SRCS) 
+SRCS = $(GENERIC_SRCS) $(UNIX_SRCS) $(NOTIFY_SRCS) $(STUB_SRCS)
 
 all: binaries libraries doc
 
@@ -582,7 +582,7 @@ valgrindshell: tclsh
 topDirName:
 	@cd $(TOP_DIR); pwd
 
-# The following target generates the file generic/tclDate.c 
+# The following target generates the file generic/tclDate.c
 # from the yacc grammar found in generic/tclGetDate.y.  This is
 # only run by hand as yacc is not available in all environments.
 # The name of the .c file is different than the name of the .y file
@@ -607,7 +607,7 @@ gendate:
 dltest.marker: ${STUB_LIB_FILE}
 	cd dltest ; $(MAKE)
 
-INSTALL_TARGETS = install-binaries install-libraries install-doc 
+INSTALL_TARGETS = install-binaries install-libraries install-doc
 
 install: $(INSTALL_TARGETS)
 
@@ -649,7 +649,7 @@ install-binaries: binaries
 	    echo "Installing $(STUB_LIB_FILE) to $(LIB_INSTALL_DIR)/"; \
 	    $(INSTALL_LIBRARY) $(STUB_LIB_FILE) $(LIB_INSTALL_DIR)/$(STUB_LIB_FILE) ; (cd $(LIB_INSTALL_DIR) ; $(RANLIB) $(STUB_LIB_FILE)) ; \
 	fi
-	
+
 
 install-libraries: libraries
 	@for i in $(INCLUDE_INSTALL_DIR) $(SCRIPT_INSTALL_DIR); \
@@ -1105,7 +1105,7 @@ tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
 
 # DTrace support
 
-$(TCL_OBJS): 
+$(TCL_OBJS):
 
 $(DTRACE_HDR): $(DTRACE_SRC)
 	$(DTRACE) -h $(DTRACE_SWITCHES) -o $@ -s $(DTRACE_SRC)
@@ -1408,13 +1408,13 @@ allpatch: dist
 
 html: tclsh
 	$(BUILD_HTML)
-	
+
 html-tcl: tclsh
 	$(BUILD_HTML) --tcl
-	
+
 html-tk: tclsh
 	$(BUILD_HTML) --tk
-	
+
 
 BUILD_HTML = \
 	@LD_LIBRARY_PATH=`pwd`:$${LD_LIBRARY_PATH}; export LD_LIBRARY_PATH; \
@@ -1439,7 +1439,7 @@ machtml:
 #
 # Targets to build Solaris package of the distribution for the current
 # architecture.  To build stream packages for both sun4 and i86pc
-# architectures: 
+# architectures:
 #
 #   On the sun4 machine, execute the following:
 #     make distclean; ./configure
@@ -1493,7 +1493,7 @@ package-common:
 # Build and install the architecture specific files in the dist directory.
 #
 
-package-binaries: 
+package-binaries:
 	cd $(DISTDIR)/unix/`arch`; \
 	$(MAKE); \
 	$(MAKE) install-binaries prefix=$(DISTDIR)/$(PACKAGE)/$(VERSION) \

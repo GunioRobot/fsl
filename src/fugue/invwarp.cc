@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -91,8 +91,8 @@ bool abs_warp=true;
 string title="invwarp (Version 1.2)\nCopyright(c) 2007, University of Oxford (Mark Jenkinson)";
 string examples="invwarp -w warpvol -o invwarpvol -r refvol";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -144,7 +144,7 @@ Option<string> warpname(string("-w,--warp"), string(""),
   //  has been done for now
   using std::abs;
 
-  bool estquadmin(float &xnew, float x1, float xmid, float x2, 
+  bool estquadmin(float &xnew, float x1, float xmid, float x2,
 		   float y1, float ymid, float y2)
   {
     // Finds the estimated quadratic minimum's position
@@ -180,7 +180,7 @@ Option<string> warpname(string("-w,--warp"), string(""),
     }
     return xnew;
   }
-  
+
 
 
   float nextpt(float x1, float xmid, float x2, float y1, float ymid, float y2)
@@ -198,12 +198,12 @@ Option<string> warpname(string("-w,--warp"), string(""),
     return xnew;
   }
 
-      
 
-  void findinitialbound(float &x1, float &xmid, float &x2, 
-			float &y1, float &ymid, float &y2, 
+
+  void findinitialbound(float &x1, float &xmid, float &x2,
+			float &y1, float &ymid, float &y2,
 			float (*func)(const volume4D<float> &),
-			const volume4D<float> &unitdir, 
+			const volume4D<float> &unitdir,
 			const volume4D<float> &pt)
   {
     const float extrapolationfactor = 1.6;
@@ -226,15 +226,15 @@ Option<string> warpname(string("-w,--warp"), string(""),
     y2 = (*func)(x2*unitdir + pt);
 
     while (ymid > y2) {  // note: must maintain y1 >= ymid
-	
-      // cout << "    <" << Min(x1,x2) << "," << xmid 
+
+      // cout << "    <" << Min(x1,x2) << "," << xmid
       //   << "," << Max(x1,x2) << ">" << endl;
       maxx2 = xmid + maxextrap*(x2 - xmid);
       quadok = estquadmin(newx2,x1,xmid,x2,y1,ymid,y2);
       if ((!quadok) || ((newx2 - x1)*dir<0) || ((newx2 - maxx2)*dir>0)) {
 	newx2 = xmid + extrapolationfactor*(x2-x1);
       }
-      
+
       newy2 = (*func)(newx2*unitdir + pt);
 
       if ((newx2 - xmid)*(newx2 - x1)<0) {  // newx2 is between x1 and xmid
@@ -258,19 +258,19 @@ Option<string> warpname(string("-w,--warp"), string(""),
 	  x2 = newx2;  y2 = newy2;
 	}
       }
-	
+
     }
 
     if ( (y2<ymid) || (y1<ymid) ) {
       cerr << "findinitialbound failed to bracket: current triplet is" << endl;
     }
   }
-  
 
-  float optimise1d(volume4D<float> &pt, const volume4D<float>& unitdir, 
-		  float unittol, int &iterations_done, 
+
+  float optimise1d(volume4D<float> &pt, const volume4D<float>& unitdir,
+		  float unittol, int &iterations_done,
 		  float (*func)(const volume4D<float>&), int max_iter,
-		  float init_value, float boundguess) 
+		  float init_value, float boundguess)
   {
     // Golden Search Routine
     // Must pass in the direction vector in N-space (dir), the initial
@@ -424,8 +424,8 @@ volume<float> initialise_invwarp(volume4D<float>& invwarp, const volume4D<float>
   return pixdist;
 }
 
-float calc_cost(volume4D<float>& costim, 
-		const volume4D<float>& warp, 
+float calc_cost(volume4D<float>& costim,
+		const volume4D<float>& warp,
 		const volume4D<float>& invwarp, float lambda=0.0)
 {
   // C = \sum (x_d - x_u)^2 / N = \sum c_x
@@ -438,7 +438,7 @@ float calc_cost(volume4D<float>& costim,
 	float xu=warp(x,y,z,0)/invwarp.xdim();
 	float yu=warp(x,y,z,1)/invwarp.ydim();
 	float zu=warp(x,y,z,2)/invwarp.zdim();
-	if ((xu>=0) && (yu>=0) && (zu>=0) && (xu<=invwarp.maxx()) && 
+	if ((xu>=0) && (yu>=0) && (zu>=0) && (xu<=invwarp.maxx()) &&
 	    (yu<=invwarp.maxy()) && (zu<=invwarp.maxz())) {
 	  float xw=invwarp[0].interpolate(xu,yu,zu);
 	  float yw=invwarp[1].interpolate(xu,yu,zu);
@@ -476,10 +476,10 @@ float calc_cost(volume4D<float>& costim,
 	TotLap += Lap;
 	Lap=0.0;
       }
-    }    
+    }
     TotLap+=Lap;  // should be unnecessary
-    if (debug.value()) { 
-      cout << "Lap cost = " << ( lambda / costim.nvoxels() ) * TotLap << endl; 
+    if (debug.value()) {
+      cout << "Lap cost = " << ( lambda / costim.nvoxels() ) * TotLap << endl;
       cout << "TotLap = " << TotLap << endl;
     }
     cost += ( lambda / costim.nvoxels() ) * TotLap;
@@ -495,13 +495,13 @@ float calc_cost_stub(const volume4D<float>& invwarp)
   return calc_cost(global_costim, global_warp, invwarp, lambdaval.value());
 }
 
-volume4D<float> cost_deriv(const volume4D<float>& warp, 
-			   const volume4D<float>& invwarp, 
+volume4D<float> cost_deriv(const volume4D<float>& warp,
+			   const volume4D<float>& invwarp,
 			   float& cost, float lambda=0.0)
 {
   // C = \sum (x_d - x_u)^2 / N = \sum c_x
   // dC/dx_p = \sum 2*(x_d - x_u)*dx_d/dx_p / N
-  //         = \sum 2 * c_x * dx_d/dx_p 
+  //         = \sum 2 * c_x * dx_d/dx_p
   if (debug.value()) { cout << "Lambda = " << lambda << endl; }
   volume4D<float> costim(warp);
   cost = calc_cost(costim,warp,invwarp,lambda);
@@ -517,7 +517,7 @@ volume4D<float> cost_deriv(const volume4D<float>& warp,
 	int xu0 = MISCMATHS::round(floor(xu));
 	int yu0 = MISCMATHS::round(floor(yu));
 	int zu0 = MISCMATHS::round(floor(zu));
-	if (deriv.in_bounds(xu0,yu0,zu0) && 
+	if (deriv.in_bounds(xu0,yu0,zu0) &&
 	    deriv.in_bounds(xu0+1,yu0+1,zu0+1)) {
 	  for (int zd=0; zd<=1; zd++) {
 	    for (int yd=0; yd<=1; yd++) {
@@ -536,7 +536,7 @@ volume4D<float> cost_deriv(const volume4D<float>& warp,
 
   if (lambda>0.0) {
     // L = \sum (2*x1 - x0 - x2)^2 / N
-    // dL/dx_p = \sum f*(2*x1-x0-x2) / N  with f=4 for x_p=x1, f=-2 otherwise 
+    // dL/dx_p = \sum f*(2*x1-x0-x2) / N  with f=4 for x_p=x1, f=-2 otherwise
     volume4D<float> dLap(deriv);
     dLap*=0.0;
     float d2wdx2=0.0;
@@ -566,7 +566,7 @@ volume4D<float> cost_deriv(const volume4D<float>& warp,
 	  }
 	}
       }
-    }    
+    }
     deriv += (lambda / costim.nvoxels()) * dLap;
   }
 
@@ -584,7 +584,7 @@ int gradient_descent(volume4D<float>& invwarp, const volume4D<float>& warpvol, i
 
   for (int iter=1; iter<=n_iter; iter++) {
     deriv = cost_deriv(warpvol,invwarp,cost,lambdaval.value());
-    // normalise derivative and calculate a1 as a guess of the 
+    // normalise derivative and calculate a1 as a guess of the
     //  amount needed along the derivative to cause a useful single voxel shift
     if (deriv.sumsquares()<1e-12) {
       // no derivative probably means the warp is trivial and so nothing to do
@@ -594,8 +594,8 @@ int gradient_descent(volume4D<float>& invwarp, const volume4D<float>& warpvol, i
     float a1=1.0/Max(fabs(deriv.max()),fabs(deriv.min()));
     global_costim = costim;
     global_warp = warpvol;
-    cost = optimise1d(invwarp, deriv, 0.1*a1, iterations, 
-		      calc_cost_stub, 10, 0.0, 10.0*a1); 
+    cost = optimise1d(invwarp, deriv, 0.1*a1, iterations,
+		      calc_cost_stub, 10, 0.0, 10.0*a1);
     totiter += iterations;
     if (verbose.value()) { cout << "Iteration #"<<iter<<" : cost = " << cost << endl; }
   }
@@ -608,7 +608,7 @@ int gradient_descent(volume4D<float>& invwarp, const volume4D<float>& warpvol, i
 
 int invwarp()
 {
- 
+
  // read in images
   volume4D<float>    invwarp;
   volume4D<float>    warpvol;
@@ -621,7 +621,7 @@ int invwarp()
   else if (relwarp.value()) spec_wt = RelativeWarps;
   FnirtFileReader    fnirtfile(warpname.value(),spec_wt,verbose.set());
   warpvol = fnirtfile.FieldAsNewimageVolume4D(true);
-  convertwarp_rel2abs(warpvol); 
+  convertwarp_rel2abs(warpvol);
 
   // read reference volume and set size of invwarp
   read_volume4D(invwarp,refvolname.value());
@@ -640,7 +640,7 @@ int invwarp()
   } else {
     mask=initialise_invwarp(invwarp,warpvol);
   }
-  if (debug.value()) { 
+  if (debug.value()) {
     print_volume_info(invwarp,"invwarp");
     if (outname.set()) {   // save results
       if (fnirtfile.AbsOrRel()==RelativeWarps) { convertwarp_abs2rel(invwarp); }
@@ -655,7 +655,7 @@ int invwarp()
   gradient_descent(invwarp,warpvol,niter.value(),deriv,costim);
   if (verbose.value()) { cout << "After gradient descent" << endl; }
 
-  if (debug.value()) { 
+  if (debug.value()) {
       if (fnirtfile.AbsOrRel()==RelativeWarps) { convertwarp_abs2rel(invwarp); }
       save_volume4D(invwarp,fslbasename(outname.value())+"_prefill");
       if (fnirtfile.AbsOrRel()==RelativeWarps) { convertwarp_rel2abs(invwarp); }
@@ -664,18 +664,18 @@ int invwarp()
   if (!nojaccon.value()) {
     if (verbose.value()) { cout << "Re-fill image using valid mask" << endl; }
     fill_warp(invwarp,mask);
-    
-    if (debug.value()) { 
+
+    if (debug.value()) {
       if (fnirtfile.AbsOrRel()==RelativeWarps) { convertwarp_abs2rel(invwarp); }
       save_volume4D(invwarp,fslbasename(outname.value())+"_postfill");
       if (fnirtfile.AbsOrRel()==RelativeWarps) { convertwarp_rel2abs(invwarp); }
     }
     if (verbose.value()) { cout << "Constrain Jacobian" << endl; }
     constrain_topology(invwarp,jmin.value(),jmax.value());
-    
+
 //     // apply another round of gradient descent
 //     gradient_descent(invwarp,warpvol,1,deriv,costim);
-    
+
 //     // reconstrain Jacobian (hopefully unnecessary)
 //     constrain_topology(invwarp,jmin.value(),jmax.value());
   }
@@ -720,7 +720,7 @@ int main(int argc, char *argv[])
     options.add(debug);
     options.add(verbose);
     options.add(help);
-    
+
     int nparsed = options.parse_command_line(argc, argv);
     if (nparsed < argc) {
       for (; nparsed<argc; nparsed++) {
@@ -740,7 +740,7 @@ int main(int argc, char *argv[])
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   if (abswarp.value() && relwarp.value()) {
     cerr << "--abs and --rel flags cannot both be set" << endl;
@@ -755,8 +755,8 @@ int main(int argc, char *argv[])
     cerr << "invwarp: Problem reading warp-file " << warpname.value() << endl;
     exit(EXIT_FAILURE);
   }
-  if ((warpvol.intent_code()==FSL_CUBIC_SPLINE_COEFFICIENTS || 
-       warpvol.intent_code()==FSL_QUADRATIC_SPLINE_COEFFICIENTS || 
+  if ((warpvol.intent_code()==FSL_CUBIC_SPLINE_COEFFICIENTS ||
+       warpvol.intent_code()==FSL_QUADRATIC_SPLINE_COEFFICIENTS ||
        warpvol.intent_code()==FSL_DCT_COEFFICIENTS ||
        warpvol.intent_code()==FSL_FNIRT_DISPLACEMENT_FIELD) &&
       (abswarp.value() || relwarp.value())) {

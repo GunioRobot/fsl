@@ -1,4 +1,4 @@
-/* 
+/*
  * tkCanvBmap.c --
  *
  *	This file implements bitmap items for canvas widgets.

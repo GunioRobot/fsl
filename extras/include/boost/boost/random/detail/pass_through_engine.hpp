@@ -74,7 +74,7 @@ operator>>(
 
 template<class UniformRandomNumberGenerator>
 inline std::ostream&
-operator<<(std::ostream& os, 
+operator<<(std::ostream& os,
            const pass_through_engine<UniformRandomNumberGenerator>& ud)
 {
     return os << ud.base();
@@ -82,7 +82,7 @@ operator<<(std::ostream& os,
 
 template<class UniformRandomNumberGenerator>
 inline std::istream&
-operator>>(std::istream& is, 
+operator>>(std::istream& is,
            const pass_through_engine<UniformRandomNumberGenerator>& ud)
 {
     return is >> ud.base();

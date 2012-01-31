@@ -21,9 +21,9 @@
 
 namespace boost
 {
-    
-    template< class ForwardRange > 
-    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type > 
+
+    template< class ForwardRange >
+    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type >
     {
         typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
@@ -37,12 +37,12 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
 
     public:
-        sub_range() : base() 
+        sub_range() : base()
         { }
 /*
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
         typedef sub_range<ForwardRange> this_type;
-        
+
         sub_range( this_type r ) :
         : base( r )
         { }
@@ -55,30 +55,30 @@ namespace boost
 #endif
 */
         template< class ForwardRange2 >
-        sub_range( ForwardRange2& r ) : 
-            
-#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( impl::adl_begin( r ), impl::adl_end( r ) )
-#else
-            base( r )
-#endif        
-        { }
-        
-        template< class ForwardRange2 >
-        sub_range( const ForwardRange2& r ) : 
+        sub_range( ForwardRange2& r ) :
 
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
             base( impl::adl_begin( r ), impl::adl_end( r ) )
 #else
             base( r )
-#endif                
+#endif
+        { }
+
+        template< class ForwardRange2 >
+        sub_range( const ForwardRange2& r ) :
+
+#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
+            base( impl::adl_begin( r ), impl::adl_end( r ) )
+#else
+            base( r )
+#endif
         { }
 
         template< class Iter >
         sub_range( Iter first, Iter last ) :
             base( first, last )
         { }
-        
+
         template< class ForwardRange2 >
         sub_range& operator=( ForwardRange2& r )
         {
@@ -92,16 +92,16 @@ namespace boost
             base::operator=( r );
             return *this;
         }
-        
+
     public:
-        
+
         iterator        begin()          { return base::begin(); }
         const_iterator  begin() const    { return base::begin(); }
         iterator        end()            { return base::end();   }
         const_iterator  end() const      { return base::end();   }
-        size_type       size() const     { return base::size();  }   
+        size_type       size() const     { return base::size();  }
 
-        
+
     public: // convenience
         value_type& front()
         {

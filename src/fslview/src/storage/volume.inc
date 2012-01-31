@@ -92,7 +92,7 @@ inline void VolumeStore<VoxelType>::setValue(short x, short y, short z, float va
      y >= 0 && y < m_y &&
      z >= 0 && z < m_z)
     {
-      m_buffer[((z * m_y) + y) * m_x + x] = (VoxelType)value;  
+      m_buffer[((z * m_y) + y) * m_x + x] = (VoxelType)value;
     }
 
 }

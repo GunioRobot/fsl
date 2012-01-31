@@ -54,7 +54,7 @@
  * by a file (usually a library) whose resource fork
  * should not be closed by the resource command.
  */
- 
+
 #define TCL_RESOURCE_DONT_CLOSE  2
 
 /*
@@ -73,5 +73,5 @@ EXTERN long		TclpGetGMTOffset _ANSI_ARGS_((void));
 # define TCL_STORAGE_CLASS DLLIMPORT
 
 #include "tclIntPlatDecls.h"
-    
+
 #endif /* _TCLMACINT */

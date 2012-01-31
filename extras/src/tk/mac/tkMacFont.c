@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacFont.c --
  *
  *	Contains the Macintosh implementation of the platform-independant
@@ -12,7 +12,7 @@
  *
  * RCS: @(#) $Id: tkMacFont.c,v 1.1.1.1 2007/07/10 15:05:17 duncan Exp $
  */
- 
+
 #include <Windows.h>
 #include <Strings.h>
 #include <Fonts.h>
@@ -24,7 +24,7 @@
 #include "tkFont.h"
 
 /*
- * For doing things with Mac strings and Fixed numbers.  This probably should move 
+ * For doing things with Mac strings and Fixed numbers.  This probably should move
  * the mac header file.
  */
 
@@ -51,12 +51,12 @@ static CONST char *encodingList[] = {
 };
 
 /*
- * The following structures are used to map the script/language codes of a 
+ * The following structures are used to map the script/language codes of a
  * font to the name that should be passed to Tcl_GetTextEncoding() to obtain
- * the encoding for that font.  The set of numeric constants is fixed and 
+ * the encoding for that font.  The set of numeric constants is fixed and
  * defined by Apple.
  */
- 
+
 static TkStateMap scriptMap[] = {
     {smRoman,		"macRoman"},
     {smJapanese,	"macJapan"},
@@ -91,7 +91,7 @@ static TkStateMap scriptMap[] = {
     {smVietnamese,	"macVietnam"},
     {smExtArabic,	"macSindhi"},
     {NULL,		NULL}
-};    
+};
 
 static TkStateMap romanMap[] = {
     {langCroatian,	"macCroatian"},
@@ -136,19 +136,19 @@ typedef struct FontFamily {
      */
 
     short faceNum;		/* Unique face number key for this FontFamily. */
-    
+
     /*
      * Derived properties.
      */
-     
+
     Tcl_Encoding encoding;	/* Encoding for this font family. */
     int isSymbolFont;		/* Non-zero if this is a symbol family. */
     int isMultiByteFont;	/* Non-zero if this is a multi-byte family. */
     char typeTable[256];	/* Table that identfies all lead bytes for a
     				 * multi-byte family, used when measuring chars.
-    				 * If a byte is a lead byte, the value at the 
-    				 * corresponding position in the typeTable is 1, 
-    				 * otherwise 0.  If this is a single-byte font, 
+    				 * If a byte is a lead byte, the value at the
+    				 * corresponding position in the typeTable is 1,
+    				 * otherwise 0.  If this is a single-byte font,
     				 * all entries are 0. */
     char *fontMap[FONTMAP_PAGES];
     				/* Two-level sparse table used to determine
@@ -171,7 +171,7 @@ typedef struct FontFamily {
  */
 
 typedef struct SubFont {
-    char **fontMap;		/* Pointer to font map from the FontFamily, 
+    char **fontMap;		/* Pointer to font map from the FontFamily,
 				 * cached here to save a dereference. */
     FontFamily *familyPtr;	/* The FontFamily for this SubFont. */
 } SubFont;
@@ -208,10 +208,10 @@ typedef struct MacFont {
 /*
  * The following structure is used to map between the UTF-8 name for a font and
  * the name that the Macintosh uses to refer to the font, in order to determine
- * if a font exists.  The Macintosh names for fonts are stored in the encoding 
+ * if a font exists.  The Macintosh names for fonts are stored in the encoding
  * of the font itself.
  */
- 
+
 typedef struct FontNameMap {
     Tk_Uid utfName;		/* The name of the font in UTF-8. */
     StringPtr nativeName;	/* The name of the font in the font's encoding. */
@@ -229,7 +229,7 @@ static FontFamily *fontFamilyList = NULL;
 /*
  * Information cached about the system at startup time.
  */
- 
+
 static FontNameMap *gFontNameMap = NULL;
 static GWorldPtr gWorld = NULL;
 
@@ -240,16 +240,16 @@ static GWorldPtr gWorld = NULL;
 static FontFamily *	AllocFontFamily(CONST MacFont *fontPtr, int family);
 static SubFont *	CanUseFallback(MacFont *fontPtr,
 			    CONST char *fallbackName, int ch);
-static SubFont *	CanUseFallbackWithAliases(MacFont *fontPtr, 
+static SubFont *	CanUseFallbackWithAliases(MacFont *fontPtr,
 			    CONST char *faceName, int ch, Tcl_DString *nameTriedPtr);
 static SubFont *	FindSubFontForChar(MacFont *fontPtr, int ch);
 static void		FontMapInsert(SubFont *subFontPtr, int ch);
 static void		FontMapLoadPage(SubFont *subFontPtr, int row);
 static int		FontMapLookup(SubFont *subFontPtr, int ch);
 static void 		FreeFontFamily(FontFamily *familyPtr);
-static void		InitFont(Tk_Window tkwin, int family, int size, 
+static void		InitFont(Tk_Window tkwin, int family, int size,
 			    int style, MacFont *fontPtr);
-static void		InitSubFont(CONST MacFont *fontPtr, int family, 
+static void		InitSubFont(CONST MacFont *fontPtr, int family,
 			    SubFont *subFontPtr);
 static void		MultiFontDrawText(MacFont *fontPtr,
 			    CONST char *source, int numBytes, int x, int y);
@@ -257,10 +257,10 @@ static void		ReleaseFont(MacFont *fontPtr);
 static void		ReleaseSubFont(SubFont *subFontPtr);
 static int		SeenName(CONST char *name, Tcl_DString *dsPtr);
 
-static CONST char *    	BreakLine(FontFamily *familyPtr, int flags, 
+static CONST char *    	BreakLine(FontFamily *familyPtr, int flags,
 			    CONST char *source, int numBytes, int *widthPtr);
 static int		GetFamilyNum(CONST char *faceName, short *familyPtr);
-static int		GetFamilyOrAliasNum(CONST char *faceName, 
+static int		GetFamilyOrAliasNum(CONST char *faceName,
 			    short *familyPtr);
 static Tcl_Encoding	GetFontEncoding(int faceNum, int allowSymbol,
 			    int *isSymbolPtr);
@@ -269,15 +269,15 @@ static Tk_Uid		GetUtfFaceName(StringPtr faceNameStr);
 
 /*
  *-------------------------------------------------------------------------
- * 
+ *
  * TkpFontPkgInit --
  *
  *	This procedure is called when an application is created.  It
- *	initializes all the structures that are used by the 
+ *	initializes all the structures that are used by the
  *	platform-dependant code on a per application basis.
  *
  * Results:
- *	None.  
+ *	None.
  *
  * Side effects:
  *	See comments below.
@@ -296,38 +296,38 @@ TkpFontPkgInit(mainPtr)
     Tcl_DString ds;
     Tcl_Encoding encoding;
     Tcl_Encoding *encodings;
-    
+
     if (gWorld == NULL) {
-	/* 
+	/*
 	 * Do the following one time only.
 	 */
 
 	Rect rect = {0, 0, 1, 1};
 
 	SetFractEnable(0);
-	
+
 	/*
 	 * Used for saving and restoring state while drawing and measuring.
 	 */
-	 
+
 	if (NewGWorld(&gWorld, 0, &rect, NULL, NULL, 0) != noErr) {
 	    panic("TkpFontPkgInit: NewGWorld failed");
 	}
-	
+
 	/*
 	 * The name of each font is stored in the encoding of that font.
 	 * How would we translate a name from UTF-8 into the native encoding
 	 * of the font unless we knew the encoding of that font?  We can't.
-	 * So, precompute the UTF-8 and native names of all fonts on the 
+	 * So, precompute the UTF-8 and native names of all fonts on the
 	 * system.  The when the user asks for font by its UTF-8 name, we
 	 * lookup the name in that table and really ask for the font by its
-	 * native name.  Any unknown UTF-8 names will be mapped to the system 
+	 * native name.  Any unknown UTF-8 names will be mapped to the system
 	 * font.
 	 */
-	
+
 	fontMenu = NewMenu('FT', "\px");
 	AppendResMenu(fontMenu, 'FONT');
-	
+
 	numFonts = CountMItems(fontMenu);
 	tmpFontNameMap = (FontNameMap *) ckalloc(sizeof(FontNameMap) * numFonts);
 	encodings = (Tcl_Encoding *) ckalloc(sizeof(Tcl_Encoding) * numFonts);
@@ -337,7 +337,7 @@ TkpFontPkgInit(mainPtr)
        	    GetMenuItemText(fontMenu, i + 1, nativeName);
        	    GetFNum(nativeName, &mapPtr->faceNum);
        	    encodings[i] = GetFontEncoding(mapPtr->faceNum, 0, &isSymbol);
-       	    Tcl_ExternalToUtfDString(encodings[i], StrBody(nativeName), 
+       	    Tcl_ExternalToUtfDString(encodings[i], StrBody(nativeName),
        	    	    StrLength(nativeName), &ds);
        	    mapPtr->utfName = Tk_GetUid(Tcl_DStringValue(&ds));
        	    mapPtr->nativeName = (StringPtr) ckalloc(StrLength(nativeName) + 1);
@@ -346,14 +346,14 @@ TkpFontPkgInit(mainPtr)
        	    mapPtr++;
        	}
        	DisposeMenu(fontMenu);
-       	
+
        	/*
-       	 * Reorder FontNameMap so fonts with the preferred encodings are at 
+       	 * Reorder FontNameMap so fonts with the preferred encodings are at
        	 * the front of the list.  The relative order of fonts that all have
        	 * the same encoding is preserved.  Fonts with unknown encodings get
        	 * stuck at the end.
        	 */
-       	 
+
        	newFontNameMap = (FontNameMap *) ckalloc(sizeof(FontNameMap) * (numFonts + 1));
        	fontMapOffset = 0;
        	for (i = 0; encodingList[i] != NULL; i++) {
@@ -370,7 +370,7 @@ TkpFontPkgInit(mainPtr)
        	    	}
        	    }
        	    Tcl_FreeEncoding(encoding);
-       	} 
+       	}
        	for (i = 0; i < numFonts; i++) {
        	    if (tmpFontNameMap[i].utfName != NULL) {
        	        newFontNameMap[fontMapOffset] = tmpFontNameMap[i];
@@ -389,9 +389,9 @@ TkpFontPkgInit(mainPtr)
 
        	ckfree((char *) tmpFontNameMap);
        	ckfree((char *) encodings);
-       	
+
        	gFontNameMap = newFontNameMap;
-    }       	    
+    }
 }
 
 /*
@@ -404,7 +404,7 @@ TkpFontPkgInit(mainPtr)
  * Results:
  * 	The return value is a pointer to a TkFont that represents the
  *	native font.  If a native font by the given name could not be
- *	found, the return value is NULL.  
+ *	found, the return value is NULL.
  *
  *	Every call to this procedure returns a new TkFont structure,
  *	even if the name has already been seen before.  The caller should
@@ -427,7 +427,7 @@ TkpGetNativeFont(
 {
     short family;
     MacFont *fontPtr;
-    
+
     if (strcmp(name, "system") == 0) {
 	family = GetSysFont();
     } else if (strcmp(name, "application") == 0) {
@@ -435,17 +435,17 @@ TkpGetNativeFont(
     } else {
 	return NULL;
     }
-    
+
     fontPtr = (MacFont *) ckalloc(sizeof(MacFont));
     InitFont(tkwin, family, 0, 0, fontPtr);
-    
+
     return (TkFont *) fontPtr;
 }
 
 /*
  *---------------------------------------------------------------------------
  *
- * TkpGetFontFromAttributes -- 
+ * TkpGetFontFromAttributes --
  *
  *	Given a desired set of attributes for a font, find a font with
  *	the closest matching attributes.
@@ -459,7 +459,7 @@ TkpGetNativeFont(
  *	Every call to this procedure returns a new TkFont structure,
  *	even if the specified attributes have already been seen before.
  *	The caller should call TkpDeleteFont() to free the platform-
- *	specific data when the font is no longer needed.  
+ *	specific data when the font is no longer needed.
  *
  *	The caller is responsible for initializing the memory associated
  *	with the generic TkFont when this function returns and releasing
@@ -488,7 +488,7 @@ TkpGetFontFromAttributes(
     char *fallback;
     char ***fallbacks;
     MacFont *fontPtr;
-        
+
     /*
      * Algorithm to get the closest font to the one requested.
      *
@@ -498,7 +498,7 @@ TkpGetFontFromAttributes(
      *	    try the fallback
      *	    try all aliases for the fallback
      */
-     
+
     faceNum = 0;
     faceName = faPtr->family;
     if (faceName != NULL) {
@@ -519,8 +519,8 @@ TkpGetFontFromAttributes(
 	    }
 	}
     }
-    
-    found:    
+
+    found:
     style = 0;
     if (faPtr->weight != TK_FW_NORMAL) {
 	style |= bold;
@@ -538,7 +538,7 @@ TkpGetFontFromAttributes(
 	ReleaseFont(fontPtr);
     }
     InitFont(tkwin, faceNum, faPtr->size, style, fontPtr);
-    
+
     return (TkFont *) fontPtr;
 }
 
@@ -566,7 +566,7 @@ TkpDeleteFont(
     TkFont *tkFontPtr)		/* Token of font to be deleted. */
 {
     MacFont *fontPtr;
-    
+
     fontPtr = (MacFont *) tkFontPtr;
     ReleaseFont(fontPtr);
 }
@@ -588,15 +588,15 @@ TkpDeleteFont(
  *
  *---------------------------------------------------------------------------
  */
- 
+
 void
 TkpGetFontFamilies(
     Tcl_Interp *interp,		/* Interp to hold result. */
     Tk_Window tkwin)		/* For display to query. */
-{    
+{
     FontNameMap *mapPtr;
     Tcl_Obj *resultPtr, *strPtr;
-        
+
     resultPtr = Tcl_GetObjResult(interp);
     for (mapPtr = gFontNameMap; mapPtr->utfName != NULL; mapPtr++) {
         strPtr = Tcl_NewStringObj(mapPtr->utfName, -1);
@@ -609,11 +609,11 @@ TkpGetFontFamilies(
  *
  * TkpGetSubFonts --
  *
- *	A function used by the testing package for querying the actual 
+ *	A function used by the testing package for querying the actual
  *	screen fonts that make up a font object.
  *
  * Results:
- *	Modifies interp's result object to hold a list containing the 
+ *	Modifies interp's result object to hold a list containing the
  *	names of the screen fonts that make up the given font object.
  *
  * Side effects:
@@ -621,7 +621,7 @@ TkpGetFontFamilies(
  *
  *-------------------------------------------------------------------------
  */
-	
+
 void
 TkpGetSubFonts(interp, tkfont)
     Tcl_Interp *interp;		/* Interp to hold result. */
@@ -633,7 +633,7 @@ TkpGetSubFonts(interp, tkfont)
     FontFamily *familyPtr;
     Str255 nativeName;
 
-    resultPtr = Tcl_GetObjResult(interp);    
+    resultPtr = Tcl_GetObjResult(interp);
     fontPtr = (MacFont *) tkfont;
     for (i = 0; i < fontPtr->numSubFonts; i++) {
 	familyPtr = fontPtr->subFontArray[i].familyPtr;
@@ -705,17 +705,17 @@ Tk_MeasureChars(
      * where a word or line break would occur, then can we map that
      * number back to UTF-8?
      */
-     
+
     fontPtr = (MacFont *) tkfont;
 
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(gWorld, NULL);
-    
+
     TextSize(fontPtr->size);
     TextFace(fontPtr->style);
 
-    lastFamilyPtr = fontPtr->subFontArray[0].familyPtr; 
-    
+    lastFamilyPtr = fontPtr->subFontArray[0].familyPtr;
+
     if (numBytes == 0) {
     	curX = 0;
     	curByte = 0;
@@ -724,15 +724,15 @@ Tk_MeasureChars(
     	Tcl_UniChar ch;
     	FontFamily *thisFamilyPtr;
     	Tcl_DString runString;
-    	 
+
     	/*
     	 * A three step process:
-    	 * 1. Find a contiguous range of characters that can all be 
+    	 * 1. Find a contiguous range of characters that can all be
     	 *    represented by a single screen font.
     	 * 2. Convert those chars to the encoding of that font.
 	 * 3. Measure converted chars.
     	 */
-    	 
+
         curX = 0;
         end = source + numBytes;
         for (p = source; p < end; ) {
@@ -740,9 +740,9 @@ Tk_MeasureChars(
             thisFamilyPtr = FindSubFontForChar(fontPtr, ch)->familyPtr;
             if (thisFamilyPtr != lastFamilyPtr) {
                 TextFont(lastFamilyPtr->faceNum);
-                Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source, 
+                Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source,
                 	p - source, &runString);
-                curX += TextWidth(Tcl_DStringValue(&runString), 0, 
+                curX += TextWidth(Tcl_DStringValue(&runString), 0,
                 	Tcl_DStringLength(&runString));
                 Tcl_DStringFree(&runString);
                 lastFamilyPtr = thisFamilyPtr;
@@ -751,9 +751,9 @@ Tk_MeasureChars(
             p = next;
         }
 	TextFont(lastFamilyPtr->faceNum);
-        Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source, p - source, 
+        Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source, p - source,
         	&runString);
-        curX += TextWidth(Tcl_DStringValue(&runString), 0, 
+        curX += TextWidth(Tcl_DStringValue(&runString), 0,
         	Tcl_DStringLength(&runString));
         Tcl_DStringFree(&runString);
 	curByte = numBytes;
@@ -763,24 +763,24 @@ Tk_MeasureChars(
         FontFamily *thisFamilyPtr;
         Tcl_UniChar ch;
         CONST char *rest;
-        
+
 	/*
-	 * How many chars will fit in the space allotted? 
+	 * How many chars will fit in the space allotted?
 	 */
-	
+
 	if (maxLength > 32767) {
             maxLength = 32767;
         }
-        
-        widthLeft = maxLength; 
+
+        widthLeft = maxLength;
         sourceOrig = source;
-        end = source + numBytes;      
+        end = source + numBytes;
 	for (p = source; p < end; p = next) {
 	    next = p + Tcl_UtfToUniChar(p, &ch);
   	    thisFamilyPtr = FindSubFontForChar(fontPtr, ch)->familyPtr;
   	    if (thisFamilyPtr != lastFamilyPtr) {
   	        if (p > source) {
-  	            rest = BreakLine(lastFamilyPtr, flags, source, 
+  	            rest = BreakLine(lastFamilyPtr, flags, source,
   	            	    p - source, &widthLeft);
   	            flags &= ~TK_AT_LEAST_ONE;
   	            if (rest != NULL) {
@@ -792,12 +792,12 @@ Tk_MeasureChars(
                 source = p;
             }
         }
-        
+
         if (p > source) {
-            rest = BreakLine(lastFamilyPtr, flags, source, p - source, 
+            rest = BreakLine(lastFamilyPtr, flags, source, p - source,
             	    &widthLeft);
         }
-        
+
         if (rest == NULL) {
             curByte = numBytes;
         } else {
@@ -818,16 +818,16 @@ Tk_MeasureChars(
  * BreakLine --
  *
  *	Determine where the given line of text should be broken so that it
- *	fits in the specified range.  Before calling this function, the 
+ *	fits in the specified range.  Before calling this function, the
  *	font values and graphics port must be set.
  *
  * Results:
  *	The return value is NULL if the specified range is larger that the
- *	space the text needs, and *widthLeftPtr is filled with how much 
+ *	space the text needs, and *widthLeftPtr is filled with how much
  *	space is left in the range after measuring the whole text buffer.
- *	Otherwise, the return value is a pointer into the text buffer that 
- *	indicates where the line should be broken (up to, but not including 
- *	that character), and *widthLeftPtr is filled with how much space is 
+ *	Otherwise, the return value is a pointer into the text buffer that
+ *	indicates where the line should be broken (up to, but not including
+ *	that character), and *widthLeftPtr is filled with how much space is
  *	left in the range after measuring up to that character.
  *
  * Side effects:
@@ -835,8 +835,8 @@ Tk_MeasureChars(
  *
  *---------------------------------------------------------------------------
  */
- 
-static CONST char *      	
+
+static CONST char *
 BreakLine(
     FontFamily *familyPtr,	/* FontFamily that describes the font values
     				 * that are already selected into the graphics
@@ -847,16 +847,16 @@ BreakLine(
 				 * TK_WHOLE_WORDS means stop on a word
 				 * boundary, if possible.
 				 * TK_AT_LEAST_ONE means return at least one
-				 * character even if no characters fit. */				 
+				 * character even if no characters fit. */
     CONST char *source,		/* UTF-8 string to be displayed.  Need not be
 				 * '\0' terminated. */
     int numBytes,		/* Maximum number of bytes to consider
 				 * from source string. */
-    int *widthLeftPtr) 		/* On input, specifies size of range into 
+    int *widthLeftPtr) 		/* On input, specifies size of range into
     				 * which characters from source buffer should
     				 * be fit.  On output, filled with how much
-    				 * space is left after fitting as many 
-    				 * characters as possible into the range. 
+    				 * space is left after fitting as many
+    				 * characters as possible into the range.
     				 * Result may be negative if TK_AT_LEAST_ONE
     				 * was specified in the flags argument. */
 {
@@ -868,23 +868,23 @@ BreakLine(
     Point point;
     int charOffset, thisCharWasDoubleByte;
     char *p, *end, *typeTable;
-    
+
     TextFont(familyPtr->faceNum);
     Tcl_UtfToExternalDString(familyPtr->encoding, source, numBytes,
     	    &runString);
     pixelWidth = Int2Fixed(*widthLeftPtr) + 1;
     if (flags & TK_WHOLE_WORDS) {
-        textOffset = (flags & TK_AT_LEAST_ONE);  
+        textOffset = (flags & TK_AT_LEAST_ONE);
         widthLeft = pixelWidth;
 	breakCode = StyledLineBreak(Tcl_DStringValue(&runString),
-		Tcl_DStringLength(&runString), 0, Tcl_DStringLength(&runString), 
+		Tcl_DStringLength(&runString), 0, Tcl_DStringLength(&runString),
 		0, &widthLeft, &textOffset);
         if (breakCode != smBreakOverflow) {
-            /* 
-             * StyledLineBreak includes all the space characters at the end of 
+            /*
+             * StyledLineBreak includes all the space characters at the end of
              * line that we want to suppress.
              */
-             
+
             textOffset = VisibleLength(Tcl_DStringValue(&runString), textOffset);
             goto getoffset;
         }
@@ -892,8 +892,8 @@ BreakLine(
         point.v = 1;
         point.h = 1;
 	textOffset = PixelToChar(Tcl_DStringValue(&runString),
-		Tcl_DStringLength(&runString), 0, pixelWidth, &leadingEdge, 
-		&widthLeft, smOnlyStyleRun, point, point);        
+		Tcl_DStringLength(&runString), 0, pixelWidth, &leadingEdge,
+		&widthLeft, smOnlyStyleRun, point, point);
 	if (Fixed2Int(widthLeft) < 0) {
 	    goto getoffset;
 	}
@@ -906,11 +906,11 @@ BreakLine(
      * The conversion routine that converts UTF-8 to the target encoding
      * must map one UTF-8 character to exactly one encoding-specific
      * character, so that the following algorithm works:
-     *  
+     *
      * 1. Get byte offset of where line should be broken.
      * 2. Get char offset corresponding to that byte offset.
      * 3. Map that char offset to byte offset in UTF-8 string.
-     */ 
+     */
 
     getoffset:
     thisCharWasDoubleByte = 0;
@@ -919,7 +919,7 @@ BreakLine(
     } else {
         charOffset = 0;
         typeTable = familyPtr->typeTable;
-        
+
         p = Tcl_DStringValue(&runString);
         end = p + textOffset;
         thisCharWasDoubleByte = typeTable[*((unsigned char *) p)];
@@ -929,7 +929,7 @@ BreakLine(
             charOffset++;
         }
     }
-    
+
     if ((flags & TK_WHOLE_WORDS) == 0) {
     	if ((flags & TK_PARTIAL_OK) && (leadingEdge != 0)) {
 	    textOffset += thisCharWasDoubleByte;
@@ -941,14 +941,14 @@ BreakLine(
 	    charOffset--;
 	}
     }
-    if ((textOffset == 0) && (Tcl_DStringLength(&runString) > 0) 
+    if ((textOffset == 0) && (Tcl_DStringLength(&runString) > 0)
     	    && (flags & TK_AT_LEAST_ONE)) {
     	p = Tcl_DStringValue(&runString);
         textOffset += familyPtr->typeTable[*((unsigned char *) p)];
         textOffset++;
         charOffset++;
     }
-    *widthLeftPtr = Fixed2Int(pixelWidth) 
+    *widthLeftPtr = Fixed2Int(pixelWidth)
     	    - TextWidth(Tcl_DStringValue(&runString), 0, textOffset);
     Tcl_DStringFree(&runString);
     return Tcl_UtfAtIndex(source, charOffset);
@@ -959,7 +959,7 @@ BreakLine(
  *
  * Tk_DrawChars --
  *
- *	Draw a string of characters on the screen.  
+ *	Draw a string of characters on the screen.
  *
  * Results:
  *	None.
@@ -1003,29 +1003,29 @@ Tk_DrawChars(
     destPort = TkMacGetDrawablePort(drawable);
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(destPort, NULL);
-    
+
     TkMacSetUpClippingRgn(drawable);
     TkMacSetUpGraphicsPort(gc);
-    
+
     txFont = tcl_macQdPtr->thePort->txFont;
     txFace = tcl_macQdPtr->thePort->txFace;
     txSize = tcl_macQdPtr->thePort->txSize;
     GetForeColor(&origColor);
-    
+
     if ((gc->fill_style == FillStippled
 	    || gc->fill_style == FillOpaqueStippled)
 	    && gc->stipple != None) {
 	Pixmap pixmap;
 	GWorldPtr bufferPort;
-	
+
 	stippleMap = TkMacMakeStippleMap(drawable, gc->stipple);
 
-	pixmap = Tk_GetPixmap(display, drawable, 	
+	pixmap = Tk_GetPixmap(display, drawable,
 		stippleMap->bounds.right, stippleMap->bounds.bottom, 0);
-		
+
 	bufferPort = TkMacGetDrawablePort(pixmap);
 	SetGWorld(bufferPort, NULL);
-	
+
 	if (TkSetMacColor(gc->foreground, &macColor) == true) {
 	    RGBForeColor(&macColor);
 	}
@@ -1034,19 +1034,19 @@ Tk_DrawChars(
 	MultiFontDrawText(fontPtr, source, numBytes, 0, 0);
 
 	SetGWorld(destPort, NULL);
-	CopyDeepMask(&((GrafPtr) bufferPort)->portBits, stippleMap, 
+	CopyDeepMask(&((GrafPtr) bufferPort)->portBits, stippleMap,
 		&((GrafPtr) destPort)->portBits, &stippleMap->bounds,
 		&stippleMap->bounds, &((GrafPtr) destPort)->portRect,
 		srcOr, NULL);
-	
+
 	/* TODO: this doesn't work quite right - it does a blend.   you can't
 	 * draw white text when you have a stipple.
 	 */
-		
+
 	Tk_FreePixmap(display, pixmap);
 	ckfree(stippleMap->baseAddr);
 	ckfree((char *)stippleMap);
-    } else {	
+    } else {
 	if (TkSetMacColor(gc->foreground, &macColor) == true) {
 	    RGBForeColor(&macColor);
 	}
@@ -1067,7 +1067,7 @@ Tk_DrawChars(
  *
  * MultiFontDrawText --
  *
- *	Helper function for Tk_DrawChars.  Draws characters, using the 
+ *	Helper function for Tk_DrawChars.  Draws characters, using the
  *	various screen fonts in fontPtr to draw multilingual characters.
  *	Note: No bidirectional support.
  *
@@ -1075,9 +1075,9 @@ Tk_DrawChars(
  *	None.
  *
  * Side effects:
- *	Information gets drawn on the screen.  
- *	Contents of fontPtr may be modified if more subfonts were loaded 
- *	in order to draw all the multilingual characters in the given 
+ *	Information gets drawn on the screen.
+ *	Contents of fontPtr may be modified if more subfonts were loaded
+ *	in order to draw all the multilingual characters in the given
  *	string.
  *
  *-------------------------------------------------------------------------
@@ -1096,12 +1096,12 @@ MultiFontDrawText(
     Tcl_DString runString;
     CONST char *p, *end, *next;
     Tcl_UniChar ch;
-    
+
     TextSize(fontPtr->size);
     TextFace(fontPtr->style);
 
     lastFamilyPtr = fontPtr->subFontArray[0].familyPtr;
-    
+
     end = source + numBytes;
     for (p = source; p < end; ) {
         next = p + Tcl_UtfToUniChar(p, &ch);
@@ -1109,12 +1109,12 @@ MultiFontDrawText(
         if (thisFamilyPtr != lastFamilyPtr) {
             if (p > source) {
 		TextFont(lastFamilyPtr->faceNum);
- 		Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source, 
+ 		Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source,
 		        p - source, &runString);
 		MoveTo((short) x, (short) y);
-		DrawText(Tcl_DStringValue(&runString), 0, 
+		DrawText(Tcl_DStringValue(&runString), 0,
 		        Tcl_DStringLength(&runString));
-		x += TextWidth(Tcl_DStringValue(&runString), 0, 
+		x += TextWidth(Tcl_DStringValue(&runString), 0,
 		        Tcl_DStringLength(&runString));
 		Tcl_DStringFree(&runString);
                 source = p;
@@ -1125,14 +1125,14 @@ MultiFontDrawText(
     }
     if (p > source) {
         TextFont(thisFamilyPtr->faceNum);
-	Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source, 
+	Tcl_UtfToExternalDString(lastFamilyPtr->encoding, source,
 	        p - source, &runString);
 	MoveTo((short) x, (short) y);
-    	DrawText(Tcl_DStringValue(&runString), 0, 
+    	DrawText(Tcl_DStringValue(&runString), 0,
 	        Tcl_DStringLength(&runString));
 	Tcl_DStringFree(&runString);
     }
-}        
+}
 
 /*
  *---------------------------------------------------------------------------
@@ -1162,21 +1162,21 @@ TkMacIsCharacterMissing(
     MacFont *fontPtr = (MacFont *) tkfont;
     FMInput fm;
     FontRec **fontRecHandle;
-    
+
     fm.family = fontPtr->subFontArray[0].familyPtr->faceNum;
     fm.size = fontPtr->size;
     fm.face = fontPtr->style;
     fm.needBits = 0;
     fm.device = 0;
     fm.numer.h = fm.numer.v = fm.denom.h = fm.denom.v = 1;
-    
+
 #if !defined(UNIVERSAL_INTERFACES_VERSION) || (UNIVERSAL_INTERFACES_VERSION < 0x0300)
     fontRecHandle = (FontRec **) FMSwapFont(&fm)->fontResult;
 #else
     fontRecHandle = (FontRec **) FMSwapFont(&fm)->fontHandle;
 #endif
-    return *(short *) ((long) &(*fontRecHandle)->owTLoc 
-    	    + ((long)((*fontRecHandle)->owTLoc + searchChar 
+    return *(short *) ((long) &(*fontRecHandle)->owTLoc
+    	    + ((long)((*fontRecHandle)->owTLoc + searchChar
     	    - (*fontRecHandle)->firstChar) * sizeof(short))) == -1;
 }
 
@@ -1200,7 +1200,7 @@ TkMacIsCharacterMissing(
  *	Memory allocated.
  *
  *---------------------------------------------------------------------------
- */ 
+ */
 
 static void
 InitFont(
@@ -1223,7 +1223,7 @@ InitFont(
     	size = -GetDefFontSize();
     }
     pixels = (short) TkFontGetPixels(tkwin, size);
-    
+
     GetGWorld(&saveWorld, &saveDevice);
     SetGWorld(gWorld, NULL);
     TextFont(faceNum);
@@ -1244,14 +1244,14 @@ InitFont(
     faPtr->overstrike	= 0;
 
     fmPtr 		= &fontPtr->font.fm;
-    fmPtr->ascent	= fi.ascent;	
-    fmPtr->descent	= fi.descent;	
+    fmPtr->ascent	= fi.ascent;
+    fmPtr->descent	= fi.descent;
     fmPtr->maxWidth	= fi.widMax;
     fmPtr->fixed	= (CharWidth('i') == CharWidth('w'));
-    
+
     fontPtr->size	= pixels;
     fontPtr->style	= (short) style;
-        
+
     fontPtr->numSubFonts 	= 1;
     fontPtr->subFontArray	= fontPtr->staticSubFonts;
     InitSubFont(fontPtr, faceNum, &fontPtr->subFontArray[0]);
@@ -1263,7 +1263,7 @@ InitFont(
  *-------------------------------------------------------------------------
  *
  * ReleaseFont --
- * 
+ *
  *	Called to release the Macintosh-specific contents of a TkFont.
  *	The caller is responsible for freeing the memory used by the
  *	font itself.
@@ -1276,7 +1276,7 @@ InitFont(
  *
  *---------------------------------------------------------------------------
  */
- 
+
 static void
 ReleaseFont(
     MacFont *fontPtr)		/* The font to delete. */
@@ -1314,7 +1314,7 @@ InitSubFont(
     CONST MacFont *fontPtr,	/* Font object in which the SubFont will be
     				 * used. */
     int faceNum,		/* The font number. */
-    SubFont *subFontPtr)	/* Filled with SubFont constructed from 
+    SubFont *subFontPtr)	/* Filled with SubFont constructed from
     				 * above attributes. */
 {
     subFontPtr->familyPtr = AllocFontFamily(fontPtr, faceNum);
@@ -1326,7 +1326,7 @@ InitSubFont(
  *
  * ReleaseSubFont --
  *
- *	Called to release the contents of a SubFont.  The caller is 
+ *	Called to release the contents of a SubFont.  The caller is
  *	responsible for freeing the memory used by the SubFont itself.
  *
  * Results:
@@ -1350,10 +1350,10 @@ ReleaseSubFont(
  *
  * AllocFontFamily --
  *
- *	Find the FontFamily structure associated with the given font 
- *	family.  The information should be stored by the caller in a 
- *	SubFont and used when determining if that SubFont supports a 
- *	character. 
+ *	Find the FontFamily structure associated with the given font
+ *	family.  The information should be stored by the caller in a
+ *	SubFont and used when determining if that SubFont supports a
+ *	character.
  *
  * Results:
  *	A pointer to a FontFamily.  The reference count in the FontFamily
@@ -1363,7 +1363,7 @@ ReleaseSubFont(
  *
  * Side effects:
  *	A new FontFamily structure will be allocated if this font family
- *	has not been seen.  
+ *	has not been seen.
  *
  *-------------------------------------------------------------------------
  */
@@ -1376,7 +1376,7 @@ AllocFontFamily(
 {
     FontFamily *familyPtr;
     int i;
-    
+
     familyPtr = fontFamilyList;
     for (; familyPtr != NULL; familyPtr = familyPtr->nextPtr) {
 	if (familyPtr->faceNum == faceNum) {
@@ -1390,18 +1390,18 @@ AllocFontFamily(
     familyPtr->nextPtr = fontFamilyList;
     fontFamilyList = familyPtr;
 
-    /* 
-     * Set key for this FontFamily. 
+    /*
+     * Set key for this FontFamily.
      */
-     
+
     familyPtr->faceNum = faceNum;
 
-    /* 
+    /*
      * An initial refCount of 2 means that FontFamily information will
      * persist even when the SubFont that loaded the FontFamily is released.
      * Change it to 1 to cause FontFamilies to be unloaded when not in use.
      */
-     
+
     familyPtr->refCount = 2;
     familyPtr->encoding = GetFontEncoding(faceNum, 1, &familyPtr->isSymbolFont);
     familyPtr->isMultiByteFont = 0;
@@ -1432,7 +1432,7 @@ AllocFontFamily(
  *
  *-------------------------------------------------------------------------
  */
- 
+
 static void
 FreeFontFamily(
     FontFamily *familyPtr)	/* The FontFamily to delete. */
@@ -1453,11 +1453,11 @@ FreeFontFamily(
             ckfree((char *) familyPtr->fontMap[i]);
         }
     }
-    
-    /* 
-     * Delete from list. 
+
+    /*
+     * Delete from list.
      */
-         
+
     for (familyPtrPtr = &fontFamilyList; ; ) {
         if (*familyPtrPtr == familyPtr) {
   	    *familyPtrPtr = familyPtr->nextPtr;
@@ -1465,7 +1465,7 @@ FreeFontFamily(
 	}
 	familyPtrPtr = &(*familyPtrPtr)->nextPtr;
     }
-    
+
     ckfree((char *) familyPtr);
 }
 
@@ -1474,19 +1474,19 @@ FreeFontFamily(
  *
  * FindSubFontForChar --
  *
- *	Determine which physical screen font is necessary to use to 
+ *	Determine which physical screen font is necessary to use to
  *	display the given character.  If the font object does not have
  *	a screen font that can display the character, another screen font
  *	may be loaded into the font object, following a set of preferred
  *	fallback rules.
  *
  * Results:
- *	The return value is the SubFont to use to display the given 
- *	character. 
+ *	The return value is the SubFont to use to display the given
+ *	character.
  *
  * Side effects:
  *	The contents of fontPtr are modified to cache the results
- *	of the lookup and remember any SubFonts that were dynamically 
+ *	of the lookup and remember any SubFonts that were dynamically
  *	loaded.
  *
  *-------------------------------------------------------------------------
@@ -1506,7 +1506,7 @@ FindSubFontForChar(
     Tcl_DString faceNames;
     char ***fontFallbacks;
     char **anyFallbacks;
-    
+
     if (FontMapLookup(&fontPtr->subFontArray[0], ch)) {
 	return &fontPtr->subFontArray[0];
     }
@@ -1521,9 +1521,9 @@ FindSubFontForChar(
      * Keep track of all face names that we check, so we don't check some
      * name multiple times if it can be reached by multiple paths.
      */
-     
+
     Tcl_DStringInit(&faceNames);
-        
+
     aliases = TkFontGetAliasList(fontPtr->font.fa.family);
 
     subFontPtr = NULL;
@@ -1538,7 +1538,7 @@ FindSubFontForChar(
 
 		goto tryfallbacks;
 	    } else if (aliases != NULL) {
-		/* 
+		/*
 		 * Or if an alias for the base font has a fallback...
 		 */
 
@@ -1550,8 +1550,8 @@ FindSubFontForChar(
 	    }
 	}
 	continue;
-	    
-	/* 
+
+	/*
 	 * ...then see if we can use one of the fallbacks, or an
 	 * alias for one of the fallbacks.
 	 */
@@ -1566,9 +1566,9 @@ FindSubFontForChar(
 	    }
 	}
     }
-    
+
     /*
-     * See if we can use something from the global fallback list. 
+     * See if we can use something from the global fallback list.
      */
 
     anyFallbacks = TkFontGetGlobalClass();
@@ -1595,12 +1595,12 @@ FindSubFontForChar(
 	    }
 	}
     }
-    
+
     end:
     Tcl_DStringFree(&faceNames);
-    
+
     if (subFontPtr == NULL) {
-        /* 
+        /*
          * No font can display this character.  We will use the base font
          * and have it display the "unknown" character.
          */
@@ -1655,7 +1655,7 @@ FontMapLookup(
  *
  *	Tell the font mapping cache that the given screen font should be
  *	used to display the specified character.  This is called when no
- *	font on the system can be be found that can display that 
+ *	font on the system can be be found that can display that
  *	character; we lie to the font and tell it that it can display
  *	the character, otherwise we would end up re-searching the entire
  *	fallback hierarchy every time that character was seen.
@@ -1675,7 +1675,7 @@ FontMapLookup(
 
 static void
 FontMapInsert(
-    SubFont *subFontPtr,	/* Contains font mapping cache to be 
+    SubFont *subFontPtr,	/* Contains font mapping cache to be
 				 * updated. */
     int ch)			/* Character to be added to cache. */
 {
@@ -1707,11 +1707,11 @@ FontMapInsert(
  *
  *-------------------------------------------------------------------------
  */
-static void 
+static void
 FontMapLoadPage(
-    SubFont *subFontPtr,	/* Contains font mapping cache to be 
+    SubFont *subFontPtr,	/* Contains font mapping cache to be
 				 * updated. */
-    int row)			/* Index of the page to be loaded into 
+    int row)			/* Index of the page to be loaded into
 				 * the cache. */
 {
     FMInput fm;
@@ -1729,9 +1729,9 @@ FontMapLoadPage(
 
     subFontPtr->fontMap[row] = (char *) ckalloc(FONTMAP_BITSPERPAGE / 8);
     memset(subFontPtr->fontMap[row], 0, FONTMAP_BITSPERPAGE / 8);
-    
+
     encoding = subFontPtr->familyPtr->encoding;
-    
+
     fm.family 	= subFontPtr->familyPtr->faceNum;
     fm.size 	= 12;
     fm.face 	= 0;
@@ -1741,7 +1741,7 @@ FontMapLoadPage(
     fm.numer.v	= 1;
     fm.denom.h	= 1;
     fm.denom.v	= 1;
-    
+
 #if !defined(UNIVERSAL_INTERFACES_VERSION) || (UNIVERSAL_INTERFACES_VERSION < 0x0300)
     fHandle = FMSwapFont(&fm)->fontHandle;
 #else
@@ -1758,7 +1758,7 @@ FontMapLoadPage(
         end = (row + 1) << FONTMAP_SHIFT;
         for (i = row << FONTMAP_SHIFT; i < end; i++) {
             if (Tcl_UtfToExternal(NULL, encoding, src, Tcl_UniCharToUtf(i,
-		    src), 
+		    src),
 		    TCL_ENCODING_STOPONERROR, NULL, (char *) buf,
 		    sizeof(buf),
 		    &srcRead, &dstWrote, NULL) == TCL_OK) {
@@ -1774,30 +1774,30 @@ FontMapLoadPage(
 	 */
 
         fontRecPtr = *((FontRec **) fHandle );
-        widths = (short *) ((long) &fontRecPtr->owTLoc 
+        widths = (short *) ((long) &fontRecPtr->owTLoc
 		+ ((long) (fontRecPtr->owTLoc - fontRecPtr->firstChar)
 			* sizeof(short)));
-                              
+
         end = (row + 1) << FONTMAP_SHIFT;
         for (i = row << FONTMAP_SHIFT; i < end; i++) {
             if (Tcl_UtfToExternal(NULL, encoding, src,
-		    Tcl_UniCharToUtf(i, src), 
-		    TCL_ENCODING_STOPONERROR, NULL, (char *) buf, sizeof(buf), 
+		    Tcl_UniCharToUtf(i, src),
+		    TCL_ENCODING_STOPONERROR, NULL, (char *) buf, sizeof(buf),
 		    &srcRead, &dstWrote, NULL) == TCL_OK) {
-                
+
                 if (((isMultiByteFont != 0) && (buf[0] > 31))
 			|| (widths[buf[0]] != -1)) {
 		    if ((buf[0] == 0x11) && (widths[0x12] == -1)) {
 			continue;
 		    }
-                      
-                    /* 
+
+                    /*
                      * Mac's char existence metrics are only for one-byte
-                     * characters.  If we have a double-byte char, just 
-                     * assume that the font supports that char if the font's 
+                     * characters.  If we have a double-byte char, just
+                     * assume that the font supports that char if the font's
                      * encoding supports that char.
                      */
-                    
+
                     bitOffset = i & (FONTMAP_BITSPERPAGE - 1);
 		    subFontPtr->fontMap[row][bitOffset >> 3] |= 1
 						       << (bitOffset & 7);
@@ -1843,7 +1843,7 @@ CanUseFallbackWithAliases(
     SubFont *subFontPtr;
     char **aliases;
     int i;
-    
+
     if (SeenName(faceName, nameTriedPtr) == 0) {
 	subFontPtr = CanUseFallback(fontPtr, faceName, ch);
 	if (subFontPtr != NULL) {
@@ -1908,20 +1908,20 @@ SeenName(
  *
  * CanUseFallback --
  *
- *	If the specified physical screen font has not already been loaded 
- *	into the font object, determine if the specified physical screen 
+ *	If the specified physical screen font has not already been loaded
+ *	into the font object, determine if the specified physical screen
  *	font can display the given character.
  *
  * Results:
  *	The return value is a pointer to a newly allocated SubFont, owned
  *	by the font object.  This SubFont can be used to display the given
- *	character.  The SubFont represents the screen font with the base set 
- *	of font attributes from the font object, but using the specified 
+ *	character.  The SubFont represents the screen font with the base set
+ *	of font attributes from the font object, but using the specified
  *	font name.  NULL is returned if the font object already holds
- *	a reference to the specified physical font or if the specified 
+ *	a reference to the specified physical font or if the specified
  *	physical font cannot display the given character.
  *
- * Side effects:				       
+ * Side effects:
  *	The font object's subFontArray is updated to contain a reference
  *	to the newly allocated SubFont.
  *
@@ -1943,32 +1943,32 @@ CanUseFallback(
     if (GetFamilyNum(faceName, &faceNum) == 0) {
         return NULL;
     }
-    
-    /* 
+
+    /*
      * Skip all fonts we've already used.
      */
-     
+
     for (i = 0; i < fontPtr->numSubFonts; i++) {
 	if (faceNum == fontPtr->subFontArray[i].familyPtr->faceNum) {
 	    return NULL;
 	}
     }
-    
+
     /*
      * Load this font and see if it has the desired character.
      */
-     
+
     InitSubFont(fontPtr, faceNum, &subFont);
-    if (((ch < 256) && (subFont.familyPtr->isSymbolFont)) 
+    if (((ch < 256) && (subFont.familyPtr->isSymbolFont))
 	    || (FontMapLookup(&subFont, ch) == 0)) {
         ReleaseSubFont(&subFont);
         return NULL;
     }
-    
+
     if (fontPtr->numSubFonts >= SUBFONT_SPACE) {
 	SubFont *newPtr;
-    	
-    	newPtr = (SubFont *) ckalloc(sizeof(SubFont) 
+
+    	newPtr = (SubFont *) ckalloc(sizeof(SubFont)
 		* (fontPtr->numSubFonts + 1));
 	memcpy((char *) newPtr, fontPtr->subFontArray,
 		fontPtr->numSubFonts * sizeof(SubFont));
@@ -1987,7 +1987,7 @@ CanUseFallback(
  *
  * GetFamilyNum --
  *
- *	Determines if any physical screen font exists on the system with 
+ *	Determines if any physical screen font exists on the system with
  *	the given family name.  If the family exists, then it should be
  *	possible to construct some physical screen font with that family
  *	name.
@@ -2010,7 +2010,7 @@ GetFamilyNum(
     short *faceNumPtr)		/* Filled with font number for above family. */
 {
     FontNameMap *mapPtr;
-    
+
     if (faceName != NULL) {
         for (mapPtr = gFontNameMap; mapPtr->utfName != NULL; mapPtr++) {
             if (strcasecmp(faceName, mapPtr->utfName) == 0) {
@@ -2019,7 +2019,7 @@ GetFamilyNum(
             }
         }
     }
-    *faceNumPtr = 0;    
+    *faceNumPtr = 0;
     return 0;
 }
 
@@ -2030,7 +2030,7 @@ GetFamilyOrAliasNum(
 {
     char **aliases;
     int i;
-    
+
     if (GetFamilyNum(faceName, faceNumPtr) != 0) {
         return 1;
     }
@@ -2053,7 +2053,7 @@ GetFamilyOrAliasNum(
  *	Given the native name for a Macintosh font (in which the name of
  *	the font is in the encoding of the font itself), return the UTF-8
  *	name that corresponds to that font.  The specified font name must
- *	refer to a font that actually exists on the machine.  
+ *	refer to a font that actually exists on the machine.
  *
  *	This function is used to obtain the UTF-8 name when querying the
  *	properties of a Macintosh font object.
@@ -2066,13 +2066,13 @@ GetFamilyOrAliasNum(
  *
  *------------------------------------------------------------------------
  */
- 
+
 static Tk_Uid
 GetUtfFaceName(
     StringPtr nativeName)	/* Pascal name for font in native encoding. */
 {
     FontNameMap *mapPtr;
-    
+
     for (mapPtr = gFontNameMap; mapPtr->utfName != NULL; mapPtr++) {
         if (pstrcmp(nativeName, mapPtr->nativeName) == 0) {
             return mapPtr->utfName;
@@ -2088,15 +2088,15 @@ GetUtfFaceName(
  * GetFontEncoding --
  *
  *	Return a string that can be passed to Tcl_GetTextEncoding() and
- *	used to convert bytes from UTF-8 into the encoding  of the 
+ *	used to convert bytes from UTF-8 into the encoding  of the
  *	specified font.
  *
- *	The desired encoding to use to convert the name of a symbolic 
+ *	The desired encoding to use to convert the name of a symbolic
  *	font into UTF-8 is macRoman, while the desired encoding to use
  *	to convert bytes in a symbolic font to UTF-8 is the corresponding
  *	symbolic encoding.  Due to this dual interpretatation of symbolic
- *	fonts, the caller can specify what type of encoding to return 
- *	should the specified font be symbolic.  
+ *	fonts, the caller can specify what type of encoding to return
+ *	should the specified font be symbolic.
  *
  * Results:
  *	The return value is a string that specifies the font's encoding.
@@ -2107,22 +2107,22 @@ GetUtfFaceName(
  *
  *------------------------------------------------------------------------
  */
-  
+
 static Tcl_Encoding
 GetFontEncoding(
     int faceNum,		/* Macintosh font number. */
     int allowSymbol,		/* If non-zero, then the encoding string
     				 * for symbol fonts will be the corresponding
     				 * symbol encoding.  Otherwise, the encoding
-    				 * string for symbol fonts will be 
+    				 * string for symbol fonts will be
     				 * "macRoman". */
     int *isSymbolPtr)		/* Filled with non-zero if this font is a
     				 * symbol font, 0 otherwise. */
 {
     Str255 faceName;
     int script, lang;
-    char *name;   
-    
+    char *name;
+
     if (allowSymbol != 0) {
         GetFontName(faceNum, faceName);
         if (pstrcasecmp(faceName, "\psymbol") == 0) {
@@ -2134,9 +2134,9 @@ GetFontEncoding(
             return Tcl_GetEncoding(NULL, "macDingbats");
         }
     }
-    
+
     *isSymbolPtr = 0;
-    
+
     script = FontToScript(faceNum);
     lang = GetScriptVariable(script, smScriptLang);
     name = NULL;

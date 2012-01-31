@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWin32Dll.c --
  *
  *	This file contains a stub dll entry point.
@@ -35,7 +35,7 @@ typedef struct EXCEPTION_REGISTRATION {
  * compile time error because of redefined local labels.
  */
 
-BOOL WINAPI		DllMain(HINSTANCE hInst, DWORD reason, 
+BOOL WINAPI		DllMain(HINSTANCE hInst, DWORD reason,
 				LPVOID reserved)
                         __attribute__ ((noinline));
 
@@ -175,7 +175,7 @@ DllMain(hInstance, reason, reserved)
 	    "movl	0x8(%%edx),	%%edx"		"\n"
 
 
-	    /* 
+	    /*
 	     * Come here however we exited. Restore context from the
 	     * EXCEPTION_REGISTRATION in case the stack is unbalanced.
 	     */

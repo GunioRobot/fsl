@@ -101,8 +101,8 @@ where <b>A</b> is a 4x4 matrix that is uniquely defined by 12 values (3 translat
 </p>
 <img border=0, src="non_linear_transformation.png">
 <p>
-The crucial part here are the <i>d<sub>i</sub>(x,y,z)</i>, the warp fields. These are three (one for each dimension) fields of displacements, each of which have the same size as the image one is warping towards. They are often represented as linear combinations of basis-functions, thereby reducing the number of parameters that needs to be determined. In the case of fnirt they are represented by quadratic or cubic B-splines. 
-</p> 
+The crucial part here are the <i>d<sub>i</sub>(x,y,z)</i>, the warp fields. These are three (one for each dimension) fields of displacements, each of which have the same size as the image one is warping towards. They are often represented as linear combinations of basis-functions, thereby reducing the number of parameters that needs to be determined. In the case of fnirt they are represented by quadratic or cubic B-splines.
+</p>
 
 <a name="fnirt_cost"></a><h3>Cost-function</h3>
 <p>
@@ -112,7 +112,7 @@ The only cost-function presently implemented in fnirt is the "sum-of-squared dif
 <p>
 where <i>f</i> denotes the "reference image" (<i>e.g.</i> the MNI152-template) and <i>g</i> denotes the image we want to warp. This would potentially limit its (fnirt's) use to cases where the images <i>f</i> and <i>g</i> are very similar, as opposed to other cost-functions like <i>e.g.</i> correlation-ratio or mutual information which are less sensitive to differences in contrast. However, the sum-of-squared differences cost-function has important advantages when <a href="#fnirt_optimisation">searching</a> for the parameters that minimize its value. In addition fnirt has the option of <a href="#fnirt_intensity">modulating the intensity</a> of <i>f</i>, both globally and locally, that addresses the issue of differences in contrast.
 </p>
- 
+
 <a name="fnirt_optimisation"></a><h3>Optimisation</h3>
 <p>
 Registration (linear or non-linear) is really a non-linear optimisation problem in that there is some function <i>O</i> that depends in a non-linear fashion on some set of parameters <b>w</b>, and we want to find the values of <b>w</b> that minimizes <i>O</i>. Methods for finding the parameters <b>w</b> come in various flavors; Some will require only the ability to calculate <i>O</i>(<b>w</b>) whereas other relies also on the first, and possibly second, derivatives with respect to <b>w</b>. Methods in the latter category can potentially have large advantages over the former in terms of executions speed, something that is especially important when there are a large number of unknown parameters.
@@ -125,7 +125,7 @@ The Gauss-Newton method falls into the second category and is an approximation t
 Where <b>H</b> and &nabla<i>O</i> denotes the Hessian and the gradient of <i>O</i> respectively. This is an advantage of Gauss-Newton over many other methods that will only provide a direction in which to search for a local minima, and will potentially enable faster convergence.
 </p>
 <p>
-Fnirt has been implemented using a Levenberg-Marquardt modification of the Gauss-Newton method and great effort has gone into an efficient calculation of <b>H</b>. 
+Fnirt has been implemented using a Levenberg-Marquardt modification of the Gauss-Newton method and great effort has gone into an efficient calculation of <b>H</b>.
 
 <a name="fnirt_subsampling"></a><h3>Sub-sampling</h3>
 
@@ -135,7 +135,7 @@ One way of forcing the warps towards being more "reasonable" in that sense is th
 
 <a name="fnirt_regularisation"></a><h3>Regularisation</h3>
 <p>
-All non-linear registration is a compromise between minimising the cost-function, <i>i.e.</i> between making the images look as similar as possible, and making the warps/displacements "reasonable". This is based on a notion that some warps are more reasonable, or probable, than others. We typicall find a smoother warp more likely than one that is very sharp. In addition there is the notion of one-to-one and onto. With one-to-one we mean that there can only be one point in the original space mapping into any given point in the transformed space and by onto we mean that there cannot be any points in the transformed space to which there is no mapping. 
+All non-linear registration is a compromise between minimising the cost-function, <i>i.e.</i> between making the images look as similar as possible, and making the warps/displacements "reasonable". This is based on a notion that some warps are more reasonable, or probable, than others. We typicall find a smoother warp more likely than one that is very sharp. In addition there is the notion of one-to-one and onto. With one-to-one we mean that there can only be one point in the original space mapping into any given point in the transformed space and by onto we mean that there cannot be any points in the transformed space to which there is no mapping.
 </p>
 <p>
 This compromise is formalised by some regularising function, typically with concepts borrowed from mechanics. Examples of regularising functions are "membrane energy" and "bending energy". These are functions of the warps themselves, the images doesn't enter into it, that have a high value for sharp warps and a small value for smooth warps.
@@ -145,9 +145,9 @@ Hence the cost-function that we really minimise is
 </p>
 <a name="cost_function_with_regularisation"></a><img border=0, src="cost_function_with_regularisation.png">
 <p>
-where <i>&epsilon</i> is the regularisation function and &lambda is a "fudge factor" that determines the relative balance between how "similar" the images get and how "smooth" we want the warps. 
+where <i>&epsilon</i> is the regularisation function and &lambda is a "fudge factor" that determines the relative balance between how "similar" the images get and how "smooth" we want the warps.
 </p>
-<p>Below is an example of warping a subject (with some atrophy) to the MNI152 template with "medium" regularisation (&lambda=30 with the <a href="#fnirt_ssqlambda"><tt>ssqlambda</tt></a> option set) and with "little" regularisation (&lambda=8 with the <a href="#fnirt_ssqlambda"><tt>ssqlambda</tt></a> option set) 
+<p>Below is an example of warping a subject (with some atrophy) to the MNI152 template with "medium" regularisation (&lambda=30 with the <a href="#fnirt_ssqlambda"><tt>ssqlambda</tt></a> option set) and with "little" regularisation (&lambda=8 with the <a href="#fnirt_ssqlambda"><tt>ssqlambda</tt></a> option set)
 </p>
 <a name="regularisation_brains"></a><table class="image">
 <tr>
@@ -177,8 +177,8 @@ where <i>&epsilon</i> is the regularisation function and &lambda is a "fudge fac
 In the images abov it can be seen that with the larger value for &lambda (warp and image on the left) the warps are smoother and the warped image is, possibly, a little less similar to the template. With the smaller value for &lambda (warp and image on the right) the image is slightly more similar to the template, in particular the ventricles and the left Sylvian fissure, but at the expense of sharper warps. For this particular data set there are more than ten voxels (in the whole volume) where the one-to-one condition has been violated when using the lower value for &lambda, so clearly the larger value is more appropriate in this case.
 </p>
 <p>
-We refer to &lambda as a "fudge factor", and the reason for that is that we have no principled way of deriving an appropriate value for it. It will have to be determined empirically for each "category" of images. If one for example wants to register structural T1-weighted images with reasonable contrast and signal-to-noise one determines, once and for all, a suitable value for &lambda and uses that for subsequent studies. There are some examples of "appropriate" values in the <a href="#fnirt_examples">"Example uses"</a> section. 
-</p> 
+We refer to &lambda as a "fudge factor", and the reason for that is that we have no principled way of deriving an appropriate value for it. It will have to be determined empirically for each "category" of images. If one for example wants to register structural T1-weighted images with reasonable contrast and signal-to-noise one determines, once and for all, a suitable value for &lambda and uses that for subsequent studies. There are some examples of "appropriate" values in the <a href="#fnirt_examples">"Example uses"</a> section.
+</p>
 <a name="fnirt_intensity"></a><h3>Intensity modulation</h3>
 <p>
 The sum-of-squared differences cost function assumes that the images <i>f</i> and <i>g</i> are identical save for some differences in shape, and can get its knickers in a twist when that is not the case.
@@ -202,7 +202,7 @@ An example of this is when one of the images is affected by a bias-field while t
 </table>
 <p>
 We can see from the images above that for this subject the linear registration (flirt) did a good job. We can also see that there is a considerable intensity gradient (bias-field) in the anterior-posterior direction of the image. When looking at the fnirted image we see how it (fnirt) has "tried to correct" for this by shrinking the white matter in the posterior part of the brain, thereby reducing the intensity. Conversly it has shrunk the gray matter in the frontal parts, increasing the intensity there.
-</p> 
+</p>
 <p>
 In fnirt this can be addressed using the various intensity modulation options that are available. For the example above the "local linear" option would be suitable. It is implemented by altering the cost-function to
 </p>
@@ -242,14 +242,14 @@ This means that even if each and every update is diffeomorphic in itself, the su
 </p>
 <img border=0, src="combination_of_displacements.png">
 <p>
-<i>i.e.</i> they are warping the warps rather than adding them. In this latter case one can guarantee that <b>d</b> is diffeomorphic as long as each of the <b>d</b><sub>i</sub> are diffeomorphic. This means that one can use heavy regularisation (big &lambda) when calculating each update, thereby ensuring diffeomorphism for each step, and then perform many updates (iterations) thereby still accomodating large displacements. 
+<i>i.e.</i> they are warping the warps rather than adding them. In this latter case one can guarantee that <b>d</b> is diffeomorphic as long as each of the <b>d</b><sub>i</sub> are diffeomorphic. This means that one can use heavy regularisation (big &lambda) when calculating each update, thereby ensuring diffeomorphism for each step, and then perform many updates (iterations) thereby still accomodating large displacements.
 </p>
 <p>
-<tt>fnirt</tt> is <b>not</b> diffeomorphic by construction, <i>i.e.</i> it sums the updates. Hence after each update (iteration) there is a risk that the field is no longer diffeomorphic. Therefore <tt>fnirt</tt> uses a different "trick" which means that after each sub-sampling level it checks for non-diffeomorphic fields (by searching for <=0 Jacobians) and if it finds any it will project the field onto the closest diffeomorphic field. 
+<tt>fnirt</tt> is <b>not</b> diffeomorphic by construction, <i>i.e.</i> it sums the updates. Hence after each update (iteration) there is a risk that the field is no longer diffeomorphic. Therefore <tt>fnirt</tt> uses a different "trick" which means that after each sub-sampling level it checks for non-diffeomorphic fields (by searching for <=0 Jacobians) and if it finds any it will project the field onto the closest diffeomorphic field.
 </p>
 <p>
 This is, perhaps, less elegant then ensuring diffeomorphism by construction, but also has its own advantages. A method that guarantees dieffeomorphism by construction guarantees <b>only</b> that. The Jacobians can in principle become infinitely close to zero which can, depending on the reason for the registration, be a problem. In contrast <tt>fnirt</tt> has the ability to project the warp onto any manifold consisting of mappings with Jacobians within a specified range. By for example setting <a href="#fnirt_jacrange"><tt>--jacrange</a>=0.2,5</tt> one specifies that one wants to find the "best" warps of all those for which there are no local contractions/expansions of volume greater than 5.
- 
+
 <a name="fnirt_fnirt"></a><h2>Software implementation</h2>
 
 <ul>
@@ -265,7 +265,7 @@ This is, perhaps, less elegant then ensuring diffeomorphism by construction, but
 Fnirt is a command line program that is run by typing <tt>fnirt</tt> followed by some set of parameters. The minimum you need to type is
 </p>
 <p>
-<tt>fnirt --ref=target_image --in=input_image</tt> 
+<tt>fnirt --ref=target_image --in=input_image</tt>
 </p>
 <p>
 but it is not very likely it will do you any good. Fnirt has a large set of parameters that determine what is done, and how it is done. Without a knowledge of these parameters you will not get the best results that you can. These parameters are described below, but it should be said that there are many of them, and to complicate things further they are linked such that the value of one parameter will determine what is the optimal value to use for another parameter. Hence, the command line options for fnirt offers a lot of flexibility but are difficult to use unless one is an expert on non-linear registration. We therefore offer the option of using configuration files that hides the complexity of fnirt and we strongly encourage using these rather than specifying command line options oneself.
@@ -278,7 +278,7 @@ A configuration file is a text file containing some or all of the parameters tha
 <tt># I want to use membrane energy for regularisation</tt><br>
 <tt>--regmod=membrane_energy</tt><br><br>
 It becomes more useful when it specifes all or most parameters with values suited for ones particular application.
-</p> 
+</p>
 <p>
 When a parameter is specified both in the config-file and on the command line the value on the command line takes precedence. For example with the example above we could run <tt>fnirt</tt> with<br><br>
 <tt>fnirt --in=my_brain --ref=MNI152_T1_2mm --config=my_silly_file --regmod=bending_energy</tt><br><br>
@@ -287,9 +287,9 @@ and the <tt>--regmod=bending_energy</tt> on the command line will take precedenc
 <p>
 When you specify <tt>--config=my_file</tt>, <i>i.e.</i> without explicit path or extension, <tt>fnirt</tt> will search for <tt>./my_file</tt>, <tt>./my_file.cnf</tt>, <tt>${FSLDIR}/etc/flirtsch/my_file</tt> and <tt>${FSLDIR}/etc/flirtsch/my_file.cnf</tt> in that order and use the first one that is found.
 </p>
-<p> 
+<p>
 As part of the <tt>fnirt</tt> distribution we supply two predefined config files: <tt>T1_2_MNI152_2mm.cnf</tt> and <tt>FA_2_FMRIB58_1mm.cnf</tt>. These contain parameters that have been found to be useful for registering a good quality T1-weighted 3D acquisition to the MNI152 template and for registering a good quality FA image to the FMRIB58 template. Together with the override facility this is probably the starting (an quite possible finishing) point for most users. Let us say for example that you want to register a T1 scan to the MNI152 template, but that you want to push warp-resolution a little beyond that given in <tt>T1_2_MNI152_2mm.cnf</tt> (10mm isotropic). You may then <i>e.g.</i> run <tt>fnirt</tt> with<br><br>
-<tt>fnirt --in=my_brain --config=T1_2_MNI152_2mm --warpres=6,6,6</tt><br> 
+<tt>fnirt --in=my_brain --config=T1_2_MNI152_2mm --warpres=6,6,6</tt><br>
 </p>
 <p>
 As our experience with <tt>fnirt</tt> increases and we start using it for more applications we will supply more configuration files. Meanwhile if you have an application for which neither of the predefined config files is appropriate you may want to read about the individual parameters below and write your own file. We would then recommend to start with one of the predefined files (that which seems more appropriate given your application) and gradually change it to suit your application. Alternatively if your application is of sufficient general interest you may contact us and we can together devise a file for that application.
@@ -298,31 +298,31 @@ As our experience with <tt>fnirt</tt> increases and we start using it for more a
 <a name="fnirt_running"></a><h3>Running <tt>fnirt</tt> efficiently</h3>
 
 <p>
-This paragraph contains some general advice that is useful to ensure that <tt>fnirt</tt> is run in an "optimal" manner. <tt>fnirt</tt> is designed to be a "medium resolution" non-linear registration method. Hence it is intended to be used with a warp-resolution of ~10mm. If/when attempting to go much below that (<i>i.e.</i> below ~5mm) one starts to pay a high price both in terms of working memory and execution time. In general this is not a big problem since a 10mm warp-resolution is typically sufficient to register two brains. 
+This paragraph contains some general advice that is useful to ensure that <tt>fnirt</tt> is run in an "optimal" manner. <tt>fnirt</tt> is designed to be a "medium resolution" non-linear registration method. Hence it is intended to be used with a warp-resolution of ~10mm. If/when attempting to go much below that (<i>i.e.</i> below ~5mm) one starts to pay a high price both in terms of working memory and execution time. In general this is not a big problem since a 10mm warp-resolution is typically sufficient to register two brains.
 </p>
 <p>
 Another factor that greatly affects execution time and memory requirements is the resolution and the field-of-view (FOV) of the <tt>--ref</tt> image respectively. Let us say one wants for example to register one T1-scan to another. Tpical scan parameters may then be <i>e.g.</i> a 208x256x192 matrix-size with a 1x1x1mm resolution. With that FOV (208x256x192mm) there are typically thick slabs of non-brain in all directions and it may be cropped extensively (using the <tt>fslroi</tt> command) without loss of any brain. If one is <i>e.g.</i> able to crop it down to a 146x194x130 matrix (numbers taken from a specific example) one will have reduced both execution time and memory requirements by 60%.
 </p>
-<p> 
-If one additionaly specifies a subsampling of 2 at the lowest level (<i>e.g.</i> <tt>--subsamp=8,4,2,2</tt>) there is a further reduction of execution time by a factor of eight. This implies that the full resolution of the images is never used for estimation of the warps, but that makes very little difference when using a warp-resolution of 10mm. When/if using subsampling of 2 the subsampled voxels have a size of 2x2x2mm which means that each spline-function has a support of 5832 voxels which is typically more than sufficient. If one uses the full resolution the support is a staggering 54872 voxels which is unneccessarily large and "wastes" execution time.  
+<p>
+If one additionaly specifies a subsampling of 2 at the lowest level (<i>e.g.</i> <tt>--subsamp=8,4,2,2</tt>) there is a further reduction of execution time by a factor of eight. This implies that the full resolution of the images is never used for estimation of the warps, but that makes very little difference when using a warp-resolution of 10mm. When/if using subsampling of 2 the subsampled voxels have a size of 2x2x2mm which means that each spline-function has a support of 5832 voxels which is typically more than sufficient. If one uses the full resolution the support is a staggering 54872 voxels which is unneccessarily large and "wastes" execution time.
 </p>
 <p>
 It should also be realized that the level of subsampling that is used when estimating the warps does not affect the resolution of the final warp-field. It will still produce a field with the full resolution of the <tt>--ref</tt> volume and the registered volume will have the full resolution of the <tt>--ref</tt> volume. An example of a config file that uses this "trick" is <tt>FA_2_FMRIB58_1mm.cnf</tt>, which is used to register an FA-volume to the FMRIB 1mm (overkill) FA template.
-</p>  
+</p>
 <p>
-Other parameters that has an effect on efficiency include <a href="#fnirt_splineorder"><tt>--splineorder</tt></a> and <a href="#fnirt_numprec"><tt>--numprec</tt></a>. 
+Other parameters that has an effect on efficiency include <a href="#fnirt_splineorder"><tt>--splineorder</tt></a> and <a href="#fnirt_numprec"><tt>--numprec</tt></a>.
 </p>
 
 <a name="fnirt_understanding_subsample"></a><h3>Understanding sub-sampling levels</h3>
 
 <p>
-It is important to understand the concept of different sub-sampling levels and how that affects how one can/need to specify the different paramaters of <tt>fnirt</tt>. As described <a href="#fnirt_subsampling">above</a> in the theory section an execution of <tt>fnirt</tt> is really several consecutive registrations with increasing use of high frequency information. An example of a subsampling scheme might be <tt>--subsamp=4,2,1,1</tt> which specifies that four consecutive registrations should be performed, the first with the <tt>--ref</tt> volume sub-sampled by a factor 4, the second by a factor 2 and the two final registrations at full resolution. Given this there are some parameters that it makes sense to define "once and for all" and use for all four registration. An example of such a parameter is <tt>--regmod</tt> which specifies what regularisation model to use ("membrane energy" or "bending energy"). 
+It is important to understand the concept of different sub-sampling levels and how that affects how one can/need to specify the different paramaters of <tt>fnirt</tt>. As described <a href="#fnirt_subsampling">above</a> in the theory section an execution of <tt>fnirt</tt> is really several consecutive registrations with increasing use of high frequency information. An example of a subsampling scheme might be <tt>--subsamp=4,2,1,1</tt> which specifies that four consecutive registrations should be performed, the first with the <tt>--ref</tt> volume sub-sampled by a factor 4, the second by a factor 2 and the two final registrations at full resolution. Given this there are some parameters that it makes sense to define "once and for all" and use for all four registration. An example of such a parameter is <tt>--regmod</tt> which specifies what regularisation model to use ("membrane energy" or "bending energy").
 </p>
 <p>
 For other parameters it makes more sense to specify a separate value for each sub-sampling level. An example of such a parameter is <tt>--lambda</tt> which could for subsampling scheme above be set to <i>e.g.</i> <tt>--lambda=200,75,40,20</tt>. What this means is that we are using a larger relative weighting of the regularisation term, <i>i.e.</i> we are forcing the warps to be smoother, for the registrations performed at lower resolution (larger sub-sampling). Note also how, in this example, at the final resolution we perform two registrations with decreasing regularisation.
 </p>
 <p>
-Hence the parameters for <tt>fnirt</tt> are divided into those that are defined "once and for all" and those that can/should be defined once for each sub-sampling level. That means that there must be a complete correspondence between the parameters in the latter category. It is for example correct to specify 
+Hence the parameters for <tt>fnirt</tt> are divided into those that are defined "once and for all" and those that can/should be defined once for each sub-sampling level. That means that there must be a complete correspondence between the parameters in the latter category. It is for example correct to specify
 </p>
 <tt>fnirt ... --subsamp=4,2,1,1 --lambda=200,75,40,20 ...</tt>
 <p>
@@ -455,7 +455,7 @@ When providing an initial guess for the non-linear warps (using the <tt>--inwarp
 </p>
 <tt>fnirt --ref=...   ... --<a href="#fnirt_intmod">intmod</a>=<a href="#fnirt_global_non_linear_with_bias">global_non_linear_with_bias</a> ... --intout=my_intensity_mapping</tt>
 </p>
-in the previous run it will have produced two files: <tt>my_intensity_mapping.txt</tt> containing the global mapping and <tt>my_intensity_mapping.nii</tt> containing the bias-field. If then in the next run <tt>fnirt</tt> is passed the parameters 
+in the previous run it will have produced two files: <tt>my_intensity_mapping.txt</tt> containing the global mapping and <tt>my_intensity_mapping.nii</tt> containing the bias-field. If then in the next run <tt>fnirt</tt> is passed the parameters
 </p>
 <tt>fnirt --ref=...  ... --intin=my_intensity_mapping</tt>
 <p>
@@ -533,7 +533,7 @@ Specifies the name of a copy of the <tt>--ref</tt> image with intensity modulati
 
 <a name="fnirt_intout"></a><h2><tt>--intout</tt></h2>
 <p>
-Specifies the base-name for file/files containing information about the intensity transform. Depending on what <tt>--intmod</tt> has been set to This can be a text-file containing scaling/polynomial factors, a 3D nifti-file containing a multiplicative bias-field or a 4D nifti-file containing voxel-wise polynomial factors. This is useful mainly for "template building" where one would expect the intensity transform to be very similar from one iteration to the next. One can then generate these files using the <tt>--intout</tt> parameter and then read them in as starting estimates for the next iteration using the <tt>--intin</tt> parameter. 
+Specifies the base-name for file/files containing information about the intensity transform. Depending on what <tt>--intmod</tt> has been set to This can be a text-file containing scaling/polynomial factors, a 3D nifti-file containing a multiplicative bias-field or a 4D nifti-file containing voxel-wise polynomial factors. This is useful mainly for "template building" where one would expect the intensity transform to be very similar from one iteration to the next. One can then generate these files using the <tt>--intout</tt> parameter and then read them in as starting estimates for the next iteration using the <tt>--intin</tt> parameter.
 </p>
 
 <a href="#fnirt_parameters">Back to list of parameters</a>
@@ -560,14 +560,14 @@ The downside with a 2nd order spline is that the resulting field will not have c
 
 <a name="fnirt_numprec"></a><h2><tt>--numprec</tt></h2>
 <p>
-Its value can be either <tt>float</tt> or <tt>double</tt> (default) and it specifies the precision that the hessian <b>H</b> is calculated and stored in. Changing this to <tt>float</tt> will decrease the amount of RAM needed to store <b>H</b> and will hence allow one to go to slightly higher warp-resolution. The default is <tt>double</tt> since that is what we have used for most of the testing and validation. 
+Its value can be either <tt>float</tt> or <tt>double</tt> (default) and it specifies the precision that the hessian <b>H</b> is calculated and stored in. Changing this to <tt>float</tt> will decrease the amount of RAM needed to store <b>H</b> and will hence allow one to go to slightly higher warp-resolution. The default is <tt>double</tt> since that is what we have used for most of the testing and validation.
 </p>
 
 <a href="#fnirt_parameters">Back to list of parameters</a>
 
 <a name="fnirt_imprefm"></a><a name="fnirt_impinm"><a name="fnirt_imprefval"></a><a name="fnirt_impinval"></a><h2><tt>--imprefm, --imprefval, --impinm, --impinval</tt></h2>
 <p>
-When set to 1 the <tt>--imprefm</tt> and <tt>--impinm</tt> flags imply that a certain value implies that that voxel is outside the valid FOV and should be excluded when estimating the warps. This is useful for example if one has data that has already been resampled by an affine transform or if one uses skull stripped data. In both those cases there will be zeros in the image volume that does not mean that the intensity is actually zero, but rather that it is unknown. Note though that the recommended use of <tt>fnirt</tt> is to <i>not</i> use skull-stripped data and to inform <tt>fnirt</tt> of any affine warps through the <a href="#fnirt_aff"><tt>--aff</tt></a> parameter instead of resampling the data. The full form of this parameter is 
+When set to 1 the <tt>--imprefm</tt> and <tt>--impinm</tt> flags imply that a certain value implies that that voxel is outside the valid FOV and should be excluded when estimating the warps. This is useful for example if one has data that has already been resampled by an affine transform or if one uses skull stripped data. In both those cases there will be zeros in the image volume that does not mean that the intensity is actually zero, but rather that it is unknown. Note though that the recommended use of <tt>fnirt</tt> is to <i>not</i> use skull-stripped data and to inform <tt>fnirt</tt> of any affine warps through the <a href="#fnirt_aff"><tt>--aff</tt></a> parameter instead of resampling the data. The full form of this parameter is
 </p>
 <tt>fnirt --ref=MNI152_T1_2mm.nii --in=my_brain.nii --imprefm=1 ... </tt>
 <p>
@@ -617,7 +617,7 @@ The default is to use Bending Energy, and our testing indicate that that is slig
 <dt><tt>--intmod=global_non_linear</tt></dt>
 <dd>This model assumes that there is some curved relationship between the intensities in the two images. Imagine creating a scatter-plot where for each point takes its x-value from a voxel in the <tt>--ref</tt> image and the y-value from the same voxel in the (warped) <tt>--in</tt> image. Let us further assume that this scatter-plot displays a pattern where the majority of the points fall along a curved path. Using this model <tt>fnirt</tt> will fit a polynomial-function to that curve. The order of the polynomial will be determined by the value of the parameter <a href="#fnirt_intorder"><tt>--intorder</tt></a> (and this is also the number of additional parameters that needs to be estimated). It assumes that the curved intensity relationship is the same for all parts of the image (global). It corresponds (roughly) to a correlation-ratio cost-function. It is useful when both images (<tt>--ref</tt> and <tt>--in</tt>) have little or no intensity inhomogeneity and they have been acquired with similar sequences but on different scanners or with <b>slightly</b> different sequences on the same scanner. It could <i>e.g.</i> be used to register two T1-weighted images where the degree of weighting was a little different but would <b>not</b> work for registering a T1- to a T2-weighted image.</dd><br>
 <dt><tt>--intmod=local_linear</tt></dt>
-<dd>Frequently MR images exhibit RF intensity inhomogeneity, <i>i.e.</i> there is a smoothly varying multiplicative bias-field. This option models such a field as a linear combination of B-splines (same as the warp fields). The properties of the field are determined by the parameters <a href="#fnirt_biasres"><tt>--biasres</tt></a> and <a href="#fnirt_biaslambda"><tt>--biaslambda</tt></a>. The number of additional parameters are also determined by <a href="#fnirt_biasres"><tt>--biasres</tt></a> and is typically substantial (several hundreds -- thousands). This option has no correspondence in traditional cost-functions. It is useful when images are acquired with the same scanner and sequence and there is a discernible bias-field</dd><br> 
+<dd>Frequently MR images exhibit RF intensity inhomogeneity, <i>i.e.</i> there is a smoothly varying multiplicative bias-field. This option models such a field as a linear combination of B-splines (same as the warp fields). The properties of the field are determined by the parameters <a href="#fnirt_biasres"><tt>--biasres</tt></a> and <a href="#fnirt_biaslambda"><tt>--biaslambda</tt></a>. The number of additional parameters are also determined by <a href="#fnirt_biasres"><tt>--biasres</tt></a> and is typically substantial (several hundreds -- thousands). This option has no correspondence in traditional cost-functions. It is useful when images are acquired with the same scanner and sequence and there is a discernible bias-field</dd><br>
 <dt><tt>--intmod=global_non_linear_with_bias</tt></dt>
 <dd>This model can be said to encompass both previous models (<tt>global_non_linear</tt> and <tt>local_linear</tt>). It models a global curvilinear relationship between the intensities (same as <tt>global_non_linear</tt>) and modulates this locally with a multiplicative factor. The number of additional parameters are given by <tt>--intorder</tt> and <tt>--biasres</tt> and is the sum of the numbers for the two previous models. This means that execution time is roughly twice that of <i>e.g.</i> a <tt>global_linear</tt> model. It is useful when the images are acquired with different scanners and/or slightly different sequences and one or both images have discernible intensity inhomogeneities. This is a suitable model for many cases. One frequently wishes to register an individual image to a template representing some standard space. The subject/subjects constituting the template have typically been scanned elsewhere, and will therefore not have identical contrast. In addition it is very likely that the images will both (or at least ones own) be affected by bias-fields. This is <i>e.g.</i> the model that is used in the <tt>T1_2_MNI152_2mm.cnf</tt> configuration file.</dd><br>
 <dt><tt>--intmod=local_non_linear</tt></dt>
@@ -639,14 +639,14 @@ Determines the order of a polynomial that models a curvilinear relationship betw
 
 <a name="fnirt_biasres"></a><h2><tt>--biasres</tt></h2>
 <p>
-Determines the knot-spacing for the splines that are used to model a bias-field. It means the same thing as <a href="#fnirt_warpres"><tt>--warpres</tt></a>, but for the bias-field rather than the warp-fields. It is relevant for the <tt>local_linear</tt>, the <tt>global_non_linear_with_bias</tt> and the <tt>local_non_linear</tt> models. Typically a bias-field varies quite slowly over space so a deafult of <tt>--biasres=50,50,50</tt> has been choosen. 
+Determines the knot-spacing for the splines that are used to model a bias-field. It means the same thing as <a href="#fnirt_warpres"><tt>--warpres</tt></a>, but for the bias-field rather than the warp-fields. It is relevant for the <tt>local_linear</tt>, the <tt>global_non_linear_with_bias</tt> and the <tt>local_non_linear</tt> models. Typically a bias-field varies quite slowly over space so a deafult of <tt>--biasres=50,50,50</tt> has been choosen.
 </p>
 
 <a href="#fnirt_parameters">Back to list of parameters</a><br>
 
 <a name="fnirt_biaslambda"></a><h2><tt>--biaslambda</tt></h2>
 <p>
-Determines the relative weight of the sum-of-squared differences and the bending energy of the bias-field. This is similar to the <tt>--lambda</tt> paramter, but for the bias-field rather than the warp-fields. Default is 10000. 
+Determines the relative weight of the sum-of-squared differences and the bending energy of the bias-field. This is similar to the <tt>--lambda</tt> paramter, but for the bias-field rather than the warp-fields. Default is 10000.
 </p>
 
 <a href="#fnirt_parameters">Back to list of parameters</a><br>
@@ -711,7 +711,7 @@ Specifies the amount of smoothing that should be applied to the <tt>--ref</tt> a
 </p>
 <tt>fnirt --ref=MNI152_T1_2mm.nii --in=my_brain.nii --subsamp=4,2,1 --reffwhm=8,4,0</tt>
 <p>
-which smoothes the <tt>--ref</tt> image with an 8mm FWHM Gaussian filter prior to subsampling with a factor of 4 for the first level of sub-registration. For the second level it smoothes it by 4mm prior to subsampling by a factor of 2. For the final level it applies no smoothing at all. 
+which smoothes the <tt>--ref</tt> image with an 8mm FWHM Gaussian filter prior to subsampling with a factor of 4 for the first level of sub-registration. For the second level it smoothes it by 4mm prior to subsampling by a factor of 2. For the final level it applies no smoothing at all.
 </p>
 <p>
 Since the MNI152 template is "a little smooth already" owing to its origin as an average of many subjects it is typically a good idea to smooth the <tt>--in</tt> image a little more that the <tt>--ref</tt> image. An example would be
@@ -725,14 +725,14 @@ If you do not specify a value for the <tt>--reffwhm</tt> parameter it will be se
 
 <a name="fnirt_lambda"></a><h2><tt>--lambda</tt></h2>
 <p>
-&lambda specifies the relative weighting of the sum-of-squared differences and the regularisation (smoothness) of the warps. A larger value of &lambda implies a smoother warp-field, at the expense of how similar to the <tt>--ref</tt> image that the <tt>--in</tt> image will end up being. There is no principled way to determine the "correct" value and suitable values for &lambda will have to be determined for each "type of data". It will <i>e.g.</i> be the case that a different set of parameters will be used when warping good quality T1-weighted structural images to the MNI152 template compared to when matching (relatively noisy) FA images to the FMRIB58 template. It may also be that if your T1-weighted scans have relatively poor SNR, poor contrast and/or highly non-isotropic voxels you may have to use a different set of &lambda values when matching to the MNI152 template compared to if you have optimal quality data. 
+&lambda specifies the relative weighting of the sum-of-squared differences and the regularisation (smoothness) of the warps. A larger value of &lambda implies a smoother warp-field, at the expense of how similar to the <tt>--ref</tt> image that the <tt>--in</tt> image will end up being. There is no principled way to determine the "correct" value and suitable values for &lambda will have to be determined for each "type of data". It will <i>e.g.</i> be the case that a different set of parameters will be used when warping good quality T1-weighted structural images to the MNI152 template compared to when matching (relatively noisy) FA images to the FMRIB58 template. It may also be that if your T1-weighted scans have relatively poor SNR, poor contrast and/or highly non-isotropic voxels you may have to use a different set of &lambda values when matching to the MNI152 template compared to if you have optimal quality data.
 </p>
 <p>
 You can either specify a single &lambda for all levels of subsampling (<tt><a href="#fnirt_subsamp">--subsamp</a></tt>) or one for each level like
 </p>
 <tt>fnirt --ref=MNI152_T1_2mm.nii --in=my_brain.nii --subsamp=4,2,1 --lambda=300,75,30 ...</tt>
 <p>
-This is usually a good idea and has the advantage of providing over-fitting at the early stage of the registration where the gross features are aligned, while allowing a closer registration at the later stages. This same strategy can be employed even if not utilising the multi-resolution approach by specifying 
+This is usually a good idea and has the advantage of providing over-fitting at the early stage of the registration where the gross features are aligned, while allowing a closer registration at the later stages. This same strategy can be employed even if not utilising the multi-resolution approach by specifying
 </p>
 <tt>fnirt --ref=MNI152_T1_2mm.nii --in=my_brain.nii --subsamp=1,1,1 --lambda=300,75,30 ...</tt>
 <p>
@@ -819,4 +819,4 @@ Copyright &copy; 2007, University of Oxford. <a href="http://www.fmrib.ox.ac.uk/
 
 </body>
 </html>
- 
+

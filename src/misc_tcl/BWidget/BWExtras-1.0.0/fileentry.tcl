@@ -1,4 +1,4 @@
-#* 
+#*
 #* ------------------------------------------------------------------
 #* BWExtras.tcl -- Assorted extra composite widgets
 #* ------------------------------------------------------------------
@@ -21,14 +21,14 @@
 #* ------------------------------------------------------------------
 #* Contents:
 #* ------------------------------------------------------------------
-#*  
+#*
 #* Copyright (c) 2006, Robert Heller
 #* All rights reserved.
-#* 
+#*
 #* Redistribution and use in source and binary forms, with or without
 #* modification, are permitted provided that the following conditions are
 #* met:
-#* 
+#*
 #*     * Redistributions of source code must retain the above copyright
 #*       notice, this list of conditions and the following disclaimer.
 #*     * Redistributions in binary form must reproduce the above copyright
@@ -37,7 +37,7 @@
 #*     * Neither the name of the Deepwoods Software nor the names of its
 #*       contributors may be used to endorse or promote products derived from
 #*       this software without specific prior written permission.
-#* 
+#*
 #* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 #* IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
 #* TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
@@ -49,8 +49,8 @@
 #* THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 #* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#* 
-#* 
+#*
+#*
 #  $Id: fileentry.tcl,v 1.3 2007/01/10 21:41:12 mwebster Exp $
 # ------------------------------------------------------------------------------
 #  Index of commands:
@@ -84,13 +84,13 @@ namespace eval FileEntry {
 
     Widget::bwinclude FileEntry Button .b \
         remove {-anchor -bg -bitmap -borderwidth -bd -cursor -font
-		-fg -highlightthickness -image -justify -padx -pady 
-		-repeatdelay -repeatinterval -takefocus -text -textvariable 
-		-wraplength -armcommand -command -default -disarmcommand 
-		-height -helptext -helptype -helpvar -name -relief -state 
+		-fg -highlightthickness -image -justify -padx -pady
+		-repeatdelay -repeatinterval -takefocus -text -textvariable
+		-wraplength -armcommand -command -default -disarmcommand
+		-height -helptext -helptype -helpvar -name -relief -state
 		-underline -width} \
 	rename {-foreground -buttonfg -background -buttonbg
-		-activebackground -buttonactivebg 
+		-activebackground -buttonactivebg
 		-activeforeground -buttonactivefg
 		-disabledforeground -buttondisabledfg
 		-highlightbackground -buttonhighlightbg
@@ -116,9 +116,9 @@ proc FileEntry::create { path args } {
 	    -relief flat -bd 0 -highlightthickness 0 -takefocus 0
     Widget::initFromODB FileEntry $path $maps(FileEntry)
 
-    variable ${path}.var_filhis {}    
+    variable ${path}.var_filhis {}
     variable ${path}.var_selhis {}
-	
+
     set labf  [eval [list LabelFrame::create $path.labf] $maps(.labf) \
                    [list -relief flat -borderwidth 0 -focus $path.e]]
     set subf  [LabelFrame::getframe $labf]
@@ -136,7 +136,7 @@ proc FileEntry::create { path args } {
       $button configure -image "$fileimage"
     }
     $button configure -command [list FileEntry::OpenFile $path]
-    
+
     pack $entry -in $subf -fill both -expand yes -side left
     pack $button -in $subf -side right
     pack $labf  -fill both -expand yes
@@ -191,10 +191,10 @@ proc FileEntry::_destroy { path } {
 # Bound to the button -- open a file select dialog
 #---------------------------------
 
-proc FileEntry::OpenFile { path } {    
+proc FileEntry::OpenFile { path } {
   variable  ${path}.var_filhis
   set var_filhis  ${path}.var_filhis
-  variable  ${path}.var_selhis 
+  variable  ${path}.var_selhis
   set var_selhis  ${path}.var_selhis
   set dialogType [Widget::getoption $path -filedialog]
   set defaultextension [Widget::getoption $path -defaultextension]
@@ -205,7 +205,7 @@ proc FileEntry::OpenFile { path } {
   set currentfile "[$path.e cget -text]"
   set output [$path.e cget -textvariable]
   set $output $currentfile
-  if { $dialogType=="directory" } { set dialogType 2panel } 
+  if { $dialogType=="directory" } { set dialogType 2panel }
   switch $dialogType {
     2panel {
        feat_file:setup_dialog $path $output $var_filhis $var_selhis [namespace current] $filetypes $title $command $dirasfile

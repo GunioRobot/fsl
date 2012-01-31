@@ -11,7 +11,7 @@ href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
 <p>
 
 <IMG ALIGN=RIGHT height=200 SRC="fdt_images/fdt_vecreg.gif"
-ALT="vecreg applied to V1">  
+ALT="vecreg applied to V1">
 After running dtifit or bedpostx, it is often useful to register vector data to another space. For example, one might want to represent V1 for different subjects in standard space. <b>vecreg</b> is a command line tool that allows to perform such registration.<br><br>
 Vector images cannot be registered by simply applying a transformation (as calculated by, say, <a href="http://www.fmrib.ox.ac.uk/fsl/flirt/index.html">FLIRT</a>) to every voxel's coordinates. The corresponding vectors have to be reoriented accordingly (see D. Alexander 2001, IEEE-TMI 20:1131-39). <b>vecreg</b> performs this operation for you.
 The image on the right shows the effect of applying vecreg (right) to the V1 image on the left, compared to simply applying voxelwise transformation (e.g. using applyxfm4D) to the vectors (centre).
@@ -33,7 +33,7 @@ vecreg -i input_vector -o output_vector -r reference_image -t flirt_transform.ma
 vecreg -i input_vector -o output_vector -r reference_image -w warp_field<br>
 
 <br><b>more options</b>
-<pre> 
+<pre>
 vecreg -i &lt;input4Dvector&gt; -o &lt;output4D&gt; -t &lt;transformation&gt;
 
 Compulsory arguments (You MUST set one or more of):
@@ -49,4 +49,4 @@ Optional arguments (You may optionally specify one or more of):
         --interp        interpolation method : nearestneighbour (default) or trilinear or sinc
         -m,--mask       brain mask in input space
 </pre>
- 
+

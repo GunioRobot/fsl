@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacOSA.c --
  *
  *	This contains the initialization routines, and the implementation of
@@ -30,7 +30,7 @@
 
 #include <resources.h>
 #include <FSpCompat.h>
-/* 
+/*
  * The following two Includes are from the More Files package.
  */
 #include <MoreFiles.h>
@@ -72,7 +72,7 @@ typedef struct tclOSAComponent {
 } tclOSAComponent;
 
 /*
- * Prototypes for static procedures. 
+ * Prototypes for static procedures.
  */
 
 static pascal OSErr	TclOSAActiveProc _ANSI_ARGS_((long refCon));
@@ -106,53 +106,53 @@ static OSErr 		GetCStringFromDescriptor _ANSI_ARGS_((
 			    AEDesc *sourceDesc, char *resultStr,
 			    Size resultMaxSize,Size *resultSize));
 static int 		Tcl_OSAComponentCmd _ANSI_ARGS_((ClientData clientData,
-			    Tcl_Interp *interp, int argc, CONST char **argv)); 
+			    Tcl_Interp *interp, int argc, CONST char **argv));
 static void 		getSortedHashKeys _ANSI_ARGS_((Tcl_HashTable *theTable,
 			    CONST char *pattern, Tcl_DString *theResult));
 static int 		ASCIICompareProc _ANSI_ARGS_((const void *first,
 			    const void *second));
 static int 		Tcl_OSACmd _ANSI_ARGS_((ClientData clientData,
-			    Tcl_Interp *interp, int argc, CONST char **argv)); 
+			    Tcl_Interp *interp, int argc, CONST char **argv));
 static void 		tclOSAClose _ANSI_ARGS_((ClientData clientData));
 /*static void 		tclOSACloseAll _ANSI_ARGS_((ClientData clientData));*/
 static tclOSAComponent *tclOSAMakeNewComponent _ANSI_ARGS_((Tcl_Interp *interp,
 			    char *cmdName, char *languageName,
-			    OSType scriptSubtype, long componentFlags));  
+			    OSType scriptSubtype, long componentFlags));
 static int 		prepareScriptData _ANSI_ARGS_((int argc, CONST char **argv,
-			    Tcl_DString *scrptData ,AEDesc *scrptDesc)); 
+			    Tcl_DString *scrptData ,AEDesc *scrptDesc));
 static void 		tclOSAResultFromID _ANSI_ARGS_((Tcl_Interp *interp,
 			    ComponentInstance theComponent, OSAID resultID));
 static void 		tclOSAASError _ANSI_ARGS_((Tcl_Interp * interp,
 			    ComponentInstance theComponent, char *scriptSource));
-static int 		tclOSAGetContextID _ANSI_ARGS_((tclOSAComponent *theComponent, 
+static int 		tclOSAGetContextID _ANSI_ARGS_((tclOSAComponent *theComponent,
 			    CONST char *contextName, OSAID *theContext));
-static void 		tclOSAAddContext _ANSI_ARGS_((tclOSAComponent *theComponent, 
-			    char *contextName, const OSAID theContext));						
-static int 		tclOSAMakeContext _ANSI_ARGS_((tclOSAComponent *theComponent, 
-			    CONST char *contextName, OSAID *theContext));						
+static void 		tclOSAAddContext _ANSI_ARGS_((tclOSAComponent *theComponent,
+			    char *contextName, const OSAID theContext));
+static int 		tclOSAMakeContext _ANSI_ARGS_((tclOSAComponent *theComponent,
+			    CONST char *contextName, OSAID *theContext));
 static int 		tclOSADeleteContext _ANSI_ARGS_((tclOSAComponent *theComponent,
-			    CONST char *contextName)); 
-static int 		tclOSALoad _ANSI_ARGS_((Tcl_Interp *interp, 
-			    tclOSAComponent *theComponent, CONST char *resourceName, 
+			    CONST char *contextName));
+static int 		tclOSALoad _ANSI_ARGS_((Tcl_Interp *interp,
+			    tclOSAComponent *theComponent, CONST char *resourceName,
 			    int resourceNumber, CONST char *fileName,OSAID *resultID));
-static int 		tclOSAStore _ANSI_ARGS_((Tcl_Interp *interp, 
-			    tclOSAComponent *theComponent, CONST char *resourceName, 
+static int 		tclOSAStore _ANSI_ARGS_((Tcl_Interp *interp,
+			    tclOSAComponent *theComponent, CONST char *resourceName,
 			    int resourceNumber, CONST char *scriptName, CONST char *fileName));
 static int 		tclOSAAddScript _ANSI_ARGS_((tclOSAComponent *theComponent,
-			    char *scriptName, long modeFlags, OSAID scriptID)); 		
+			    char *scriptName, long modeFlags, OSAID scriptID));
 static int 		tclOSAGetScriptID _ANSI_ARGS_((tclOSAComponent *theComponent,
-			    CONST char *scriptName, OSAID *scriptID)); 
+			    CONST char *scriptName, OSAID *scriptID));
 static tclOSAScript *	tclOSAGetScript _ANSI_ARGS_((tclOSAComponent *theComponent,
-			    CONST char *scriptName)); 
+			    CONST char *scriptName));
 static int 		tclOSADeleteScript _ANSI_ARGS_((tclOSAComponent *theComponent,
 			    CONST char *scriptName,char *errMsg));
 
 /*
- * "export" is a MetroWerks specific pragma.  It flags the linker that  
- * any symbols that are defined when this pragma is on will be exported 
+ * "export" is a MetroWerks specific pragma.  It flags the linker that
+ * any symbols that are defined when this pragma is on will be exported
  * to shared libraries that link with this library.
  */
- 
+
 
 #pragma export on
 int Tclapplescript_Init( Tcl_Interp *interp );
@@ -164,7 +164,7 @@ int Tclapplescript_Init( Tcl_Interp *interp );
  * Tclapplescript_Init --
  *
  *	Initializes the the OSA command which opens connections to
- *	OSA components, creates the AppleScript command, which opens an 
+ *	OSA components, creates the AppleScript command, which opens an
  *	instance of the AppleScript component,and constructs the table of
  *	available languages.
  *
@@ -172,14 +172,14 @@ int Tclapplescript_Init( Tcl_Interp *interp );
  *	A standard Tcl result.
  *
  * Side Effects:
- *	Opens one connection to the AppleScript component, if 
+ *	Opens one connection to the AppleScript component, if
  *	available.  Also builds up a table of available OSA languages,
  *	and creates the OSA command.
  *
  *----------------------------------------------------------------------
  */
 
-int 
+int
 Tclapplescript_Init(
     Tcl_Interp *interp)		/* Tcl interpreter. */
 {
@@ -201,34 +201,34 @@ Tclapplescript_Init(
     Tcl_HashEntry *hashEntry;
     int newPtr;
     AEDesc componentName = { typeNull, NULL };
-    char nameStr[32];			
+    char nameStr[32];
     Size nameLen;
     long appleScriptFlags;
-	
-    /* 
+
+    /*
      * Perform the required stubs magic...
      */
-     	
+
     if (!Tcl_InitStubs(interp, "8.2", 0)) {
 	return TCL_ERROR;
     }
 
-    /* 
-     * Here We Will Get The Available Osa Languages, Since They Can Only Be 
+    /*
+     * Here We Will Get The Available Osa Languages, Since They Can Only Be
      * Registered At Startup...  If You Dynamically Load Components, This
      * Will Fail, But This Is Not A Common Thing To Do.
      */
-	 
+
     LanguagesTable = (Tcl_HashTable *) ckalloc(sizeof(Tcl_HashTable));
-	
+
     if (LanguagesTable == NULL) {
 	panic("Memory Error Allocating Languages Hash Table");
     }
-	
+
     Tcl_SetAssocData(interp, "OSAScript_LangTable", NULL, LanguagesTable);
     Tcl_InitHashTable(LanguagesTable, TCL_STRING_KEYS);
-	
-			
+
+
     while ((curComponent = FindNextComponent(curComponent, &compDescr)) != 0) {
 	int nbytes = sizeof(ComponentDescription);
 	foundComp = (ComponentDescription *)
@@ -242,18 +242,18 @@ Tclapplescript_Init(
 	    GotOneOSALanguage = true;
 
 	    /*
-	     * This is gross: looks like I have to open the component just  
+	     * This is gross: looks like I have to open the component just
 	     * to get its name!!! GetComponentInfo is supposed to return
 	     * the name, but AppleScript always returns an empty string.
 	     */
-		 	
+
 	    curOpenComponent = OpenComponent(curComponent);
 	    if (curOpenComponent == NULL) {
 		Tcl_AppendResult(interp,"Error opening component",
 			(char *) NULL);
 		return TCL_ERROR;
 	    }
-			 
+
 	    myErr = OSAScriptingComponentName(curOpenComponent,&componentName);
 	    if (myErr == noErr) {
 		myErr = GetCStringFromDescriptor(&componentName,
@@ -271,7 +271,7 @@ Tclapplescript_Init(
 			(char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    /*
 	     * Make sure AppleScript is loaded, otherwise we will
 	     * not bother to make the AppleScript command.
@@ -279,48 +279,48 @@ Tclapplescript_Init(
 	    if (foundComp->componentSubType == kAppleScriptSubtype) {
 		appleScriptFlags = foundComp->componentFlags;
 		gotAppleScript = true;
-	    }			
+	    }
 	}
-    }				
+    }
 
     /*
      * Create the OSA command.
      */
-	
+
     if (!GotOneOSALanguage) {
 	Tcl_AppendResult(interp,"Could not find any OSA languages",
 		(char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     /*
      * Create the Component Assoc Data & put it in the interpreter.
      */
-	
+
     ComponentTable = (Tcl_HashTable *) ckalloc(sizeof(Tcl_HashTable));
-	
+
     if (ComponentTable == NULL) {
 	panic("Memory Error Allocating Hash Table");
     }
-	
+
     Tcl_SetAssocData(interp, "OSAScript_CompTable", NULL, ComponentTable);
-			
+
     Tcl_InitHashTable(ComponentTable, TCL_STRING_KEYS);
 
     /*
-     * The OSA command is not currently supported.	 
+     * The OSA command is not currently supported.
     Tcl_CreateCommand(interp, "OSA", Tcl_OSACmd, (ClientData) NULL,
 	    (Tcl_CmdDeleteProc *) NULL);
      */
-     
-    /* 
+
+    /*
      * Open up one AppleScript component, with a default context
      * and tie it to the AppleScript command.
      * If the user just wants single-threaded AppleScript execution
      * this should be enough.
      *
      */
-	 
+
     if (gotAppleScript) {
 	if (tclOSAMakeNewComponent(interp, "AppleScript",
 		"AppleScript English", kAppleScriptSubtype,
@@ -333,12 +333,12 @@ Tclapplescript_Init(
 }
 
 /*
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  *
  * Tcl_OSACmd --
  *
  *	This is the command that provides the interface to the OSA
- *	component manager.  The subcommands are: close: close a component, 
+ *	component manager.  The subcommands are: close: close a component,
  *	info: get info on components open, and open: get a new connection
  *	with the Scripting Component
  *
@@ -351,8 +351,8 @@ Tclapplescript_Init(
  *
  *----------------------------------------------------------------------
  */
- 
-int 
+
+int
 Tcl_OSACmd(
     ClientData clientData,
     Tcl_Interp *interp,
@@ -364,30 +364,30 @@ Tcl_OSACmd(
     char c;
     int length;
     Tcl_HashTable *ComponentTable = NULL;
-	
+
 
     if (argc == 1) {
 	Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
 		argv[0], " option\"", (char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     c = *argv[1];
     length = strlen(argv[1]);
-	
+
     /*
      * Query out the Component Table, since most of these commands use it...
      */
-	
+
     ComponentTable = (Tcl_HashTable *) Tcl_GetAssocData(interp,
 	    "OSAScript_CompTable", (Tcl_InterpDeleteProc **) NULL);
-	
+
     if (ComponentTable == NULL) {
 	Tcl_AppendResult(interp, "Error, could not get the Component Table",
 		" from the Associated data.", (char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     if (c == 'c' && strncmp(argv[1],"close",length) == 0) {
 	Tcl_HashEntry *hashEntry;
 	if (argc != 3) {
@@ -396,7 +396,7 @@ Tcl_OSACmd(
 		    (char *) NULL);
 	    return TCL_ERROR;
 	}
-		
+
 	if ((hashEntry = Tcl_FindHashEntry(ComponentTable,argv[2])) == NULL) {
 	    Tcl_AppendResult(interp, "Component \"", argv[2], "\" not found",
 		    (char *) NULL);
@@ -416,7 +416,7 @@ Tcl_OSACmd(
 
 	argv += 2;
 	argc -= 2;
-		 
+
 	while (argc > 0 ) {
 	    if (*argv[0] == '-') {
 		c = *(argv[0] + 1);
@@ -431,17 +431,17 @@ Tcl_OSACmd(
 			Tcl_HashSearch search;
 			Boolean gotIt = false;
 			Tcl_HashTable *LanguagesTable;
-						
+
 			/*
 			 * Look up the language in the languages table
 			 * Do a simple strstr match, so AppleScript
 			 * will match "AppleScript English"...
 			 */
-						
+
 			LanguagesTable = Tcl_GetAssocData(interp,
 				"OSAScript_LangTable",
 				(Tcl_InterpDeleteProc **) NULL);
-							
+
 			for (hashEntry =
 				 Tcl_FirstHashEntry(LanguagesTable, &search);
 			     hashEntry != NULL;
@@ -466,23 +466,23 @@ Tcl_OSACmd(
 		    }
 		}
 		argc -= 2;
-		argv += 2;				
+		argv += 2;
 	    } else {
 		Tcl_AppendResult(interp, "Expected a flag, but got ",
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
 	}
-			
+
 	sprintf(autoName, "OSAComponent%-d", componentCmdIndex++);
 	if (tclOSAMakeNewComponent(interp, autoName, languageName,
 		theCD->componentSubType, theCD->componentFlags) == NULL ) {
 	    return TCL_ERROR;
 	} else {
 	    Tcl_SetResult(interp,autoName,TCL_VOLATILE);
-	    return TCL_OK;	
+	    return TCL_OK;
 	}
-		
+
     } else if (c == 'i' && strncmp(argv[1],"info",length) == 0) {
 	if (argc == 2) {
 	    Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
@@ -490,15 +490,15 @@ Tcl_OSACmd(
 		    (char *) NULL);
 	    return TCL_ERROR;
 	}
-		 	
+
 	c = *argv[2];
 	length = strlen(argv[2]);
-		
+
 	if (c == 'c' && strncmp(argv[2], "components", length) == 0) {
 	    Tcl_DString theResult;
-			
+
 	    Tcl_DStringInit(&theResult);
-			
+
 	    if (argc == 3) {
 		getSortedHashKeys(ComponentTable,(char *) NULL, &theResult);
 	    } else if (argc == 4) {
@@ -510,15 +510,15 @@ Tcl_OSACmd(
 		return TCL_ERROR;
 	    }
 	    Tcl_DStringResult(interp, &theResult);
-	    return TCL_OK;			
+	    return TCL_OK;
 	} else if (c == 'l' && strncmp(argv[2],"languages",length) == 0) {
 	    Tcl_DString theResult;
 	    Tcl_HashTable *LanguagesTable;
-			
+
 	    Tcl_DStringInit(&theResult);
 	    LanguagesTable = Tcl_GetAssocData(interp,
 		    "OSAScript_LangTable", (Tcl_InterpDeleteProc **) NULL);
-							
+
 	    if (argc == 3) {
 		getSortedHashKeys(LanguagesTable, (char *) NULL, &theResult);
 	    } else if (argc == 4) {
@@ -530,7 +530,7 @@ Tcl_OSACmd(
 		return TCL_ERROR;
 	    }
 	    Tcl_DStringResult(interp,&theResult);
-	    return TCL_OK;			
+	    return TCL_OK;
 	} else {
 	    Tcl_AppendResult(interp, "Unknown option: ", argv[2],
 		    " for OSA info, should be one of",
@@ -547,7 +547,7 @@ Tcl_OSACmd(
     return TCL_OK;
 }
 
-/* 
+/*
  *----------------------------------------------------------------------
  *
  * Tcl_OSAComponentCmd --
@@ -564,7 +564,7 @@ Tcl_OSACmd(
  *	- load ?-flags values? fileName
  *		loads & compiles script data from fileName
  *	- run scriptId ?options?
- *		executes the compiled script 
+ *		executes the compiled script
  *
  * Results:
  *	A standard Tcl result
@@ -575,26 +575,26 @@ Tcl_OSACmd(
  *
  *----------------------------------------------------------------------
  */
- 
-int 
+
+int
 Tcl_OSAComponentCmd(
     ClientData clientData,
-    Tcl_Interp *interp, 
+    Tcl_Interp *interp,
     int argc,
     CONST char **argv)
 {
     int length;
     char c;
-	
+
     tclOSAComponent *OSAComponent = (tclOSAComponent *) clientData;
-	
+
     if (argc == 1) {
 	Tcl_AppendResult(interp, "wrong # args: should be \"",
 		argv[0], " option ?arg ...?\"",
 		(char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     c = *argv[1];
     length = strlen(argv[1]);
     if (c == 'c' && strncmp(argv[1], "compile", length) == 0) {
@@ -623,7 +623,7 @@ Tcl_OSAComponentCmd(
 
     return TCL_OK;
 }
- 
+
 /*
  *----------------------------------------------------------------------
  *
@@ -642,8 +642,8 @@ Tcl_OSAComponentCmd(
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 TclOSACompileCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -665,7 +665,7 @@ TclOSACompileCmd(
     OSAID contextID = kOSANullScript;
     OSAID parentID = kOSANullScript;
     OSAError osaErr = noErr;
-	
+
     if (!(OSAComponent->componentFlags && kOSASupportsCompiling)) {
 	Tcl_AppendResult(interp,
 		"OSA component does not support compiling",
@@ -673,21 +673,21 @@ TclOSACompileCmd(
 	return TCL_ERROR;
     }
 
-    /* 
+    /*
      * This signals that we should make up a name, which is the
      * default behavior:
      */
-	 
+
     autoName[0] = '\0';
     resultName = NULL;
-	
+
     if (argc == 2) {
 	numArgs:
 	Tcl_AppendResult(interp,
 		"wrong # args: should be \"", argv[0], " ", argv[1],
 		" ?options? code\"",(char *) NULL);
 	return TCL_ERROR;
-    } 
+    }
 
     argv += 2;
     argc -= 2;
@@ -695,33 +695,33 @@ TclOSACompileCmd(
     /*
      * Do the argument parsing.
      */
-	
+
     while (argc > 0) {
-		
+
 	if (*argv[0] == '-') {
 	    c = *(argv[0] + 1);
-			
+
 	    /*
 	     * "--" is the only switch that has no value, stops processing
 	     */
-			
+
 	    if (c == '-' && *(argv[0] + 2) == '\0') {
 		argv += 1;
 		argc--;
 		break;
 	    }
-			
+
 	    /*
 	     * So we can check here a switch with no value.
 	     */
-			
+
 	    if (argc == 1)  {
 		Tcl_AppendResult(interp,
 			"no value given for switch: ",
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    if (c == 'c' && strcmp(argv[0] + 1, "context") == 0) {
 		if (Tcl_GetBoolean(interp, argv[1], &makeContext) != TCL_OK) {
 		    return TCL_ERROR;
@@ -741,7 +741,7 @@ TclOSACompileCmd(
 		resultName = autoName;
 	    } else if (c == 'p' && strcmp(argv[0] + 1,"parent") == 0) {
 		/*
-		 * Since this implies we are compiling into a context, 
+		 * Since this implies we are compiling into a context,
 		 * set makeContext here
 		 */
 		if (tclOSAGetContextID(OSAComponent,
@@ -759,7 +759,7 @@ TclOSACompileCmd(
 	    }
 	    argv += 2;
 	    argc -= 2;
-			
+
 	} else {
 	    break;
 	}
@@ -771,9 +771,9 @@ TclOSACompileCmd(
     if (argc == 0) {
 	goto numArgs;
     }
-	
-    /* 
-     * Now if we are making a context, see if it is a new one... 
+
+    /*
+     * Now if we are making a context, see if it is a new one...
      * There are three options here:
      * 1) There was no name provided, so we autoName it
      * 2) There was a name, then check and see if it already exists
@@ -792,10 +792,10 @@ TclOSACompileCmd(
 	    makeNewContext = true;
 	} else if (tclOSAGetContextID(OSAComponent,
 		resultName, &resultID) == TCL_OK) {
-	} else { 
+	} else {
 	    makeNewContext = true;
 	}
-		
+
 	/*
 	 * Deal with the augment now...
 	 */
@@ -805,22 +805,22 @@ TclOSACompileCmd(
     } else if (resultName == NULL) {
 	resultName = autoName; /* Auto name the script */
     }
-	
+
     /*
      * Ok, now we have the options, so we can compile the script data.
      */
-			
+
     if (prepareScriptData(argc, argv, &scrptData, &scrptDesc) == TCL_ERROR) {
 	Tcl_DStringResult(interp, &scrptData);
 	AEDisposeDesc(&scrptDesc);
 	return TCL_ERROR;
     }
 
-    /* 
-     * If we want to use a parent context, we have to make the context 
-     * by hand. Note, parentID is only specified when you make a new context. 
+    /*
+     * If we want to use a parent context, we have to make the context
+     * by hand. Note, parentID is only specified when you make a new context.
      */
-	
+
     if (parentID != kOSANullScript && makeNewContext) {
 	AEDesc contextDesc = { typeNull, NULL };
 
@@ -828,14 +828,14 @@ TclOSACompileCmd(
 		&contextDesc, parentID, &resultID);
 	modeFlags |= kOSAModeAugmentContext;
     }
-	
+
     osaErr = OSACompile(OSAComponent->theComponent, &scrptDesc,
-	    modeFlags, &resultID);								
+	    modeFlags, &resultID);
     if (osaErr == noErr) {
-	 
+
 	if (makeContext) {
-	    /* 
-	     * For the compiled context to be active, you need to run 
+	    /*
+	     * For the compiled context to be active, you need to run
 	     * the code that is in the context.
 	     */
 	    OSAID activateID;
@@ -847,13 +847,13 @@ TclOSACompileCmd(
 	    if (osaErr == noErr) {
 		if (makeNewContext) {
 		    /*
-		     * If we have compiled into a context, 
-		     * this is added to the context table 
+		     * If we have compiled into a context,
+		     * this is added to the context table
 		     */
-					 
+
 		    tclOSAAddContext(OSAComponent, resultName, resultID);
 		}
-				
+
 		Tcl_SetResult(interp, resultName, TCL_VOLATILE);
 		tclError = TCL_OK;
 	    }
@@ -863,15 +863,15 @@ TclOSACompileCmd(
 	     */
 	    tclOSAAddScript(OSAComponent, resultName, modeFlags, resultID);
 	    Tcl_SetResult(interp, resultName, TCL_VOLATILE);
-	    tclError = TCL_OK;	
+	    tclError = TCL_OK;
 	}
     }
-	
-    /* 
-     * This catches the error either from the original compile, 
+
+    /*
+     * This catches the error either from the original compile,
      * or from the execute in case makeContext == true
      */
-	 						
+
     if (osaErr == errOSAScriptError) {
 	OSADispose(OSAComponent->theComponent, resultID);
 	tclOSAASError(interp, OSAComponent->theComponent,
@@ -880,12 +880,12 @@ TclOSACompileCmd(
     } else if (osaErr != noErr)  {
 	sprintf(buffer, "Error #%-6ld compiling script", osaErr);
 	Tcl_AppendResult(interp, buffer, (char *) NULL);
-	tclError = TCL_ERROR;		
-    } 
+	tclError = TCL_ERROR;
+    }
 
     Tcl_DStringFree(&scrptData);
     AEDisposeDesc(&scrptDesc);
-	
+
     return tclError;
 }
 
@@ -905,12 +905,12 @@ TclOSACompileCmd(
  *
  *----------------------------------------------------------------------
  */
- 		
-static int 
+
+static int
 tclOSADecompileCmd(
     Tcl_Interp * interp,
     tclOSAComponent *OSAComponent,
-    int argc, 
+    int argc,
     CONST char **argv)
 {
     AEDesc resultingSourceData = { typeChar, NULL };
@@ -918,37 +918,37 @@ tclOSADecompileCmd(
     Boolean isContext;
     long result;
     OSErr sysErr = noErr;
- 		
+
     if (argc == 2) {
 	Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
 		argv[0], " ",argv[1], " scriptName \"", (char *) NULL );
 	return TCL_ERROR;
     }
- 	
+
     if (!(OSAComponent->componentFlags && kOSASupportsGetSource)) {
 	Tcl_AppendResult(interp,
 		"Error, this component does not support get source",
 		(char *) NULL);
 	return TCL_ERROR;
     }
- 	
+
     if (tclOSAGetScriptID(OSAComponent, argv[2], &scriptID) == TCL_OK) {
 	isContext = false;
     } else if (tclOSAGetContextID(OSAComponent, argv[2], &scriptID)
 	    == TCL_OK ) {
 	isContext = true;
-    } else { 
+    } else {
 	Tcl_AppendResult(interp, "Could not find script \"",
 		argv[2], "\"", (char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     OSAGetScriptInfo(OSAComponent->theComponent, scriptID,
 	    kOSACanGetSource, &result);
-						
-    sysErr = OSAGetSource(OSAComponent->theComponent, 
+
+    sysErr = OSAGetSource(OSAComponent->theComponent,
 	    scriptID, typeChar, &resultingSourceData);
-	
+
     if (sysErr == noErr) {
 	Tcl_DString theResult;
 	Tcl_DStringInit(&theResult);
@@ -963,8 +963,8 @@ tclOSADecompileCmd(
 	AEDisposeDesc(&resultingSourceData);
 	return TCL_ERROR;
     }
-}			
-	 	
+}
+
 /*
  *----------------------------------------------------------------------
  *
@@ -982,8 +982,8 @@ tclOSADecompileCmd(
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 tclOSADeleteCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -992,13 +992,13 @@ tclOSADeleteCmd(
 {
     char c,*errMsg = NULL;
     int length;
- 	
+
     if (argc < 4) {
 	Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
 		argv[0], " ", argv[1], " what scriptName", (char *) NULL);
 	return TCL_ERROR;
     }
- 	
+
     c = *argv[2];
     length = strlen(argv[2]);
     if (c == 'c' && strncmp(argv[2], "context", length) == 0) {
@@ -1030,7 +1030,7 @@ tclOSADeleteCmd(
 }
 
 /*
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  *
  * tclOSAExecuteCmd --
  *
@@ -1043,10 +1043,10 @@ tclOSADeleteCmd(
  *	Executes the given script data, and sets interp's result to
  *	the OSA component's return value.
  *
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 tclOSAExecuteCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -1071,7 +1071,7 @@ tclOSAExecuteCmd(
 		"Error, no script data for \"", argv[0],
 		" run\"", (char *) NULL);
 	return TCL_ERROR;
-    } 
+    }
 
     argv += 2;
     argc -= 2;
@@ -1081,33 +1081,33 @@ tclOSAExecuteCmd(
      * Then parse the argument list for switches
      */
     tclOSAGetContextID(OSAComponent, "global", &contextID);
-	
+
     while (argc > 0) {
-		
+
 	if (*argv[0] == '-') {
 	    c = *(argv[0] + 1);
 
 	    /*
 	     * "--" is the only switch that has no value.
 	     */
-			
+
 	    if (c == '-' && *(argv[0] + 2) == '\0') {
 		argv += 1;
 		argc--;
 		break;
 	    }
-			
+
 	    /*
 	     * So we can check here for a switch with no value.
 	     */
-			
+
 	    if (argc == 1)  {
 		Tcl_AppendResult(interp,
 			"Error, no value given for switch ",
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    if (c == 'c' && strcmp(argv[0] + 1, "context") == 0) {
 		if (tclOSAGetContextID(OSAComponent,
 			argv[1], &contextID) == TCL_OK) {
@@ -1116,24 +1116,24 @@ tclOSAExecuteCmd(
 			    argv[1], "\" not found", (char *) NULL);
 		    return TCL_ERROR;
 		}
-	    } else { 
+	    } else {
 		Tcl_AppendResult(interp, "Error, invalid switch ", argv[0],
 			" should be \"-context\"", (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    argv += 2;
 	    argc -= 2;
 	} else {
 	    break;
 	}
     }
-	
+
     if (argc == 0) {
 	Tcl_AppendResult(interp, "Error, no script data", (char *) NULL);
 	return TCL_ERROR;
     }
-		
+
     if (prepareScriptData(argc, argv, &scrptData, &scrptDesc) == TCL_ERROR) {
 	Tcl_DStringResult(interp, &scrptData);
 	AEDisposeDesc(&scrptDesc);
@@ -1164,7 +1164,7 @@ tclOSAExecuteCmd(
 	     * The scripting component had better be able to load text data...
 	     */
 	    OSAID loadedID = kOSANullScript;
-			
+
 	    scrptDesc.descriptorType = OSAComponent->languageID;
 	    osaErr = OSALoad(OSAComponent->theComponent, &scrptDesc,
 		    modeFlags, &loadedID);
@@ -1182,18 +1182,18 @@ tclOSAExecuteCmd(
     } else if (osaErr != noErr) {
 	sprintf(buffer, "Error #%-6ld compiling script", osaErr);
 	Tcl_AppendResult(interp, buffer, (char *) NULL);
-	tclError = TCL_ERROR;		
+	tclError = TCL_ERROR;
     } else  {
 	tclOSAResultFromID(interp, OSAComponent->theComponent, resultID);
 	osaErr = OSADispose(OSAComponent->theComponent, resultID);
 	tclError = TCL_OK;
-    } 
+    }
 
     Tcl_DStringFree(&scrptData);
-    AEDisposeDesc(&scrptDesc);	
+    AEDisposeDesc(&scrptDesc);
 
-    return tclError;	
-} 
+    return tclError;
+}
 
 /*
  *----------------------------------------------------------------------
@@ -1210,23 +1210,23 @@ tclOSAExecuteCmd(
  *
  *----------------------------------------------------------------------
  */
-static int 
+static int
 tclOSAInfoCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
-    int argc, 
+    int argc,
     CONST char **argv)
 {
     char c;
     int length;
     Tcl_DString theResult;
-	
+
     if (argc == 2) {
 	Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
 		argv[0], " ", argv[1], " what \"", (char *) NULL );
 	return TCL_ERROR;
     }
- 	
+
     c = *argv[2];
     length = strlen(argv[2]);
     if (c == 's' && strncmp(argv[2], "scripts", length) == 0) {
@@ -1243,9 +1243,9 @@ tclOSAInfoCmd(
 	    return TCL_ERROR;
 	}
 	Tcl_DStringResult(interp, &theResult);
-	return TCL_OK;			
+	return TCL_OK;
     } else if (c == 'c' && strncmp(argv[2], "contexts", length) == 0) {
-	Tcl_DStringInit(&theResult);		
+	Tcl_DStringInit(&theResult);
 	if (argc == 3) {
 	    getSortedHashKeys(&OSAComponent->contextTable, (char *) NULL,
 		   &theResult);
@@ -1259,7 +1259,7 @@ tclOSAInfoCmd(
 	    return TCL_ERROR;
 	}
 	Tcl_DStringResult(interp, &theResult);
-	return TCL_OK;			
+	return TCL_OK;
     } else if (c == 'l' && strncmp(argv[2], "language", length) == 0) {
 	Tcl_SetResult(interp, OSAComponent->languageName, TCL_STATIC);
 	return TCL_OK;
@@ -1269,9 +1269,9 @@ tclOSAInfoCmd(
 		"\"scripts\" \"language\", or \"contexts\"",
 		(char *) NULL);
 	return TCL_ERROR;
-    } 
+    }
 }
-		
+
 /*
  *----------------------------------------------------------------------
  *
@@ -1289,8 +1289,8 @@ tclOSAInfoCmd(
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 tclOSALoadCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -1310,17 +1310,17 @@ tclOSALoadCmd(
     OSAError osaErr = noErr;
     OSErr  sysErr = noErr;
     long scptInfo;
-	
+
     autoName[0] = '\0';
     scriptName = autoName;
     contextName = autoName;
-	
+
     if (argc == 2) {
 	Tcl_AppendResult(interp,
 		"Error, no data for \"", argv[0], " ", argv[1],
 		"\"", (char *) NULL);
 	return TCL_ERROR;
-    } 
+    }
 
     argv += 2;
     argc -= 2;
@@ -1328,32 +1328,32 @@ tclOSALoadCmd(
     /*
      * Do the argument parsing.
      */
-	
+
     while (argc > 0) {
-		
+
 	if (*argv[0] == '-') {
 	    c = *(argv[0] + 1);
-			
+
 	    /*
 	     * "--" is the only switch that has no value.
 	     */
-			
+
 	    if (c == '-' && *(argv[0] + 2) == '\0') {
 		argv += 1;
 		argc--;
 		break;
 	    }
-			
+
 	    /*
 	     * So we can check here a switch with no value.
 	     */
-			
+
 	    if (argc == 1)  {
 		Tcl_AppendResult(interp, "Error, no value given for switch ",
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    if (c == 'r' && strcmp(argv[0] + 1, "rsrcname") == 0) {
 		resName = argv[1];
 	    } else if (c == 'r' && strcmp(argv[0] + 1, "rsrcid") == 0) {
@@ -1368,7 +1368,7 @@ tclOSALoadCmd(
 			(char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    argv += 2;
 	    argc -= 2;
 	} else {
@@ -1382,24 +1382,24 @@ tclOSALoadCmd(
 	Tcl_AppendResult(interp, "Error, no filename given", (char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     if (tclOSALoad(interp, OSAComponent, resName, resID,
 	    argv[0], &resultID) != TCL_OK) {
 	Tcl_AppendResult(interp, "Error in load command", (char *) NULL);
 	return TCL_ERROR;
     }
-	 
+
     /*
      *  Now find out whether we have a script, or a script context.
      */
-	 
+
     OSAGetScriptInfo(OSAComponent->theComponent, resultID,
 	    kOSAScriptIsTypeScriptContext, &scptInfo);
-    
+
     if (scptInfo) {
 	autoName[0] = '\0';
 	tclOSAAddContext(OSAComponent, autoName, resultID);
-		
+
 	Tcl_SetResult(interp, autoName, TCL_VOLATILE);
     } else {
 	/*
@@ -1408,7 +1408,7 @@ tclOSALoadCmd(
 	autoName[0] = '\0';
 	tclOSAAddScript(OSAComponent, autoName, kOSAModeCanInteract, resultID);
 	Tcl_SetResult(interp, autoName, TCL_VOLATILE);
-    }		 	
+    }
     return TCL_OK;
 }
 
@@ -1428,8 +1428,8 @@ tclOSALoadCmd(
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 tclOSARunCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -1439,7 +1439,7 @@ tclOSARunCmd(
     int tclError = TCL_OK,
 	resID = 128;
     char c, *contextName = NULL,
-	*scriptName = NULL, 
+	*scriptName = NULL,
 	*resName = NULL;
     AEDesc scrptDesc = { typeNull, NULL };
     long modeFlags = kOSAModeCanInteract;
@@ -1450,13 +1450,13 @@ tclOSARunCmd(
     OSErr sysErr = noErr;
     CONST char *componentName = argv[0];
     OSAID scriptID;
-	
+
     if (argc == 2) {
 	Tcl_AppendResult(interp, "Wrong # of arguments, should be \"",
 		argv[0], " ", argv[1], " scriptName", (char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     /*
      * Set the context to the global context for this component,
      * as a default
@@ -1473,7 +1473,7 @@ tclOSARunCmd(
      */
     argv += 2;
     argc -= 2;
-	
+
     while (argc > 0) {
 	if (*argv[0] == '-') {
 	    c = *(argv[0] + 1);
@@ -1485,7 +1485,7 @@ tclOSARunCmd(
 		argc--;
 		break;
 	    }
-			
+
 	    /*
 	     * So we can check here for a switch with no value.
 	     */
@@ -1494,7 +1494,7 @@ tclOSARunCmd(
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    if (c == 'c' && strcmp(argv[0] + 1, "context") == 0) {
 		if (argc == 1) {
 		    Tcl_AppendResult(interp,
@@ -1507,7 +1507,7 @@ tclOSARunCmd(
 		    Tcl_AppendResult(interp, "Script context \"", argv[1],
 			    "\" not found", (char *) NULL);
 		    return TCL_ERROR;
-		} 
+		}
 	    } else {
 		Tcl_AppendResult(interp, "Error, invalid switch ", argv[0],
 			" for ", componentName,
@@ -1520,7 +1520,7 @@ tclOSARunCmd(
 	    break;
 	}
     }
-	
+
     if (tclOSAGetScriptID(OSAComponent, argv[0], &scriptID) != TCL_OK) {
 	if (tclOSAGetContextID(OSAComponent, argv[0], &scriptID) != TCL_OK) {
 	    Tcl_AppendResult(interp, "Could not find script \"",
@@ -1528,10 +1528,10 @@ tclOSARunCmd(
 	    return TCL_ERROR;
 	}
     }
-	
+
     sysErr = OSAExecute(OSAComponent->theComponent,
 	    scriptID, contextID, modeFlags, &resultID);
-							
+
     if (sysErr == errOSAScriptError) {
 	tclOSAASError(interp, OSAComponent->theComponent, (char *) NULL);
 	tclError = TCL_ERROR;
@@ -1545,7 +1545,7 @@ tclOSARunCmd(
     }
     OSADispose(OSAComponent->theComponent, resultID);
 
-    return tclError;		
+    return tclError;
 }
 
 /*
@@ -1564,8 +1564,8 @@ tclOSARunCmd(
  *
  *----------------------------------------------------------------------
  */
- 
-static int 
+
+static int
 tclOSAStoreCmd(
     Tcl_Interp *interp,
     tclOSAComponent *OSAComponent,
@@ -1583,12 +1583,12 @@ tclOSAStoreCmd(
 	parentID = kOSANullScript;
     OSAError osaErr = noErr;
     OSErr  sysErr = noErr;
-		
+
     if (argc == 2) {
 	Tcl_AppendResult(interp, "Error, no data for \"", argv[0],
 		" ",argv[1], "\"", (char *) NULL);
 	return TCL_ERROR;
-    } 
+    }
 
     argv += 2;
     argc -= 2;
@@ -1596,11 +1596,11 @@ tclOSAStoreCmd(
     /*
      * Do the argument parsing
      */
-	
+
     while (argc > 0) {
 	if (*argv[0] == '-') {
 	    c = *(argv[0] + 1);
-			
+
 	    /*
 	     * "--" is the only switch that has no value
 	     */
@@ -1609,7 +1609,7 @@ tclOSAStoreCmd(
 		argc--;
 		break;
 	    }
-			
+
 	    /*
 	     * So we can check here a switch with no value.
 	     */
@@ -1619,7 +1619,7 @@ tclOSAStoreCmd(
 			argv[0], (char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    if (c == 'r' && strcmp(argv[0] + 1, "rsrcname") == 0) {
 		resName = argv[1];
 	    } else if (c == 'r' && strcmp(argv[0] + 1, "rsrcid") == 0) {
@@ -1634,7 +1634,7 @@ tclOSAStoreCmd(
 			(char *) NULL);
 		return TCL_ERROR;
 	    }
-			
+
 	    argv += 2;
 	    argc -= 2;
 	} else {
@@ -1650,7 +1650,7 @@ tclOSAStoreCmd(
 		(char *) NULL);
 	return TCL_ERROR;
     }
-	
+
     if (tclOSAStore(interp, OSAComponent, resName, resID,
 	    argv[0], argv[1]) != TCL_OK) {
 	Tcl_AppendResult(interp, "Error in load command", (char *) NULL);
@@ -1659,7 +1659,7 @@ tclOSAStoreCmd(
 	Tcl_ResetResult(interp);
 	tclError = TCL_OK;
     }
-    
+
     return tclError;
 }
 
@@ -1671,24 +1671,24 @@ tclOSAStoreCmd(
  *	Makes a command cmdName to represent a new connection to the
  *	OSA component with componentSubType scriptSubtype.
  *
- * Results: 
+ * Results:
  *	Returns the tclOSAComponent structure for the connection.
  *
- * Side Effects: 
+ * Side Effects:
  *	Adds a new element to the component table.  If there is an
  *	error, then the result of the Tcl interpreter interp is set
  *	to an appropriate error message.
  *
  *----------------------------------------------------------------------
  */
- 
+
 tclOSAComponent *
 tclOSAMakeNewComponent(
     Tcl_Interp *interp,
     char *cmdName,
-    char *languageName, 
+    char *languageName,
     OSType scriptSubtype,
-    long componentFlags) 
+    long componentFlags)
 {
     char buffer[32];
     AEDesc resultingName = {typeNull, NULL};
@@ -1706,74 +1706,74 @@ tclOSAMakeNewComponent(
     Tcl_HashTable *ComponentTable;
     Component foundComponent = NULL;
     OSAActiveUPP myActiveProcUPP;
-			
+
     tclOSAComponent *newComponent;
     Tcl_HashEntry *hashEntry;
     int newPtr;
-	
+
     requestedComponent.componentSubType = scriptSubtype;
     nbytes = sizeof(tclOSAComponent);
     newComponent = (tclOSAComponent *) ckalloc(sizeof(tclOSAComponent));
     if (newComponent == NULL) {
 	goto CleanUp;
     }
-	
+
     foundComponent = FindNextComponent(0, &requestedComponent);
     if (foundComponent == 0) {
 	Tcl_AppendResult(interp,
 		"Could not find component of requested type", (char *) NULL);
 	goto CleanUp;
-    } 
-	
-    newComponent->theComponent = OpenComponent(foundComponent); 
-	
+    }
+
+    newComponent->theComponent = OpenComponent(foundComponent);
+
     if (newComponent->theComponent == NULL) {
 	Tcl_AppendResult(interp,
 		"Could not open component of the requested type",
 		(char *) NULL);
 	goto CleanUp;
     }
-							
+
     newComponent->languageName = (char *) ckalloc(strlen(languageName) + 1);
     strcpy(newComponent->languageName,languageName);
-	
+
     newComponent->componentFlags = componentFlags;
-	
+
     newComponent->theInterp = interp;
-	
+
     Tcl_InitHashTable(&newComponent->contextTable, TCL_STRING_KEYS);
     Tcl_InitHashTable(&newComponent->scriptTable, TCL_STRING_KEYS);
-		
+
     if (tclOSAMakeContext(newComponent, global, &globalContext) != TCL_OK) {
 	sprintf(buffer, "%-6.6ld", globalContext);
 	Tcl_AppendResult(interp, "Error ", buffer, " making ", global,
 		" context.", (char *) NULL);
 	goto CleanUp;
     }
-    
+
     newComponent->languageID = scriptSubtype;
-	
+
     newComponent->theName = (char *) ckalloc(strlen(cmdName) + 1 );
     strcpy(newComponent->theName, cmdName);
 
     Tcl_CreateCommand(interp, newComponent->theName, Tcl_OSAComponentCmd,
 	    (ClientData) newComponent, tclOSAClose);
-					
+
     /*
      * Register the new component with the component table
-     */ 
+     */
 
     ComponentTable = (Tcl_HashTable *) Tcl_GetAssocData(interp,
 	    "OSAScript_CompTable", (Tcl_InterpDeleteProc **) NULL);
-	
+
     if (ComponentTable == NULL) {
 	Tcl_AppendResult(interp, "Error, could not get the Component Table",
 		" from the Associated data.", (char *) NULL);
 	return (tclOSAComponent *) NULL;
     }
-	
+
     hashEntry = Tcl_CreateHashEntry(ComponentTable,
-	    newComponent->theName, &newPtr);	
+	    newComponent->theName, &newPtr);
     Tcl_SetHashValue(hashEntry, (ClientData) newComponent);
 
     /*
@@ -1788,9 +1788,9 @@ tclOSAMakeNewComponent(
     OSASetActiveProc(newComponent->theComponent,
 	    myActiveProcUPP, (long) newComponent);
     return newComponent;
-	
+
     CleanUp:
-	
+
     ckfree((char *) newComponent);
     return (tclOSAComponent *) NULL;
 }
@@ -1800,7 +1800,7 @@ tclOSAMakeNewComponent(
  *
  * tclOSAClose --
  *
- *	This procedure closes the connection to an OSA component, and 
+ *	This procedure closes the connection to an OSA component, and
  *	deletes all the script and context data associated with it.
  *	It is the command deletion callback for the component's command.
  *
@@ -1813,61 +1813,61 @@ tclOSAMakeNewComponent(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 tclOSAClose(
-    ClientData clientData) 
+    ClientData clientData)
 {
     tclOSAComponent *theComponent = (tclOSAComponent *) clientData;
     Tcl_HashEntry *hashEntry;
     Tcl_HashSearch search;
     tclOSAScript *theScript;
     Tcl_HashTable *ComponentTable;
-	
-    /* 
-     * Delete the context and script tables 
+
+    /*
+     * Delete the context and script tables
      * the memory for the language name, and
      * the hash entry.
      */
-	
+
     for (hashEntry = Tcl_FirstHashEntry(&theComponent->scriptTable, &search);
 	 hashEntry != NULL;
 	 hashEntry = Tcl_NextHashEntry(&search)) {
 
 	theScript = (tclOSAScript *) Tcl_GetHashValue(hashEntry);
-	OSADispose(theComponent->theComponent, theScript->scriptID);	
+	OSADispose(theComponent->theComponent, theScript->scriptID);
 	ckfree((char *) theScript);
 	Tcl_DeleteHashEntry(hashEntry);
     }
-	
+
     for (hashEntry = Tcl_FirstHashEntry(&theComponent->contextTable, &search);
 	 hashEntry != NULL;
 	 hashEntry = Tcl_NextHashEntry(&search)) {
 
 	Tcl_DeleteHashEntry(hashEntry);
     }
-	
+
     ckfree(theComponent->languageName);
     ckfree(theComponent->theName);
-	
+
     /*
      * Finally close the component
      */
-	
+
     CloseComponent(theComponent->theComponent);
-	
+
     ComponentTable = (Tcl_HashTable *)
 	Tcl_GetAssocData(theComponent->theInterp,
 		"OSAScript_CompTable", (Tcl_InterpDeleteProc **) NULL);
-	
+
     if (ComponentTable == NULL) {
 	panic("Error, could not get the Component Table from the Associated data.");
     }
-	
+
     hashEntry = Tcl_FindHashEntry(ComponentTable, theComponent->theName);
     if (hashEntry != NULL) {
 	Tcl_DeleteHashEntry(hashEntry);
     }
-    
+
     ckfree((char *) theComponent);
 }
 
@@ -1887,17 +1887,17 @@ tclOSAClose(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 tclOSAGetContextID(
-    tclOSAComponent *theComponent, 
-    CONST char *contextName, 
+    tclOSAComponent *theComponent,
+    CONST char *contextName,
     OSAID *theContext)
 {
     Tcl_HashEntry *hashEntry;
     tclOSAContext *contextStruct;
-	
+
     if ((hashEntry = Tcl_FindHashEntry(&theComponent->contextTable,
-	    contextName)) == NULL ) {			
+	    contextName)) == NULL ) {
 	return TCL_ERROR;
     } else {
 	contextStruct = (tclOSAContext *) Tcl_GetHashValue(hashEntry);
@@ -1926,9 +1926,9 @@ tclOSAGetContextID(
  *----------------------------------------------------------------------
  */
 
-static void 
+static void
 tclOSAAddContext(
-    tclOSAComponent *theComponent, 
+    tclOSAComponent *theComponent,
     char *contextName,
     const OSAID theContext)
 {
@@ -1943,9 +1943,9 @@ tclOSAAddContext(
     } else if (*contextName == '\0') {
 	sprintf(contextName, "OSAContext%d", contextIndex++);
     }
-	
+
     hashEntry = Tcl_CreateHashEntry(&theComponent->contextTable,
-	    contextName, &newPtr);	
+	    contextName, &newPtr);
 
     contextStruct = (tclOSAContext *) ckalloc(sizeof(tclOSAContext));
     contextStruct->contextID = theContext;
@@ -1957,7 +1957,7 @@ tclOSAAddContext(
  *
  * tclOSADeleteContext  --
  *
- *	This deletes the context struct, with the name contextName.  
+ *	This deletes the context struct, with the name contextName.
  *
  * Results:
  *	A normal Tcl result
@@ -1969,18 +1969,18 @@ tclOSAAddContext(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 tclOSADeleteContext(
     tclOSAComponent *theComponent,
-    CONST char *contextName) 
+    CONST char *contextName)
 {
     Tcl_HashEntry *hashEntry;
     tclOSAContext *contextStruct;
-	
+
     hashEntry = Tcl_FindHashEntry(&theComponent->contextTable, contextName);
     if (hashEntry == NULL) {
 	return TCL_ERROR;
-    }	
+    }
     /*
      * Dispose of the script context data
      */
@@ -2005,15 +2005,15 @@ tclOSADeleteContext(
  *	A standard Tcl result
  *
  * Side effects:
- *	Makes a new context, adds it to the context table, and returns 
+ *	Makes a new context, adds it to the context table, and returns
  *	the new contextID in the variable theContext.
  *
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 tclOSAMakeContext(
-    tclOSAComponent *theComponent, 
+    tclOSAComponent *theComponent,
     CONST char *contextName,
     OSAID *theContext)
 {
@@ -2023,9 +2023,9 @@ tclOSAMakeContext(
     AECreateDesc(typeChar, contextName, strlen(contextName), &contextNameDesc);
     osaErr = OSAMakeContext(theComponent->theComponent, &contextNameDesc,
 	    kOSANullScript, theContext);
-								
+
     AEDisposeDesc(&contextNameDesc);
-	
+
     if (osaErr == noErr) {
 	char name[24];
 	strncpy(name, contextName, 23);
@@ -2035,7 +2035,7 @@ tclOSAMakeContext(
 	*theContext = (OSAID) osaErr;
 	return TCL_ERROR;
     }
-	
+
     return TCL_OK;
 }
 
@@ -2058,13 +2058,13 @@ tclOSAMakeContext(
  *
  *----------------------------------------------------------------------
  */
- 
+
 int
 tclOSAStore(
     Tcl_Interp *interp,
     tclOSAComponent *theComponent,
     CONST char *resourceName,
-    int resourceNumber, 
+    int resourceNumber,
     CONST char *scriptName,
     CONST char *fileName)
 {
@@ -2084,7 +2084,7 @@ tclOSAStore(
     /*
      * First extract the script data
      */
-	
+
     if (tclOSAGetScriptID(theComponent, scriptName, &scriptID) != TCL_OK ) {
 	if (tclOSAGetContextID(theComponent, scriptName, &scriptID)
 		!= TCL_OK) {
@@ -2093,7 +2093,7 @@ tclOSAStore(
 	    return TCL_ERROR;
 	}
     }
-	
+
     myErr = OSAStore(theComponent->theComponent, scriptID,
 	    typeOSAGenericStorage, kOSAModeNull, &scriptData);
     if (myErr != noErr) {
@@ -2106,32 +2106,32 @@ tclOSAStore(
     /*
      * Now try to open the output file
      */
-	
+
     saveRef = CurResFile();
-	
+
     if (fileName != NULL) {
 	OSErr err;
-		
+
 	if (Tcl_TranslateFileName(interp, fileName, &buffer) == NULL) {
 	    return TCL_ERROR;
 	}
-	nativeName = Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&buffer), 
+	nativeName = Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&buffer),
     	    Tcl_DStringLength(&buffer), &ds);
 	err = FSpLocationFromPath(strlen(nativeName), nativeName, &fileSpec);
-		
+
 	Tcl_DStringFree(&ds);
 	Tcl_DStringFree(&buffer);
 	if ((err != noErr) && (err != fnfErr)) {
 	    Tcl_AppendResult(interp,
-		    "Error getting a location for the file: \"", 
+		    "Error getting a location for the file: \"",
 		    fileName, "\".", NULL);
 	    return TCL_ERROR;
 	}
-		
+
 	FSpCreateResFileCompatTcl(&fileSpec,
-		'WiSH', 'osas', smSystemScript);	
+		'WiSH', 'osas', smSystemScript);
 	myErr = ResError();
-	
+
 	if ((myErr != noErr) && (myErr != dupFNErr)) {
 	    sprintf(idStr, "%d", myErr);
 	    Tcl_AppendResult(interp, "Error #", idStr,
@@ -2139,10 +2139,10 @@ tclOSAStore(
 	    result = TCL_ERROR;
 	    goto rezEvalCleanUp;
 	}
-		
+
 	fileRef = FSpOpenResFileCompatTcl(&fileSpec, fsRdWrPerm);
 	if (fileRef == -1) {
-	    Tcl_AppendResult(interp, "Error reading the file: \"", 
+	    Tcl_AppendResult(interp, "Error reading the file: \"",
 		    fileName, "\".", NULL);
 	    result = TCL_ERROR;
 	    goto rezEvalCleanUp;
@@ -2154,13 +2154,13 @@ tclOSAStore(
 	 * This may not be the behavior you desire.  If you want the behavior
 	 * of this call to *only* search the application resource fork, you
 	 * must call UseResFile at this point to set it to the application
-	 * file.  This means you must have already obtained the application's 
+	 * file.  This means you must have already obtained the application's
 	 * fileRef when the application started up.
 	 */
     }
-	
+
     /*
-     * Load the resource by name 
+     * Load the resource by name
      */
     if (resourceName != NULL) {
 	strcpy((char *) rezName + 1, resourceName);
@@ -2194,7 +2194,7 @@ tclOSAStore(
 	}
 	/*
 	 * Or ID
-	 */ 
+	 */
     } else {
 	resHandle = Get1Resource('scpt', resourceNumber);
 	rezName[0] = 0;
@@ -2222,14 +2222,14 @@ tclOSAStore(
 		result = TCL_ERROR;
 		goto rezEvalCleanUp;
 	    }
-	} 
+	}
     }
-	
-    /* 
-     * We get to here if the resource exists 
-     * we just copy into it... 
+
+    /*
+     * We get to here if the resource exists
+     * we just copy into it...
      */
-	 
+
     scriptSize = GetHandleSize(scriptData.dataHandle);
     SetHandleSize(resHandle, scriptSize);
     HLock(scriptData.dataHandle);
@@ -2241,7 +2241,7 @@ tclOSAStore(
     WriteResource(resHandle);
     result = TCL_OK;
     goto rezEvalCleanUp;
-			
+
     rezEvalError:
     sprintf(idStr, "ID=%d", resourceNumber);
     Tcl_AppendResult(interp, "The resource \"",
@@ -2256,7 +2256,7 @@ tclOSAStore(
     }
 
     UseResFile(saveRef);
-	
+
     return result;
 }
 
@@ -2278,13 +2278,13 @@ tclOSAStore(
  *
  *----------------------------------------------------------------------
  */
- 
+
 int
 tclOSALoad(
     Tcl_Interp *interp,
     tclOSAComponent *theComponent,
     CONST char *resourceName,
-    int resourceNumber, 
+    int resourceNumber,
     CONST char *fileName,
     OSAID *resultID)
 {
@@ -2298,27 +2298,27 @@ tclOSALoad(
     CONST char *nativeName;
 
     saveRef = CurResFile();
-	
+
     if (fileName != NULL) {
 	OSErr err;
-		
+
 	if (Tcl_TranslateFileName(interp, fileName, &buffer) == NULL) {
 	    return TCL_ERROR;
 	}
-	nativeName = Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&buffer), 
+	nativeName = Tcl_UtfToExternalDString(NULL, Tcl_DStringValue(&buffer),
     	    Tcl_DStringLength(&buffer), &ds);
 	err = FSpLocationFromPath(strlen(nativeName), nativeName, &fileSpec);
 	Tcl_DStringFree(&ds);
 	Tcl_DStringFree(&buffer);
 	if (err != noErr) {
-	    Tcl_AppendResult(interp, "Error finding the file: \"", 
+	    Tcl_AppendResult(interp, "Error finding the file: \"",
 		    fileName, "\".", NULL);
 	    return TCL_ERROR;
 	}
-			
+
 	fileRef = FSpOpenResFileCompatTcl(&fileSpec, fsRdPerm);
 	if (fileRef == -1) {
-	    Tcl_AppendResult(interp, "Error reading the file: \"", 
+	    Tcl_AppendResult(interp, "Error reading the file: \"",
 		    fileName, "\".", NULL);
 	    return TCL_ERROR;
 	}
@@ -2329,11 +2329,11 @@ tclOSALoad(
 	 * This may not be the behavior you desire.  If you want the behavior
 	 * of this call to *only* search the application resource fork, you
 	 * must call UseResFile at this point to set it to the application
-	 * file.  This means you must have already obtained the application's 
+	 * file.  This means you must have already obtained the application's
 	 * fileRef when the application started up.
 	 */
     }
-	
+
     /*
      * Load the resource by name or ID
      */
@@ -2344,29 +2344,29 @@ tclOSALoad(
     } else {
 	sourceData = GetResource('scpt', (short) resourceNumber);
     }
-	
+
     if (sourceData == NULL) {
 	result = TCL_ERROR;
     } else {
 	AEDesc scriptDesc;
 	OSAError osaErr;
-		
+
 	scriptDesc.descriptorType = typeOSAGenericStorage;
 	scriptDesc.dataHandle = sourceData;
-		
+
 	osaErr = OSALoad(theComponent->theComponent, &scriptDesc,
 		kOSAModeNull, resultID);
-		
+
 	ReleaseResource(sourceData);
-		
+
 	if (osaErr != noErr) {
 	    result = TCL_ERROR;
 	    goto rezEvalError;
 	}
-			
+
 	goto rezEvalCleanUp;
     }
-	
+
     rezEvalError:
     sprintf(idStr, "ID=%d", resourceNumber);
     Tcl_AppendResult(interp, "The resource \"",
@@ -2381,7 +2381,7 @@ tclOSALoad(
     }
 
     UseResFile(saveRef);
-	
+
     return result;
 }
 
@@ -2401,19 +2401,19 @@ tclOSALoad(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 tclOSAGetScriptID(
     tclOSAComponent *theComponent,
     CONST char *scriptName,
-    OSAID *scriptID) 
+    OSAID *scriptID)
 {
     tclOSAScript *theScript;
-	
+
     theScript = tclOSAGetScript(theComponent, scriptName);
     if (theScript == NULL) {
 	return TCL_ERROR;
     }
-	
+
     *scriptID = theScript->scriptID;
     return TCL_OK;
 }
@@ -2435,38 +2435,38 @@ tclOSAGetScriptID(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 tclOSAAddScript(
     tclOSAComponent *theComponent,
     char *scriptName,
     long modeFlags,
-    OSAID scriptID) 
+    OSAID scriptID)
 {
     Tcl_HashEntry *hashEntry;
     int newPtr;
     static int scriptIndex = 0;
     tclOSAScript *theScript;
-	
+
     if (*scriptName == '\0') {
 	sprintf(scriptName, "OSAScript%d", scriptIndex++);
     }
-	
+
     hashEntry = Tcl_CreateHashEntry(&theComponent->scriptTable,
 	    scriptName, &newPtr);
     if (newPtr == 0) {
 	theScript = (tclOSAScript *) Tcl_GetHashValue(hashEntry);
 	OSADispose(theComponent->theComponent, theScript->scriptID);
-    } else {		
+    } else {
 	theScript = (tclOSAScript *) ckalloc(sizeof(tclOSAScript));
 	if (theScript == NULL) {
 	    return TCL_ERROR;
 	}
     }
-		
+
     theScript->scriptID = scriptID;
     theScript->languageID = theComponent->languageID;
     theScript->modeFlags = modeFlags;
-	
+
     Tcl_SetHashValue(hashEntry,(ClientData) theScript);
 
     return TCL_OK;
@@ -2487,19 +2487,19 @@ tclOSAAddScript(
  *
  *----------------------------------------------------------------------
  */
- 
+
 static tclOSAScript *
 tclOSAGetScript(
     tclOSAComponent *theComponent,
     CONST char *scriptName)
 {
     Tcl_HashEntry *hashEntry;
-	
+
     hashEntry = Tcl_FindHashEntry(&theComponent->scriptTable, scriptName);
     if (hashEntry == NULL) {
 	return NULL;
     }
-	
+
     return (tclOSAScript *) Tcl_GetHashValue(hashEntry);
 }
 
@@ -2526,7 +2526,7 @@ static int
 tclOSADeleteScript(
     tclOSAComponent *theComponent,
     CONST char *scriptName,
-    char *errMsg) 
+    char *errMsg)
 {
     Tcl_HashEntry *hashEntry;
     tclOSAScript *scriptPtr;
@@ -2537,7 +2537,7 @@ tclOSADeleteScript(
 	strcpy(errMsg,"Script not found");
 	return TCL_ERROR;
     }
-	
+
     scriptPtr = (tclOSAScript *) Tcl_GetHashValue(hashEntry);
     OSADispose(theComponent->theComponent, scriptPtr->scriptID);
     ckfree((char *) scriptPtr);
@@ -2555,7 +2555,7 @@ tclOSADeleteScript(
  *	calls Tcl_DoOneEvent to process the event queue.  We also call
  *	the default Active proc which will let the user cancel the script
  *	by hitting Command-.
- * 
+ *
  * Results:
  *	A standard MacOS system error
  *
@@ -2564,16 +2564,16 @@ tclOSADeleteScript(
  *
  *----------------------------------------------------------------------
  */
- 
-static pascal OSErr 
+
+static pascal OSErr
 TclOSAActiveProc(
     long refCon)
 {
     tclOSAComponent *theComponent = (tclOSAComponent *) refCon;
-	
+
     Tcl_DoOneEvent(TCL_DONT_WAIT);
     InvokeOSAActiveUPP(theComponent->defRefCon, theComponent->defActiveProc);
-	
+
     return noErr;
 }
 
@@ -2582,7 +2582,7 @@ TclOSAActiveProc(
  *
  * ASCIICompareProc --
  *
- *	Trivial ascii compare for use with qsort.	
+ *	Trivial ascii compare for use with qsort.
  *
  * Results:
  *	strcmp of the two input strings
@@ -2592,16 +2592,16 @@ TclOSAActiveProc(
  *
  *----------------------------------------------------------------------
  */
-static int 
+static int
 ASCIICompareProc(const void *first,const void *second)
 {
     int order;
-    
+
     char *firstString = *((char **) first);
     char *secondString = *((char **) second);
 
     order = strcmp(firstString, secondString);
-	
+
     return order;
 }
 
@@ -2624,8 +2624,8 @@ ASCIICompareProc(const void *first,const void *second)
  *
  *----------------------------------------------------------------------
  */
- 
-static void 
+
+static void
 getSortedHashKeys(
     Tcl_HashTable *theTable,
     CONST char *pattern,
@@ -2638,27 +2638,27 @@ getSortedHashKeys(
     static char **resultArgv = NULL;
     static int totSize = 0;
     int totElem = 0, i;
-	
-    if (pattern == NULL || *pattern == '\0' || 
+
+    if (pattern == NULL || *pattern == '\0' ||
 	    (*pattern == '*' && *(pattern + 1) == '\0')) {
 	compare = false;
     }
-	
+
     for (hPtr = Tcl_FirstHashEntry(theTable,&search), totElem = 0;
 	 hPtr != NULL; hPtr = Tcl_NextHashEntry(&search)) {
-			
+
 	keyPtr = (char *) Tcl_GetHashKey(theTable, hPtr);
 	if (!compare || Tcl_StringMatch(keyPtr, pattern)) {
-	    totElem++;		
+	    totElem++;
 	    if (totElem >= totSize) {
 		totSize += REALLOC_INCR;
 		resultArgv = (char **) ckrealloc((char *) resultArgv,
 			totSize * sizeof(char *));
 	    }
 	    resultArgv[totElem - 1] = keyPtr;
-	} 
+	}
     }
-		
+
     Tcl_DStringInit(theResult);
     if (totElem == 1) {
 	Tcl_DStringAppendElement(theResult, resultArgv[0]);
@@ -2669,7 +2669,7 @@ getSortedHashKeys(
 	for (i = 0; i < totElem; i++) {
 	    Tcl_DStringAppendElement(theResult, resultArgv[i]);
 	}
-    }	
+    }
 }
 
 /*
@@ -2677,7 +2677,7 @@ getSortedHashKeys(
  *
  * prepareScriptData --
  *
- *	Massages the input data in the argv array, concating the 
+ *	Massages the input data in the argv array, concating the
  *	elements, with a " " between each, and replacing \n with \r,
  *	and \\n with "  ".  Puts the result in the the DString scrptData,
  *	and copies the result to the AEdesc scrptDesc.
@@ -2692,13 +2692,13 @@ getSortedHashKeys(
  *
  *----------------------------------------------------------------------
  */
- 
+
 static int
 prepareScriptData(
     int argc,
     CONST char **argv,
     Tcl_DString *scrptData,
-    AEDesc *scrptDesc) 
+    AEDesc *scrptDesc)
 {
     char * ptr;
     int i;
@@ -2741,7 +2741,7 @@ prepareScriptData(
 	Tcl_DStringAppend(scrptData, "Error #", 7);
 	Tcl_DStringAppend(scrptData, buffer, -1);
 	Tcl_DStringAppend(scrptData, " creating Script Data Descriptor.", 33);
-	return TCL_ERROR;					
+	return TCL_ERROR;
     }
 
     return TCL_OK;
@@ -2760,12 +2760,12 @@ prepareScriptData(
  *
  * Side effects:
  *	Sets the result of interp to the human readable version of resultID.
- *  
+ *
  *
  *----------------------------------------------------------------------
  */
- 
-void 
+
+void
 tclOSAResultFromID(
     Tcl_Interp *interp,
     ComponentInstance theComponent,
@@ -2774,9 +2774,9 @@ tclOSAResultFromID(
     OSErr myErr = noErr;
     AEDesc resultDesc;
     Tcl_DString resultStr;
-	
+
     Tcl_DStringInit(&resultStr);
-	
+
     myErr = OSADisplay(theComponent, resultID, typeChar,
 	    kOSAModeNull, &resultDesc);
     Tcl_DStringAppend(&resultStr, (char *) *resultDesc.dataHandle,
@@ -2803,8 +2803,8 @@ tclOSAResultFromID(
  *
  *----------------------------------------------------------------------
  */
- 
-void 
+
+void
 tclOSAASError(
     Tcl_Interp * interp,
     ComponentInstance theComponent,
@@ -2817,30 +2817,30 @@ tclOSAASError(
     Size returnSize;
     short srcStart,srcEnd;
     char buffer[16];
-	
+
     Tcl_DStringInit(&errStr);
-    Tcl_DStringAppend(&errStr, "An AppleScript error was encountered.\n", -1); 
-	
+    Tcl_DStringAppend(&errStr, "An AppleScript error was encountered.\n", -1);
+
     OSAScriptError(theComponent, kOSAErrorNumber,
 	    typeShortInteger, &errResult);
-	
+
     sprintf(buffer, "Error #%-6.6d\n", (short int) **errResult.dataHandle);
 
     AEDisposeDesc(&errResult);
-	
+
     Tcl_DStringAppend(&errStr,buffer, 15);
-	
+
     OSAScriptError(theComponent, kOSAErrorMessage, typeChar, &errResult);
     Tcl_DStringAppend(&errStr, (char *) *errResult.dataHandle,
 	    GetHandleSize(errResult.dataHandle));
     AEDisposeDesc(&errResult);
-	
+
     if (scriptData != NULL) {
 	int lowerB, upperB;
-		
+
 	myErr = OSAScriptError(theComponent, kOSAErrorRange,
 		typeOSAErrorRange, &errResult);
-		
+
 	myErr = AECoerceDesc(&errResult, typeAERecord, &errLimits);
 	myErr = AEGetKeyPtr(&errLimits, keyOSASourceStart,
 		typeShortInteger, &returnType, &srcStart,
@@ -2860,7 +2860,7 @@ tclOSAASError(
 		break;
 	    }
 	}
-		
+
 	for (upperB = srcEnd; *(scriptData + upperB) != '\0'; upperB++) {
 	    if (*(scriptData + upperB) == '\r') {
 		break;
@@ -2871,7 +2871,7 @@ tclOSAASError(
 	Tcl_DStringAppend(&errStr, "_", 1);
 	Tcl_DStringAppend(&errStr, scriptData+srcStart, upperB - srcStart);
     }
-	
+
     Tcl_DStringResult(interp,&errStr);
 }
 
@@ -2890,7 +2890,7 @@ tclOSAASError(
  *
  *----------------------------------------------------------------------
  */
- 
+
 static void
 GetRawDataFromDescriptor(
     AEDesc *theDesc,
@@ -2909,7 +2909,7 @@ GetRawDataFromDescriptor(
       } else {
 	  *actSize = 0;
       }
-      
+
   }
 
 /*
@@ -2927,7 +2927,7 @@ GetRawDataFromDescriptor(
  *
  *----------------------------------------------------------------------
  */
- 
+
 static OSErr
 GetCStringFromDescriptor(
     AEDesc *sourceDesc,
@@ -2939,9 +2939,9 @@ GetCStringFromDescriptor(
     AEDesc resultDesc;
 
     resultDesc.dataHandle = nil;
-				
+
     err = AECoerceDesc(sourceDesc, typeChar, &resultDesc);
-		
+
     if (!err) {
 	GetRawDataFromDescriptor(&resultDesc, (Ptr) resultStr,
 		resultMaxSize - 1, resultSize);
@@ -2949,10 +2949,10 @@ GetCStringFromDescriptor(
     } else {
 	err = errAECoercionFail;
     }
-			
+
     if (resultDesc.dataHandle) {
 	AEDisposeDesc(&resultDesc);
     }
-    
+
     return err;
 }

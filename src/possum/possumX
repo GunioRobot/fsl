@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -74,7 +74,7 @@ Usage() {
     echo ""
     echo "Subject directory needs to contain:"
     echo "1.  brain"
-    echo "2.  MRpar" 
+    echo "2.  MRpar"
     echo "3.  motion "
     echo "4.  slcprof"
     echo "5.  pulse, pulse.info, pulse.readme, pulse.posx, pulse.posy, pulse.posz"
@@ -86,7 +86,7 @@ Usage() {
     echo "10. b0timecourse"
     echo ""
     echo "In case there is a cluster enviroment (e.g. SGE):"
-    echo "-n (number of processors, default 1)"   
+    echo "-n (number of processors, default 1)"
     echo "-t (estimated running time per processor (minutes), default 2000)"
     echo "-a (architecture [e.g., darwin or lx24-amd64])"
     exit 1
@@ -226,14 +226,14 @@ fi
 if [ ! -e ${subjdir}/noise ]; then
         echo "sigma" 0 > ${subjdir}/noise
 fi
-    
+
 echo Making possum directory structure
 mkdir -p ${subjdir}/diff_proc
 mkdir -p ${subjdir}/logs
 mkdir -p ${subjdir}/logs/pid_${$}
 mailto=`whoami`@fmrib.ox.ac.uk
-    
-echo Processing stage 
+
+echo Processing stage
 date
 command="$command --nproc=${nproc}"
 [ -f ${subjdir}/possum.com ] && rm ${subjdir}/possum.com
@@ -246,7 +246,7 @@ done
 
 echo "${FSLDIR}/bin/fsl_sub -T $ntime -l ${subjdir}/logs $arch -M $mailto -N possum -t ${subjdir}/possum.com"
 
-possumid=`${FSLDIR}/bin/fsl_sub -T $ntime -l ${subjdir}/logs $arch -M $mailto -N possum -t ${subjdir}/possum.com ` 
+possumid=`${FSLDIR}/bin/fsl_sub -T $ntime -l ${subjdir}/logs $arch -M $mailto -N possum -t ${subjdir}/possum.com `
 
 echo Post processing stage
 date

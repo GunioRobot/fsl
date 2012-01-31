@@ -33,7 +33,7 @@ void trymat7()
    Matrix MD=D; Matrix ML=L; Matrix MU=U;
    Matrix MS=S;
    Matrix M(6,6);
-   for (i=1;i<=6;i++) for (j=1;j<=6;j++) M(i,j)=i*j+i*i-10.0;  
+   for (i=1;i<=6;i++) for (j=1;j<=6;j++) M(i,j)=i*j+i*i-10.0;
    {
       Tracer et1("Stage 1");
       Print(Matrix((S-M)-(MS-M)));
@@ -82,7 +82,7 @@ void trymat7()
       CV << 2 << 6 <<3 << 8 << -4 << 17.5 << 2 << 1 << -2 << 5 << 3.75;
       D << 2 << 6 <<3 << 8 << -4 << 17.5 << 2 << 1 << -2 << 5 << 3.75;
       X = CV.AsDiagonal(); X = X-D; Print(X);
-      SymmetricBandMatrix SB1(11,7); SB1 = 5; 
+      SymmetricBandMatrix SB1(11,7); SB1 = 5;
       SymmetricBandMatrix SB2 = SB1 + D;
       X.ReSize(11,11); X=0;
       for (i=1;i<=11;i++) for (j=1;j<=11;j++)

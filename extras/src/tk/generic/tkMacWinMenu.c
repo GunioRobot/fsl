@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacWinMenu.c --
  *
  *	This module implements the common elements of the Mac and Windows
@@ -47,28 +47,28 @@ PreprocessMenu(menuPtr)
 {
     int index, result, finished;
     TkMenu *cascadeMenuPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
-   
+
     Tcl_Preserve((ClientData) menuPtr);
-    
+
     /*
      * First, let's process the post command on ourselves. If this command
      * destroys this menu, or if there was an error, we are done.
      */
-     
+
     result = TkPostCommand(menuPtr);
     if ((result != TCL_OK) || (menuPtr->tkwin == NULL)) {
     	goto done;
     }
-    
+
     /*
      * Now, we go through structure and process all of the commands.
      * Since the structure is changing, we stop after we do one command,
      * and start over. When we get through without doing any, we are done.
      */
-    
-    
+
+
     do {
     	finished = 1;
         for (index = 0; index < menuPtr->numEntries; index++) {
@@ -79,9 +79,9 @@ PreprocessMenu(menuPtr)
             		!= NULL)) {
             	    cascadeMenuPtr =
             	    	    menuPtr->entries[index]->childMenuRefPtr->menuPtr;
-            	    if (cascadeMenuPtr->postCommandGeneration != 
+            	    if (cascadeMenuPtr->postCommandGeneration !=
             	    	    tsdPtr->postCommandGeneration) {
-            	    	cascadeMenuPtr->postCommandGeneration = 
+            	    	cascadeMenuPtr->postCommandGeneration =
             	    		tsdPtr->postCommandGeneration;
             	        result = PreprocessMenu(cascadeMenuPtr);
             	        if (result != TCL_OK) {
@@ -94,7 +94,7 @@ PreprocessMenu(menuPtr)
             }
         }
     } while (!finished);
-    
+
     done:
     Tcl_Release((ClientData)menuPtr);
     return result;
@@ -134,7 +134,7 @@ int
 TkPreprocessMenu(menuPtr)
     TkMenu *menuPtr;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     tsdPtr->postCommandGeneration++;

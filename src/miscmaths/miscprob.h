@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -80,21 +80,21 @@ using namespace NEWMAT;
 
 namespace MISCMATHS {
 
-//   ReturnMatrix betarnd(const int dim1, const int dim2, 
-// 		       const float a, const float b); 
+//   ReturnMatrix betarnd(const int dim1, const int dim2,
+// 		       const float a, const float b);
 
-  ReturnMatrix betapdf(const RowVector& vals, 
-		       const float a, const float b); 
+  ReturnMatrix betapdf(const RowVector& vals,
+		       const float a, const float b);
 
-  ReturnMatrix unifrnd(const int dim1 = 1, const int dim2 = -1, 
+  ReturnMatrix unifrnd(const int dim1 = 1, const int dim2 = -1,
 		       const float start = 0, const float end = 1);
-  
-  ReturnMatrix normrnd(const int dim1 = 1, const int dim2 = -1, 
+
+  ReturnMatrix normrnd(const int dim1 = 1, const int dim2 = -1,
 		       const float mu = 0, const float sigma = 1);
 
   // returns nsamps*nparams matrix:
   ReturnMatrix mvnrnd(const RowVector& mu, const SymmetricMatrix& covar, int nsamp = 1);
-  
+
   float mvnpdf(const RowVector& vals, const RowVector& mu, const SymmetricMatrix& covar);
 
   float bvnpdf(const RowVector& vals, const RowVector& mu, const SymmetricMatrix& covar);
@@ -104,7 +104,7 @@ namespace MISCMATHS {
 
   ReturnMatrix normpdf(const RowVector& vals, const float mu = 0, const float var = 1);
 
-  ReturnMatrix normpdf(const RowVector& vals, const RowVector& mus, 
+  ReturnMatrix normpdf(const RowVector& vals, const RowVector& mus,
 		       const RowVector& vars);
 
   ReturnMatrix normcdf(const RowVector& vals, const float mu = 0, const float var = 1);
@@ -113,13 +113,13 @@ namespace MISCMATHS {
 
   ReturnMatrix gammacdf(const RowVector& vals, const float mu = 0, const float var = 1);
 
-//   ReturnMatrix gammarnd(const int dim1, const int dim2, 
+//   ReturnMatrix gammarnd(const int dim1, const int dim2,
 // 			const float a, const float b);
 
   // returns n! * n matrix of all possible permutations
   ReturnMatrix perms(const int n);
 
-  
+
   class Mvnormrandm
     {
     public:
@@ -136,14 +136,14 @@ namespace MISCMATHS {
 	  covarw = sqrt(eig_val)*eig_vec.t();
 	}
 
-      ReturnMatrix next(int nsamp = 1) const 
+      ReturnMatrix next(int nsamp = 1) const
 	{
 	  Matrix ret = ones(nsamp, 1)*mu + normrnd(nsamp,mu.Ncols())*covarw;
 	  ret.Release();
 	  return ret;
 	}
 
-      ReturnMatrix next(const RowVector& pmu, int nsamp = 1)  
+      ReturnMatrix next(const RowVector& pmu, int nsamp = 1)
 	{
 	  mu=pmu;
 
@@ -166,7 +166,7 @@ namespace MISCMATHS {
 	  covarw = sqrt(eig_val)*eig_vec.t();
 	}
 
-    private:      
+    private:
 
       RowVector mu;
       SymmetricMatrix covar;

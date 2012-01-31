@@ -1,4 +1,4 @@
-/* 
+/*
  * tclUnixThrd.c --
  *
  *	This file implements the UNIX-specific thread support.
@@ -429,10 +429,10 @@ Tcl_MutexLock(mutexPtr)
     if (*mutexPtr == NULL) {
 	MASTER_LOCK;
 	if (*mutexPtr == NULL) {
-	    /* 
+	    /*
 	     * Double inside master lock check to avoid a race condition.
 	     */
-    
+
 	    pmutexPtr = (pthread_mutex_t *)ckalloc(sizeof(pthread_mutex_t));
 	    pthread_mutex_init(pmutexPtr, NULL);
 	    *mutexPtr = (Tcl_Mutex)pmutexPtr;
@@ -706,7 +706,7 @@ Tcl_ConditionWait(condPtr, mutexPtr, timePtr)
     if (*condPtr == NULL) {
 	MASTER_LOCK;
 
-	/* 
+	/*
 	 * Double check inside mutex to avoid race,
 	 * then initialize condition variable if necessary.
 	 */

@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -60,18 +60,18 @@ struct for_each_impl<false>
     static void execute(
           Iterator*
         , LastIterator*
-        , TransformFunc* 
+        , TransformFunc*
         , F f
         )
     {
         typedef typename deref<Iterator>::type item;
         typedef typename apply1<TransformFunc,item>::type arg;
-    
+
         // dwa 2002/9/10 -- make sure not to invoke undefined behavior
         // when we pass arg.
         value_initialized<arg> x;
         aux::unwrap(f, 0)(boost::get(x));
-        
+
         typedef typename mpl::next<Iterator>::type iter;
         for_each_impl<boost::is_same<iter,LastIterator>::value>
             ::execute((iter*)0, (LastIterator*)0, (TransformFunc*)0, f);
@@ -80,7 +80,7 @@ struct for_each_impl<false>
 
 } // namespace aux
 
-// agurt, 17/mar/02: pointer default parameters are necessary to workaround 
+// agurt, 17/mar/02: pointer default parameters are necessary to workaround
 // MSVC 6.5 function template signature's mangling bug
 template<
       typename Sequence

@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinTest.c --
  *
  *	Contains commands for platform specific tests for
@@ -17,7 +17,7 @@
 #include "tkWinInt.h"
 
 HWND tkWinCurrentDialog;
- 
+
 /*
  * Forward declarations of procedures defined later in this file:
  */
@@ -26,7 +26,7 @@ int			TkplatformtestInit(Tcl_Interp *interp);
 static int		TestclipboardObjCmd(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *CONST objv[]);
-static int		TestwineventCmd(ClientData clientData, 
+static int		TestwineventCmd(ClientData clientData,
 			    Tcl_Interp *interp, int argc, CONST char **argv);
 
 
@@ -54,7 +54,7 @@ TkplatformtestInit(
     /*
      * Add commands for platform specific tests on MacOS here.
      */
-    
+
     Tcl_CreateObjCommand(interp, "testclipboard", TestclipboardObjCmd,
 	    (ClientData) Tk_MainWindow(interp), (Tcl_CmdDeleteProc *) NULL);
     Tcl_CreateCommand(interp, "testwinevent", TestwineventCmd,
@@ -332,8 +332,8 @@ TestwineventCmd(clientData, interp, argc, argv)
 	}
 	default: {
 	    char buf[TCL_INTEGER_SPACE];
-	    
-	    sprintf(buf, "%d", 
+
+	    sprintf(buf, "%d",
 		    SendDlgItemMessage(hwnd, id, message, wParam, lParam));
 	    Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	    break;
@@ -341,6 +341,6 @@ TestwineventCmd(clientData, interp, argc, argv)
     }
     return TCL_OK;
 }
-    
+
 
 

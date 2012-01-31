@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------------
-//  alt_sstream_impl.hpp : alternative stringstream, templates implementation 
+//  alt_sstream_impl.hpp : alternative stringstream, templates implementation
 // ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
@@ -18,22 +18,22 @@ namespace boost {
 // --- Implementation  ------------------------------------------------------//
 
         template<class Ch, class Tr, class Alloc>
-        void basic_altstringbuf<Ch, Tr, Alloc>:: 
+        void basic_altstringbuf<Ch, Tr, Alloc>::
         clear_buffer () {
             const Ch * p = pptr();
             const Ch * b = pbase();
             if(p != NULL && p != b) {
-                seekpos(0, ::std::ios_base::out); 
+                seekpos(0, ::std::ios_base::out);
             }
             p = gptr();
             b = eback();
             if(p != NULL && p != b) {
-                seekpos(0, ::std::ios_base::in); 
+                seekpos(0, ::std::ios_base::in);
             }
         }
 
         template<class Ch, class Tr, class Alloc>
-        void basic_altstringbuf<Ch, Tr, Alloc>:: 
+        void basic_altstringbuf<Ch, Tr, Alloc>::
         str (const string_type& s) {
             size_type sz=s.size();
             if(sz != 0 && mode_ & (::std::ios_base::in | ::std::ios_base::out) ) {
@@ -53,11 +53,11 @@ namespace boost {
                 }
                 is_allocated_ = true;
             }
-            else 
+            else
                 dealloc();
         }
         template<class Ch, class Tr, class Alloc>
-        Ch*   basic_altstringbuf<Ch, Tr, Alloc>:: 
+        Ch*   basic_altstringbuf<Ch, Tr, Alloc>::
         begin () const {
             if(mode_ & ::std::ios_base::out && pptr() != NULL)
                 return pbase();
@@ -68,31 +68,31 @@ namespace boost {
 
         template<class Ch, class Tr, class Alloc>
         typename std::basic_string<Ch,Tr,Alloc>::size_type
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
-        size () const { 
+        basic_altstringbuf<Ch, Tr, Alloc>::
+        size () const {
             if(mode_ & ::std::ios_base::out && pptr())
                 return static_cast<size_type>(pend() - pbase());
             else if(mode_ & ::std::ios_base::in && gptr())
                 return static_cast<size_type>(egptr() - eback());
-            else 
+            else
                 return 0;
         }
 
         template<class Ch, class Tr, class Alloc>
         typename std::basic_string<Ch,Tr,Alloc>::size_type
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
-        cur_size () const { 
+        basic_altstringbuf<Ch, Tr, Alloc>::
+        cur_size () const {
             if(mode_ & ::std::ios_base::out && pptr())
                 return static_cast<streamsize>( pptr() - pbase());
             else if(mode_ & ::std::ios_base::in && gptr())
                 return static_cast<streamsize>( gptr() - eback());
-            else 
+            else
                 return 0;
         }
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type  
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type
+        basic_altstringbuf<Ch, Tr, Alloc>::
         seekoff (off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which) {
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
@@ -122,10 +122,10 @@ namespace boost {
                 else if(way == ::std::ios_base::beg)
                     off += static_cast<off_type>(pbase() - pptr());
                 else if(way != ::std::ios_base::beg)
-                    return pos_type(off_type(-1));                    
+                    return pos_type(off_type(-1));
                 if(pbase() <= off+pptr() && off+pptr() <= putend_)
                     // set pptr
-                    streambuf_t::pbump(off); 
+                    streambuf_t::pbump(off);
                 else
                     off = off_type(-1);
             }
@@ -135,10 +135,10 @@ namespace boost {
         }
         //- end seekoff(..)
 
-        
+
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type 
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type
+        basic_altstringbuf<Ch, Tr, Alloc>::
         seekpos (pos_type pos, ::std::ios_base::openmode which) {
             off_type off = off_type(pos); // operation guaranteed by §27.4.3.2 table 88
             if(pptr() != NULL && putend_ < pptr())
@@ -177,16 +177,16 @@ namespace boost {
 
         template<class Ch, class Tr, class Alloc>
         typename basic_altstringbuf<Ch, Tr, Alloc>::int_type
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
+        basic_altstringbuf<Ch, Tr, Alloc>::
         underflow () {
             if(gptr() == NULL) // no get area -> nothing to get.
-                return (compat_traits_type::eof()); 
+                return (compat_traits_type::eof());
             else if(gptr() < egptr())  // ok, in buffer
-                return (compat_traits_type::to_int_type(*gptr())); 
+                return (compat_traits_type::to_int_type(*gptr()));
             else if(mode_ & ::std::ios_base::in && pptr() != NULL
                     && (gptr() < pptr() || gptr() < putend_) )
-                {  // expand get area 
-                    if(putend_ < pptr()) 
+                {  // expand get area
+                    if(putend_ < pptr())
                         putend_ = pptr(); // remember pptr reached this far
                     streambuf_t::setg(eback(), gptr(), putend_);
                     return (compat_traits_type::to_int_type(*gptr()));
@@ -198,13 +198,13 @@ namespace boost {
 
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type 
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type
+        basic_altstringbuf<Ch, Tr, Alloc>::
         pbackfail (int_type meta) {
-            if(gptr() != NULL  &&  (eback() < gptr()) 
+            if(gptr() != NULL  &&  (eback() < gptr())
                && (mode_ & (::std::ios_base::out)
                    || compat_traits_type::eq_int_type(compat_traits_type::eof(), meta)
-                   || compat_traits_type::eq(compat_traits_type::to_char_type(meta), gptr()[-1]) ) ) { 
+                   || compat_traits_type::eq(compat_traits_type::to_char_type(meta), gptr()[-1]) ) ) {
                 streambuf_t::gbump(-1); // back one character
                 if(!compat_traits_type::eq_int_type(compat_traits_type::eof(), meta))
                     //  put-back meta into get area
@@ -218,8 +218,8 @@ namespace boost {
 
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type 
-        basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type
+        basic_altstringbuf<Ch, Tr, Alloc>::
         overflow (int_type meta) {
             if(compat_traits_type::eq_int_type(compat_traits_type::eof(), meta))
                 return compat_traits_type::not_eof(meta); // nothing to do
@@ -227,9 +227,9 @@ namespace boost {
                 streambuf_t::sputc(compat_traits_type::to_char_type(meta));
                 return meta;
             }
-            else if(! (mode_ & ::std::ios_base::out)) 
+            else if(! (mode_ & ::std::ios_base::out))
                 // no write position, and cant make one
-                return compat_traits_type::eof(); 
+                return compat_traits_type::eof();
             else { // make a write position available
                 std::size_t prev_size = pptr() == NULL ? 0 : epptr() - eback();
                 std::size_t new_size = prev_size;

@@ -79,11 +79,11 @@ public:
 public:
     stream_buffer() { }
     ~stream_buffer()
-    { 
-        try { 
-            if (this->is_open() && this->auto_close()) 
-                this->close(); 
-        } catch (std::exception&) { } 
+    {
+        try {
+            if (this->is_open() && this->auto_close())
+                this->close();
+        } catch (std::exception&) { }
     }
     BOOST_IOSTREAMS_FORWARD( stream_buffer, open_impl, T,
                              BOOST_IOSTREAMS_PUSH_PARAMS,

@@ -124,15 +124,15 @@ namespace eval ComboBox {
     LabelFrame::use
 
     <FONT COLOR=red><I># Include resources of LabelFrame</I></FONT>
-    Widget::bwinclude ComboBox LabelFrame .labf \ 
-        rename     {-text -label} \ 
-        remove     {-focus} \ 
-        prefix     {label -justify -width -anchor -height -font} \ 
+    Widget::bwinclude ComboBox LabelFrame .labf \
+        rename     {-text -label} \
+        remove     {-focus} \
+        prefix     {label -justify -width -anchor -height -font} \
         initialize {-relief sunken -borderwidth 2}
 
     <FONT COLOR=red><I># Include resources of Entry</I></FONT>
-    Widget::bwinclude ComboBox Entry .e \ 
-        remove {-relief -bd -borderwidth -bg -fg} \ 
+    Widget::bwinclude ComboBox Entry .e \
+        remove {-relief -bd -borderwidth -bg -fg} \
         rename {-foreground -entryfg -background -entrybg}
 
     <FONT COLOR=red><I># Declare new resources</I></FONT>
@@ -145,7 +145,7 @@ namespace eval ComboBox {
 
     <FONT COLOR=red><I># Map resources to subwidget</I></FONT>
     Widget::addmap ComboBox "" :cmd {-background {}}
-    Widget::addmap ComboBox ArrowButton .a \ 
+    Widget::addmap ComboBox ArrowButton .a \
         {-foreground {} -background {} -disabledforeground {} -state {}}
 
     <FONT COLOR=red><I># Synchronize subwidget options</I></FONT>
@@ -466,7 +466,7 @@ Used when an option of a subwidget is modified out of the BWidget <B>configure</
 <LI><I>class</I> is the class of the new BWidget
 <LI><I>subclass</I> is the class the subwidget (BWidget class, e.g Entry, or empty for Tk widget)
 <LI><I>subpath</I> is the path of the subwidget
-<LI><I>options</I> is the list <I>{option realres ...}</I> of options to synchronize 
+<LI><I>options</I> is the list <I>{option realres ...}</I> of options to synchronize
 with subwidget
 </UL>
 </DD></DL>

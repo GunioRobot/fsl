@@ -56,7 +56,7 @@ Let us say we have a region of interest (ROI) for the putamen that has been defi
 <p>
   We also need the inverse of the non-linear transform <tt>highres2standard_warp</tt>. If you have run <tt>featquery</tt> it will already exist and be called <tt>highres2standard_warp_inv</tt>. If not it can be generated with the command
 </p>
-<tt>invwarp --ref==highres --warp=highres2standard_warp --out=highres2standard_warp_inv</tt> 
+<tt>invwarp --ref==highres --warp=highres2standard_warp --out=highres2standard_warp_inv</tt>
 <p>
 These two (<tt>highres2example_func.mat</tt> and <tt>highres2standard_warp_inv</tt>) can now be used to bring the mask into standard space with the command
 </p>

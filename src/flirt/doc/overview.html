@@ -7,7 +7,7 @@ flirt Command-line Program and Utilities
   <!-- No Table of Contents -->
 
 <A NAME="section1"></A><H2>INTRODUCTION</H2>
- 
+
 This document gives a brief description of flirt and the various command-line
 programs available in the FLIRT component of FSL.  A description of
 the available <a href="gui.html">GUI interfaces</a> is also available.
@@ -25,16 +25,16 @@ See also the list of common <a href="examples.html">example usages.</a>
  <!-- J-Back -->
 
 <A NAME="section2"></A><HR><H2>flirt</H2>
- 
+
 <B>flirt</B> is the main program that performs affine registration.  The main options are:
 an input (<FONT COLOR=PURPLE>-in</FONT>) and a reference
 (<FONT COLOR=PURPLE>-ref</FONT>) volume; the calculated affine
 transformation that registers the input to the reference which is
 saved as a 4x4 affine matrix
-(<FONT COLOR=PURPLE>-omat</FONT>); and 
+(<FONT COLOR=PURPLE>-omat</FONT>); and
 output volume (<FONT COLOR=PURPLE>-out</FONT>)
 where the transform is applied to
-the input volume to 
+the input volume to
 align it with the reference volume.
 
 <P>
@@ -80,7 +80,7 @@ calculations.
  <!-- J-Back -->
 
 <A NAME="misc"></A><HR><H2>convert_xfm</H2>
- 
+
 <B>convert_xfm</B> is a utility that is used to convert between different
 transformation file formats.  It can read and write ascii 4x4 matrices.  In
 addition, it can be used to concatenate two transforms (using
@@ -92,7 +92,7 @@ inverse transformation (using <FONT COLOR=PURPLE>-inverse</FONT>).
  <!-- J-Back -->
 
 <A NAME="section7"></A><HR><H2>img2imgcoord</h2>
- 
+
 <B>img2imgcoord</B> is a utility that calculates the corresponding
 coordinate positions (in voxels or mm) within a destination volume
 given the original coordinates in the source volume and the transformation
@@ -104,7 +104,7 @@ separated.
  <!-- J-Back -->
 
 <A NAME="section8"></A><HR><H2>img2stdcoord</H2>
- 
+
 <B>img2stdcoord</B> is a similar utility to <B>img2imgcoord</B>
 except that the destination volume coordinates are treated as standard
 space coordinates.  This requires the standard space image to have the
@@ -114,7 +114,7 @@ header fields.  This is more complicated for nifti - see the FSL FAQ.
  <!-- J-Back -->
 
 <A NAME="section9"></A><HR><H2>std2imgcoord</H2>
- 
+
 <B>std2imgcoord</B> is the complementary utility to <B>img2stdcoord</B>.
 It works the same way but transfers coordinates from standard space to
 the other image (IMG) space.
@@ -122,7 +122,7 @@ the other image (IMG) space.
  <!-- J-Back -->
 
 <A NAME="section6"></A><HR><H2>applyxfm4d</H2>
- 
+
 <B>applyxfm4D</B> is a utility that transforms a 4D time series by
 applying known affine transformations to them.  It can be used with a
 single transformation applied to all, or using a directory of
@@ -138,19 +138,19 @@ can be specified with the <font color=purple>-userprefix</font> option.
  <!-- J-Back -->
 
 <A NAME="section4"></A><HR><H2>rmsdiff</H2>
- 
+
 <B>rmsdiff</B> is a utility that calculates the Root Mean Square deviation
 (in millimetres) between two transformations.  That is, it compares
 two transformations (normally two possible registrations of the same
 volume pair) to see how much they differ.  This is useful to compare
 alternative registrations.  It calculates the average using an analytic
 formula applied over an 80mm sphere with the origin at the centre of the
-image (for which it requires the input image to be specified).  
+image (for which it requires the input image to be specified).
 
  <!-- J-Back -->
 
 <A NAME="section5"></A><HR><H2>avscale</H2>
- 
+
 <B>avscale</B> is a utility that displays the decomposed elements of an
 affine matrix.  It displays the rotation/translation matrix, the
 individual axis scalings, the individual skews, the average scaling,

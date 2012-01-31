@@ -15,7 +15,7 @@ namespace Utilities {
     for(Options::iterator option = options_.begin();
 	option != options_.end();
 	option++) {
-    
+
       if((*option)->compulsory() && (*option)->unset()) {
 	if(okay) {
 	  if(verbose) {
@@ -29,7 +29,7 @@ namespace Utilities {
       }
     }
     if(!okay && verbose)
-      cerr << "***************************************************" << endl; 
+      cerr << "***************************************************" << endl;
 
     return okay;
   }

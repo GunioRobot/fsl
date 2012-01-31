@@ -31,7 +31,7 @@
 static int fontConfigFlag = 0;
 
 static char *font_path(char **fontpath, char *name_list);
-/* translate a fontconfig fontpattern into a fontpath. 
+/* translate a fontconfig fontpattern into a fontpath.
 	return NULL if OK, else return error string */
 static char *font_pattern(char **fontpath, char *fontpattern);
 
@@ -122,8 +122,8 @@ static char * font_pattern(char **fontpath, char *fontpattern)
 #define TWEENCOLORCACHESIZE 32
 
 /*
- * Line separation as a factor of font height.  
- *      No space between if LINESPACE = 1.00 
+ * Line separation as a factor of font height.
+ *      No space between if LINESPACE = 1.00
  *      Line separation will be rounded up to next pixel row.
  */
 #define LINESPACE 1.05
@@ -445,7 +445,7 @@ fontFetch (char **error, void *key)
   a->fontpath = NULL;
 
 #ifdef HAVE_LIBFONTCONFIG
-  if (!useFontConfig(b->flags)) 
+  if (!useFontConfig(b->flags))
   	*error = font_path(&(a->fontpath), a->fontlist);
               else
   	*error = font_pattern(&(a->fontpath), a->fontlist);
@@ -846,7 +846,7 @@ BGD_DECLARE(char *) gdImageStringFTEx (gdImage * im, int *brect, int fg, char *f
   char *tmpstr = 0;
   int render = (im && (im->trueColor || (fg <= 255 && fg >= -255)));
   FT_BitmapGlyph bm;
-  /* 2.0.13: Bob Ostermann: don't force autohint, that's just for testing 
+  /* 2.0.13: Bob Ostermann: don't force autohint, that's just for testing
      freetype and doesn't look as good */
   int render_mode = FT_LOAD_DEFAULT;
   int encoding, encodingfound;
@@ -931,7 +931,7 @@ BGD_DECLARE(char *) gdImageStringFTEx (gdImage * im, int *brect, int fg, char *f
           encoding = strex->charmap;
         }
       /* 2.0.29: we can return the font path if desired */
-      if (strex->flags & gdFTEX_RETURNFONTPATHNAME) 
+      if (strex->flags & gdFTEX_RETURNFONTPATHNAME)
         strex->fontpath = strdup(font->fontpath);
       else
         strex->fontpath = 0;
@@ -1140,7 +1140,7 @@ fprintf(stderr,"dpi=%d,%d metric_res=%d ptsize=%g\n",hdpi,vdpi,METRIC_RES,ptsize
 	        {
 	          next++;
 	          jiscode = 0x100 * (c & 0x7F) + ((*next) & 0x7F);
-      
+
 		  ch = (jiscode >> 8) & 0xFF;
 		  jiscode &= 0xFF;
 
@@ -1210,7 +1210,7 @@ fprintf(stderr,"dpi=%d,%d metric_res=%d ptsize=%g\n",hdpi,vdpi,METRIC_RES,ptsize
 		xshow_alloc = 100;
 		strex->xshow = malloc(xshow_alloc);
 		xshow_pos = 0;
-	  } 
+	  }
 	  else if (xshow_pos + 20 > xshow_alloc) {
 		xshow_alloc += 100;
 		strex->xshow = realloc(strex->xshow, xshow_alloc);
@@ -1323,7 +1323,7 @@ fprintf(stderr,"dpi=%d,%d metric_res=%d ptsize=%g\n",hdpi,vdpi,METRIC_RES,ptsize
   if (brect)
     {				/* only if need brect */
       double dpix, dpiy;
-      
+
       dpix = 64 * METRIC_RES / hdpi;
       dpiy = 64 * METRIC_RES / vdpi;
 
@@ -1332,7 +1332,7 @@ fprintf(stderr,"dpi=%d,%d metric_res=%d ptsize=%g\n",hdpi,vdpi,METRIC_RES,ptsize
       total_min.y -= METRIC_RES;
       total_max.x += METRIC_RES;
       total_max.y += METRIC_RES;
- 
+
       /* rotate bounding rectangle, scale and round to int pixels, and translate */
       brect[0] = x + (total_min.x * cos_a + total_max.y * sin_a)/dpix;
       brect[1] = y - (total_min.x * sin_a - total_max.y * cos_a)/dpiy;
@@ -1391,7 +1391,7 @@ static PostscriptAlias postscript_alias[] = {
   { "Courier-Oblique", "Nimbus Mono L", "Regular Oblique" },
   { "Courier-Bold", "Nimbus Mono L", "Bold" },
   { "Courier-BoldOblique", "Nimbus Mono L", "Bold Oblique" },
-  
+
   { "Helvetica", "Nimbus Sans L", "Regular" },
   { "Helvetica-Oblique", "Nimbus Sans L", "Regular Italic" },
   { "Helvetica-Bold", "Nimbus Sans L", "Bold" },
@@ -1459,7 +1459,7 @@ static char* find_postscript_font(FcPattern **fontpattern, char* fontname)
 
       if (!font || FcPatternGetString(font, FC_FAMILY, 0, &family) != FcResultMatch)
 	return "fontconfig: Couldn't retrieve font family name.";
-      
+
       /* Check whether we got the font family we wanted. */
       if (strcmp((const char *)family, postscript_alias[i].family) != 0) {
 	FcPatternDestroy(font);

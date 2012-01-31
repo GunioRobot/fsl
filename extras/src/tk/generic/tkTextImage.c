@@ -1,4 +1,4 @@
-/* 
+/*
  * tkImage.c --
  *
  *	This file contains code that allows images to be
@@ -217,7 +217,7 @@ TkTextImageCmd(textPtr, interp, argc, argv)
 	/*
 	 * Don't allow insertions on the last (dummy) line of the text.
 	 */
-    
+
 	lineIndex = TkBTreeLineIndex(index.linePtr);
 	if (lineIndex == TkBTreeNumLines(textPtr->tree)) {
 	    lineIndex--;
@@ -347,7 +347,7 @@ EmbImageConfigure(textPtr, eiPtr, argc, argv)
     	return TCL_OK;
     }
 
-    /* 
+    /*
      * Find a unique name for this image.  Use imageName (or imageString)
      * if available, otherwise tack on a #nn and use it.  If a name is already
      * associated with this image, delete the name.

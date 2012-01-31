@@ -50,7 +50,7 @@ namespace boost { namespace fusion
             call(Iterator const& i);
         };
         template<typename Iterator>
-        typename next_traits_impl<Iterator>::type 
+        typename next_traits_impl<Iterator>::type
         next_traits_impl<Iterator>::call(Iterator const& i)
         {
             return type(filter::call(i.first));

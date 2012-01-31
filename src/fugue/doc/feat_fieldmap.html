@@ -7,7 +7,7 @@ Making Fieldmap Images for FEAT
 <!-- No Table of Contents -->
 
 <A NAME="section1"></A><H2>Introduction</H2>
- 
+
 This page outlines some of the most common ways to construct the required
 fieldmap images for B0 unwarping in FEAT.  Also see the documentation on
 <a href="index.html">FUGUE</a>
@@ -189,9 +189,9 @@ fslmaths phase1_unwrapped_rad -sub phase0_unwrapped_rad -mul 1000 -div TE fieldm
 where <b>TE</b> must be replaced with the appropriate difference in echo times (in units of milliseconds).
 
 <p><b>(b)</b>
-If you have a single, real fieldmap then you must determine the units of this 
+If you have a single, real fieldmap then you must determine the units of this
 fieldmap (ask an operator/physicist) and rescale to radians per second if
-it is not already in these units.  Common other units are (i) Hz (scale these 
+it is not already in these units.  Common other units are (i) Hz (scale these
 by 6.28 to get rad/s) and (ii) Telsa (scale these by 2.68e8 to get rad/s).
 
 <hr>

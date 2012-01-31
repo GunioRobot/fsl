@@ -171,7 +171,7 @@ void trymatc()
          { RowVector RV = 5 * M1.Row(i); M.Row(i) -= RV; }
 
       M += M1; Print(M);
- 
+
    }
 
    {

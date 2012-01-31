@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -106,29 +106,29 @@ class BintOptions {
   Option<bool> analmargprec;
 
   void parse_command_line(int argc, char** argv, Log& logger);
-  
+
  protected:
 
-  BintOptions(const string& str1, const string& str2);  
-  OptionParser options; 
+  BintOptions(const string& str1, const string& str2);
+  OptionParser options;
 
  private:
 
   BintOptions();
   const BintOptions& operator=(BintOptions&);
   BintOptions(BintOptions&);
-  
+
 };
 
  inline BintOptions::BintOptions(const string& str1, const string& str2) :
-   verbose(string("-v,-V,--verbose"), false, 
-	   string("switch on diagnostic messages"), 
+   verbose(string("-v,-V,--verbose"), false,
+	   string("switch on diagnostic messages"),
 	   false, no_argument),
    debuglevel(string("--debug,--debuglevel"), 0,
-		       string("set debug level"), 
+		       string("set debug level"),
 		       false, requires_argument),
-   timingon(string("--to,--timingon"), false, 
-		       string("turn timing on"), 
+   timingon(string("--to,--timingon"), false,
+		       string("turn timing on"),
 		       false, no_argument),
    help(string("-h,--help"), false,
 		    string("display this message"),
@@ -141,13 +141,13 @@ class BintOptions {
 		     true, requires_argument),
    logdir(string("--ld,--logdir"), string("logdir"),
 			  string("log directory (default is logdir)"),
-		     false, requires_argument), 
+		     false, requires_argument),
    forcedir(string("--forcedir"), false,
 		    string("Use the actual directory name given - i.e. don't add + to make a new directory"),
 		    false, no_argument),
    inference(string("--inf,--inference"), string("mcmc"),
 			  string("inference technique: mcmc\n laplace\n (default is mcmc)"),
-		     false, requires_argument),  
+		     false, requires_argument),
    njumps(string("--nj,--njumps"), 5000,
 			  string("Num of jumps to be made by MCMC (default is 5000)"),
 		     false, requires_argument),
@@ -163,14 +163,14 @@ class BintOptions {
    acceptancerate(string("--arate,--acceptancerate"), 0.6,
 			  string("Acceptance rate to aim for (MCMC) (default is 0.6)"),
 		     false, requires_argument),
-   seed(string("--seed"), 10, 
-      string("seed for pseudo random number generator"), 
+   seed(string("--seed"), 10,
+      string("seed for pseudo random number generator"),
       false, requires_argument),
-   prec(string("--prec"), -1, 
-      string("value to fix error precision to (default is -1, which means error precision is not fixed)"), 
+   prec(string("--prec"), -1,
+      string("value to fix error precision to (default is -1, which means error precision is not fixed)"),
 	false, requires_argument),
-   analmargprec(string("--noamp"), true, 
-      string("turn off Analytical Marginalisation of error Precision"), 
+   analmargprec(string("--noamp"), true,
+      string("turn off Analytical Marginalisation of error Precision"),
 	false, no_argument),
    options(str1,str2)
    {
@@ -196,11 +196,11 @@ class BintOptions {
      catch(X_OptionError& e) {
        options.usage();
        cerr << endl << e.what() << endl;
-     } 
+     }
      catch(std::exception &e) {
        cerr << e.what() << endl;
-     }    
-     
+     }
+
    }
 }
 

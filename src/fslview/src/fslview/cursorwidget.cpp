@@ -35,7 +35,7 @@ class VoxBox: public QSpinBox
   {
     setFont(QFont("Arial", 10));
     setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)3,
-				0, 0, sizePolicy().hasHeightForWidth() ) );   
+				0, 0, sizePolicy().hasHeightForWidth() ) );
   }
 };
 
@@ -47,7 +47,7 @@ class ValBox: public QLineEdit
     setFont(QFont("Arial", 10));
     setAlignment(AlignLeft);
     setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)3,
-				0, 0, sizePolicy().hasHeightForWidth() ) );   
+				0, 0, sizePolicy().hasHeightForWidth() ) );
     setMinimumWidth( QFontMetrics(font()).width(QString("-0.00000e-00")) );
     setMaximumWidth( QFontMetrics(font()).width(QString("-0.00000e-00")) );
     setReadOnly(true);
@@ -62,9 +62,9 @@ class MMBox: public QLineEdit
     setFont(QFont("Arial", 10));
     setAlignment(AlignLeft);
     setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)3,
-				0, 0, sizePolicy().hasHeightForWidth() ) );   
+				0, 0, sizePolicy().hasHeightForWidth() ) );
     setMinimumWidth( QFontMetrics(font()).width(QString("-0000.00")) );
-    setMaximumWidth( QFontMetrics(font()).width(QString("-0000.00")) );  
+    setMaximumWidth( QFontMetrics(font()).width(QString("-0000.00")) );
   }
 };
 
@@ -74,18 +74,18 @@ CursorWidget::CursorWidget(QWidget *parent, const Cursor::Handle& c, OverlayList
   setFont(QFont("Arial", 8));
   m_cursor->attach(this);
   m_overlayList->attach(this);
-                
+
   connect(m_xVoxBox, SIGNAL(valueChanged(int)), SLOT(voxBoxChanged(int)));
   connect(m_yVoxBox, SIGNAL(valueChanged(int)), SLOT(voxBoxChanged(int)));
   connect(m_zVoxBox, SIGNAL(valueChanged(int)), SLOT(voxBoxChanged(int)));
 
-  connect(m_xMmBox,SIGNAL(lostFocus()), SLOT(mmBoxChanged()));          
+  connect(m_xMmBox,SIGNAL(lostFocus()), SLOT(mmBoxChanged()));
   connect(m_yMmBox,SIGNAL(lostFocus()), SLOT(mmBoxChanged()));
   connect(m_zMmBox,SIGNAL(lostFocus()), SLOT(mmBoxChanged()));
-  connect(m_xMmBox,SIGNAL(returnPressed()), SLOT(mmBoxChanged()));          
+  connect(m_xMmBox,SIGNAL(returnPressed()), SLOT(mmBoxChanged()));
   connect(m_yMmBox,SIGNAL(returnPressed()), SLOT(mmBoxChanged()));
   connect(m_zMmBox,SIGNAL(returnPressed()), SLOT(mmBoxChanged()));
-  
+
   connect(m_volumeBox, SIGNAL(valueChanged(int)), SLOT(internalVolumeValueChanged(int)));
 
   setInputValidators();
@@ -123,11 +123,11 @@ void CursorWidget::update(const Cursor::Handle& c)
   MESSAGE( QString("c = %1, %2, %3, %4").arg(c->inqX()).arg(c->inqY()).arg(c->inqZ()).arg(c->inqV()) );
 
   blockBoxSignals(true);
- 
+
   Image::Handle image = m_overlayList->getActiveMetaImage()->getImage();
 
   string coordsysstring("Error!");
-  switch(image->getInfo()->inqCoordSystem()) 
+  switch(image->getInfo()->inqCoordSystem())
     {
     case ImageCoordSystem::Unknown: coordsysstring = "Unknown"; break;
     case ImageCoordSystem::ScannerAnatomical: coordsysstring = "Scanner Anatomical"; break;
@@ -150,17 +150,17 @@ void CursorWidget::update(const Cursor::Handle& c)
     else
       {
 	float x(0), y(0), z(0);
-	
+
 	if(!image->getInfo()->isStoredRadiological())
 	  radiogX = image->getInfo()->inqX()-1-radiogX;
-	
+
 	image->getInfo()->voxToMMCoord(radiogX, c->inqY(), c->inqZ(),
 				       x, y, z);
-	m_xMmBox->setText(tr("%1").arg(x, 3, 'f', 2));  
-	m_yMmBox->setText(tr("%1").arg(y, 3, 'f', 2));  
+	m_xMmBox->setText(tr("%1").arg(x, 3, 'f', 2));
+	m_yMmBox->setText(tr("%1").arg(y, 3, 'f', 2));
 	m_zMmBox->setText(tr("%1").arg(z, 3, 'f', 2));
       }
-    
+
     m_xVoxBox->setValue(radiogX);
     m_yVoxBox->setValue(c->inqY());
     m_zVoxBox->setValue(c->inqZ());
@@ -199,7 +199,7 @@ void CursorWidget::voxBoxChanged(int v)
 {
   TRACKER("CursorWidget::voxBoxChanged");
   blockBoxSignals(true);
-  
+
   Image::Handle image = m_overlayList->getActiveMetaImage()->getImage();
 
   if(image->getInfo()->inqNoDimensions())
@@ -232,9 +232,9 @@ void CursorWidget::voxBoxChanged(int v)
 void CursorWidget::mmBoxChanged()
 {
   TRACKER("CursorWidget::mmBoxChanged");
-       
+
   Image::Handle image = m_overlayList->getActiveMetaImage()->getImage();
-  
+
   if(image->getInfo()->inqNoDimensions())
     {
       m_xMmBox->setText("");
@@ -242,11 +242,11 @@ void CursorWidget::mmBoxChanged()
       m_zMmBox->setText("");
     }
   else
-    { 
+    {
       blockBoxSignals(true);
 
-      int pos;  
-  
+      int pos;
+
       QString xText = m_xMmBox->text();
       QString yText = m_yMmBox->text();
       QString zText = m_zMmBox->text();
@@ -260,11 +260,11 @@ void CursorWidget::mmBoxChanged()
 
       float xMm = m_xMmBox->text().toFloat();
       float yMm = m_yMmBox->text().toFloat();
-      float zMm = m_zMmBox->text().toFloat(); 
+      float zMm = m_zMmBox->text().toFloat();
 
       short xCur(0), yCur(0), zCur(0);
       image->getInfo()->mmToVoxCoord(xMm ,yMm, zMm , xCur, yCur, zCur);
-  
+
       m_xVoxBox->setValue(xCur);
       m_yVoxBox->setValue(yCur);
       m_zVoxBox->setValue(zCur);
@@ -286,7 +286,7 @@ void CursorWidget::blockBoxSignals(bool state)
 {
   m_xVoxBox->blockSignals(state);
   m_yVoxBox->blockSignals(state);
-  m_zVoxBox->blockSignals(state);  
+  m_zVoxBox->blockSignals(state);
   m_xMmBox->blockSignals(state);
   m_yMmBox->blockSignals(state);
   m_zMmBox->blockSignals(state);
@@ -302,25 +302,25 @@ void CursorWidget::updateValBox()
     image = mi->getImage();
     ds    = mi->getDs();
   } else {
-    image = m_overlayList->getMainMetaImage()->getImage();    
-    ds    = m_overlayList->getMainMetaImage()->getDs(); 
+    image = m_overlayList->getMainMetaImage()->getImage();
+    ds    = m_overlayList->getMainMetaImage()->getDs();
   }
- 
+
   //  int vol = std::min(m_cursor->inqV(), short (image->getInfo()->inqNumVolumes()-1));
   int vol = ds->inqCurrentVolume();
   float i = image->getVolume(vol) -> value(m_cursor->inqX(),m_cursor->inqY(),m_cursor->inqZ());
-  
-  if(ds->inqDtiDisplay() == DtiDisplay(None) && m_valBoxState) {      
+
+  if(ds->inqDtiDisplay() == DtiDisplay(None) && m_valBoxState) {
     m_valBox->setEnabled(true);
     QString valStr;
     valStr.setNum(i,'g');
-    
+
     if (valStr.length() > 9){valStr.setNum(i,'g',2);}
-    
+
     QToolTip::remove(m_valBox);
     QToolTip::add(m_valBox, tr("Voxel value: %1").arg(i,8));
-    
-    m_valBox->setText(valStr); 
+
+    m_valBox->setText(valStr);
     m_valBox->repaint();
   } else {
     m_valBox->setEnabled(false);
@@ -332,7 +332,7 @@ void CursorWidget::setInputValidators()
 {
   TRACKER("CursorWidget::setInputValidators");
   Image::Handle image = m_overlayList->getActiveMetaImage()->getImage();
-  
+
   m_xVoxBox->setRange(0,image->getInfo()->inqX() - 1);
   m_yVoxBox->setRange(0,image->getInfo()->inqY() - 1);
   m_zVoxBox->setRange(0,image->getInfo()->inqZ() - 1);
@@ -342,14 +342,14 @@ void CursorWidget::setInputValidators()
 
   if(!image->getInfo()->inqNoDimensions())
     {
- 
+
       m_xBoxValidator = new QDoubleValidator(this);
       m_yBoxValidator = new QDoubleValidator(this);
       m_zBoxValidator = new QDoubleValidator(this);
-    
+
       m_xMmBox->setValidator(m_xBoxValidator);
       m_yMmBox->setValidator(m_yBoxValidator);
-      m_zMmBox->setValidator(m_zBoxValidator); 
+      m_zMmBox->setValidator(m_zBoxValidator);
 
       float xMax, yMax, zMax, xMin, yMin, zMin;
       image->getInfo()->voxToMMCoord((image->getInfo()->inqX() - 1),
@@ -362,10 +362,10 @@ void CursorWidget::setInputValidators()
 
       if(xMin < xMax){m_xBoxValidator->setRange(xMin,xMax,2);}
       else           {m_xBoxValidator->setRange(xMax,xMin,2);}
-  
+
       if(yMin < yMax){m_yBoxValidator->setRange(yMin,yMax,2);}
       else           {m_yBoxValidator->setRange(yMax,yMin,2);}
-  
+
       if(zMin < zMax){m_zBoxValidator->setRange(zMin,zMax,2);}
       else           {m_zBoxValidator->setRange(zMax,zMin,2);}
     }
@@ -375,7 +375,7 @@ QString CursorWidget::fixMmBoxVal(QDoubleValidator* v,QString & s)
 {
   TRACKER("CursorWidget::fixMmBoxVal()");
   float val = s.toFloat();
-  
+
   if(val > v->top())         {val = v->top();}
   else if(val < v->bottom()) {val = v->bottom();}
 

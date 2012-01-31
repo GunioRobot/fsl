@@ -3,9 +3,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: BoolObj.3,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH Tcl_BooleanObj 3 8.0 Tcl "Tcl Library Procedures"
 .BS
@@ -32,7 +32,7 @@ otherwise the boolean object is set to 0.
 For \fBTcl_SetBooleanObj\fR, this points to the object to be converted
 to boolean type.
 For \fBTcl_GetBooleanFromObj\fR, this refers to the object
-from which to get a boolean value; 
+from which to get a boolean value;
 if \fIobjPtr\fR does not already point to a boolean object,
 an attempt will be made to convert it to one.
 .AP Tcl_Interp *interp in/out
@@ -50,7 +50,7 @@ These procedures are used to create, modify, and read
 boolean Tcl objects from C code.
 \fBTcl_NewBooleanObj\fR and \fBTcl_SetBooleanObj\fR
 will create a new object of boolean type
-or modify an existing object to have boolean type. 
+or modify an existing object to have boolean type.
 Both of these procedures set the object to have the
 boolean value (0 or 1) specified by \fIboolValue\fR;
 if \fIboolValue\fR is nonzero, the object is set to 1,

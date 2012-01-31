@@ -25,20 +25,20 @@ public:
   static void     preWhitenModel(const ColumnVector& ac,
                                  const Matrix& designMatrix,
                                  Matrix& preWhitenedMatrix);
-  static void     establishPwFilter(const ColumnVector& ac, 
-                                    ColumnVector& pwfilter, 
+  static void     establishPwFilter(const ColumnVector& ac,
+                                    ColumnVector& pwfilter,
                                     int zeropad, int npts);
-  static void     preWhitenData(const ColumnVector& data, 
-                                ColumnVector& pwdata, 
-                                ColumnVector& pwfilter, 
+  static void     preWhitenData(const ColumnVector& data,
+                                ColumnVector& pwdata,
+                                ColumnVector& pwfilter,
                                 int zeropad, int npts);
 
-  static TimeSeries::Handle     preWhitenTimeseries(const ColumnVector& ac, 
-                                             TimeSeries::Handle& ts);  
+  static TimeSeries::Handle     preWhitenTimeseries(const ColumnVector& ac,
+                                             TimeSeries::Handle& ts);
   static ColumnVector convertTimeSeries(const TimeSeries::Handle&);
-  static TimeSeries::Handle convertMatrix(const Matrix&, int col, 
-                                   short x, short y, short z); 
-  static TimeSeries::Handle convertColumnVector(const ColumnVector&, 
+  static TimeSeries::Handle convertMatrix(const Matrix&, int col,
+                                   short x, short y, short z);
+  static TimeSeries::Handle convertColumnVector(const ColumnVector&,
                                    short x, short y, short z);
 };
 

@@ -123,7 +123,7 @@ _gdCreateFromFile (gdIOCtx * in, int *sx, int *sy)
     {
       /* This is a gd 2.0 .gd file */
       gd2xFlag = 1;
-      /* 2.0.12: 65534 signals a truecolor .gd file. 
+      /* 2.0.12: 65534 signals a truecolor .gd file.
          There is a slight redundancy here but we can
          live with it. */
       if (*sx == 65534)
@@ -266,7 +266,7 @@ _gdPutColors (gdImagePtr im, gdIOCtx * out)
 static void
 _gdPutHeader (gdImagePtr im, gdIOCtx * out)
 {
-  /* 65535 indicates this is a gd 2.x .gd file. 
+  /* 65535 indicates this is a gd 2.x .gd file.
      2.0.12: 65534 indicates truecolor. */
   if (im->trueColor)
     {

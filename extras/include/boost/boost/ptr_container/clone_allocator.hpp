@@ -17,9 +17,9 @@
 namespace boost
 {
     /////////////////////////////////////////////////////////////////////////
-    // Clonable concept 
+    // Clonable concept
     /////////////////////////////////////////////////////////////////////////
-    
+
     template< class T >
     inline T* new_clone( const T& r )
     {
@@ -35,7 +35,7 @@ namespace boost
     /////////////////////////////////////////////////////////////////////////
     // CloneAllocator concept
     /////////////////////////////////////////////////////////////////////////
-    
+
     struct heap_clone_allocator
     {
         template< class U >
@@ -53,7 +53,7 @@ namespace boost
     };
 
 
-    
+
     struct view_clone_allocator
     {
         template< class U >
@@ -78,9 +78,9 @@ namespace boost
     {
         return new T();
     }
-        
+
     struct map_heap_clone_allocator : heap_clone_allocator
-    {   
+    {
         template< class U >
         static U* allocate_default_clone()
         {
@@ -88,7 +88,7 @@ namespace boost
             return new_default_clone(ptr);
         }
     };
-    
+
 } // namespace 'boost'
 
 #endif

@@ -24,7 +24,7 @@
  *  where
  *
  *  t = 1 - d - ndtri(p) sqrt(d)
- * 
+ *
  * and
  *
  *  d = 1/9a,
@@ -158,7 +158,7 @@ for( i=0; i<400; i++ )
 			d = 0.5;
 			}
 		else if( dir > 1 )
-			d = 0.5 * d + 0.5; 
+			d = 0.5 * d + 0.5;
 		else
 			d = (y0 - yl)/(yh - yl);
 		dir += 1;

@@ -1,9 +1,9 @@
-//  
+//
 //  splinterpolator.h
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2008 University of Oxford 
+// Copyright (C) 2008 University of Oxford
 //
 //     CCOPYRIGHT
 //
@@ -89,7 +89,7 @@ public:
 
   // Return interpolated value along with first derivative in one direction (useful for distortion correction)
   T operator()(const std::vector<float>& coord, unsigned int dd, T *dval) const;
-  T operator()(double x, double y, double z, unsigned int dd, T *dval) const; 
+  T operator()(double x, double y, double z, unsigned int dd, T *dval) const;
   T operator()(double x, double y, unsigned int dd, T *dval) const { return((*this)(x,y,0.0,dd,dval)); }
   T operator()(double x, T *dval) const { return((*this)(x,0.0,0.0,0,dval)); }
 
@@ -127,11 +127,11 @@ public:
   //
   unsigned int NDim() const { return(_ndim); }
   unsigned int Order() const { return(_order); }
-  ExtrapolationType Extrapolation(unsigned int dim) const 
-  { 
+  ExtrapolationType Extrapolation(unsigned int dim) const
+  {
     if (dim >= _ndim) throw SplinterpolatorException("Extrapolation: Invalid dimension");
     return(_et[dim]);
-  } 
+  }
   const std::vector<unsigned int>& Size() const { return(_dim); }
   unsigned int Size(unsigned int dim) const { if (dim > 4) return(0); else return(_dim[dim]);}
   T Coef(unsigned int x, unsigned int y=0, unsigned int z=0) const
@@ -143,7 +143,7 @@ public:
   T Coef(std::vector<unsigned int> indx) const;
   NEWMAT::ReturnMatrix CoefAsNewmatMatrix() const;
   NEWMAT::ReturnMatrix KernelAsNewmatMatrix(double sp=0.1, unsigned int deriv=0) const;
-  
+
   //
   // Here we declare nested helper-class SplineColumn
   //
@@ -213,7 +213,7 @@ private:
   unsigned int indx2linear(int k, int l, int m) const;
   unsigned int add2linear(unsigned int lin, int j) const;
   double value_at(const double *coord) const;
-  double value_and_derivatives_at(const double *coord, const unsigned int *deriv, double *dval) const; 
+  double value_and_derivatives_at(const double *coord, const unsigned int *deriv, double *dval) const;
   void derivatives_at_i(const unsigned int *indx, const unsigned int *deriv, double *dval) const;
   unsigned int get_start_indicies(const double *coord, int *sinds) const;
   unsigned int get_start_indicies_at_i(const unsigned int *indx, int *sinds) const;
@@ -225,7 +225,7 @@ private:
   double get_wgt_at_i(int i) const;
   double get_dwgt(double x) const;
   double get_dwgt_at_i(int i) const;
-  void get_dwgt1(const double * const *wgts, const double * const *dwgts, const unsigned int *dd, unsigned int nd, 
+  void get_dwgt1(const double * const *wgts, const double * const *dwgts, const unsigned int *dd, unsigned int nd,
                  unsigned int k, unsigned int l, unsigned int m, double wgt1, double *dwgt1) const;
 
   std::pair<double,double> range() const;
@@ -286,14 +286,14 @@ T Splinterpolator<T>::operator()(const std::vector<float>& coord, unsigned int d
   T               rval;
   rval = static_cast<T>(value_and_derivatives_at(dcoord,deriv,&ddval));
   *dval = static_cast<T>(ddval);
-  
+
   return(rval);
-}	   
+}
 
 /////////////////////////////////////////////////////////////////////
 //
 // Returns interpolated value and a single derivative at location
-// given by x, y and . The derivative should be specified as the # 
+// given by x, y and . The derivative should be specified as the #
 // of the dimension (starting at zero) that you want it along.
 //
 /////////////////////////////////////////////////////////////////////
@@ -312,18 +312,18 @@ T Splinterpolator<T>::operator()(double x, double y, double z, unsigned int dd, 
   T               rval;
   rval = static_cast<T>(value_and_derivatives_at(coord,deriv,&ddval));
   *dval = static_cast<T>(ddval);
-  
+
   return(rval);
-}	   
+}
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns interpolated value and selected (by deriv) derivatives 
+// Returns interpolated value and selected (by deriv) derivatives
 // at location given by coord. The interpolated value is the return
 // value and the derivatives are returned in rderiv. The input
 // deriv should be an _ndim long vector where a 1 indicates that
 // the derivative is required in that direction and a zero that it
-// is not. 
+// is not.
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -346,8 +346,8 @@ T Splinterpolator<T>::ValAndDerivs(const std::vector<float>& coord, const std::v
 /////////////////////////////////////////////////////////////////////
 //
 // Returns interpolated value and derivatives in the x, y and z
-// directions at a location given by x, y and z. The interpolated 
-// value is the return value and the derivatives are returned in rderiv. 
+// directions at a location given by x, y and z. The interpolated
+// value is the return value and the derivatives are returned in rderiv.
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -416,7 +416,7 @@ void Splinterpolator<T>::Grad3D(unsigned int i, unsigned int j, unsigned int k, 
   double       dval[5] = {0.0,0.0,0.0,0.0,0.0};
   derivatives_at_i(lindx,deriv,dval);
   *xg=static_cast<T>(dval[0]); *yg=static_cast<T>(dval[1]); *zg=static_cast<T>(dval[2]);
-  return; 
+  return;
 }
 
 template<class T>
@@ -454,11 +454,11 @@ T Splinterpolator<T>::Coef(std::vector<unsigned int> indx) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the values of all coefficients as a Newmat matrix. If 
+// Returns the values of all coefficients as a Newmat matrix. If
 // _ndim==1 it will return a row-vector, if _ndim==2 it will return
 // a matrix, if _ndim==3 it will return a tiled matrix where the n
-// first rows (where n is the number of rows in one slice) pertain to 
-// the first slice, the next n rows to the second slice, etc. And 
+// first rows (where n is the number of rows in one slice) pertain to
+// the first slice, the next n rows to the second slice, etc. And
 // correspondingly for 4- and 5-D.
 //
 /////////////////////////////////////////////////////////////////////
@@ -476,7 +476,7 @@ NEWMAT::ReturnMatrix Splinterpolator<T>::CoefAsNewmatMatrix() const
       for (cindx[2]=0; cindx[2]<_dim[2]; cindx[2]++) {
 	for (cindx[1]=0; cindx[1]<_dim[1]; cindx[1]++, r++) {
 	  for (cindx[0]=0; cindx[0]<_dim[0]; cindx[0]++) {
-            mat.element(r,cindx[0]) = Coef(cindx);  
+            mat.element(r,cindx[0]) = Coef(cindx);
 	  }
 	}
       }
@@ -493,7 +493,7 @@ NEWMAT::ReturnMatrix Splinterpolator<T>::CoefAsNewmatMatrix() const
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-NEWMAT::ReturnMatrix Splinterpolator<T>::KernelAsNewmatMatrix(double sp,                // Distance (in ksp) between points 
+NEWMAT::ReturnMatrix Splinterpolator<T>::KernelAsNewmatMatrix(double sp,                // Distance (in ksp) between points
                                                               unsigned int deriv) const // Derivative (only 0/1 implemented).
 {
   if (!_valid) throw SplinterpolatorException("KernelAsNewmatMatrix: Cannot get kernel for un-initialized object");
@@ -509,7 +509,7 @@ NEWMAT::ReturnMatrix Splinterpolator<T>::KernelAsNewmatMatrix(double sp,        
     kernel.element(i,1) = (deriv) ? get_dwgt(x) : get_wgt(x);
   }
   kernel.Release();
-  return(kernel);  
+  return(kernel);
 }
 /////////////////////////////////////////////////////////////////////
 //
@@ -546,7 +546,7 @@ void Splinterpolator<T>::SplineColumn::Deconv(unsigned int order, ExtrapolationT
     for (int i=_sz-2; i>=0; i--, ptr--) *ptr = z[p]*(*(ptr+1) - *ptr);
   }
   double *ptr=_col;
-  for (unsigned int i=0; i<_sz; i++, ptr++) *ptr *= sf; 
+  for (unsigned int i=0; i<_sz; i++, ptr++) *ptr *= sf;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -557,7 +557,7 @@ void Splinterpolator<T>::SplineColumn::Deconv(unsigned int order, ExtrapolationT
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the interpolated value at location given by coord. 
+// Returns the interpolated value at location given by coord.
 // coord must be a pointer to an array of indicies with _ndim
 // values.
 //
@@ -577,11 +577,11 @@ double Splinterpolator<T>::value_at(const double *coord) const
   get_wgts(coord,inds,wgts);
 
   double val=0.0;
-  for (int m=0, me=(_ndim>4)?ni:1; m<me; m++) { 
-    for (int l=0, le=(_ndim>3)?ni:1; l<le; l++) { 
-      for (int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) { 
+  for (int m=0, me=(_ndim>4)?ni:1; m<me; m++) {
+    for (int l=0, le=(_ndim>3)?ni:1; l<le; l++) {
+      for (int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) {
         double wgt1 = wgts[4][m]*wgts[3][l]*wgts[2][k];
-        for (int j=0, je=(_ndim>1)?ni:1; j<je; j++) { 
+        for (int j=0, je=(_ndim>1)?ni:1; j<je; j++) {
           double wgt2 = wgt1*wgts[1][j];
           for (int i=0; i<static_cast<int>(ni); i++) {
             int cindx[] = {inds[0]+i,inds[1]+j,inds[2]+k,inds[3]+l,inds[4]+m};
@@ -609,12 +609,12 @@ double Splinterpolator<T>::value_at(const double *coord) const
   get_wgts(coord,inds,wgts);
 
   double val=0.0;
-  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) { 
-    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) { 
-      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) { 
+  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) {
+    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) {
+      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) {
         double wgt1 = wgts[4][m]*wgts[3][l]*wgts[2][k];
         unsigned int linear1 = indx2linear(inds[2]+k,inds[3]+l,inds[4]+m);
-        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) { 
+        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) {
           double wgt2 = wgt1*wgts[1][j];
           int linear2 = add2linear(linear1,inds[1]+j);
           double *iiwgt=iwgt;
@@ -630,18 +630,18 @@ double Splinterpolator<T>::value_at(const double *coord) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the interpolated value and selected derivatives at a 
-// location given by coord. coord must be a pointer to an array 
+// Returns the interpolated value and selected derivatives at a
+// location given by coord. coord must be a pointer to an array
 // of voxel indicies with _ndim values. deriv must be a pointer
-// to an _ndim long array of 0/1 specifying if the derivative is 
+// to an _ndim long array of 0/1 specifying if the derivative is
 // requested in that direction or not.
 //
 /////////////////////////////////////////////////////////////////////
 
 template<class T>
-double Splinterpolator<T>::value_and_derivatives_at(const double       *coord,  
-						    const unsigned int *deriv, 
-						    double             *dval) 
+double Splinterpolator<T>::value_and_derivatives_at(const double       *coord,
+						    const unsigned int *deriv,
+						    double             *dval)
 const
 {
   if (should_be_zero(coord)) { memset(dval,n_nonzero(deriv)*sizeof(double),0); return(0.0); }
@@ -653,7 +653,7 @@ const
   double       dwgt1[5];
   double       dwgt2[5];
   int          inds[5];
-  unsigned int dd[5]; 
+  unsigned int dd[5];
   unsigned int nd = 0;
   unsigned int ni = 0;
   const T      *cptr = coef_ptr();
@@ -664,13 +664,13 @@ const
   for (unsigned int i=0; i<_ndim; i++) if (deriv[i]) { dd[nd] = i; dval[nd++] = 0.0; }
 
   double val=0.0;
-  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) { 
-    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) { 
-      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) { 
+  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) {
+    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) {
+      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) {
         double wgt1 = wgts[4][m]*wgts[3][l]*wgts[2][k];
         get_dwgt1(wgts,dwgts,dd,nd,k,l,m,wgt1,dwgt1);
         unsigned int linear1 = indx2linear(inds[2]+k,inds[3]+l,inds[4]+m);
-        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) { 
+        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) {
           double wgt2 = wgt1*wgts[1][j];
           for (unsigned int d=0; d<nd; d++) dwgt2[d] = (dd[d]==1) ? dwgt1[d]*dwgts[1][j] : dwgt1[d]*wgts[1][j];
           int linear2 = add2linear(linear1,inds[1]+j);
@@ -681,7 +681,7 @@ const
             for (unsigned int d=0; d<nd; d++) {
               double add = (dd[d]==0) ? c*diwgt[i]*dwgt2[d] : c*(*iiwgt)*dwgt2[d];
               dval[d] += add;
-	    } 
+	    }
 	  }
 	}
       }
@@ -693,7 +693,7 @@ const
 template <class T>
 void Splinterpolator<T>::derivatives_at_i(const unsigned int *indx,
                                           const unsigned int *deriv,
-                                          double             *dval) 
+                                          double             *dval)
 const
 {
   double       iwgt[8], jwgt[8], kwgt[8], lwgt[8], mwgt[8];
@@ -703,7 +703,7 @@ const
   double       dwgt1[5];
   double       dwgt2[5];
   int          inds[5];
-  unsigned int dd[5]; 
+  unsigned int dd[5];
   unsigned int nd = 0;
   unsigned int ni = 0;
   const T      *cptr = coef_ptr();
@@ -714,13 +714,13 @@ const
   for (unsigned int i=0; i<_ndim; i++) if (deriv[i]) { dd[nd] = i; dval[nd++] = 0.0; }
 
   // double val=0.0;
-  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) { 
-    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) { 
-      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) { 
+  for (unsigned int m=0, me=(_ndim>4)?ni:1; m<me; m++) {
+    for (unsigned int l=0, le=(_ndim>3)?ni:1; l<le; l++) {
+      for (unsigned int k=0, ke=(_ndim>2)?ni:1; k<ke; k++) {
         double wgt1 = wgts[4][m]*wgts[3][l]*wgts[2][k];
         get_dwgt1(wgts,dwgts,dd,nd,k,l,m,wgt1,dwgt1);
         unsigned int linear1 = indx2linear(inds[2]+k,inds[3]+l,inds[4]+m);
-        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) { 
+        for (unsigned int j=0, je=(_ndim>1)?ni:1; j<je; j++) {
           // double wgt2 = wgt1*wgts[1][j];
           for (unsigned int d=0; d<nd; d++) dwgt2[d] = (dd[d]==1) ? dwgt1[d]*dwgts[1][j] : dwgt1[d]*wgts[1][j];
           int linear2 = add2linear(linear1,inds[1]+j);
@@ -731,7 +731,7 @@ const
             for (unsigned int d=0; d<nd; d++) {
               double add = (dd[d]==0) ? c*diwgt[i]*dwgt2[d] : c*(*iiwgt)*dwgt2[d];
               dval[d] += add;
-	    } 
+	    }
 	  }
 	}
       }
@@ -740,7 +740,7 @@ const
   // return(val);
   return;
 }
-    
+
 /////////////////////////////////////////////////////////////////////
 //
 // Returns (in sinds) the indicies of the first coefficient in all
@@ -755,7 +755,7 @@ template<class T>
 unsigned int Splinterpolator<T>::get_start_indicies(const double *coord, int *sinds) const
 {
   unsigned int ni = _order+1;
-  
+
   if (odd(ni)) {
     for (unsigned int i=0; i<_ndim; i++) {
       sinds[i] = static_cast<int>(coord[i]+0.5) - ni/2;
@@ -788,8 +788,8 @@ unsigned int Splinterpolator<T>::get_start_indicies_at_i(const unsigned int *ind
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns (in wgts) the weights for the coefficients given by sinds 
-// for the location given by coord. 
+// Returns (in wgts) the weights for the coefficients given by sinds
+// for the location given by coord.
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -813,7 +813,7 @@ template<class T>
 unsigned int Splinterpolator<T>::get_wgts_at_i(const unsigned int *indx, const int *sinds, double **wgts) const
 {
   unsigned int ni = (odd(_order)) ? _order : _order+1;
-  
+
   for (unsigned int dim=0; dim<_ndim; dim++) {
     for (unsigned int i=0; i<ni; i++) {
       wgts[dim][i] = get_wgt_at_i(indx[dim]-(sinds[dim]+i));
@@ -880,7 +880,7 @@ unsigned int Splinterpolator<T>::get_dwgts_at_i(const unsigned int *indx, const 
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the weight for a spline at integer index i, where i is 
+// Returns the weight for a spline at integer index i, where i is
 // relative to the centre index of the spline.
 //
 /////////////////////////////////////////////////////////////////////
@@ -928,12 +928,12 @@ double Splinterpolator<T>::get_wgt_at_i(int i) const
     throw SplinterpolatorException("get_wgt_at_i: invalid order spline");
     break;
   }
-  return(val);     
+  return(val);
 }
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the weight for the first derivative of a spline at integer 
+// Returns the weight for the first derivative of a spline at integer
 // index i, where i is relative to the centre index of the spline.
 //
 /////////////////////////////////////////////////////////////////////
@@ -983,7 +983,7 @@ double Splinterpolator<T>::get_dwgt_at_i(int i) const
     throw SplinterpolatorException("get_dwgt_at_i: invalid order spline");
     break;
   }
-  return(val);     
+  return(val);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1046,7 +1046,7 @@ double Splinterpolator<T>::get_wgt(double x) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the weight for the first derivative of a spline at 
+// Returns the weight for the first derivative of a spline at
 // coordinate x, where x is relative to the centre of the spline.
 //
 /////////////////////////////////////////////////////////////////////
@@ -1101,8 +1101,8 @@ double Splinterpolator<T>::get_dwgt(double x) const
 }
 
 template<class T>
-inline void Splinterpolator<T>::get_dwgt1(const double * const *wgts, const double * const *dwgts, 
-                                          const unsigned int *dd, unsigned int nd, unsigned int k, 
+inline void Splinterpolator<T>::get_dwgt1(const double * const *wgts, const double * const *dwgts,
+                                          const unsigned int *dd, unsigned int nd, unsigned int k,
                                           unsigned int l, unsigned int m, double wgt1, double *dwgt1) const
 {
   for (unsigned int i=0; i<nd; i++) {
@@ -1267,7 +1267,7 @@ unsigned int Splinterpolator<T>::n_nonzero(const unsigned int *vec) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Takes care of the "common" tasks when constructing a 
+// Takes care of the "common" tasks when constructing a
 // Splinterpolator object. Called by constructors and by .Set()
 //
 /////////////////////////////////////////////////////////////////////
@@ -1281,7 +1281,7 @@ void Splinterpolator<T>::common_construction(const T *data, const std::vector<un
   for (unsigned int i=0; i<dim.size(); i++) if (!dim[i]) throw SplinterpolatorException("common_construction: data cannot have zeros size in any direction");
   if (order > 7) throw SplinterpolatorException("common_construction: spline order must be lesst than 7");
   if (!data) throw SplinterpolatorException("common_construction: zero data pointer");
-  
+
   _order = order;
   _prec = prec;
   _et = et;
@@ -1312,7 +1312,7 @@ void Splinterpolator<T>::assign(const Splinterpolator<T>& src)
   _prec = src._prec;
   _dim = src._dim;
   _et = src._et;
-  
+
   if (_own_coef) { // If we need to do a deep copy
     unsigned int ts = 1;
     for (unsigned int i=0; i<_ndim; i++) ts *= _dim[i];
@@ -1339,11 +1339,11 @@ bool Splinterpolator<T>::calc_coef(const T *data, bool copy)
   _coef = new T[ts];
   memcpy(_coef,data,ts*sizeof(T));
 
-  if (_order < 2) return(true);  // If nearest neighbour or linear, that's all we need 
+  if (_order < 2) return(true);  // If nearest neighbour or linear, that's all we need
 
   // Loop over all non-singleton dimensions and deconvolve along them
   //
-  std::vector<unsigned int>  tdim(_dim.size()-1,0); 
+  std::vector<unsigned int>  tdim(_dim.size()-1,0);
   for (unsigned int cdir=0; cdir<_dim.size(); cdir++) {
     if (_dim[cdir] > 1) deconv_along(cdir);
   }
@@ -1380,7 +1380,7 @@ void Splinterpolator<T>::deconv_along(unsigned int dim)
   }
 
   SplineColumn  col(mdim,mstep);          // Column helps us do the job
-  
+
   for (unsigned int l=0; l<rdim[3]; l++) {
     for (unsigned int k=0; k<rdim[2]; k++) {
       for (unsigned int j=0; j<rdim[1]; j++) {
@@ -1406,9 +1406,9 @@ void Splinterpolator<T>::deconv_along(unsigned int dim)
 //
 // This function returns the poles and scale-factors for splines
 // of order 2--7. The values correspond to those found in
-// table 1 in Unsers 1993 paper: 
+// table 1 in Unsers 1993 paper:
 // B-spline signal processing. II. Efficiency design and applications
-// 
+//
 // The actual values have been taken from
 // http://bigwww.epfl.ch/thevenaz/interpolation/coeff.c
 //
@@ -1491,7 +1491,7 @@ double Splinterpolator<T>::SplineColumn::init_fwd_sweep(double z, ExtrapolationT
     double z2i=z;
     for (unsigned int i=1; i<n; i++, ptr++, z2i*=z) iv += z2i * *ptr;
   }
-  return(iv); 
+  return(iv);
 }
 
 /////////////////////////////////////////////////////////////////////

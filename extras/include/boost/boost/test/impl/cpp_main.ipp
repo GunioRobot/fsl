@@ -1,7 +1,7 @@
 //  (C) Copyright Gennadiy Rozental 2001-2005.
 //  (C) Copyright Beman Dawes 1995-2001.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -45,11 +45,11 @@ namespace {
 
 struct cpp_main_caller {
     cpp_main_caller( int argc, char** argv ) : m_argc( argc ), m_argv( argv ) {}
-    
+
     int operator()() { return cpp_main( m_argc, m_argv ); }
-  
+
 private:
-    // Data members    
+    // Data members
     int      m_argc;
     char**   m_argv;
 };
@@ -66,11 +66,11 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
 
     boost::unit_test::const_string p( std::getenv( "BOOST_TEST_CATCH_SYSTEM_ERRORS" ) );
     bool catch_system_errors = p != "no";
-        
+
     try {
         ::boost::execution_monitor ex_mon;
         result = ex_mon.execute( ::boost::unit_test::callback0<int>( cpp_main_caller( argc, argv ) ), catch_system_errors );
-        
+
         if( result == 0 )
             result = ::boost::exit_success;
         else if( result != ::boost::exit_success ) {
@@ -82,7 +82,7 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
         std::cout << "\n**** exception(" << exex.code() << "): " << exex.what() << std::endl;
         result = ::boost::exit_exception_failure;
     }
-    
+
     if( result != ::boost::exit_success ) {
         std::cerr << "******** errors detected; see standard output for details ********" << std::endl;
     }
@@ -92,8 +92,8 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
         //  line argument modifications; for use in production programs
         //  that's a no-no in some organizations.
         ::boost::unit_test::const_string p( std::getenv( "BOOST_PRG_MON_CONFIRM" ) );
-        if( p != "no" ) { 
-            std::cerr << std::flush << "no errors detected" << std::endl; 
+        if( p != "no" ) {
+            std::cerr << std::flush << "no errors detected" << std::endl;
         }
     }
 
@@ -106,7 +106,7 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: cpp_main.ipp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

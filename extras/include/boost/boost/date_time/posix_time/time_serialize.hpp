@@ -2,7 +2,7 @@
 #define POSIX_TIME_SERIALIZE_HPP___
 
 /* Copyright (c) 2004-2005 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -33,8 +33,8 @@ namespace serialization {
  * as defined in the time_duration class
  */
 template<class Archive>
-void save(Archive & ar, 
-          const posix_time::time_duration& td, 
+void save(Archive & ar,
+          const posix_time::time_duration& td,
           unsigned int version)
 {
   // serialize a bool so we know how to read this back in later
@@ -62,8 +62,8 @@ void save(Archive & ar,
  * as defined in the time_duration class
  */
 template<class Archive>
-void load(Archive & ar, 
-          posix_time::time_duration & td, 
+void load(Archive & ar,
+          posix_time::time_duration & td,
           unsigned int version)
 {
   bool is_special = false;
@@ -97,8 +97,8 @@ void load(Archive & ar,
  * a date object and a time_duration onject
  */
 template<class Archive>
-void save(Archive & ar, 
-          const posix_time::ptime& pt, 
+void save(Archive & ar,
+          const posix_time::ptime& pt,
           unsigned int version)
 {
   // from_iso_string does not include fractional seconds
@@ -116,8 +116,8 @@ void save(Archive & ar,
  * a date object and a time_duration onject
  */
 template<class Archive>
-void load(Archive & ar, 
-          posix_time::ptime & pt, 
+void load(Archive & ar,
+          posix_time::ptime & pt,
           unsigned int version)
 {
   // from_iso_string does not include fractional seconds
@@ -132,16 +132,16 @@ void load(Archive & ar,
   else {
     pt = boost::posix_time::ptime(d.as_special());
   }
-    
+
 }
 
 //!override needed b/c no default constructor
 template<class Archive>
-inline void load_construct_data(Archive & ar, 
-                                posix_time::ptime* pt, 
+inline void load_construct_data(Archive & ar,
+                                posix_time::ptime* pt,
                                 const unsigned int file_version)
 {
-  // retrieve data from archive required to construct new 
+  // retrieve data from archive required to construct new
   // invoke inplace constructor to initialize instance of date
   new(pt) boost::posix_time::ptime(boost::posix_time::not_a_date_time);
 }
@@ -153,8 +153,8 @@ inline void load_construct_data(Archive & ar,
  * a begining ptime object and an ending ptime object
  */
 template<class Archive>
-void save(Archive & ar, 
-          const posix_time::time_period& tp, 
+void save(Archive & ar,
+          const posix_time::time_period& tp,
           unsigned int version)
 {
   posix_time::ptime beg(tp.begin().date(), tp.begin().time_of_day());
@@ -168,8 +168,8 @@ void save(Archive & ar,
  * a begining ptime object and an ending ptime object
  */
 template<class Archive>
-void load(Archive & ar, 
-          boost::posix_time::time_period & tp, 
+void load(Archive & ar,
+          boost::posix_time::time_period & tp,
           unsigned int version)
 {
   posix_time::time_duration td(1,0,0);
@@ -183,8 +183,8 @@ void load(Archive & ar,
 
 //!override needed b/c no default constructor
 template<class Archive>
-inline void load_construct_data(Archive & ar, 
-                                boost::posix_time::time_period* tp, 
+inline void load_construct_data(Archive & ar,
+                                boost::posix_time::time_period* tp,
                                 const unsigned int file_version)
 {
   posix_time::time_duration td(1,0,0);

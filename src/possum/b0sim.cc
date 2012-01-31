@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -86,8 +86,8 @@ string title="b0sim (Version 1.0)\nCopyright(c) 2003, University of Oxford (Mark
 string examples="b0sim [options] -i <input model> -b <b0 input> -o <output>";
 
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -113,7 +113,7 @@ int nonoptarg;
 
 // Local functions
 
-int calc_gradients(const volume<double>& im, volume<double>& gx, 
+int calc_gradients(const volume<double>& im, volume<double>& gx,
 		   volume<double>& gy, volume<double>& gz)
 {
   // Input image, im, must be in uT : output gradients in uT/mm
@@ -156,13 +156,13 @@ int calc_gradients(const volume<double>& im, volume<double>& gx,
 }
 
 
-int do_work(int argc, char* argv[]) 
+int do_work(int argc, char* argv[])
 {
   // Simulates an EPI image based on rho from brainweb_t2 and b0
   // inhomogeneity from input file
-  
+
   if (debug.value()) cout << "Debugging on" << endl;
-  
+
   string fname=fslbasename(outname.value());
 
   // random scanner and physics parameters
@@ -170,7 +170,7 @@ int do_work(int argc, char* argv[])
   double gammabar = 42.6;  // MHz/T = kHz/mT
   // NB: gammabar * field in mT/m = kHz/m = Hz/mm
   double te = 40*1e-3;  // in sec
-  
+
   // read input object model
   volume<double> rho, b0, gx, gy, gz;
   read_volume(rho,inname.value());
@@ -213,11 +213,11 @@ int do_work(int argc, char* argv[])
   //int nx=64, ny=64, nz=25;
   int nx=64, ny=64, nz=1;
   double dx=4.0, dy=4.0, dz=6.0; // output voxel dims in mm
-  
+
   // set up k-space
   double dkx=1/(nx*dx); // in mm^-1
   double dky=1/(ny*dy);
-  
+
   ColumnVector kx1(nx), ky1(nx);
   for (int m=1, n=(-nx/2); n<=(nx-1)/2; m++, n++) {
     kx1(m)=n;
@@ -236,7 +236,7 @@ int do_work(int argc, char* argv[])
   }
   kx=kx*dkx;
   ky=ky*dky;
-  
+
   // set up timing
   double dt = dkx/(gammabar*gmax); // in sec
   double t0 = te - ((ny/2)*(nx-1) + nx/2)*dt;
@@ -246,7 +246,7 @@ int do_work(int argc, char* argv[])
   if (debug.value()) write_ascii_matrix(t,fname+"debug_t");
   if (debug.value()) write_ascii_matrix(kx,fname+"debug_kx");
   if (debug.value()) write_ascii_matrix(ky,fname+"debug_ky");
-  
+
   // setup final image
   volume<float> dummy(nx,ny,nz);
   dummy.setdims(dx,dy,dz);
@@ -254,7 +254,7 @@ int do_work(int argc, char* argv[])
   complexvolume finalimage(dummy,dummy);
 
   // calculate signal s(t)
-  
+
   Matrix sig(2,nx*ny);
   double twopi = 2.0*M_PI;
   for (int oz=0; oz<nz; oz++) { // slice number of output
@@ -267,12 +267,12 @@ int do_work(int argc, char* argv[])
     if (zend>=inz) zend=inz-1;
     if ( (zstart>=inz) || (zend<0) ) {
       zstart=1; zend=0;  // do not want the following loop to run!
-    } else if (verbose.value()) { 
+    } else if (verbose.value()) {
       cout << "Output slice " << oz << " ;  input slice range : ";
     }
     for (int z=zstart; z<=zend; z++) {  // slice number of input
-      if (verbose.value()) { 
-	if (z==zend) cout << z << endl; 
+      if (verbose.value()) {
+	if (z==zend) cout << z << endl;
 	else { cout <<  z << " , "; cout.flush(); }
       }
       double zpos=lz*(z+1)-z0;   // NB z+1 for MATLAB equivalence
@@ -284,8 +284,8 @@ int do_work(int argc, char* argv[])
 	      double kxx=kx(m) + gbart*gx(x,y,z);
 	      double kyy=ky(m) + gbart*gy(x,y,z);
 	      double kzz=gbart*gz(x,y,z);
-	      double phi = twopi*(gbart*b0(x,y,z) + kx(m)*xpos(x,y,0) + 
-				  ky(m)*ypos(x,y,0));   
+	      double phi = twopi*(gbart*b0(x,y,z) + kx(m)*xpos(x,y,0) +
+				  ky(m)*ypos(x,y,0));
 	      double term = rho(x,y,z)*MISCMATHS::Sinc(lx*kxx)*
 		MISCMATHS::Sinc(ly*kyy)*MISCMATHS::Sinc(lz*kzz);
 	      sig(1,m) += cos(phi)*term;
@@ -296,9 +296,9 @@ int do_work(int argc, char* argv[])
       }
     }
     sig *= (lx*ly*lz);
-    
+
     if (debug.value()) write_ascii_matrix(sig,fname+"debug_signal");
-    
+
     // reconstruct slice
     volume<float> dummy(nx,ny,1);
     dummy = 0.0;
@@ -312,7 +312,7 @@ int do_work(int argc, char* argv[])
 	kslice.im(m-1,2*n-1,0) = (double) sig(2,tidx+2*nx-m);
       }
     }
-  
+
     if (debug.value()) save_complexvolume(kslice,fname+"debug_kspace");
     fft2(kslice);
     fftshift(kslice);
@@ -328,7 +328,7 @@ int do_work(int argc, char* argv[])
   if (debug.value()) print_volume_info(finalimage.re(),"finalimage.re()");
   if (debug.value()) print_volume_info(finalimage.im(),"finalimage.im()");
   save_complexvolume(finalimage,fname);
-  
+
   return 0;
 }
 
@@ -352,24 +352,24 @@ int main(int argc,char *argv[])
     options.add(verbose);
     options.add(help);
     options.add(debug);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
 

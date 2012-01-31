@@ -3,7 +3,7 @@
 
 class TestVolumeStoreImpl;
 
-class TestVolumeStore  
+class TestVolumeStore
 {
 public:
 	TestVolumeStore();

@@ -46,14 +46,14 @@ namespace boost { namespace fusion
         };
 
         template<typename Iterator>
-        typename next_traits_impl<Iterator>::type 
+        typename next_traits_impl<Iterator>::type
         call(Iterator const& i, mpl::true_)
         {
             return i.concat;
         }
-        
+
         template<typename Iterator>
-        typename next_traits_impl<Iterator>::type 
+        typename next_traits_impl<Iterator>::type
         call(Iterator const& i, mpl::false_)
         {
             typedef typename next_traits_impl<Iterator>::type type;

@@ -108,7 +108,7 @@ using unit_test::const_string;
 
 const std::size_t REPORT_ERROR_BUFFER_SIZE = 512;
 
-static void report_error( 
+static void report_error(
     execution_exception::error_code   ec,
     const_string                      msg1,         // first part of the message
     const_string                      msg2 = "" );  // second part of the message; sum length msg1 + msg2 should not
@@ -511,7 +511,7 @@ ms_se_trans_func( unsigned int id, _EXCEPTION_POINTERS* /* exps */ )
 
 //____________________________________________________________________________//
 
-void BOOST_TEST_CALL_DECL 
+void BOOST_TEST_CALL_DECL
 ms_se_forward_func( unsigned int /* id */, _EXCEPTION_POINTERS* /* exps */ )
 {
     throw;
@@ -624,7 +624,7 @@ detect_memory_leak( long mem_leak_alloc_num )
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
-    
+
     if( mem_leak_alloc_num > 1 )
         _CrtSetBreakAlloc( mem_leak_alloc_num );
 #endif // BOOST_MS_CRT_DEBUG_HOOKS

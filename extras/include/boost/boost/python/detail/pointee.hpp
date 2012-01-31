@@ -7,7 +7,7 @@
 
 # include <boost/type_traits/object_traits.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost { namespace python { namespace detail {
 
 template <bool is_ptr = true>
 struct pointee_impl

@@ -58,7 +58,7 @@ namespace boost { namespace fusion
         }
 
         template<typename Sequence>
-        typename begin_traits_impl<Sequence>::type 
+        typename begin_traits_impl<Sequence>::type
         begin_traits_impl<Sequence>::call(Sequence& s)
         {
             return joint_view_detail::call(s, equal_to());
@@ -74,7 +74,7 @@ namespace boost { namespace fusion
         };
 
         template<typename Sequence>
-        typename end_traits_impl<Sequence>::type 
+        typename end_traits_impl<Sequence>::type
         end_traits_impl<Sequence>::call(Sequence& s)
         {
             return s.concat_last;

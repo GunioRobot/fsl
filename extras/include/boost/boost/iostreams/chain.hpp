@@ -22,7 +22,7 @@
 #include <stdexcept>                            // logic_error, out_of_range.
 #include <boost/checked_delete.hpp>
 #include <boost/config.hpp>                     // BOOST_MSVC, template friends,
-#include <boost/detail/workaround.hpp>          // BOOST_NESTED_TEMPLATE 
+#include <boost/detail/workaround.hpp>          // BOOST_NESTED_TEMPLATE
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
@@ -200,7 +200,7 @@ public:
     T* component(int n) const { return component(n, boost::type<T>()); }
 
     // Deprecated.
-    template<int N, typename T> 
+    template<int N, typename T>
     T* component() const { return component<T>(N); }
 #endif
 
@@ -428,7 +428,7 @@ public:
 //
 //    template<typename T>
 //    T* component(int n) const   // Tru64 needs boost::type.
-//    { return chain_->component(n, boost::type<T>()); } 
+//    { return chain_->component(n, boost::type<T>()); }
 //
 //    // Deprecated.
 //    template<int N, typename T>

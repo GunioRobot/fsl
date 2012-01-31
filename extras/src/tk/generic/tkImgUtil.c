@@ -1,4 +1,4 @@
-/* 
+/*
  * tkImgUtil.c --
  *
  *	This file contains image related utility functions.

@@ -26,7 +26,7 @@
 
 # if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
 #  include <boost/type_traits/remove_cv.hpp>
-# endif 
+# endif
 
 # include <boost/mpl/eval_if.hpp>
 # include <boost/mpl/if.hpp>
@@ -34,7 +34,7 @@
 
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 //
 // This file defines the make_getter and make_setter function
@@ -51,9 +51,9 @@ namespace detail
   template <class Data, class Class>
   struct member
   {
-   public:      
+   public:
       member(Data Class::*which) : m_which(which) {}
-      
+
       Data& operator()(Class& c) const
       {
           return c.*m_which;
@@ -72,9 +72,9 @@ namespace detail
   template <class Data>
   struct datum
   {
-   public:      
+   public:
       datum(Data *which) : m_which(which) {}
-      
+
       Data& operator()() const
       {
           return *m_which;
@@ -87,7 +87,7 @@ namespace detail
    private:
       Data *m_which;
   };
-  
+
   //
   // Helper metafunction for determining the default CallPolicy to use
   // for attribute access.  If T is a [reference to a] class type X
@@ -98,7 +98,7 @@ namespace detail
   // pointee type), to-python conversions will attempt to produce an
   // object which refers to the original C++ object, rather than a
   // copy.  See default_member_getter_policy for rationale.
-  // 
+  //
   template <class T>
   struct default_getter_by_ref
       : mpl::and_<
@@ -166,7 +166,7 @@ namespace detail
           detail::datum<D>(d), policies, mpl::vector1<D&>()
       );
   }
-  
+
   // Handle non-member pointers without policies
   template <class D>
   inline object make_getter(D* d, not_specified, mpl::false_, long)
@@ -183,14 +183,14 @@ namespace detail
       typedef typename remove_cv<C>::type Class;
 #else
       typedef C Class;
-#endif 
+#endif
       return python::make_function(
           detail::member<D,Class>(pm)
         , policies
         , mpl::vector2<D&,Class&>()
       );
   }
-      
+
   // Handle pointers-to-members without policies
   template <class C, class D>
   inline object make_getter(D C::*pm, not_specified, mpl::true_, long)
@@ -214,7 +214,7 @@ namespace detail
   // ordering at all and should always be passed 0.
   //
 
-  
+
   // Handle non-member pointers
   template <class D, class Policies>
   inline object make_setter(D* p, Policies const& policies, mpl::false_, int)

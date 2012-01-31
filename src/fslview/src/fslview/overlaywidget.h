@@ -30,21 +30,21 @@ class OverlayWidget : public OverlayWidgetBase, OverlayListObserver
 
   QSize sizeHint() const;
 
- private:  
+ private:
   void updateListView();
   void updateListItem();
-  void setAllInActive(); 
+  void setAllInActive();
   void updateUpDownButtons();
   void setVisibility(bool state);
   void updateControls();
   QListViewItem* getLayerItem(const MetaImage::Handle mi)const;
 
-  OverlayList::Handle   m_overlayList; 
+  OverlayList::Handle   m_overlayList;
 
   bool           m_blockEvents;
   bool           m_blockSliderUpdate;
   QListViewItem *m_prevItem;
-  
+
  signals:
   virtual void infoButtonAction();
 
@@ -53,10 +53,10 @@ class OverlayWidget : public OverlayWidgetBase, OverlayListObserver
   void listSelectChanged();
   void visibleButtonChanged(bool state);
   void lockedButtonChanged(bool state);
- 
+
   void listDoubleClicked(QListViewItem* item);
 
-  void transSliderChanged(int value);     
+  void transSliderChanged(int value);
   void modTransSliderChanged(int value);
   void upButtonPressed();
   void downButtonPressed();

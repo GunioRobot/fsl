@@ -11,9 +11,9 @@ id=`xwininfo -root -tree | grep -m 1 1024x768 | awk '{print $1}'`
 echo $id;
 
 xwd -silent -nobdrs -id $id | convert - index.pnm
-pnmscale -xsize=320 -ysize=240 index.pnm | convert - index.gif 
+pnmscale -xsize=320 -ysize=240 index.pnm | convert - index.gif
 
-for i in ${1}/s_*htm ; do 
+for i in ${1}/s_*htm ; do
   j=`basename $i .htm | sed 's/\// /g' | sed 's/s_//'`
 
   opera ${i} &

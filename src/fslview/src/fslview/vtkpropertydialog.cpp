@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -21,7 +21,7 @@
 #include <qcolordialog.h>
 #include <qpushbutton.h>
 
-VTKPropertyDialog::VTKPropertyDialog(QWidget* parent, VTKProperties& props): 
+VTKPropertyDialog::VTKPropertyDialog(QWidget* parent, VTKProperties& props):
   VTKPropertyDialogBase(parent), m_props(props)
 {
 //   m_lowerThreshold->setValue(m_props.inqLowerThreshold());
@@ -80,8 +80,8 @@ VTKProperties& VTKPropertyDialog::getProperties()
   m_props.setFeatureAngle(m_featureAngle->text().toDouble());
   m_props.setStdDev(m_sd->text().toDouble());
   m_props.setRadii(m_radius->text().toDouble());
-  m_props.setColor(m_colorR->text().toDouble(), 
-		   m_colorG->text().toDouble(), 
+  m_props.setColor(m_colorR->text().toDouble(),
+		   m_colorG->text().toDouble(),
 		   m_colorB->text().toDouble());
   return m_props;
 }

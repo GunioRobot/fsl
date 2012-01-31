@@ -22,7 +22,7 @@ enum VMUpdateType {VM_DFP, VM_BFGS};                // See NRinC chapter 10.
 
 enum CGUpdateType {CG_FR, CG_PR};                   // Fletcher-Reeves, Polak-Ribiere
 
-enum VMMatrixType {VM_OPT,                          // 
+enum VMMatrixType {VM_OPT,                          //
                    VM_COL,                          // Store all rank-one updates as column-vectors
                    VM_FULL};                        // Store full estimate of inverse Hessian
 
@@ -55,10 +55,10 @@ public:
 };
 
 // NonlinParam is a struct that contains the
-// information about "how" the 
+// information about "how" the
 // minisation should be performed. I.e. it
 // contains things like choice of minimisation
-// algorithm, # of parameters, converegence 
+// algorithm, # of parameters, converegence
 // criteria etc
 
 class NonlinParam
@@ -70,7 +70,7 @@ public:
               NEWMAT::ColumnVector  ppar=NEWMAT::ColumnVector(),
               bool                  plogcf=false,
               bool                  ploglambda=false,
-              bool                  plogpar=false, 
+              bool                  plogpar=false,
               int                   pmaxiter=200,
               double                pcftol=1.0e-8,
               double                pgtol=1.0e-8,
@@ -88,12 +88,12 @@ public:
 	      int                   pcg_maxiter=200,
 	      double                pcg_tol=1.0e-6,
               double                plambda=0.1)
-    : npar(pnpar), mtd(pmtd), logcf(plogcf), 
-    loglambda(ploglambda), logpar(plogpar), maxiter(pmaxiter), 
-    cftol(pcftol), gtol(pgtol), ptol(pptol), vmut(pvmut), 
+    : npar(pnpar), mtd(pmtd), logcf(plogcf),
+    loglambda(ploglambda), logpar(plogpar), maxiter(pmaxiter),
+    cftol(pcftol), gtol(pgtol), ptol(pptol), vmut(pvmut),
     alpha(palpha), stepmax(pstepmax), lm_maxiter(plm_maxiter),
-    maxrestart(pmaxrestart), autoscale(pautoscale), cgut(pcgut), 
-    lm_ftol(plm_ftol), lmtype(plmtype), ltol(pltol), cg_maxiter(pcg_maxiter), 
+    maxrestart(pmaxrestart), autoscale(pautoscale), cgut(pcgut),
+    lm_ftol(plm_ftol), lmtype(plmtype), ltol(pltol), cg_maxiter(pcg_maxiter),
     cg_tol(pcg_tol), lambda(), cf(), par(), niter(0), nrestart(0), status(NL_UNDEFINED)
   {
     lambda.push_back(plambda);
@@ -104,7 +104,7 @@ public:
       SetStartingEstimate(tmp);
     }
   }
-  ~NonlinParam() {}                  
+  ~NonlinParam() {}
 
   // Routines to check values
 
@@ -144,7 +144,7 @@ public:
   double InitialCF() const {if (logcf) return(cf[0]); else {throw NonlinException("InitialCF: Cost-function not logged"); return(cf[0]);}}
   const std::vector<double> CFHistory() const {if (logcf) return(cf); else {throw NonlinException("CFHistory: Cost-function not logged"); return(cf);}}
   NonlinOut Status() const {return(status);}
-      
+
   // Routines to set values of steering parameters
   void SetMethod(NLMethod pmtd) {mtd = pmtd;}
   void LogCF(bool flag=true) {logcf = flag;}
@@ -196,7 +196,7 @@ public:
   void SetEquationSolverMaxIter(int pcg_maxiter) {cg_maxiter = pcg_maxiter;}
   void SetEquationSolverTol(double pcg_tol) {cg_tol = pcg_tol;}
 
-  
+
   // Reset is used to reset a NonlinParam object after it has run to convergence, thereby allowing it
   // to be reused with a different CF object. This is to avoid the cost of creating the object many
   // times when fitting for example multiple voxels.
@@ -205,15 +205,15 @@ public:
   // all be called for const objects.
   void SetPar(const NEWMAT::ColumnVector& p) const {
     if (p.Nrows() != npar) throw NonlinException("SetPar: Mismatch between starting vector and # of parameters");
-    if (logpar || !par.size()) par.push_back(p); 
+    if (logpar || !par.size()) par.push_back(p);
     else par[0] = p;
   }
   void SetCF(double pcf) const {
-    if (logcf || !cf.size()) cf.push_back(pcf); 
+    if (logcf || !cf.size()) cf.push_back(pcf);
     else cf[0] = pcf;
   }
   void SetLambda(double pl) const {
-    if (loglambda || !lambda.size()) lambda.push_back(pl); 
+    if (loglambda || !lambda.size()) lambda.push_back(pl);
     else lambda[0] = pl;
   }
   bool NextIter(bool success=true) const {if (success && niter++ >= maxiter) return(false); else return(true);}
@@ -241,7 +241,7 @@ private:
   double                     alpha;      // Criterion for convergence in line minimisation
   double                     stepmax;    // Maximum step length for line minimisation
   int                        lm_maxiter; // Maximum # of iterations for line minimisation
-  int                        maxrestart; // Maximum # of restarts that should be done.      
+  int                        maxrestart; // Maximum # of restarts that should be done.
   bool                       autoscale;  // "Automatic" search for optimal scaling
 
   //         Parameters that apply to CG algorithm
@@ -264,12 +264,12 @@ private:
   mutable std::vector<NEWMAT::ColumnVector>          par;        // (History of) Parameter estimates
   mutable int                                        niter;      // Number of iterations
   mutable int                                        nrestart;   // Number of restarts
-  mutable NonlinOut                                  status;     // Output status  
-  
+  mutable NonlinOut                                  status;     // Output status
+
   NonlinParam& operator=(const NonlinParam& rhs); // Hide assignment
 
 };
-  
+
 // NonlinCF (Cost Function) is a virtual
 // class that defines a minimal interface.
 // By subclassing NonlinCF the "user" can
@@ -283,10 +283,10 @@ public:
   NonlinCF() {}
   virtual ~NonlinCF() {}
   virtual double sf() const {return(1.0);}
-  virtual NEWMAT::ReturnMatrix grad(const NEWMAT::ColumnVector& p) const;  
+  virtual NEWMAT::ReturnMatrix grad(const NEWMAT::ColumnVector& p) const;
   virtual boost::shared_ptr<BFMatrix> hess(const NEWMAT::ColumnVector& p,
-                                           boost::shared_ptr<BFMatrix> iptr=boost::shared_ptr<BFMatrix>()) const;  
-  virtual double cf(const NEWMAT::ColumnVector& p) const = 0;              
+                                           boost::shared_ptr<BFMatrix> iptr=boost::shared_ptr<BFMatrix>()) const;
+  virtual double cf(const NEWMAT::ColumnVector& p) const = 0;
 };
 
 // Varmet matrix is a "helper" class
@@ -305,7 +305,7 @@ private:
   VarmetMatrix& operator=(const VarmetMatrix& rhs);  // Hide assignment
 
 public:
-  explicit VarmetMatrix(int psz, VMMatrixType pmtp, VMUpdateType putp) 
+  explicit VarmetMatrix(int psz, VMMatrixType pmtp, VMUpdateType putp)
   : sz(psz), mtp(pmtp), utp(putp)
   {
     if (sz > 0 && mtp == VM_OPT) {
@@ -344,7 +344,7 @@ public:
   void update(const NEWMAT::ColumnVector& pdiff,  // x_{i+1} - x_i
               const NEWMAT::ColumnVector& gdiff); // \nabla f_{i+1} - \nabla f_i
   friend NEWMAT::ColumnVector operator*(const VarmetMatrix&          m,
-                                        const NEWMAT::ColumnVector&  v); 
+                                        const NEWMAT::ColumnVector&  v);
 };
 
 // Declaration of (global) main function for minimisation

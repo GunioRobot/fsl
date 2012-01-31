@@ -1,4 +1,4 @@
-<usrguide name="NEWIMAGE Quick Reference Guide" section="l" rootdir="../" author="Mark Jenkinson" 
+<usrguide name="NEWIMAGE Quick Reference Guide" section="l" rootdir="../" author="Mark Jenkinson"
 year="2000">
 
 <section title="Volume">
@@ -12,7 +12,7 @@ public:
   volume(int xsize, int ysize, int zsize);
   volume(int xsize, int ysize, int zsize, T *d, bool d_owner);
   ~volume();
-  const volume&lt;T&gt;&amp; operator=(const volume&lt;T&gt;&amp; source); 
+  const volume&lt;T&gt;&amp; operator=(const volume&lt;T&gt;&amp; source);
   int reinitialize(const volume&lt;T&gt;&amp; source);
   int reinitialize(int xsize, int ysize, int zsize);
   int reinitialize(int xsize, int ysize, int zsize, T *d, bool d_owner);
@@ -50,7 +50,7 @@ public:
   inline bool usingROI() const;
   void setROIlimits(int x0, int y0, int z0, int x1, int y1, int z1) const;
   void setROIlimits(const std::vector&lt;int&gt;&amp; lims) const;
-  void activateROI() const; 
+  void activateROI() const;
   void deactivateROI() const;
   int copyROIonly(const volume&lt;T&gt;&amp; source);
 
@@ -82,10 +82,10 @@ public:
   typedef posconstiterator&lt;T&gt; const_iterator;
   typedef rlazyiterator&lt;T*,T&gt; fast_iterator;
   typedef const T* fast_const_iterator;
-  
+
   inline iterator begin();
   inline iterator end();
-  inline const_iterator begin() const; 
+  inline const_iterator begin() const;
   inline const_iterator end() const;
   inline fast_iterator fbegin();
   inline fast_iterator fend();
@@ -107,26 +107,26 @@ public:
   extrapolation getextrapolationmethod() const;
   void setpadvalue(T padval) const;
   T getpadvalue() const;
-  inline void getneighbours(int x, int y, int z, 
+  inline void getneighbours(int x, int y, int z,
 			      T &amp;v000, T &amp;v001, T &amp;v010,
 			      T &amp;v011, T &amp;v100, T &amp;v101,
 			      T &amp;v110, T &amp;v111) const;
-  inline void getneighbours(int x, int y, int z, 
+  inline void getneighbours(int x, int y, int z,
 			      T &amp;v000, T &amp;v010,
 			      T &amp;v100, T &amp;v110) const;
-  
-  
+
+
 
   // ARITHMETIC FUNCTIONS
-  T operator=(T val); 
-  const volume&lt;T&gt;&amp; operator+=(T val); 
-  const volume&lt;T&gt;&amp; operator-=(T val); 
-  const volume&lt;T&gt;&amp; operator*=(T val); 
-  const volume&lt;T&gt;&amp; operator/=(T val); 
-  const volume&lt;T&gt;&amp; operator+=(const volume&lt;T&gt;&amp; source); 
-  const volume&lt;T&gt;&amp; operator-=(const volume&lt;T&gt;&amp; source); 
-  const volume&lt;T&gt;&amp; operator*=(const volume&lt;T&gt;&amp; source); 
-  const volume&lt;T&gt;&amp; operator/=(const volume&lt;T&gt;&amp; source); 
+  T operator=(T val);
+  const volume&lt;T&gt;&amp; operator+=(T val);
+  const volume&lt;T&gt;&amp; operator-=(T val);
+  const volume&lt;T&gt;&amp; operator*=(T val);
+  const volume&lt;T&gt;&amp; operator/=(T val);
+  const volume&lt;T&gt;&amp; operator+=(const volume&lt;T&gt;&amp; source);
+  const volume&lt;T&gt;&amp; operator-=(const volume&lt;T&gt;&amp; source);
+  const volume&lt;T&gt;&amp; operator*=(const volume&lt;T&gt;&amp; source);
+  const volume&lt;T&gt;&amp; operator/=(const volume&lt;T&gt;&amp; source);
 
   volume&lt;T&gt; operator+(T num) const;
   volume&lt;T&gt; operator-(T num) const;
@@ -145,11 +145,11 @@ public:
   friend volume&lt;S&gt; operator*(S num, const volume&lt;S&gt;&amp; vol);
   template &lt;class S&gt;
   friend volume&lt;S&gt; operator/(S num, const volume&lt;S&gt;&amp; vol);
-   
+
   // CONVERSION FUNCTIONS
   template &lt;class S, class D&gt; friend
   void copyconvert(const volume&lt;S&gt;&amp; source, volume&lt;D&gt;&amp; dest);
-    
+
 };
 
 
@@ -175,29 +175,29 @@ public:
   volume4D(const volume4D&lt;T&gt;&amp; source);
   volume4D(int xsize, int ysize, int zsize, int tsize, T *d=0);
   ~volume4D();
-  const volume4D&lt;T&gt;&amp; operator=(const volume4D&lt;T&gt;&amp; source); 
+  const volume4D&lt;T&gt;&amp; operator=(const volume4D&lt;T&gt;&amp; source);
   int reinitialize(const volume4D&lt;T&gt;&amp; source);
   int reinitialize(int xsize, int ysize, int zsize, int tsize, T *d=0);
   int copyproperties(const volume4D&lt;T&gt;&amp; source);
   int copyvolumes(const volume4D&lt;T&gt;&amp; source);
-  
+
   inline T&amp; operator()(int x, int y, int z, int t);
   inline const T&amp; operator()(int x, int y, int z, int t) const;
   inline volume&lt;T&gt;&amp; operator[](int t);
   inline const volume&lt;T&gt;&amp; operator[](int t) const;
-  
+
   void addvolume(const volume&lt;T&gt;&amp; source);
   void insertvolume(const volume&lt;T&gt;&amp; source, int t);
   void deletevolume(int t);
 
   ColumnVector voxelts(int x, int y, int z) const;
   void setvoxelts(const ColumnVector&amp; ts, int x, int y, int z);
-  
+
   Matrix matrix(const volume&lt;T&gt;&amp; mask) const;
   Matrix matrix() const;
-  void setmatrix(const Matrix&amp; newmatrix, const volume&lt;T&gt;&amp; mask, 
+  void setmatrix(const Matrix&amp; newmatrix, const volume&lt;T&gt;&amp; mask,
 		   const T pad=0);
-  void setmatrix(const Matrix&amp; newmatrix); 
+  void setmatrix(const Matrix&amp; newmatrix);
 
   // ROIset, blah blah
   inline int xsize() const;
@@ -226,8 +226,8 @@ public:
   T max() const;
 
   // ARITHMETIC FUNCTIONS
-  T operator=(T val); 
-   
+  T operator=(T val);
+
   // CONVERSION FUNCTIONS
 //      template &lt;class S, class D&gt; friend
 //      void copyconvert(const volume4D&lt;S&gt;&amp; source, volume4D&lt;D&gt;&amp; dest);

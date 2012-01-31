@@ -20,7 +20,7 @@
 #endif
 
 /*
- * The following defines are for the Xlib.h file to force 
+ * The following defines are for the Xlib.h file to force
  * it to generate prototypes in the way we need it.  This is
  * defined here in case X.h & company are ever included before
  * tk.h.

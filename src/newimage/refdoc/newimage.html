@@ -13,7 +13,7 @@
 <P>
 This document describes the two templated container classes
 (<B><I></I> volume</B> and <B><I></I> volume4D</B>) in
-NEWIMAGE.  In addition, it describes the general functions supporting them, 
+NEWIMAGE.  In addition, it describes the general functions supporting them,
 including file I/O operations, in AVW format.
 <br>
 
@@ -28,7 +28,7 @@ short, int, float, double</I>.
 
 
 <A NAME="section1"></A><HR><H2>HEADER FILES</H2>
- 
+
 Both classes can be used by using the following line:
 <BR>
 
@@ -43,18 +43,18 @@ and all classes are contained in the namespace: NEWIMAGE
 
 
 <A NAME="section2"></A><HR><H2>VOLUME</H2>
- 
+
 
 This is the basic 3D container class.
 
 <H3>Constructors</H3>
- 
+
 
 <UL>
 
 <LI><B><I></I> volume<FONT COLOR=BLUE>&lt;T&gt;</FONT></B>( )
 <BR>
-Creates an empty volume, which allocates <B>no</B> data 
+Creates an empty volume, which allocates <B>no</B> data
 storage.
 <LI><B><I></I> volume<FONT COLOR=BLUE>&lt;T&gt;</FONT></B>(<I>int</I> <FONT COLOR=GREEN>xsize</FONT>, <I>int</I> <FONT COLOR=GREEN>ysize</FONT>, <I>int</I> <FONT COLOR=GREEN>zsize</FONT>)
 <BR>
@@ -77,7 +77,7 @@ To do this the assignment operator should be used.
 
 
 <H3>Data Access</H3>
- 
+
 
 <UL>
 
@@ -91,7 +91,7 @@ Returns a reference to data value at position (x,y,z) without any bounds checkin
 </UL>
 
 
-Note that both <I></I> <FONT COLOR=GREEN>const</FONT> and non-<I></I> <FONT COLOR=GREEN>const</FONT> 
+Note that both <I></I> <FONT COLOR=GREEN>const</FONT> and non-<I></I> <FONT COLOR=GREEN>const</FONT>
 versions of the above access operators exist.
 
 The first form <B><I></I> operator()</B> is the most general form, and
@@ -137,7 +137,7 @@ Returns the pad value that is currently set.
 
 
 <H3>Basic Properties</H3>
- 
+
 
 <UL>
 
@@ -219,7 +219,7 @@ Returns the number of voxels in the current ROI.
 
 
 <H3>Lazily Evaluated Properties</H3>
- 
+
 
 <UL>
 
@@ -285,7 +285,7 @@ the edge of the total volume (ignores the ROI).
 
 
 <H3>Secondary Properties</H3>
- 
+
 
 <UL>
 
@@ -318,25 +318,25 @@ Allows the user to set an origin that is carried with the volume, but not used i
 
 
 <H3>Iterators</H3>
- 
+
 
 
 
 
 <H3>ROI Functions</H3>
- 
+
 
 
 
 
 <H3>Arithmetic Functions</H3>
- 
+
 
 
 
 
 <H3>Other Functionality</H3>
- 
+
 
 
 
@@ -347,20 +347,20 @@ Allows the user to set an origin that is carried with the volume, but not used i
 
 
 <A NAME="section3"></A><HR><H2>VOLUME4D</H2>
- 
+
 
 This is the basic 4D container class, which is built as an array of
 3D volumes.  Therefore, each individual volume has all the attributes
 described above.
 
 <H3>Constructors</H3>
- 
+
 
 <UL>
 
 <LI><B><I></I> volume4D<FONT COLOR=BLUE>&lt;T&gt;</FONT></B>( )
 <BR>
-Creates an empty 4D volume, which allocates <B>no</B> data 
+Creates an empty 4D volume, which allocates <B>no</B> data
 storage.
 
 </UL>
@@ -370,31 +370,31 @@ storage.
 
 
 <H3>Data Access</H3>
- 
+
 
 
 
 
 <H3>Basic Properties</H3>
- 
+
 
 
 
 
 <H3>Lazily Evaluated Properties</H3>
- 
+
 
 
 
 
 <H3>Iterators</H3>
- 
+
 
 
 
 
 <H3>Other Functionality</H3>
- 
+
 
 
 
@@ -405,7 +405,7 @@ storage.
 
 
 <A NAME="section4"></A><HR><H2>FILE I/O</H2>
- 
+
 
 
  <!-- J-Back -->
@@ -413,7 +413,7 @@ storage.
 
 
 <A NAME="section5"></A><HR><H2>FUNCTIONS</H2>
- 
+
 
 
  <!-- J-Back -->

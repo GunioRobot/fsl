@@ -1,6 +1,6 @@
 /* {{{ Copyright etc. */
 
-/*  fsl_tsplot - 
+/*  fsl_tsplot -
 
     Christian Beckmann, FMRIB Image Analysis Group
 
@@ -9,20 +9,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -70,13 +70,13 @@
 
 /* }}} */
 /* {{{ defines, includes and typedefs */
- 
+
 #include "libvis/miscplot.h"
 #include "miscmaths/miscmaths.h"
 #include "miscmaths/miscprob.h"
 #include "utils/options.h"
 #include <vector>
-#include <cfloat> 
+#include <cfloat>
 #include <limits>
 #include <limits.h>
 using namespace MISCPLOT;
@@ -97,8 +97,8 @@ string examples="fsl_tsplot [options] ";
 // Note that they must also be included in the main() function or they
 //  will not be active.
 
-//Option<bool> verbose(string("-v,--verbose"), false, 
-//		     string("switch on diagnostic messages"), 
+//Option<bool> verbose(string("-v,--verbose"), false,
+//		     string("switch on diagnostic messages"),
 //		     false, no_argument);
 Option<bool> help(string("--help"), false,
 		  string("display this message"),
@@ -114,7 +114,7 @@ Option<float>  ymax(string("--ymax"),float(0.0),
 		    false, requires_argument);
 Option<float>  ymin(string("--ymin"),float(0.0),
 		    string("        minimum y-value"),
-		    false, requires_argument);  
+		    false, requires_argument);
 Option<string> ptitle(string("-t,--title"), string(""),
 		  string("plot title"),
 		  false, requires_argument);
@@ -160,7 +160,7 @@ int nonoptarg;
 ////////////////////////////////////////////////////////////////////////////
 
 // Local functions
-int do_work(int argc, char* argv[]) 
+int do_work(int argc, char* argv[])
 {
   Matrix in;
   in=read_ascii_matrix(inname.value().at(0));
@@ -197,7 +197,7 @@ int do_work(int argc, char* argv[])
       if (!fs) {
 	cerr << "Could not open file " << labelname.value() << endl;
       }
-      
+
       int ctr=1;
       string cline;
       while(!fs.eof())
@@ -207,7 +207,7 @@ int do_work(int argc, char* argv[])
 	    newplot.add_label(cline);
 	    ctr++;
 	  }
-	} 
+	}
       fs.close();
     }
   for (int i = 0; i < (int)labels.value().size(); i++) newplot.add_label(labels.value().at(i));
@@ -217,7 +217,7 @@ int do_work(int argc, char* argv[])
   if (ymin.value()==ymax.value()) newplot.set_yrange(in.Minimum(),in.Maximum());
   else newplot.set_yrange(ymin.value(),ymax.value());
   newplot.add_xlabel(xtitle.value());
-  newplot.add_ylabel(ytitle.value());  
+  newplot.add_ylabel(ytitle.value());
   newplot.timeseries(in.t(),outname.value(),ptitle.value(),TR.value(),
 		     ysize.value(),width.value(),prec.value(),sci.value());
 
@@ -250,24 +250,24 @@ int main(int argc,char *argv[])
     options.add(prec);
     options.add(sci);
     options.add(start);
-    options.add(finish);    
+    options.add(finish);
     options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
                                                      exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
   return do_work(argc,argv);

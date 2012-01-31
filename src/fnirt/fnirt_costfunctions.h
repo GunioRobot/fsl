@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 
@@ -45,13 +45,13 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
 // fnirt_CF is the base-class for cost functions used by fnirt. It implements
-// general functions like initialisation, masking etc, but is still not a 
+// general functions like initialisation, masking etc, but is still not a
 // proper cost-function and is still pure virtual. It should be sub-classed
 // to implement an actual cost-function.
 //
 // Most objects in the class are represented as smart pointers, which should
 // allow both safe and memory efficient use. It allows the user to request and
-// get handles to the internal objects without risk of memory leak or of 
+// get handles to the internal objects without risk of memory leak or of
 // objects suddenly passing out of scope.
 //
 // Note that there are two constructors. One which takes references to the input
@@ -68,14 +68,14 @@ public:
   // Constructors and destructors
 
   // Safe (and slightly wasteful) constructor
-  fnirt_CF(const NEWIMAGE::volume<float>&                                 pvref, 
+  fnirt_CF(const NEWIMAGE::volume<float>&                                 pvref,
            const NEWIMAGE::volume<float>&                                 pvobj,
            const NEWMAT::Matrix&                                          aff,
            std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&       pdf_field,
            boost::shared_ptr<IntensityMapper>                             im = boost::shared_ptr<IntensityMapper>());
 
   // A little unsafe, but faster
-  fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >              pvref, 
+  fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >              pvref,
            const boost::shared_ptr<NEWIMAGE::volume<float> >              pvobj,
            const NEWMAT::Matrix&                                          paff,
            std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&       pdf_field,
@@ -88,7 +88,7 @@ public:
   // Get current set of parameters
   virtual NEWMAT::ReturnMatrix Par() const = 0;
   // Set model to use for regularisation of field
-  virtual void SetRegularisationModel(RegularisationType  pregmod) {regmod = pregmod;} 
+  virtual void SetRegularisationModel(RegularisationType  pregmod) {regmod = pregmod;}
   // Set relative weight of (membrane energy) regularisation
   virtual void SetLambda(double plambda) {lambda = plambda; if (Verbose()) cout << "New Lambda: " << lambda << endl;}
   // Specify that lambda should be weighted by latest ssd
@@ -110,12 +110,12 @@ public:
   virtual void SetMatchingPointsLambda(double pl) {mpl_lambda = pl;}
 
   // Routines for re-scaling the intensity of ref or obj images
-  virtual void IntensityScaleObj(double sfac);  
+  virtual void IntensityScaleObj(double sfac);
 
   // Routines for applying Gaussian smoothing to ref or obj images
   virtual void SmoothObj(double  fwhm);
   virtual void SmoothRef(double  fwhm);
-  
+
   // Subsampling reference volume
   virtual void SubsampleRef(unsigned int ss) {std::vector<unsigned int> ssv(3,ss); SubsampleRef(ssv);}
   virtual void SubsampleRef(const std::vector<unsigned int>& ss);
@@ -153,7 +153,7 @@ public:
   virtual void SaveRobjMask(std::string fname) const;
   virtual void SaveObjMask(std::string fname) const;
 
-  // Set intensity mapping to be fixed, i.e. not part of the 
+  // Set intensity mapping to be fixed, i.e. not part of the
   // parameters we are trying to estimate.
   virtual void SetIntensityMappingFixed(bool status=true) {imap->SetFixed(status);}
 
@@ -222,7 +222,7 @@ protected:
 
   // Find out what regularisation model to use
   virtual RegularisationType RegularisationModel() const {return(regmod);}
-  
+
   // Get weight of regularisation
   virtual double Lambda() const {if (ssd_lambda) return(latest_ssd*lambda); else return(lambda);}
 
@@ -234,14 +234,14 @@ protected:
 
   // Set/Get parameters describing the field
   virtual void SetDefFieldParams(const NEWMAT::ColumnVector& p) const;
-  virtual NEWMAT::ColumnVector GetDefFieldParams(int  findx = -1) const; 
- 
+  virtual NEWMAT::ColumnVector GetDefFieldParams(int  findx = -1) const;
+
   // Set deformation field directly (i.e. not via params)
   virtual void SetDefField(const NEWIMAGE::volume4D<float>&   vfield) const;
 
   // Set/Get parameters describing intensity scaling
   virtual void SetScaleParams(const NEWMAT::ColumnVector& p) const;
-  virtual NEWMAT::ColumnVector GetScaleParams() const; 
+  virtual NEWMAT::ColumnVector GetScaleParams() const;
 
   // Calculate resulting mask
   virtual const NEWIMAGE::volume<char>& Mask() const;
@@ -281,7 +281,7 @@ protected:
 
   // "Local" change of verbose flag
   virtual void LocalSetVerbose(bool status=true) const {verbose=status;}
-  
+
   // Find out what precision to use for Hessian
   virtual BFMatrixPrecisionType HessianPrecision() const {return(hess_prec);}
 
@@ -314,7 +314,7 @@ private:
 
   const NEWMAT::Matrix                                     aff;        // Affine transformation matrix
 
-  // The field is represented as a 3-element vector of fields, one per displacement direction  
+  // The field is represented as a 3-element vector of fields, one per displacement direction
 
   mutable std::vector<boost::shared_ptr<BASISFIELD::basisfield> >  df_field;   // Displacement field implementing the warp
 
@@ -343,11 +343,11 @@ private:
   mutable unsigned int                                     attempt;            // Attempt (within an iteration)
 
   // Optional masks in ref and/or object space
-  
+
   boost::shared_ptr<NEWIMAGE::volume<char> >    refmask;                       // Mask in space of reference volume
   boost::shared_ptr<NEWIMAGE::volume<char> >    ssrefmask;                     // Mask in sub-sampled reference volume
   boost::shared_ptr<NEWIMAGE::volume<char> >    objmask;                       // Mask in space of object volume
-  
+
   // Scratch pads
 
   mutable boost::shared_ptr<NEWIMAGE::volume<float> >   robj;                // Resampled version of object volume
@@ -357,7 +357,7 @@ private:
   mutable boost::shared_ptr<NEWIMAGE::volume<char> >    robjmask;            // Resampled version of objmask
   mutable bool                                          robjmask_updated;    // True if robjmask accurately reflects df
   mutable boost::shared_ptr<NEWIMAGE::volume<char> >    totmask;             // Total mask, only used if refmask and/or objmask is set.
-  mutable bool                                          totmask_updated;   
+  mutable bool                                          totmask_updated;
   mutable boost::shared_ptr<NEWIMAGE::volume4D<float> > robj_deriv;          // Derivative of object image at resampled points.
   mutable bool                                          robj_deriv_updated;  // True if derivatives accurately reflects current df
   mutable boost::shared_ptr<NEWIMAGE::volume4D<float> > ref_deriv;           // Derivative of reference image in native space
@@ -380,7 +380,7 @@ private:
     vxs[0]=OrigRefVxs_x(); vxs[1]=OrigRefVxs_y(); vxs[2]=OrigRefVxs_z();
     return(df_field[0]->SubsampledVoxelSize(ss,vxs,ms));
   }
-	   
+
   void subsample_ref(const std::vector<unsigned int>  nms,
                      const std::vector<double>        nvxs);
 
@@ -415,7 +415,7 @@ public:
   // Constructors and destructors
 
   // Safe and wasteful
-  SSD_fnirt_CF(const NEWIMAGE::volume<float>&                            pvref, 
+  SSD_fnirt_CF(const NEWIMAGE::volume<float>&                            pvref,
                const NEWIMAGE::volume<float>&                            pvobj,
                const NEWMAT::Matrix                                      aff,
                std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&  pdf_field,
@@ -430,7 +430,7 @@ public:
   }
 
   // Unsafe (if you misbehave), but faster.
-  SSD_fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >         pvref, 
+  SSD_fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >         pvref,
                const boost::shared_ptr<NEWIMAGE::volume<float> >         pvobj,
                const NEWMAT::Matrix                                      aff,
                std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&  pdf_field,
@@ -443,13 +443,13 @@ public:
       SetIMap(def_imap);
     }
   }
-  
+
   virtual ~SSD_fnirt_CF() {}
 
   // Find out # of parameters
   virtual int NPar() const {return(3*DefCoefSz()+ScaleCoefSz());}
   // Read access to current set of parameters
-  virtual NEWMAT::ReturnMatrix Par() const; 
+  virtual NEWMAT::ReturnMatrix Par() const;
 
   // Cost function, gradient and hessian
   // For SSD_fnirt_CF the first parameter is a scale-factor between the reference
@@ -459,20 +459,20 @@ public:
   virtual NEWMAT::ReturnMatrix grad(const NEWMAT::ColumnVector& p) const;
   virtual boost::shared_ptr<MISCMATHS::BFMatrix> hess(const NEWMAT::ColumnVector& p,
                                                       boost::shared_ptr<MISCMATHS::BFMatrix>  iptr=boost::shared_ptr<MISCMATHS::BFMatrix>()) const;
-  
+
 private:
   // I can't see a need for default constructor, assignment or copy construction, so I'll hide them.
   SSD_fnirt_CF();
   SSD_fnirt_CF(const SSD_fnirt_CF& inf);
   virtual SSD_fnirt_CF& operator=(const SSD_fnirt_CF& inf) {throw FnirtException("SSD_fnirt_CF:: Assignment explicitly disallowed"); return(*this);}
-  
+
   // Internal copy of ptr-> last calculated Hessian. Useful when basing hessian on reference image derivatives
   mutable boost::shared_ptr<MISCMATHS::BFMatrix>                   last_hess;
   // Internal copy of ptr-> regularisation part of Hessian. Saves us a little time
   mutable boost::shared_ptr<MISCMATHS::BFMatrix>                   reg;
 };
 
-  
+
 } // End namespace FNIRT
 
 #endif // end #ifndef fnirt_costfunctions_h

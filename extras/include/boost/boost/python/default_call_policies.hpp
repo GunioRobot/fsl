@@ -14,7 +14,7 @@
 # include <boost/type_traits/is_reference.hpp>
 # include <boost/mpl/or.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 template <class T> struct to_python_value;
 
@@ -24,7 +24,7 @@ namespace detail
   template <class T> struct specify_a_return_value_policy_to_wrap_functions_returning
 # if defined(__GNUC__) && __GNUC__ >= 3 || defined(__EDG__)
   {}
-# endif 
+# endif
   ;
 }
 

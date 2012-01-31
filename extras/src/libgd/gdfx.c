@@ -191,7 +191,7 @@ gdImageStringFTCircle (gdImagePtr im,
      source (im3) is white-on-black, so we can use the
      red component as a basis for alpha as long as we're
      careful to shift off the extra bit and invert
-     (alpha ranges from 0 to 127 where 0 is OPAQUE). 
+     (alpha ranges from 0 to 127 where 0 is OPAQUE).
      Also be careful to allow for an alpha component
      in the fgcolor parameter itself (gug!) */
   fr = gdTrueColorGetRed (fgcolor);
@@ -330,7 +330,7 @@ gdImageSquareToCircle (gdImagePtr im, int radius)
     }
   /* Restore full dynamic range, 0-63 yields 0-252. Replication of
      first 2 bits in last 2 bits has the desired effect. Note
-     slightly different arithmetic for alpha which is 7-bit. 
+     slightly different arithmetic for alpha which is 7-bit.
      NOTE: only correct for SUPER == 2 */
   for (y = 0; (y < im2->sy); y++)
     {
@@ -364,7 +364,7 @@ gdImageSquareToCircle (gdImagePtr im, int radius)
 /* 2.0.16: Called by gdImageSharpen to avoid excessive code repetition
     Added on 2003-11-19 by
     Paul Troughton (paul<dot>troughton<at>ieee<dot>org)
-    Given filter coefficents and colours of three adjacent pixels, 
+    Given filter coefficents and colours of three adjacent pixels,
 returns new colour for centre pixel
 */
 
@@ -441,9 +441,9 @@ gdImageSharpen (gdImagePtr im, int pct)
   outer_coeff = -pct / 400.0;
   inner_coeff = 1 - 2 * outer_coeff;
 
-  /* Don't try to do anything with non-truecolor images, as 
+  /* Don't try to do anything with non-truecolor images, as
      pointless,
-     * nor for pct<=0, as small kernel size leads to nasty 
+     * nor for pct<=0, as small kernel size leads to nasty
      artefacts when blurring
    */
   if ((im->trueColor) && (pct > 0))
@@ -453,14 +453,14 @@ gdImageSharpen (gdImagePtr im, int pct)
       for (x = 0; x < sx; x++)
 	{
 
-	  /* pc is colour of previous pixel; c of the 
+	  /* pc is colour of previous pixel; c of the
 	     current pixel and nc of the next */
 	  int pc, c, nc;
 
 	  /* Replicate edge pixel at image boundary */
 	  pc = gdImageGetPixel (im, x, 0);
 
-	  /* Stop looping before last pixel to avoid 
+	  /* Stop looping before last pixel to avoid
 	     conditional within loop */
 	  for (y = 0; y < sy - 1; y++)
 	    {
@@ -474,12 +474,12 @@ gdImageSharpen (gdImagePtr im, int pct)
 			       gdImageSubSharpen (pc, c, nc, inner_coeff,
 						  outer_coeff));
 
-	      /* Save original colour of current 
+	      /* Save original colour of current
 	         pixel for next time round */
 	      pc = c;
 	    }
 
-	  /* Deal with last pixel, replicating current 
+	  /* Deal with last pixel, replicating current
 	     pixel at image boundary */
 	  c = gdImageGetPixel (im, x, y);
 	  gdImageSetPixel (im, x, y, gdImageSubSharpen

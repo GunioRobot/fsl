@@ -1,4 +1,4 @@
-// Copyright (C) 2002 Brad King (brad.king@kitware.com) 
+// Copyright (C) 2002 Brad King (brad.king@kitware.com)
 //                    Douglas Gregor (gregod@cs.rpi.edu)
 //                    Peter Dimov
 //
@@ -25,7 +25,7 @@ template<class T> struct _addp
 {
     typedef T * type;
 };
-    
+
 template <typename T> typename _addp<T>::type
 
 # else

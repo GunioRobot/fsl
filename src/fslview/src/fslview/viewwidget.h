@@ -19,14 +19,14 @@
 class QGroupBox;
 class OverlayList;
 
-/** 
+/**
  * An abstract base class for all widgets which can display
  * image views such as ortho projections or lightboxes.
  */
 class ViewWidget : public QMainWindow, public CursorObserver
 {
   Q_OBJECT
-		
+
 public:
   typedef boost::shared_ptr< ViewWidget > Handle;
 
@@ -51,4 +51,4 @@ protected:
   virtual void closeEvent(QCloseEvent*);
 };
 
-#endif 
+#endif

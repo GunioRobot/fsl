@@ -31,7 +31,7 @@ using namespace std;
 
 AtlasGroup::Handle TalairachWidget::m_atlasGroup;
 
-TalairachWidget::TalairachWidget(QWidget *parent, const Cursor::Handle& c, 
+TalairachWidget::TalairachWidget(QWidget *parent, const Cursor::Handle& c,
 				 const OverlayList::Handle &ol):
   TalairachWidgetBase(parent), m_cursor(c), m_overlayList(ol),
   m_optionsDialog(this, m_options, ol, c),
@@ -68,14 +68,14 @@ void TalairachWidget::readAtlas(const string& dirname, const string& fname)
     m_atlasGroup->readAtlas(dirname, fname);
 
   } catch (ios::failure &e) {
-    QMessageBox::warning(this, "AtlasWidget", 
+    QMessageBox::warning(this, "AtlasWidget",
 			 string("XML error while parsing atlas: ") + fname + "<br><br>" +
-			 e.what());    
+			 e.what());
   } catch (Image::Exception &e) {
-    QMessageBox::warning(this, "AtlasWidget", 
+    QMessageBox::warning(this, "AtlasWidget",
 			 string("Exception while parsing atlas: ") + fname + "<br><br>" +
-			 e.what());    
-  }    
+			 e.what());
+  }
 }
 
 TalairachWidget::~TalairachWidget()
@@ -87,11 +87,11 @@ void TalairachWidget::showSettingsDialog()
 {
   if(m_selectionDialog.exec() == QDialog::Accepted) {
     m_selectedAtlases = m_selectionDialog.getSelectionList();
-    for(AtlasGroup::ConstIterator it = m_atlasGroup->begin(); 
+    for(AtlasGroup::ConstIterator it = m_atlasGroup->begin();
 	it != m_atlasGroup->end(); ++it) {
       it->second->inqCurrentImage()->clearCache();
       Image::Handle im(it->second->inqCurrentSummaryImage());
-      if( m_selectionDialog.showSummary(it->second) && 
+      if( m_selectionDialog.showSummary(it->second) &&
 	  im->getInfo()->isCompatible(m_overlayList->getMainImage()->getInfo()) ) {
 	im->getInfo()->setPurpose(ImageIntent::Label);
 	if(m_overlayList->getImageGroup()->addUniqueOverlay(im))

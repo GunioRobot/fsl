@@ -20,21 +20,21 @@ using namespace NEWMAT;
 
 namespace MISCMATHS {
 
-//   ReturnMatrix betarnd(const int dim1, const int dim2, 
-// 		       const float a, const float b); 
+//   ReturnMatrix betarnd(const int dim1, const int dim2,
+// 		       const float a, const float b);
 
-  ReturnMatrix betapdf(const RowVector& vals, 
-		       const float a, const float b); 
+  ReturnMatrix betapdf(const RowVector& vals,
+		       const float a, const float b);
 
-  ReturnMatrix unifrnd(const int dim1 = 1, const int dim2 = -1, 
+  ReturnMatrix unifrnd(const int dim1 = 1, const int dim2 = -1,
 		       const float start = 0, const float end = 1);
-  
-  ReturnMatrix normrnd(const int dim1 = 1, const int dim2 = -1, 
+
+  ReturnMatrix normrnd(const int dim1 = 1, const int dim2 = -1,
 		       const float mu = 0, const float sigma = 1);
 
   // returns nsamps*nparams matrix:
   ReturnMatrix mvnrnd(const RowVector& mu, const SymmetricMatrix& covar, int nsamp = 1);
-  
+
   float mvnpdf(const RowVector& vals, const RowVector& mu, const SymmetricMatrix& covar);
 
   float bvnpdf(const RowVector& vals, const RowVector& mu, const SymmetricMatrix& covar);
@@ -44,7 +44,7 @@ namespace MISCMATHS {
 
   ReturnMatrix normpdf(const RowVector& vals, const float mu = 0, const float var = 1);
 
-  ReturnMatrix normpdf(const RowVector& vals, const RowVector& mus, 
+  ReturnMatrix normpdf(const RowVector& vals, const RowVector& mus,
 		       const RowVector& vars);
 
   ReturnMatrix normcdf(const RowVector& vals, const float mu = 0, const float var = 1);
@@ -53,13 +53,13 @@ namespace MISCMATHS {
 
   ReturnMatrix gammacdf(const RowVector& vals, const float mu = 0, const float var = 1);
 
-//   ReturnMatrix gammarnd(const int dim1, const int dim2, 
+//   ReturnMatrix gammarnd(const int dim1, const int dim2,
 // 			const float a, const float b);
 
   // returns n! * n matrix of all possible permutations
   ReturnMatrix perms(const int n);
 
-  
+
   class Mvnormrandm
     {
     public:
@@ -76,14 +76,14 @@ namespace MISCMATHS {
 	  covarw = sqrt(eig_val)*eig_vec.t();
 	}
 
-      ReturnMatrix next(int nsamp = 1) const 
+      ReturnMatrix next(int nsamp = 1) const
 	{
 	  Matrix ret = ones(nsamp, 1)*mu + normrnd(nsamp,mu.Ncols())*covarw;
 	  ret.Release();
 	  return ret;
 	}
 
-      ReturnMatrix next(const RowVector& pmu, int nsamp = 1)  
+      ReturnMatrix next(const RowVector& pmu, int nsamp = 1)
 	{
 	  mu=pmu;
 
@@ -106,7 +106,7 @@ namespace MISCMATHS {
 	  covarw = sqrt(eig_val)*eig_vec.t();
 	}
 
-    private:      
+    private:
 
       RowVector mu;
       SymmetricMatrix covar;

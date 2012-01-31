@@ -18,7 +18,7 @@ namespace boost { namespace fusion
 
     template <typename First, typename F>
     struct transform_view_iterator;
-    
+
     namespace transform_view_detail {
         template <typename Iterator>
         struct next_traits_impl

@@ -491,10 +491,10 @@ class inner
             result_type;
 
         struct Data {
-            Data(InputT const &input_) 
+            Data(InputT const &input_)
             :   input(input_), was_initialized(false)
             {}
-            
+
             InputT input;
             result_type curtok;
             bool was_initialized;
@@ -1120,7 +1120,7 @@ operator==(const multi_pass<InputT, InputPolicy, OwnershipPolicy, CheckingPolicy
 {
     bool is_eof_ = SP::is_eof(*this);
     bool y_is_eof_ = SP::is_eof(y);
-    
+
     if (is_eof_ && y_is_eof_)
     {
         return true;  // both are EOF

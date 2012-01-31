@@ -26,34 +26,34 @@ if [ $# -ge 4 ] ; then
 fi
 
 # prepare input images at required resolutions
-if [ `imtest ${INPIM}8` = '0' ] ; then 
+if [ `imtest ${INPIM}8` = '0' ] ; then
   run "flirt -in ${INPIM} -ref ${INPIM} -out ${INPIM}8 -applyisoxfm 8"
 fi
-if [ `imtest ${INPIM}4` = '0' ] ; then 
+if [ `imtest ${INPIM}4` = '0' ] ; then
   run "flirt -in ${INPIM} -ref ${INPIM} -out ${INPIM}4 -applyisoxfm 4"
 fi
-if [ `imtest ${INPIM}2` = '0' ] ; then 
+if [ `imtest ${INPIM}2` = '0' ] ; then
   run "flirt -in ${INPIM} -ref ${INPIM} -out ${INPIM}2 -applyisoxfm 2"
 fi
-if [ `imtest ${INPIM}1` = '0' ] ; then 
+if [ `imtest ${INPIM}1` = '0' ] ; then
   run "flirt -in ${INPIM} -ref ${INPIM} -out ${INPIM}1 -applyisoxfm 1"
 fi
- 
-if [ `imtest ${REFIM}8` = '0' ] ; then 
+
+if [ `imtest ${REFIM}8` = '0' ] ; then
   run "flirt -in ${REFIM} -ref ${REFIM} -out ${REFIM}8 -applyisoxfm 8"
 fi
-if [ `imtest ${REFIM}4` = '0' ] ; then 
+if [ `imtest ${REFIM}4` = '0' ] ; then
   run "flirt -in ${REFIM} -ref ${REFIM} -out ${REFIM}4 -applyisoxfm 4"
 fi
-if [ `imtest ${REFIM}2` = '0' ] ; then 
+if [ `imtest ${REFIM}2` = '0' ] ; then
   run "flirt -in ${REFIM} -ref ${REFIM} -out ${REFIM}2 -applyisoxfm 2"
 fi
-if [ `imtest ${REFIM}1` = '0' ] ; then 
+if [ `imtest ${REFIM}1` = '0' ] ; then
   run "flirt -in ${REFIM} -ref ${REFIM} -out ${REFIM}1 -applyisoxfm 1"
 fi
 
-if [ ! -e ident.mat ] ; then 
-    echo "1 0 0 0" > ident.mat ; 
+if [ ! -e ident.mat ] ; then
+    echo "1 0 0 0" > ident.mat ;
     echo "0 1 0 0" >> ident.mat ;
     echo "0 0 1 0" >> ident.mat ;
     echo "0 0 0 1" >> ident.mat ;
@@ -76,12 +76,12 @@ if [ ! -e ${INPIM}2${REFIM}.mat ] ; then
   run "flirt -in ${INPIM} -ref ${REFIM} -omat ${INPIM}2${REFIM}.mat"
 fi
 
-# resample output for 8mm stage 
-if [ `imtest ${INPIM}8_to_${REFIM}8` = '0' ] ; then 
+# resample output for 8mm stage
+if [ `imtest ${INPIM}8_to_${REFIM}8` = '0' ] ; then
   run "flirt -in ${INPIM}8 -init ${INPIM}2${REFIM}.mat -ref ${REFIM}8 -out ${INPIM}8_to_${REFIM}8 -applyxfm"
 fi
 
-# 8mm stages 
+# 8mm stages
 echo " "
 echo "### 8MM STAGE ###"
 echo " "
@@ -92,7 +92,7 @@ run "./nonlin -i ${INPIM}8 -r ${REFIM}8 -o ${OUTNM}8 -w postwarp8 --initaff=${IN
 run "fslmaths postwarp8 -sub identwarp8 postwarp_rel8"
 run "flirt -in postwarp_rel8 -ref ${REFIM}4 -out prewarp_rel4 -applyxfm -paddingsize 8"
 run "fslmaths prewarp_rel4 -add identwarp4 prewarp4"
-if [ `imtest ${INPIM}4_to_${REFIM}4` = '0' ] ; then 
+if [ `imtest ${INPIM}4_to_${REFIM}4` = '0' ] ; then
   run "flirt -in ${INPIM}4 -init ${INPIM}2${REFIM}.mat -ref ${REFIM}4 -out ${INPIM}4_to_${REFIM}4 -applyxfm"
 fi
 
@@ -108,7 +108,7 @@ run "./nonlin -i ${INPIM}4 -r ${REFIM}4 -o ${OUTNM}4b -w postwarp4 ${NLOPTIONS} 
 run "fslmaths postwarp4 -sub identwarp4 postwarp_rel4"
 run "flirt -in postwarp_rel4 -ref ${REFIM}2 -out prewarp_rel2 -applyxfm -paddingsize 4"
 run "fslmaths prewarp_rel2 -add identwarp2 prewarp2"
-if [ `imtest ${INPIM}2_to_${REFIM}2` = '0' ] ; then 
+if [ `imtest ${INPIM}2_to_${REFIM}2` = '0' ] ; then
   run "flirt -in ${INPIM}2 -init ${INPIM}2${REFIM}.mat -ref ${REFIM}2 -out ${INPIM}2_to_${REFIM}2 -applyxfm"
 fi
 
@@ -124,7 +124,7 @@ run "./nonlin -i ${INPIM}2 -r ${REFIM}2 -o ${OUTNM}2b -w postwarp2 ${NLOPTIONS} 
 run "fslmaths postwarp2 -sub identwarp2 postwarp_rel2"
 run "flirt -in postwarp_rel2 -ref ${REFIM}1 -out prewarp_rel1 -applyxfm -paddingsize 2"
 run "fslmaths prewarp_rel1 -add identwarp1 prewarp1"
-if [ `imtest ${INPIM}1_to_${REFIM}1` = '0' ] ; then 
+if [ `imtest ${INPIM}1_to_${REFIM}1` = '0' ] ; then
   run "flirt -in ${INPIM}1 -init ${INPIM}2${REFIM}.mat -ref ${REFIM}1 -out ${INPIM}1_to_${REFIM}1 -applyxfm"
 fi
 

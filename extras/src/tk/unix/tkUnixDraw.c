@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixDraw.c --
  *
  *	This file contains X specific drawing routines.
@@ -69,7 +69,7 @@ TkScrollWindow(tkwin, gc, x, y, width, height, dx, dy, damageRgn)
     Tk_RestrictProc *oldProc;
     ClientData oldArg, dummy;
     ScrollInfo info;
-    
+
     XCopyArea(Tk_Display(tkwin), Tk_WindowId(tkwin), Tk_WindowId(tkwin), gc,
 	    x, y, (unsigned int) width, (unsigned int) height, x + dx, y + dy);
 
@@ -199,7 +199,7 @@ ScrollRestrictProc(arg, eventPtr)
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkpDrawHighlightBorder(tkwin, fgGC, bgGC, highlightWidth, drawable)
     Tk_Window tkwin;
     GC fgGC;

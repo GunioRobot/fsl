@@ -47,10 +47,10 @@ namespace boost { namespace spirit { namespace utility { namespace impl {
 
         bool operator()(range<CharT> const& x, const CharT y) const
         { return x.first < y; }
-        
+
         bool operator()(const CharT x, range<CharT> const& y) const
         { return x < y.first; }
-        
+
         // This additional operator is required for the checked STL shipped
         // with VC8 testing the ordering of the iterators passed to the
         // std::lower_bound algo this range_char_compare<> predicate is passed

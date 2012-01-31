@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -101,7 +101,7 @@ namespace NEWIMAGE {
   }
 
 
-  inline float q_tri_interpolation(const volume<float>& v, 
+  inline float q_tri_interpolation(const volume<float>& v,
 				   const float x, const float y, const float z)
     {
       int ix, iy, iz;
@@ -110,7 +110,7 @@ namespace NEWIMAGE {
       float v000, v001, v010, v011, v100, v101, v110, v111;
       float retval=0;
 #ifdef SAFE_FLIRT
-      if ( (ix>=0) && (iy>=0) && (iz>=0) 
+      if ( (ix>=0) && (iy>=0) && (iz>=0)
 	   && (ix<v.maxx()) && (iy<v.maxy()) && (iz<v.maxz()) ) {
 #endif
 	v.getneighbours(ix,iy,iz, v000,v001,v010,v011,v100,v101,v110,v111);
@@ -135,7 +135,7 @@ namespace NEWIMAGE {
     }
 
 
-  int q_get_neighbours(const volume<float>& v, 
+  int q_get_neighbours(const volume<float>& v,
 		       const float x, const float y, const float z,
 		       float& v000, float& v001, float& v010, float& v011,
 		       float& v100, float& v101, float& v110, float& v111,
@@ -145,7 +145,7 @@ namespace NEWIMAGE {
     ix=(int) x; iy=(int) y; iz=(int) z;
     dx=x-ix; dy=y-iy; dz=z-iz;
 #ifdef SAFE_FLIRT
-    if ( (ix>=0) && (iy>=0) && (iz>=0) 
+    if ( (ix>=0) && (iy>=0) && (iz>=0)
 	 && (ix<v.maxx()) && (iy<v.maxy()) && (iz<v.maxz()) ) {
 #endif
       v.getneighbours(ix,iy,iz, v000,v001,v010,v011,v100,v101,v110,v111);
@@ -166,10 +166,10 @@ namespace NEWIMAGE {
      float y=M_PI*x;
      return sin(y)/y;
    }
-   
+
    float q_hanning(float x, int w)
    {
-     if (fabs(x)>w) 
+     if (fabs(x)>w)
        return 0.0;
      else
        return (0.5 + 0.5 *cos(M_PI*x/w));
@@ -178,7 +178,7 @@ namespace NEWIMAGE {
    // somewhat cheating global statics
    static int Globalkernelwidth;
    static float Globalsinckernel[201];
-   
+
    void q_setupkernel()
    {
      Globalkernelwidth=3;
@@ -188,7 +188,7 @@ namespace NEWIMAGE {
        Globalsinckernel[n] = q_sinc(x)*q_hanning(x,Globalkernelwidth);
      }
    }
-   
+
    float q_kernelval(float x, int w)
    {
      // effectively returns  sinc(x)*hanning(x,w);
@@ -198,35 +198,35 @@ namespace NEWIMAGE {
      dn -= n;
      if (n>=200) return 0.0;
      if (n<0) return 0.0;
-     
+
      return Globalsinckernel[n]*(1.0-dn) + Globalsinckernel[n+1]*dn;
    }
-   
-   
-   float q_sinc_interpolation(const volume<float>& v, 
+
+
+   float q_sinc_interpolation(const volume<float>& v,
 			      const float x, const float y, const float z)
    {
      // kernel half-width  (i.e. range is +/- w)
-     int w=Globalkernelwidth;  
-     if (w<1) { 
-       q_setupkernel(); 
+     int w=Globalkernelwidth;
+     if (w<1) {
+       q_setupkernel();
        w=Globalkernelwidth;
      }
-     
+
      int ix0, iy0, iz0;
      ix0 = (int) floor(x);
      iy0 = (int) floor(y);
      iz0 = (int) floor(z);
-     
+
      float convsum=0.0, interpval=0.0, kersum=0.0;
      static float sincz[201], sincy[201], sincx[201];  // limits width to 200
-     
+
      for (int d=-w; d<=w; d++) {
        sincz[d+w] = q_kernelval((z-iz0+d),w);
        sincy[d+w] = q_kernelval((y-iy0+d),w);
        sincx[d+w] = q_kernelval((x-ix0+d),w);
      }
-     
+
      int xj, yj, zj;
      int x1a, x1b, y1a, y1b, z1a, z1b;
      x1a = Max(0,ix0-w);  x1b=Min(v.xsize()-1,ix0+w);
@@ -244,7 +244,7 @@ namespace NEWIMAGE {
 	 }
        }
      }
-     
+
      if (fabs(kersum)>1e-9) {
        interpval = convsum / kersum;
      } else {
@@ -252,37 +252,37 @@ namespace NEWIMAGE {
      }
      return interpval;
    }
-   
+
    /////////////////////////////////////////////////////////////////////////
 
 
    Costfn::Costfn(const volume<float>& refv, const volume<float>& inputv) :
      refvol(refv), testvol(inputv), rweight(refv), tweight(inputv),
-     bindex(0), no_bins(0),jointhist(0), marghist1(0), marghist2(0), 
-     fjointhist(0), fmarghist1(0), fmarghist2(0), p_count(0), 
+     bindex(0), no_bins(0),jointhist(0), marghist1(0), marghist2(0),
+     fjointhist(0), fmarghist1(0), fmarghist2(0), p_count(0),
      p_costtype(CorrRatio), validweights(false), bin_a0(0), bin_a1(1),
      smoothsize(1.0), fuzzyfrac(0.5)
-   { 
+   {
    }
 
    Costfn::Costfn(const volume<float>& refv, const volume<float>& inputv,
-		  const volume<float>& refweight, 
+		  const volume<float>& refweight,
 		  const volume<float>& inweight) :
      refvol(refv), testvol(inputv), rweight(refweight), tweight(inweight),
-     bindex(0), no_bins(0),jointhist(0), marghist1(0), marghist2(0), 
-     fjointhist(0), fmarghist1(0), fmarghist2(0), p_count(0), 
+     bindex(0), no_bins(0),jointhist(0), marghist1(0), marghist2(0),
+     fjointhist(0), fmarghist1(0), fmarghist2(0), p_count(0),
      p_costtype(CorrRatio), validweights(true), bin_a0(0), bin_a1(1),
      smoothsize(1.0), fuzzyfrac(0.5)
-   { 
+   {
    }
 
-    Costfn::~Costfn() { 
-     if (jointhist)  delete [] jointhist; 
-     if (marghist1)  delete [] marghist1; 
-     if (marghist2)  delete [] marghist2; 
-     if (fjointhist)  delete [] fjointhist; 
-     if (fmarghist1)  delete [] fmarghist1; 
-     if (fmarghist2)  delete [] fmarghist2; 
+    Costfn::~Costfn() {
+     if (jointhist)  delete [] jointhist;
+     if (marghist1)  delete [] marghist1;
+     if (marghist2)  delete [] marghist2;
+     if (fjointhist)  delete [] fjointhist;
+     if (fmarghist1)  delete [] fmarghist1;
+     if (fmarghist2)  delete [] fmarghist2;
      if (bindex)     delete [] bindex;
    }
 
@@ -298,8 +298,8 @@ namespace NEWIMAGE {
       switch (p_costtype)
 	{
 	case NormCorr:  // MAXimise corr
-	  if (smoothsize > 0.0) { 
-	    retval = 1.0 - 
+	  if (smoothsize > 0.0) {
+	    retval = 1.0 -
 	      fabs(this->normcorr_smoothed(affmat));
 	  } else {
 	    retval = 1.0 - fabs(this->normcorr(affmat));
@@ -326,24 +326,24 @@ namespace NEWIMAGE {
 	  if (smoothsize > 0.0) {
 	    retval = 1.0 - this->corr_ratio_smoothed(affmat);
 	  } else {
-	    retval = 1.0 - this->corr_ratio(affmat); 
+	    retval = 1.0 - this->corr_ratio(affmat);
 	  }
 	  break;
 	case Woods:  // minimise variance/mean
-	  retval = this->woods_fn(affmat); 
+	  retval = this->woods_fn(affmat);
 	  break;
 	case MutualInfo:  // MAXimise info
 	  if ((smoothsize > 0.0) || (fuzzyfrac > 0.0)) {
-	    retval = -this->mutual_info_smoothed(affmat); 
+	    retval = -this->mutual_info_smoothed(affmat);
 	  } else {
-	    retval = -this->mutual_info(affmat); 
+	    retval = -this->mutual_info(affmat);
 	  }
 	  break;
 	case NormMI:  // MAXimise
 	  if ((smoothsize > 0.0) || (fuzzyfrac > 0.0)) {
-	    retval = -this->normalised_mutual_info_smoothed(affmat); 
+	    retval = -this->normalised_mutual_info_smoothed(affmat);
 	  } else {
-	    retval = -this->normalised_mutual_info(affmat); 
+	    retval = -this->normalised_mutual_info(affmat);
 	  }
 	  break;
 	default:
@@ -355,11 +355,11 @@ namespace NEWIMAGE {
 
 
    float Costfn::cost(const Matrix& affmat,   // affmat is voxel to voxel
-		      const volume<float>& refweight, 
+		      const volume<float>& refweight,
 		      const volume<float>& testweight) const
    {
      float retval = 0.0;
-     switch (p_costtype) 
+     switch (p_costtype)
        {
        case NormCorr:  // MAXimise corr
 	 retval = 1.0-this->normcorr_fully_weighted(affmat,refweight,
@@ -385,7 +385,7 @@ namespace NEWIMAGE {
        case Woods:  // minimise variance/mean
 	 cerr<<"WARNING: Woods is not implemented with cost function weighting"
 	     << endl;
-	 retval = this->woods_fn(affmat); 
+	 retval = this->woods_fn(affmat);
 	 break;
        case MutualInfo:  // MAXimise info
 	retval = -this->mutual_info_fully_weighted(affmat,refweight,
@@ -406,7 +406,7 @@ namespace NEWIMAGE {
 
 
   float Costfn::cost(const volume4D<float>& warp,  // warp is mm to mm
-		     const volume<float>& refweight, 
+		     const volume<float>& refweight,
 		     const volume<float>& testweight) const
 
     {
@@ -414,7 +414,7 @@ namespace NEWIMAGE {
       switch (p_costtype)
 	{
 	case CorrRatio:  // MAXimise corr
-	  retval = 1.0 - this->corr_ratio_fully_weighted(warp, refweight, 
+	  retval = 1.0 - this->corr_ratio_fully_weighted(warp, refweight,
 							 testweight);
 	    break;
 	default:
@@ -447,11 +447,11 @@ namespace NEWIMAGE {
     }
 
 
- 
+
   float Costfn::cost_gradient(volume4D<float>& gradvec,
 			      const volume4D<float>& warp,  // warp is mm to mm
-			      const volume<float>& refweight, 
-			      const volume<float>& testweight, 
+			      const volume<float>& refweight,
+			      const volume<float>& testweight,
 			      bool nullbc) const
 
   {
@@ -460,8 +460,8 @@ namespace NEWIMAGE {
 	{
 	case CorrRatio:  // MAXimise corr
 	  retval = 1.0 - this->corr_ratio_gradient_fully_weighted(gradvec,
-								  warp, 
-								  refweight, 
+								  warp,
+								  refweight,
 								  testweight,
 								  nullbc);
 	  gradvec *= -1.0f;
@@ -473,10 +473,10 @@ namespace NEWIMAGE {
       return retval;
     }
 
-  
+
   float Costfn::cost_gradient(volume4D<float>& gradvec, // warp is mm to mm
 			      const volume4D<float>& warp, bool nullbc) const
-   
+
     {
       if (validweights) {
 	return this->cost_gradient(gradvec,warp,rweight,tweight,nullbc);
@@ -494,25 +494,25 @@ namespace NEWIMAGE {
       return retval;
     }
 
-  
+
 
    // Helper functions
    inline int *get_bindexptr(unsigned int x, unsigned int y, unsigned int z,
-			     const volume<float>& refvol, int *bindex) 
+			     const volume<float>& refvol, int *bindex)
    { return bindex + ( z * refvol.ysize() + y ) * refvol.xsize() + x; }
-   
+
 
    void findrangex(unsigned int &xmin1 , unsigned int &xmax1,
 		   float o1, float o2, float o3,
 		   float a11, float a21, float a31,
 		   unsigned int xb1, unsigned int yb1, unsigned int zb1,
 		   float xb2, float yb2, float zb2) {
-     
+
      float x1, x2, xmin, xmax, xmin0, xmax0;
-     
+
      xmin0 = 0;
      xmax0 = xb1;
-      
+
      if (fabs(a11)<1.0e-8) {
        if ((0.0<=o1) && (o1<=xb2)) {
 	 x1 = -1.0e8; x2 = 1.0e8;
@@ -528,7 +528,7 @@ namespace NEWIMAGE {
      // intersect ranges
      xmin0 = Max(xmin0,xmin);
      xmax0 = Min(xmax0,xmax);
-	  
+
      if (fabs(a21)<1.0e-8) {
        if ((0.0<=o2) && (o2<=yb2)) {
 	 x1 = -1.0e8; x2 = 1.0e8;
@@ -560,7 +560,7 @@ namespace NEWIMAGE {
      // intersect ranges
      xmin0 = Max(xmin0,xmin);
      xmax0 = Min(xmax0,xmax);
-    
+
      //assert(xmin0>=0.0);
      //assert(xmax0<=xb1);
 
@@ -580,7 +580,7 @@ namespace NEWIMAGE {
      y += xminT * a21;
      z += xminT * a31;
      for (unsigned int xc=xminT; xc<=xmaxT; xc++) {
-       bool inbounds=( (x<=xb2) && (x>=0.0) && (y<=yb2) && (y>=0.0) && 
+       bool inbounds=( (x<=xb2) && (x>=0.0) && (y<=yb2) && (y>=0.0) &&
 		       (z<=zb2) && (z>=0.0) );
        if ( (xc==xmin1) && (!inbounds) ) {
 	 xmin1++;
@@ -598,9 +598,9 @@ namespace NEWIMAGE {
 
    //--------------------------------------------------------------------//
 
-   float p_corr_ratio_fully_weighted(const volume<float>& vref, 
+   float p_corr_ratio_fully_weighted(const volume<float>& vref,
 				   const volume<float>& vtest,
-				   const volume<float>& refweight, 
+				   const volume<float>& refweight,
 				   const volume<float>& testweight,
 				   int *bindex, const Matrix& aff,
 				   const int no_bins, const float smoothsize)
@@ -613,7 +613,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -625,7 +625,7 @@ namespace NEWIMAGE {
       float *numy;
       numy = new float[no_bins+1];
       int b=0;
- 
+
       for (int i=0; i<=no_bins; i++) {
 	numy[i]=0.0; sumy[i]=0.0;  sumy2[i]=0.0;
       }
@@ -646,13 +646,13 @@ namespace NEWIMAGE {
       unsigned int xmin, xmax;
       int *bptr;
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -665,12 +665,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		b=*bptr;
 		weight=wval*refweight(x,y,z);
@@ -715,7 +715,7 @@ namespace NEWIMAGE {
 	  totsumy2 += sumy2[b];
 	  // the following should be the variance of the bth iso-subset
 	  var = (sumy2[b] - sumy[b]*sumy[b]/numy[b] ) / ( numy[b]-1);
-	  // cerr << "Set #" << b << " has " << numy[b] << " elements and " 
+	  // cerr << "Set #" << b << " has " << numy[b] << " elements and "
 	  //   << var << " variance" << endl;
 	  corr_ratio += var * ((float) numy[b]);
 	}
@@ -727,9 +727,9 @@ namespace NEWIMAGE {
       // calculate the total variance of Image y and then normalise by this
       if (numtoty>1)
 	var = ( totsumy2 - totsumy*totsumy/numtoty ) / (numtoty - 1);
-      //cerr << "TOTALS are:" << endl 
+      //cerr << "TOTALS are:" << endl
       //   << " numerator variance is : " << corr_ratio << endl
-      //   << " and denominator variance is: " << var << " from " << numtoty 
+      //   << " and denominator variance is: " << var << " from " << numtoty
       //   << " valid elements" << endl;
       if (var>0.0)  corr_ratio/=var;
       // the above is actually 1 - correlation ratio, so correct this now
@@ -748,9 +748,9 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-   float p_corr_ratio_fully_weighted(const volume<float>& vref, 
+   float p_corr_ratio_fully_weighted(const volume<float>& vref,
 				   const volume<float>& vtest,
-				   const volume<float>& refweight, 
+				   const volume<float>& refweight,
 				   const volume<float>& testweight,
 				   int *bindex, const volume4D<float>& warpvol,
 				   const int no_bins, const float smoothsize)
@@ -774,7 +774,7 @@ namespace NEWIMAGE {
       float *numy;
       numy = new float[no_bins+1];
       int b=0;
- 
+
       for (int i=0; i<=no_bins; i++) {
 	numy[i]=0.0; sumy[i]=0.0;  sumy2[i]=0.0;
       }
@@ -801,7 +801,7 @@ namespace NEWIMAGE {
 	      if (in_interp_bounds(vtest,o1,o2,o3)) {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		bptr = get_bindexptr(x,y,z,vref,bindex);
 		b=*bptr;
@@ -821,8 +821,8 @@ namespace NEWIMAGE {
 	  }
 	}
       }
-      
-      
+
+
       float corr_ratio=0.0, var=0.0, totsumy=0.0, totsumy2=0.0;
       float numtoty=0.0;
 
@@ -843,7 +843,7 @@ namespace NEWIMAGE {
 	  totsumy2 += sumy2[b];
 	  // the following should be the variance of the bth iso-subset
 	  var = (sumy2[b] - sumy[b]*sumy[b]/numy[b] ) / ( numy[b]-1);
-	  // cerr << "Set #" << b << " has " << numy[b] << " elements and " 
+	  // cerr << "Set #" << b << " has " << numy[b] << " elements and "
 	  //   << var << " variance" << endl;
 	  corr_ratio += var * ((float) numy[b]);
 	}
@@ -855,9 +855,9 @@ namespace NEWIMAGE {
       // calculate the total variance of Image y and then normalise by this
       if (numtoty>1)
 	var = ( totsumy2 - totsumy*totsumy/numtoty ) / (numtoty - 1);
-      //cerr << "TOTALS are:" << endl 
+      //cerr << "TOTALS are:" << endl
       //   << " numerator variance is : " << corr_ratio << endl
-      //   << " and denominator variance is: " << var << " from " << numtoty 
+      //   << " and denominator variance is: " << var << " from " << numtoty
       //   << " valid elements" << endl;
       if (var>0.0)  corr_ratio/=var;
       // the above is actually 1 - correlation ratio, so correct this now
@@ -898,14 +898,14 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
   float p_corr_ratio_gradient_fully_weighted(volume4D<float>& gradvec,
-					     const volume<float>& vref, 
+					     const volume<float>& vref,
 					     const volume<float>& vtest,
-					     const volume<float>& refweight, 
+					     const volume<float>& refweight,
 					     const volume<float>& testweight,
-					     int *bindex, 
+					     int *bindex,
 					     const volume4D<float>& warpvol,
-					     const int no_bins, 
-					     const float smoothsize, 
+					     const int no_bins,
+					     const float smoothsize,
 					     bool nullbc)
     {
 
@@ -927,7 +927,7 @@ namespace NEWIMAGE {
       float *numy;
       numy = new float[no_bins+1];
       int b=0;
- 
+
       for (int i=0; i<=no_bins; i++) {
 	numy[i]=0.0; sumy[i]=0.0;  sumy2[i]=0.0;
       }
@@ -954,7 +954,7 @@ namespace NEWIMAGE {
 	      if (in_interp_bounds(vtest,o1,o2,o3)) {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		bptr = get_bindexptr(x,y,z,vref,bindex);
 		b=*bptr;
@@ -974,8 +974,8 @@ namespace NEWIMAGE {
 	  }
 	}
       }
-      
-      
+
+
       float corr_ratio=0.0, var=0.0, totsumy=0.0, totsumy2=0.0;
       float numtoty=0.0;
 
@@ -1011,11 +1011,11 @@ namespace NEWIMAGE {
 	corr_ratio = 0.0;   // the totally uncorrelated condition
       else
 	corr_ratio = 1.0 - corr_ratio;
-      
+
       ////////////////////////////////
       // now calculate the gradient //
       ////////////////////////////////
-      gradvec = warpvol * 0.0f;   
+      gradvec = warpvol * 0.0f;
       float delta_cr[2], delta_i, i0=0, i1=0;
       float do1=0, do2=0, do3=0;
       float nn, voxdim=1;
@@ -1024,7 +1024,7 @@ namespace NEWIMAGE {
       for (int z=vref.minz(); z<=vref.maxz(); z++) {
 	for (int y=vref.miny(); y<=vref.maxy(); y++) {
 	  for (int x=vref.minx(); x<=vref.maxx(); x++) {
-	    
+
 	    bptr = get_bindexptr(x,y,z,vref,bindex);
 	    b=*bptr;
 	    nn = numy[b];
@@ -1037,7 +1037,7 @@ namespace NEWIMAGE {
 	    }
 	    prein = in_interp_bounds(vtest,o1,o2,o3);
 	    if (prein) { i0 = q_tri_interpolation(vtest,o1,o2,o3); }
-	    
+
 	    for (int dirn=0; dirn<=2; dirn++) {
 	      // set the perturbed direction (in voxel units)
 	      if (dirn==0) { do1=0.5; do2=0; do3=0; voxdim=vtest.xdim(); }
@@ -1048,27 +1048,27 @@ namespace NEWIMAGE {
 		// set the perturbed direction
 		if (diridx==1) { do1=-do1; do2=-do2; do3=-do3; }
 		postin = in_interp_bounds(vtest,o1+do1,o2+do2,o3+do3);
-		if (postin) { 
-		  i1 = q_tri_interpolation(vtest,o1+do1,o2+do2,o3+do3); 
+		if (postin) {
+		  i1 = q_tri_interpolation(vtest,o1+do1,o2+do2,o3+do3);
 		}
 		if (prein && postin) {
 		  // for both pre- and post-perturbed point inside the FOV
 		  delta_i = i1 - i0;
-		  delta_cr[diridx] = -delta_i * ( 2 * (i0 - sumy[b]/nn) + 
+		  delta_cr[diridx] = -delta_i * ( 2 * (i0 - sumy[b]/nn) +
 						  (1 - 1.0/nn)*delta_i ) / nn;
 		}
 		if (prein && !postin && !nullbc) {
 		  // if the post-perturbed point is outside the FOV, but pre- is inside
-		  delta_cr[diridx] = (sumy2[b] - sumy[b]*sumy[b]/nn) / (nn-1) 
+		  delta_cr[diridx] = (sumy2[b] - sumy[b]*sumy[b]/nn) / (nn-1)
 		    - (sumy2[b] - i0*i0 - Sqr(sumy[b] - i0)/(nn-1)) / (nn-2);
 		}
 		if (postin && !prein && !nullbc) {
 		  // if the pre-perturbed point is outside the FOV, but post- is inside
-		  delta_cr[diridx] =  (sumy2[b] - sumy[b]*sumy[b]/nn) / (nn-1) 
+		  delta_cr[diridx] =  (sumy2[b] - sumy[b]*sumy[b]/nn) / (nn-1)
 		    - ( sumy2[b] + i1*i1 - Sqr(sumy[b] + i1) / (nn+1) ) / nn;
 		}
 	      }
-	      
+
 	      // check if the behaviour about this point is linear or quadratic
 	      if ( (delta_cr[0]<0) && (delta_cr[1]<0) ) {
 		// currently at a maximum, so pick the direction of biggest decrease
@@ -1076,7 +1076,7 @@ namespace NEWIMAGE {
 		  gradvec[dirn](x,y,z) = delta_cr[0] / (0.5 * voxdim);
 		} else {
 		  // as diridx 1 is -ve mvmt
-		  gradvec[dirn](x,y,z) = -delta_cr[1] / (0.5 * voxdim);  
+		  gradvec[dirn](x,y,z) = -delta_cr[1] / (0.5 * voxdim);
 		}
 	      } else if ( (delta_cr[0]>0) && (delta_cr[1]>0) ) {
 		// currently at a minimum, so zero gradient (don't want to move)
@@ -1089,13 +1089,13 @@ namespace NEWIMAGE {
 	  }
 	}
       }
-      
+
       return corr_ratio;
     }
 
   ///////////////////////////////////////////////////////////////////////
 
-   float p_corr_ratio_smoothed(const volume<float>& vref, 
+   float p_corr_ratio_smoothed(const volume<float>& vref,
 			     const volume<float>& vtest,
 			     int *bindex, const Matrix& aff,
 			     const int no_bins, const float smoothsize)
@@ -1108,7 +1108,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1141,13 +1141,13 @@ namespace NEWIMAGE {
       unsigned int xmin, xmax;
       int *bptr;
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1159,11 +1159,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-	    
+
 	        // do the cost function record keeping...
 		b=*bptr;
 		weight=1.0;
@@ -1208,7 +1208,7 @@ namespace NEWIMAGE {
 	  totsumy2 += sumy2[b];
 	  // the following should be the variance of the bth iso-subset
 	  var = (sumy2[b] - sumy[b]*sumy[b]/numy[b] ) / ( numy[b]-1);
-	  // cerr << "Set #" << b << " has " << numy[b] << " elements and " 
+	  // cerr << "Set #" << b << " has " << numy[b] << " elements and "
 	  //   << var << " variance" << endl;
 	  corr_ratio += var * ((float) numy[b]);
 	}
@@ -1220,9 +1220,9 @@ namespace NEWIMAGE {
       // calculate the total variance of Image y and then normalise by this
       if (numtoty>1)
 	var = ( totsumy2 - totsumy*totsumy/numtoty ) / (numtoty - 1);
-      //cerr << "TOTALS are:" << endl 
+      //cerr << "TOTALS are:" << endl
       //   << " numerator variance is : " << corr_ratio << endl
-      //   << " and denominator variance is: " << var << " from " << numtoty 
+      //   << " and denominator variance is: " << var << " from " << numtoty
       //   << " valid elements" << endl;
       if (var>0.0)  corr_ratio/=var;
       // the above is actually 1 - correlation ratio, so correct this now
@@ -1253,7 +1253,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1265,7 +1265,7 @@ namespace NEWIMAGE {
       int *numy;
       numy = new int[no_bins+1];
       int b=0;
- 
+
       for (int i=0; i<=no_bins; i++) {
 	numy[i]=0; sumy[i]=0.0;  sumy2[i]=0.0;
       }
@@ -1281,13 +1281,13 @@ namespace NEWIMAGE {
       unsigned int xmin, xmax;
       int *bptr;
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1299,11 +1299,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		b=*bptr;
 		numy[b]++;
@@ -1341,7 +1341,7 @@ namespace NEWIMAGE {
 	  // the following should be the variance of the bth iso-subset
 	  var = (sumy2[b] - sumy[b]*sumy[b]/((float) numy[b]) ) /
 	    ((float) (numy[b]-1));
-	  // cerr << "Set #" << b << " has " << numy[b] << " elements and " 
+	  // cerr << "Set #" << b << " has " << numy[b] << " elements and "
 	  //   << var << " variance" << endl;
 	  corr_ratio += var * ((float) numy[b]);
 	}
@@ -1354,9 +1354,9 @@ namespace NEWIMAGE {
       if (numtoty>1)
 	var = ( totsumy2 - totsumy*totsumy/((float) numtoty) ) /
 	  ((float) (numtoty - 1));
-      //cerr << "TOTALS are:" << endl 
+      //cerr << "TOTALS are:" << endl
       //   << " numerator variance is : " << corr_ratio << endl
-      //   << " and denominator variance is: " << var << " from " << numtoty 
+      //   << " and denominator variance is: " << var << " from " << numtoty
       //   << " valid elements" << endl;
       if (var>0.0)  corr_ratio/=var;
       // the above is actually 1 - correlation ratio, so correct this now
@@ -1375,8 +1375,8 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_woods_fn(const volume<float>& vref, 
-		 const volume<float>& vtest, int *bindex, 
+  float p_woods_fn(const volume<float>& vref,
+		 const volume<float>& vtest, int *bindex,
 		 const Matrix& aff, const int no_bins)
     {
       // Do everything in practice via the inverse transformation
@@ -1386,7 +1386,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1406,7 +1406,7 @@ namespace NEWIMAGE {
       for (int i=0; i<=no_bins; i++) {
 	num[i]=0; sum[i]=0.0;  sum2[i]=0.0;
       }
-  
+
       float val=0.0;
       unsigned int xmin, xmax;
       int *bptr;
@@ -1414,13 +1414,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1432,18 +1432,18 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		b=*bptr;
 		num[b]++;
 		sum[b]+=val;
 		sum2[b]+=val*val;
 	      }
-	    
+
 	    bptr++;
 	    o1 += a11;
 	    o2 += a21;
@@ -1486,9 +1486,9 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_woods_fn_smoothed(const volume<float>& vref, 
-			  const volume<float>& vtest, int *bindex, 
-			  const Matrix& aff, const int no_bins, 
+  float p_woods_fn_smoothed(const volume<float>& vref,
+			  const volume<float>& vtest, int *bindex,
+			  const Matrix& aff, const int no_bins,
 			  const float smoothsize)
     {
       // Do everything in practice via the inverse transformation
@@ -1498,7 +1498,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1518,7 +1518,7 @@ namespace NEWIMAGE {
       for (int i=0; i<=no_bins; i++) {
 	num[i]=0.0; sum[i]=0.0;  sum2[i]=0.0;
       }
-  
+
       float smoothx, smoothy, smoothz, weight;
       smoothx = smoothsize / vtest.xdim();
       smoothy = smoothsize / vtest.ydim();
@@ -1531,13 +1531,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1549,11 +1549,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		b=*bptr;
 		weight=1.0;
@@ -1620,7 +1620,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1643,13 +1643,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1659,11 +1659,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		num++;
 		valx = vref(x,y,z);
@@ -1679,12 +1679,12 @@ namespace NEWIMAGE {
 	    o2 += a21;
 	    o3 += a31;
 	  }
-	  sumxA+=sumx; sumyA+=sumy; 
-	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy; 
+	  sumxA+=sumx; sumyA+=sumy;
+	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy;
 	  sumx=0.0; sumy=0.0; sumx2=0.0; sumy2=0.0; sumxy=0.0;
 	}
-	sumxB+=sumxA; sumyB+=sumyA; 
-	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA; 
+	sumxB+=sumxA; sumyB+=sumyA;
+	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA;
 	sumxA=0.0; sumyA=0.0; sumx2A=0.0; sumy2A=0.0; sumxyA=0.0;
       }
       assert(fabs(sumxA+sumx)<1e-9);
@@ -1698,16 +1698,16 @@ namespace NEWIMAGE {
 	vary = sumy2/((float) num-1) - (sumy*sumy)/numsq;
 	if ((varx>0.0) && (vary>0.0)) {
 	  corr = varxy/sqrt(varx)/sqrt(vary);
-	} 
+	}
       }
       return corr;
     }
 
-  
+
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_normcorr_smoothed(const volume<float>& vref, 
+  float p_normcorr_smoothed(const volume<float>& vref,
 			    const volume<float>& vtest,
 			    const Matrix& aff, const float smoothsize)
     {
@@ -1718,7 +1718,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1747,14 +1747,14 @@ namespace NEWIMAGE {
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
       //cerr << "debug - normcorr_smoothed (1)" << endl;
-    
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
-	  
+
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
+
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1767,11 +1767,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=1.0;
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -1781,7 +1781,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 		valy = val;
 		num += weight;
@@ -1797,20 +1797,20 @@ namespace NEWIMAGE {
 	    o3 += a31;
 	  }
 
-	  numA+=num; sumxA+=sumx; sumyA+=sumy; 
-	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy; 
+	  numA+=num; sumxA+=sumx; sumyA+=sumy;
+	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy;
 	  sumx=0.0; sumy=0.0; sumx2=0.0; sumy2=0.0; sumxy=0.0;
 	}
 
-	numB+=numA; sumxB+=sumxA; sumyB+=sumyA; 
-	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA; 
+	numB+=numA; sumxB+=sumxA; sumyB+=sumyA;
+	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA;
 	sumxA=0.0; sumyA=0.0; sumx2A=0.0; sumy2A=0.0; sumxyA=0.0;
       }
 
       assert(fabs(sumxA+sumx)<1e-9);
       num = numB;
       sumx=sumxB; sumy=sumyB; sumx2=sumx2B; sumy2=sumy2B; sumxy=sumxyB;
-  
+
       corr = 0.0;  // uncorrelated (worst) case
       if (num>2.0) {
 	varxy = sumxy/(num-1.0) - (sumx*sumy)/(num*num);
@@ -1818,16 +1818,16 @@ namespace NEWIMAGE {
 	vary = sumy2/(num-1.0) - (sumy*sumy)/(num*num);
 	if ((varx>0.0) && (vary>0.0)) {
 	  corr = varxy/sqrt(varx)/sqrt(vary);
-	} 
+	}
       }
       return corr;
     }
 
-  
+
   ///////////////////////////////////////////////////////////////////////
 
- 
-  float p_normcorr_smoothed_sinc(const volume<float>& vref, 
+
+  float p_normcorr_smoothed_sinc(const volume<float>& vref,
 				 const volume<float>& vtest,
 				 const Matrix& aff, const float smoothsize)
   {
@@ -1841,7 +1841,7 @@ namespace NEWIMAGE {
       ///vtest.setinterpolationmethod(sinc);
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1869,13 +1869,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -1885,12 +1885,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_sinc_interpolation(vtest,o1,o2,o3);
 		///val = vtest.interpolate(o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=1.0;
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -1900,7 +1900,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 		valy = val;
 		num += weight;
@@ -1915,18 +1915,18 @@ namespace NEWIMAGE {
 	    o2 += a21;
 	    o3 += a31;
 	  }
-	  numA+=num; sumxA+=sumx; sumyA+=sumy; 
-	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy; 
+	  numA+=num; sumxA+=sumx; sumyA+=sumy;
+	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy;
 	  sumx=0.0; sumy=0.0; sumx2=0.0; sumy2=0.0; sumxy=0.0;
 	}
-	numB+=numA; sumxB+=sumxA; sumyB+=sumyA; 
-	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA; 
+	numB+=numA; sumxB+=sumxA; sumyB+=sumyA;
+	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA;
 	sumxA=0.0; sumyA=0.0; sumx2A=0.0; sumy2A=0.0; sumxyA=0.0;
       }
       assert(fabs(sumxA+sumx)<1e-9);
       num = numB;
       sumx=sumxB; sumy=sumyB; sumx2=sumx2B; sumy2=sumy2B; sumxy=sumxyB;
-  
+
       corr = 0.0;  // uncorrelated (worst) case
       if (num>2.0) {
 	varxy = sumxy/(num-1.0) - (sumx*sumy)/(num*num);
@@ -1934,20 +1934,20 @@ namespace NEWIMAGE {
 	vary = sumy2/(num-1.0) - (sumy*sumy)/(num*num);
 	if ((varx>0.0) && (vary>0.0)) {
 	  corr = varxy/sqrt(varx)/sqrt(vary);
-	} 
+	}
       }
       return corr;
     }
 
-  
+
 
 
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_normcorr_fully_weighted(const volume<float>& vref, 
+  float p_normcorr_fully_weighted(const volume<float>& vref,
 				const volume<float>& vtest,
-				const volume<float>& refweight, 
+				const volume<float>& refweight,
 				const volume<float>& testweight,
 				const Matrix& aff, const float smoothsize)
     {
@@ -1958,7 +1958,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -1986,13 +1986,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2002,12 +2002,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=wval*refweight(x,y,z);
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -2017,7 +2017,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 		valy = val;
 		num += weight;
@@ -2027,23 +2027,23 @@ namespace NEWIMAGE {
 		sumy2 += weight*valy*valy;
 		sumxy += weight*valx*valy;
 	      }
-	    
+
 	    o1 += a11;
 	    o2 += a21;
 	    o3 += a31;
 	  }
-	  numA+=num; sumxA+=sumx; sumyA+=sumy; 
-	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy; 
+	  numA+=num; sumxA+=sumx; sumyA+=sumy;
+	  sumx2A+=sumx2; sumy2A+=sumy2; sumxyA+=sumxy;
 	  sumx=0.0; sumy=0.0; sumx2=0.0; sumy2=0.0; sumxy=0.0;
 	}
-	numB+=numA; sumxB+=sumxA; sumyB+=sumyA; 
-	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA; 
+	numB+=numA; sumxB+=sumxA; sumyB+=sumyA;
+	sumx2B+=sumx2A; sumy2B+=sumy2A; sumxyB+=sumxyA;
 	sumxA=0.0; sumyA=0.0; sumx2A=0.0; sumy2A=0.0; sumxyA=0.0;
       }
       assert(fabs(sumxA+sumx)<1e-9);
       num = numB;
       sumx=sumxB; sumy=sumyB; sumx2=sumx2B; sumy2=sumy2B; sumxy=sumxyB;
-  
+
       corr = 0.0;  // uncorrelated (worst) case
       if (num>2.0) {
 	varxy = sumxy/(num-1.0) - (sumx*sumy)/(num*num);
@@ -2051,12 +2051,12 @@ namespace NEWIMAGE {
 	vary = sumy2/(num-1.0) - (sumy*sumy)/(num*num);
 	if ((varx>0.0) && (vary>0.0)) {
 	  corr = varxy/sqrt(varx)/sqrt(vary);
-	} 
+	}
       }
       return corr;
     }
 
-  
+
   ///////////////////////////////////////////////////////////////////////
 
 
@@ -2070,7 +2070,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2090,13 +2090,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2106,11 +2106,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		num++;
 		valx = vref(x,y,z);
@@ -2136,7 +2136,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2144,7 +2144,7 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_leastsquares_smoothed(const volume<float>& vref, 
+  float p_leastsquares_smoothed(const volume<float>& vref,
 			      const volume<float>& vtest,
 			      const Matrix& aff, const float smoothsize)
     {
@@ -2155,7 +2155,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2180,13 +2180,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2196,11 +2196,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=1.0;
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -2210,7 +2210,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 		valy = val;
 		num+=weight;
@@ -2229,8 +2229,8 @@ namespace NEWIMAGE {
       }
       assert(fabs(sumA+sum)<1e-9);
       sum = sumB;  num = numB;
-  
-      
+
+
       if (num>1.0) {
 	lsq = sum/num;
       } else {
@@ -2238,7 +2238,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2246,9 +2246,9 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_leastsquares_fully_weighted(const volume<float>& vref, 
+  float p_leastsquares_fully_weighted(const volume<float>& vref,
 				    const volume<float>& vtest,
-				    const volume<float>& refweight, 
+				    const volume<float>& refweight,
 				    const volume<float>& testweight,
 				    const Matrix& aff, const float smoothsize)
   {
@@ -2259,7 +2259,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2284,13 +2284,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2300,12 +2300,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=wval*refweight(x,y,z);
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -2315,7 +2315,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 		valy = val;
 		num+=weight;
@@ -2334,8 +2334,8 @@ namespace NEWIMAGE {
       }
       assert(fabs(sumA+sum)<1e-9);
       sum = sumB;  num = numB;
-  
-      
+
+
       if (num>1.0) {
 	lsq = sum/num;
       } else {
@@ -2343,7 +2343,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2360,7 +2360,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2382,13 +2382,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2398,7 +2398,7 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		// do the cost function record keeping...
@@ -2436,7 +2436,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2444,7 +2444,7 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_labeldiff_smoothed(const volume<float>& vref, 
+  float p_labeldiff_smoothed(const volume<float>& vref,
 			     const volume<float>& vtest,
 			     const Matrix& aff, const float smoothsize)
     {
@@ -2455,7 +2455,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2481,13 +2481,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2497,12 +2497,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 
 		valx = vref(x,y,z);
-	
+
 		// do the cost function record keeping...
 		weight=1.0;
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -2512,7 +2512,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		num+=weight;
 		q_get_neighbours(vtest,o1,o2,o3,v000,v001,v010,v011,v100,v101,v110,v111,
 				 dx, dy,dz);
@@ -2541,8 +2541,8 @@ namespace NEWIMAGE {
       }
       assert(fabs(sumA+sum)<1e-9);
       sum = sumB;  num = numB;
-  
-      
+
+
       if (num>1.0) {
 	lsq = sum/num;
       } else {
@@ -2550,7 +2550,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2558,9 +2558,9 @@ namespace NEWIMAGE {
   ///////////////////////////////////////////////////////////////////////
 
 
-  float p_labeldiff_fully_weighted(const volume<float>& vref, 
+  float p_labeldiff_fully_weighted(const volume<float>& vref,
 				   const volume<float>& vtest,
-				   const volume<float>& refweight, 
+				   const volume<float>& refweight,
 				   const volume<float>& testweight,
 				   const Matrix& aff, const float smoothsize)
   {
@@ -2571,7 +2571,7 @@ namespace NEWIMAGE {
       // Also, the sampling transformations must be accounted for:
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2597,13 +2597,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2613,11 +2613,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		weight=wval*refweight(x,y,z);
 		if (o1<smoothx)  weight*=o1/smoothx;
@@ -2627,7 +2627,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  weight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) weight*=(zb2-o3)/smoothz;
 		if (weight<0.0)  weight=0.0;
-		
+
 		valx = vref(x,y,z);
 
 		num+=weight;
@@ -2658,8 +2658,8 @@ namespace NEWIMAGE {
       }
       assert(fabs(sumA+sum)<1e-9);
       sum = sumB;  num = numB;
-  
-      
+
+
       if (num>1.0) {
 	lsq = sum/num;
       } else {
@@ -2667,7 +2667,7 @@ namespace NEWIMAGE {
 	lsq = (Max(vref.max(),vtest.max())-Min(vref.min(),vtest.min()));
 	lsq = lsq*lsq;
       }
-      
+
       return lsq;
     }
 
@@ -2678,7 +2678,7 @@ namespace NEWIMAGE {
   void calc_entropy(const volume<float>& vref, const volume<float>& vtest,
 		    int *bindex,  const Matrix& aff,
 		    const float mintest, const float maxtest,
-		    const int no_bins, const ColumnVector& plnp, 
+		    const int no_bins, const ColumnVector& plnp,
 		    int *jointhist, int *marghist1, int *marghist2,
 		    float& jointentropy, float& margentropy1,
 		    float& margentropy2)
@@ -2696,7 +2696,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2717,20 +2717,20 @@ namespace NEWIMAGE {
       long int a,b;
       float b1=no_bins/(maxtest-mintest), b0=-mintest*no_bins/(maxtest-mintest);
       float val=0.0;
- 
+
       unsigned int xmin, xmax;
       int *bptr;
 
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2742,11 +2742,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		a=*bptr;
 		b=(long int) (val*b1 + b0);
@@ -2769,7 +2769,7 @@ namespace NEWIMAGE {
       //   plnp(n) = n/N * log(n/N)
       float p=0.0;
       int n=0, psize=plnp.Nrows();
-      long int nvoxels = (long int) (vref.ysize() * vref.xsize() * 
+      long int nvoxels = (long int) (vref.ysize() * vref.xsize() *
 				     vref.zsize());
       for (long int i=0; i<((no_bins+1)*(no_bins+1)); i++) {
 	n = jointhist[i];
@@ -2831,7 +2831,7 @@ namespace NEWIMAGE {
   float p_test_entropy(const volume<float>& vref, const volume<float>& vtest,
 		    int *bindex, const Matrix& aff,
 		    const float mintest, const float maxtest,
-		    const int no_bins, const ColumnVector& plnp, 
+		    const int no_bins, const ColumnVector& plnp,
 		    int *jointhist, int *marghist1, int *marghist2)
     {
       float jointentropy=0.0, margentropy1=0.0, margentropy2=0.0;
@@ -2844,7 +2844,7 @@ namespace NEWIMAGE {
   float p_ref_entropy(const volume<float>& vref, const volume<float>& vtest,
 		    int *bindex, const Matrix& aff,
 		    const float mintest, const float maxtest,
-		    const int no_bins, const ColumnVector& plnp, 
+		    const int no_bins, const ColumnVector& plnp,
 		    int *jointhist, int *marghist1, int *marghist2)
     {
       float jointentropy=0.0, margentropy1=0.0, margentropy2=0.0;
@@ -2857,7 +2857,7 @@ namespace NEWIMAGE {
   float p_joint_entropy(const volume<float>& vref, const volume<float>& vtest,
 		    int *bindex, const Matrix& aff,
 		    const float mintest, const float maxtest,
-		    const int no_bins, const ColumnVector& plnp, 
+		    const int no_bins, const ColumnVector& plnp,
 		    int *jointhist, int *marghist1, int *marghist2)
     {
       float jointentropy=0.0, margentropy1=0.0, margentropy2=0.0;
@@ -2870,7 +2870,7 @@ namespace NEWIMAGE {
   float p_mutual_info(const volume<float>& vref, const volume<float>& vtest,
 		    int *bindex, const Matrix& aff,
 		    const float mintest, const float maxtest,
-		    const int no_bins, const ColumnVector& plnp, 
+		    const int no_bins, const ColumnVector& plnp,
 		    int *jointhist, int *marghist1, int *marghist2)
     {
       float jointentropy=0.0, margentropy1=0.0, margentropy2=0.0;
@@ -2883,11 +2883,11 @@ namespace NEWIMAGE {
 
 
 
-  float p_normalised_mutual_info(const volume<float>& vref, 
+  float p_normalised_mutual_info(const volume<float>& vref,
 			       const volume<float>& vtest,
 			       int *bindex, const Matrix& aff,
 			       const float mintest, const float maxtest,
-			       const int no_bins, const ColumnVector& plnp, 
+			       const int no_bins, const ColumnVector& plnp,
 			       int *jointhist, int *marghist1, int *marghist2)
     {
       float jointentropy=0.0, margentropy1=0.0, margentropy2=0.0;
@@ -2906,12 +2906,12 @@ namespace NEWIMAGE {
 
   ///////////////////////////////////////////////////////////////////////
 
-   void calc_smoothed_entropy(const volume<float>& vref, 
+   void calc_smoothed_entropy(const volume<float>& vref,
 			      const volume<float>& vtest,
 			      int *bindex,  const Matrix& aff,
 			      const float mintest, const float maxtest,
 			      const int no_bins,
-			      float *jointhist, float *marghist1, 
+			      float *jointhist, float *marghist1,
 			      float *marghist2,
 			      float& jointentropy, float& margentropy1,
 			      float& margentropy2,
@@ -2928,7 +2928,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -2949,7 +2949,7 @@ namespace NEWIMAGE {
       long int a;
       float b1=no_bins/(maxtest-mintest), b0=-mintest*no_bins/(maxtest-mintest);
       float val=0.0;
- 
+
       float smoothx, smoothy, smoothz, geomweight, wcentre, wplus, wminus, bidx;
       long int bcentre, bplus, bminus;
       smoothx = smoothsize / vtest.xdim();
@@ -2962,13 +2962,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -2980,11 +2980,11 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		geomweight=1.0;
 		if (o1<smoothx)  geomweight*=o1/smoothx;
@@ -2994,7 +2994,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  geomweight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) geomweight*=(zb2-o3)/smoothz;
 		if (geomweight<0.0)  geomweight=0.0;
-		
+
 		// do the cost function record keeping...
 		a=*bptr;
 		bidx=val*b1 + b0;
@@ -3044,7 +3044,7 @@ namespace NEWIMAGE {
       }
 
       float p=0.0, n=0.0;
-      long int nvoxels = (long int) (vref.ysize() * vref.xsize() * 
+      long int nvoxels = (long int) (vref.ysize() * vref.xsize() *
 				     vref.zsize());
       for (long int i=0; i<((no_bins+1)*(no_bins+1)); i++) {
 	n = jointhist[i];
@@ -3090,12 +3090,12 @@ namespace NEWIMAGE {
 
 
 
-  float p_mutual_info_smoothed(const volume<float>& vref, 
+  float p_mutual_info_smoothed(const volume<float>& vref,
 			     const volume<float>& vtest,
 			     int *bindex, const Matrix& aff,
 			     const float mintest, const float maxtest,
-			     const int no_bins, 
-			     float *jointhist, float *marghist1, 
+			     const int no_bins,
+			     float *jointhist, float *marghist1,
 			     float *marghist2,
 			     const float smoothsize, const float fuzzyfrac)
     {
@@ -3113,7 +3113,7 @@ namespace NEWIMAGE {
   float p_normalised_mutual_info_smoothed(const volume<float>& vref, const volume<float>& vtest,
 			       int *bindex, const Matrix& aff,
 			       const float mintest, const float maxtest,
-			       const int no_bins, float *jointhist, 
+			       const int no_bins, float *jointhist,
 			       float *marghist1, float *marghist2,
 			       const float smoothsize, const float fuzzyfrac)
     {
@@ -3133,18 +3133,18 @@ namespace NEWIMAGE {
 
   ///////////////////////////////////////////////////////////////////////
 
-   void calc_fully_weighted_entropy(const volume<float>& vref, 
+   void calc_fully_weighted_entropy(const volume<float>& vref,
 				    const volume<float>& vtest,
-				    const volume<float>& refweight, 
+				    const volume<float>& refweight,
 				    const volume<float>& testweight,
 				    int *bindex,  const Matrix& aff,
 				    const float mintest, const float maxtest,
 				    const int no_bins,
-				    float *jointhist, float *marghist1, 
+				    float *jointhist, float *marghist1,
 				    float *marghist2,
 				    float& jointentropy, float& margentropy1,
 				    float& margentropy2,
-				    const float smoothsize, 
+				    const float smoothsize,
 				    const float fuzzyfrac)
    {
       // the joint and marginal entropies between the two images are
@@ -3158,7 +3158,7 @@ namespace NEWIMAGE {
       //     T_vox1->vox2 = (T_samp2)^-1 * T_world * T_samp1
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -3179,7 +3179,7 @@ namespace NEWIMAGE {
       long int a;
       float b1=no_bins/(maxtest-mintest), b0=-mintest*no_bins/(maxtest-mintest);
       float val=0.0;
- 
+
       float wval=0, smoothx, smoothy, smoothz;
       float geomweight, wcentre, wplus, wminus, bidx;
       long int bcentre, bplus, bminus;
@@ -3193,13 +3193,13 @@ namespace NEWIMAGE {
       // The matrix algebra below has been hand-optimized from
       //  [o1 o2 o3] = a * [x y z]  at each iteration
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -3211,12 +3211,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		geomweight=wval*refweight(x,y,z);
 		if (o1<smoothx)  geomweight*=o1/smoothx;
@@ -3226,7 +3226,7 @@ namespace NEWIMAGE {
 		if (o3<smoothz)  geomweight*=o3/smoothz;
 		else if ((zb2-o3)<smoothz) geomweight*=(zb2-o3)/smoothz;
 		if (geomweight<0.0)  geomweight=0.0;
-		
+
 		// do the cost function record keeping...
 		a=*bptr;
 		bidx=val*b1 + b0;
@@ -3276,7 +3276,7 @@ namespace NEWIMAGE {
       }
 
       float p=0.0, n=0.0;
-      long int nvoxels = (long int) (vref.ysize() * vref.xsize() * 
+      long int nvoxels = (long int) (vref.ysize() * vref.xsize() *
 				     vref.zsize());
       for (long int i=0; i<((no_bins+1)*(no_bins+1)); i++) {
 	n = jointhist[i];
@@ -3322,14 +3322,14 @@ namespace NEWIMAGE {
 
 
 
-  float p_mutual_info_fully_weighted(const volume<float>& vref, 
+  float p_mutual_info_fully_weighted(const volume<float>& vref,
 				   const volume<float>& vtest,
-				    const volume<float>& refweight, 
+				    const volume<float>& refweight,
 				    const volume<float>& testweight,
 			     int *bindex, const Matrix& aff,
 			     const float mintest, const float maxtest,
-			     const int no_bins, 
-			     float *jointhist, float *marghist1, 
+			     const int no_bins,
+			     float *jointhist, float *marghist1,
 			     float *marghist2,
 			     const float smoothsize, const float fuzzyfrac)
     {
@@ -3345,13 +3345,13 @@ namespace NEWIMAGE {
 
 
 
-  float p_normalised_mutual_info_fully_weighted(const volume<float>& vref, 
+  float p_normalised_mutual_info_fully_weighted(const volume<float>& vref,
 					      const volume<float>& vtest,
-					      const volume<float>& refweight, 
+					      const volume<float>& refweight,
 					      const volume<float>& testweight,
 			       int *bindex, const Matrix& aff,
 			       const float mintest, const float maxtest,
-			       const int no_bins, float *jointhist, 
+			       const int no_bins, float *jointhist,
 			       float *marghist1, float *marghist2,
 			       const float smoothsize, const float fuzzyfrac)
     {
@@ -3373,7 +3373,7 @@ namespace NEWIMAGE {
 
   ///////////////////////////////////////////////////////////////////////
 
-  void Costfn::set_no_bins(int n_bins) 
+  void Costfn::set_no_bins(int n_bins)
     {
       no_bins=n_bins;
       //hist.ReSize(no_bins+1,no_bins+1);
@@ -3387,7 +3387,7 @@ namespace NEWIMAGE {
       float p=0.0;
       try {
         plnp.ReSize(Min((unsigned long int) 10000, (unsigned long int) (10*N/(no_bins+1))));
-      } catch(...) { 
+      } catch(...) {
 	cerr<<"ERROR: failed on plnp.Resize("
 	    <<Min((unsigned long int) 10000, (unsigned long int) (10*N/(no_bins+1)))
 	    <<")"<<endl;
@@ -3407,8 +3407,8 @@ namespace NEWIMAGE {
       bin_a1=no_bins/(refmax-refmin);
       bin_a0=-refmin*no_bins/(refmax-refmin);
       int *bptr = bindex;
-      for (int z=0; z<refvol.zsize(); z++) { 
-	for (int y=0; y<refvol.ysize(); y++) { 
+      for (int z=0; z<refvol.zsize(); z++) {
+	for (int y=0; y<refvol.ysize(); y++) {
 	  for (int x=0; x<refvol.xsize(); x++) {
 	    *bptr = (int) get_bin_number(refvol(x,y,z));
 	    if (*bptr >= no_bins)  *bptr = no_bins-1;
@@ -3441,7 +3441,7 @@ namespace NEWIMAGE {
   float Costfn::normcorr_smoothed(const Matrix& aff) const
     {
       p_count++;
-      return p_normcorr_smoothed(this->refvol,this->testvol,aff, 
+      return p_normcorr_smoothed(this->refvol,this->testvol,aff,
 				 this->smoothsize);
     }
 
@@ -3449,12 +3449,12 @@ namespace NEWIMAGE {
   float Costfn::normcorr_smoothed_sinc(const Matrix& aff) const
     {
       p_count++;
-      return p_normcorr_smoothed_sinc(this->refvol,this->testvol,aff, 
+      return p_normcorr_smoothed_sinc(this->refvol,this->testvol,aff,
 				      this->smoothsize);
     }
 
   float Costfn::normcorr_fully_weighted(const Matrix& aff,
-				const volume<float>& refweight, 
+				const volume<float>& refweight,
 				const volume<float>& testweight) const
    {
      p_count++;
@@ -3473,12 +3473,12 @@ namespace NEWIMAGE {
   float Costfn::leastsquares_smoothed(const Matrix& aff) const
     {
       p_count++;
-      return p_leastsquares_smoothed(this->refvol,this->testvol,aff, 
+      return p_leastsquares_smoothed(this->refvol,this->testvol,aff,
 				   this->smoothsize);
     }
 
-   float Costfn::leastsquares_fully_weighted(const Matrix& aff, 
-				     const volume<float>& refweight, 
+   float Costfn::leastsquares_fully_weighted(const Matrix& aff,
+				     const volume<float>& refweight,
 				     const volume<float>& testweight) const
    {
      p_count++;
@@ -3497,12 +3497,12 @@ namespace NEWIMAGE {
   float Costfn::labeldiff_smoothed(const Matrix& aff) const
     {
       p_count++;
-      return p_labeldiff_smoothed(this->refvol,this->testvol,aff, 
+      return p_labeldiff_smoothed(this->refvol,this->testvol,aff,
 				   this->smoothsize);
     }
 
-   float Costfn::labeldiff_fully_weighted(const Matrix& aff, 
-				     const volume<float>& refweight, 
+   float Costfn::labeldiff_fully_weighted(const Matrix& aff,
+				     const volume<float>& refweight,
 				     const volume<float>& testweight) const
    {
      p_count++;
@@ -3533,16 +3533,16 @@ namespace NEWIMAGE {
       return p_corr_ratio(this->refvol,this->testvol,this->bindex,aff,
 			this->no_bins);
     }
-  
+
   float Costfn::corr_ratio_smoothed(const Matrix& aff) const
     {
       p_count++;
       return p_corr_ratio_smoothed(this->refvol,this->testvol,this->bindex,aff,
 			this->no_bins, this->smoothsize);
     }
-  
+
   float Costfn::corr_ratio_fully_weighted(const Matrix& aff,
-				  const volume<float>& refweight, 
+				  const volume<float>& refweight,
 				  const volume<float>& testweight) const
     {
       p_count++;
@@ -3551,9 +3551,9 @@ namespace NEWIMAGE {
 				       this->bindex,aff,
 				       this->no_bins, this->smoothsize);
     }
-  
+
   float Costfn::corr_ratio_fully_weighted(const volume4D<float>& warpvol,
-				  const volume<float>& refweight, 
+				  const volume<float>& refweight,
 				  const volume<float>& testweight) const
     {
       p_count++;
@@ -3562,12 +3562,12 @@ namespace NEWIMAGE {
 				       this->bindex,warpvol,
 				       this->no_bins, this->smoothsize);
     }
-  
+
 
   float Costfn::corr_ratio_gradient_fully_weighted(volume4D<float>& gradvec,
 					  const volume4D<float>& warpvol,
-					  const volume<float>& refweight, 
-					  const volume<float>& testweight, 
+					  const volume<float>& refweight,
+					  const volume<float>& testweight,
 						   bool nullbc) const
   {
       p_count++;
@@ -3575,10 +3575,10 @@ namespace NEWIMAGE {
 						  this->refvol,this->testvol,
 						  refweight,testweight,
 						  this->bindex,warpvol,
-						  this->no_bins, 
+						  this->no_bins,
 						  this->smoothsize, nullbc);
     }
-  
+
 
   float Costfn::ref_entropy(const Matrix& aff) const
     {
@@ -3631,7 +3631,7 @@ namespace NEWIMAGE {
 
 
   float Costfn::mutual_info_fully_weighted(const Matrix& aff,
-				   const volume<float>& refweight, 
+				   const volume<float>& refweight,
 				   const volume<float>& testweight) const
     {
       p_count++;
@@ -3667,7 +3667,7 @@ namespace NEWIMAGE {
     }
 
   float Costfn::normalised_mutual_info_fully_weighted(const Matrix& aff,
-					      const volume<float>& refweight, 
+					      const volume<float>& refweight,
 					      const volume<float>& testweight) const
     {
       p_count++;
@@ -3680,7 +3680,7 @@ namespace NEWIMAGE {
 						   this->fjointhist,
 						   this->fmarghist1,
 						   this->fmarghist2,
-						   this->smoothsize, 
+						   this->smoothsize,
 						   this->fuzzyfrac);
     }
 
@@ -3690,9 +3690,9 @@ namespace NEWIMAGE {
 
   int Costfn::p_corr_ratio_image_mapper(volume<float>& vout,
 				Matrix& mappingfn,
-				const volume<float>& vref, 
+				const volume<float>& vref,
 				const volume<float>& vtest,
-				const volume<float>& refweight, 
+				const volume<float>& refweight,
 				const volume<float>& testweight,
 				int *bindex, const Matrix& aff,
 				const int no_bins, const float smoothsize) const
@@ -3712,7 +3712,7 @@ namespace NEWIMAGE {
       }
 
       Matrix iaffbig = vtest.sampling_mat().i() * aff.i() *
-	                     vref.sampling_mat();  
+	                     vref.sampling_mat();
       Matrix iaff=iaffbig.SubMatrix(1,3,1,3);
       unsigned int xb1=vref.xsize()-1, yb1=vref.ysize()-1, zb1=vref.zsize()-1;
       float  xb2 = ((float) vtest.xsize())-1.0001,
@@ -3724,7 +3724,7 @@ namespace NEWIMAGE {
       float *numy;
       numy = new float[no_bins+1];
       int b=0;
- 
+
       for (int i=0; i<=no_bins; i++) {
 	numy[i]=0.0; sumy[i]=0.0;  sumy2[i]=0.0;
       }
@@ -3745,13 +3745,13 @@ namespace NEWIMAGE {
       unsigned int xmin, xmax;
       int *bptr;
 
-      for (unsigned int z=0; z<=zb1; z++) { 
-	for (unsigned int y=0; y<=yb1; y++) { 
+      for (unsigned int z=0; z<=zb1; z++) {
+	for (unsigned int y=0; y<=yb1; y++) {
 
 	  o1= y*a12 + z*a13 + a14;  // x=0
 	  o2= y*a22 + z*a23 + a24;  // x=0
 	  o3= y*a32 + z*a33 + a34;  // x=0
-	
+
 	  // determine range
 	  findrangex(xmin,xmax,o1,o2,o3,a11,a21,a31,xb1,yb1,zb1,xb2,yb2,zb2);
 
@@ -3764,12 +3764,12 @@ namespace NEWIMAGE {
 
 	  for (unsigned int x=xmin; x<=xmax; x++) {
 
-	    if ( !((x==xmin) || (x==xmax)) 
+	    if ( !((x==xmin) || (x==xmax))
 		 || in_interp_bounds(vtest,o1,o2,o3) )
 	      {
 		val = q_tri_interpolation(vtest,o1,o2,o3);
 		wval = q_tri_interpolation(testweight,o1,o2,o3);
-		
+
 		// do the cost function record keeping...
 		b=*bptr;
 		weight=wval*refweight(x,y,z);
@@ -3802,8 +3802,8 @@ namespace NEWIMAGE {
       sumy2[no_bins]=0.0;
 
       if (mapimage) {
-	for (unsigned int z=0; z<=zb1; z++) { 
-	  for (unsigned int y=0; y<=yb1; y++) { 
+	for (unsigned int z=0; z<=zb1; z++) {
+	  for (unsigned int y=0; y<=yb1; y++) {
 	    xmin=0; xmax=xb1;
 	    bptr = get_bindexptr(xmin,y,z,vref,bindex);
 	    for (unsigned int x=xmin; x<=xmax; x++) {
@@ -3825,15 +3825,15 @@ namespace NEWIMAGE {
        mappingfn(b+1,1) = get_bin_intensity(b);
    	if (numy[b]>0) {
 	  mappingfn(b+1,2) = sumy[b]/numy[b];
-	} else { 
+	} else {
 	  mappingfn(b+1,2) = 0;
 	}
      }
 
      delete [] numy; delete [] sumy; delete [] sumy2;
-     
+
      return 0;
-     
+
     }
 
 

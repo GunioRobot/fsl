@@ -4,20 +4,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -29,13 +29,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -46,7 +46,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -107,7 +107,7 @@ void VoxelwiseDesign::setup(const vector<int>& EVnumbers,const vector<string>& E
   location=EVnumbers;
   EV.resize(EVfilenames.size());
   volume4D<float> input;
-  for(unsigned int i=0; i<EV.size(); i++)      
+  for(unsigned int i=0; i<EV.size(); i++)
   {
     if(location[i]>maximumLocation)
       throw Exception("voxelwise_ev_numbers option specifies a number greater than number of design EVs)");
@@ -121,7 +121,7 @@ void VoxelwiseDesign::setup(const vector<int>& EVnumbers,const vector<string>& E
 VoxelwiseDesign voxelwiseInput;
 
 class Permuter
-{ 
+{
 public:
   bool isFlipping;
   bool isRandom;
@@ -188,17 +188,17 @@ void ParametricStatistic::setup(const int nContrasts,const unsigned long nPerms,
 
 void ParametricStatistic::store(const volume<int>& clusterLabels, const ColumnVector& clusterSizes ,const volume<float>& mask, const int contrastNo, const unsigned long permNo)
 {
-  if ( clusterSizes.Nrows() > 0 ) 
+  if ( clusterSizes.Nrows() > 0 )
     maximumDistribution(contrastNo,permNo)=clusterSizes.MaximumAbsoluteValue();
-  if (permNo==1 || isAveraging) { 
+  if (permNo==1 || isAveraging) {
     volume4D<float> parametricImage(mask.xsize(),mask.ysize(),mask.zsize(),1);
     parametricImage=0;
     for(int z=0; z<mask.zsize(); z++)
       for(int y=0; y<mask.ysize(); y++)
 	for(int x=0; x<mask.xsize(); x++)
-	  if( clusterLabels(x,y,z) ) 
-	    parametricImage(x,y,z,0)=clusterSizes(clusterLabels(x,y,z));	  
-    if (permNo==1) 
+	  if( clusterLabels(x,y,z) )
+	    parametricImage(x,y,z,0)=clusterSizes(clusterLabels(x,y,z));
+    if (permNo==1)
       originalStatistic.Row(contrastNo)=parametricImage.matrix(mask);
     if (isAveraging) {
       sumStatMat.Row(contrastNo)+=parametricImage.matrix(mask);
@@ -210,15 +210,15 @@ void ParametricStatistic::store(const volume<int>& clusterLabels, const ColumnVe
 void ParametricStatistic::store(const Matrix& parametricMatrix, const unsigned long permNo)
 {
   maximumDistribution.Column(permNo)=max(parametricMatrix.t()).t();
-  if (permNo==1) 
+  if (permNo==1)
     originalStatistic=parametricMatrix;
-  if (storingUncorrected) 
+  if (storingUncorrected)
     uncorrectedStatistic += gt(originalStatistic,parametricMatrix);
   if (isAveraging) {
     sumStatMat+=parametricMatrix;
     sumSampMat+=SD(parametricMatrix,parametricMatrix);
   }
-  
+
 }
 
 void ParametricStatistic::average(const string filename, const float percentileThreshold,const volume<float>& mask)
@@ -234,7 +234,7 @@ void ParametricStatistic::average(const string filename, const float percentileT
     if (percentileThreshold>0) {
       temp.setmatrix(sumStatMat,mask);
       float min=temp.percentile(percentileThreshold,mask);
-      //cerr << min << " " << percentile((Matrix)tstat_ceav.t(),percentileThreshold*100) << endl;     
+      //cerr << min << " " << percentile((Matrix)tstat_ceav.t(),percentileThreshold*100) << endl;
       for(int i=1;i<=sumStatMat.Ncols();i++)
 	if(sumStatMat(1,i)<min) sumStatMat(1,i)=min;
     }
@@ -254,7 +254,7 @@ Matrix tfce(const Matrix& tstat, const volume<float>& mask, const float delta, f
 void clusterStatistic(ParametricStatistic& output, const Matrix& inputStatistic, const volume<float>& mask, const float threshold, const int permutationNo)
 {
 ColumnVector clusterSizes;
-volume4D<float> spatialStatistic;  
+volume4D<float> spatialStatistic;
    spatialStatistic.setmatrix(inputStatistic,mask);
    spatialStatistic.binarise(threshold);
    volume<int> clusterLabels=connected_components(spatialStatistic[0],clusterSizes,CLUST_CON);
@@ -264,12 +264,12 @@ volume4D<float> spatialStatistic;
 void clusterMassStatistic(ParametricStatistic& output, const Matrix& inputStatistic, const volume<float>& mask, const float threshold, const int permutationNo)
 {
 ColumnVector clusterSizes;
-volume4D<float> spatialStatistic, originalSpatialStatistic;  
+volume4D<float> spatialStatistic, originalSpatialStatistic;
    spatialStatistic.setmatrix(inputStatistic,mask);
    originalSpatialStatistic=spatialStatistic;
    spatialStatistic.binarise(threshold);
    volume<int> clusterLabels=connected_components(spatialStatistic[0],clusterSizes,CLUST_CON);
-   clusterSizes=0;	
+   clusterSizes=0;
    for(int z=0; z<mask.zsize(); z++)
      for(int y=0; y<mask.ysize(); y++)
        for(int x=0; x<mask.xsize(); x++)
@@ -280,10 +280,10 @@ volume4D<float> spatialStatistic, originalSpatialStatistic;
 
 Matrix tfceStatistic(ParametricStatistic& output, const Matrix& inputStatistic, const volume<float>& mask, float& tfceDelta, const float tfceHeight, const float tfceSize, const int tfceConnectivity, const int permutationNo, const bool isF, const int numContrasts, const vector<float>& dof)
 {
-   if (permutationNo==1) 
+   if (permutationNo==1)
      tfceDelta=inputStatistic.Maximum()/100.0;  // i.e. 100 subdivisions of the max input stat height
    Matrix tstat_ce=tfce(inputStatistic,mask,tfceDelta,tfceHeight,tfceSize,tfceConnectivity);
-   if ( isF ) { 
+   if ( isF ) {
      ColumnVector zstat, dofVector(inputStatistic.AsColumn());
      dofVector=dof[0];
      F2z::ComputeFStats( tstat_ce.AsColumn(), numContrasts, dofVector, zstat);
@@ -294,7 +294,7 @@ Matrix tfceStatistic(ParametricStatistic& output, const Matrix& inputStatistic, 
 }
 
 void checkInput(const short st,const  Matrix& dm,const  Matrix& tc,const  Matrix& fc){
-  if (dm.Nrows()!=st) throw Exception("number of rows in design matrix doesn't match number of \"time points\" in input data!"); 
+  if (dm.Nrows()!=st) throw Exception("number of rows in design matrix doesn't match number of \"time points\" in input data!");
   if (tc.Ncols()!=dm.Ncols()) throw Exception("number of columns in t-contrast matrix doesn't match number of columns in design matrix!");
   if (fc.Ncols() !=0 && fc.Ncols()!=tc.Nrows()) throw Exception("number of columns in f-contrast matrix doesn't match number of rows in t-contrast matrix!");
 }
@@ -303,16 +303,16 @@ void Initialise(ranopts& opts, volume<float>& mask, Matrix& datam, Matrix& tc, M
 {
   if (opts.tfce2D.value()) {
     opts.tfce.set_value("true");
-    opts.tfce_height.set_value("2");     
-    opts.tfce_size.set_value("1");     
-    opts.tfce_connectivity.set_value("26");  
+    opts.tfce_height.set_value("2");
+    opts.tfce_size.set_value("1");
+    opts.tfce_connectivity.set_value("26");
   }
   if ( opts.randomSeed.set()) srand(opts.randomSeed.value());
   if ( opts.randomSeed.set() && opts.verbose.value() ) cout << "Seeding with " << opts.randomSeed.value() << endl;
-  if (opts.verbose.value()) cout << "Loading Data: "; 
+  if (opts.verbose.value()) cout << "Loading Data: ";
   volume4D<float> data;
   read_volume4D(data,opts.in_fileroot.value());
-  
+
   if(opts.one_samp.value())
   {
     dm.ReSize(data.tsize(),1);
@@ -333,7 +333,7 @@ void Initialise(ranopts& opts, volume<float>& mask, Matrix& datam, Matrix& tc, M
   if (!opts.nMultiVariate.value()) checkInput(data.tsize(),dm,tc,fc);  // should do a different check in the Multivariate case!
 
   if (opts.parallelData.value()) {
-    int fragmentPermutations(300); 
+    int fragmentPermutations(300);
     if (opts.tfce.value()) fragmentPermutations=240;
     if (data.tsize()>100 || tc.Nrows() > 10 ) fragmentPermutations=200;
     if (opts.voxelwise_ev_numbers.set() && opts.voxelwise_ev_filenames.set()) fragmentPermutations=200;
@@ -344,7 +344,7 @@ void Initialise(ranopts& opts, volume<float>& mask, Matrix& datam, Matrix& tc, M
 
   if (opts.nMultiVariate.set()) {
     // Read in 4D data - see error message below for format details
-    if ((data.ysize()!=opts.nMultiVariate.value()) || (data.zsize()!=1) || (data.tsize()!=dm.Nrows())) { 
+    if ((data.ysize()!=opts.nMultiVariate.value()) || (data.zsize()!=1) || (data.tsize()!=dm.Nrows())) {
       throw Exception("Multi-Variate input data of wrong size!\nSize must be: N x k x 1 x M\n   where N=#vertices, k=#multi-variate dims, M=#subjects");
     }
     // make data matrix of concatenated components, with all of component 1, then all of component 2, etc.
@@ -380,7 +380,7 @@ void Initialise(ranopts& opts, volume<float>& mask, Matrix& datam, Matrix& tc, M
 
   if (opts.voxelwise_ev_numbers.set() && opts.voxelwise_ev_filenames.set())
     voxelwiseInput.setup(opts.voxelwise_ev_numbers.value(),opts.voxelwise_ev_filenames.value(),mask,dm.Ncols(),opts.verbose.value());
-  
+
   if (opts.verbose.value()) cout << "Data loaded" << endl;
 }
 
@@ -406,7 +406,7 @@ Matrix calculateTstat(const Matrix& data, const Matrix& model, const Matrix& tc,
 }
 
 Matrix calculateFStat(const Matrix& data, const Matrix& model, const Matrix& contrast, const float dof,const int rank)
-{ 
+{
   // model is N_subject by N_ev
   // data is N_subject by N_voxels
   Matrix pinvModel(pinv(model)); // inverted model used several times
@@ -416,7 +416,7 @@ Matrix calculateFStat(const Matrix& data, const Matrix& model, const Matrix& con
   estimate = pinv((contrast*pinvModel).t()).t()*contrast*estimate;
   estimate = sum(SP(estimate,estimate))/rank;
   return(SD(estimate,residuals));
-}        
+}
 
 Matrix smoothTstat(const Matrix inputSigmaSquared,const volume<float>& mask,const volume<float>& smoothedMask, const float sigma_mm)
 {
@@ -429,13 +429,13 @@ Matrix smoothTstat(const Matrix inputSigmaSquared,const volume<float>& mask,cons
 }
 
 void OutputStat(const ParametricStatistic input,const volume<float>& mask, const int nPerms,string statLabel,const string fileRoot,const bool outputText, const bool outputRaw=true)
-{ 
+{
 volume4D<float> output(mask.xsize(),mask.ysize(),mask.zsize(),1);
 long nVoxels(input.originalStatistic.Ncols());
 Matrix currentStat(1,nVoxels);
  output.setmatrix(input.originalStatistic.Row(1),mask);
  if (outputRaw) save_volume4D(output,fileRoot+statLabel);
- RowVector distribution = input.maximumDistribution.Row(1);    
+ RowVector distribution = input.maximumDistribution.Row(1);
  if (outputText)
  {
    ofstream output_file((fileRoot+"_corrp"+statLabel+".txt").c_str());
@@ -457,7 +457,7 @@ Matrix currentStat(1,nVoxels);
    output.setmatrix(input.uncorrectedStatistic.Row(1)/float(nPerms),mask);
    save_volume4D(output,fileRoot+"_p"+statLabel);
  }
-}           
+}
 
 float MVGLM_fit(const Matrix& X, const Matrix& Y, const Matrix& contrast, vector<float>& dof)
 {
@@ -479,20 +479,20 @@ float MVGLM_fit(const Matrix& X, const Matrix& Y, const Matrix& contrast, vector
   Matrix R1=Y-Yhat1;
   // Not efficient but easy to convert to other statistics
   R1=R1.t()*R1-R0;
-	
+
   // Calculate Pillai F
   int g=Y.Ncols();
   float F=0, df2=0,df1=0;
   int p=X.Ncols();//number of dependant
   int N=Y.Nrows();//total sampel size
-				
+
   float pillai=(R1*(R1+R0).i()).Trace();
-				
+
   int s=1;
   if (p<(g-1)) {s=p;}
   else {s=g-1;}
   float t=(abs(p-g-1)-1)/2.0;
-  float u=(N-g-p-1)/2.0;				
+  float u=(N-g-p-1)/2.0;
   F=((2*u+s+1)/(2*t+s+1))*(pillai/(s-pillai));
   df1=s*(2*t+s+1);
   df2=s*(2*u+s+1);
@@ -504,7 +504,7 @@ float MVGLM_fit(const Matrix& X, const Matrix& Y, const Matrix& contrast, vector
 
 
 Matrix calculateMultiVariateFStat(const Matrix& model, const Matrix& data, vector<float>& dof, int nMultiVariate)
-{ 
+{
   // model is N_subject by N_ev
   // data is N_subject by (N_vertex * 3)
   // dof[0] for numerator (F) and dof[1] for denominator  - but are these ever needed?
@@ -531,7 +531,7 @@ Matrix evaluateStatistics(const Matrix& data,const Matrix& model,const Matrix& c
       return calculateMultiVariateFStat(model, data, dof, multiVariate);
     else
       return calculateFStat(data, model, contrast, dof[0], rank);
-  } else 
+  } else
     return calculateTstat(data, model, contrast, cope, varcope, sigmaSquared, dof[0]);
 }
 
@@ -544,7 +544,7 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
     cerr << "Input Contrast: " << endl << tc << endl;
     cerr << "Contrast rank: " << rankF << endl;
     cerr << "Dof: " << dof[0] << " original dof: " << ols_dof(dm) << endl;
-  }    
+  }
   volume4D<float> tstat4D(mask.xsize(),mask.ysize(),mask.zsize(),1);
   float tfce_delta(0), clusterThreshold(0), massThreshold(0);
   if (tstatnum>=0) clusterThreshold=opts.cluster_thresh.value();
@@ -554,13 +554,13 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
   bool isNormalising( opts.cluster_norm.value() && tstatnum >=0 ), lowram(false);
 
   string statLabel;
-  if (tstatnum<0) 
+  if (tstatnum<0)
     statLabel="_fstat"+num2str(-tstatnum);
-  else 
+  else
     statLabel="_tstat"+num2str(tstatnum);
   // prepare smoothed mask for use (as a convolution renormaliser) in variance smoothing if required
   volume<float> smoothedMask;
-  if(opts.var_sm_sig.value()>0) 
+  if(opts.var_sm_sig.value()>0)
     smoothedMask=smooth(mask,opts.var_sm_sig.value());
   // containers for different inference distribution
   ParametricStatistic clusters, clusterMasses, clusterNormals, clusterEnhanced, clusterEnhancedNormals, voxels;
@@ -574,41 +574,41 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
   }
   // resize the containers for the relevant inference distributions
   voxels.setup(1,nPerms,nVoxels,false,true);
-  if ( clusterThreshold >0 )  
+  if ( clusterThreshold >0 )
     clusters.setup(1,nPerms,nVoxels,isNormalising);
-  if ( massThreshold>0 ) 
+  if ( massThreshold>0 )
     clusterMasses.setup(1,nPerms,nVoxels,false);
-  if ( clusters.isAveraging ) 
+  if ( clusters.isAveraging )
     clusterNormals.setup(1,nPerms,nVoxels,false);
-  if ( opts.tfce.value() )    
+  if ( opts.tfce.value() )
     clusterEnhanced.setup(1,nPerms,nVoxels,isNormalising,true);
-  if ( clusterEnhanced.isAveraging ) { 
+  if ( clusterEnhanced.isAveraging ) {
     clusterEnhancedNormals.setup(1,nPerms,nVoxels,false);
     try { previousTFCEStat.ReSize(nPerms,clusterEnhanced.sumStatMat.Ncols());} //between 5e17 - 5e18 values for a 2gb machine
-    catch (...) {cerr << "using lowram" << endl; lowram=true;}         
+    catch (...) {cerr << "using lowram" << endl; lowram=true;}
   }
-  
+
   for(unsigned long perm=1; perm<=nPerms; perm++) {
 
-    ColumnVector permvec = permuter.nextPermutation(perm,opts.verbose.value(), isNormalising || opts.outputTextPerm.value());   
-    dmperm=PermutedDesign(dm,permvec,permuter.isFlipping);   
+    ColumnVector permvec = permuter.nextPermutation(perm,opts.verbose.value(), isNormalising || opts.outputTextPerm.value());
+    dmperm=PermutedDesign(dm,permvec,permuter.isFlipping);
 
     if (voxelwiseDesign.isSet)
       for(int voxel=1;voxel<=datam.Ncols();voxel++)
 	{
 	Matrix dmtemp(voxelwiseDesign.adjustDesign(dm,voxel)), sigmaTemp(1,1);
-	dof[0]=ols_dof(dmtemp); 
+	dof[0]=ols_dof(dmtemp);
 	if (opts.demean_data.value()) dof[0]--;
 	dmperm=PermutedDesign(dmtemp,permvec,permuter.isFlipping);
 	tstat.Column(voxel)=evaluateStatistics(datam.Column(voxel), dmperm, tc, cope, varcope, sigmaTemp, dof, rankF, opts.nMultiVariate.value(), (tstatnum < 0) );
 	sigmaSquared.Column(voxel)=sigmaTemp;
       }
-    else 
+    else
       tstat=evaluateStatistics(datam, dmperm, tc, cope, varcope, sigmaSquared, dof, rankF, opts.nMultiVariate.value(), (tstatnum < 0) );
- 
-    if( opts.var_sm_sig.value()>0 && tstatnum > 0 ) 
+
+    if( opts.var_sm_sig.value()>0 && tstatnum > 0 )
       tstat=SD(tstat,sqrt(smoothTstat(sigmaSquared,mask,smoothedMask,opts.var_sm_sig.value())));
-    if ( opts.isDebugging.value() ) 
+    if ( opts.isDebugging.value() )
       cerr << "statistic Maximum: " << tstat.Maximum() << endl;
     voxels.store(tstat,perm);
     if (opts.output_permstat.value()) {
@@ -620,17 +620,17 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
       Matrix tfceOutput=tfceStatistic(clusterEnhanced,tstat,mask,tfce_delta,opts.tfce_height.value(),opts.tfce_size.value(),opts.tfce_connectivity.value(),perm,(tstatnum<0),tc.Nrows(),dof);
       if(!lowram && clusterEnhanced.isAveraging ) previousTFCEStat.Row(perm)=tfceOutput.Row(1);
     }
-    if ( clusterThreshold > 0 ) 
+    if ( clusterThreshold > 0 )
       clusterStatistic(clusters,tstat,mask,clusterThreshold,perm);
-    
-    if ( massThreshold > 0 ) 
+
+    if ( massThreshold > 0 )
       clusterMassStatistic(clusterMasses,tstat,mask,massThreshold,perm);
   }
   //End of Permutations
-    
+
   //Rerun perms for clusternorm
   if ( isNormalising )
-  { 
+  {
     volume4D<float> temp4D;
     if ( clusters.isAveraging ) {
       clusters.average(opts.out_fileroot.value()+statLabel+"_clusternorm",0,mask);
@@ -643,13 +643,13 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
     {
       if (opts.verbose.value()) cout << "Starting second-pass " << perm << endl;
       if ( clusters.isAveraging || ( clusterEnhanced.isAveraging && lowram ) ) //Regenerate stats
-      { 
+      {
 	ColumnVector permvec=permuter.returnPreviousTruePermutation(perm);
 	dmperm=PermutedDesign(dm,permvec,permuter.isFlipping);
-	tstat=calculateTstat(datam,dmperm,tc,cope,varcope,sigmaSquared,dof[0]);    
+	tstat=calculateTstat(datam,dmperm,tc,cope,varcope,sigmaSquared,dof[0]);
       }
       if ( clusters.isAveraging )
-      { 
+      {
 	ColumnVector clustersizes;
 	tstat4D.setmatrix(tstat,mask);
 	tstat4D.binarise(clusterThreshold);
@@ -672,23 +672,23 @@ void calculatePermutationStatistics(ranopts& opts, const volume<float>& mask, Ma
       {
 	if (!lowram) tstat=previousTFCEStat.Row(perm);
 	else tstat=tfce(tstat,mask,tfce_delta,opts.tfce_height.value(),opts.tfce_size.value(),opts.tfce_connectivity.value());
-	tstat=SD(tstat,clusterEnhanced.sumStatMat); 
+	tstat=SD(tstat,clusterEnhanced.sumStatMat);
 	clusterEnhancedNormals.store(tstat,perm);
       }
     }
   }
-   
-  //OUTPUT Routines 
+
+  //OUTPUT Routines
   tstat4D.setmatrix(voxels.originalStatistic.Row(1),mask);
   save_volume4D(tstat4D,opts.out_fileroot.value()+statLabel);
   if ( opts.voxelwiseOutput.value() ) OutputStat(voxels,mask,nPerms,statLabel,opts.out_fileroot.value()+"_vox",opts.outputTextNull.value(),false);
   if ( clusterThreshold > 0 ) OutputStat(clusters,mask,nPerms,statLabel,opts.out_fileroot.value()+"_clustere",opts.outputTextNull.value(),opts.outputRaw.value());
   if ( massThreshold > 0 )    OutputStat(clusterMasses,mask,nPerms,statLabel,opts.out_fileroot.value()+"_clusterm",opts.outputTextNull.value(),opts.outputRaw.value());
-  if ( clusters.isAveraging ) OutputStat(clusterNormals,mask,nPerms,statLabel,opts.out_fileroot.value()+"_clustern",opts.outputTextNull.value(),opts.outputRaw.value());  
+  if ( clusters.isAveraging ) OutputStat(clusterNormals,mask,nPerms,statLabel,opts.out_fileroot.value()+"_clustern",opts.outputTextNull.value(),opts.outputRaw.value());
   if ( opts.tfce.value() )    OutputStat(clusterEnhanced,mask,nPerms,statLabel,opts.out_fileroot.value()+"_tfce",opts.outputTextNull.value(),opts.outputRaw.value());
   if ( clusterEnhanced.isAveraging ) OutputStat(clusterEnhancedNormals,mask,nPerms,statLabel,opts.out_fileroot.value()+"_tfcen",opts.outputTextNull.value(),opts.outputRaw.value());
-  if (opts.outputTextPerm.value()) 
-    permuter.writePermutationHistory(opts.out_fileroot.value()+"_perm"+statLabel+".txt");  
+  if (opts.outputTextPerm.value())
+    permuter.writePermutationHistory(opts.out_fileroot.value()+"_perm"+statLabel+".txt");
 }
 
 bool convertContrast(const Matrix& inputModel,const Matrix& inputContrast,const Matrix& inputData,Matrix& outputModel,Matrix& outputContrast, Matrix& outputData, const int mode)
@@ -705,32 +705,32 @@ bool convertContrast(const Matrix& inputModel,const Matrix& inputContrast,const 
     Matrix W1=W.Columns(1,r);
     Matrix W2=W.Columns(r+1,W.Ncols());
 
-    bool confoundsExist( W2.Ncols() > 0 ); 
-    if ( confoundsExist && mode == 0 ) 
+    bool confoundsExist( W2.Ncols() > 0 );
+    if ( confoundsExist && mode == 0 )
       outputData=(IdentityMatrix(W2.Nrows())-W2*pinv(W2))*inputData;
-    else if ( confoundsExist && mode == 1 ) 
+    else if ( confoundsExist && mode == 1 )
       outputData=(IdentityMatrix(W2.Nrows())-W2*pinv(W2))*inputData;
-    else 
+    else
       outputData=inputData;
-    
+
     if ( mode == 0 ) { //Kennedy  Regress Y_a on X_a
       outputModel=W1;
       outputContrast=IdentityMatrix(r);
-      if ( confoundsExist ) 
+      if ( confoundsExist )
 	outputModel=W1-W2*pinv(W2)*W1;
     }
-    if ( mode == 1 || mode == 2 || mode == 3 ) { //Regress Y_a (Freedman_Lane) or Y (No unconfounding) or Y_aFull ( ter Braak ) on X | Z 
+    if ( mode == 1 || mode == 2 || mode == 3 ) { //Regress Y_a (Freedman_Lane) or Y (No unconfounding) or Y_aFull ( ter Braak ) on X | Z
       outputModel=W1;
       outputContrast=IdentityMatrix(r);
-      if ( confoundsExist ) { 
+      if ( confoundsExist ) {
 	Matrix nuisanceContrast(r,W2.Ncols());
 	nuisanceContrast=0;
 	outputContrast = outputContrast | nuisanceContrast;
 	outputModel = outputModel | W2;
-      }        
-      if ( mode == 3 ) 
+      }
+      if ( mode == 3 )
 	outputData=(IdentityMatrix(outputModel.Nrows())-outputModel*pinv(outputModel))*inputData;
-      
+
     }
     return(confoundsExist);
 }
@@ -757,12 +757,12 @@ void analyseContrast(const Matrix& inputContrast, const Matrix& dm, const Matrix
       Matrix tempDesign(voxelwiseInput.adjustDesign(dm,voxel)),tempData;
       hasConfounds=convertContrast(tempDesign,inputContrast,datam.Column(voxel),NewModel,NewCon,tempData,opts.confoundMethod.value());
       NewDataM.Column(voxel)=tempData;
-      for (unsigned int currentEV=0;currentEV<effectiveVoxelwiseRegressors.size();currentEV++) 
+      for (unsigned int currentEV=0;currentEV<effectiveVoxelwiseRegressors.size();currentEV++)
 	effectiveVoxelwiseRegressors.at(currentEV).Column(voxel)=NewModel.Column(currentEV+1);
     }
     fullVoxelwiseDesign.location.clear();
     fullVoxelwiseDesign.location.resize(inputContrast.Nrows());
-    for (unsigned int currentEV=0;currentEV<effectiveVoxelwiseRegressors.size();currentEV++) 
+    for (unsigned int currentEV=0;currentEV<effectiveVoxelwiseRegressors.size();currentEV++)
       fullVoxelwiseDesign.location.at(currentEV)=currentEV+1;
     fullVoxelwiseDesign.EV.clear();
     fullVoxelwiseDesign.EV=effectiveVoxelwiseRegressors;
@@ -772,19 +772,19 @@ void analyseContrast(const Matrix& inputContrast, const Matrix& dm, const Matrix
 
 
   if ( opts.isDebugging.value() ) {
-    if ( hasConfounds ) 
+    if ( hasConfounds )
       cerr << "Confounds detected." << endl;
-    else 
+    else
       cerr << "No confounds detected." << endl;
   }
 
   bool oneRegressor( inputContrast.SumAbsoluteValue() == inputContrast.MaximumAbsoluteValue() );
   if (opts.effectiveDesignFile.value()!="")
-    permuter.createPermutationGroups(effectiveDesign,gp,(contrastNo>0 && oneRegressor),opts.n_perm.value(),opts.detectNullSubjects.value(),opts.isDebugging.value()); 
+    permuter.createPermutationGroups(effectiveDesign,gp,(contrastNo>0 && oneRegressor),opts.n_perm.value(),opts.detectNullSubjects.value(),opts.isDebugging.value());
   else
     permuter.createPermutationGroups(remmean(dm)*inputContrast.t(),gp,(contrastNo>0 && oneRegressor),opts.n_perm.value(),opts.detectNullSubjects.value(),opts.isDebugging.value());
   if(permuter.isFlipping) cout << "One-sample design detected; sign-flipping instead of permuting." << endl;
-  if(opts.verbose.value() || opts.how_many_perms.value()) 
+  if(opts.verbose.value() || opts.how_many_perms.value())
   {
     if(permuter.isFlipping) cout << permuter.uniquePermutations[0] << " sign-flips required for exhaustive test";
     else cout << permuter.uniquePermutations[0] << " permutations required for exhaustive test";
@@ -792,15 +792,15 @@ void analyseContrast(const Matrix& inputContrast, const Matrix& dm, const Matrix
     if (contrastNo==0) cout << " of all t-tests " << endl;
     if (contrastNo<0)  cout << " of f-test " << abs(contrastNo) << endl;
     if(opts.how_many_perms.value()) return;
-  }  
-  vector<float> dof(1,ols_dof(dm)-(int)opts.demean_data.value()); 
-  calculatePermutationStatistics(opts,mask,NewDataM,NewCon,NewModel,contrastNo,dof,permuter,fullVoxelwiseDesign); 
+  }
+  vector<float> dof(1,ols_dof(dm)-(int)opts.demean_data.value());
+  calculatePermutationStatistics(opts,mask,NewDataM,NewCon,NewModel,contrastNo,dof,permuter,fullVoxelwiseDesign);
 }
 
 
 void analyseFContrast(Matrix& fc,Matrix& tc,Matrix& model,Matrix& data,volume<float>& mask,Matrix& gp,ranopts& opts, const Matrix& effectiveDesign)
-{   
-   for( int fstat=1; fstat<=fc.Nrows() ; fstat++ ) 
+{
+   for( int fstat=1; fstat<=fc.Nrows() ; fstat++ )
    {
       Matrix fullFContrast(0,tc.Ncols());
       for (int tcon=1; tcon<=fc.Ncols() ; tcon++ )
@@ -816,31 +816,31 @@ int main(int argc,char *argv[]) {
   if (opts.parallelData.value()) opts.verbose.set_value("false");
   Matrix model, Tcontrasts, Fcontrasts, data, blockLabels, effectiveDesign;
   volume<float> mask;
-  if ( opts.verbose.value() ) { 
+  if ( opts.verbose.value() ) {
     cout << "randomise options: ";
     for (int i=1;i<argc;i++) cout << argv[i] << " ";
     cout << endl;
   }
-  try { 
+  try {
     Initialise(opts,mask,data,Tcontrasts,model,Fcontrasts,blockLabels,effectiveDesign);
     bool needsDemean=true;
     for (int i=1;i<=model.Ncols();i++) if ( fabs( (model.Column(i)).Sum() ) > 0.0001 ) needsDemean=false;
     if (needsDemean && !opts.demean_data.value()) cerr << "Warning: All design columns have zero mean - consider using the -D option to demean your data" << endl;
     if (!needsDemean && opts.demean_data.value()) cerr << "Warning: You have demeaned your data, but at least one design column has non-zero mean" << endl;
-    if(opts.fc_file.value()!="") analyseFContrast(Fcontrasts,Tcontrasts,model,data,mask,blockLabels,opts,effectiveDesign); 
-    for (int tstat=1; tstat<=Tcontrasts.Nrows() && !opts.doFOnly.value(); tstat++ )  analyseContrast(Tcontrasts.Row(tstat),model,data,mask,blockLabels,tstat,opts,effectiveDesign); 
+    if(opts.fc_file.value()!="") analyseFContrast(Fcontrasts,Tcontrasts,model,data,mask,blockLabels,opts,effectiveDesign);
+    for (int tstat=1; tstat<=Tcontrasts.Nrows() && !opts.doFOnly.value(); tstat++ )  analyseContrast(Tcontrasts.Row(tstat),model,data,mask,blockLabels,tstat,opts,effectiveDesign);
   }
-  catch(Exception& e) 
-  { 
-    cerr << "ERROR: Program failed" <<  e.what() << endl << endl << "Exiting" << endl; 
+  catch(Exception& e)
+  {
+    cerr << "ERROR: Program failed" <<  e.what() << endl << endl << "Exiting" << endl;
     return 1;
   }
-  catch(...) 
-  { 
-    cerr << "ERROR: Program failed, unknown exception" << endl << endl << "Exiting" << endl; 
+  catch(...)
+  {
+    cerr << "ERROR: Program failed, unknown exception" << endl << endl << "Exiting" << endl;
     return 1;
   }
-  if ( opts.verbose.value() ) 
+  if ( opts.verbose.value() )
     cout << "Finished, exiting." << endl;
   return 0;
 }
@@ -873,28 +873,28 @@ void Permuter::createPermutationGroups(const Matrix& design, Matrix groups,const
   }
 
   initialisePermutationGroups(labels,requiredPermutations);
-  if (outputDebug) 
+  if (outputDebug)
     cerr << "Subject | Design | group | label" << endl << ( truePermutation | design | groups | labels ) << endl;
 }
 
 ColumnVector Permuter::returnPreviousTruePermutation(const long permutationNumber)
 {
-  if (isFlipping) 
+  if (isFlipping)
     return previousPermutations[permutationNumber-1];
-  else {    
+  else {
     ColumnVector permvec(unpermutedVector);
-    for(long perm=1; perm<=permutationNumber; perm++) 
-      createTruePermutation(previousPermutations[perm-1],previousPermutations[perm-1-int(perm!=1)],permvec);  
+    for(long perm=1; perm<=permutationNumber; perm++)
+      createTruePermutation(previousPermutations[perm-1],previousPermutations[perm-1-int(perm!=1)],permvec);
     return permvec;
   }
 }
 
 ColumnVector Permuter::returnPreviousTruePermutation(const long permutationNumber, ColumnVector& previousState)
 {
-  if (isFlipping) 
+  if (isFlipping)
     return previousPermutations[permutationNumber-1];
-  else {    
-    createTruePermutation(previousPermutations[permutationNumber-1],previousPermutations[permutationNumber-1-int(permutationNumber!=1)],previousState);  
+  else {
+    createTruePermutation(previousPermutations[permutationNumber-1],previousPermutations[permutationNumber-1-int(permutationNumber!=1)],previousState);
     return previousState;
   }
 }
@@ -908,8 +908,8 @@ void Permuter::initialisePermutationGroups(const ColumnVector& designLabels,cons
   uniquePermutations.resize(nGroups);
   uniquePermutations[0]=1;
   for(int group=0;group<nGroups;group++)
-  { 
-    for(int row=1;row<=permutedLabels[group].Nrows();row++) 
+  {
+    for(int row=1;row<=permutedLabels[group].Nrows();row++)
       permutedLabels[group](row)=designLabels((int)originalLocations[group](row));
     if (group>0) uniquePermutations[group]=computeUniquePermutations(permutedLabels[group],isFlipping);
     uniquePermutations[0]*=uniquePermutations[group];
@@ -923,9 +923,9 @@ void Permuter::initialisePermutationGroups(const ColumnVector& designLabels,cons
 
 ColumnVector Permuter::permutationVector()
 {
-ColumnVector newvec(nSubjects); 
+ColumnVector newvec(nSubjects);
    for(int group=0;group<nGroups;group++)
-     for(int row=1;row<=permutedLabels[group].Nrows();row++) 
+     for(int row=1;row<=permutedLabels[group].Nrows();row++)
        newvec((int)originalLocations[group](row))=permutedLabels[group](row);
    return newvec;
 }
@@ -935,9 +935,9 @@ void Permuter::createTruePermutation(const ColumnVector& newLabels,ColumnVector 
   if (isFlipping) permvec=permutationVector();
   else
   {
-    for(int k=1;k<=newLabels.Nrows();k++)	       
+    for(int k=1;k<=newLabels.Nrows();k++)
       if(newLabels(k)!=copyOldLabels(k))
-        for(int l=1;l<=newLabels.Nrows();l++) 
+        for(int l=1;l<=newLabels.Nrows();l++)
 	  if(newLabels(l)!=copyOldLabels(l) && copyOldLabels(l)==newLabels(k) )
  	   {
 	     swap(permvec(l),permvec(k));
@@ -989,7 +989,7 @@ void Permuter::nextShuffle(ColumnVector& perm){
 }
 
 void Permuter::nextFlip(ColumnVector& flip){
-       
+
   if (isRandom)
   {
     for(int i=1;i<=flip.Nrows();i++)
@@ -997,7 +997,7 @@ void Permuter::nextFlip(ColumnVector& flip){
       float tmp=(float)rand()/RAND_MAX;
       if(tmp > 0.5) flip(i)=1;
       else  flip(i)=-1;
-    }     
+    }
   }
   else for (int n=flip.Nrows();n>0;n--)
     if(flip(n)==1)
@@ -1005,7 +1005,7 @@ void Permuter::nextFlip(ColumnVector& flip){
       flip(n)=-1;
       if (n<flip.Nrows()) flip.Rows(n+1,flip.Nrows())=1;
       return;
-    } 
+    }
 }
 
 double Permuter::computeUniquePermutations(const ColumnVector& labels,const bool calculateFlips){
@@ -1053,7 +1053,7 @@ void Permuter::writePermutationHistory(const string& fileName)
   ofstream output_file(fileName.c_str());
   ColumnVector state(unpermutedVector);
   for(unsigned long perm=1; perm<=finalPermutation; perm++)
-    output_file << returnPreviousTruePermutation(perm,state).t(); 
+    output_file << returnPreviousTruePermutation(perm,state).t();
   output_file.close();
 }
 

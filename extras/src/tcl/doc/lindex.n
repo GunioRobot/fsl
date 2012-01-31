@@ -5,9 +5,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: lindex.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH lindex n 8.4 Tcl "Tcl Built-In Commands"
 .BS
@@ -82,7 +82,7 @@ lindex [lindex [lindex $a 1] 2] 3
 .CE
 .VE
 .SH "SEE ALSO"
-list(n), lappend(n), linsert(n), llength(n), lsearch(n), 
+list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 .VS 8.4
 lset(n),
 .VE

@@ -31,7 +31,7 @@ public:
   void setColours(unsigned char r, unsigned char g, unsigned char b) {
     m_r = r; m_g = g; m_b = b; m_a = 255;
   }
-  void setColours(unsigned char r, unsigned char g, unsigned char b, 
+  void setColours(unsigned char r, unsigned char g, unsigned char b,
 		  unsigned char a) {
     m_r = r; m_g = g; m_b = b; m_a = a;
   }
@@ -53,9 +53,9 @@ private:
 /**
  * @author James Saunders <jim@fmrib.ox.ac.uk>
  * @date   Mon Dec 23 17:59:36 2002
- * 
+ *
  * @brief  Implementation of a color look up table (lut).
- * 
+ *
  * Provides a color lut suitable for GL rendering along with methods
  * to create standard luts and read custom ones from file.
  */
@@ -66,7 +66,7 @@ public:
   typedef std::vector<LutElement>::const_iterator ConstIterator;
   typedef std::vector<LutElement>::size_type SizeType;
 
-  static LookUpTable::Handle load(const std::string& filename); 
+  static LookUpTable::Handle load(const std::string& filename);
 
   static LookUpTable::Handle greyScale();
   static LookUpTable::Handle red();
@@ -91,9 +91,9 @@ public:
 
   void pushValue(const LutElement&);
   void pushValue(unsigned char red, unsigned char green, unsigned char blue, int index);
-  void pushValue(unsigned char red, unsigned char green, unsigned char blue, 
+  void pushValue(unsigned char red, unsigned char green, unsigned char blue,
 		 const std::string& label, int index);
-  const LutElement& inqValue(float f);  
+  const LutElement& inqValue(float f);
   const LutElement& inqValueIndex(float f);
 
   void allocateMemory(int size);
@@ -110,13 +110,13 @@ public:
 
   bool isVisible() const;
   bool isAutoSelectable() const;
-  
+
   ConstIterator begin() const { return m_lookUpData.begin(); }
   ConstIterator end() const { return m_lookUpData.end(); }
   SizeType size() const { return m_lookUpData.size(); }
   virtual ~LookUpTable() {}
 
-private:   
+private:
   LookUpTable(const std::string& filename);
   LookUpTable();
   LookUpTable::Handle LoadStdLut(const char ** lutData,

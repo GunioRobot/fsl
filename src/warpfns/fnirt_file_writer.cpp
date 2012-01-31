@@ -5,7 +5,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #include <string>
@@ -32,7 +32,7 @@ using namespace boost;
 
 namespace NEWIMAGE {
 
-FnirtFileWriter::FnirtFileWriter(const string&                            fname, 
+FnirtFileWriter::FnirtFileWriter(const string&                            fname,
                                  const vector<shared_ptr<basisfield> >&   fields,
                                  Matrix                                   aff)
 {
@@ -43,8 +43,8 @@ FnirtFileWriter::FnirtFileWriter(const string&                            fname,
 }
 
 FnirtFileWriter::FnirtFileWriter(const string&              fname,
-				 const volume<float>&       fieldx,                         
-			         const volume<float>&       fieldy,                         
+				 const volume<float>&       fieldx,
+			         const volume<float>&       fieldy,
 			         const volume<float>&       fieldz)
 {
   volume<float>  tmp(fieldx.xsize(),fieldx.ysize(),fieldx.zsize());
@@ -56,7 +56,7 @@ FnirtFileWriter::FnirtFileWriter(const string&              fname,
 
 FnirtFileWriter::FnirtFileWriter(const string&                fname,
                                  const volume<float>&         ref,
-                                 const volume4D<float>&       vfields,                         
+                                 const volume4D<float>&       vfields,
                                  Matrix                       aff)
 {
   if (vfields.tsize() != 3) throw FnirtFileWriterException("FnirtFileWriter: Invalid 4D volume");
@@ -78,7 +78,7 @@ FnirtFileWriter::FnirtFileWriter(const string&                fname,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // The coefficients are saved in a slightly dodgy format where the fields of the niftii
-// header are used to store information that is neccessary for us to reconstruct the 
+// header are used to store information that is neccessary for us to reconstruct the
 // displacement fields from the coefficients. E.g. the affine starting guess is stored
 // in the sform, the knot-spacings in the "pixdims" and the matrix size of the field/template
 // in the offsets of the qform.
@@ -88,7 +88,7 @@ FnirtFileWriter::FnirtFileWriter(const string&                fname,
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FnirtFileWriter::common_coef_construction(const string&            fname, 
+void FnirtFileWriter::common_coef_construction(const string&            fname,
                                                const basisfield&        fieldx,
                                                const basisfield&        fieldy,
                                                const basisfield&        fieldz,
@@ -102,7 +102,7 @@ void FnirtFileWriter::common_coef_construction(const string&            fname,
     if (f.Order() == 2) coefs.set_intent(FSL_QUADRATIC_SPLINE_COEFFICIENTS,f.Vxs_x(),f.Vxs_y(),f.Vxs_z());
     else if (f.Order() == 3) coefs.set_intent(FSL_CUBIC_SPLINE_COEFFICIENTS,f.Vxs_x(),f.Vxs_y(),f.Vxs_z());
   }
-  catch (...) {  
+  catch (...) {
     try {
       const dctfield& f = dynamic_cast<const dctfield& >(fieldx);
       coefs.set_intent(FSL_DCT_COEFFICIENTS,f.Vxs_x(),f.Vxs_y(),f.Vxs_z());
@@ -111,17 +111,17 @@ void FnirtFileWriter::common_coef_construction(const string&            fname,
     catch (...) {
       throw FnirtFileWriterException("common_coef_construction: Unknown field type");
     }
-  } 
+  }
   coefs.setxdim(ksp[0]); coefs.setydim(ksp[1]); coefs.setzdim(ksp[2]);
-  Matrix  qform(4,4); 
+  Matrix  qform(4,4);
   qform = IdentityMatrix(4);
-  qform(1,4) = fieldx.FieldSz_x(); 
-  qform(2,4) = fieldx.FieldSz_y(); 
+  qform(1,4) = fieldx.FieldSz_x();
+  qform(2,4) = fieldx.FieldSz_y();
   qform(3,4) = fieldx.FieldSz_z();
   coefs.set_qform(NIFTI_XFORM_SCANNER_ANAT,qform);
   coefs.set_sform(NIFTI_XFORM_SCANNER_ANAT,aff);
   vector<shared_ptr<ColumnVector> > coefp(3);
-  coefp[0]=fieldx.GetCoef(); coefp[1]=fieldy.GetCoef(); coefp[2]=fieldz.GetCoef();  
+  coefp[0]=fieldx.GetCoef(); coefp[1]=fieldy.GetCoef(); coefp[2]=fieldz.GetCoef();
   for (unsigned int v=0; v<3; v++) {
     ColumnVector  c = *(coefp[v]);
     for (unsigned int k=0, vindx=0; k<fieldx.CoefSz_z(); k++) {
@@ -138,9 +138,9 @@ void FnirtFileWriter::common_coef_construction(const string&            fname,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// This saves out the deformation/displacement fields. The affine "starting-guess" will 
+// This saves out the deformation/displacement fields. The affine "starting-guess" will
 // be incorporated into these warps. That means that the header is free to store its "proper"
-// information. The fields are in mm and should be added to the "scaled flirt coordinates". 
+// information. The fields are in mm and should be added to the "scaled flirt coordinates".
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -148,11 +148,11 @@ void FnirtFileWriter::common_field_construction(const string&            fname,
                                                 const volume<float>&     ref,
                                                 const volume<float>&     fieldx,
                                                 const volume<float>&     fieldy,
-                                                const volume<float>&     fieldz, 
+                                                const volume<float>&     fieldz,
                                                 const Matrix&            aff)
 {
   volume4D<float>   fields(ref.xsize(),ref.ysize(),ref.zsize(),3);
-  fields.copyproperties(ref); 
+  fields.copyproperties(ref);
 
   Matrix M;
   bool   add_affine = false;
@@ -180,7 +180,7 @@ void FnirtFileWriter::common_field_construction(const string&            fname,
 	  }
         }
       }
-    } 
+    }
   }
   else {
     fieldx.setextrapolationmethod(extraslice);
@@ -224,12 +224,12 @@ void FnirtFileWriter::common_field_construction(const string&            fname,
                                                 const volume<float>&     ref,
                                                 const volume<float>&     fieldx,
                                                 const volume<float>&     fieldy,
-                                                const volume<float>&     fieldz, 
+                                                const volume<float>&     fieldz,
                                                 const Matrix&            aff)
 {
   volume4D<float>   fields(fieldx.xsize(),fieldx.ysize(),fieldx.zsize(),3);
   fields[0] = fieldx; fields[1] = fieldy; fields[2] = fieldz;
-  fields.copyproperties(ref); 
+  fields.copyproperties(ref);
 
   if ((aff-IdentityMatrix(4)).MaximumAbsoluteValue() > 1e-6) {
     // Add affine part to fields

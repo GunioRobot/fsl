@@ -123,7 +123,7 @@ typedef struct {
     int offRelief;		/* Value of -offrelief option: specifies a 3-d
 				 * effect for the border, such as
 				 * TK_RELIEF_RAISED, to be used when a
-				 * checkbutton or radiobutton without 
+				 * checkbutton or radiobutton without
 				 * indicator is off */
     Tcl_Obj *highlightWidthPtr;	/* Value of -highlightthickness option:
 				 * specifies width in pixels of highlight to
@@ -238,7 +238,7 @@ typedef struct {
     Tcl_Obj *takeFocusPtr;	/* Value of -takefocus option;  not used in
 				 * the C code, but used by keyboard traversal
 				 * scripts. */
-    Tcl_Obj *commandPtr;	/* Value of -command option: specifies script 
+    Tcl_Obj *commandPtr;	/* Value of -command option: specifies script
 				 * to execute when button is invoked.  If
 				 * widget is label or has no command, this
 				 * is NULL. */
@@ -294,7 +294,7 @@ extern Tk_ClassProcs tkpButtonProcs;
 
 /*
  * Declaration of procedures used in the implementation of the button
- * widget. 
+ * widget.
  */
 
 #ifndef TkpButtonSetDefaults

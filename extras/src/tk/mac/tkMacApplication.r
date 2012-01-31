@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacApplication.r --
  *
  *	This file creates resources for use in the Wish application.
@@ -65,7 +65,7 @@ resource 'vers' (2) {
  * custom icons rather than new file types for a different appearance.
  */
 
-resource 'BNDL' (TK_APP_RESOURCES, "Tk app bundle", purgeable) 
+resource 'BNDL' (TK_APP_RESOURCES, "Tk app bundle", purgeable)
 {
 	TK_APP_CREATOR,
 	0,
@@ -83,11 +83,11 @@ resource 'BNDL' (TK_APP_RESOURCES, "Tk app bundle", purgeable)
 	}
 };
 
-resource 'FREF' (TK_APP_RESOURCES, purgeable) 
+resource 'FREF' (TK_APP_RESOURCES, purgeable)
 {
 	'APPL', 0, ""
 };
-resource 'FREF' (TK_APP_RESOURCES+1, purgeable) 
+resource 'FREF' (TK_APP_RESOURCES+1, purgeable)
 {
 	'TEXT', 1, ""
 };
@@ -200,7 +200,7 @@ data 'ics4' (TK_APP_RESOURCES + 1, "Tk Doc", purgeable) {
 	$"0F33 33C3 3333 3F00 0FFF FFFF FFFF FF00"
 };
 
-/* 
+/*
  * The following resources define the icons for the Wish
  * application.
  */
@@ -286,14 +286,14 @@ data 'ics4' (TK_APP_RESOURCES, "Tk App", purgeable) {
  * the resource must be of the form "KEYWORD=SOME STRING".  See Tcl
  * documentation for futher information about the env variable.
  */
- 
+
 /* A good example of something you may want to set is:
- * "TCL_LIBRARY=My disk:etc." 
+ * "TCL_LIBRARY=My disk:etc."
  */
-		
+
 resource 'STR#' (128, "Tcl Environment Variables") {
-	{	
-		/*		
+	{
+		/*
 		"SCHEDULE_NAME=Agent Controller Schedule",
 		"SCHEDULE_PATH=Lozoya:System Folder:Tcl Lib:Tcl-Scheduler"
 		*/

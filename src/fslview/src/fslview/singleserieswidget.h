@@ -23,7 +23,7 @@
 
 class PlotOptions
 {
-public:  
+public:
   typedef boost::shared_ptr< PlotOptions > Handle;
 
   static Handle create();
@@ -69,7 +69,7 @@ private:
 class TimeSeriesDisplay: public QwtPlot
 {
   Q_OBJECT
-public:  
+public:
   typedef boost::shared_ptr< TimeSeriesDisplay > Handle;
   TimeSeriesDisplay(QWidget* parent):QwtPlot(parent){};
   virtual ~TimeSeriesDisplay(){};
@@ -78,7 +78,7 @@ public:
 
   virtual void setDemean(bool) = 0;
   virtual void setPercent(bool) = 0;
-  virtual void addTimeSeries() = 0;  
+  virtual void addTimeSeries() = 0;
   virtual void remTimeSeries() = 0;
   virtual void remAllTimeSeries() = 0;
   virtual void axisDisplay(bool) = 0;
@@ -92,7 +92,7 @@ public:
 
 
 class SingleSeriesWidget: public  TimeSeriesDisplay, CursorObserver, GraphManagerObserver, ModelFitObserver
-{	
+{
   Q_OBJECT
 public:
 
@@ -109,29 +109,29 @@ public:
   bool addTimeSeries(const TimeSeries::Handle &timeSeries, bool browse);
   void remTimeSeries(bool browse);
   bool addFeatSeries(const TimeSeries::Handle &, int index);
-  
+
 
   void setLastCurveActive(bool setCursor);
   void setAllInActive();
 
   void setEnabled(bool);
   void axisDisplay(bool);
-  void addTimeSeries();  
+  void addTimeSeries();
   void remTimeSeries();
   void remAllTimeSeries();
   void setDemean(bool state) {m_demean = state;}
   void setPercent(bool state) {m_percent = state;}
   void redraw();
 
-  bool inqCausedCursorUpdate(){return m_causedCursorUpdate;} 
+  bool inqCausedCursorUpdate(){return m_causedCursorUpdate;}
   virtual void update(const Cursor::Handle& c);
   virtual void update(const GraphManager::Handle& c);
   virtual void update(ModelFit *m);
 
 private:
-  CurveDataList::Handle m_curveDataList;  
+  CurveDataList::Handle m_curveDataList;
   Image::Handle         m_image;
-  Cursor::Handle        m_cursor; 
+  Cursor::Handle        m_cursor;
   GraphManager::Handle  m_graphManager;
   PlotOptions::Handle   m_options;
   //ModelFit              *m_modelFit;
@@ -140,12 +140,12 @@ private:
   bool m_enabled;
   bool m_percent;
   bool m_axisDisplay;
-  
+
   bool m_demean;
   bool m_causedCursorUpdate;
   void startPlotProcess();
   void plotAllTimeSeries();
-  void plotTimeSeries(CurveData::Handle);  
+  void plotTimeSeries(CurveData::Handle);
   void setActiveCurve(CurveData::Handle,bool setCursor);
   void constructor();
   void setGraphOptions();

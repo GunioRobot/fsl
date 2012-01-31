@@ -39,7 +39,7 @@
  */
 
 #ifndef WS_EX_TOOLWINDOW
-#define WS_EX_TOOLWINDOW	0x00000080L 
+#define WS_EX_TOOLWINDOW	0x00000080L
 #endif
 
 /*
@@ -176,7 +176,7 @@ EXTERN HICON	TkWinGetIcon(Tk_Window tkw, DWORD iconsize);
 EXTERN void	TkWinDisplayChanged(Display *display);
 
 /*
- * The following structure keeps track of whether we are using the 
+ * The following structure keeps track of whether we are using the
  * multi-byte or the wide-character interfaces to the operating system.
  * System calls should be made through the following function table.
  *

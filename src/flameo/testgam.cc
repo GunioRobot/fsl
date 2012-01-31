@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -92,29 +92,29 @@ using namespace NEWIMAGE;
 #endif
 
 
- 
 
-  
-float csevl(const float x, const ColumnVector& cs, const int n) 
+
+
+float csevl(const float x, const ColumnVector& cs, const int n)
 {
- 
+
   float b0 = 0;
   float b1 = 0;
   float b2 = 0;
   const float twox=2*x;
-  
+
   for(int i=1; i<=n; i++)
     {
       b2=b1;
       b1=b0;
       b0=twox*b1-b2+cs(n+1-i);
     }
-  
+
   return 0.5*(b0-b2);
 }
 
-float digamma(const float x) 
-{ 
+float digamma(const float x)
+{
    ColumnVector psics(23);
   ColumnVector apsics(16);
   int ntapsi=16,ntpsi=23;
@@ -141,7 +141,7 @@ float digamma(const float x)
 	    -.000000000000000691E0<<
 	    .000000000000000118E0<<
 	    -.000000000000000020E0;
-	  
+
 	  apsics <<-.0204749044678185E0<<
 	    -.0101801271534859E0<<
 	    .0000559718725387E0<<
@@ -182,13 +182,13 @@ float digamma(const float x)
       const float aux = csevl(8/(Sqr(y))-1, apsics, ntapsi);
       psi = log(x) - 0.5/x + aux;
     }
-    
+
   return psi;
 }
 
-float mgradpt(const float v, const ColumnVector& xsq, const int P) 
+float mgradpt(const float v, const ColumnVector& xsq, const int P)
 {
-    
+
 
   int n = xsq.Nrows();
 
@@ -198,14 +198,14 @@ float mgradpt(const float v, const ColumnVector& xsq, const int P)
     {
       sumoveri += (v+P)*(xsq(i)/Sqr(v))/(2*(1+xsq(i)/v)) - 0.5*log(1+xsq(i)/v);
     }
-    
-  return -(n*(0.5*digamma((v+P)/2.0) - 0.5*P/v - 0.5*digamma(v/2.0)) + sumoveri);	     
+
+  return -(n*(0.5*digamma((v+P)/2.0) - 0.5*P/v - 0.5*digamma(v/2.0)) + sumoveri);
 
 }
 
-float mdofls(const ColumnVector& xsq, const float phi, const int P) 
-{    
-    
+float mdofls(const ColumnVector& xsq, const float phi, const int P)
+{
+
 
   ColumnVector xsqscaled = xsq/phi;
 
@@ -217,7 +217,7 @@ float mdofls(const ColumnVector& xsq, const float phi, const int P)
   float fsm=mgradpt(vsm,xsqscaled,P);
 
   while((vbig-vmid)>0.5 && (vmid-vsm)>0.5)
-    {  
+    {
       if(sign(fsm)!=sign(fmid))
 	{
 	  vbig=vmid;
@@ -242,7 +242,7 @@ float mdofls(const ColumnVector& xsq, const float phi, const int P)
 
   return round(vmid);
 }
-void multitfit(const Matrix& x, ColumnVector& m, SymmetricMatrix& covar, float& v) 
+void multitfit(const Matrix& x, ColumnVector& m, SymmetricMatrix& covar, float& v)
 {
 
   int nevs=x.Nrows();
@@ -251,15 +251,15 @@ void multitfit(const Matrix& x, ColumnVector& m, SymmetricMatrix& covar, float& 
   OUT("FOO1");
   Matrix mx;
   remmean(x,mx,m,2);
-  
+
   covar = cov(mx.t());
-  float tmp = pow(covar.Determinant(),(1.0/nevs));    
+  float tmp = pow(covar.Determinant(),(1.0/nevs));
   covar=covar/tmp;
 
   // xsq(i) = x(i)'*inv(c)*x(i)
   ColumnVector xsq(n);
   SymmetricMatrix invcovar = covar.i();
-  OUT("Smelly Germans");  
+  OUT("Smelly Germans");
   for(int i = 1; i <= n; i++)
     {
       xsq(i) = (mx.Column(i).t()*invcovar*mx.Column(i)).AsScalar();
@@ -283,7 +283,7 @@ void multitfit(const Matrix& x, ColumnVector& m, SymmetricMatrix& covar, float& 
       // 	OUT(phi);
       v = mdofls(xsq,phi,nevs);
       //	OUT(v);
-    } 
+    }
   OUT("BUGGER");
   covar = covar*phi;
 }
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
     OUT("BUGGER2");
     RowVector x=xtmp.t();
     OUT("BUGGER2");
-      
+
     //    cout << x << endl;
 
     OUT("here");
@@ -311,10 +311,10 @@ int main(int argc, char *argv[])
     OUT(m);
     OUT(covar);
     OUT(v);
-    
+
 
   }
-  catch(Exception p_excp) 
+  catch(Exception p_excp)
     {
       cerr << p_excp.what() << endl;
     }

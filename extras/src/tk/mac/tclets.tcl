@@ -36,11 +36,11 @@ namespace eval ::tk::mac {}
 
 proc ::tk::mac::OpenDocument {args} {
     variable Droped_to_start
-    
+
     # We only deal with the one file droped on the App
     set tclFile [lindex $args 0]
     set stub [GetStub]
-    
+
     # Give a helper screen to guide user
     toplevel .helper -menu .bar
     ::tk::unsupported::MacWindowStyle style .helper dBoxProc
@@ -49,12 +49,12 @@ proc ::tk::mac::OpenDocument {args} {
     pack .helper.m
     wm geometry .helper +20+40
     update idletasks
-    
+
     # Get the target file from the end user
     set target [tk_getSaveFile]
     destroy .helper
     if {$target == ""} return
-    
+
     # Copy stub, copy the droped file into the stubs text resource
     file copy $stub $target
     set id [open $tclFile r]
@@ -62,7 +62,7 @@ proc ::tk::mac::OpenDocument {args} {
     resource write -name tclshrc -file $rid TEXT [read $id]
     resource close $rid
     close $id
-    
+
     # This is a hint to the start-up code - always set to true
     set Droped_to_start true
 }
@@ -81,15 +81,15 @@ proc ::tk::mac::OpenDocument {args} {
 proc ::tk::mac::GetStub {} {
     global env
     variable Stub_location
-    
+
     if {[info exists Stub_location]} {
 	return $Stub_location
     }
-    
+
     set file $env(PREF_FOLDER)
     append file "D&D Tclet Preferences"
-    
-    
+
+
     if {[file exists $file]} {
 	uplevel #0 [list source $file]
 	if {[info exists Stub_location] && [file exists $Stub_location]} {
@@ -119,7 +119,7 @@ proc ::tk::mac::GetStub {} {
 # 	None.  The prefernce file is updated.
 
 proc ::tk::mac::SelectStub {} {
-    global env 
+    global env
     variable Stub_location
 
     # Give a helper screen to guide user
@@ -127,7 +127,7 @@ proc ::tk::mac::SelectStub {} {
     ::tk::unsupported::MacWindowStyle style .helper dBoxProc
     message .helper.m -aspect 300 -text \
         "Select \"Wish\" stub to clone.  A copy of this application will be made to create your Tclet." \
-	
+
     pack .helper.m
     wm geometry .helper +20+40
     update idletasks
@@ -137,7 +137,7 @@ proc ::tk::mac::SelectStub {} {
     if {$new_location != ""} {
 	set Stub_location $new_location
 	set file [file join $env(PREF_FOLDER) "D&D Tclet Preferences"]
-    
+
 	set id [open $file w]
 	puts $id [list set [namespace which -variable Stub_location] \
 		$Stub_location]
@@ -160,7 +160,7 @@ proc ::tk::mac::CreateMenus {} {
     .bar add cascade -menu .bar.file -label File
     .bar add cascade -menu .bar.apple
     . configure -menu .bar
-    
+
     menu .bar.apple -tearoff 0
     .bar.apple add command -label "About Drag & Drop Tclets..." \
 	    -command [namespace code ShowAbout]
@@ -216,7 +216,7 @@ proc ::tk::mac::Start {} {
     if {$Droped_to_start == "true"} {
 	exit
     }
-    
+
     # We were not started by a drag & drop - create the UI
     CreateMenus
 }

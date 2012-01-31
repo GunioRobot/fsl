@@ -10,7 +10,7 @@
 # include <boost/python/refcount.hpp>
 # include <boost/utility.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {
@@ -27,7 +27,7 @@ class scope
     inline scope(object const&);
     inline scope();
     inline ~scope();
-    
+
  private: // data members
     PyObject* m_previous_scope;
 

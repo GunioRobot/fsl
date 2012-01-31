@@ -1,7 +1,7 @@
 proc rmSlash { {file/In} } {
     set part_dir [file dirname ${file/In}]
     set part_file [file tail ${file/In}]
-    if {$part_file == "file/In"} { set part_file {}; puts "error in file name" } 
+    if {$part_file == "file/In"} { set part_file {}; puts "error in file name" }
     set out [file join $part_dir $part_file]
     return $out
 	}
@@ -11,7 +11,7 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
     upvar 1 $output_file outputfile
     #set pattern to { } for pseudo directory-style select
     upvar 1 $output_filhis filterhist
-    upvar 1 $output_selhis selhis  
+    upvar 1 $output_selhis selhis
      if { [ info exists env(w_filesel) ] } {
 	if { [ winfo exists $env(w_filesel) ] } {
             raise $env(w_filesel)
@@ -34,7 +34,7 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
     set data(w:filter)  $w0.f1.filter
     pack $data(w:filter) -side top -expand yes -fill both
     #CenterFrame
-    PanedWindow $w0.f2 -side top 
+    PanedWindow $w0.f2 -side top
     #Left
     set dir [$w0.f2 add -minsize 400]
     $dir config -relief flat
@@ -56,13 +56,13 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
     pack  $data(w:filelist) -side right -expand yes -fill both -padx {10 0}
     #SelectionFrame
     frame $w0.f3 -border 10
-    LabelComboBox   $w0.f3.selection -command "feat_file:invoke $w0 $output_file $output_filhis $output_selhis $name_space {$command}"  -modifycmd "feat_file:invoke $w0 $output_file $output_filhis  $output_selhis $name_space {$command} ; return -code break" -label "Selection:" 
+    LabelComboBox   $w0.f3.selection -command "feat_file:invoke $w0 $output_file $output_filhis $output_selhis $name_space {$command}"  -modifycmd "feat_file:invoke $w0 $output_file $output_filhis  $output_selhis $name_space {$command} ; return -code break" -label "Selection:"
     set data(w:selection) $w0.f3.selection
     pack $data(w:selection) -side top -fill both
     #Buttons
     frame $w0.f4
     button $w0.f4.but_ok -text "Ok" -command "feat_file:invoke $w0 $output_file $output_filhis $output_selhis $name_space {$command}"
-    button $w0.f4.but_filt -text "Filter" -command "feat_file:filter $w0" 
+    button $w0.f4.but_filt -text "Filter" -command "feat_file:filter $w0"
     button $w0.f4.but_cancel -text "Cancel" -command "destroy $w0"
     pack $w0.f4.but_ok  $w0.f4.but_filt  $w0.f4.but_cancel -side left -padx 10
     #ConstructFrame
@@ -76,33 +76,33 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
     set data(-browsecmd) {}
     set data(-selhist) {}
     set data(-filterhist) {}
-   
+
     #if { [ info exists $output_filhis ] } { set data(-filterhist) $filterhist }
     if { [ info exists filterhist ] } { set data(-filterhist) $filterhist }
     if { [ info exists selhis ] } { set data(-selhist) $selhis }
     set data(-pattern) $pattern
 
-    if { [info exists outputfile] } { 
+    if { [info exists outputfile] } {
 	if { $outputfile != [ $data(w:selection).combo.e get ] } {
            $data(w:selection) configure -text [rmSlash $outputfile]
-	    if { [file isdirectory $outputfile] && [file exists $outputfile] } { 
-		if { [ lindex $data(-filterhist) end ] != "$outputfile/$data(-pattern)" } { lappend data(-filterhist) $outputfile/$data(-pattern) }            
+	    if { [file isdirectory $outputfile] && [file exists $outputfile] } {
+		if { [ lindex $data(-filterhist) end ] != "$outputfile/$data(-pattern)" } { lappend data(-filterhist) $outputfile/$data(-pattern) }
             } else {
-		if {[file exists [file dir $outputfile]] && [file isdirectory [file dir $outputfile]] && [ lindex $data(-filterhist) end ] != "[file dir $outputfile]/$data(-pattern)"  } {  
-               lappend data(-filterhist) [file dir $outputfile]/$data(-pattern) 
+		if {[file exists [file dir $outputfile]] && [file isdirectory [file dir $outputfile]] && [ lindex $data(-filterhist) end ] != "[file dir $outputfile]/$data(-pattern)"  } {
+               lappend data(-filterhist) [file dir $outputfile]/$data(-pattern)
             }}
             if { [ lindex $data(-selhist) end ] != "$outputfile" } { lappend data(-selhist) $outputfile }
 	}
     }
 
-    if { $data(-selhist) != {} } { 
-       $data(w:selection) configure -values  $data(-selhist) 
+    if { $data(-selhist) != {} } {
+       $data(w:selection) configure -values  $data(-selhist)
 	$data(w:selection).combo setvalue last
     }
 
-    #If there is a previous filter history obtain values from pattern etc from it 
-    if { $data(-filterhist) != {} } { 
-       $data(w:filter) configure -values  $data(-filterhist) 
+    #If there is a previous filter history obtain values from pattern etc from it
+    if { $data(-filterhist) != {} } {
+       $data(w:filter) configure -values  $data(-filterhist)
        $data(w:filter).combo setvalue last
        feat_file:InterpFilter $w0 [ $data(w:filter).combo.e get ]
     } else {
@@ -112,17 +112,17 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
        $data(w:filter) configure -values [feat_file:InterpFilter $w $filter]
     }
     feat_file:LoadDirIntoLists w0
-    if { [info exists outputfile] && ![file isdirectory $outputfile] && [file exists $outputfile]} { 
+    if { [info exists outputfile] && ![file isdirectory $outputfile] && [file exists $outputfile]} {
                    set i 0
 		while {[file tail $outputfile ] != [ $file.list get $i ] && $i < 1000 } {
                     $file.list selection clear $i
 		    set i [ expr $i + 1 ]
                     $file.list selection set $i
-               }     
+               }
             }
     bind  $data(w:dirlist) <Double-1>      "feat_file:InvokeDir $w0"
     bind  $data(w:dirlist) <<ListboxSelect>> "feat_file:SelectDir $w0"
-    bind  $data(w:filelist) <<ListboxSelect>> "feat_file:SelectFile $w0" 
+    bind  $data(w:filelist) <<ListboxSelect>> "feat_file:SelectFile $w0"
     bind  $data(w:filelist) <Double-1> "feat_file:invoke $w0 $output_file $output_filhis $output_selhis $name_space {$command}"
     bind  $w0 <Destroy> "set env(w_filesel) -1"
 }
@@ -130,7 +130,7 @@ proc feat_file:setup_dialog { w output_file output_filhis output_selhis name_spa
 proc feat_file:filter {w args} {
     global data
     set filter [feat_file:InterpFilter $w]
-    lappend data(-filterhist) $filter 
+    lappend data(-filterhist) $filter
     if { [ llength $data(-filterhist) ] > 5 }  { set data(-filterhist) [ lreplace $data(-filterhist) 0   [ expr [ llength $data(-filterhist) ] - 5 ] ] }
     $data(w:filter) configure -values $data(-filterhist)
     feat_file:LoadDir $w
@@ -162,8 +162,8 @@ proc feat_file:invoke {w output_file1 output_filhis1 output_selhis1 name_space c
     if { [ llength $data(-selhist) ] > 5 }  { set data(-selhist) [ lreplace $data(-selhist) 0 [ expr [ llength $data(-filterhist) ] - 5 ] ] }
     if { [namespace exists $name_space] }  { set  ${name_space}::$output_selhis1 $data(-selhist) }
     #this is for compatibility with old FSLFile (which appened outputfile on the end)
-    destroy $w 
-    set outputfile1 $value 
+    destroy $w
+    set outputfile1 $value
     if { $command != {} } { eval "$command $outputfile1" }
 }
 
@@ -188,7 +188,7 @@ proc feat_file:LoadDirIntoLists {w} {
 	cd $appPWD
 	return
     }
- 
+
     set data(-showdotfiles) 1
     if { $data(-directory) == "/" } {
 	set dir ""
@@ -222,13 +222,13 @@ proc feat_file:LoadDirIntoLists {w} {
     }
     set top 0
     if {$data(-dirasfile) == ""} {
-	
+
 	if { $data(-showdotfiles) } {
 	    set filepatmatch ".*"
 	} else {
 	    set filepatmatch ".."
 	}
-	
+
 	set top 0
 	if {$data(-pattern) == "*"} {
 	    foreach fname [lsort [glob -nocomplain * $filepatmatch]] {
@@ -303,7 +303,7 @@ proc feat_file:SelectDir {w} {
     }
 
     set filter [feat_file:GetFilter $w $data(-directory) $subdir/$data(-pattern)]
-   $data(w:filter) configure -text $filter    
+   $data(w:filter) configure -text $filter
     # Now select the directory
     #
     set selected [$data(w:dirlist) curselection]
@@ -348,7 +348,7 @@ proc feat_file:InvokeDir {w} {
     feat_file:LoadDir $w
     #update selection if go back via ..
     $data(w:selection) configure -text "$data(-directory)"
-    
+
 }
 
 proc feat_file:GetFilter {w dir pattern} {

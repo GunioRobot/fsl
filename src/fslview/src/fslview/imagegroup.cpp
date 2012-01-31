@@ -21,7 +21,7 @@ using namespace std;
 class CheckImageTarnish{
 public:
   CheckImageTarnish():m_tarnished(false){}
-  void operator()(Image::Handle image) 
+  void operator()(Image::Handle image)
   {
     m_tarnished = image->getInfo()->inqTarnished();
   }
@@ -40,7 +40,7 @@ public:
 
   LookUpTable::Handle result(){return m_lut;}
 private:
-  std::string m_name;  
+  std::string m_name;
   LookUpTable::Handle m_lut;
 };
 
@@ -76,7 +76,7 @@ struct ImageGroup::Implementation
   int  m_zDim;
   float  m_min;
   float  m_max;
-  
+
   std::list<ImageGroup::Msg> m_messages;
 };
 
@@ -119,11 +119,11 @@ ImageGroup::~ImageGroup()
   TRACKER("ImageGroup::~ImageGroup()");
 }
 
-/** 
- * @brief Generate a new image group with a given image. 
- * 
+/**
+ * @brief Generate a new image group with a given image.
+ *
  * @param image Main image for new image group
- * 
+ *
  * @return Reference counted handle to a new ImageGroup.
  *
  * The create methods are in-lieu of conventional constructors. See
@@ -135,11 +135,11 @@ ImageGroup::Handle ImageGroup::create(Image::Handle image)
   return ImageGroup::Handle(new ImageGroup(image));
 }
 
-/** 
+/**
  * @brief Add an overlay to this image group
- * 
+ *
  * @param image New image to be added to the image groups overlay list.
- * 
+ *
  * @return true if operation succeeds.
  */
 bool ImageGroup::addOverlay(Image::Handle image)
@@ -166,11 +166,11 @@ bool ImageGroup::addOverlay(Image::Handle image)
   return true;
 }
 
-/** 
+/**
  * @brief Add an overlay to this image group iff it isn't already there.
- * 
+ *
  * @param image New image to be added to the image groups overlay list.
- * 
+ *
  * @return true if operation succeeds.
  */
 bool ImageGroup::addUniqueOverlay(Image::Handle image)
@@ -186,9 +186,9 @@ bool ImageGroup::addUniqueOverlay(Image::Handle image)
   return result;
 }
 
-/** 
+/**
  * @brief Add a lut to the image groups look up table list.
- * 
+ *
  * @param lut New lut to be added to the lut list.
  */
 void ImageGroup::addLookUpTable(LookUpTable::Handle lut)
@@ -211,7 +211,7 @@ Image::Handle ImageGroup::getLatestImage() const
 LookUpTable::Handle ImageGroup::getLatestLUT()
 {
   LookUpTable::Handle latest;
-  
+
   if(!m_impl->m_lookUpTables.empty())
   {
     latest = m_impl->m_lookUpTables.back();
@@ -234,14 +234,14 @@ Image::Handle ImageGroup::getImage(int n) const
 //! @brief Get the next auto-selectable LUT
 //! @return A handle referencing the next auto-selectable LookUpTable
 //!
-//! Use this method to select a LUT deemed suitable for stats/mask images. 
+//! Use this method to select a LUT deemed suitable for stats/mask images.
 LookUpTable::Handle ImageGroup::getNextLut() const
 {
   return m_impl->m_lookUpTables[m_impl->m_currentLut];
 }
 
 //! @brief Get the nth LUT
-//! @return A handle referencing the nth LUT stored in this ImageGroup 
+//! @return A handle referencing the nth LUT stored in this ImageGroup
 LookUpTable::Handle ImageGroup::getLut(int n) const
 {
   LookUpTable::Handle lut;
@@ -270,9 +270,9 @@ LookUpTable::Handle ImageGroup::getLut(std::string const &name) const
 
     if(!r)
       r = LookUpTable::load(name);
-    
+
   } catch (std::exception& e) {
-//     QMessageBox::warning(NULL, "ImageGroup::getLut: Exception while trying to open LUT!", 
+//     QMessageBox::warning(NULL, "ImageGroup::getLut: Exception while trying to open LUT!",
 // 			 QString("Error message was: \"%1\"! \nReverting to Greyscale colormap.").arg(e.what()));
     r = LookUpTable::greyScale();
   }
@@ -284,11 +284,11 @@ int ImageGroup::getInitialLutCount() const
   return m_impl->m_initLutSize;
 }
 
-/** 
+/**
  * @brief Remove a given overlay from the image group.
- * 
+ *
  * @param image The image handle for the overlay image to be removed.
- * 
+ *
  * @return true if operation succeeded.
  */
 bool ImageGroup::remOverlay(Image::Handle image)
@@ -296,7 +296,7 @@ bool ImageGroup::remOverlay(Image::Handle image)
   bool result(false);
 
   if (!m_impl->m_imageList.empty())
-    {     
+    {
 
       ImageList::iterator cur = std::find(m_impl->m_imageList.begin(),
                                           m_impl->m_imageList.end(),
@@ -312,9 +312,9 @@ bool ImageGroup::remOverlay(Image::Handle image)
   return result;
 }
 
-/** 
+/**
  * @brief Access the groups main image.
- * 
+ *
  * @return Image::Handle for the groups main image.
  */
 Image::Handle ImageGroup::getMainImage()
@@ -353,13 +353,13 @@ int ImageGroup::inqX()
 }
 
 int ImageGroup::inqY()
-{ 
-   return m_impl->m_yDim; 
+{
+   return m_impl->m_yDim;
 }
 
 int ImageGroup::inqZ()
-{   
-  return m_impl->m_zDim;   
+{
+  return m_impl->m_zDim;
 }
 
 float ImageGroup::inqMin() { return m_impl->m_min; }
@@ -395,7 +395,7 @@ void ImageGroup::notify(ImageGroup::Msg message)
 {
   m_impl->m_messages.push_back(message);
 
-  std::for_each(m_impl->m_observers.begin(), m_impl->m_observers.end(), 
+  std::for_each(m_impl->m_observers.begin(), m_impl->m_observers.end(),
                Update(this));
 
   m_impl->m_messages.pop_back();

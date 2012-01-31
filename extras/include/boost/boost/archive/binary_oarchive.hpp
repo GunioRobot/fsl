@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // binary_oarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -23,11 +23,11 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 template<class Archive>
-class binary_oarchive_impl : 
+class binary_oarchive_impl :
     public basic_binary_oprimitive<Archive, std::ostream>,
     public basic_binary_oarchive<Archive>
 {
@@ -57,7 +57,7 @@ protected:
     }
     binary_oarchive_impl(std::ostream & os, unsigned int flags) :
         basic_binary_oprimitive<Archive, std::ostream>(
-            os, 
+            os,
             0 != (flags & no_codecvt)
         ),
         basic_binary_oarchive<Archive>(flags)
@@ -70,7 +70,7 @@ protected:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from binary_oarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class binary_oarchive : 
+class binary_oarchive :
     public binary_oarchive_impl<binary_oarchive>
 {
 public:
@@ -82,7 +82,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
+// required by smart_cast for compilers not implementing
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::binary_oarchive)
 

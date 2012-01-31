@@ -4,7 +4,7 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: Tcl.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
 '\"
 .so man.macros
@@ -150,13 +150,13 @@ in braces or quotes.
 Backslash (``\e'').
 .VS 8.1 br
 .TP 7
-\e\fIooo\fR 
+\e\fIooo\fR
 .
-The digits \fIooo\fR (one, two, or three of them) give an eight-bit octal 
+The digits \fIooo\fR (one, two, or three of them) give an eight-bit octal
 value for the Unicode character that will be inserted.  The upper bits of the
 Unicode character will be 0.
 .TP 7
-\e\fBx\fIhh\fR 
+\e\fBx\fIhh\fR
 .
 The hexadecimal digits \fIhh\fR give an eight-bit hexadecimal value for the
 Unicode character that will be inserted.  Any number of hexadecimal digits
@@ -164,7 +164,7 @@ may be present; however, all but the last two are ignored (the result is
 always a one-byte quantity).  The upper bits of the Unicode character will
 be 0.
 .TP 7
-\e\fBu\fIhhhh\fR 
+\e\fBu\fIhhhh\fR
 .
 The hexadecimal digits \fIhhhh\fR (one, two, three, or four of them) give a
 sixteen-bit hexadecimal value for the Unicode character that will be

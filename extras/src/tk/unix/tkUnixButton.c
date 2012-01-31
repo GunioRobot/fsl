@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixButton.c --
  *
  *	This file implements the Unix specific portion of the button
@@ -184,7 +184,7 @@ TkpDisplayButton(clientData)
     imageHeight = height;
 
     haveText = (butPtr->textWidth != 0 && butPtr->textHeight != 0);
-    
+
     if (butPtr->compound != COMPOUND_NONE && haveImage && haveText) {
 	textXOffset = 0;
 	textYOffset = 0;
@@ -192,7 +192,7 @@ TkpDisplayButton(clientData)
 	fullHeight = 0;
 
 	switch ((enum compound) butPtr->compound) {
-	    case COMPOUND_TOP: 
+	    case COMPOUND_TOP:
 	    case COMPOUND_BOTTOM: {
 		/* Image is above or below text */
 		if (butPtr->compound == COMPOUND_TOP) {
@@ -306,7 +306,7 @@ TkpDisplayButton(clientData)
 	    TkComputeAnchor(butPtr->anchor, tkwin, 0, 0,
 		    butPtr->indicatorSpace + width, height, &x, &y);
 	    x += butPtr->indicatorSpace;
-	    
+
 	    x += offset;
 	    y += offset;
 	    if (relief == TK_RELIEF_RAISED) {
@@ -362,9 +362,9 @@ TkpDisplayButton(clientData)
  	    TkComputeAnchor(butPtr->anchor, tkwin, butPtr->padX, butPtr->padY,
 		    butPtr->indicatorSpace + butPtr->textWidth,
 		    butPtr->textHeight, &x, &y);
-	    
+
 	    x += butPtr->indicatorSpace;
-	    
+
 	    x += offset;
 	    y += offset;
 	    if (relief == TK_RELIEF_RAISED) {
@@ -381,7 +381,7 @@ TkpDisplayButton(clientData)
 	    y += butPtr->textHeight/2;
 	}
     }
-    
+
     /*
      * Draw the indicator for check buttons and radio buttons.  At this
      * point x and y refer to the top-left corner of the text or image
@@ -416,7 +416,7 @@ TkpDisplayButton(clientData)
 		    if (butPtr->disabledFg != NULL) {
 			gc = butPtr->disabledGC;
 		    } else {
-			gc = butPtr->normalTextGC; 
+			gc = butPtr->normalTextGC;
 			XSetForeground(butPtr->display, butPtr->disabledGC,
 				Tk_3DBorderColor(butPtr->normalBorder)->pixel);
 		    }
@@ -457,7 +457,7 @@ TkpDisplayButton(clientData)
 		if (butPtr->disabledFg != NULL) {
 		    gc = butPtr->disabledGC;
 		} else {
-		    gc = butPtr->normalTextGC; 
+		    gc = butPtr->normalTextGC;
 		    XSetForeground(butPtr->display, butPtr->disabledGC,
 			    Tk_3DBorderColor(butPtr->normalBorder)->pixel);
 		}
@@ -635,7 +635,7 @@ TkpComputeButtonGeometry(butPtr)
     txtWidth = 0;
     txtHeight = 0;
     avgWidth = 0;
-    
+
     if (butPtr->image != NULL) {
 	Tk_SizeOfImage(butPtr->image, &width, &height);
 	haveImage = 1;
@@ -643,21 +643,21 @@ TkpComputeButtonGeometry(butPtr)
 	Tk_SizeOfBitmap(butPtr->display, butPtr->bitmap, &width, &height);
 	haveImage = 1;
     }
-    
+
     if (haveImage == 0 || butPtr->compound != COMPOUND_NONE) {
 	Tk_FreeTextLayout(butPtr->textLayout);
-	    
+
 	butPtr->textLayout = Tk_ComputeTextLayout(butPtr->tkfont,
 		Tcl_GetString(butPtr->textPtr), -1, butPtr->wrapLength,
 		butPtr->justify, 0, &butPtr->textWidth, &butPtr->textHeight);
-	
+
 	txtWidth = butPtr->textWidth;
 	txtHeight = butPtr->textHeight;
 	avgWidth = Tk_TextWidth(butPtr->tkfont, "0", 1);
 	Tk_GetFontMetrics(butPtr->tkfont, &fm);
 	haveText = (txtWidth != 0 && txtHeight != 0);
     }
-    
+
     /*
      * If the button is compound (ie, it shows both an image and text),
      * the new geometry is a combination of the image and text geometry.
@@ -716,7 +716,7 @@ TkpComputeButtonGeometry(butPtr)
 	    if (butPtr->height > 0) {
 		height = butPtr->height;
 	    }
-	    
+
 	    if ((butPtr->type >= TYPE_CHECK_BUTTON) && butPtr->indicatorOn) {
 		butPtr->indicatorSpace = height;
 		if (butPtr->type == TYPE_CHECK_BUTTON) {
@@ -728,7 +728,7 @@ TkpComputeButtonGeometry(butPtr)
 	} else {
 	    width = txtWidth;
 	    height = txtHeight;
-	    
+
 	    if (butPtr->width > 0) {
 		width = butPtr->width * avgWidth;
 	    }

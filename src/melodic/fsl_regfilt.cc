@@ -1,4 +1,4 @@
-/*  fsl_regfilt - 
+/*  fsl_regfilt -
 
     Christian F. Beckmann, FMRIB Image Analysis Group
 
@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -113,7 +113,7 @@ using namespace std;
 	Option<int> help(string("-h,--help"), 0,
 		string("display this help text"),
 		false,no_argument);
-	// Output options	
+	// Output options
 	Option<string> outdata(string("--out_data"),string(""),
 		string("output data"),
 		false, requires_argument);
@@ -167,24 +167,24 @@ int dofilter(){
 		return 1;
 	}
 	if(verbose.value())
-		cout << "  Calculating maps " << endl;  
+		cout << "  Calculating maps " << endl;
 	Matrix unmixMatrix = pinv(design);
   Matrix maps = unmixMatrix * data;
 
   Matrix noisedes;
   Matrix noisemaps;
 
-  int ctr=0;    
+  int ctr=0;
   char *p;
   char t[1024];
   const char *discard = ", [];{(})abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*_-=+|\':><./?";
-  
+
   strcpy(t, filter.value().c_str());
   p=strtok(t,discard);
   ctr = atoi(p);
   if(ctr>0 && ctr<=design.Ncols()){
     noisedes = design.Column(ctr);
-    noisemaps  = maps.Row(ctr).t();    
+    noisemaps  = maps.Row(ctr).t();
   }
 
   do{
@@ -202,9 +202,9 @@ int dofilter(){
 		cout << "  Calculating filtered data " << endl;
  	newData = data - noisedes * noisemaps.t();
   newData = newData + ones(newData.Nrows(),1)*meanR;
-  
+
 	save4D(newData,fnout.value());
-  return 0;	
+  return 0;
 }
 
 int setup(){
@@ -212,7 +212,7 @@ int setup(){
 		//input is 3D/4D vol
 		volume4D<float> tmpdata;
 		read_volume4D(tmpdata,fnin.value());
-		
+
 		// create mask
 		if(fnmask.value()>""){
 			read_volume(mask,fnmask.value());
@@ -228,12 +228,12 @@ int setup(){
 			Mmin = Mean.min(); Mmax = Mean.max();
 			mask = binarise(Mean,float(Mmin + 0.01* (Mmax-Mmin)),Mmax);
 		}
-		
+
 		data = tmpdata.matrix(mask);
 		voxels = data.Ncols();
 		if(verbose.value())
 			cout << " Data matrix size : " << data.Nrows() << " x " << voxels << endl;
-		
+
 	}else{
 		cerr << "ERROR: cannot read input image " << fnin.value()<<endl;
 		return 1;
@@ -246,10 +246,10 @@ int setup(){
 	design = remmean(design,1);
 	if(perfvn.value())
 		vnscales = Melodic::varnorm(data);
-	return 0;	
+	return 0;
 }
 
-void write_res(){	
+void write_res(){
 	if(outdata.value()>"")
 		saveit(data,outdata.value());
 	if(outvnscales.value()>"")
@@ -261,7 +261,7 @@ int do_work(int argc, char* argv[]) {
 		exit(1);
 
 	if(dofilter())
-		exit(1);	
+		exit(1);
 	write_res();
 	return 0;
 }
@@ -286,7 +286,7 @@ int main(int argc,char *argv[]){
 			options.add(outvnscales);
 	    options.parse_command_line(argc, argv);
 
-	    // line below stops the program if the help was requested or 
+	    // line below stops the program if the help was requested or
 	    //  a compulsory option was not set
 	    if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
 				options.usage();
@@ -301,6 +301,6 @@ int main(int argc,char *argv[]){
 	    exit(EXIT_FAILURE);
 	  }catch(std::exception &e) {
 	    cerr << e.what() << endl;
-	  } 
+	  }
 }
 

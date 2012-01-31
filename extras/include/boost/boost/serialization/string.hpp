@@ -10,7 +10,7 @@
 // serialization/string.hpp:
 // serialization for stl string templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -28,7 +28,7 @@ BOOST_CLASS_IMPLEMENTATION(std::wstring, boost::serialization::primitive_type)
 #endif
 
 // left over from a previous incarnation - strings are now always primitive types
-#if 0 
+#if 0
 #include <string>
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
@@ -42,7 +42,7 @@ BOOST_CLASS_IMPLEMENTATION(std::wstring, boost::serialization::primitive_type)
 #define STD std
 #endif
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 // basic_string - general case
@@ -53,7 +53,7 @@ inline void save(
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
-        Archive, STD::basic_string<U, Allocator> 
+        Archive, STD::basic_string<U, Allocator>
     >(ar, t);
 }
 
@@ -67,11 +67,11 @@ inline void load(
         Archive,
         STD::basic_string<U, Allocator>,
         boost::serialization::stl::archive_input_seq<
-            Archive, 
-            STD::basic_string<U, Allocator> 
+            Archive,
+            STD::basic_string<U, Allocator>
         >,
         boost::serialization::stl::reserve_imp<
-            STD::basic_string<U, Allocator> 
+            STD::basic_string<U, Allocator>
         >
     >(ar, t);
 }

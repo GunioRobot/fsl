@@ -22,7 +22,7 @@ namespace wave {
 namespace grammars {
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  store parser_id's of all rules of the cpp_grammar here for later access
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,10 +55,10 @@ struct cpp_grammar_rule_ids {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  cpp_grammar_gen template class
 //
-//      This template helps separating the compilation of the cpp_grammar 
+//      This template helps separating the compilation of the cpp_grammar
 //      class from the compilation of the main pp_iterator. This is done to
 //      safe compilation time.
 //
@@ -70,7 +70,7 @@ struct cpp_grammar_gen
     typedef LexIteratorT                          iterator_type;
     typedef typename LexIteratorT::token_type     token_type;
     typedef typename token_type::position_type    position_type;
-    
+
 //  the parser_id's of all rules of the cpp_grammar are stored here
 //  note: these are valid only after the first call to parse_cpp_grammar
     static cpp_grammar_rule_ids rule_ids;
@@ -79,15 +79,15 @@ struct cpp_grammar_gen
 //  member 'pos_of_newline'
     static position_type pos_of_newline;
 
-//  the found_eof flag is set to true during the parsing, if the directive 
+//  the found_eof flag is set to true during the parsing, if the directive
 //  under inspection terminates with a T__EOF token
     static bool found_eof;
 
 //  the found_directive contains the token_id of the recognized pp directive
     static boost::wave::token_id found_directive;
-        
-//  parse the cpp_grammar and return the resulting parse tree    
-    static boost::spirit::tree_parse_info<iterator_type> 
+
+//  parse the cpp_grammar and return the resulting parse tree
+    static boost::spirit::tree_parse_info<iterator_type>
     parse_cpp_grammar (iterator_type const &first, iterator_type const &last,
         bool &found_eof_, position_type const &act_pos);
 };
@@ -95,18 +95,18 @@ struct cpp_grammar_gen
 ///////////////////////////////////////////////////////////////////////////////
 //  definitions of the static members
 template <typename LexIteratorT>
-cpp_grammar_rule_ids 
+cpp_grammar_rule_ids
     cpp_grammar_gen<LexIteratorT>::rule_ids;
 
 template <typename LexIteratorT>
-typename LexIteratorT::token_type::position_type 
+typename LexIteratorT::token_type::position_type
     cpp_grammar_gen<LexIteratorT>::pos_of_newline;
 
 template <typename LexIteratorT>
 bool cpp_grammar_gen<LexIteratorT>::found_eof = false;
 
 template <typename LexIteratorT>
-boost::wave::token_id cpp_grammar_gen<LexIteratorT>::found_directive = 
+boost::wave::token_id cpp_grammar_gen<LexIteratorT>::found_directive =
     boost::wave::T_EOF;
 
 ///////////////////////////////////////////////////////////////////////////////

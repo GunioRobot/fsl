@@ -1,6 +1,6 @@
-# FSL configuration file 
+# FSL configuration file
 #  - to be sourced by the user, typically in .bashrc or equivalent
-#  - note that the user should set 
+#  - note that the user should set
 
 # Written by Mark Jenkinson
 #  FMRIB Analysis Group, University of Oxford
@@ -16,7 +16,7 @@
 #  to write files with a different format
 setenv FSLOUTPUTTYPE NIFTI_GZ
 
-# Comment out the definition of FSLMULTIFILEQUIT to enable 
+# Comment out the definition of FSLMULTIFILEQUIT to enable
 #  FSL programs to soldier on after detecting multiple image
 #  files with the same basename ( e.g. epi.hdr and epi.nii )
 setenv FSLMULTIFILEQUIT TRUE
@@ -31,9 +31,9 @@ setenv FSLWISH $FSLDIR/bin/fslwish
 # The following variables are used for running code in parallel across
 #  several machines ( i.e. for FDT )
 
-setenv FSLLOCKDIR 
-setenv FSLMACHINELIST 
-setenv FSLREMOTECALL 
+setenv FSLLOCKDIR
+setenv FSLMACHINELIST
+setenv FSLREMOTECALL
 
 # Set up development variables (not for the faint-hearted)
 

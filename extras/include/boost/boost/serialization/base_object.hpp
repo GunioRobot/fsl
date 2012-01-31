@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // base_object.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 // if no archive headers have been included this is a no op
-// this is to permit BOOST_EXPORT etc to be included in a 
+// this is to permit BOOST_EXPORT etc to be included in a
 // file declaration header
 
 #include <boost/config.hpp>
@@ -39,7 +39,7 @@ namespace serialization {
 
 namespace detail {
     // metrowerks CodeWarrior
-    #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206)) 
+    #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
         // only register void casts if the types are polymorphic
         template<class Base, class Derived>
         struct base_register{
@@ -51,8 +51,8 @@ namespace detail {
                 }
             };
 
-            // hold a reference to the void_cast_register and void_caster in the hope of 
-            // ensuring code instantiation for some compilers with over-zealous link time 
+            // hold a reference to the void_cast_register and void_caster in the hope of
+            // ensuring code instantiation for some compilers with over-zealous link time
             // optimiser. The compiler that demanded this was CW
             struct reg{
                 typedef const void_cast_detail::void_caster & (* t_vcr)(
@@ -133,9 +133,9 @@ namespace detail {
 } // namespace detail
 
 // metrowerks CodeWarrior
-#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206)) 
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
 template<class Base, class Derived>
-BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
+BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type &
 base_object(Derived &d)
 {
     BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
@@ -146,7 +146,7 @@ base_object(Derived &d)
 // BORLAND
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 template<class Base, class Derived>
-const Base & 
+const Base &
 base_object(const Derived & d)
 {
     BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
@@ -155,7 +155,7 @@ base_object(const Derived & d)
 }
 #else
 template<class Base, class Derived>
-BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
+BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type &
 base_object(Derived &d)
 {
     BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));

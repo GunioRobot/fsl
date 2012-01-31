@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacScrollbar.c --
  *
  *	This file implements the Macintosh specific portion of the scrollbar
@@ -62,7 +62,7 @@ typedef struct MacScrollbar {
 
 /*
  * Flag bits for scrollbars on the Mac:
- * 
+ *
  * ALREADY_DEAD:		Non-zero means this scrollbar has been
  *				destroyed, but has not been cleaned up.
  * IN_MODAL_LOOP:		Non-zero means this scrollbar is in the middle
@@ -112,7 +112,7 @@ static void		ScrollbarEventProc _ANSI_ARGS_((
 			    ClientData clientData, XEvent *eventPtr));
 static pascal void	ThumbActionProc _ANSI_ARGS_((void));
 static void		UpdateControlValues _ANSI_ARGS_((MacScrollbar *macScrollPtr));
-		    
+
 /*
  * The class procedure table for the scrollbar widget.  Leave the proc fields
  * initialized to NULL, which should happen automatically because of the scope
@@ -145,7 +145,7 @@ TkpCreateScrollbar(
 {
     MacScrollbar * macScrollPtr;
     TkWindow *winPtr = (TkWindow *)tkwin;
-    
+
     if (scrollActionProc == NULL) {
 	scrollActionProc = NewControlActionProc(ScrollbarActionProc);
 	thumbActionProc = NewThumbActionProc(ThumbActionProc);
@@ -196,13 +196,13 @@ TkpDisplayScrollbar(
     register TkScrollbar *scrollPtr = (TkScrollbar *) clientData;
     register MacScrollbar *macScrollPtr = (MacScrollbar *) clientData;
     register Tk_Window tkwin = scrollPtr->tkwin;
-    
+
     MacDrawable *macDraw;
     CGrafPtr saveWorld;
     GDHandle saveDevice;
     GWorldPtr destPort;
     WindowRef windowRef;
-    
+
     if ((scrollPtr->tkwin == NULL) || !Tk_IsMapped(tkwin)) {
 	goto done;
     }
@@ -244,7 +244,7 @@ TkpDisplayScrollbar(
     if (macScrollPtr->sbHandle == NULL) {
         Rect r;
         WindowRef frontNonFloating;
-        
+
         r.left = r.top = 0;
         r.right = r.bottom = 1;
 	macScrollPtr->sbHandle = NewControl((WindowRef) destPort, &r, "\p",
@@ -254,13 +254,13 @@ TkpDisplayScrollbar(
 	/*
 	 * If we are foremost than make us active.
 	 */
-	
+
 	if (TkMacHaveAppearance() >= 0x110) {
 	    frontNonFloating = FrontNonFloatingWindow();
 	} else {
 	    frontNonFloating = FrontWindow();
 	}
-	
+
 	if ((WindowPtr) destPort == FrontWindow() || TkpIsWindowFloating((WindowPtr) destPort)) {
 	    macScrollPtr->macFlags |= ACTIVE;
 	}
@@ -269,9 +269,9 @@ TkpDisplayScrollbar(
     /*
      * Update the control values before we draw.
      */
-    windowRef  = (**macScrollPtr->sbHandle).contrlOwner;    
+    windowRef  = (**macScrollPtr->sbHandle).contrlOwner;
     UpdateControlValues(macScrollPtr);
-    
+
     if (macScrollPtr->macFlags & ACTIVE) {
 	Draw1Control(macScrollPtr->sbHandle);
 	if (macScrollPtr->macFlags & DRAW_GROW) {
@@ -288,9 +288,9 @@ TkpDisplayScrollbar(
 		0, TK_RELIEF_FLAT);
 	}
     }
-    
+
     SetGWorld(saveWorld, saveDevice);
-     
+
     done:
     scrollPtr->flags &= ~REDRAW_PENDING;
 }
@@ -495,7 +495,7 @@ TkpScrollbarPosition(
 
     /*
      * All of the calculations in this procedure mirror those in
-     * DisplayScrollbar.  Be sure to keep the two consistent.  On the 
+     * DisplayScrollbar.  Be sure to keep the two consistent.  On the
      * Macintosh we use the OS call TestControl to do this mapping.
      * For TestControl to work, the scrollbar must be active and must
      * be in the current port.
@@ -509,7 +509,7 @@ TkpScrollbarPosition(
 	(**macScrollPtr->sbHandle).contrlHilite = 0;
     }
 
-    TkMacWinBounds((TkWindow *) scrollPtr->tkwin, &bounds);		
+    TkMacWinBounds((TkWindow *) scrollPtr->tkwin, &bounds);
     where.h = x + bounds.left;
     where.v = y + bounds.top;
     part = TestControl(((MacScrollbar *) scrollPtr)->sbHandle, where);
@@ -567,13 +567,13 @@ ThumbActionProc()
     Point lastPoint = { 0, 0 };
     Rect trackRect;
     Tcl_Interp *interp;
-    
+
     if (scrollPtr == NULL) {
 	return;
     }
 
     Tcl_DStringInit(&cmdString);
-    
+
     /*
      * First compute values that will remain constant during the tracking
      * of the thumb.  The variable trackBarSize is the length of the scrollbar
@@ -591,7 +591,7 @@ ThumbActionProc()
 	trackBarPin = trackRect.top + scrollPtr->arrowLength
 	    + (scrollPtr->arrowLength / 2);
 	InsetRect(&trackRect, -25, -113);
-	
+
     } else {
 	trackBarSize = (double) (trackRect.right - trackRect.left
 		- (scrollPtr->arrowLength * 3));
@@ -631,7 +631,7 @@ ThumbActionProc()
 	    newFirstFraction = ((double) origValue / 1000.0)
 		* (1.0 - thumbWidth);
 	}
-	
+
 	sprintf(vauleString, "%g", newFirstFraction);
 
 	Tcl_DStringSetLength(&cmdString, 0);
@@ -644,7 +644,7 @@ ThumbActionProc()
         Tcl_Preserve((ClientData) interp);
 	Tcl_GlobalEval(interp, cmdString.string);
         Tcl_Release((ClientData) interp);
-	
+
 	Tcl_DStringSetLength(&cmdString, 0);
 	Tcl_DStringAppend(&cmdString, "update idletasks",
 		strlen("update idletasks"));
@@ -652,7 +652,7 @@ ThumbActionProc()
 	Tcl_GlobalEval(interp, cmdString.string);
         Tcl_Release((ClientData) interp);
     }
-    
+
     /*
      * This next bit of code is a bit of a hack - but needed.  The problem is
      * that the control wants to draw the drag outline if the control value
@@ -660,7 +660,7 @@ ThumbActionProc()
      * clip region to hide this drawing from the user.
      */
     ClipRect(&nullRect);
-    
+
     Tcl_DStringFree(&cmdString);
     return;
 }
@@ -690,7 +690,7 @@ ScrollbarActionProc(
 {
     register TkScrollbar *scrollPtr = (TkScrollbar *) GetControlReference(theControl);
     Tcl_DString cmdString;
-    
+
     Tcl_DStringInit(&cmdString);
     Tcl_DStringAppend(&cmdString, scrollPtr->command,
 	    scrollPtr->commandSize);
@@ -746,7 +746,7 @@ ScrollbarBindProc(
 
     Tcl_Preserve((ClientData)scrollPtr);
     macScrollPtr->macFlags |= IN_MODAL_LOOP;
-    
+
     if (eventPtr->type == ButtonPress) {
     	Point where;
     	Rect bounds;
@@ -767,7 +767,7 @@ ScrollbarBindProc(
 	SetGWorld(destPort, NULL);
 	TkMacSetUpClippingRgn(Tk_WindowId(scrollPtr->tkwin));
 
-	TkMacWinBounds((TkWindow *) scrollPtr->tkwin, &bounds);		
+	TkMacWinBounds((TkWindow *) scrollPtr->tkwin, &bounds);
     	where.h = eventPtr->xbutton.x + bounds.left;
     	where.v = eventPtr->xbutton.y + bounds.top;
 	part = TestControl(macScrollPtr->sbHandle, where);
@@ -812,12 +812,12 @@ ScrollbarBindProc(
 		Tcl_DStringAppendElement(&cmdString, vauleString);
 		Tcl_DStringAppend(&cmdString, "; update idletasks",
 			strlen("; update idletasks"));
-		
+
                 interp = scrollPtr->interp;
                 Tcl_Preserve((ClientData) interp);
 		Tcl_GlobalEval(interp, cmdString.string);
                 Tcl_Release((ClientData) interp);
-		Tcl_DStringFree(&cmdString);		
+		Tcl_DStringFree(&cmdString);
 	    }
 	} else if (part != 0) {
 	    /*
@@ -828,7 +828,7 @@ ScrollbarBindProc(
 	    TrackControl(macScrollPtr->sbHandle, where, scrollActionProc);
 	    HiliteControl(macScrollPtr->sbHandle, 0);
 	}
-	
+
 	/*
 	 * The TrackControl call will "eat" the ButtonUp event.  We now
 	 * generate a ButtonUp event so Tk will unset implicit grabs etc.
@@ -848,7 +848,7 @@ ScrollbarBindProc(
     }
     macScrollPtr->macFlags &= ~IN_MODAL_LOOP;
     Tcl_Release((ClientData)scrollPtr);
-    
+
     return TCL_OK;
 }
 
@@ -915,7 +915,7 @@ UpdateControlValues(
     TkScrollbar *scrollPtr = (TkScrollbar *) macScrollPtr;
     Tk_Window tkwin = scrollPtr->tkwin;
     MacDrawable * macDraw = (MacDrawable *) Tk_WindowId(scrollPtr->tkwin);
-    WindowRef windowRef  = (**macScrollPtr->sbHandle).contrlOwner;    
+    WindowRef windowRef  = (**macScrollPtr->sbHandle).contrlOwner;
     double middle;
     int drawGrowRgn = false;
     int flushRight = false;
@@ -931,16 +931,16 @@ UpdateControlValues(
      * NOTE: changing the control record directly may not work when
      * Apple releases the Copland version of the MacOS (or when hell is cold).
      */
-     
+
     (**macScrollPtr->sbHandle).contrlRect.left = macDraw->xOff + scrollPtr->inset;
     (**macScrollPtr->sbHandle).contrlRect.top = macDraw->yOff + scrollPtr->inset;
     (**macScrollPtr->sbHandle).contrlRect.right = macDraw->xOff + Tk_Width(tkwin)
 	- scrollPtr->inset;
     (**macScrollPtr->sbHandle).contrlRect.bottom = macDraw->yOff +
 	Tk_Height(tkwin) - scrollPtr->inset;
-    
+
     /*
-     * To make Tk applications look more like Macintosh applications without 
+     * To make Tk applications look more like Macintosh applications without
      * requiring additional work by the Tk developer we do some cute tricks.
      * The first trick plays with the size of the widget to get it to overlap
      * with the side of the window by one pixel (we don't do this if the placer
@@ -970,7 +970,7 @@ UpdateControlValues(
 	    TkpComputeScrollbarGeometry(scrollPtr);
 	}
     }
-    
+
     if (windowRef->portRect.top == (**macScrollPtr->sbHandle).contrlRect.top) {
 	if (macScrollPtr->macFlags & AUTO_ADJUST) {
 	    (**macScrollPtr->sbHandle).contrlRect.top--;
@@ -987,7 +987,7 @@ UpdateControlValues(
 	    TkpComputeScrollbarGeometry(scrollPtr);
 	}
     }
-	
+
     if (windowRef->portRect.right == (**macScrollPtr->sbHandle).contrlRect.right) {
 	flushRight = true;
 	if (macScrollPtr->macFlags & AUTO_ADJUST) {
@@ -1005,7 +1005,7 @@ UpdateControlValues(
 	    TkpComputeScrollbarGeometry(scrollPtr);
 	}
     }
-	
+
     if (windowRef->portRect.bottom == (**macScrollPtr->sbHandle).contrlRect.bottom) {
 	flushBottom = true;
 	if (macScrollPtr->macFlags & AUTO_ADJUST) {
@@ -1044,7 +1044,7 @@ UpdateControlValues(
     } else {
 	TkMacSetScrollbarGrow((TkWindow *) tkwin, false);
     }
-    
+
     /*
      * Given the Tk parameters for the fractions of the start and
      * end of the thumb, the following calculation determines the
@@ -1054,7 +1054,7 @@ UpdateControlValues(
 	    (1.0 - scrollPtr->lastFraction));
 
     (**macScrollPtr->sbHandle).contrlValue = (short) (middle * 1000);
-    if ((**macScrollPtr->sbHandle).contrlHilite == 0 || 
+    if ((**macScrollPtr->sbHandle).contrlHilite == 0 ||
 		(**macScrollPtr->sbHandle).contrlHilite == 255) {
 	if (scrollPtr->firstFraction == 0.0 &&
 		scrollPtr->lastFraction == 1.0) {

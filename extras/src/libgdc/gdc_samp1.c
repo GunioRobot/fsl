@@ -10,10 +10,10 @@
 /* for CGI use un-comment the "Content-Type" line */
 
 #include <stdio.h>
- 
+
 #include "gdc.h"
 #include "gdchart.h"
- 
+
 main()
 {
     /* ----- set some data ----- */
@@ -26,7 +26,7 @@ main()
     char    *t[6] = { "Chicago", "New York", "L.A.", "Atlanta", "Paris, MD\n(USA) ", "London" };
     /* ----- data set colors (RGB) ----- */
     unsigned long   sc[2]    = { 0xFF8080, 0x8080FF };
- 
+
     GDC_BGColor   = 0xFFFFFFL;                  /* backgound color (white) */
     GDC_LineColor = 0x000000L;                  /* line color      (black) */
     GDC_SetColor  = &(sc[0]);                   /* assign set colors */
@@ -41,7 +41,7 @@ main()
                t,             /* char*[]     array of X labels */
                2,             /* int         number of data sets */
                (float*)a, NULL );             /* float[]     data set 1 */
-/*               b );             ...        data set n */ 
+/*               b );             ...        data set n */
 
     exit(0);
 }

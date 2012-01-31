@@ -21,8 +21,8 @@ namespace wave {
 namespace grammars {
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
-//  store parser_id's of all rules of the predefined_macros_grammar here 
+//
+//  store parser_id's of all rules of the predefined_macros_grammar here
 //  for later access
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,11 +33,11 @@ struct predefined_macros_grammar_rule_ids {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  predefined_macros_grammar_gen template class
 //
-//      This template helps separating the compilation of the 
-//      predefined_macros_grammar class from the compilation of the 
+//      This template helps separating the compilation of the
+//      predefined_macros_grammar class from the compilation of the
 //      main pp_iterator. This is done to safe compilation time.
 //
 //      This class helps parsing command line given macro definitions in a
@@ -54,15 +54,15 @@ struct predefined_macros_grammar_gen
 //  note: these are valid only after the first call to parse_cpp_grammar
     static predefined_macros_grammar_rule_ids rule_ids;
 
-//  parse the cpp_grammar and return the resulting parse tree    
-    static boost::spirit::tree_parse_info<iterator_type> 
+//  parse the cpp_grammar and return the resulting parse tree
+    static boost::spirit::tree_parse_info<iterator_type>
     parse_predefined_macro (iterator_type const &first, iterator_type const &last);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //  definitions of the static members
 template <typename LexIteratorT>
-predefined_macros_grammar_rule_ids 
+predefined_macros_grammar_rule_ids
     predefined_macros_grammar_gen<LexIteratorT>::rule_ids;
 
 ///////////////////////////////////////////////////////////////////////////////

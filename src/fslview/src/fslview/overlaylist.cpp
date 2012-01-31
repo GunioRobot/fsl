@@ -18,7 +18,7 @@
 class CopyOverlay {
 public:
   CopyOverlay(){}
-  void operator()(MetaImage::Handle mi) 
+  void operator()(MetaImage::Handle mi)
   {
     MetaImage::Handle newMi = mi->clone();
     m_newList.push_back(newMi);
@@ -32,7 +32,7 @@ private:
 class ImageSearch {
 public:
   ImageSearch(Image::Handle i) : m_found(false),m_image(i) {}
-  void operator()(MetaImage::Handle mi) 
+  void operator()(MetaImage::Handle mi)
   {
     if(mi->getImage() ==  m_image){m_found = true;m_metaImage = mi;}
   }
@@ -45,10 +45,10 @@ private:
 class AddOverlay {
 public:
   AddOverlay(std::list<MetaImage::Handle> ol,
-             ImageGroup::Handle ig,int &n) 
+             ImageGroup::Handle ig,int &n)
     : m_oldlist(ol),
       m_imgGrp(ig),m_curLut(n) {}
-  void operator()(Image::Handle i) 
+  void operator()(Image::Handle i)
   {
     ImageSearch search = std::for_each(m_oldlist.begin(),m_oldlist.end(),ImageSearch(i));
 
@@ -58,31 +58,31 @@ public:
       }
     else
       {
-        LookUpTable::Handle lut; 
+        LookUpTable::Handle lut;
 
         if(!m_newlist.empty())
           {
             lut = m_imgGrp->getLut(i->getInfo()->inqLutName());
-            if(lut) lut = m_imgGrp->getLut(m_curLut++);        
+            if(lut) lut = m_imgGrp->getLut(m_curLut++);
             if (m_curLut >= m_imgGrp->getInitialLutCount())m_curLut = 0;
           }
 
-        m_newlist.push_back(MetaImage::create(i,ImageDisplaySetting::create(i, lut, 1.0f, true)));  
+        m_newlist.push_back(MetaImage::create(i,ImageDisplaySetting::create(i, lut, 1.0f, true)));
       }
   }
   std::list<MetaImage::Handle> m_newlist;
 private:
-  std::list<MetaImage::Handle> m_oldlist;  
-  ImageGroup::Handle m_imgGrp;  
+  std::list<MetaImage::Handle> m_oldlist;
+  ImageGroup::Handle m_imgGrp;
   int &m_curLut;
 
 };
 
-class MainSearch 
+class MainSearch
 {
 public:
   MainSearch(){}
-  void operator()(MetaImage::Handle mi) 
+  void operator()(MetaImage::Handle mi)
   {
     if(mi->getInfo()->isMainImage())
       m_mainMetaImage = mi;
@@ -93,7 +93,7 @@ public:
 OverlayList::OverlayList(ImageGroup::Handle i):m_imageGroup(i),m_currentLut(0)
 {
   m_imageGroup->attach(this);
-  
+
   loadOverlaysList();
 }
 
@@ -121,23 +121,23 @@ OverlayList::Handle OverlayList::create(ImageGroup::Handle i)
 }
 
 
-const Image::Handle OverlayList::getMainImage() const 
-{  
+const Image::Handle OverlayList::getMainImage() const
+{
   MainSearch search = std::for_each(m_overlays.begin(),
                                     m_overlays.end(),
                                     MainSearch());
   return search.m_mainMetaImage->getImage();
 }
-  
+
 void OverlayList::loadOverlaysList()
-{ 
+{
   AddOverlay add = std::for_each(m_imageGroup->begin(),m_imageGroup->end(),
 				 AddOverlay(m_overlays,m_imageGroup,m_currentLut));
   m_overlays.clear();
   m_overlays = add.m_newlist;
 
   setActiveMetaImage(m_overlays.back());
-  
+
   m_xDim = m_overlays.front()->inqX();
   m_yDim = m_overlays.front()->inqY();
   m_zDim = m_overlays.front()->inqZ();
@@ -145,7 +145,7 @@ void OverlayList::loadOverlaysList()
 
 struct ImageNotIn {
   ImageNotIn(ImageGroup::Handle ig): m_imageGroup(ig) {}
-  
+
   bool operator()(const MetaImage::Handle mi) const
   {
 	Image::Handle i = mi->getImage();
@@ -194,10 +194,10 @@ struct Update
 
 void OverlayList::notify(OverlayListMsg message)
 {
-  TRACKER("OverlayList::notify"); 
+  TRACKER("OverlayList::notify");
   MESSAGE(QString("notifying %1 observers").arg(m_observers.size()));
 
-  std::for_each(m_observers.begin(), m_observers.end(), 
+  std::for_each(m_observers.begin(), m_observers.end(),
                Update(this,message));
 }
 
@@ -228,11 +228,11 @@ void OverlayList::assignLatestLUT()
 {
   TRACKER("OverlayList::assignLatestLUT()");
   MetaImage::Handle mi = getActiveMetaImage();
-  
+
   if(m_activeMetaImage)
     {
       m_activeMetaImage->getDs()->setLookUpTable(m_imageGroup->getLatestLUT());
-      notify(OverlayListMsg(LookUpTable));  
+      notify(OverlayListMsg(LookUpTable));
     }
 }
 
@@ -244,7 +244,7 @@ void OverlayList::update(const ImageGroup* i)
   switch(i->inqMessage())
   {
   case ImageGroup::NewLookUpTable:  assignLatestLUT(); notify(OverlayListMsg(LookUpTable)); break;
-  case ImageGroup::NewOverlay:    
+  case ImageGroup::NewOverlay:
     {
       Image::Handle newImage = m_imageGroup->getLatestImage();
 
@@ -260,7 +260,7 @@ void OverlayList::update(const ImageGroup* i)
 	else
 	  lut = LookUpTable::greyScale();
       }
-      
+
       if (m_currentLut >= i->getInitialLutCount()) m_currentLut = 0;
       m_overlays.push_back(MetaImage::create(newImage,ImageDisplaySetting::create(newImage, lut, 1.0f, true)));
       setActiveMetaImage(m_overlays.back());
@@ -280,14 +280,14 @@ void OverlayList::update(const ImageGroup* i)
 }
 
 void OverlayList::setActiveMetaImage(const MetaImage::Handle mi)
-{    
+{
   TRACKER("OverlayList::setActiveMetaImage");
   m_activeMetaImage = mi;
   notify(OverlayListMsg(Select));
 }
 
 void OverlayList::setLabelMetaImage(const MetaImage::Handle mi)
-{    
+{
   TRACKER("OverlayList::setLabelMetaImage");
   m_labelMetaImage = mi;
   notify(OverlayListMsg(Select));
@@ -315,17 +315,17 @@ void OverlayList::setModTransparency(float trans)
 void OverlayList::setVisibility(bool state)
 {
   if(m_activeMetaImage)
-    {    
+    {
       m_activeMetaImage->setVisibility(state);
       notify(OverlayListMsg(Visibility));
     }
-}  
+}
 
 void OverlayList::setReadOnly(bool state)
 {
   TRACKER("OverlayList::setReadOnly(bool state)");
   if(m_activeMetaImage)
-    {    
+    {
       m_activeMetaImage->getImage()->getInfo()->setReadOnly(state);
       notify(OverlayListMsg(Security));
       m_imageGroup->notify(ImageGroup::Lock);
@@ -336,18 +336,18 @@ void OverlayList::moveOverlayUp()
 {
   TRACKER("OverlayList::moveOverlayUp");
 
-  if(m_activeMetaImage)   
+  if(m_activeMetaImage)
   {
      MetaImageListIt cur = std::find(m_overlays.begin(),
                                      m_overlays.end(),
                                      m_activeMetaImage);
      assert(cur != m_overlays.end());
-  
+
      MetaImageListIt next(cur);
-          
+
      if(++next != m_overlays.end())
        {
-         std::swap(*cur,*next);              
+         std::swap(*cur,*next);
          notify(OverlayListMsg(Order));
        }
     }
@@ -363,13 +363,13 @@ void OverlayList::moveOverlayDown()
                                      m_overlays.end(),
                                      m_activeMetaImage);
      assert(cur != m_overlays.end());
-        
+
      MetaImageListIt prev(cur);
-          
+
      if(cur != m_overlays.begin())
-     {       
+     {
        --prev;
-       std::swap(*cur,*prev);              
+       std::swap(*cur,*prev);
        notify(OverlayListMsg(Order));
      }
    }
@@ -407,7 +407,7 @@ void OverlayList::setModImage(Image::Handle img)
 
      if(search.m_found == true)
       {
-        search.m_metaImage->setVisibility(false);      
+        search.m_metaImage->setVisibility(false);
       }
 
     m_activeMetaImage->getDs()->setModImage(img);
@@ -416,7 +416,7 @@ void OverlayList::setModImage(Image::Handle img)
 }
 
 Image::Handle OverlayList::inqActiveImage()
-{      
+{
   Image::Handle img;
 
   if(m_activeMetaImage)
@@ -433,10 +433,10 @@ OverlayList::Handle OverlayList::clone()
 }
 
 void OverlayList::setOverlays(std::list<MetaImage::Handle> list)
-{    
+{
   CopyOverlay copyOverlay = std::for_each(list.begin(),list.end(),CopyOverlay());
-  m_overlays = copyOverlay.getOverlays(); 
- 
+  m_overlays = copyOverlay.getOverlays();
+
  if(!m_overlays.empty()){setActiveMetaImage(m_overlays.back());}
 }
 

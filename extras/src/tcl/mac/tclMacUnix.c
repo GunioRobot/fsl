@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacUnix.c --
  *
  *	This file contains routines to implement several features
@@ -146,12 +146,12 @@ Tcl_LsObjCmd(
 	if (argv[0] != '-') {
 	    break;
 	}
-		
+
 	if (!strcmp(argv, "-")) {
 	    i++;
 	    break;
 	}
-		
+
 	for (j = 1 ; argv[j] ; ++j) {
 	    switch(argv[j]) {
 	    case 'a':
@@ -238,10 +238,10 @@ Tcl_LsObjCmd(
 		    "-------------------------------------------------------------\n",
 		    NULL);
 	}
-		
+
 	for (i = 0; i < objc; i++) {
 	    strcpy(theFile, Tcl_GetString(objv[i]));
-			
+
 	    c2pstr(theFile);
 	    hpb->ioCompletion = NULL;
 	    hpb->ioVRefNum = 0;
@@ -300,14 +300,14 @@ Tcl_LsObjCmd(
 		    }
 		}
 	    }
-			
+
 	    sprintf(theLine, "%c %7ld %8s %8s %-4.4s %-4.4s 0x%4.4X %s",
 		    lineTag, size, time, date, creator, type, flags, theFile);
-						 
+
 	    Tcl_AppendResult(interp, theLine, "\n", NULL);
-	    
+
 	}
-		
+
 	objPtr = Tcl_GetObjResult(interp);
 	string = Tcl_GetStringFromObj(objPtr, &length);
 	if ((length > 0) && (string[length - 1] == '\n')) {
@@ -345,7 +345,7 @@ Tcl_LsObjCmd(
 	memset(theLine, ' ', STRING_LENGTH);
 	while (argCount < objc) {
 	    strcpy(theFile, Tcl_GetString(objv[argCount]));
-			
+
 	    c2pstr(theFile);
 	    hpb->ioCompletion = NULL;
 	    hpb->ioVRefNum = 0;
@@ -393,7 +393,7 @@ Tcl_LsObjCmd(
 	    strncpy(theLine + (linePos * fieldLength), theFile,
 		    strlen(theFile));
 	    linePos++;
-			
+
 	    if (linePos == perLine) {
 		theLine[STRING_LENGTH] = '\0';
 		if (needNewLine) {
@@ -405,10 +405,10 @@ Tcl_LsObjCmd(
 		linePos = 0;
 		memset(theLine, ' ', STRING_LENGTH);
 	    }
-			
+
 	    argCount++;
 	}
-		
+
 	if (linePos != 0) {
 	    theLine[STRING_LENGTH] = '\0';
 	    if (needNewLine) {
@@ -420,6 +420,6 @@ Tcl_LsObjCmd(
     }
 
     Tcl_DecrRefCount(resultObjPtr);
-    	
+
     return TCL_OK;
 }

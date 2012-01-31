@@ -1,30 +1,30 @@
 
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     meloptions.cc - class for command line options
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-     
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -36,13 +36,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -53,7 +53,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -86,7 +86,7 @@ namespace Melodic {
 
 MelodicOptions* MelodicOptions::gopt = NULL;
 
-  void MelodicOptions::parse_command_line(int argc, char** argv, Log& logger, 
+  void MelodicOptions::parse_command_line(int argc, char** argv, Log& logger,
 		const string &p_version){
   		//set version number and some other stuff
   		version = p_version;
@@ -109,20 +109,20 @@ MelodicOptions* MelodicOptions::gopt = NULL;
   		if(help.value()){
       	print_usage(argc, argv);
       	exit(0);
-    	} 
+    	}
   		if(vers.value()){
       	print_version();
       	cout << endl;
       	exit(0);
-    	} 
+    	}
   		if(copyright.value()){
       	print_copyright();
       	exit(0);
-    	} 
+    	}
   		if(! options.check_compulsory_arguments()){
 				print_usage(argc, argv);
       	exit(2);
-    	}     
+    	}
 
   		// check for invalid values
   		if (inputfname.value().size()<1) {
@@ -130,14 +130,14 @@ MelodicOptions* MelodicOptions::gopt = NULL;
     		print_usage(argc,argv);
     		exit(2);
   		}
-  		if (approach.value() != "symm" && approach.value() != "defl"  && 
+  		if (approach.value() != "symm" && approach.value() != "defl"  &&
       	approach.value() != "jade" && approach.value() != "maxent" &&
       	approach.value() != "tica" && approach.value() != "concat"){
     			cerr << "ERROR:: unknown approach \n\n";
     			print_usage(argc,argv);
     			exit(2);
   			}
-  		if (nonlinearity.value() != "pow3" && nonlinearity.value() != "pow4" && 
+  		if (nonlinearity.value() != "pow3" && nonlinearity.value() != "pow4" &&
 				nonlinearity.value() != "tanh"  && nonlinearity.value() != "gauss" ){
     			cerr << "ERROR:: unknown nonlinearity \n\n";
     			print_usage(argc,argv);
@@ -151,7 +151,7 @@ MelodicOptions* MelodicOptions::gopt = NULL;
   		if (epsilon.value() < 0.000000001){
     		cerr << "ERROR:: epsilon too small  \n\n";
     		print_usage(argc,argv);
-    		exit(2);    
+    		exit(2);
   		}
   		if (epsilon.value() >= 0.01){
     		cerr << "ERROR:: epsilon too large  \n\n";
@@ -168,16 +168,16 @@ MelodicOptions* MelodicOptions::gopt = NULL;
   		}
   		if (filter.value().length()>0){
     		if (filtermix.value().length()<0){
-      		cerr << "ERROR:: no mixing matrix for filtering (use --mix='filename') \n\n"; 
+      		cerr << "ERROR:: no mixing matrix for filtering (use --mix='filename') \n\n";
       		print_usage(argc,argv);
       		exit(2);
-    		} else {   
+    		} else {
 					temporal.set_T(false);
       		filtermode = true;
       		varnorm.set_T(false);
 					pbsc.set_T(false);
 					cerr << "WARNING: melodic denoising is deprecated, please use fsl_regfilt instead!" <<endl;
-    		} 
+    		}
   		}
   		if (threshold.value()<=0){
     		use_mask.set_T(false);
@@ -219,7 +219,7 @@ MelodicOptions* MelodicOptions::gopt = NULL;
   		if (numICs.value() > 0){
     		explicitnums = true;
   		}
-  
+
   		//in the case of indirect inputs, create the vector of input names here
   		if(!fsl_imageexists(inputfname.value().at(0))){
     		std::vector< string > tmpfnames;
@@ -229,7 +229,7 @@ MelodicOptions* MelodicOptions::gopt = NULL;
       		getline(fs,cline);
       		if(cline.length()>0)
 						tmpfnames.push_back(cline);
-    		}	
+    		}
     		fs.close();
     		inputfname.set_T(tmpfnames);
   		}
@@ -258,7 +258,7 @@ MelodicOptions* MelodicOptions::gopt = NULL;
   		// parse again so that options are logged
   		for(int a = 0; a < argc; a++)
     		logger.str() << argv[a] << " ";
-  			logger.str() << endl << "---------------------------------------------" 
+  			logger.str() << endl << "---------------------------------------------"
 					<< endl << endl;
   			message("Melodic results will be in " << logger.getDir() << endl << endl);
     }
@@ -283,7 +283,7 @@ void MelodicOptions::print_copyright(){
 
 void MelodicOptions::status(){
   cout << " version = " << version << endl;
- 
+
   cout << " logdir = "  << logdir.value() << endl;
   cout << " inputfname = "  << inputfname.value().at(0) << inputfname.value().at(inputfname.value().size()-1) << endl;
   cout << " outputfname = "  << outputfname.value() << endl;
@@ -292,7 +292,7 @@ void MelodicOptions::status(){
   cout << " paradigmfname = "  <<  paradigmfname.value() << endl;
   cout << " nonlinearity = "  << nonlinearity.value() << endl;
   cout << " approach = "  << approach.value() << endl;
-  
+
   cout << " pca_dim = "  << pca_dim.value() << endl;
   cout << " segment = "  << segment.value() << endl;
   cout << " numICs = "  << numICs.value() << endl;
@@ -305,7 +305,7 @@ void MelodicOptions::status(){
   cout << " smooth_probmap = "  << smooth_probmap.value() << endl;
   cout << " epsilon = "  << epsilon.value() << endl;
   cout << " threshold = "  << threshold.value() << endl;
-  
+
   cout << " help = "  << help.value() << endl;
   cout << " verbose = "  << verbose.value() << endl;
   cout << " vers = "  << vers.value() << endl;

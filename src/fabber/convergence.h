@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -71,7 +71,7 @@ class ConvergenceDetector {
   virtual bool Test(double F) = 0;  // to be called BEFORE each iteration
   virtual ~ConvergenceDetector() { return; }
   virtual void DumpTo(ostream& out, const string indent = "") const = 0;
-  virtual void Reset() = 0; 
+  virtual void Reset() = 0;
   virtual bool UseF() const = 0;
   virtual bool NeedSave() = 0;
   virtual bool NeedRevert() = 0;
@@ -79,15 +79,15 @@ class ConvergenceDetector {
 
 class CountingConvergenceDetector : public ConvergenceDetector {
   public:
-    virtual bool Test(double) 
+    virtual bool Test(double)
         { return ++its >= max; }
-    CountingConvergenceDetector(int maxIts) 
+    CountingConvergenceDetector(int maxIts)
         : max(maxIts) { assert(max>0); Reset(); }
       virtual void DumpTo(ostream& out, const string indent = "") const
         { out << indent << "Starting iteration " << its+1 << " of " << max << endl << endl; }
-    virtual void Reset() 
+    virtual void Reset()
         { its = 0; }
-    virtual bool UseF() const { return false; }        
+    virtual bool UseF() const { return false; }
     virtual bool NeedSave() { return false; }
     virtual bool NeedRevert() {return false; }
   private:
@@ -103,7 +103,7 @@ class FchangeConvergenceDetector : public ConvergenceDetector {
       virtual void DumpTo(ostream& out, const string indent = "") const;
     virtual void Reset()
         { its = 0; prev = -99e99; }
-    virtual bool UseF() const { return true; }      
+    virtual bool UseF() const { return true; }
     virtual bool NeedSave() { return false; }
     virtual bool NeedRevert() {return false; }
   private:
@@ -114,16 +114,16 @@ class FchangeConvergenceDetector : public ConvergenceDetector {
 };
 
 inline bool FchangeConvergenceDetector::Test(double F)
-{   
+{
 //    if (F == 1234.5678)
 //        throw logic_error("FchangeConvergenceDetector needs F, but it seems it isn't being calculated!  Internal bug... should have needF = true");
-        // F could actually be 1234.5678, but what are the chances of that?        
+        // F could actually be 1234.5678, but what are the chances of that?
     double diff = F - prev;
-    prev = F; 
+    prev = F;
     ++its;
-    
+
     diff = diff>0 ? diff : -diff;
-    
+
     return (its >= max) || (diff < chg);
 }
 
@@ -131,7 +131,7 @@ inline void FchangeConvergenceDetector::DumpTo(ostream& out, const string indent
 {
     out << indent << "Iteration " << its << " of at most " << max << endl;
     out << indent << "Previous Free Energy == " << prev << endl;
-} 
+}
 
 class FreduceConvergenceDetector : public ConvergenceDetector {
  public:
@@ -159,17 +159,17 @@ inline bool FreduceConvergenceDetector::Test(double F)
   prev = F;
   ++its;
   reason = "blank";
-  
+
   double absdiff = diff; //look at magnitude of diff in absdiff
   if(diff<0) {absdiff = -diff;}
 
   if (its >= max) {reason = "Max. Iterations Reached";}
   else if (diff < 0) {
-    reason = "F reduced - halt here"; 
+    reason = "F reduced - halt here";
     revert=true;
   }
   else if (absdiff < chg) {reason = "F Settled";}
-  
+
   return (its >= max) || (absdiff < chg) || (diff < 0);
 }
 
@@ -218,7 +218,7 @@ inline bool TrialModeConvergenceDetector::Test(double F)
 
   double absdiff = diff; //look at magnitude of diff in absdiff
   if(diff<0) {absdiff = -diff;}
-  
+
   //if we are not in trial mode
   if (!trialmode) {
     // if F has reduced then we will enter trial mode

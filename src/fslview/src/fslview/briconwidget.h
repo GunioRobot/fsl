@@ -29,19 +29,19 @@ class BriConWidget : public BriConWidgetBase, BriConObserver, OverlayListObserve
   Q_OBJECT
 public:
   typedef boost::shared_ptr< BriConWidget > Handle;
-  
+
   BriConWidget(QWidget *parent, OverlayList::Handle list);
   virtual ~BriConWidget();
 
   virtual void update(const BriCon *);
   virtual void update(const OverlayList* list, OverlayListMsg message);
-  
+
   void setMinMaxBoxesState(bool state);
   void setBriSliderState(bool state);
   void setConSliderState(bool state);
 
 private:
-  
+
   BriCon::Handle        m_bricon;
   OverlayList::Handle   m_list;
   //  bool         m_blockEvents;

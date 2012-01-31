@@ -1,4 +1,4 @@
-/* 
+/*
  * tkStubImg.c --
  *
  *	Stub object that will be statically linked into extensions that wish

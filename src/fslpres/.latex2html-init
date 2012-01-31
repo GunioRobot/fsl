@@ -5,4 +5,4 @@
 # Effective values are those greater than 0.
 # Sensible values are between 0.1 - 4.
 #
-$MATH_SCALE_FACTOR = 
+$MATH_SCALE_FACTOR =

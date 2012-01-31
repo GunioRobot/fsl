@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: AddErrInfo.3,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH Tcl_AddErrorInfo 3 8.0 Tcl "Tcl Library Procedures"
 .BS
@@ -121,7 +121,7 @@ instead of \fBTcl_AddObjErrorInfo\fR's counted string.
 The procedure \fBTcl_SetObjErrorCode\fR is used to set the
 \fBerrorCode\fR variable. \fIerrorObjPtr\fR contains a list object
 built up by the caller. \fBerrorCode\fR is set to this
-value. \fBTcl_SetObjErrorCode\fR is typically invoked just 
+value. \fBTcl_SetObjErrorCode\fR is typically invoked just
 before returning an error in an object command. If an error is
 returned without calling \fBTcl_SetObjErrorCode\fR or
 \fBTcl_SetErrorCode\fR the Tcl interpreter automatically sets

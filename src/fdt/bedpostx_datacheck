@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-if [ $# -lt 1 ]; then 
+if [ $# -lt 1 ]; then
     echo "Usage: $0 data_dir"
     exit 1;
 fi
@@ -30,16 +30,16 @@ if [ `${FSLDIR}/bin/imtest ${DIR}/data` -eq 1 ] && [ `${FSLDIR}/bin/imtest ${DIR
     dy=`${FSLDIR}/bin/fslval ${DIR}/data dim2`
     dz=`${FSLDIR}/bin/fslval ${DIR}/data dim3`
     dt=`${FSLDIR}/bin/fslval ${DIR}/data dim4`
-    
+
     nbmx=`${FSLDIR}/bin/fslval ${DIR}/nodif_brain_mask dim1`
     nbmy=`${FSLDIR}/bin/fslval ${DIR}/nodif_brain_mask dim2`
     nbmz=`${FSLDIR}/bin/fslval ${DIR}/nodif_brain_mask dim3`
-    
-    
-    if [ $dx -ne $nbmx ] || [ $dy -ne $nbmy ] || [ $dz -ne $nbmz ];then 
+
+
+    if [ $dx -ne $nbmx ] || [ $dy -ne $nbmy ] || [ $dz -ne $nbmz ];then
 	echo "data dimensions do not match mask dimensions"
     fi
-    
+
     bvallenw=`cat ${DIR}/bvals|wc -w`
     bvallenl=`cat ${DIR}/bvals|grep -v "^[ 	]*$"|wc -l`
     bvallen=`echo "$bvallenw / $bvallenl"|bc`
@@ -55,17 +55,17 @@ if [ `${FSLDIR}/bin/imtest ${DIR}/data` -eq 1 ] && [ `${FSLDIR}/bin/imtest ${DIR
     if [ $bvallenl -ge 2 -a $bvallen -ge 2 ];then
 	echo "bvals is not 1xN or Nx1 format"
     fi
- 
+
     if [ $bveclen -ne $bvallenw -a $bveclenl -ne $bvallenw ];then
 	echo "bvecs and bvals are incompatible"
     fi
 
-    if [ $bvallenw -ne $dt ];then 
+    if [ $bvallenw -ne $dt ];then
 	echo "number of elements in bvals is not equal to number of vols in data"
     fi
 
-    if [ $bveclen -ne $dt -a $bveclenl -ne $dt ];then 
+    if [ $bveclen -ne $dt -a $bveclenl -ne $dt ];then
 	echo "number of vectors in bvecs is not equal to number of vols in data"
     fi
-	
+
 fi

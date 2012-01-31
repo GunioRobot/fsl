@@ -131,7 +131,7 @@
 # Description:
 #	A `collapsible' widget is one that is packed into its parent's frame
 #	only on demand.  It appears on the screen as an arrow (pointing right
-#	or downward) at upper left, a title at upper center, and the widget 
+#	or downward) at upper left, a title at upper center, and the widget
 #	itself at lower right.  The arrow is a button. Invoking the button
 #	toggles the state of the widget between being visible and invisible
 #	by packing it or unpacking it.
@@ -190,7 +190,7 @@ proc collapsible {type w args} {
 		[label $w.t -text $title] \
 				{top frame w}
 
-	eval [list $type $w.b] $fargs	
+	eval [list $type $w.b] $fargs
 
 	if {$visible} {
 		collapsible_show $w

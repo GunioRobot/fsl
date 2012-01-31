@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
-    melpca.cc - PCA and whitening 
+
+    melpca.cc - PCA and whitening
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,13 +85,13 @@ using namespace NEWIMAGE;
 
 namespace Melodic{
 
-  void MelodicPCA::perf_pca(Matrix& in, Matrix& weights){    
+  void MelodicPCA::perf_pca(Matrix& in, Matrix& weights){
   	message("Starting PCA  ... ");
 
     Matrix Corr;
     Matrix tmpE;
     RowVector tmpD, AdjEV, PercEV;
-   
+
 	if(opts.paradigmfname.value().length()>0)
 	{
 		basicGLM tmpglm;
@@ -100,28 +100,28 @@ namespace Melodic{
 //		std_pca(in,weights,Corr,tmpE,tmpD,melodat.get_param());
 	}
 	else{
- 		std_pca(in,weights,Corr,tmpE,tmpD); 
-	}	
-	
+ 		std_pca(in,weights,Corr,tmpE,tmpD);
+	}
+
     if(opts.tsmooth.value()){
       message(endl << "  temporal smoothing of Eigenvectors " << endl);
       tmpE=smoothColumns(tmpE);
     }
-   
+
     adj_eigspec(tmpD,AdjEV,PercEV);
     melodat.set_pcaE(tmpE);
     melodat.set_pcaD(tmpD);
-    melodat.set_EVP(PercEV); 
+    melodat.set_EVP(PercEV);
     melodat.set_EV((AdjEV));
     write_ascii_matrix(logger.appendDir("eigenvalues_percent"),PercEV);
-   
+
     message("done" << endl);
   }
-  
+
   void MelodicPCA::perf_white(){
-    int N = melodat.get_pcaE().Ncols();    
+    int N = melodat.get_pcaE().Ncols();
     if(opts.pca_dim.value() > N){
-      message("dimensionality too large - using -dim " << N << 
+      message("dimensionality too large - using -dim " << N <<
               " instead " << endl);
       opts.pca_dim.set_T(N);
     }
@@ -152,10 +152,10 @@ namespace Melodic{
     float varp = 1.0;
 
 	if (opts.paradigmfname.value().length()>0)
-	    varp = calc_white(melodat.get_pcaE(),melodat.get_pcaD(), 
+	    varp = calc_white(melodat.get_pcaE(),melodat.get_pcaD(),
     		melodat.get_EVP(),opts.pca_dim.value(),melodat.get_param(),melodat.get_paramS(),tmpWhite,tmpDeWhite);
 	else
-		varp = calc_white(melodat.get_pcaE(),melodat.get_pcaD(), 
+		varp = calc_white(melodat.get_pcaE(),melodat.get_pcaD(),
     		melodat.get_EVP(),opts.pca_dim.value(),tmpWhite,tmpDeWhite);
 
     melodat.set_white(tmpWhite);
@@ -165,21 +165,21 @@ namespace Melodic{
   }
 
   int MelodicPCA::pcadim()
-  { 
+  {
     message("Estimating the number of sources from the data (PPCA) ..." << endl);
 
-    ColumnVector PPCA; RowVector AdjEV, PercEV;   
-    int res = ppca_dim(melodat.get_Data(),melodat.get_RXweight(), PPCA, 
+    ColumnVector PPCA; RowVector AdjEV, PercEV;
+    int res = ppca_dim(melodat.get_Data(),melodat.get_RXweight(), PPCA,
 			AdjEV, PercEV, melodat.get_resels(), opts.pca_est.value());
-     
-    write_ascii_matrix(logger.appendDir("PPCA"),PPCA);			      
+
+    write_ascii_matrix(logger.appendDir("PPCA"),PPCA);
     write_ascii_matrix(logger.appendDir("eigenvalues_adjusted"),AdjEV.t());
     write_ascii_matrix(logger.appendDir("eigenvalues_percent"),PercEV.t());
 
     melodat.set_EVP(PercEV);
     melodat.set_EV(AdjEV);
     melodat.set_PPCA(PPCA);
-    
+
     return res;
   }
 

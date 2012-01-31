@@ -21,10 +21,10 @@ namespace boost { namespace fusion
     template <typename SingleView>
     struct single_view_iterator;
 
-    namespace single_view_detail 
+    namespace single_view_detail
     {
         template<typename Iterator>
-        struct next_traits_impl 
+        struct next_traits_impl
         {
             typedef single_view_iterator_end<
                 typename Iterator::single_view_type>

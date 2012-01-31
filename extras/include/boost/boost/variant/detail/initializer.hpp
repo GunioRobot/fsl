@@ -125,7 +125,7 @@ public: // static functions
 
 #else // defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) 
+#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
     #define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS \
           BOOST_VARIANT_ENUM_PARAMS(typename recursive_enabled_T) \

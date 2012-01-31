@@ -1,23 +1,23 @@
 //     fslhd.cc - show image header
 //     Steve Smith, Mark Jenkinson and Matthew Webster, FMRIB Image Analysis Group
-//     Copyright (C) 2000-2005 University of Oxford  
+//     Copyright (C) 2000-2005 University of Oxford
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -29,13 +29,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -46,7 +46,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -68,7 +68,7 @@
 #include <iostream>
 using namespace NEWIMAGE;
 
-void print_usage(const string& progname) 
+void print_usage(const string& progname)
 {
   cout << endl;
   cout << "Usage: fslhd [-x] <input>" << endl;
@@ -99,38 +99,38 @@ void ShowHdr(char *fileName, FSLIO* fslio)
   mat44 mat;
   int icode, jcode, kcode;
 
-  if (fslio == NULL) 
+  if (fslio == NULL)
   {
     cerr << "ERROR: Could not open file" << endl;;
     return;
   }
 
   ft = FslGetFileType(fslio);
-  if (FslBaseFileType(ft)==FSL_TYPE_MINC) 
+  if (FslBaseFileType(ft)==FSL_TYPE_MINC)
   {
     cerr << "ERROR: Minc is not currently supported" << endl;
     return;
   }
 
-  if (fslio->niftiptr == NULL) 
+  if (fslio->niftiptr == NULL)
   {
     cerr << "ERROR: Not an Analyze or Nifti file" << endl;
     return;
   }
-  //-------------------- ANALYZE CASE ----------------------- 
-  if (FslBaseFileType(ft)==FSL_TYPE_ANALYZE) 
-  { 
-    isanalyze=1; 
-    //load raw hdr structure   
+  //-------------------- ANALYZE CASE -----------------------
+  if (FslBaseFileType(ft)==FSL_TYPE_ANALYZE)
+  {
+    isanalyze=1;
+    //load raw hdr structure
     hdr = (struct dsr *)calloc(1,sizeof(struct dsr));
     FslReadRawHeader(hdr,fslio->niftiptr->fname);
-    if (fslio->niftiptr->byteorder != nifti_short_order()) 
+    if (fslio->niftiptr->byteorder != nifti_short_order())
     {
       cout << "Byte swapping" << endl;
       AvwSwapHeader(hdr);
     }
     cout << "filename       " << fileName << endl << endl;
-    
+
     //Header Key
     cout << "sizeof_hdr     " << hdr->hk.sizeof_hdr<< endl;
     cout << "data_type      " << hdr->hk.data_type << endl;
@@ -139,7 +139,7 @@ void ShowHdr(char *fileName, FSLIO* fslio)
     cout << "session_error  " << hdr->hk.session_error << endl;
     cout << "regular        " << hdr->hk.regular << endl;
     cout << "hkey_un0       " << hdr->hk.hkey_un0 << endl;
-    //Image Dimension 
+    //Image Dimension
     for(i=0;i<8;i++) cout << "dim" << i << "           " << hdr->dime.dim[i] << endl;
     cout << "vox_units      " << hdr->dime.vox_units << endl;
     cout << "cal_units      " << hdr->dime.cal_units << endl;
@@ -147,8 +147,8 @@ void ShowHdr(char *fileName, FSLIO* fslio)
     cout << "datatype       " << hdr->dime.datatype << endl;
     cout << "bitpix         " << hdr->dime.bitpix << endl;
     cout.setf(ios::fixed);  //need cout.setf(ios::fixed) instead of << fixed in stream for tru64 comp
-    for(i=0;i<8;i++) cout << "pixdim" << i << "        " << setprecision(10) << hdr->dime.pixdim[i] << endl;       
-    cout.precision(4);                                   
+    for(i=0;i<8;i++) cout << "pixdim" << i << "        " << setprecision(10) << hdr->dime.pixdim[i] << endl;
+    cout.precision(4);
     cout << "vox_offset     " << setw(6) << hdr->dime.vox_offset << endl;
     cout << "funused1       " << setw(6) << hdr->dime.funused1 << endl;
     cout << "funused2       " << setw(6) << hdr->dime.funused2 << endl;
@@ -159,7 +159,7 @@ void ShowHdr(char *fileName, FSLIO* fslio)
     cout << "verified       " << hdr->dime.verified << endl;
     cout << "glmax          " << hdr->dime.glmax << endl;
     cout << "glmin          " << hdr->dime.glmin << endl ;
-    //Data History 
+    //Data History
     cout << "descrip        " <<  hdr->hist.descrip << endl;
     cout << "aux_file       " <<  hdr->hist.aux_file << endl;
     cout << "orient         " << (int)hdr->hist.orient << endl; //need cast else blank
@@ -172,7 +172,7 @@ void ShowHdr(char *fileName, FSLIO* fslio)
       cout << "origin3        " << blah[2] << endl;
       }*/
     cout << "origin1        " << (short)hdr->hist.originator[0] << endl; //These lines don't work on
-    cout << "origin2        " << (short)hdr->hist.originator[2] << endl; //all platforms... but WHICH 
+    cout << "origin2        " << (short)hdr->hist.originator[2] << endl; //all platforms... but WHICH
     cout << "origin3        " << (short)hdr->hist.originator[4] << endl; //ones - that is the question
     cout << "generated      " << hdr->hist.generated << endl;
     cout << "scannum        " << hdr->hist.scannum << endl;
@@ -193,8 +193,8 @@ void ShowHdr(char *fileName, FSLIO* fslio)
     return;
   }
     /* -------------------- NIFTI CASE ----------------------- */
-  if (fslio->niftiptr->byteorder != nifti_short_order()) 
-  { 
+  if (fslio->niftiptr->byteorder != nifti_short_order())
+  {
     cout << "Byte swapping" << endl;
   }
 
@@ -249,7 +249,7 @@ void ShowHdr(char *fileName, FSLIO* fslio)
   cout << "sform_zorient  " << nifti_orientation_string(kcode) << endl;
   cout << "file_type      " << FslFileTypeString(fslio->niftiptr->nifti_type) << endl;
   cout << "file_code      " << fslio->niftiptr->nifti_type << endl;
-  //Data History 
+  //Data History
   cout << "descrip        " << fslio->niftiptr->descrip << endl;
   cout << "aux_file       " << fslio->niftiptr->aux_file << endl;
   /*cout << "orient         %d\n", hdr->hist.orient); */
@@ -259,22 +259,22 @@ void ShowHdr(char *fileName, FSLIO* fslio)
 
 int main(int argc,char *argv[])
 {
-  if (argc < 2) 
+  if (argc < 2)
   {
     print_usage(string(argv[0]));
-    return 1; 
+    return 1;
   }
   FSLIO* fslio=NULL;
   int argval=1, niftiform=0;
-  if (strcmp(argv[1],"-x")==0) 
+  if (strcmp(argv[1],"-x")==0)
   {
       niftiform=1;
       argval=2;
   }
   fslio = FslOpen(FslMakeBaseName(argv[argval]),"rb");
   FslClose(fslio);
-  if (niftiform==0) ShowHdr(argv[argval], fslio); 
-  else ShowNifti(fslio); 
+  if (niftiform==0) ShowHdr(argv[argval], fslio);
+  else ShowNifti(fslio);
   return 0;
 }
 

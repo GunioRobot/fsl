@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2008 University of Oxford 
+// Copyright (C) 2008 University of Oxford
 //
 
 #include <string>
@@ -28,7 +28,7 @@ using namespace NEWMAT;
 using namespace NEWIMAGE;
 using namespace mesh;
 
-PointList::PointList(const std::string& pfname, const std::string& ifname) : _pfname(pfname), _ifname(ifname) 
+PointList::PointList(const std::string& pfname, const std::string& ifname) : _pfname(pfname), _ifname(ifname)
 {
   _affine = IdentityMatrix(4);
 
@@ -50,7 +50,7 @@ PointList::PointList(const std::string& pfname, const std::string& ifname) : _pf
     if (PointList::read_ascii_file(pfname)<0) {
       throw PointListException(string("PointList: Can not read text-file: ")+pfname);
     }
-  }  
+  }
 }
 
 NEWMAT::ReturnMatrix PointList::Point(unsigned int indx, bool one_ext) const
@@ -103,7 +103,7 @@ void PointList::SetAffine(const NEWMAT::Matrix& aff)
   _affine = aff;
 }
 
-// This routine reads a list of points from a text-file that 
+// This routine reads a list of points from a text-file that
 // the user has (presumably) entered manually. It will be assumed
 // that the user has used fslview to deduce these points, and that
 // he/she has entered the coordinates from the second column of the
@@ -128,7 +128,7 @@ int PointList::read_ascii_file(const std::string& fname)
       _points.Column(i) = pt.Rows(1,3);
     }
   }
-  else _points = pl;  
+  else _points = pl;
   return(1);
 }
 
@@ -149,12 +149,12 @@ int PointList::read_first_file(const std::string& fname)
     for (vector<Mpoint *>::iterator i=pl._points.begin(); i!=pl._points.end(); i++) {
       int indx = (*i)->get_no();
       Pt p = pl.get_point(indx)->get_coord();
-      _points(1,indx+1) = p.X; _points(2,indx+1) = p.Y; _points(3,indx+1) = p.Z; 
+      _points(1,indx+1) = p.X; _points(2,indx+1) = p.Y; _points(3,indx+1) = p.Z;
     }
     return(1);
   }
   catch (const std::exception& error) {
-    cerr << "PointList::read_first_file: Exception thrown with message: " << error.what() << endl; 
+    cerr << "PointList::read_first_file: Exception thrown with message: " << error.what() << endl;
     return(-1);
   }
   return(-1);

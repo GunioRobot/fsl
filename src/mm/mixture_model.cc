@@ -7,20 +7,20 @@ Copyright (C) 1999-2000 University of Oxford  */
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@ Copyright (C) 1999-2000 University of Oxford  */
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@ Copyright (C) 1999-2000 University of Oxford  */
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -93,7 +93,7 @@ void matout(const Matrix& mat, const string& name)
   for(int z = 1; z <= mat.Nrows(); z++)
     {
       for(int y = 1; y <= mat.Ncols(); y++)
-	{      
+	{
 	  cout<< mat(z,y);
 	  if(y<mat.Ncols())
 	    cout << " ";
@@ -121,10 +121,10 @@ namespace Mm {
     os.setf(ios::internal, ios::adjustfield);
     os << f;
     return os.str();
-  } 
+  }
 
   bool GammaDistribution::validate() {
-    
+
     if(var<=0)
       return false;
 
@@ -146,7 +146,7 @@ namespace Mm {
     }
 
   bool FlippedGammaDistribution::validate() {
-        
+
     if(var<=0)
       return false;
 
@@ -155,13 +155,13 @@ namespace Mm {
 	  {
 	    return false;
 	  }
-	
+
 	// want mode to be !positive!
 	float mode = abs(mn) - var/abs(mn);
-	
+
 	if(mode <= std::abs(minmode))
 	  {
-	    return false;	    
+	    return false;
 	  }
 
 	return true;
@@ -182,10 +182,10 @@ namespace Mm {
 //     OUT(w);
 
     for(int c=1; c <= nclasses; c++)
-      {     
+      {
 	h += w(c)*dists[c-1]->pdf(data);
       }
-   
+
     if(h<=0) {
 //       OUT(w);
 //       OUT(h);
@@ -228,12 +228,12 @@ namespace Mm {
 // 	  if(mask(x,y,z))
 // 	    {
 // 	      int xi=0,yi=0,zi=0;
-// 	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+// 	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 // 		{
 // 		  xi = x+connected_offsets[i].x;
 // 		  yi = y+connected_offsets[i].y;
 // 		  zi = z+connected_offsets[i].z;
-		  		  
+
 // 		  if(mask(xi,yi,zi))
 // 		    {
 // 		      for(int c = 0; c < nclasses; c++)
@@ -249,11 +249,11 @@ namespace Mm {
 
     // likelihood terms stuff:
     //    float A = 1.0/std::sqrt(2*M_PI);
-    
+
     for(int r = 1; r<=num_superthreshold; r++)
-      {       
+      {
 	float h = 0;
-       
+
 	RowVector wtilde(nclasses);
 	wtilde = 0;
 
@@ -270,7 +270,7 @@ namespace Mm {
 // 	    OUT(c);
 // 	    OUT(dists[c-1]->pdf(data(r)));
 	  }
-       
+
 	if(h<=0) {
 // 	  OUT(w);
 // 	  OUT(h);
@@ -286,8 +286,8 @@ namespace Mm {
   ReturnMatrix SmmFunction::g_evaluate(const ColumnVector& m_tildew) const
   {
     Tracer_Plus trace("SmmFunction::g_evaluate");
-        
-    //    float A = 1.0/std::sqrt(2*M_PI);        
+
+    //    float A = 1.0/std::sqrt(2*M_PI);
     ColumnVector derivative_tilde(num_superthreshold*nclasses);
     derivative_tilde = 0;
 
@@ -306,23 +306,23 @@ namespace Mm {
 // 	      derivsum = 0;
 
 // 	      int xi=0,yi=0,zi=0;
-// 	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+// 	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 // 		{
 // 		  xi = x+connected_offsets[i].x;
 // 		  yi = y+connected_offsets[i].y;
 // 		  zi = z+connected_offsets[i].z;
-		  		  
+
 // 		  if(mask(xi,yi,zi))
 // 		    {
 // 		      for(int c = 0; c < nclasses; c++)
-// 			{  
-// 			  derivsum(c+1) +=  m_tildew(c*num_superthreshold+indices(x,y,z)) - m_tildew(c*num_superthreshold+indices(xi,yi,zi)); 
+// 			{
+// 			  derivsum(c+1) +=  m_tildew(c*num_superthreshold+indices(x,y,z)) - m_tildew(c*num_superthreshold+indices(xi,yi,zi));
 // 			}
 // 		    }
 // 		}
 
 // 	      for(int c = 0; c < nclasses; c++)
-// 		{		  
+// 		{
 // 		  derivative_tilde(c*num_superthreshold+indices(x,y,z)) += derivsum(c+1)*mrf_precision;
 // 		}
 // 	    }
@@ -334,25 +334,25 @@ namespace Mm {
 	RowVector wtildetmp(nclasses);
 	wtildetmp = 0;
 	for(int c=1; c <= nclasses; c++)
-	  {	
+	  {
 	    // calculate terms for use in calculating hessian and deriv of likelihood:
 	    wtildetmp(c) = m_tildew((c-1)*num_superthreshold+r);
 	  }
 
 	// LT of y = LT of demean(y)
-	    
+
 	const RowVector wtilde = wtildetmp - mean(wtildetmp,2).AsScalar();
-		
+
 	RowVector w = logistic_transform(wtilde,lambda,log_bound);
-	
+
 	vector<double> R(nclasses,0);
-	
+
 	double P = 0;
 	float h = 0;
 	//float Q = 0;
 
 	for(int c=1; c <= nclasses; c++)
-	  {	
+	  {
 	    // calculate terms for use in deriv of likelihood:
 	    h += w(c)*dists[c-1]->pdf(data(r));
 	    R[c-1] = boundexp(wtilde(c)/(lambda*log_bound));
@@ -367,14 +367,14 @@ namespace Mm {
 	// calculate dw/dy and dy/dx
 	vector<ColumnVector> dwdy(nclasses);
 	for(int k=1; k <= nclasses; k++)
-	  {	
+	  {
 	    dwdy[k-1].ReSize(nclasses);
 	    dwdy[k-1] = 0;
 //  	    dydx[k-1].ReSize(nclasses);
 //  	    dydx[k-1] = 0;
-	   
+
 	    for(int c2=1; c2 <= nclasses; c2++)
-	      {		
+	      {
 		if(c2==k)
 		  {
 		    dwdy[k-1](k) = R[k-1]*(1-R[k-1]/P)/(lambda*log_bound*P);
@@ -382,23 +382,23 @@ namespace Mm {
 		else
 		  {
 		    dwdy[k-1](c2) = -R[k-1]*R[c2-1]/(lambda*log_bound*Sqr(P));
-		  }	       
+		  }
 	      }
 	  }
 
 	// calculate df/dw
 	ColumnVector dfdw(nclasses);
-	dfdw = 0;       
+	dfdw = 0;
 
 	for(int c=1; c <= nclasses; c++)
 	  {
 	    dfdw(c) = -dists[c-1]->pdf(data(r))/h;
 	  }
-           
+
     	// Now fill up derivative vector for tildew (aka x) for this voxel
 	ColumnVector derivanal(nclasses);
 	derivanal = 0;
-	
+
 	for(int k=1; k <= nclasses; k++)
 	  {
 	    float sum_l = 0;
@@ -406,7 +406,7 @@ namespace Mm {
 	      {
 		sum_l += dfdw(l)*dwdy[l-1](k);
 	      }
-	    
+
 	    derivanal(k) = sum_l;
 	  }
 
@@ -420,7 +420,7 @@ namespace Mm {
 
 //     OUT(derivative_tilde.Rows(1,10).t());
     derivative_tilde.Release();
-    
+
     return derivative_tilde;
   }
 
@@ -446,12 +446,12 @@ namespace Mm {
       {
 	RowVector wtilde(nclasses);
 	wtilde = 0;
-	
+
 	for(int c=0; c < nclasses; c++)
 	  {
 	    wtilde(c+1) = m_tildew(c*num_superthreshold+r);
 	  }
-	
+
 	//	OUT(wtilde);
 	w[r-1] = logistic_transform(wtilde,lambda,log_bound);
 	//OUT(w);
@@ -476,11 +476,11 @@ namespace Mm {
 
     // likelihood terms stuff:
     //    float A = 1.0/std::sqrt(2*M_PI);
-    
+
     for(int r = 1; r<=num_superthreshold; r++)
-      {       
+      {
 	float h = 0;
-       
+
 	for(int c=1; c <= nclasses; c++)
 	  {
 	    h += w[r-1](c)*dists[c-1]->pdf(data(r));
@@ -490,7 +490,7 @@ namespace Mm {
 	ret += -std::log(h);
       }
 
- 
+
     return ret;
   }
 
@@ -501,27 +501,27 @@ namespace Mm {
     // get dists params from passed in vector
     for(int c = 0; c < nclasses; c++)
       {
-	dists[c]->setparams(x(c*2+1),x(c*2+2),1);	
-      }      
+	dists[c]->setparams(x(c*2+1),x(c*2+2),1);
+      }
 
     // likelihood terms stuff:
-    ColumnVector meansum(nclasses); 
+    ColumnVector meansum(nclasses);
     meansum = 0.0;
-    ColumnVector varsum(nclasses); 
+    ColumnVector varsum(nclasses);
     varsum = 0.0;
     for(int r = 1; r<=num_superthreshold; r++)
-      {		
+      {
 	float h = 0;
 
 	//float Q = 0;
 
 	for(int c=1; c <= nclasses; c++)
-	  {	
+	  {
 	    // calculate terms for use in deriv of likelihood:
 	    float mult=1;
 	    //	    if(dists[c-1]->flipped) mult=-1;
-	    h += w[r-1](c)*mult*dists[c-1]->pdf(data(r));	    
-	  }	
+	    h += w[r-1](c)*mult*dists[c-1]->pdf(data(r));
+	  }
 
 	for(int c=1; c <= nclasses; c++)
 	  {
@@ -529,19 +529,19 @@ namespace Mm {
 	    varsum(c) += -w[r-1](c)*dists[c-1]->dpdfdvar(data(r))/h;
 	  }
       }
-	
+
     ColumnVector derivative_tilde(nclasses*2);
     derivative_tilde = 0;
-    
+
     for(int c = 0; c < nclasses; c++)
-      {	
+      {
 	derivative_tilde(c*2+1) = meansum(c+1);
 	derivative_tilde(c*2+2) = varsum(c+1);
       }
 
-    
+
     derivative_tilde.Release();
-    
+
     return derivative_tilde;
   }
 
@@ -557,13 +557,13 @@ namespace Mm {
     epibt(pepibt),
     localweights(),
     connected_offsets(),
-    indices(pmask.xsize(),pmask.ysize(),pmask.zsize()),    
+    indices(pmask.xsize(),pmask.ysize(),pmask.zsize()),
     Y(pY),
     D(),
     m_tildew(),
     mrf_precision(popts.mrfprecstart.value()),
     nonspatial(popts.nonspatial.value()),
-    niters(popts.niters.value()),  
+    niters(popts.niters.value()),
     stopearly(),
     updatetheta(popts.updatetheta.value()),
     debuglevel(popts.debuglevel.value()),
@@ -632,8 +632,8 @@ namespace Mm {
 
   void Mixture_Model::run()
   {
-    Tracer_Plus trace("Mixture_Model::run");    
-    
+    Tracer_Plus trace("Mixture_Model::run");
+
 //  	float mrf_precision_saved = mrf_precision;
 	//	mrf_precision = 10;
 
@@ -642,14 +642,14 @@ namespace Mm {
 	for(it=1; it<=niters; it++)
 	  {
 	    OUT(it);
-	    
+
 	    calculate_taylor_lik();
 	    update_voxel_tildew_vb();
 
 // 	    if(it==20) mrf_precision = mrf_precision_saved;
 
 	    if(!fixmrfprec)// && it>20 )
-	      {		
+	      {
 		OUT("Calculating trace");
 		calculate_trace_tildew_D();
 
@@ -659,26 +659,26 @@ namespace Mm {
 		OUT(mrf_precision);
 	      }
 
-	    if(updatetheta)	    
+	    if(updatetheta)
 	      {
 		OUT("Updating distribution params");
 		update_theta();
-	      }	    	    	  
+	      }
 
  //  	    save_weights(volinfo,m_tildew,num2str(it).c_str(),true);
 
 	    cout << "Iterations=" << it << endl;
-	  }        
-      
+	  }
+
   }
 
 
   void Mixture_Model::setup()
   {
     Tracer_Plus trace("Mixture_Model::setup");
-    
+
     trace_tol = 0.0001;
-    scg_tol = 0.001;  
+    scg_tol = 0.001;
 
     if(niters<0)
       {
@@ -691,26 +691,26 @@ namespace Mm {
     // setup lattice:
     localweights.reinitialize(mask.xsize(),mask.ysize(),mask.zsize(),6);
     localweights = 0;
-  
+
     for(int x = 0; x < mask.xsize(); x++)
       for(int y = 0; y < mask.ysize(); y++)
 	for(int z = 0; z < mask.zsize(); z++)
 	  if(mask(x,y,z))
 	    {
 	      num_superthreshold++;
-	      
+
 	      int xi,yi,zi;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      if(epibt > 0)
 			{
-			  localweights(x,y,z,connected_offsets[i].ind) = exp(-Sqr(epi_example_data(xi,yi,zi)-epi_example_data(x,y,z))/(2*epibt*epibt));			  
+			  localweights(x,y,z,connected_offsets[i].ind) = exp(-Sqr(epi_example_data(xi,yi,zi)-epi_example_data(x,y,z))/(2*epibt*epibt));
 			}
 		      else
 			{
@@ -718,8 +718,8 @@ namespace Mm {
 			}
 		    }
 		}
-	    }   
-      
+	    }
+
     OUT(nclasses);
     OUT(num_superthreshold);
     OUT(niters);
@@ -732,7 +732,7 @@ namespace Mm {
     OUT(lambda);
     OUT(log_bound);
 
-    w_means.resize(nclasses);    
+    w_means.resize(nclasses);
     indices = 0;
     int index=1;
     Y.ReSize(num_superthreshold);
@@ -752,9 +752,9 @@ namespace Mm {
 	cov_tildew[c] = 0;
 
       }
-    
+
     precision_lik.ReSize(num_superthreshold*nclasses,num_superthreshold*nclasses);
- 
+
 //     derivative_tildew.ReSize(num_superthreshold*nclasses);
 //     derivative_tildew = 0;
     derivative_lik.ReSize(num_superthreshold*nclasses);
@@ -768,19 +768,19 @@ namespace Mm {
 
     for(int c = 1; c <= nclasses; c++)
       dists[c-1]->setuseprop(true);
-    
-    for(int z = 0; z < mask.zsize(); z++)    
-      for(int y = 0; y < mask.ysize(); y++)	
+
+    for(int z = 0; z < mask.zsize(); z++)
+      for(int y = 0; y < mask.ysize(); y++)
 	for(int x = 0; x < mask.xsize(); x++)
 	  if(mask(x,y,z))
 	    {
 	      int xi=0,yi=0,zi=0;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      num_neigbours(index) += localweights(x,y,z,connected_offsets[i].ind);
@@ -805,21 +805,21 @@ namespace Mm {
 	      float minprob = 1e32;
 
 	      float sumprob = 0;
-	
+
 	      for(int c = 1; c <= nclasses; c++)
-		{	    
+		{
 		  probs(c) = dists[c-1]->pdf(tmp);
 		  sumprob += probs(c);
 
 		  if(probs(c) > maxprob) {
 		    maxc = c;
 		    maxprob = probs(c);
-		  }	    	    
+		  }
 
 		  if(probs(c) < minprob) {
 		    minc = c;
 		    minprob = probs(c);
-		  }	    	    
+		  }
 		}
 
 	      maxcsmap(x,y,z)=maxc;
@@ -829,12 +829,12 @@ namespace Mm {
 	    }
 
     save_volume(maxcsmap, LogSingleton::getInstance().appendDir("maxcsmap"));
-	
+
     volume<int> maxcsmapnew;
     maxcsmapnew=maxcsmap;
 
-    for(int z = 0; z < mask.zsize(); z++)    
-      for(int y = 0; y < mask.ysize(); y++)	
+    for(int z = 0; z < mask.zsize(); z++)
+      for(int y = 0; y < mask.ysize(); y++)
 	for(int x = 0; x < mask.xsize(); x++)
 	  if(mask(x,y,z))
 	    {
@@ -842,12 +842,12 @@ namespace Mm {
 	      RowVector count(nclasses);
 	      count=0;
 	      int xi=0,yi=0,zi=0;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      count(int(maxcsmap(xi,yi,zi)))++;
@@ -856,17 +856,17 @@ namespace Mm {
 
 	      maxcsmapnew(x,y,z)=maxcsmap(x,y,z);
 
-	      // assign voxel to its own class if number of voxels in 
+	      // assign voxel to its own class if number of voxels in
 	      // neighbourhood is gt 1
 	      // otherwise assign to class with greatest no of voxels
-	      //  if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)		 
-// 	      if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)	  
+	      //  if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)
+// 	      if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)
 // 		{
 // 		  int tmpmax=1;
 // 		  int tmpmaxindex=1;
 // 		  for(int c = 1; c <= nclasses; c++)
 // 		    {
-// 		      if(count(c)>tmpmax) 
+// 		      if(count(c)>tmpmax)
 // 			{
 // 			  tmpmaxindex=c;
 // 			  tmpmax=int(count(c));
@@ -877,15 +877,15 @@ namespace Mm {
 // 		}
 
 	    }
- 
+
     save_volume(maxcsmapnew, LogSingleton::getInstance().appendDir("maxcsmapnew"));
 
     // second erosion
     ColumnVector maxcs(num_superthreshold);
     maxcs = 0;
- 
-    for(int z = 0; z < mask.zsize(); z++)    
-      for(int y = 0; y < mask.ysize(); y++)	
+
+    for(int z = 0; z < mask.zsize(); z++)
+      for(int y = 0; y < mask.ysize(); y++)
 	for(int x = 0; x < mask.xsize(); x++)
 	  if(mask(x,y,z))
 	    {
@@ -893,12 +893,12 @@ namespace Mm {
 	      RowVector count(nclasses);
 	      count=0;
 	      int xi=0,yi=0,zi=0;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      count(int(maxcsmapnew(xi,yi,zi)))++;
@@ -907,17 +907,17 @@ namespace Mm {
 
 	      maxcs(int(indices(x,y,z)))=maxcsmapnew(x,y,z);
 
-	      // assign voxel to its own class if number of voxels in 
+	      // assign voxel to its own class if number of voxels in
 	      // neighbourhood is gt 1
 	      // otherwise assign to class with greatest no of voxels
-	      //  if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)		 
-// 	      if(count(int(maxcsmapnew(x,y,z)))<2 && !nonspatial)	  
+	      //  if(count(int(maxcsmap(x,y,z)))<2 && !nonspatial)
+// 	      if(count(int(maxcsmapnew(x,y,z)))<2 && !nonspatial)
 // 		{
 // 		  int tmpmax=1;
 // 		  int tmpmaxindex=1;
 // 		  for(int c = 1; c <= nclasses; c++)
 // 		    {
-// 		      if(count(c)>tmpmax) 
+// 		      if(count(c)>tmpmax)
 // 			{
 // 			  tmpmaxindex=c;
 // 			  tmpmax=int(count(c));
@@ -927,34 +927,34 @@ namespace Mm {
 
 // 		  // final erosion result
 // 		  maxcs(int(indices(x,y,z)))=tmpmaxindex;
-		  
+
 // 		}
 	    }
- 
+
     for(int z = 0; z < mask.zsize(); z++)
       for(int y = 0; y < mask.ysize(); y++)
 	for(int x = 0; x < mask.xsize(); x++)
 	  if(mask(x,y,z))
 	    {
 	      int xi=0,yi=0,zi=0;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      for(int c = 0; c < nclasses; c++)
 			{
 			  // this gives same as sumpairs:
 //  			  D.insert(c*num_superthreshold+indices(x,y,z),c*num_superthreshold+indices(xi,yi,zi), -1.0);
-//  			  D.insert(c*num_superthreshold+indices(xi,yi,zi),c*num_superthreshold+indices(x,y,z), -1.0);	 
+//  			  D.insert(c*num_superthreshold+indices(xi,yi,zi),c*num_superthreshold+indices(x,y,z), -1.0);
 
 			  float val = std::sqrt(num_neigbours(indices(x,y,z))*num_neigbours(indices(xi,yi,zi)));
 			  D.insert(c*num_superthreshold+indices(x,y,z),c*num_superthreshold+indices(xi,yi,zi), -1.0/val);
- 			  D.insert(c*num_superthreshold+indices(xi,yi,zi),c*num_superthreshold+indices(x,y,z), -1.0/val);	 
-			  
+ 			  D.insert(c*num_superthreshold+indices(xi,yi,zi),c*num_superthreshold+indices(x,y,z), -1.0/val);
+
 			}
 		    }
 		}
@@ -962,11 +962,11 @@ namespace Mm {
 	      for(int c = 0; c < nclasses; c++)
 		//this gives same as sumpairs:
 // 		D.insert(c*num_superthreshold+indices(x,y,z),c*num_superthreshold+indices(x,y,z),num_neigbours(indices(x,y,z)));
-		
+
 		D.insert(c*num_superthreshold+indices(x,y,z),c*num_superthreshold+indices(x,y,z),1);
-	      
+
 	    }
-    
+
     // initialise tildew
     for(int r = 1; r<=num_superthreshold; r++)
       {
@@ -1003,28 +1003,28 @@ namespace Mm {
 
     for(int c = 1; c <= nclasses; c++)
       dists[c-1]->setuseprop(false);
-    
+
   }
 
   void Mixture_Model::update_theta()
   {
     Tracer_Plus trace("Mixture_Model::update_theta");
-   
+
     // update means and vars using ML estimates, given weights are known
-    
+
     if(true)
       {
 	SmmFunctionDists smmfunc(Y,dists,mrf_precision,mask,connected_offsets,indices,lambda,log_bound,m_tildew);
 	// set dists params in vector
 	ColumnVector x(nclasses*2);
-	x=0;    	
+	x=0;
 	for(int c = 0; c < nclasses; c++)
-	  {	    
+	  {
 	    x(c*2+1) = dists[c]->getmean();
 	    x(c*2+2) = dists[c]->getvar();
 	  }
-	
-// 	ColumnVector tmp2(x.Nrows());tmp2=1;	
+
+// 	ColumnVector tmp2(x.Nrows());tmp2=1;
 // 	scg(x, smmfunc, tmp2, scg_tol);
 // 	//smmfunc.minimize(x,tmp2);
 
@@ -1042,15 +1042,15 @@ namespace Mm {
 	  }
       }
     else
-      {    
+      {
 	vector<ColumnVector> weights;
 	vector<vector<vector<float> > > weights_samps;
 	vector<vector<vector<float> > > tildew_samps;
 	//get_weights2(weights, weights_samps, tildew_samps, 100, m_tildew);
 	get_weights(weights, m_tildew);
-  	
+
 	for(int c = 0; c < nclasses; c++)
-	  {	
+	  {
 	    float sumweights = 0;
 	    float sumy = 0;
 
@@ -1058,15 +1058,15 @@ namespace Mm {
 	      {
 		float wtmp = weights[c](r);
 		sumweights += wtmp;
-		sumy += wtmp*Y(r);	    
+		sumy += wtmp*Y(r);
 	      }
-	
+
 	    float mu = sumy/sumweights;
-	
+
 	    float ssy = 0;
 	    for(int r = 1; r<=num_superthreshold; r++)
 	      {
-		float wtmp = weights[c](r);	    
+		float wtmp = weights[c](r);
 		ssy += wtmp*Sqr(Y(r)-mu);
 	      }
 
@@ -1075,12 +1075,12 @@ namespace Mm {
 	    //  	OUT(sumy/sumweights);
 	    //  	OUT(ssy/sumweights);
 
-	    if(updatetheta)	
+	    if(updatetheta)
 	      dists[c]->setparams(mu,ssy/sumweights,sumweights/num_superthreshold);
 	    else
 	      dists[c]->setparams(dists[c]->getmean(),dists[c]->getvar(),sumweights/num_superthreshold);
-      
-	  }    
+
+	  }
       }
 
     meanhist.push_back(dists[0]->getmean());
@@ -1094,13 +1094,13 @@ namespace Mm {
 
     OUT("Doing tildew SCG");
     SmmFunction smmfunc(Y,dists,mrf_precision,mask,connected_offsets,indices,D,lambda,log_bound);
-    
+
     float tmp = smmfunc.evaluate(m_tildew);
     OUT(tmp);
-    ColumnVector tmp2(m_tildew.Nrows());tmp2=1;    
+    ColumnVector tmp2(m_tildew.Nrows());tmp2=1;
     scg(m_tildew,smmfunc, tmp2, 0.01);
     tmp = smmfunc.evaluate(m_tildew);
-    OUT(tmp); 
+    OUT(tmp);
   }
 
   void Mixture_Model::update_voxel_tildew_vb()
@@ -1128,37 +1128,37 @@ namespace Mm {
 	      ColumnVector sumneighs(nclasses);
 	      sumneighs = 0;
 
-	      int r = indices(x,y,z);   
-	     
+	      int r = indices(x,y,z);
+
 // 	      if(it>0 && r==17)
 // 	      {
 // 		OUT(r);
 // 		RowVector cv(nclasses);
-// 		cv = 0;		
+// 		cv = 0;
 // 		for(int c = 0; c < nclasses; c++)
 // 		  {
 // 		    cv(c+1) = m_tildew(c*num_superthreshold+r);
 // 		  }
-		
+
 // 		matout(cv,"cv");
 // 		RowVector w = logistic_transform(cv,lambda,log_bound);
 // 		OUT(w);
 // 	      }
-	   
+
 	      int xi=0,yi=0,zi=0;
-	      for(unsigned int i = 0; i < connected_offsets.size(); i++) 
+	      for(unsigned int i = 0; i < connected_offsets.size(); i++)
 		{
 		  xi = x+connected_offsets[i].x;
 		  yi = y+connected_offsets[i].y;
 		  zi = z+connected_offsets[i].z;
-		  
+
 		  if(mask(xi,yi,zi))
 		    {
 		      int r2 = indices(xi,yi,zi);
 
 		      ColumnVector ck(nclasses);
 		      ck = 0;
-		     
+
 		      DiagonalMatrix lam_vk(nclasses);
 		      lam_vk = 0;
 
@@ -1166,7 +1166,7 @@ namespace Mm {
 			{
 			  ck(c+1) = m_tildew(c*num_superthreshold+r2);
 			  lam_vk(c+1,c+1) =  Lambda(c*num_superthreshold+r2,c*num_superthreshold+r);
-			  
+
 			}
 
 		      sumneighs += lam_vk*ck;
@@ -1177,7 +1177,7 @@ namespace Mm {
 // 			  OUT(lam_vk*ck);
 // 			}
 		    }
-		}	    
+		}
 
 	      ColumnVector betav(nclasses);
 	      for(int c=0; c < nclasses; c++)
@@ -1196,7 +1196,7 @@ namespace Mm {
 		  wtildeprec(c+1,c+1) = Lambda(c*num_superthreshold+r,c*num_superthreshold+r);
 		  for(int k=c+1; k < nclasses; k++)
 		    {
-		      wtildeprec(c+1,k+1) = Lambda(c*num_superthreshold+r,k*num_superthreshold+r); 
+		      wtildeprec(c+1,k+1) = Lambda(c*num_superthreshold+r,k*num_superthreshold+r);
 		    }
 		}
 
@@ -1210,23 +1210,23 @@ namespace Mm {
 		  matout(betav.t(),"betav");
 		  matout(sumneighs.t(),"sumneighs");
 		  RowVector cv(nclasses);
-		  cv = 0;		
+		  cv = 0;
 		  for(int c = 0; c < nclasses; c++)
 		    {
 		      cv(c+1) = m_tildew(c*num_superthreshold+r);
-		    }		
+		    }
 		  matout(cv,"cv");
 		  RowVector w = logistic_transform(cv,lambda,log_bound);
 		  matout(w,"w");
 		  OUT(r);
 		  exit(0);
 		}
-	    
+
 
 	      ColumnVector wtilde = wtildecov*(betav - sumneighs);
 
 	      wtilde = wtilde - mean(wtilde).AsScalar();
-	
+
 	      bool valid = true;
 	      for(int c=0; c < nclasses; c++)
 		{
@@ -1240,7 +1240,7 @@ namespace Mm {
 		  // 		    {
 		  // 		      wtilde(c+1) = 10;
 		  // 		      count++;
-		  
+
 		  // 		    }
 		  // 		  if(wtilde(c+1) < -10)
 		  // 		    {
@@ -1248,11 +1248,11 @@ namespace Mm {
 		  // 		      count++;
 		  // 		    }
 		}
-	  
+
 	      //if(it>0 && r==11335)
 	      // 	      if(!valid)
-// 		{	
-// 		  OUT(r);		
+// 		{
+// 		  OUT(r);
 // 		  RowVector w = logistic_transform(wtilde.t(),lambda,log_bound);
 // 		  matout(wtildeprec,"wtildeprec");
 // 		  matout(wtildecov,"wtildecov");
@@ -1263,23 +1263,23 @@ namespace Mm {
 // 		  matout(w,"w");
 
 // 		  RowVector cv(nclasses);
-// 		  cv = 0;		
+// 		  cv = 0;
 // 		  for(int c = 0; c < nclasses; c++)
 // 		    {
 // 		      cv(c+1) = m_tildew(c*num_superthreshold+r);
-// 		    }		
+// 		    }
 // 		  matout(cv,"cv");
 // 		  w = logistic_transform(cv,lambda,log_bound);
 // 		  matout(w,"w");
 
-// 		}	
-    
+// 		}
+
 	      if(valid || it<2)
 		{
 		  count++;
 		  prec_tildew[r-1] = wtildeprec;
 		  cov_tildew[r-1] = wtildecov;
-		  
+
 		  for(int c=0; c < nclasses; c++)
 		    {
 		      //m_tildew_new(c*num_superthreshold+r) = wtilde(c+1);
@@ -1295,10 +1295,10 @@ namespace Mm {
 
   void Mixture_Model::update_mrf_precision()
   {
-    Tracer_Plus trace("Mixture_Model::update_mrf_precision"); 
-    
+    Tracer_Plus trace("Mixture_Model::update_mrf_precision");
+
     mrf_precision_hist.push_back(mrf_precision);
-    
+
     float errorprecision = 1;
     float var = Sqr(errorprecision)*10;
     float c_0 = Sqr(errorprecision)/var;
@@ -1316,8 +1316,8 @@ namespace Mm {
     if(mrfprecmultiplier>0 && it>2)
       {
 	float mrf_precision_old = mrf_precision_hist[mrf_precision_hist.size()-1];
-	float mrf_precision_oldold = mrf_precision_hist[mrf_precision_hist.size()-2];     
-	
+	float mrf_precision_oldold = mrf_precision_hist[mrf_precision_hist.size()-2];
+
 	// 	OUT(mrfprecmultiplier);
 	// 	OUT(mrf_precision_oldold);
 	// 	OUT(mrf_precision_old);
@@ -1335,11 +1335,11 @@ namespace Mm {
 	  {
 	    mrf_precision = 1;
 	    mrfprecmultiplier *= 0.5;
-	  } 
+	  }
 
 	if(mrfprecmultiplier<1)mrfprecmultiplier=1;
 	OUT(mrfprecmultiplier);
-	
+
       }
     else
       {
@@ -1350,7 +1350,7 @@ namespace Mm {
 	  {
 	    float mrf_precision_old = mrf_precision_hist[mrf_precision_hist.size()-1];
 	    float mrf_precision_oldold = mrf_precision_hist[mrf_precision_hist.size()-2];
-	    
+
 // 	    OUT(mrf_precision);
 // 	    OUT(mrf_precision_old);
 // 	    OUT(mrf_precision_oldold);
@@ -1358,21 +1358,21 @@ namespace Mm {
 //  	    OUT(std::fabs((mrf_precision-mrf_precision_oldold)/mrf_precision_oldold));
 
 	    float precision = 0.005;
-	    
+
 	    if(std::fabs((mrf_precision-mrf_precision_old)/mrf_precision_old) < precision && std::fabs((mrf_precision-mrf_precision_oldold)/mrf_precision_oldold) < precision)
 	      {
 		it=niters;
 	      }
 	  }
       }
-    
+
   }
 
   void Mixture_Model::calculate_taylor_lik()
   {
     Tracer_Plus trace("Mixture_Model::calculate_taylor_lik");
 
-    cout << "Doing 2nd Order Taylor Expansion of Likelihood" << endl; 
+    cout << "Doing 2nd Order Taylor Expansion of Likelihood" << endl;
 
     // build up precision/hessian matrix for tildew (aka x)
     //    float A = 1.0/std::sqrt(2*M_PI);
@@ -1387,13 +1387,13 @@ namespace Mm {
 	RowVector wtildetmp(nclasses);
 	wtildetmp = 0;
 	for(int c=1; c <= nclasses; c++)
-	  {	
+	  {
 	    // calculate terms for use in calculating hessian and deriv of likelihood:
 	    wtildetmp(c) = m_tildew((c-1)*num_superthreshold+r);
 	  }
 
 	// LT of y = LT of demean(y)
-	    
+
 	const RowVector wtilde = wtildetmp - mean(wtildetmp,2).AsScalar();
 
 	RowVector w = logistic_transform(wtilde,lambda,log_bound);
@@ -1409,13 +1409,13 @@ namespace Mm {
 	RowVector gamma(nclasses);
 	gamma = 0;
 	vector<double> R(nclasses,0);
-	    
+
 	double P = 0;
 	double h = 0;
 
 	for(int c=1; c <= nclasses; c++)
-	  {	
-	    // calculate terms for use in calculating hessian and deriv of likelihood:	    
+	  {
+	    // calculate terms for use in calculating hessian and deriv of likelihood:
 	    h += w(c)*dists[c-1]->pdf(Y(r));
 	    R[c-1] = boundexp(wtilde(c)/(lambda*log_bound));
 	    P += R[c-1];
@@ -1438,19 +1438,19 @@ namespace Mm {
 	    OUT(Sqr(h));
 	  }
 
-	// calculate dw_k/dx and d^2w_k/dx^2 
+	// calculate dw_k/dx and d^2w_k/dx^2
 	vector<SymmetricMatrix> dwdydy(nclasses);
 	vector<ColumnVector> dwdy(nclasses);
 	for(int k=1; k <= nclasses; k++)
-	  {	
+	  {
 	    dwdydy[k-1].ReSize(nclasses);
 	    dwdydy[k-1] = 0;
 	    dwdy[k-1].ReSize(nclasses);
 	    dwdy[k-1] = 0;
-	    
+
 	    for(int c2=1; c2 <= nclasses; c2++)
-	      {		
-		
+	      {
+
 		if(c2==k)
 		  {
 		    dwdydy[k-1](k,k) = R[k-1]/(lamsqr*P)*(1-3*R[k-1]/P+2*Sqr(R[k-1]/P));
@@ -1458,7 +1458,7 @@ namespace Mm {
 		  }
 		else
 		  {
-		    dwdydy[k-1](c2,c2) = R[k-1]*R[c2-1]/(lamsqr*Sqr(P))*(2*R[c2-1]/P-1);	
+		    dwdydy[k-1](c2,c2) = R[k-1]*R[c2-1]/(lamsqr*Sqr(P))*(2*R[c2-1]/P-1);
 		    dwdy[k-1](c2) = -R[k-1]*R[c2-1]/(lambda*log_bound*Sqr(P));
 		  }
 
@@ -1559,7 +1559,7 @@ namespace Mm {
 		      {
 			sum_m += dfdwdw(m,l)*dwdy[m-1](k);
 		      }
-		    sum_l += sum_m*dwdy[l-1](n) + dfdw(l)*dwdydy[l-1](n,k);		 
+		    sum_l += sum_m*dwdy[l-1](n) + dfdw(l)*dwdydy[l-1](n,k);
 		  }
 
 		hessanal(n,k) = sum_l;
@@ -1570,22 +1570,22 @@ namespace Mm {
 	  {
 	    derivative_lik((k-1)*num_superthreshold+r) += derivanal(k);
 
-	    precision_lik.addto((k-1)*num_superthreshold+r,(k-1)*num_superthreshold+r,hessanal(k,k));	    
+	    precision_lik.addto((k-1)*num_superthreshold+r,(k-1)*num_superthreshold+r,hessanal(k,k));
 	    for(int l=k+1; l <= nclasses; l++)
 	      {
 		precision_lik.addto((k-1)*num_superthreshold+r,(l-1)*num_superthreshold+r,hessanal(k,l));
 		precision_lik.addto((l-1)*num_superthreshold+r,(k-1)*num_superthreshold+r,hessanal(k,l));
-	      }	
-	  }      
+	      }
+	  }
 
 	////////////////////
-	if(it>0 && r==-1)  
+	if(it>0 && r==-1)
 	  {
 	    matout(derivanal,"derivanal");
 	    matout(hessanal,"hessanal");
 	  }
 
-// 	if(it>5 && r==-1)  
+// 	if(it>5 && r==-1)
 // 	  {
 // 	    SmmVoxelFunction smmfunc(Y(r),dists,lambda,log_bound);
 // 	    ColumnVector deriv1 = gradient(wtilde.t(),smmfunc,1e-2,1);
@@ -1610,13 +1610,13 @@ namespace Mm {
   {
     Tracer_Plus trace("Mixture_Model::calculate_trace_tildew_D");
 
-    // Now calculate trace    
-    float trace_new = 0; 
+    // Now calculate trace
+    float trace_new = 0;
     DiagonalMatrix tmp1(num_superthreshold*nclasses);
     tmp1 = 0;
 
     for(int r=1; r <= num_superthreshold; r++)
-      {	
+      {
 // 	OUT(r);
 // 	matout(cov_tildew[r-1],"cov_tildew[r-1]");
 	for(int c=1; c <= nclasses; c++)
@@ -1631,9 +1631,9 @@ namespace Mm {
 
     OUT(trace_new);
 
-    trace_covariance_tildew_D = trace_new;	
+    trace_covariance_tildew_D = trace_new;
 
-    OUT(trace_covariance_tildew_D);  
+    OUT(trace_covariance_tildew_D);
   }
 
   ReturnMatrix sum_transform(const RowVector& wtilde, float log_bound)
@@ -1641,10 +1641,10 @@ namespace Mm {
     //Tracer_Plus trace("sum_transform");
 
     // converts from wtilde (aka x) to y
-    RowVector ret_y  = log_bound*wtilde/std::sqrt(wtilde.SumSquare());    
-    
+    RowVector ret_y  = log_bound*wtilde/std::sqrt(wtilde.SumSquare());
+
     ret_y.Release();
-    return ret_y;    
+    return ret_y;
   }
 
   ReturnMatrix logistic_transform(const RowVector& py,float lambda,float log_bound)
@@ -1655,7 +1655,7 @@ namespace Mm {
     const RowVector y = py - mean(py,2).AsScalar();
 
     // converts from y to w
-    
+
     int nclasses = y.Ncols();
     double sum = 0.0;
     RowVector ret_weights(nclasses);
@@ -1667,10 +1667,10 @@ namespace Mm {
       {
 	sum += boundexp(y(c+1)/phi);
       }
-    
+
     for(int c=0; c < nclasses; c++)
       {
-	ret_weights(c+1) = boundexp(y(c+1)/phi)/sum;	
+	ret_weights(c+1) = boundexp(y(c+1)/phi)/sum;
       }
 
     if(ret_weights(2)>1)
@@ -1682,10 +1682,10 @@ namespace Mm {
 	OUT(boundexp(y(2)/phi));
 
       }
-    
+
     ret_weights.Release();
     return ret_weights;
-    
+
   }
 
   ReturnMatrix inv_transform(const RowVector& w,float lambda,float log_bound,float initmultiplier)
@@ -1695,7 +1695,7 @@ namespace Mm {
     // converts from w to wtilde (aka x)
 
     int nclasses = w.Ncols();
-    
+
     RowVector ret_wtilde(nclasses);
     ret_wtilde = 0;
 
@@ -1713,7 +1713,7 @@ namespace Mm {
 // 	ret_wtilde(c+1) = -phi*initmultiplier+normrnd().AsScalar()*phi*noise;
 
 // 	while(ret_wtilde(c+1) >= maxret)
-// 	{	  
+// 	{
 // 	  ret_wtilde(c+1) = -phi*initmultiplier+normrnd().AsScalar()*phi*noise;
 // 	}
 //       }
@@ -1731,15 +1731,15 @@ namespace Mm {
       }
 
     ret_wtilde.Release();
-    return ret_wtilde; 
+    return ret_wtilde;
   }
 
-  void Mixture_Model::save_weights(const ColumnVector& pmtildew, const char* affix, bool usesamples) 
+  void Mixture_Model::save_weights(const ColumnVector& pmtildew, const char* affix, bool usesamples)
   {
     Tracer_Plus trace("Mixture_Model::save_weights");
 
-    //    vector<volume<float> > w_means(nclasses);   
-    vector<volume<float> > logistic_w_means(nclasses);   
+    //    vector<volume<float> > w_means(nclasses);
+    vector<volume<float> > logistic_w_means(nclasses);
     vector<ColumnVector> weights;
     vector<vector<vector<float> > > weights_samps;
     vector<vector<vector<float> > > tildew_samps;
@@ -1752,7 +1752,7 @@ namespace Mm {
 	get_weights(weights, pmtildew);
       }
     else
-      {	
+      {
 	get_weights2(weights,weights_samps,tildew_samps,nsamps,pmtildew);
       }
 
@@ -1770,29 +1770,29 @@ namespace Mm {
 	tildew_samples[c].reinitialize(xsize,ysize,zsize,nsamps);
 	tildew_samples[c] = 0.0;
 
-	for(int z = 0; z < mask.zsize(); z++)    
-	  for(int y = 0; y < mask.ysize(); y++)	
+	for(int z = 0; z < mask.zsize(); z++)
+	  for(int y = 0; y < mask.ysize(); y++)
 	    for(int x = 0; x < mask.xsize(); x++)
 	      if(mask(x,y,z))
 		{
 		  w_means[c](x,y,z) = weights[c](indices(x,y,z));
 		  logistic_w_means[c](x,y,z) = pmtildew(c*num_superthreshold+indices(x,y,z));
 		  //		  if(w_means[c](x,y,z)>0.5) {OUT(indices(x,y,z)); OUT(w_means[c](x,y,z));}
-		  
+
 		  if(!nonspatial && usesamples)
-		    for(int s = 0; s < nsamps; s++) 
+		    for(int s = 0; s < nsamps; s++)
 		      {
 			w_samples[c](x,y,z,s) = weights_samps[indices(x,y,z)-1][s][c];
 			tildew_samples[c](x,y,z,s) = tildew_samps[indices(x,y,z)-1][s][c];
 		      }
 		}
-	
-	copybasicproperties(spatial_data,logistic_w_means[c]);		
-	save_volume(logistic_w_means[c], LogSingleton::getInstance().appendDir("logistic_w"+num2str(c+1)+"_mean"+affix));	
 
-	copybasicproperties(spatial_data,w_means[c]);		
-	save_volume(w_means[c], LogSingleton::getInstance().appendDir("w"+num2str(c+1)+"_mean"+affix));	
-	
+	copybasicproperties(spatial_data,logistic_w_means[c]);
+	save_volume(logistic_w_means[c], LogSingleton::getInstance().appendDir("logistic_w"+num2str(c+1)+"_mean"+affix));
+
+	copybasicproperties(spatial_data,w_means[c]);
+	save_volume(w_means[c], LogSingleton::getInstance().appendDir("w"+num2str(c+1)+"_mean"+affix));
+
 	copybasicproperties(spatial_data,w_samples[c]);
 	save_volume4D(w_samples[c], LogSingleton::getInstance().appendDir("w"+num2str(c+1)+"_samples"+affix));
 
@@ -1802,7 +1802,7 @@ namespace Mm {
 
   }
 
-  void Mixture_Model::save() 
+  void Mixture_Model::save()
   {
     Tracer_Plus trace("Mixture_Model::save");
 
@@ -1842,7 +1842,7 @@ namespace Mm {
     if(!nonspatial && !fixmrfprec)
       {
 	miscplot newplot;
-	newplot.add_xlabel("Iterations");    
+	newplot.add_xlabel("Iterations");
 	newplot.set_xysize(610,300);
 	newplot.timeseries(vector2ColumnVector(mrf_precision_hist).t(), LogSingleton::getInstance().appendDir("mrfprechist"), "MRF Precision", 0,400,3,0,false);
       }
@@ -1850,7 +1850,7 @@ namespace Mm {
     if(updatetheta)
       {
 	miscplot newplot;
-	newplot.add_xlabel("Iterations");    
+	newplot.add_xlabel("Iterations");
 	newplot.set_xysize(610,300);
 	newplot.timeseries(vector2ColumnVector(meanhist).t(), LogSingleton::getInstance().appendDir("meanhist"), "class 1 mean", 0,400,3,0,false);
       }
@@ -1867,13 +1867,13 @@ namespace Mm {
       {
 	weights[c].ReSize(num_superthreshold);
 	weights[c] = 0;
-      } 
+      }
 
     for(int r = 1; r<=num_superthreshold; r++)
-      {       
+      {
 	RowVector wtilde(nclasses);
 	wtilde = 0;
-	
+
 	for(int c=0; c < nclasses; c++)
 	  wtilde(c+1) = pmtildew(c*num_superthreshold+r);
 
@@ -1899,18 +1899,18 @@ namespace Mm {
       {
 	weights[c].ReSize(num_superthreshold);
 	weights[c] = 0;
-      } 
+      }
     weights_samps.reserve(num_superthreshold);
     tildew_samps.reserve(num_superthreshold);
 
     for(int r = 1; r<=num_superthreshold; r++)
-      {	
+      {
 	//	OUT(r);
-	RowVector wtilde(nclasses);	
-	wtilde = 0;	
+	RowVector wtilde(nclasses);
+	wtilde = 0;
 	for(int c=0; c < nclasses; c++)
 	  {
-	    wtilde(c+1) = pmtildew(c*num_superthreshold+r);	    
+	    wtilde(c+1) = pmtildew(c*num_superthreshold+r);
 	  }
 	SymmetricMatrix wtildecov = cov_tildew[r-1];
 
@@ -1965,8 +1965,8 @@ namespace Mm {
 
   void ggmfit(const RowVector& dat, vector<Distribution*>& pdists, bool useprops)
   {// fit a mixture of a Gaussian and multiple Gamma functions to the histogram
-  
-    //normalise data 
+
+    //normalise data
     float datamean = mean(dat,2).AsScalar();
     float datastdev= stdev(dat,2).AsScalar();
     RowVector data=(dat - datamean)/datastdev;
@@ -1992,9 +1992,9 @@ namespace Mm {
     Dmin1 =  min(data).AsScalar(); Dmax1 = max(data).AsScalar();
     IntSize = Dmax1 / nummix;
 
-    means(1)=mean(data,2).AsScalar(); 
+    means(1)=mean(data,2).AsScalar();
     for (int ctr=2; ctr <= means.Ncols(); ctr++){
-      means(ctr) =  Dmax1 - (ctr - 1.5) * IntSize; 
+      means(ctr) =  Dmax1 - (ctr - 1.5) * IntSize;
     }
     means(2)=means(1)+2*sqrt(vars(1));
     //means(2)=means(1)+ 0.6*(Dmax-means(1));
@@ -2013,7 +2013,7 @@ namespace Mm {
     float g_eps = 0.000001;
     int it_ctr = 0;
     double Dmax, Dmin;
-   
+
     Dmax = 2 * data.Maximum();
     Dmin = -2 * data.Minimum();
 
@@ -2039,7 +2039,7 @@ namespace Mm {
     while((it_ctr<10) ||
 	  ((std::abs(old_ll - log_p_y_theta)>g_eps) && (it_ctr<100)))
       { // fit GGM
-	
+
  	it_ctr++;
 	//offset = (std::min(0.2,1-props(1)))*std::sqrt(vars(1));
 
@@ -2051,17 +2051,17 @@ namespace Mm {
 
  	p_ygx = 0.0;
  	p_ygx.Row(1) << normpdf(data,means(1),vars(1));
-       
+
  	const2 = (2.6-props(1))*sqrt(vars(1))+means(1); //min. nht level
- 
+
 	means(2) = (std::max(means(2), std::max(0.001,
 	   0.5 * ( const2 + std::sqrt( const2*const2 + 4*vars(2))))));
 	vars(2)  = std::max(std::min(vars(2), 0.5*std::pow(means(2),2)),0.0001);
 	p_ygx.Row(2) << gammapdf(data,means(2),vars(2));
-   
+
  	if(nummix>2){
 	  const2 = (2.6-props(1))*sqrt(vars(1))-means(1);
-	
+
 	  means(3) = -(std::max(-means(3), std::max(0.001,
 	      0.5 * ( const2 + std::sqrt( const2*const2 + 4*vars(3))))));
 	  vars(3)  = std::max(std::min(vars(3), 0.5*std::pow(means(3),2)),0.0001);
@@ -2070,7 +2070,7 @@ namespace Mm {
 
  	tmp1 = SP(props.t()*ones(1,numdata),p_ygx);
  	prob_Y__theta << sum(tmp1,1);
-	
+
 	//deal with non-modelled voxels
 	for(int ctr=1; ctr<=tmp1.Ncols(); ctr++)
 	  if(prob_Y__theta(ctr) < 0.0001)
@@ -2079,11 +2079,11 @@ namespace Mm {
  	old_ll = log_p_y_theta;
  	log_p_y_theta = log(prob_Y__theta).Sum();
 	// 	cerr << "calculated log_prob_Y__theta" <<endl;
-	// 	cerr << old_ll << "   " << log_p_y_theta << "   " 
+	// 	cerr << old_ll << "   " << log_p_y_theta << "   "
 	//	cerr << float(std::abs(old_ll - log_p_y_theta)) << endl;
  	if((it_ctr<10) ||
 	   ((std::abs(old_ll - log_p_y_theta)>g_eps) && (it_ctr<100))){//update
-	  
+
  	  prob_K__y_theta = SP(tmp1,pow(ones(nummix,1)*prob_Y__theta,-1));
  	  Nbar << sum(prob_K__y_theta,2).t();
 	  for(int ctr=1; ctr<=Nbar.Ncols(); ctr++)
@@ -2092,13 +2092,13 @@ namespace Mm {
  	  pibar= Nbar / numdata;
 	  // 	  cerr << "pibar :" << pibar << endl;
  	  kdata = ones(nummix,1)*data;
- 	  mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1)); 
+ 	  mubar <<SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
 	  // 	  cerr << "mubar :" << mubar << endl;
 
  	  kdata -= mubar.t()*ones(1,numdata);
  	  kdata = pow(kdata,2);
  	  sigmabar << SP(sum(SP(kdata,prob_K__y_theta),2).t(),pow(Nbar,-1));
-      
+
  	  means = mubar;
  	  vars  = sigmabar;
 
@@ -2120,12 +2120,12 @@ namespace Mm {
 
       newplot.ggmfit(data,means,vars,props,
 		     LogSingleton::getInstance().appendDir("init_mmfit.png"),string("Initial Fit"),0.0);
-    }    
+    }
 
     for(unsigned int c=0; c < pdists.size(); c++)
-      {	
+      {
 	pdists[c]->setparams(means(c+1),vars(c+1),props(c+1));
-	  
+
  	OUT(c);
  	OUT(pdists[c]->getmean());
  	OUT(pdists[c]->getvar());
@@ -2136,13 +2136,13 @@ namespace Mm {
   {
     int nclasses = w_means.size();
     for(int c = 0; c < nclasses; c++)
-      {	
+      {
 	OUT(c);
 	float sumweights = 0;
 	int num_superthreshold = 0;
 
-	for(int z = 0; z < mask.zsize(); z++)    
-	  for(int y = 0; y < mask.ysize(); y++)	
+	for(int z = 0; z < mask.zsize(); z++)
+	  for(int y = 0; y < mask.ysize(); y++)
 	    for(int x = 0; x < mask.xsize(); x++)
 	      if(mask(x,y,z))
 		{
@@ -2160,7 +2160,7 @@ namespace Mm {
   void plot_ggm(const vector<volume<float> >& w_means, const vector<Distribution*>& dists, const volume<int>& mask, const ColumnVector& Y)
   {
     OUT("plot_ggm");
-    // update means and vars using ML estimates, given weights are known    
+    // update means and vars using ML estimates, given weights are known
     int nclasses = w_means.size();
 
     OUT(nclasses);
@@ -2192,9 +2192,9 @@ namespace Mm {
     OUT(props);
 
     miscplot newplot;
- 
+
     newplot.ggmfit(Y.t(),means,vars,props,LogSingleton::getInstance().appendDir("final_mmfit.png"),string("Final Fit"),0.0);
-    
+
   }
 
   void make_ggmreport(const vector<volume<float> >& w_means, const vector<Distribution*>& dists, const volume<int>& mask, const volume<float>& spatial_data, bool zfstatmode, bool overlay, const volume<float>& epivol, float thresh, bool nonspatial, bool updatetheta, const string& data_name)
@@ -2218,16 +2218,16 @@ namespace Mm {
     LogSingleton::getInstance().setLogFile(string("MM.html"));
 
     Log& htmllog = LogSingleton::getInstance();
-      {	
+      {
 //  	OUT(htmllog.getDir());
 //  	OUT(htmllog.getLogFileName());
 
 	htmllog << "<HTML> " << endl
 		<< "<TITLE>Mixture Model fit for" << data_name << "</TITLE>" << endl
-		<< "<BODY BACKGROUND=\"file:" << getenv("FSLDIR") 
-		<< "/doc/images/fsl-bg.jpg\">" << endl 
+		<< "<BODY BACKGROUND=\"file:" << getenv("FSLDIR")
+		<< "/doc/images/fsl-bg.jpg\">" << endl
 		<< "<hr><CENTER><H1>Mixture Model fit for<br>" << data_name << " </H1>"<< endl;
-     	
+
 	htmllog << "<hr><p>" << endl;
       }
 
@@ -2235,79 +2235,79 @@ namespace Mm {
 //        volume<float> map1;
 //        volume<float> map2;
 
-//        map1 = threshold(spatial_data,float(0.0), 
+//        map1 = threshold(spatial_data,float(0.0),
 //  		       spatial_data.max());
-//        map2 = threshold(spatial_data,spatial_data.min(), 
+//        map2 = threshold(spatial_data,spatial_data.min(),
 //  		       float(-0.0));
-      
-        volume<float> newvol; 
+
+        volume<float> newvol;
         miscpic newpic;
-      
+
 	newvol = spatial_data;
 
  	char instr[10000];
-	
+
  	sprintf(instr," ");
- 	strcat(instr,"-s 2 ");	
+ 	strcat(instr,"-s 2 ");
 	strcat(instr,(string("-i ")+num2str(spatial_data.min())+" "+num2str(spatial_data.max())+" ").c_str());
  	strcat(instr,"-A 950 ");
  	strcat(instr,LogSingleton::getInstance().appendDir("spatial_data.png").c_str());
 
  	newpic.set_title(string("Raw spatial map"));
-	
+
  	newpic.slicer(newvol, instr);
-      
+
 
 	htmllog << "<img BORDER=0 SRC=\"spatial_data.png\"><p>" << endl;
       }
 
       if(overlay)
-	{	
-	  volume<float> map;	  
+	{
+	  volume<float> map;
 
 	  map = w_means[1];
-	
+
  	  if(thresh>0)
- 	    map.threshold(0.5);	 
+ 	    map.threshold(0.5);
 	  else
 	    thresh=0;
 
-	  volume<float> newvol; 
+	  volume<float> newvol;
 	  miscpic newpic;
 
 	  volume<float> epivoltmp = epivol;
 
 	  save_volume(map, LogSingleton::getInstance().appendDir("map"));
 	  save_volume(epivoltmp, LogSingleton::getInstance().appendDir("epivol"));
-	 
-	  newpic.overlay(newvol, epivoltmp, map, map, 
+
+	  newpic.overlay(newvol, epivoltmp, map, map,
 			 epivol.percentile(0.01),
 			 epivol.percentile(0.99),
 			 float(thresh), float(1.0), float(0.0), float(0.0),
 			 0, 0);
-		
+
 	  char instr[10000];
-	
+
 	  sprintf(instr," ");
 	  strcat(instr,"-l render1 -s 2 ");
 	  strcat(instr,"-A 950 ");
-	  strcat(instr,LogSingleton::getInstance().appendDir("actprobmap.png").c_str());     
+	  strcat(instr,LogSingleton::getInstance().appendDir("actprobmap.png").c_str());
 
 	  string tit = "Activation prob map";
 	  if(thresh>0)
 	    tit += " thresholded at p>" + num2str(thresh);
-	  newpic.set_title(tit);	    
-	
+	  newpic.set_title(tit);
+
 	  newpic.set_cbar(string("y"));
-	  newpic.slicer(newvol, instr); 
-	
+	  newpic.slicer(newvol, instr);
+
 	  htmllog << "<img BORDER=0 SRC=\"actprobmap.png\">" << endl;
 	  htmllog << "<p>" << endl;
 
 	}
       else
-	{			
-	  volume<float> newvol; 
+	{
+	  volume<float> newvol;
 	  miscpic newpic;
 
 	  newvol = w_means[1];
@@ -2316,7 +2316,7 @@ namespace Mm {
 	    newvol.threshold(0.5);
 
 	  char instr[10000];
-	
+
 	  	      //volume<float> tmp = newvol/newvol.max();
 	      volume<float> tmp = spatial_data;
 // 	      newpic.overlay(newvol, newvol, tmp, tmp,
@@ -2333,47 +2333,47 @@ namespace Mm {
 	  strcat(instr,"-s 2 ");
 	  //	strcat(instr,"-i 0 1 ");
 	  strcat(instr,"-A 950 ");
-	  strcat(instr,LogSingleton::getInstance().appendDir("actprobmap.png").c_str());      
+	  strcat(instr,LogSingleton::getInstance().appendDir("actprobmap.png").c_str());
 
 	  string tit = "Activation prob map";
 	  if(thresh>0)
 	    tit += " thresholded at p>" + num2str(thresh);
-	  newpic.set_title(tit);	    
-	  
+	  newpic.set_title(tit);
+
 	  newpic.set_cbar(string("y"));
-	  newpic.slicer(newvol, instr); 
-		
+	  newpic.slicer(newvol, instr);
+
 	  htmllog << "<img BORDER=0 SRC=\"actprobmap.png\">" << endl;
 	  htmllog << "<p>" << endl;
 	}
-      
+
       if(!zfstatmode)
-	{	
+	{
 	  // Output deactivation
 	  if(overlay)
-	    {	
+	    {
 	      volume<float> map;
 	      map = w_means[2];
-	
+
 	      if(thresh>0)
 		map.threshold(0.5);
 	      else
 		thresh=0;
 
-	      volume<float> newvol; 
-	      
+	      volume<float> newvol;
+
 	      miscpic newpic;
 
 	      volume<float> epivoltmp = epivol;
 
-	      newpic.overlay(newvol, epivoltmp, map, map, 
+	      newpic.overlay(newvol, epivoltmp, map, map,
 			     epivol.percentile(0.01),
 			     epivol.percentile(0.99),
 			     float(thresh), float(1.0), float(0.0), float(0.0),
 			     0, 0);
-		
+
 	      char instr[10000];
-	
+
 	      sprintf(instr," ");
 	      strcat(instr,"-s 2 ");
 	      strcat(instr,"-A 950 ");
@@ -2383,26 +2383,26 @@ namespace Mm {
 	      if(thresh>0)
 		tit += " thresholded at p>" + num2str(thresh);
 	      newpic.set_title(tit);
-	
+
 	      newpic.set_cbar(string("y"));
-	      newpic.slicer(newvol, instr); 
-	
+	      newpic.slicer(newvol, instr);
+
 	      htmllog << "<img BORDER=0 SRC=\"deactprobmap.png\">" << endl;
 	      htmllog << "<p>" << endl;
 
 	    }
 	  else
-	    {	      
-	    	    
-	      volume<float> newvol; 
+	    {
+
+	      volume<float> newvol;
 	      miscpic newpic;
-	
+
 	      newvol = w_means[2];
 	      if(thresh>0)
 		newvol.threshold(0.5);
 
 	      char instr[10000];
-	
+
 	      //volume<float> tmp = newvol/newvol.max();
 	      volume<float> tmp = spatial_data;
 // 	      newpic.overlay(newvol, newvol, tmp, tmp,
@@ -2419,30 +2419,30 @@ namespace Mm {
 	      strcat(instr,"-s 2 ");
 	      //	      strcat(instr,"-i 0 1 ");
 	      strcat(instr,"-A 950 ");
-	      strcat(instr,LogSingleton::getInstance().appendDir("deactprobmap.png").c_str());      
+	      strcat(instr,LogSingleton::getInstance().appendDir("deactprobmap.png").c_str());
 	      string tit = "Deactivation prob map";
 	      if(thresh>0)
 		tit += " thresholded at p>" + num2str(thresh);
 	      newpic.set_title(tit);
 
 	      newpic.set_cbar(string("y"));
-	      newpic.slicer(newvol, instr); 
+	      newpic.slicer(newvol, instr);
 	      htmllog << "<img BORDER=0 SRC=\"deactprobmap.png\">" << endl;
 	      htmllog << "<p>" << endl;
 	    }
 	}
-      
+
       {//Output GGM fit
 	miscplot newplot;
 
 	htmllog << "<A><img BORDER=0 SRC=\"final_mmfit.png\"></A><p>" << endl;
       }
-      
+
       {
 	htmllog << "<br> Mixture Model fit <br>" << endl
 		<< "<br> &nbsp; Means :  " << means << endl
 		<< "<br> &nbsp;  Vars  :  " << vars  << endl
-		<< "<br> &nbsp;  Prop. :  " << props    << endl;	
+		<< "<br> &nbsp;  Prop. :  " << props    << endl;
       }
 
 //      if(updatetheta)
@@ -2460,16 +2460,16 @@ namespace Mm {
       else
 	{
 	  htmllog << "</CENTER> Non-spatial mixture modelling based on: <br> Mixture Models with Adaptive Spatial Regularisation for Segmentation with an Application to FMRI Data; Woolrich, M., Behrens, T., Beckmann, C., and Smith, S.; IEEE TMI In Press 2004.";
-	
+
 	}
- 
-      { 
+
+      {
 	htmllog<< "<HR><FONT SIZE=1>This page produced automatically by "
-	       << "mm </A>" 
+	       << "mm </A>"
 	       << " - a part of <A HREF=\"http://www.fmrib.ox.ac.uk/fsl\">FSL - "
 	       << "FMRIB Software Library</A>.</FONT>" << endl
 	       << "</BODY></HTML>" << endl;
-      } 
+      }
   }
 
 }

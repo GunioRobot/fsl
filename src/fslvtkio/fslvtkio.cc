@@ -10,7 +10,7 @@ using namespace mesh;
 
 
 namespace fslvtkio {
-	
+
 	fslvtkIO::fslvtkIO(){
 		dt=POLYDATA;
 		scalarsName="Scalars";
@@ -20,12 +20,12 @@ namespace fslvtkio {
 		BINARY=false;
 		MAX_SET=false;
 		MAX=0;
-				ST_COUNT=0;		
+				ST_COUNT=0;
 #ifdef PPC64
 	m_n=0;
 #endif
 	}
-	
+
 	fslvtkIO::fslvtkIO(const string & filename,const fslvtkIO::DataType i)
 {
 		scalarsName="Scalars";
@@ -56,8 +56,8 @@ namespace fslvtkio {
 
 	fslvtkIO::~fslvtkIO(){
 	}
-	
-	
+
+
 	void fslvtkIO::setMesh(const  Mesh &  m){
 		//set points
 		//assume 3 dimensions
@@ -65,29 +65,29 @@ namespace fslvtkio {
 		Points.ReSize(m._points.size(),3);
 		int  count=0;
 		for (vector<Mpoint*>::iterator i =const_cast<Mesh &>(m)._points.begin(); i!=const_cast<Mesh &>(m)._points.end(); i++ )
-		{ 
-			Points.element(count,0)=(*i)->get_coord().X;	
-			Points.element(count,1)=(*i)->get_coord().Y;	
-			Points.element(count,2)=(*i)->get_coord().Z;	
-			
+		{
+			Points.element(count,0)=(*i)->get_coord().X;
+			Points.element(count,1)=(*i)->get_coord().Y;
+			Points.element(count,2)=(*i)->get_coord().Z;
+
 			count++;
 		}
-		
+
 		//set polygons, assumes eacxh vertex has 3 connections
 		Polygons.ReSize(m._triangles.size(),3);
-		
+
 		count=0;
 		for ( list<Triangle*>::const_iterator i=m._triangles.begin(); i!=m._triangles.end(); i++) {
-			
+
 			Polygons.element(count,0)=(*i)->get_vertice(0)->get_no();
 			Polygons.element(count,1)=(*i)->get_vertice(1)->get_no();
-			Polygons.element(count,2)=(*i)->get_vertice(2)->get_no();	  
+			Polygons.element(count,2)=(*i)->get_vertice(2)->get_no();
 			count++;
 		}
-		
-		
+
+
 	}
-	
+
 	void fslvtkIO::setPoints(const Matrix& m)
 	{
 		if (m.Ncols()==3)
@@ -95,7 +95,7 @@ namespace fslvtkio {
 		else if ( (m.Ncols()==1) && ( (m.Nrows()%3) == 0) )
 		{
 			Points.ReSize(m.Nrows()/3,3);
-		
+
 			unsigned int count=0;
 			for (int i =0 ; i < m.Nrows() ;i++,count++)
 			{
@@ -108,11 +108,11 @@ namespace fslvtkio {
 		}else
 			throw fslvtkIOException("incompatible dimensions when setting points");
 	}
-	
+
 	void fslvtkIO::setPoints(const vector<float> & m)
 	{
 		Points.ReSize(m.size()/3,3);
-		
+
 		unsigned int count=0;
 		for (vector<float>::const_iterator i=m.begin();i!=m.end();i++,count++)
 		{
@@ -123,14 +123,14 @@ namespace fslvtkio {
 			Points.element(count,2)=*i;
 		}
 	}
-	
+
 		void fslvtkIO::appendPointsAndPolygons(const Matrix & pts, const Matrix & polys)
 		{
 			cout<<"begin append"<<endl;
 
 			//if  ( (pts.Ncols()==1) && ( (pts.Nrows()%3) == 0) && (Points.Ncols()==3) )
 			//{
-			//}else 
+			//}else
 			if (pts.Ncols() != Points.Ncols())
 					throw fslvtkIOException("incompatible dimensions when appending points");
 
@@ -144,7 +144,7 @@ namespace fslvtkio {
 			cout<<"append polys "<<polys.Nrows()<<" "<<polys.Ncols()<<endl;
 
 			Polygons=Polygons & (polys+Nprev);
-			if (ST_COUNT==1)	
+			if (ST_COUNT==1)
 				Scalars=Sc;
 			else
 				Scalars=Scalars & Sc;
@@ -155,7 +155,7 @@ namespace fslvtkio {
 			cout<<"end append"<<endl;
 		}
 
-	
+
 	template<class T>
 	vector<T> fslvtkIO::getPointsAsVector()
 {
@@ -163,7 +163,7 @@ namespace fslvtkio {
 		for (int i=0;i<Points.Nrows();i++)
 			for (int j=0;j<Points.Ncols();j++)
 				allpoints.push_back(static_cast<T>(Points.element(i,j)));
-		
+
 		return allpoints;
 }
 
@@ -176,31 +176,31 @@ template vector<double> fslvtkIO::getPointsAsVector<double>();
 
 Matrix fslvtkIO::getField(const string & name){
 	//search for field index
-	
+
 	int ind=-1;
 	for (unsigned int i=0;i<fieldDataNumName.size();i++)
 		if (!strcmp(fieldDataNumName.at(i).c_str(),name.c_str()))
 			ind=i;
 	if (ind==-1)
-		throw fslvtkIOException("No field data of that name."); 
-	
+		throw fslvtkIOException("No field data of that name.");
+
 	return fieldDataNum.at(ind);
 }
 	Matrix fslvtkIO::getField(const string & name, unsigned int & indout ){
 		//search for field index
-		
+
 		int ind=-1;
 		for (unsigned int i=0;i<fieldDataNumName.size();i++)
 			if (!strcmp(fieldDataNumName.at(i).c_str(),name.c_str()))
 				ind=i;
 		if (ind==-1)
-			throw fslvtkIOException("No field data of that name."); 
-		
+			throw fslvtkIOException("No field data of that name.");
+
 		indout=ind;
-		
+
 		return fieldDataNum.at(ind);
 	}
-	
+
 
 
 template<class T>
@@ -215,7 +215,7 @@ template void fslvtkIO::setScalars<float>(const vector<float> & sc);
 
 
 void fslvtkIO::addPointFieldData(const Matrix & M, const string & name, const string & type, const string & vtkAttType){
-	
+
 	addFieldData(M, name, type);
 	pd_list.push_back(name);
 	pd_type.push_back(vtkAttType);
@@ -227,25 +227,25 @@ void fslvtkIO::addCellFieldData(const Matrix & M, const string & name, const str
 	cd_list.push_back(name);
 	cd_type.push_back(vtkAttType);
 }
-	
-	
-	
-	
+
+
+
+
 	void fslvtkIO::replaceFieldData(const Matrix& M,const string & name)
 	{
 		unsigned int ind;
 		getField(name, ind);
 		fieldDataNum.at(ind)=M;
 	}
-	
-	
-	
+
+
+
 template< class T >
 void fslvtkIO::addFieldData(const vector<T> & vM, const string & name, const string & type){
 	ColumnVector M(vM.size());
 	for (unsigned int i=0; i<vM.size();i++)
 		M.element(i)=vM.at(i);
-	
+
 	fieldDataNum.push_back(M);
 	fieldDataNumName.push_back(name);
 	fieldDataNumType.push_back(type);
@@ -266,15 +266,15 @@ void fslvtkIO::addFieldData(const Matrix & M, const string & name, const string 
 void fslvtkIO::addFieldData(vector< string > str, string name){
 	fieldDataStr.push_back(str);
 	fieldDataStrName.push_back(name);
-	
+
 }
-	
+
 
 template<class T>
 void  fslvtkIO::writePointData(ofstream & fshape, const string & str_typename )
 {
-	//handle point data 
-	if ( (Scalars.Nrows()>0) || (Vectors.Nrows()>0)  ) 
+	//handle point data
+	if ( (Scalars.Nrows()>0) || (Vectors.Nrows()>0)  )
 	{
 		fshape<<"POINT_DATA "<<Points.Nrows()<<endl;
 		if (Scalars.Nrows()>0)
@@ -300,7 +300,7 @@ void  fslvtkIO::writePointData(ofstream & fshape, const string & str_typename )
 				if ((m_n++ % 20) == 0) fshape.flush();
 #endif
 			}
-			
+
 		}
 		if (Vectors.Nrows()>0)
 		{
@@ -324,13 +324,13 @@ void  fslvtkIO::writePointData(ofstream & fshape, const string & str_typename )
 				if ((m_n++ % 20) == 0) fshape.flush();
 #endif
 			}
-			
+
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 }
 
 
@@ -343,7 +343,7 @@ void  fslvtkIO::writePoints(ofstream & fshape, const string & str_typename ){
 		fshape<<"POINTS "<<Points.Nrows()<<" "<<str_typename<<endl;
 		if (Points.Ncols()!=3)
 			throw fslvtkIOException("Points does not have 3 columns");
-		
+
 		for (int i=0;i<Points.Nrows();i++)
 		{
 			//cols should always be three
@@ -362,8 +362,8 @@ void  fslvtkIO::writePoints(ofstream & fshape, const string & str_typename ){
 		if ((m_n++ % 20) == 0) fshape.flush();
 #endif
 	}
-	
-	
+
+
 }
 
 template void fslvtkIO::writePoints<float>(ofstream & fshape, const string & str_typename );
@@ -377,14 +377,14 @@ bool  fslvtkIO::readPoints(ifstream & fvtk)
 	fvtk>>stemp>>Npts;
 
 	if ((strcmp(stemp.c_str(),"POINTS")) || (Npts<=0)) throw fslvtkIOException("POINTS not found");
-	
+
 	fvtk>>stemp;
-	
+
 	Points.ReSize(Npts,3);
-	
-	if (BINARY) 
-		getline(fvtk,stemp); //gets rid of newline		
-	
+
+	if (BINARY)
+		getline(fvtk,stemp); //gets rid of newline
+
 	for (int i=0 ; i < Npts ; i++)
 	{
 		float x,y,z;
@@ -395,32 +395,32 @@ bool  fslvtkIO::readPoints(ifstream & fvtk)
 			fvtk.read(reinterpret_cast<char*>(&x),sizeof(float));
 			fvtk.read(reinterpret_cast<char*>(&y),sizeof(float));
 			fvtk.read(reinterpret_cast<char*>(&z),sizeof(float));
-			
+
 			if (SWAP_BYTES)
 			{
 				Swap_Nbytes(1,sizeof(x),&x);
-				Swap_Nbytes(1,sizeof(y),&y);	
+				Swap_Nbytes(1,sizeof(y),&y);
 				Swap_Nbytes(1,sizeof(z),&z);
 			}
-			
-			
+
+
 		}
 		Points.element(i,0)=x;
 		Points.element(i,1)=y;
 		Points.element(i,2)=z;
-				
+
 	}
-	
+
 	return true;
 }
 
 void fslvtkIO::setPolygons(const vector< vector<unsigned int> > & vm)
-{ 
+{
 	Matrix m(vm.size(),vm.at(0).size());
 	for (unsigned int i = 0; i<vm.size();i++)
 		for (unsigned int j=0;j<vm.at(0).size();j++)
 			m.element(i,j)=vm.at(i).at(j);
-	Polygons=m; 
+	Polygons=m;
 }
 
 
@@ -431,14 +431,14 @@ bool  fslvtkIO::readPolygons(ifstream & fvtk)
 	fvtk>>stemp>>NPolys;
 	if (strcmp(stemp.c_str(),"POLYGONS")) throw fslvtkIOException("POLYGONS not found");
 	fvtk>>stemp;
-	
+
 	Polygons.ReSize(NPolys,3);
-	
-	if (BINARY) getline(fvtk,stemp); 
+
+	if (BINARY) getline(fvtk,stemp);
 	for (int i=0 ; i < NPolys ; i++)
 	{
 		unsigned int x,y,z;
-		
+
 		if (!BINARY)
 			fvtk>>x>>x>>y>>z;//just ignore number of connections assumed to be 3 for polydata
 		else
@@ -450,7 +450,7 @@ bool  fslvtkIO::readPolygons(ifstream & fvtk)
 			if (SWAP_BYTES)
 			{
 				Swap_Nbytes(1,sizeof(x),&x);
-				Swap_Nbytes(1,sizeof(y),&y);	
+				Swap_Nbytes(1,sizeof(y),&y);
 				Swap_Nbytes(1,sizeof(z),&z);
 			}
 		}
@@ -464,7 +464,7 @@ bool  fslvtkIO::readPolygons(ifstream & fvtk)
 
 void  fslvtkIO::writePolygons(ofstream & fshape)
 {
-	
+
 	if (Polygons.Nrows()>0){
 		fshape<<"POLYGONS "<<Polygons.Nrows()<<"  "<<Polygons.Nrows()*(Polygons.Ncols()+1)<<endl;
 		for (int i=0;i<Polygons.Nrows();i++)
@@ -484,7 +484,7 @@ void  fslvtkIO::writePolygons(ofstream & fshape)
 				{
 					if (j==0)
 						fshape<<Polygons.Ncols()<<" ";
-					
+
 					if (j==(Polygons.Ncols()-1))
 						fshape<<Polygons.element(i,j)<<endl;
 					else
@@ -494,10 +494,10 @@ void  fslvtkIO::writePolygons(ofstream & fshape)
 #ifdef PPC64
 			if ((m_n++ % 20) == 0) fshape.flush();
 #endif
-			
+
 		}
 	}
-	
+
 }
 void  fslvtkIO::writeCells(ofstream & fshape)
 {
@@ -506,7 +506,7 @@ void  fslvtkIO::writeCells(ofstream & fshape)
 	int N=0;
 	for (unsigned int i=0;i<Cells.size();i++)
 		N+=Cells.at(i).size();
-	
+
 	fshape<<"Cells "<<Cells.size()<<" "<<N<<endl;
 	for (unsigned int i=0;i<Cells.size();i++)
 	{
@@ -524,7 +524,7 @@ void  fslvtkIO::writeUnstructuredGridCellTypes(ofstream & fshape)
 }
 void fslvtkIO::save(string s)
 {
-	//add required field data 
+	//add required field data
 	if (pd_list.size()>0){
 		addFieldData(pd_list, "PointFieldNames");
 		addFieldData(pd_type, "PointFieldAttTypes");
@@ -533,15 +533,15 @@ void fslvtkIO::save(string s)
 		addFieldData(cd_list, "CellFieldNames");
 		addFieldData(cd_type, "CellFieldAttTypes");
 	}
-	
+
 	cout<<"open file "<<s<<" to save."<<endl;
-	ofstream fshape;  
+	ofstream fshape;
 	fshape.open(s.c_str());
 	cout<<"succesfully opened file "<<s<<" to save."<<endl;
 
 	//calculate total number of points
-	
-	
+
+
 	fshape<<"# vtk DataFile Version 3.0"<<endl;
 	if (BINARY)
 	{
@@ -550,7 +550,7 @@ void fslvtkIO::save(string s)
 		fshape<<"this file was written using fslvtkio"<<endl<<"BINARY"<<endl<<"DATASET ";
 	}else
 		fshape<<"this file was written using fslvtkio"<<endl<<"ASCII"<<endl<<"DATASET ";
-	
+
 	switch (dt) {
 		case POLYDATA:
 			fshape<<"POLYDATA"<<endl;
@@ -562,16 +562,16 @@ void fslvtkIO::save(string s)
 			writePoints<float>(fshape,"float");
 			writeCells(fshape);
 			writeUnstructuredGridCellTypes(fshape);
-			
+
 			break;
 		default:
 			cerr<<"Invalid Data Type"<<endl;
 	}
-	
+
 	writePointData<float>(fshape,"float");
-	
-	//Ignored cell data for now 
-	
+
+	//Ignored cell data for now
+
 	//write field data
 	if ( ( fieldDataStr.size()>0) || (fieldDataNum.size()>0) )
 	{
@@ -584,17 +584,17 @@ void fslvtkIO::save(string s)
 				else
 					writeNumericField<float>(fshape, fieldDataNumName.at(i), "float", fieldDataNum.at(i));
 	}
-	
+
 				vector<string>::iterator name_i=fieldDataStrName.begin();
 				for (vector< vector<string> >::iterator i=fieldDataStr.begin(); i!=fieldDataStr.end();i++, name_i++)
 					writeStringField(fshape, *name_i, *i);
-				
+
 				fshape.close();
-				
+
 }
 
 void fslvtkIO::writeStringField(ofstream & fvtk, const string & name, const vector<string> & v_string)
-{	
+{
 	fvtk<<name<<" "<<1<<" "<<v_string.size()<<" string"<<endl;
 	for (vector<string>::const_iterator i=v_string.begin(); i!=v_string.end();i++)
 	{
@@ -617,7 +617,7 @@ void fslvtkIO::writeNumericField(ofstream & fvtk, const string & name, const str
 	unsigned int nrows=Data.Nrows();
 	unsigned int ncols=Data.Ncols();
 	fvtk<<name<<" "<<nrows<<" "<<ncols<<" "<<type<<endl;
-	
+
 	for (unsigned int i=0; i<nrows ;i++)
 		for (unsigned int j=0;j<ncols;j++)
 		{
@@ -632,7 +632,7 @@ void fslvtkIO::writeNumericField(ofstream & fvtk, const string & name, const str
 				T val=static_cast<T>(Data.element(i,j));
 				fvtk.write(reinterpret_cast<char*>(&val),sizeof(val));
 			}
-			
+
 #ifdef PPC64
 			if ((m_n++ % 20) == 0) fvtk.flush();
 #endif
@@ -647,20 +647,20 @@ ReturnMatrix fslvtkIO::readField(ifstream & fvtk, const int & nrows,const int & 
 	T val;
 	for (int i=0; i<nrows ;i++){
 		for (int j=0;j<mcols;j++){
-			
+
 			if (!BINARY)
 				fvtk>>val;
 			else
 			{
 				fvtk.read(reinterpret_cast<char*>(&val),sizeof(T));
 				if (SWAP_BYTES)
-					Swap_Nbytes(1,sizeof(val),&val);	
+					Swap_Nbytes(1,sizeof(val),&val);
 			}
 			fieldM.element(i,j)=val;
 			//	cout<<"val "<<val<<endl;
 		}
-	} 
-	
+	}
+
 	fieldM.Release();
 	return fieldM;
 }
@@ -670,147 +670,147 @@ void fslvtkIO::readFieldData(ifstream & fvtk){
 	fieldDataNumName.clear();
 	fieldDataNum.clear();
 	fieldDataNumType.clear();
-	
+
 	string stemp;
 	int N;//number of fields
 		fvtk>>stemp>>N;
-		
+
 		if (SWITCH_ROWS_COLS){ N-=1; }//only used to fix old model!!!!!!!!
-		
+
 		//read in field
 		for ( int fieldnum=0; fieldnum< N ; fieldnum++){
 			string fieldname;
 			fvtk>>fieldname;
 			long unsigned int nrows,mcols;
-			
+
 			if (SWITCH_ROWS_COLS)
 			{//only used to fix old model!!!!!!!!
 				fvtk>>mcols>>nrows;
-				if (mcols==1){ mcols=nrows; nrows=1; } 
+				if (mcols==1){ mcols=nrows; nrows=1; }
 			}else
 				fvtk>>nrows>>mcols;
 			fvtk>>stemp;
-			
+
 			if (BINARY) { string stemp2 ; getline(fvtk,stemp2); };
 			if (! ((strcmp(stemp.c_str(),"float")) && (strcmp(stemp.c_str(),"unsigned int")) && (strcmp(stemp.c_str(),"double")) && (strcmp(stemp.c_str(),"int"))) )  {
 				//deal with number field data
 				fieldDataNumType.push_back(stemp);
 				fieldDataNumName.push_back(fieldname);
 				Matrix fieldM;
-				if (!(strcmp(stemp.c_str(),"float")))  
-					fieldM=readField<float>(fvtk,nrows,mcols); 
-				else if (!(strcmp(stemp.c_str(),"double")))  
-					fieldM=readField<double>(fvtk,nrows,mcols); 
-				else if (!(strcmp(stemp.c_str(),"unsigned int")))  
-					fieldM=readField<unsigned int>(fvtk,nrows,mcols); 
-				else if (!(strcmp(stemp.c_str(),"int"))) 
-					fieldM=readField<int>(fvtk,nrows,mcols); 
+				if (!(strcmp(stemp.c_str(),"float")))
+					fieldM=readField<float>(fvtk,nrows,mcols);
+				else if (!(strcmp(stemp.c_str(),"double")))
+					fieldM=readField<double>(fvtk,nrows,mcols);
+				else if (!(strcmp(stemp.c_str(),"unsigned int")))
+					fieldM=readField<unsigned int>(fvtk,nrows,mcols);
+				else if (!(strcmp(stemp.c_str(),"int")))
+					fieldM=readField<int>(fvtk,nrows,mcols);
 				fieldDataNum.push_back(fieldM);
-				
+
 			}else if (!(strcmp(stemp.c_str(),"string")))
-				fieldDataStrName.push_back(fieldname);	//deal with strings separately 
+				fieldDataStrName.push_back(fieldname);	//deal with strings separately
 			else if(fvtk.eof())
 				return;
 			else
 				throw fslvtkIOException(("Data type for field data not supported..."+stemp).c_str()) ;
 		}
-		
+
 }
 void fslvtkIO::readPointData( ifstream & fvtk, string & nextData){
 	//only handles SCALARS and VECTORS currently
 	//assumes POINT_DATA is found
-        // WARNING!!  NEED TO DEAL WITH nextData BEING SET, AS IT INDICATES THAT A STRING HAS BEEN 
+        // WARNING!!  NEED TO DEAL WITH nextData BEING SET, AS IT INDICATES THAT A STRING HAS BEEN
         //   REMOVED FROM THE STREAM BUT NOT YET PROCESSED!!
 	string stemp,stype;
 	int N;//number of Points
 		fvtk>>N;
-		
+
 		if (N<=0)
 			throw fslvtkIOException("no points in structure") ;
-		
+
 		//this will not read past any unsupported data
 		bool still_PD=true;
 		while (still_PD){
-			fvtk>>stemp;		
-			
+			fvtk>>stemp;
+
 			if (!strcmp(stemp.c_str(),"SCALARS")){
 				fvtk>>stemp>>stype;
 				string lut;
 				fvtk>>lut>>lut;
-				
+
 				//there is now an options fourth number of component argument not implemented here
 				int mcols=1;
-				
-				if (BINARY) 
-				{ 
-					string stemp2 ; 
-					getline(fvtk,stemp2); 
+
+				if (BINARY)
+				{
+					string stemp2 ;
+					getline(fvtk,stemp2);
 				}
-				
+
 				if (! ((strcmp(stype.c_str(),"float") ) && (strcmp(stype.c_str(),"unsigned int")) && \
-					   (strcmp(stype.c_str(),"double")) && (strcmp(stype.c_str(),"int")) ))  
+					   (strcmp(stype.c_str(),"double")) && (strcmp(stype.c_str(),"int")) ))
 				{
 					//deal with number field data
 					Matrix fieldM;
-					if (!(strcmp(stype.c_str(),"float")))				fieldM=readField<float>(fvtk,N,mcols); 
-					else if (!(strcmp(stype.c_str(),"double")))			fieldM=readField<double>(fvtk,N,mcols); 
-					else if (!(strcmp(stype.c_str(),"unsigned int")))	fieldM=readField<unsigned int>(fvtk,N,mcols); 
-					else if (!(strcmp(stype.c_str(),"int")))			fieldM=readField<int>(fvtk,N,mcols); 
+					if (!(strcmp(stype.c_str(),"float")))				fieldM=readField<float>(fvtk,N,mcols);
+					else if (!(strcmp(stype.c_str(),"double")))			fieldM=readField<double>(fvtk,N,mcols);
+					else if (!(strcmp(stype.c_str(),"unsigned int")))	fieldM=readField<unsigned int>(fvtk,N,mcols);
+					else if (!(strcmp(stype.c_str(),"int")))			fieldM=readField<int>(fvtk,N,mcols);
 					Scalars=fieldM;
 				}else
 					throw fslvtkIOException("Data type for points not supported.");
-				
+
 			}else if (!strcmp(stemp.c_str(),"VECTORS")){
-				
+
 				fvtk>>stemp>>stype;
-				
+
 				if (! ((strcmp(stype.c_str(),"float") ) && (strcmp(stype.c_str(),"unsigned int")) && \
-					   (strcmp(stype.c_str(),"double")) && (strcmp(stype.c_str(),"int")) ))  
+					   (strcmp(stype.c_str(),"double")) && (strcmp(stype.c_str(),"int")) ))
 				{
 					//deal with number field data
 					Matrix fieldM;
-					if (!(strcmp(stype.c_str(),"float")))				fieldM=readField<float>(fvtk,N,3); 
-					else if (!(strcmp(stype.c_str(),"double")))			fieldM=readField<double>(fvtk,N,3); 
-					else if (!(strcmp(stype.c_str(),"unsigned int")))	fieldM=readField<unsigned int>(fvtk,N,3); 
-					else if (!(strcmp(stype.c_str(),"int")))			fieldM=readField<int>(fvtk,N,3); 
+					if (!(strcmp(stype.c_str(),"float")))				fieldM=readField<float>(fvtk,N,3);
+					else if (!(strcmp(stype.c_str(),"double")))			fieldM=readField<double>(fvtk,N,3);
+					else if (!(strcmp(stype.c_str(),"unsigned int")))	fieldM=readField<unsigned int>(fvtk,N,3);
+					else if (!(strcmp(stype.c_str(),"int")))			fieldM=readField<int>(fvtk,N,3);
 					Vectors=fieldM;
-					
+
 				}else
 					throw fslvtkIOException("Data type for vectors not supported.");
-				
+
 			}else
 			{
 				nextData=stemp;
 				still_PD=false;
 			}
-			
-			
-		}	
-		
+
+
+		}
+
 }
 
 void fslvtkIO::readUnstructuredGrid(string fname)
 {
 	Cells.clear();
 	Cell_Types.clear();
-	
+
 	ifstream fvtk;
 	fvtk.open(fname.c_str());
-	
+
 	string stemp;
 	getline(fvtk,stemp);
 	getline(fvtk,stemp);//used to get rid of second ascii line to avoid "modes"
-		
+
 		fvtk>>stemp;
 		fvtk>>stemp>>stemp;
-		
+
 		readPoints(fvtk);
-		
+
 		fvtk>>stemp;
-		
+
 		int Ncells, Csize;
 		fvtk>>Ncells>>Csize;
-		
+
 		for ( int i =0 ; i<Ncells ; i++)
 		{
 			unsigned int temp1, temp2;
@@ -837,9 +837,9 @@ void fslvtkIO::readUnstructuredGrid(string fname)
 			{
 				readPointData(fvtk,stemp);
 			}else if(!strcmp(stemp.c_str(),"FIELD"))
-			{	
+			{
 				readFieldData(fvtk);
-			}			
+			}
 		}
 }
 
@@ -847,20 +847,20 @@ void fslvtkIO::readPolyData(string name)
 {
 	ifstream fvtk;
 	fvtk.open(name.c_str());
-	
+
 	if (fvtk.is_open())
-	{		
+	{
 		string stemp;
-		getline(fvtk,stemp); //read first line 
-		
-		if (strcmp(stemp.substr(0,14).c_str(),"# vtk DataFile")) 
+		getline(fvtk,stemp); //read first line
+
+		if (strcmp(stemp.substr(0,14).c_str(),"# vtk DataFile"))
 			throw fslvtkIOException("Not a vtk file (error in line 1).");
-		
-		getline(fvtk,stemp); 
+
 		getline(fvtk,stemp);
-		
-		if (((strcmp(stemp.c_str(),"ASCII")) && (strcmp(stemp.c_str(),"BINARY")))) 
-			throw fslvtkIOException("ASCII or Binary not specified (line 3)"); 
+		getline(fvtk,stemp);
+
+		if (((strcmp(stemp.c_str(),"ASCII")) && (strcmp(stemp.c_str(),"BINARY"))))
+			throw fslvtkIOException("ASCII or Binary not specified (line 3)");
 		else if (!strcmp(stemp.c_str(),"BINARY"))//if binary file test endianess, test number embedded on second line
 		{
 			BINARY=true;
@@ -874,7 +874,7 @@ void fslvtkIO::readPolyData(string name)
 					fvtktemp->close();
 					delete fvtktemp;
 			}
-			if (testval!=BINFLAG) 
+			if (testval!=BINFLAG)
 			{
 				SWAP_BYTES = true;
 				Swap_Nbytes(1,sizeof(testval),&testval);
@@ -884,14 +884,14 @@ void fslvtkIO::readPolyData(string name)
 		}
 		//once this point is reached the endianess if okay
 		//SWAP_BYTE and BINARY state variables have been set such that readPoints, Polygons, etc... will work properly
-		
+
 		getline(fvtk,stemp);
-		if (strcmp(stemp.c_str(),"DATASET POLYDATA")) 
+		if (strcmp(stemp.c_str(),"DATASET POLYDATA"))
 			throw fslvtkIOException("Is not specified as Polydata (line 4");
-		
+
 		readPoints(fvtk);
 		readPolygons(fvtk);
-		
+
 		bool already_read_stemp=false;
 		while (already_read_stemp || (fvtk>>stemp))
 		{
@@ -899,7 +899,7 @@ void fslvtkIO::readPolyData(string name)
 		  if (!strcmp(stemp.c_str(),"POINT_DATA")) {
 		    readPointData(fvtk,stemp);
 		    if (stemp.length()>0) {already_read_stemp=true;}
-		  } else { 
+		  } else {
 		    if(!strcmp(stemp.c_str(),"FIELD"))
 		      readFieldData(fvtk);
 		  }
@@ -914,13 +914,13 @@ void fslvtkIO::readPolyData(string name)
 		for (vector<string>::iterator i=fieldDataNumName.begin();i!=fieldDataNumName.end();i++)
 			cout<<*i<<endl;
 	}
-	
+
 	void fslvtkIO::displayNumericField(const string & name)
 	{
 		cout<<getField(name)<<endl;
-		
+
 	}
-	
+
 }
 
 

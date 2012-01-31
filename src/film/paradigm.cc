@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -76,28 +76,28 @@ using namespace NEWIMAGE;
 using namespace MISCMATHS;
 
 namespace FILM {
-  
+
   void Paradigm::load(const string& p_paradfname, const string& p_tcontrastfname, const string& p_fcontrastfname, bool p_blockdesign, int p_sizets)
     {
       if(p_paradfname != "")
 	designMatrix=read_vest(p_paradfname);
 
       if(p_tcontrastfname != "")
-	tcontrasts=read_vest(p_tcontrastfname);       
+	tcontrasts=read_vest(p_tcontrastfname);
 
       if(p_fcontrastfname != "")
-	fcontrasts=read_vest(p_fcontrastfname);   
-       
+	fcontrasts=read_vest(p_fcontrastfname);
+
       // Check time series match up with design
       if(p_paradfname != "" && designMatrix.Nrows() != p_sizets)
 	{
 	  cerr << "Num scans = "<< p_sizets << ", design matrix rows = " << designMatrix.Nrows() << endl;
 	  throw Exception("size of design matrix does not match number of scans\n");
 	}
-      
+
       // Check contrasts match
       if(p_tcontrastfname != "" &&  p_fcontrastfname != "" && tcontrasts.Nrows() != fcontrasts.Ncols())
-	{ 
+	{
 	  cerr << "tcontrasts.Nrows()  = " << tcontrasts.Nrows() << endl;
 	  cerr << "fcontrasts.Ncols()  = " << fcontrasts.Ncols() << endl;
 	  throw Exception("size of tcontrasts does not match fcontrasts\n");
@@ -105,8 +105,8 @@ namespace FILM {
 
       // Check contrast matches design matrix
       if(p_paradfname != "" &&  p_tcontrastfname != "" && designMatrix.Ncols() != tcontrasts.Ncols())
-	 { 
-	  cerr << "Num tcontrast cols  = " << tcontrasts.Ncols() << ", design matrix cols = " 
+	 {
+	  cerr << "Num tcontrast cols  = " << tcontrasts.Ncols() << ", design matrix cols = "
 	    << designMatrix.Ncols() << endl;
 	  throw Exception("size of design matrix does not match t contrasts\n");
 	 }
@@ -117,7 +117,7 @@ namespace FILM {
 	  designMatrix = (designMatrix + 1)/2;
 	}
     }
-  
+
 }
 
 void Paradigm::loadVoxelwise(const vector<int>& voxelwiseEvNumber, const vector<string>& voxelwiseEvName, const volume<float>& mask)
@@ -134,13 +134,13 @@ void Paradigm::loadVoxelwise(const vector<int>& voxelwiseEvNumber, const vector<
   doingVoxelwise=true;
 }
 
-NEWMAT::Matrix Paradigm::getDesignMatrix(long voxel) 
-{ 
+NEWMAT::Matrix Paradigm::getDesignMatrix(long voxel)
+{
   Matrix output=designMatrix;
-  if (doingVoxelwise) 
+  if (doingVoxelwise)
     for (unsigned int ev=0; ev<voxelwiseEvTarget.size(); ev++)
       output.Column(voxelwiseEvTarget[ev])=voxelwiseEv[ev].Column(voxel);
-  return output; 
+  return output;
 }
 
 

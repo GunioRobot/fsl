@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -99,8 +99,8 @@ Option<string> altskelname(string("-s"), string(""),
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
 		  false, no_argument);
-Option<bool> debugging(string("-d,--debug"), false, 
-		     string("switch on debugging image outputs"), 
+Option<bool> debugging(string("-d,--debug"), false,
+		     string("switch on debugging image outputs"),
 		     false, no_argument);
 Option<string> debugging2(string("-D,--debug2"), string(""),
 		  string("~<skelpoints>\tde-project <skelpoints> points on skeleton back to all_FA space"),
@@ -132,21 +132,21 @@ int main(int argc,char *argv[])
 
     nonoptarg = options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
 // }}}
 
@@ -175,11 +175,11 @@ for(int z=1;z<im.zsize()-1;z++) for(int y=1;y<im.ysize()-1;y++) for(int x=1;x<im
 	    float val = im(x+xx,y+yy,z+zz);
 	    Sum   += val;
 	    CofGx += xx * val;  CofGy += yy * val;  CofGz += zz * val;
-	  }	      
-	      
+	  }
+
 	CofGx /= Sum;  CofGy /= Sum;  CofGz /= Sum;
 	CofGl = sqrt(CofGx*CofGx+CofGy*CofGy+CofGz*CofGz);
-	      
+
 	if (CofGl > .1)  /* is CofG far enough away from centre voxel? */
 	  {
 	    // if (CofGl > 1.4) cout << CofGx << " " << CofGy << " " << CofGz << " " << Sum << endl;
@@ -199,7 +199,7 @@ for(int z=1;z<im.zsize()-1;z++) for(int y=1;y<im.ysize()-1;y++) for(int x=1;x<im
 		if ( (zz==1) || (yy==1) || ((yy==0)&&(xx==1)) ) /* only search half the voxels */
 		  {
 		    float weighting = pow( (float)(xx*xx+yy*yy+zz*zz) , -0.7 ); /* power is arbitrary: maybe test other functions here */
-		    float cost = weighting * ( centreval 
+		    float cost = weighting * ( centreval
 					       - (float)im(x+xx,y+yy,z+zz)
 					       - (float)im(x-xx,y-yy,z-zz) );
 
@@ -214,7 +214,7 @@ for(int z=1;z<im.zsize()-1;z++) for(int y=1;y<im.ysize()-1;y++) for(int x=1;x<im
 	}
 
 // }}}
-							   
+
 	  X(x,y,z)=xxx;
 	  Y(x,y,z)=yyy;
 	  Z(x,y,z)=zzz;
@@ -229,7 +229,7 @@ if (debugging.set())
     volume4D<float>tmpim(im.xsize(),im.ysize(),im.zsize(),3);
     copybasicproperties(im,tmpim);
     tmpim=0;
-    
+
     for(int z=0;z<im.zsize();z++) for(int y=0;y<im.ysize();y++) for(int x=0;x<im.xsize();x++)
       {
 	float tmpX=X(x,y,z), tmpY=Y(x,y,z), tmpZ=Z(x,y,z),
@@ -242,7 +242,7 @@ if (debugging.set())
 	    tmpim(x,y,z,2)=tmpZ/tmpf;
 	  }
       }
-    
+
     save_volume4D(tmpim,inname.value()+"_flow");
   }
 
@@ -273,7 +273,7 @@ for(int z=1;z<im.zsize()-1;z++) for(int y=1;y<im.ysize()-1;y++) for(int x=1;x<im
 	localsum[(1+zzz)*9+(1+yyy)*3+1+xxx]++;
 	localsum[(1-zzz)*9+(1-yyy)*3+1-xxx]++;
       }
-    
+
     for(int zz=-1; zz<=1; zz++) for(int yy=-1; yy<=1; yy++) for(int xx=-1; xx<=1; xx++)
       {
 	if (localsum[(1+zz)*9+(1+yy)*3+1+xx]>localmax)
@@ -299,7 +299,7 @@ if (debugging.set())
     volume4D<float>tmpim(im.xsize(),im.ysize(),im.zsize(),3);
     copybasicproperties(im,tmpim);
     tmpim=0;
-    
+
     for(int z=0;z<im.zsize();z++) for(int y=0;y<im.ysize();y++) for(int x=0;x<im.xsize();x++)
       {
 	float tmpX=XX(x,y,z), tmpY=YY(x,y,z), tmpZ=ZZ(x,y,z),
@@ -312,7 +312,7 @@ if (debugging.set())
 	    tmpim(x,y,z,2)=tmpZ/tmpf;
 	  }
       }
-    
+
     save_volume4D(tmpim,inname.value()+"_flowsmooth");
   }
 
@@ -330,7 +330,7 @@ for(int z=1;z<im.zsize()-1;z++) for(int y=1;y<im.ysize()-1;y++) for(int x=1;x<im
     int xxx=XX(x,y,z);
     int yyy=YY(x,y,z);
     int zzz=ZZ(x,y,z);
-    
+
     if ( ( (xxx!=0) || (yyy!=0) || (zzz!=0) ) &&
 	 ( theval >= im(x+xxx,y+yyy,z+zzz) ) &&
 	 ( theval >  im(x-xxx,y-yyy,z-zzz) ) &&
@@ -418,7 +418,7 @@ if (outname.set())
 	{
 	  int D=d;
 	  if (iters==1) D=-d;
-		    
+
 	  if (distancemap(x+xxx*D,y+yyy*D,z+zzz*D)>=distance)
 	    {
 	      float distanceweight = exp(d * d * exponentfactor);
@@ -444,7 +444,7 @@ if (outname.set())
 	  // {{{ search all around tube
 
 {
-  for(int yyy=-MAXSEARCHLENGTH; yyy<=MAXSEARCHLENGTH; yyy++) for(int xxx=-MAXSEARCHLENGTH; xxx<=MAXSEARCHLENGTH; xxx++) 
+  for(int yyy=-MAXSEARCHLENGTH; yyy<=MAXSEARCHLENGTH; yyy++) for(int xxx=-MAXSEARCHLENGTH; xxx<=MAXSEARCHLENGTH; xxx++)
     {
       float distanceweight = exp(-0.5 * (xxx*xxx+yyy*yyy) / (float)(SEARCHSIGMA*SEARCHSIGMA) );
 
@@ -453,7 +453,7 @@ if (outname.set())
       if (r>0)
 	{
 	  int allok=1;
-	  
+
 	  for(float rr=1; rr<=r+0.1; rr++) /* search outwards from centre to current voxel - test that distancemap always increasing */
 	    {
 	      int xxx1=round(rr*xxx/r);
@@ -480,7 +480,7 @@ if (outname.set())
 }
 
 // }}}
-	
+
 	  data_4d_projected(x,y,z,T)=maxval; /* output maxsearch data */
 
 	  // {{{ debugging search

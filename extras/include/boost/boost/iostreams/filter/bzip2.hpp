@@ -13,8 +13,8 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-                   
-#include <cassert>                            
+
+#include <cassert>
 #include <memory>            // allocator.
 #include <new>               // bad_alloc.
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
@@ -25,16 +25,16 @@
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
-#include <boost/iostreams/filter/symmetric.hpp>               
-#include <boost/iostreams/pipeline.hpp>       
-#include <boost/type_traits/is_same.hpp>     
+#include <boost/iostreams/filter/symmetric.hpp>
+#include <boost/iostreams/pipeline.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 // Must come last.
 #ifdef BOOST_MSVC
 # pragma warning(push)
 # pragma warning(disable:4251 4231 4660)
 #endif
-#include <boost/config/abi_prefix.hpp>           
+#include <boost/config/abi_prefix.hpp>
 
 // Temporary fix.
 #undef small
@@ -54,7 +54,7 @@ BOOST_IOSTREAMS_DECL extern const int ok;
 BOOST_IOSTREAMS_DECL extern const int run_ok;
 BOOST_IOSTREAMS_DECL extern const int flush_ok;
 BOOST_IOSTREAMS_DECL extern const int finish_ok;
-BOOST_IOSTREAMS_DECL extern const int stream_end;    
+BOOST_IOSTREAMS_DECL extern const int stream_end;
 BOOST_IOSTREAMS_DECL extern const int sequence_error;
 BOOST_IOSTREAMS_DECL extern const int param_error;
 BOOST_IOSTREAMS_DECL extern const int mem_error;
@@ -76,7 +76,7 @@ const int default_block_size   = 9;
 const int default_work_factor  = 30;
 const bool default_small       = false;
 
-} // End namespace bzip2. 
+} // End namespace bzip2.
 
 //
 // Class name: bzip2_params.
@@ -135,14 +135,14 @@ struct bzip2_allocator : private Base {
 private:
     typedef typename Base::size_type size_type;
 public:
-    BOOST_STATIC_CONSTANT(bool, custom = 
+    BOOST_STATIC_CONSTANT(bool, custom =
         (!is_same<std::allocator<char>, Base>::value));
     typedef typename bzip2_allocator_traits<Alloc>::type allocator_type;
     static void* allocate(void* self, int items, int size);
     static void deallocate(void* self, void* address);
 };
 
-class BOOST_IOSTREAMS_DECL bzip2_base  { 
+class BOOST_IOSTREAMS_DECL bzip2_base  {
 public:
     typedef char char_type;
 protected:
@@ -150,7 +150,7 @@ protected:
     ~bzip2_base();
     bzip2_params& params() { return params_; }
     bool& ready() { return ready_; }
-    template<typename Alloc> 
+    template<typename Alloc>
     void init( bool compress,
                bzip2_allocator<Alloc>& alloc )
         {
@@ -169,10 +169,10 @@ protected:
     int decompress();
     void end(bool compress);
 private:
-    void do_init( bool compress, 
+    void do_init( bool compress,
                   #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-                      bzip2::alloc_func, 
-                      bzip2::free_func, 
+                      bzip2::alloc_func,
+                      bzip2::free_func,
                   #endif
                   void* derived );
     bzip2_params  params_;
@@ -186,14 +186,14 @@ private:
 //      delegating to the libbzip2 function BZ_bzCompress.
 //
 template<typename Alloc = std::allocator<char> >
-class bzip2_compressor_impl 
-    : public bzip2_base, 
+class bzip2_compressor_impl
+    : public bzip2_base,
       #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
           public
       #endif
-      bzip2_allocator<Alloc> 
+      bzip2_allocator<Alloc>
 {
-public: 
+public:
     bzip2_compressor_impl(const bzip2_params&);
     bool filter( const char*& src_begin, const char* src_end,
                  char*& dest_begin, char* dest_end, bool flush );
@@ -208,13 +208,13 @@ private:
 //      delegating to the libbzip2 function BZ_bzDecompress.
 //
 template<typename Alloc = std::allocator<char> >
-class bzip2_decompressor_impl 
-    : public bzip2_base, 
+class bzip2_decompressor_impl
+    : public bzip2_base,
       #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
           public
       #endif
-      bzip2_allocator<Alloc> 
-{ 
+      bzip2_allocator<Alloc>
+{
 public:
     bzip2_decompressor_impl(bool small = bzip2::default_small);
     bool filter( const char*& begin_in, const char* end_in,
@@ -233,8 +233,8 @@ private:
 //      compression using libbzip2.
 //
 template<typename Alloc = std::allocator<char> >
-struct basic_bzip2_compressor 
-    : symmetric_filter<detail::bzip2_compressor_impl<Alloc>, Alloc> 
+struct basic_bzip2_compressor
+    : symmetric_filter<detail::bzip2_compressor_impl<Alloc>, Alloc>
 {
 private:
     typedef detail::bzip2_compressor_impl<Alloc>        impl_type;
@@ -242,7 +242,7 @@ private:
 public:
     typedef typename base_type::char_type               char_type;
     typedef typename base_type::category                category;
-    basic_bzip2_compressor( const bzip2_params& = bzip2::default_block_size, 
+    basic_bzip2_compressor( const bzip2_params& = bzip2::default_block_size,
                             int buffer_size =  default_device_buffer_size );
 };
 BOOST_IOSTREAMS_PIPABLE(basic_bzip2_compressor, 1)
@@ -255,8 +255,8 @@ typedef basic_bzip2_compressor<> bzip2_compressor;
 //      decompression using libbzip2.
 //
 template<typename Alloc = std::allocator<char> >
-struct basic_bzip2_decompressor 
-    : symmetric_filter<detail::bzip2_decompressor_impl<Alloc>, Alloc> 
+struct basic_bzip2_decompressor
+    : symmetric_filter<detail::bzip2_decompressor_impl<Alloc>, Alloc>
 {
 private:
     typedef detail::bzip2_decompressor_impl<Alloc>      impl_type;
@@ -279,9 +279,9 @@ namespace detail {
 
 template<typename Alloc, typename Base>
 void* bzip2_allocator<Alloc, Base>::allocate(void* self, int items, int size)
-{ 
+{
     size_type len = items * size;
-    char* ptr = 
+    char* ptr =
         static_cast<allocator_type*>(self)->allocate
             (len + sizeof(size_type)
             #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
@@ -294,10 +294,10 @@ void* bzip2_allocator<Alloc, Base>::allocate(void* self, int items, int size)
 
 template<typename Alloc, typename Base>
 void bzip2_allocator<Alloc, Base>::deallocate(void* self, void* address)
-{ 
+{
     char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
     size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);
-    static_cast<allocator_type*>(self)->deallocate(ptr, len); 
+    static_cast<allocator_type*>(self)->deallocate(ptr, len);
 }
 
 //------------------Implementation of bzip2_compressor_impl-------------------//
@@ -320,13 +320,13 @@ bool bzip2_compressor_impl<Alloc>::filter
 }
 
 template<typename Alloc>
-void bzip2_compressor_impl<Alloc>::close() 
-{ 
-    end(true); 
+void bzip2_compressor_impl<Alloc>::close()
+{
+    end(true);
 }
 
 template<typename Alloc>
-inline void bzip2_compressor_impl<Alloc>::init() 
+inline void bzip2_compressor_impl<Alloc>::init()
 { bzip2_base::init(true, static_cast<bzip2_allocator<Alloc>&>(*this)); }
 
 //------------------Implementation of bzip2_decompressor_impl-----------------//
@@ -340,15 +340,15 @@ bool bzip2_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
       char*& dest_begin, char* dest_end, bool /* flush */ )
 {
-    if (!ready()) 
+    if (!ready())
         init();
-    if (eof_) 
+    if (eof_)
         return false;
     before(src_begin, src_end, dest_begin, dest_end);
     int result = decompress();
     after(src_begin, dest_begin);
     bzip2_error::check(result);
-    return !(eof_ = result == bzip2::stream_end); 
+    return !(eof_ = result == bzip2::stream_end);
 }
 
 template<typename Alloc>
@@ -363,15 +363,15 @@ inline void bzip2_decompressor_impl<Alloc>::init()
 
 template<typename Alloc>
 basic_bzip2_compressor<Alloc>::basic_bzip2_compressor
-        (const bzip2_params& p, int buffer_size) 
-    : base_type(buffer_size, p) 
+        (const bzip2_params& p, int buffer_size)
+    : base_type(buffer_size, p)
     { }
 
 //------------------Implementation of bzip2_decompressor----------------------//
 
 template<typename Alloc>
 basic_bzip2_decompressor<Alloc>::basic_bzip2_decompressor
-        (bool small, int buffer_size) 
+        (bool small, int buffer_size)
     : base_type(buffer_size, small)
     { }
 

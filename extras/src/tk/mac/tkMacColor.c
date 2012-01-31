@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacColor.c --
  *
  *	This file maintains a database of color values for the Tk
@@ -136,7 +136,7 @@ XCreateColormap(
     int alloc)			/* Not used. */
 {
     static Colormap index = 1;
-    
+
     /*
      * Just return a new value each time.
      */
@@ -202,7 +202,7 @@ TkpGetColor(
 	int foundSystemColor = false;
 	RGBColor rgbValue;
 	char pixelCode;
-	
+
 	if (!strcasecmp(name+6, "Highlight")) {
 	    LMGetHiliteRGB(&rgbValue);
 	    pixelCode = HIGHLIGHT_PIXEL;
@@ -260,7 +260,7 @@ TkpGetColor(
 	    pixelCode = APPEARANCE_PIXEL;
 	    foundSystemColor = true;
 	}
-	
+
 	if (foundSystemColor) {
 	    color.red = rgbValue.red;
 	    color.green = rgbValue.green;
@@ -269,17 +269,17 @@ TkpGetColor(
 		| ((color.red >> 8) & 0xff)) << 8)
 		| ((color.green >> 8) & 0xff)) << 8)
 		| ((color.blue >> 8) & 0xff));
-	    
+
 	    tkColPtr = (TkColor *) ckalloc(sizeof(TkColor));
 	    tkColPtr->color = color;
 	    return tkColPtr;
 	}
     }
-    
+
     if (XParseColor(display, colormap, name, &color) == 0) {
 	return (TkColor *) NULL;
     }
-    
+
     tkColPtr = (TkColor *) ckalloc(sizeof(TkColor));
     tkColPtr->color = color;
 
@@ -342,7 +342,7 @@ TkpGetColorByValue(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 GetControlPartColor(
     short part, 		/* Part code. */
     RGBColor *macColor)		/* Pointer to Mac color. */
@@ -384,14 +384,14 @@ GetControlPartColor(
  *----------------------------------------------------------------------
  */
 
-static int 
+static int
 GetWindowPartColor(
     short part, 		/* Part code. */
     RGBColor *macColor)		/* Pointer to Mac color. */
 {
     short index;
     WCTabHandle wcTab;
-	
+
     wcTab = (WCTabHandle) GetResource('wctb', 0);
     if(wcTab && (ResError() == noErr)) {
 	for(index = 0; index <= (**wcTab).ctSize; index++) {
@@ -431,11 +431,11 @@ GetMenuPartColor(
     GDHandle maxDevice;
     Rect globalRect;
     MCEntryPtr mcEntryPtr;
-    
+
     /* Under Appearance, we don't want to set any menu colors when we
        are asked for the standard menu colors.  So we return false (which
        means don't use this color... */
-       
+
     if (TkMacHaveAppearance()) {
         macColor->red = 0xFFFF;
         macColor->green = 0;
@@ -478,11 +478,11 @@ GetMenuPartColor(
     	    if (GetGray(maxDevice, &backColor, &foreColor)) {
     	    	*macColor = foreColor;
     	    } else {
-    	    
+
     	    	/*
     	    	 * Pointer may have been moved by GetMaxDevice or GetGray.
     	    	 */
-    	    	 
+
     	    	mcEntryPtr = GetMCEntry(0,0);
     	    	if (mcEntryPtr == NULL) {
     	   	    macColor->red = macColor->green = macColor->blue = 0x7777;

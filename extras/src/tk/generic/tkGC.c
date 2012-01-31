@@ -1,7 +1,7 @@
-/* 
+/*
  * tkGC.c --
  *
- *	This file maintains a database of read-only graphics contexts 
+ *	This file maintains a database of read-only graphics contexts
  *	for the Tk toolkit, in order to allow GC's to be shared.
  *
  * Copyright (c) 1990-1994 The Regents of the University of California.
@@ -218,7 +218,7 @@ Tk_GetGC(tkwin, valueMask, valuePtr)
     valueKey.display = Tk_Display(tkwin);
     valueKey.screenNum = Tk_ScreenNumber(tkwin);
     valueKey.depth = Tk_Depth(tkwin);
-    valueHashPtr = Tcl_CreateHashEntry(&dispPtr->gcValueTable, 
+    valueHashPtr = Tcl_CreateHashEntry(&dispPtr->gcValueTable,
             (char *) &valueKey, &new);
     if (!new) {
 	gcPtr = (TkGC *) Tcl_GetHashValue(valueHashPtr);
@@ -256,7 +256,7 @@ Tk_GetGC(tkwin, valueMask, valuePtr)
     gcPtr->display = valueKey.display;
     gcPtr->refCount = 1;
     gcPtr->valueHashPtr = valueHashPtr;
-    idHashPtr = Tcl_CreateHashEntry(&dispPtr->gcIdTable, 
+    idHashPtr = Tcl_CreateHashEntry(&dispPtr->gcIdTable,
             (char *) gcPtr->gc, &new);
     if (!new) {
 	panic("GC already registered in Tk_GetGC");

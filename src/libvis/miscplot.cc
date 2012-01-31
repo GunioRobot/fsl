@@ -1,26 +1,26 @@
 /*  miscplot.cc  -- miscellaneous plotting functions
 
     Christian F. Beckmann and Matthew Webster, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2007 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -118,7 +118,7 @@ string float2str(float f, int width, int prec, bool scientif){
   }
 
 void miscplot::add_legend(void* ptr, unsigned long cmap[], bool inside){
-  
+
   int xsize = gdImagePtr(ptr)->sx;
   int ysize = gdImagePtr(ptr)->sy;
   int dest_x = 0;
@@ -142,7 +142,7 @@ void miscplot::add_legend(void* ptr, unsigned long cmap[], bool inside){
 
   if((!inside)&&(labels.size()>0))
     xsize += 2*space + linelength + rlbllength * gdFontSmall->w;
-  
+
   xsize += dest_x;
   gdImagePtr newim;
   newim = gdImageCreate(xsize,ysize);
@@ -195,7 +195,7 @@ void miscplot::add_legend(void* ptr, unsigned long cmap[], bool inside){
 
   // make ylabel
   xcoor=space;
-  for(int ctr=0; ctr < int(ylabels.size()); ctr++){ 
+  for(int ctr=0; ctr < int(ylabels.size()); ctr++){
     int ycoor = 3*gdImagePtr(ptr)->sy/5 + ((int)ylabels[ctr].length())/2*gdFontSmall->w;
      char *s = (char*)ylabels[ctr].c_str();
      gdImageStringUp(newim, gdFontSmall,xcoor,ycoor, (unsigned char*) s, black);
@@ -205,17 +205,17 @@ void miscplot::add_legend(void* ptr, unsigned long cmap[], bool inside){
   outim = newim;
 }
 
-void miscplot::timeseries(const Matrix& mat, string filename, string title, 
+void miscplot::timeseries(const Matrix& mat, string filename, string title,
 	  float tr, int ysize, int width, int prec, bool sci){
 
   int numlines=mat.Nrows();
   int numpoint=mat.Ncols();
   float* data = new float[numlines*numpoint];
- 
+
   GDC_interpolations=TRUE;
   for(int ctr1=1;ctr1<=numlines; ctr1++)
       for(int ctr2=1;ctr2<=numpoint; ctr2++)
-        if (!isfinite(data[(ctr1-1)*numpoint + ctr2-1])) 
+        if (!isfinite(data[(ctr1-1)*numpoint + ctr2-1]))
  	   			data[(ctr1-1)*numpoint + ctr2-1] = GDC_INTERP_VALUE;
   if(ymin < ymax){
     GDC_requested_ymax = ymax;
@@ -223,7 +223,7 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
     //GDC_hard_size = TRUE;  //DO NOT uncomment this - it seems to causes a memory leak
     //possibly in conjunction with GDC_EXPOSE_IMAGE that will cause tsplot to stop working
     for(int ctr1=1;ctr1<=numlines; ctr1++){
-      for(int ctr2=1;ctr2<=numpoint; ctr2++){ 
+      for(int ctr2=1;ctr2<=numpoint; ctr2++){
 	    	data[(ctr1-1)*numpoint + ctr2-1] = std::min(std::max(float(mat(ctr1,ctr2)),ymin),ymax);
       }
     }
@@ -246,13 +246,13 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
 
   if (tr<0) tr=-tr;
 
-  spacing =1; 
+  spacing =1;
   if(numpoint>20) spacing = 5;
   if(numpoint>40) spacing = 10;
   if(numpoint>100) spacing = 20;
   if(numpoint>500) spacing = 50;
-  if(numpoint>1200) spacing = 100;  
-  
+  if(numpoint>1200) spacing = 100;
+
 	int xsize = std::max(4*numpoint,750);
   if(xsize>1200) xsize=(int)floor(std::max(xsize/2.0,750.0));
 
@@ -266,11 +266,11 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
   int maxlabellength = s.length()+1;
   s=float2str((numpoint-1) * tr,width,prec,sci);
   maxlabellength = std::max(maxlabellength,(int)s.length()+1);
- 
+
   while ( float(xsize) * float(spacing) / float(numpoint) < 8 * maxlabellength){
     spacing = 2 * spacing;
   }
-   
+
   char* ctl = new char[numpoint];
 
   if((tr == 0.0)&&(spacing%2 == 1) || (tr > 0.0))
@@ -285,13 +285,13 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
   for(int ctr=1;ctr<numpoint;ctr++)
     if (ctl[ctr]==true) maxctr=ctr;
   char** lbls = new char*[numpoint];
-  
+
   lbls[0] = new char[2];
   if(tr == 0.0)
     strcpy(lbls[0],string("1").c_str());
   else
     strcpy(lbls[0],string("0").c_str());
-  
+
   for(int ctr=1;ctr<numpoint;ctr++){
     if(ctl[ctr]){
       if(tr == 0.0)
@@ -299,7 +299,7 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
       else
 				s = float2str((ctr)*tr,width,prec,sci);
       if (ctr==maxctr ) //Padding for final label to avoid it being "chopped"
-      { 
+      {
        int len=numpoint-maxctr;
        int len2=(s.length())-len;
        //cerr << len << " " << s << " " << s.length() << " " << len2 << endl;
@@ -314,14 +314,14 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
       strcpy(lbls[ctr],string("").c_str());
     }
   }
-	
+
   {
     int tmp = _gdccfoo1;
     tmp++;
     long unsigned int tmp2 = _gdccfoo2;
     tmp2++;
   }
-	
+
   GDC_xlabel_ctl = ctl;
 
   GDC_BGColor   = 0xFFFFFFL;                  /* backgound color (white) */
@@ -341,7 +341,7 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
   float range;
   range=abs(ymax-ymin);
   if (range<1) GDC_ylabel_density = 75;
-  else GDC_ylabel_density = 70;	 
+  else GDC_ylabel_density = 70;
   if (range>1e6) GDC_ylabel_fmt = "%.1e";
   else if (range>10) GDC_ylabel_fmt = "%.0f";
   else if (range>1) GDC_ylabel_fmt = "%.1f";
@@ -355,15 +355,15 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
   //GDC_hard_graphwidth = xsize - 65;
   if(filename.substr(filename.size()-4,filename.size())!=string(".png"))
     filename += string(".png");
-  
+
   FILE  *outpng1 = fopen(filename.c_str(), "wb" );
   GDC_image_type     = GDC_PNG;
   gdImagePtr outim2=NULL;
 
   //if (labels.size()>0||ylabels.size()>0||xlabels.size()>0)    GDC_hold_img = GDC_EXPOSE_IMAGE;
-  GDC_out_graph( xsize, ysize, outpng1 , GDC_LINE, numpoint, (char**) lbls , numlines, data, NULL ); 
+  GDC_out_graph( xsize, ysize, outpng1 , GDC_LINE, numpoint, (char**) lbls , numlines, data, NULL );
   fclose (outpng1 );
-  if (labels.size()>0||ylabels.size()>0||xlabels.size()>0) 
+  if (labels.size()>0||ylabels.size()>0||xlabels.size()>0)
   {
     outpng1=fopen(filename.c_str(), "rb" );
     outim2=gdImageCreateFromPng(outpng1);
@@ -374,17 +374,17 @@ void miscplot::timeseries(const Matrix& mat, string filename, string title,
     add_legend(outim2, sc);
     gdImagePng(outim, outpng1 );
     gdImageDestroy(outim2);
-    fclose( outpng1 ); 
+    fclose( outpng1 );
     if(outim) gdImageDestroy(outim);
   }
   for(int ctr=0;ctr<numpoint;ctr++){
     delete [] lbls[ctr];
   }
-    
+
   delete [] data;
   delete [] ctl;
   delete [] lbls;
-  
+
   }
 
 void miscplot::add_bpdata(const NEWMAT::ColumnVector& vec){
@@ -430,7 +430,7 @@ void miscplot::add_bpdata(const NEWMAT::ColumnVector& vec){
 
   bp_wishi.push_back(wishi);
   bp_wislo.push_back(wislo);
-  bp_colctr++;  
+  bp_colctr++;
 }
 
 void miscplot::add_bpdata(const NEWMAT::Matrix& mat){
@@ -454,7 +454,7 @@ title){
 
 void miscplot::setscatter(Matrix &data,int width){
   deletescatter();
-  GDC_scatter = new GDC_SCATTER_T[ data.Nrows() ]; 
+  GDC_scatter = new GDC_SCATTER_T[ data.Nrows() ];
   scat_ctr = 0;
 	Matrix tmpdat = data;
 	if(data.Ncols()<2){
@@ -462,7 +462,7 @@ void miscplot::setscatter(Matrix &data,int width){
 		for(int ctr=1;ctr<=tmpdat.Nrows(); ctr++)
 			tmpdat(ctr,1) = ctr-1;
 		tmpdat |= data.Column(1);
-	}	
+	}
 
   for(int i=1;i<=tmpdat.Nrows();i++){
     GDC_scatter[scat_ctr].point = tmpdat(i,1);
@@ -482,10 +482,10 @@ void miscplot::deletescatter(){
     GDC_num_scatter_pts = scat_ctr = 0;
   }
 }
- 
+
 void miscplot::GDCglobals_reset(){
 		deletescatter();
-		
+
 		//reset all the globals
 		GDC_BGColor   = 0xFFFFFFL;  		/* backgound color (white) */
 		GDC_LineColor = GDC_DFLTCOLOR;  /* line color      (black) */
@@ -493,7 +493,7 @@ void miscplot::GDCglobals_reset(){
 		GDC_bar_width = 75;             /* % of width              */
 		GDC_grid  = GDC_TICK_LABELS;
 		GDC_hard_graphwidth = 0;
-		GDC_hard_size = FALSE;  
+		GDC_hard_size = FALSE;
 		GDC_hard_xorig = 0;
 		GDC_hold_img = GDC_DESTROY_IMAGE;
 		GDC_image_type = GDC_PNG;
@@ -525,14 +525,14 @@ void miscplot::boxplot(string filename, string title){
   //unsigned long* extclr = new unsigned long[ num_points ];
   char** lbls = new char*[num_points];
   string s;
- 
+
   data[0]=bp_min[0];
   data[num_points]=bp_min[0];
   for(int ctr2=1; ctr2<num_points; ctr2++){
     data[ctr2] = bp_q1[ctr2-1];
     data[ctr2+num_points] = bp_q3[ctr2-1];
   }
- 
+
   s=string(" ");
   lbls[0]=new char[s.length()+1];
   strcpy(lbls[0],s.c_str());
@@ -558,10 +558,10 @@ void miscplot::boxplot(string filename, string title){
   // scatter points draw medians, ranges and outliers
 	int scatter_points = (60 + 40 + 40 + 500 + bp_outlierindex.size())
 		* bp_colctr;
-	
+
   if(bp_notched)
     scatter_points += 120 * bp_colctr;
-	
+
   GDC_SCATTER_T* scat = new GDC_SCATTER_T[ scatter_points ];
 	int scat_ctr = 0;
 
@@ -588,7 +588,7 @@ void miscplot::boxplot(string filename, string title){
 				scat_ctr++;
       }
     }
-    
+
     for( int i = 1; i < num_points; i++ ){
       for ( int k = 1; k <= 60; k++ ){
 				scat[scat_ctr].point = float(i)-0.29+0.01*k;
@@ -678,7 +678,7 @@ void miscplot::boxplot(string filename, string title){
 	GDC_grid = GDC_TICK_LABELS;
 	if(gridswapdefault)
 		GDC_grid = GDC_TICK_NONE;
-		
+
   if(filename.substr(filename.size()-4,filename.size())!=string(".png"))
     filename += string(".png");
 
@@ -710,7 +710,7 @@ void miscplot::boxplot(string filename, string title){
 
   gdImagePtr outim2=NULL;
 
- 	if (labels.size()>0||ylabels.size()>0||xlabels.size()>0) 
+ 	if (labels.size()>0||ylabels.size()>0||xlabels.size()>0)
 	 {
 	   outpng1=fopen(filename.c_str(), "rb" );
 	   outim2=gdImageCreateFromPng(outpng1);
@@ -725,12 +725,12 @@ void miscplot::boxplot(string filename, string title){
     fclose( outpng1 );
     if(outim) gdImageDestroy(outim);
  	}
-   
+
 
   for(int ctr=0;ctr<num_points;ctr++){
     delete [] lbls[ctr];
   }
-    
+
   delete [] data;
   delete [] scat;
   delete [] lbls;
@@ -745,7 +745,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   int numpoint=datam.Ncols();
   int i,j;
   double scale=std::max(1.0,MISCMATHS::pow((float)10.0,(double)-(std::floor(std::log10(std::min(std::abs(datam.Maximum2(i,j)),std::abs(datam.Minimum2(i,j)))/2.0)))));
-  
+
   if (scale > 10000)
     scale=1;
   //  cerr << datam.Maximum2(i,j) << "  " << datam.Minimum2(i,j) << scale << endl;
@@ -754,7 +754,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
     explabel=num2str(std::log10(scale));
 
   float tmax = datam.Maximum2(i,j);
-  float tmin = datam.Minimum2(i,j); 
+  float tmin = datam.Minimum2(i,j);
   float trange = tmax-tmin;
   int bins = (int)floor(MISCMATHS::sqrt(numpoint));
   if (histogram_bins>0)
@@ -763,7 +763,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   int xlint = (int)ceil(trange/6);
   int binperint = (int)ceil(xlint / intsize);
 
-  //  cerr << tmax << " " << tmin  << " " << trange  << " " << bins << " " << intsize  << " " << xlint  << " " << binperint << " :" << scale <<endl; 
+  //  cerr << tmax << " " << tmin  << " " << trange  << " " << bins << " " << intsize  << " " << xlint  << " " << binperint << " :" << scale <<endl;
   intsize = float(xlint) / float(binperint);
 
   float xmin = ceil(std::abs(1.02*tmin)/intsize)*intsize * sign(tmin);
@@ -782,19 +782,19 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 
   int factor = 1;
   numpoint = factor * bindata.Ncols();
-  float* data = new float[numpoint]; 
+  float* data = new float[numpoint];
   for(int ctr1=0;ctr1< numpoint; ctr1++){
       data[ctr1] = bindata(1,(int)floor(float(ctr1 / factor + 1)));
   }
-  
+
   RowVector xax(numpoint);
   for(int ctr1=0;ctr1< numpoint; ctr1++){
-    xax(ctr1+1) = xmin + (ctr1+ 0.5) * intsize; 
+    xax(ctr1+1) = xmin + (ctr1+ 0.5) * intsize;
   }
 
   char* ctl = new char[numpoint];
   xlint = (int)ceil((xmax-xmin)/9);
-  
+
   ctl[0]=FALSE;
   for(int ctr=1;ctr<numpoint;ctr++){
     int lblpoint = (int)(MISCMATHS::round(abs(xax(ctr))/xlint)*xlint);
@@ -804,10 +804,10 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
      }
      else
        ctl[ctr]=FALSE;
-  } 
+  }
 
   char** lbls = new char*[numpoint];
- 
+
   string s;
 
   for(int ctr=0;ctr<numpoint;ctr++){
@@ -824,8 +824,8 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
       strcpy(lbls[ctr],string("").c_str());
     }
   }
-  
- 
+
+
   GDC_xlabel_ctl = ctl;
 
   GDC_BGColor   = 0xFFFFFFL;                  /* backgound color (white) */
@@ -839,7 +839,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   GDC_grid  = GDC_TICK_NONE;
 	if(gridswapdefault)
 		GDC_grid = GDC_TICK_LABELS;
- 
+
   GDC_yaxis = ylabels.size()>0;
   GDC_yaxis2 = FALSE;
   GDC_xaxis = TRUE;
@@ -867,15 +867,15 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 
   if (labels.size()>0||ylabels.size()>0||xlabels.size()>0||explabel.length()>0)
     GDC_hold_img = GDC_EXPOSE_IMAGE;
-  
-  GDC_out_graph( xsize, ysize, outpng1 , GDC_BAR, numpoint, (char**) lbls , 1, data, NULL ); 
+
+  GDC_out_graph( xsize, ysize, outpng1 , GDC_BAR, numpoint, (char**) lbls , 1, data, NULL );
   fclose( outpng1 );
 
   if (labels.size()>0||ylabels.size()>0||xlabels.size()>0||explabel.length()>0){
     outpng1 = fopen(filename.c_str(), "wb" );
     add_legend(GDC_image, sc);
-    
-    gdImagePng(outim, outpng1); 
+
+    gdImagePng(outim, outpng1);
     fclose( outpng1 );
     GDC_destroy_image(GDC_image);
     if(outim) gdImageDestroy(outim);
@@ -884,14 +884,14 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   for(int ctr=0;ctr<numpoint;ctr++){
     delete [] lbls[ctr];
   }
-    
+
   delete [] data;
   delete [] lbls;
   delete [] ctl;
 }
 
-	void miscplot::gmmfit(const Matrix& mat, Matrix& mu, Matrix& sig, 
-		Matrix& pi, string filename, string title, 
+	void miscplot::gmmfit(const Matrix& mat, Matrix& mu, Matrix& sig,
+		Matrix& pi, string filename, string title,
 		bool gammamix, float meanoffset, float detailfactor){
   RowVector datam = mat.Row(1);
   int numpoint=datam.Ncols();
@@ -908,7 +908,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
     explabel=num2str(std::log10(scale));
 
   float tmax = datam.Maximum2(i,j);
-  float tmin = datam.Minimum2(i,j); 
+  float tmin = datam.Minimum2(i,j);
   float trange = tmax-tmin;
   int bins = (int)floor(MISCMATHS::sqrt(numpoint));
   if (histogram_bins>0)
@@ -938,32 +938,32 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 		double(1.0));
 
   numpoint = factor * bindata.Ncols();
-  float* histdata = new float[numpoint]; 
+  float* histdata = new float[numpoint];
   for(int ctr1=0;ctr1< numpoint; ctr1++){
    	histdata[ctr1] = bindata(1,(int)floor(float(ctr1 / factor + 1)));
   }
-  
+
   RowVector xax(numpoint);
   for(int ctr1=0;ctr1< numpoint; ctr1++){
-    xax(ctr1+1) = xmin + (ctr1+ 0.5) * intsize/factor; 
+    xax(ctr1+1) = xmin + (ctr1+ 0.5) * intsize/factor;
   }
 
   char* ctl = new char[numpoint];
   xlint = (int)ceil((xmax-xmin)/(factor*2));
-  
+
   ctl[0]=FALSE;
   for(int ctr=1;ctr<numpoint;ctr++){
     int lblpoint = (int)(MISCMATHS::round(abs(xax(ctr))/xlint)*xlint);
-    if(xax(ctr)<0) 
+    if(xax(ctr)<0)
 			lblpoint *= -1;
-    if( (xax(ctr)<lblpoint)&&(xax(ctr+1)>lblpoint) )	
+    if( (xax(ctr)<lblpoint)&&(xax(ctr+1)>lblpoint) )
      	ctl[ctr]=TRUE;
     else
      	ctl[ctr]=FALSE;
-  } 
+  }
 
   char** lbls = new char*[numpoint];
- 
+
   string s;
   for(int ctr=0;ctr<numpoint;ctr++){
     if(ctl[ctr]){
@@ -981,7 +981,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
       strcpy(lbls[ctr],string("").c_str());
     }
   }
-  
+
   // Calculate lines
   int numlines=mu.Ncols()+1;
   for(int ctr1=1;ctr1< sig.Ncols(); ctr1++)
@@ -994,15 +994,15 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   fit = SP(normpdf(xax,mu,sig),pi.t()*ones(1,numpoint));
 
   if(null_shift!=0.0)
-    fit.Row(1) = pi(1,1)*gammapdf(-(xax + null_shift) + 
+    fit.Row(1) = pi(1,1)*gammapdf(-(xax + null_shift) +
 			meanoffset, std::abs(mu(1,1) + null_shift), sig(1,1));
 
   if(gammamix){
     if(pi(1,2)>0.0001)
-      fit.Row(2)  = pi(1,2)*gammapdf( xax - meanoffset, 
+      fit.Row(2)  = pi(1,2)*gammapdf( xax - meanoffset,
 				std::abs(mu(1,2)), sig(1,2));
     if(pi(1,3)>0.0001)
-      fit.Row(3)  = pi(1,3)*gammapdf(-xax + meanoffset, 
+      fit.Row(3)  = pi(1,3)*gammapdf(-xax + meanoffset,
 				std::abs(mu(1,3)), sig(1,3));
   }
   fit = sum(fit,1) & fit;
@@ -1011,7 +1011,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
   float* linesdata = new float[(numlines)*numpoint];
   for(int ctr1=1;ctr1<=numlines; ctr1++)
     for(int ctr2=1;ctr2<=numpoint; ctr2++)
-      linesdata[(ctr1-1)*numpoint + ctr2-1] = fit(ctr1,ctr2);	
+      linesdata[(ctr1-1)*numpoint + ctr2-1] = fit(ctr1,ctr2);
 
   GDC_xlabel_ctl = ctl;
 
@@ -1068,7 +1068,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 
     for(int ctr1=0;ctr1< numpoint; ctr1++)
      	histdata[ctr1] =  std::min(req_max, histdata[ctr1]);
-   
+
     GDC_requested_ymax = req_max;
     GDC_requested_ymin = float(0.0);
   }
@@ -1081,17 +1081,17 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 
   if (labels.size()>0||ylabels.size()>0||xlabels.size()>0||explabel.length()>0)
     GDC_hold_img = GDC_EXPOSE_IMAGE;
-  
-  GDC_out_graph( xsize, ysize, outpng1 , GDC_COMBO_LINE_AREA, numpoint, 
-		(char**) lbls , numlines, linesdata, histdata ); 
+
+  GDC_out_graph( xsize, ysize, outpng1 , GDC_COMBO_LINE_AREA, numpoint,
+		(char**) lbls , numlines, linesdata, histdata );
   fclose( outpng1 );
 
   if (labels.size()>0||ylabels.size()>0||xlabels.size()>0||
 		explabel.length()>0){
     outpng1 = fopen(filename.c_str(), "wb" );
     add_legend(GDC_image, sc3, TRUE);
-   
-    gdImagePng(outim, outpng1); 
+
+    gdImagePng(outim, outpng1);
     fclose( outpng1 );
     GDC_destroy_image(GDC_image);
     if(outim) gdImageDestroy(outim);
@@ -1099,7 +1099,7 @@ void miscplot::histogram(const Matrix& mat, string filename, string title){
 
   for(int ctr=0;ctr<numpoint;ctr++)
     delete [] lbls[ctr];
-    
+
   delete [] histdata;
   delete [] linesdata;
   delete [] lbls;

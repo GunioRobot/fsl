@@ -73,7 +73,7 @@ public:
     }
     // Can we have a boost::mathconst please?
     const result_type pi = result_type(3.14159265358979323846);
-    
+
     return _cached_rho * (_valid ?
                           cos(result_type(2)*pi*_r1) :
                           sin(result_type(2)*pi*_r1))

@@ -4,25 +4,25 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -90,16 +90,16 @@ class helper_vol;
 enum EnergyType {MemEn, BendEn};
 enum HtHbType {HtHb, Hb};
 
-class splinefield: public basisfield 
+class splinefield: public basisfield
 {
 public:
 
   // Constructors and destructors, including assignment
 
   // Plain vanilla constructor
-  splinefield(const std::vector<unsigned int>& psz, 
-	      const std::vector<double>&       pvxs, 
-	      const std::vector<unsigned int>& pksp, 
+  splinefield(const std::vector<unsigned int>& psz,
+	      const std::vector<double>&       pvxs,
+	      const std::vector<unsigned int>& pksp,
 	      int                              porder=3);
 
   // Copy constructor
@@ -112,7 +112,7 @@ public:
 
   // General utility functions
 
-  virtual unsigned int CoefSz_x() const { 
+  virtual unsigned int CoefSz_x() const {
     // cout << "Old value would have been " << static_cast<unsigned int>(ceil(((double(FieldSz_x())) + 1.0) / (double(Ksp_x())))) + 2 << endl;
     // cout << "New value is " << _sp.NCoef(0,FieldSz_x()) << endl;
     return(_sp.NCoef(0,FieldSz_x()));
@@ -139,7 +139,7 @@ public:
   virtual unsigned int KernelSz_x() const {return(_sp.KernelSize(0));}
   virtual unsigned int KernelSz_y() const {return(_sp.KernelSize(1));}
   virtual unsigned int KernelSz_z() const {return(_sp.KernelSize(2));}
- 	
+
   // Functions that actually do some work
 
   virtual void Set(const NEWIMAGE::volume<float>& pfield);
@@ -155,7 +155,7 @@ public:
     lxyz[0] = static_cast<double>(xyz(1)); lxyz[1] = static_cast<double>(xyz(2)); lxyz[2] = static_cast<double>(xyz(3));
     std::vector<unsigned int>  coefsz(3);
     coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z();
-    _sp.RangeOfSplines(lxyz,coefsz,first,last); 
+    _sp.RangeOfSplines(lxyz,coefsz,first,last);
   }
 
   // Get the value of basis lmn at point xyz
@@ -214,12 +214,12 @@ public:
                                                      const NEWIMAGE::volume<char>         *mask,
                                                      MISCMATHS::BFMatrixPrecisionType     prec) const;
 
-  virtual boost::shared_ptr<MISCMATHS::BFMatrix> JtJ(const std::vector<unsigned int>&       deriv, 
+  virtual boost::shared_ptr<MISCMATHS::BFMatrix> JtJ(const std::vector<unsigned int>&       deriv,
                                                      const NEWIMAGE::volume<float>&         ima,
                                                      const NEWIMAGE::volume<char>           *mask,
                                                      MISCMATHS::BFMatrixPrecisionType       prec) const;
 
-  virtual boost::shared_ptr<MISCMATHS::BFMatrix> JtJ(const std::vector<unsigned int>&       deriv, 
+  virtual boost::shared_ptr<MISCMATHS::BFMatrix> JtJ(const std::vector<unsigned int>&       deriv,
                                                      const NEWIMAGE::volume<float>&         ima1,
                                                      const NEWIMAGE::volume<float>&         ima2,
                                                      const NEWIMAGE::volume<char>           *mask,
@@ -239,8 +239,8 @@ public:
                                                      MISCMATHS::BFMatrixPrecisionType      prec) const;
 
 
-  virtual double MemEnergy() const; 
-  virtual double BendEnergy() const; 
+  virtual double MemEnergy() const;
+  virtual double BendEnergy() const;
 
   virtual NEWMAT::ReturnMatrix MemEnergyGrad() const;
   virtual NEWMAT::ReturnMatrix BendEnergyGrad() const;
@@ -292,7 +292,7 @@ private:
                                unsigned int                      dim,
                                unsigned int                      csz,
                                unsigned int                      order,
-                               unsigned int                      ksp) const;  
+                               unsigned int                      ksp) const;
 
   // Regularisation matrix to avoid blowing up end coefficients
   NEWMAT::ReturnMatrix get_s_matrix(unsigned int isz,
@@ -318,7 +318,7 @@ private:
                                                   const std::vector<unsigned int>&  cszc,        // Coefficient matrix size for csp/sp2
                                                   const T                           *ima,        // Image (typically product of two images)
                                                   const std::vector<unsigned int>&  isz,         // Matrix size of image
-                                                  MISCMATHS::BFMatrixPrecisionType  prec) const; // double or float 
+                                                  MISCMATHS::BFMatrixPrecisionType  prec) const; // double or float
 
   template<class T>
   boost::shared_ptr<BFMatrix> make_fully_symmetric_jtj(const Spline3D<double>&            sp2,
@@ -492,7 +492,7 @@ public:
   helper_vol(const helper_vol& in);
   ~helper_vol() { delete [] _data; }
   helper_vol& operator=(const helper_vol& rhs);
-  unsigned int Size(unsigned int dim) const { if (dim>2) throw BasisfieldException("helper_vol::Size: dim must be 0, 1 or 2"); return(_sz[dim]); } 
+  unsigned int Size(unsigned int dim) const { if (dim>2) throw BasisfieldException("helper_vol::Size: dim must be 0, 1 or 2"); return(_sz[dim]); }
   NEWMAT::ReturnMatrix AsNewmatVector() const;
   void GetColumn(unsigned int i, unsigned int j, unsigned int dim, double *col) const;
   void SetColumn(unsigned int i, unsigned int j, unsigned int dim, const double *col);
@@ -506,8 +506,8 @@ private:
 };
 /////////////////////////////////////////////////////////////////////
 //
-// Templated member-functions for the ZeroSplineMap class. The 
-// class will keep track of splines for which the/an image is zero 
+// Templated member-functions for the ZeroSplineMap class. The
+// class will keep track of splines for which the/an image is zero
 // for all of their support, thereby avoiding unneccessary calculations.
 //
 /////////////////////////////////////////////////////////////////////

@@ -2,10 +2,10 @@
 #define DATE_TIME_C_TIME_HPP___
 
 /* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland, Bart Garst 
+ * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $
  */
 
@@ -35,11 +35,11 @@ namespace std { using ::time_t; using ::time; using ::localtime;
 namespace boost {
 namespace date_time {
   //! Provides a uniform interface to some 'ctime' functions
-  /*! Provides a uniform interface to some ctime functions and 
-   * their '_r' counterparts. The '_r' functions require a pointer to a 
-   * user created std::tm struct whereas the regular functions use a 
-   * staticly created struct and return a pointer to that. These wrapper 
-   * functions require the user to create a std::tm struct and send in a 
+  /*! Provides a uniform interface to some ctime functions and
+   * their '_r' counterparts. The '_r' functions require a pointer to a
+   * user created std::tm struct whereas the regular functions use a
+   * staticly created struct and return a pointer to that. These wrapper
+   * functions require the user to create a std::tm struct and send in a
    * pointer to it. A pointer to the user created struct will be returned. */
   struct c_time {
     public:
@@ -78,5 +78,5 @@ namespace date_time {
 #endif // BOOST_HAS_THREADS
   };
 }} // namespaces
-                
+
 #endif // DATE_TIME_C_TIME_HPP___

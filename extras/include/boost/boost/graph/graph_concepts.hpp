@@ -149,12 +149,12 @@ namespace boost {
  && !BOOST_WORKAROUND(__GNUC__, <= 2)                       \
  && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # define BOOST_VECTOR_AS_GRAPH_GRAPH_ADL_HACK
-#endif 
+#endif
 
 #ifdef BOOST_VECTOR_AS_GRAPH_GRAPH_ADL_HACK
 template <class T>
 typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
-#endif      
+#endif
 
   template <class G>
   struct VertexListGraphConcept
@@ -176,7 +176,7 @@ typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
       // redesign involving specializing a template with a static
       // member function is in order :(
       using boost::vertices;
-#endif      
+#endif
       p = vertices(g);
       v = *p.first;
       const_constraints(g);
@@ -189,8 +189,8 @@ typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
       // redesign involving specializing a template with a static
       // member function is in order :(
       using boost::vertices;
-#endif 
-      
+#endif
+
       p = vertices(cg);
       v = *p.first;
       V = num_vertices(cg);
@@ -242,7 +242,7 @@ typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
   struct VertexAndEdgeListGraphConcept
   {
     void constraints() {
-      function_requires< VertexListGraphConcept<G> >();    
+      function_requires< VertexListGraphConcept<G> >();
       function_requires< EdgeListGraphConcept<G> >();
     }
   };
@@ -367,7 +367,7 @@ typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
     typedef typename graph_traits<G>::edge_descriptor edge_descriptor;
     void constraints() {
       function_requires< GraphConcept<G> >();
-      
+
       p = edge(u, v, g);
       const_constraints(g);
     }
@@ -477,11 +477,11 @@ typename T::ThereReallyIsNoMemberByThisNameInT vertices(T const&);
     void constraints() {
       V& elt = A[i][j];
       const_constraints(A);
-      ignore_unused_variable_warning(elt);      
+      ignore_unused_variable_warning(elt);
     }
     void const_constraints(const M& cA) {
       const V& elt = cA[i][j];
-      ignore_unused_variable_warning(elt);      
+      ignore_unused_variable_warning(elt);
     }
     M A;
     I i, j;

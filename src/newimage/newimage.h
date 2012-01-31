@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -82,7 +82,7 @@
 #include "miscmaths/kernel.h"
 #include "niftiio/nifti1.h"
 #include "miscmaths/splinterpolator.h"
- 
+
 using namespace NEWMAT;
 using namespace LAZY;
 using namespace MISCMATHS;
@@ -98,17 +98,17 @@ namespace NEWIMAGE {
   enum extrapolation { zeropad, constpad, extraslice, mirror, periodic,
                        boundsassert, boundsexception, userextrapolation };
 
-  enum interpolation { nearestneighbour, trilinear, sinc, userkernel, 
+  enum interpolation { nearestneighbour, trilinear, sinc, userkernel,
 		       userinterpolation, spline };
 
   enum threshtype { inclusive , exclusive };
 
   template <class P>
-  class minmaxstuff { public: P min; P max; int minx; int miny; int minz; 
+  class minmaxstuff { public: P min; P max; int minx; int miny; int minz;
 			int mint; int maxx; int maxy; int maxz; int maxt; } ;
 
 
-#pragma interface  
+#pragma interface
 
   template <class T>
   class volume : public lazymanager {
@@ -177,7 +177,7 @@ namespace NEWIMAGE {
       { return (Data + (z*RowsY + y)*ColumnsX + x); }
     inline T* basicptr(int x, int y, int z) const
       { return (Data + (z*RowsY + y)*ColumnsX + x); }
-    
+
     int initialize(int xsize, int ysize, int zsize, T *d, bool d_owner);
     void setdefaultproperties();
     void setupsizeproperties() const;
@@ -185,7 +185,7 @@ namespace NEWIMAGE {
     void enforcelimits(std::vector<int>& lims) const;
     void calc_no_voxels() const;
     const T& extrapolate(int x, int y, int z) const;
-    float kernelinterpolation(const float x, const float y, 
+    float kernelinterpolation(const float x, const float y,
 			      const float z) const;
     float splineinterpolate(float x, float y, float z) const;
     float spline_interp1partial(float x, float y, float z, int dir, float *deriv) const;
@@ -204,7 +204,7 @@ namespace NEWIMAGE {
 
 #ifdef EXPOSE_TREACHEROUS
   public:
-#endif 
+#endif
     // sampling_mat should now be avoided - use newimagevox2mm_mat instead
     bool RadiologicalFile;
     Matrix sampling_mat() const;
@@ -229,7 +229,7 @@ namespace NEWIMAGE {
     volume(int xsize, int ysize, int zsize, T *d, bool d_owner);
     ~volume();
     void destroy();
-    const volume<T>& operator=(const volume<T>& source); 
+    const volume<T>& operator=(const volume<T>& source);
     int reinitialize(const volume<T>& source);
     int reinitialize(int xsize, int ysize, int zsize);
     int reinitialize(int xsize, int ysize, int zsize, T *d, bool d_owner);
@@ -250,7 +250,7 @@ namespace NEWIMAGE {
     void setxdim(float x) { Xdim = fabs(x); }
     void setydim(float y) { Ydim = fabs(y); }
     void setzdim(float z) { Zdim = fabs(z); }
-    void setdims(float x, float y, float z) 
+    void setdims(float x, float y, float z)
       { setxdim(x); setydim(y); setzdim(z); }
     void setDisplayMaximumMinimum(const float maximum, const float minimum) const {  displayMaximum=maximum; displayMinimum=minimum; }
     void setDisplayMaximum(const float maximum) const { setDisplayMaximumMinimum(maximum,displayMinimum); }
@@ -272,7 +272,7 @@ namespace NEWIMAGE {
     inline bool usingROI() const { return activeROI; }
     void setROIlimits(int x0, int y0, int z0, int x1, int y1, int z1) const;
     void setROIlimits(const std::vector<int>& lims) const;
-    void activateROI() const; 
+    void activateROI() const;
     void deactivateROI() const;
     volume<T> ROI() const;  // returns a new volume = ROI
     int copyROIonly(const volume<T>& source);
@@ -307,7 +307,7 @@ namespace NEWIMAGE {
     double sum() const { return sums()[0]; }
     double sumsquares() const { return sums()[1]; }
     double mean() const { return sum()/((double) no_voxels); }
-    double variance() const { double n=(double) no_voxels; 
+    double variance() const { double n=(double) no_voxels;
 		return (n/(n-1))*(sumsquares()/n - mean()*mean()); }
     double stddev() const { return sqrt(variance()); }
     T robustmin() const { return robustlimits()[0]; }
@@ -343,54 +343,54 @@ namespace NEWIMAGE {
     T robustmax(const volume<T>& mask) const;
     T percentile(float pvalue, const volume<T>& mask) const;  // arg in [0,1]
     ColumnVector histogram(int nbins, const volume<T>& mask) const;
-    ColumnVector histogram(int nbins, T minval, T maxval, const volume<T>& mask) 
+    ColumnVector histogram(int nbins, T minval, T maxval, const volume<T>& mask)
       const;
 
 
     // DATA ACCESS FUNCTIONS (iterators)
     typedef const T* fast_const_iterator;
 
-    inline fast_const_iterator fbegin() const 
+    inline fast_const_iterator fbegin() const
       { return Data; }
-    inline fast_const_iterator fend() const 
+    inline fast_const_iterator fend() const
       { return Data+SizeBound; }
 
 
     // BASIC DATA ACCESS FUNCTIONS
     inline bool in_bounds(int x, int y, int z) const
-      { return ( (x>=0) && (y>=0) && (z>=0) 
+      { return ( (x>=0) && (y>=0) && (z>=0)
 		 && (x<ColumnsX) && (y<RowsY) && (z<SlicesZ) ); }
     bool in_bounds(float x, float y, float z) const
     {
-      int ix=((int) floor(x)); 
-      int iy=((int) floor(y)); 
+      int ix=((int) floor(x));
+      int iy=((int) floor(y));
       int iz=((int) floor(z));
       return((ix>=0) && (iy>=0) && (iz>=0) && ((ix+1)<ColumnsX) && ((iy+1)<RowsY) && ((iz+1)<SlicesZ));
     }
     bool in_extraslice_bounds(float x, float y, float z) const
     {
-      int ix=((int) floor(x)); 
-      int iy=((int) floor(y)); 
+      int ix=((int) floor(x));
+      int iy=((int) floor(y));
       int iz=((int) floor(z));
       return((ix>=-1) && (iy>=-1) && (iz>=-1) && (ix<ColumnsX) && (iy<RowsY) && (iz<SlicesZ));
     }
-    inline bool valid(int x, int y, int z) const 
-    { 
+    inline bool valid(int x, int y, int z) const
+    {
       return((ep_valid[0] || (x>=0 && x<ColumnsX)) && (ep_valid[1] || (y>=0 && y<RowsY)) && (ep_valid[2] || (z>=0 && z<SlicesZ)));
     }
     bool valid(float x, float y, float z) const
     {
-      int ix=((int) floor(x)); 
-      int iy=((int) floor(y)); 
+      int ix=((int) floor(x));
+      int iy=((int) floor(y));
       int iz=((int) floor(z));
       return((ep_valid[0] || (ix>=0 && (ix+1)<ColumnsX)) && (ep_valid[1] || (iy>=0 && (iy+1)<RowsY)) && (ep_valid[2] || (iz>=0 && (iz+1)<SlicesZ)));
     }
     inline T& operator()(int x, int y, int z)
-      { set_whole_cache_validity(false); 
-        if (in_bounds(x,y,z)) return *(basicptr(x,y,z)); 
+      { set_whole_cache_validity(false);
+        if (in_bounds(x,y,z)) return *(basicptr(x,y,z));
 	else                  return const_cast<T& > (extrapolate(x,y,z)); }
     inline const T& operator()(int x, int y, int z)
-      const { 	if (in_bounds(x,y,z)) return *(basicptr(x,y,z)); 
+      const { 	if (in_bounds(x,y,z)) return *(basicptr(x,y,z));
 	        else                  return extrapolate(x,y,z); }
     float interpolate(float x, float y, float z) const;
     float interpolate(float x, float y, float z, bool *ep) const;
@@ -407,7 +407,7 @@ namespace NEWIMAGE {
                          ) const;
 
     inline T& value(int x, int y, int z)
-      { set_whole_cache_validity(false); 
+      { set_whole_cache_validity(false);
         return *(basicptr(x,y,z)); }
     inline const T& value(int x, int y, int z) const
       { return *(basicptr(x,y,z)); }
@@ -430,9 +430,9 @@ namespace NEWIMAGE {
     std::vector<bool> getextrapolationvalidity() const { return(ep_valid); }
     void defineuserinterpolation(float (*interp)(
              const volume<T>& , float, float, float)) const;
-    void definekernelinterpolation(const ColumnVector& kx, 
+    void definekernelinterpolation(const ColumnVector& kx,
 				   const ColumnVector& ky,
-				   const ColumnVector& kz, 
+				   const ColumnVector& kz,
 				   int wx, int wy, int wz) const;  // full-width
     void definekernelinterpolation(const volume<T>& vol) const;
     void definesincinterpolation(const string& sincwindowtype,
@@ -441,26 +441,26 @@ namespace NEWIMAGE {
 				 int wx, int wy, int wz, int nstore=1201) const;
                                   // full-width
 
-    inline void getneighbours(int x, int y, int z, 
+    inline void getneighbours(int x, int y, int z,
 			      T &v000, T &v001, T &v010,
 			      T &v011, T &v100, T &v101,
 			      T &v110, T &v111) const;
-    inline void getneighbours(int x, int y, int z, 
+    inline void getneighbours(int x, int y, int z,
 			      T &v000, T &v010,
 			      T &v100, T &v110) const;
-    
-    
+
+
 
     // ARITHMETIC FUNCTIONS
-    T operator=(T val); 
-    const volume<T>& operator+=(T val); 
-    const volume<T>& operator-=(T val); 
-    const volume<T>& operator*=(T val); 
-    const volume<T>& operator/=(T val); 
-    const volume<T>& operator+=(const volume<T>& source); 
-    const volume<T>& operator-=(const volume<T>& source); 
-    const volume<T>& operator*=(const volume<T>& source); 
-    const volume<T>& operator/=(const volume<T>& source); 
+    T operator=(T val);
+    const volume<T>& operator+=(T val);
+    const volume<T>& operator-=(T val);
+    const volume<T>& operator*=(T val);
+    const volume<T>& operator/=(T val);
+    const volume<T>& operator+=(const volume<T>& source);
+    const volume<T>& operator-=(const volume<T>& source);
+    const volume<T>& operator*=(const volume<T>& source);
+    const volume<T>& operator/=(const volume<T>& source);
 
     volume<T> operator+(T num) const;
     volume<T> operator-(T num) const;
@@ -490,7 +490,7 @@ namespace NEWIMAGE {
     friend bool operator==(const volume<S>& v1, const volume<S>& v2);
     template <class S>
     friend bool operator!=(const volume<S>& v1, const volume<S>& v2); // { return(!(v1==v2)); }
-    
+
     // GENERAL MANIPULATION
 
     void binarise(T lowerth, T upperth, threshtype tt=inclusive);
@@ -503,11 +503,11 @@ namespace NEWIMAGE {
     Matrix swapmat(int dim1, int dim2, int dim3) const;
     Matrix swapmat(const string& newx, const string& newy, const string& newz) const;
 
-     
+
     // CONVERSION FUNCTIONS
     template <class S, class D> friend
     void copyconvert(const volume<S>& source, volume<D>& dest);
-      
+
   };
 
 
@@ -575,7 +575,7 @@ namespace NEWIMAGE {
 
 #ifdef EXPOSE_TREACHEROUS
   public:
-#endif 
+#endif
     // sampling_mat should now be avoided - use newimagevox2mm_mat instead
     Matrix sampling_mat() const;
     void set_sform(int sform_code, const Matrix& snewmat) const;
@@ -597,14 +597,14 @@ namespace NEWIMAGE {
     volume4D(int xsize, int ysize, int zsize, int tsize, T *d=0);
     ~volume4D();
     void destroy();
-    const volume4D<T>& operator=(const volume4D<T>& source); 
-    const volume4D<T>& operator=(const volume<T>& source); 
+    const volume4D<T>& operator=(const volume4D<T>& source);
+    const volume4D<T>& operator=(const volume<T>& source);
     int reinitialize(const volume4D<T>& source);
     int reinitialize(int xsize, int ysize, int zsize, int tsize, T *d=0);
     int copyproperties(const volume4D<T>& source);
     int copyproperties(const volume<T>& source);
     int copyvolumes(const volume4D<T>& source);
-    
+
     // DATA ACCESS
     inline bool in_bounds(int x, int y, int z) const
       { return ( (vols.size()>0) && vols[0].in_bounds(x,y,z) ); }
@@ -613,39 +613,39 @@ namespace NEWIMAGE {
     inline bool in_bounds(int t) const
       { return ( (t>=0) && (t<this->tsize()) ); }
     inline bool in_bounds(int x, int y, int z, int t) const
-      { return ( (t>=0) && (t<this->tsize()) && 
+      { return ( (t>=0) && (t<this->tsize()) &&
 		 vols[Limits[3]].in_bounds(x,y,z) ); }
     bool in_bounds(float x, float y, float z, int t) const
-      { return ( (t>=0) && (t<this->tsize()) && 
+      { return ( (t>=0) && (t<this->tsize()) &&
 		 vols[Limits[3]].in_bounds(x,y,z) ); }
     bool valid(int x, int y, int z) const {return(vols.size()>0 && vols[0].valid(x,y,z));}
     bool valid(float x, float y, float z) const {return(vols.size()>0 && vols[0].valid(x,y,z));}
 
-    inline T& operator()(int x, int y, int z, int t) 
-      { set_whole_cache_validity(false);  
-        if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5); 
+    inline T& operator()(int x, int y, int z, int t)
+      { set_whole_cache_validity(false);
+        if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);
 	return vols[t](x,y,z); }
-    inline const T& operator()(int x, int y, int z, int t) const 
-      { if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5); 
+    inline const T& operator()(int x, int y, int z, int t) const
+      { if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);
         return vols[t](x,y,z); }
 
-    inline T& value(int x, int y, int z, int t) 
+    inline T& value(int x, int y, int z, int t)
       { set_whole_cache_validity(false);  return vols[t].value(x,y,z); }
-    inline const T& value(int x, int y, int z, int t) const 
+    inline const T& value(int x, int y, int z, int t) const
       { return vols[t].value(x,y,z); }
 
     inline volume<T>& operator[](int t) {
-      set_whole_cache_validity(false);  
-      if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);   
+      set_whole_cache_validity(false);
+      if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);
       return vols[t]; }
-    inline const volume<T>& operator[](int t) const 
-      { if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);  
+    inline const volume<T>& operator[](int t) const
+      { if (!in_bounds(t)) imthrow("Out of Bounds (time index)",5);
         return vols[t]; }
-    
+
     // SINGLE VOXEL TIME-SERIES ACCESS
     ReturnMatrix voxelts(int x, int y, int z) const;
     void setvoxelts(const ColumnVector& ts, int x, int y, int z);
-    
+
     // WHOLE VOLUME MODIFIERS
     void addvolume(const volume<T>& source);
     void addvolume(const volume4D<T>& source);
@@ -657,15 +657,15 @@ namespace NEWIMAGE {
     ReturnMatrix matrix(const volume<T>& mask) const;
     ReturnMatrix matrix(const volume<T>& mask, vector<long>& voxelLabels) const;
     ReturnMatrix matrix() const;
-    void setmatrix(const Matrix& newmatrix, const volume<T>& mask, 
+    void setmatrix(const Matrix& newmatrix, const volume<T>& mask,
 		   const T pad=0);
-    void setmatrix(const Matrix& newmatrix); 
+    void setmatrix(const Matrix& newmatrix);
     volume<int> vol2matrixkey(volume<T>& mask); //returns a volume with numbers in relating to matrix colnumbers
     ReturnMatrix matrix2volkey(volume<T>& mask);
 
 
     // SIZE AND DIMENSIONS
-    inline int xsize() const 
+    inline int xsize() const
       { if (vols.size()>0) return vols[0].xsize(); else return 0; }
     inline int ysize() const
       { if (vols.size()>0) return vols[0].ysize(); else return 0; }
@@ -689,9 +689,9 @@ namespace NEWIMAGE {
     void setzdim(float z);
     void settdim(float tr) { p_TR = fabs(tr); }
     void setTR(float tr)   { settdim(tr); }
-    void setdims(float x, float y, float z, float tr) 
+    void setdims(float x, float y, float z, float tr)
       { setxdim(x); setydim(y); setzdim(z); settdim(tr); }
-    unsigned long int nvoxels() const 
+    unsigned long int nvoxels() const
       { if (vols.size()>0) return vols[0].nvoxels(); else return 0; }
     int ntimepoints() const { return this->tsize(); }
     void setDisplayMaximumMinimum(const float maximum, const float minimum) const;
@@ -713,9 +713,9 @@ namespace NEWIMAGE {
 		       const volume<T>& , float, float, float)) const;
     void defineuserextrapolation(T (*extrap)(
 		       const volume<T>& , int, int, int)) const;
-    void definekernelinterpolation(const ColumnVector& kx, 
+    void definekernelinterpolation(const ColumnVector& kx,
 				   const ColumnVector& ky,
-				   const ColumnVector& kz, 
+				   const ColumnVector& kz,
 				   int wx, int wy, int wz) const;
     void definekernelinterpolation(const volume4D<T>& vol) const;
     void definekernelinterpolation(const volume<T>& vol) const;
@@ -741,9 +741,9 @@ namespace NEWIMAGE {
     void setROIlimits(int x0, int y0, int z0, int t0,
                       int x1, int y1, int z1, int t1) const;
     void setROIlimits(int t0, int t1) const;
-    void setROIlimits(int x0, int y0, int z0, int x1, int y1, int z1) const; 
+    void setROIlimits(int x0, int y0, int z0, int x1, int y1, int z1) const;
     void setROIlimits(const std::vector<int>& lims) const;
-    void activateROI() const; 
+    void activateROI() const;
     void deactivateROI() const;
     volume4D<T> ROI() const;  // returns a new volume = ROI
     int copyROIonly(const volume4D<T>& source);
@@ -755,7 +755,7 @@ namespace NEWIMAGE {
     // sampling_mat should now be avoided - use newimagevox2mm_mat instead
     Matrix newimagevox2mm_mat() const;
     Matrix niftivox2newimagevox_mat() const;
-    
+
     int intent_code() const;
     float intent_param(int n) const;
     void set_intent(int intent_code, float p1, float p2, float p3) const;
@@ -773,7 +773,7 @@ namespace NEWIMAGE {
     double sum() const { return sums()[0]; }
     double sumsquares() const { return sums()[1]; }
     double mean() const { return sum()/(Max(1.0,(double) nvoxels()*ntimepoints()));}
-    double variance() const { double n=(double) nvoxels() * ntimepoints(); 
+    double variance() const { double n=(double) nvoxels() * ntimepoints();
 		return (n/(n-1))*(sumsquares()/n - mean()*mean()); }
     double stddev() const { return sqrt(variance()); }
     T robustmin() const { return robustlimits()[0]; }
@@ -843,19 +843,19 @@ namespace NEWIMAGE {
 
 
     // ARITHMETIC FUNCTIONS
-    T operator=(T val); 
-    const volume4D<T>& operator+=(T val); 
-    const volume4D<T>& operator-=(T val); 
-    const volume4D<T>& operator*=(T val); 
-    const volume4D<T>& operator/=(T val); 
-    const volume4D<T>& operator+=(const volume<T>& source); 
-    const volume4D<T>& operator-=(const volume<T>& source); 
-    const volume4D<T>& operator*=(const volume<T>& source); 
-    const volume4D<T>& operator/=(const volume<T>& source); 
-    const volume4D<T>& operator+=(const volume4D<T>& source); 
-    const volume4D<T>& operator-=(const volume4D<T>& source); 
-    const volume4D<T>& operator*=(const volume4D<T>& source); 
-    const volume4D<T>& operator/=(const volume4D<T>& source); 
+    T operator=(T val);
+    const volume4D<T>& operator+=(T val);
+    const volume4D<T>& operator-=(T val);
+    const volume4D<T>& operator*=(T val);
+    const volume4D<T>& operator/=(T val);
+    const volume4D<T>& operator+=(const volume<T>& source);
+    const volume4D<T>& operator-=(const volume<T>& source);
+    const volume4D<T>& operator*=(const volume<T>& source);
+    const volume4D<T>& operator/=(const volume<T>& source);
+    const volume4D<T>& operator+=(const volume4D<T>& source);
+    const volume4D<T>& operator-=(const volume4D<T>& source);
+    const volume4D<T>& operator*=(const volume4D<T>& source);
+    const volume4D<T>& operator/=(const volume4D<T>& source);
 
     volume4D<T> operator+(T num) const;
     volume4D<T> operator-(T num) const;
@@ -886,7 +886,7 @@ namespace NEWIMAGE {
     friend volume4D<S> operator-(const volume<S>& v1, const volume4D<S>& v2);
     template <class S>
     friend volume4D<S> operator*(const volume<S>& v1, const volume4D<S>& v2);
-     
+
     // CONVERSION FUNCTIONS
     template <class S, class D> friend
     void copyconvert(const volume4D<S>& source, volume4D<D>& dest);
@@ -913,14 +913,14 @@ namespace NEWIMAGE {
     {
       cout << name << ":: Size = (" << source.xsize() << ","
 	   << source.ysize() << "," << source.zsize() << ")" << endl;
-      cout << name << ":: ROI Size = (" << source.maxx() - source.minx() + 1 
+      cout << name << ":: ROI Size = (" << source.maxx() - source.minx() + 1
 	   << "," << source.maxy() - source.miny() + 1
 	   << "," << source.maxz() - source.minz() + 1 << ")" << endl;
       cout << name << ":: Dims = (" << source.xdim() << ","
 	   << source.ydim() << "," << source.zdim() << ")" << endl;
-      cout << name << ":: Minimum and maximum intensities are: " 
+      cout << name << ":: Minimum and maximum intensities are: "
 	   << source.min() << " and " << source.max() << endl;
-    }  
+    }
 
   template <class T>
   void print_info(const volume4D<T>& source, const string& name)
@@ -928,16 +928,16 @@ namespace NEWIMAGE {
       cout << name << ":: Size = (" << source.xsize() << ","
 	   << source.ysize() << "," << source.zsize() << ","
 	   << source.tsize() << ")" << endl;
-      cout << name << ":: ROI Size = (" << source.maxx() - source.minx() + 1 
+      cout << name << ":: ROI Size = (" << source.maxx() - source.minx() + 1
 	   << "," << source.maxy() - source.miny() + 1
-	   << "," << source.maxz() - source.minz() + 1 
+	   << "," << source.maxz() - source.minz() + 1
 	   << "," << source.maxt() - source.mint() + 1 << ")" << endl;
       cout << name << ":: Dims = (" << source.xdim() << ","
-	   << source.ydim() << "," << source.zdim() << "," 
+	   << source.ydim() << "," << source.zdim() << ","
 	   << source.tdim() << ")" << endl;
-      cout << name << ":: Minimum and maximum intensities are: " 
+      cout << name << ":: Minimum and maximum intensities are: "
 	   << source.min() << " and " << source.max() << endl;
-    }  
+    }
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -945,17 +945,17 @@ namespace NEWIMAGE {
 ////////////////////////////////////////////////////////////////////////
 
   template <class T>
-  inline void volume<T>::getneighbours(int x, int y, int z, 
+  inline void volume<T>::getneighbours(int x, int y, int z,
 					    T &v000, T &v001, T &v010,
 					    T &v011, T &v100, T &v101,
 					    T &v110, T &v111) const {
     T *ptr = basicptr(x,y,z);
     v000 = *ptr;
-    ptr++; 
+    ptr++;
     v100 = *ptr;
-    ptr+= ColumnsX;  
+    ptr+= ColumnsX;
     v110 = *ptr;
-    ptr--; 
+    ptr--;
     v010 = *ptr;
     ptr += SliceOffset;
     v011 = *ptr;
@@ -967,26 +967,26 @@ namespace NEWIMAGE {
     v001 = *ptr;
   }
 
-	
+
   template <class T>
-  inline void volume<T>::getneighbours(int x, int y, int z, 
-					    T &v000, T &v010, 
+  inline void volume<T>::getneighbours(int x, int y, int z,
+					    T &v000, T &v010,
 					    T &v100, T &v110) const {
     T *ptr = basicptr(x,y,z);
     v000 = *ptr;
-    ptr++; 
+    ptr++;
     v100 = *ptr;
-    ptr+= ColumnsX;  
+    ptr+= ColumnsX;
     v110 = *ptr;
-    ptr--; 
+    ptr--;
     v010 = *ptr;
   }
-	
+
 
 //    template <class T>
 //    inline volume<T>::iterator volume<T>::begin()
 //    { return volume<T>::iterator(basicptr(Limits[0],Limits[1],Limits[2]),
-//  		    (lazymanager*) this, 
+//  		    (lazymanager*) this,
 //  		    Limits[0],Limits[1],Limits[2],
 //  		    Limits[0],Limits[1],Limits[2],
 //  		    Limits[3],Limits[4],Limits[5],
@@ -999,12 +999,12 @@ namespace NEWIMAGE {
 //  		 Limits[3],Limits[4],Limits[5],
 //  		 Limits[0],Limits[1],Limits[2],
 //  		 Limits[3],Limits[4],Limits[5],
-//  		 ColumnsX,SliceOffset); 
+//  		 ColumnsX,SliceOffset);
 //                   return ++tmp; }
 
 //    template <class T>
-//    inline volume<T>::const_iterator volume<T>::begin() const 
-//    { return 
+//    inline volume<T>::const_iterator volume<T>::begin() const
+//    { return
 //        volume<T>::const_iterator(basicptr(Limits[0],Limits[1],Limits[2]),
 //  			  Limits[0],Limits[1],Limits[2],
 //  			  Limits[0],Limits[1],Limits[2],
@@ -1012,23 +1012,23 @@ namespace NEWIMAGE {
 //  			  ColumnsX,SliceOffset); }
 
 //    template <class T>
-//    inline volume<T>::const_iterator volume<T>::end() const 
+//    inline volume<T>::const_iterator volume<T>::end() const
 //    { volume<T>::const_iterator tmp(basicptr(Limits[3],Limits[4],Limits[5]),
 //  		       Limits[3],Limits[4],Limits[5],
 //  		       Limits[0],Limits[1],Limits[2],
 //  		       Limits[3],Limits[4],Limits[5],
-//  		       ColumnsX,SliceOffset); 
+//  		       ColumnsX,SliceOffset);
 //                         return ++tmp; }
-  
 
-	     
+
+
 ////////////////////////////////////////////////////////////////////////
 /////////////////////////// HELPER FUNCTIONS ///////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
 
   template <class T>
-  long int no_mask_voxels(const volume<T>& mask) 
+  long int no_mask_voxels(const volume<T>& mask)
   {
      long int n=0;
      for (int z=mask.minz(); z<=mask.maxz(); z++) {
@@ -1040,9 +1040,9 @@ namespace NEWIMAGE {
      }
      return n;
   }
-  
+
   template <class T>
-  long int no_mask_voxels(const volume4D<T>& mask) 
+  long int no_mask_voxels(const volume4D<T>& mask)
   {
      long int n=0;
      for (int t=mask.mint(); t<=mask.maxt(); t++) {
@@ -1058,7 +1058,7 @@ namespace NEWIMAGE {
   }
 
   template <class T>
-  long int no_timepoints(const volume4D<T>& vol) 
+  long int no_timepoints(const volume4D<T>& vol)
   {
      return (vol.maxt()-vol.mint()+1);
   }
@@ -1086,47 +1086,47 @@ namespace NEWIMAGE {
 
   template <class S1, class S2>
   bool samesize(const volume<S1>& vol1, const volume<S2>& vol2, bool checkdim)
-  {  
-    bool same = ( ( (vol1.maxx()-vol1.minx())==(vol2.maxx()-vol2.minx()) ) && 
-	          ( (vol1.maxy()-vol1.miny())==(vol2.maxy()-vol2.miny()) ) && 
+  {
+    bool same = ( ( (vol1.maxx()-vol1.minx())==(vol2.maxx()-vol2.minx()) ) &&
+	          ( (vol1.maxy()-vol1.miny())==(vol2.maxy()-vol2.miny()) ) &&
 	          ( (vol1.maxz()-vol1.minz())==(vol2.maxz()-vol2.minz()) ) );
     if (checkdim) same = same && samedim(vol1,vol2);
-    return(same); 
+    return(same);
   }
-  
+
   template <class S1, class S2>
   bool samesize(const volume4D<S1>& vol1, const volume4D<S2>& vol2, bool checkdim)
-  {  
-    bool same = ( ( (vol1.maxt()-vol1.mint())==(vol2.maxt()-vol2.mint()) ) && 
+  {
+    bool same = ( ( (vol1.maxt()-vol1.mint())==(vol2.maxt()-vol2.mint()) ) &&
 	          ( (vol1.tsize()<=0) || (vol2.tsize()<=0) || samesize(vol1[0],vol2[0]) ) );
     if (checkdim) same = same && samedim(vol1,vol2);
     return(same);
   }
-  
+
   template <class S1, class S2>
   bool sameabssize(const volume<S1>& vol1, const volume<S2>& vol2, bool checkdim)
-  {  
-    bool same = ( ( (vol1.xsize())==(vol2.xsize()) ) && 
-	          ( (vol1.ysize())==(vol2.ysize()) ) && 
+  {
+    bool same = ( ( (vol1.xsize())==(vol2.xsize()) ) &&
+	          ( (vol1.ysize())==(vol2.ysize()) ) &&
 	          ( (vol1.zsize())==(vol2.zsize()) ) );
     if (checkdim) same = same && samedim(vol1,vol2);
-    return(same); 
+    return(same);
   }
-  
+
   template <class S1, class S2>
   bool sameabssize(const volume4D<S1>& vol1, const volume4D<S2>& vol2, bool checkdim)
-  {  
-    bool same = ( ( (vol1.tsize())==(vol2.tsize()) ) && 
+  {
+    bool same = ( ( (vol1.tsize())==(vol2.tsize()) ) &&
 	          ( (vol1.tsize()==0) || samesize(vol1[0],vol2[0]) ) );
     if (checkdim) same = same && samedim(vol1,vol2);
     return(same);
   }
-  
+
   template <class S1, class S2>
   bool samedim(const volume<S1>& vol1, const volume<S2>& vol2)
   {
-    return(std::abs(vol1.xdim()-vol2.xdim())<1e-6 && 
-           std::abs(vol1.ydim()-vol2.ydim())<1e-6 && 
+    return(std::abs(vol1.xdim()-vol2.xdim())<1e-6 &&
+           std::abs(vol1.ydim()-vol2.ydim())<1e-6 &&
            std::abs(vol1.zdim()-vol2.zdim())<1e-6);
   }
 
@@ -1147,7 +1147,7 @@ namespace NEWIMAGE {
     dest.Xdim = source.Xdim;
     dest.Ydim = source.Ydim;
     dest.Zdim = source.Zdim;
-    
+
     dest.StandardSpaceCoordMat = source.StandardSpaceCoordMat;
     dest.RigidBodyCoordMat = source.RigidBodyCoordMat;
     dest.StandardSpaceTypeCode = source.StandardSpaceTypeCode;
@@ -1166,13 +1166,13 @@ namespace NEWIMAGE {
     dest.enforcelimits(dest.ROIbox);
     dest.activeROI = source.activeROI;
     if (dest.activeROI) {
-      dest.Limits = source.Limits;  
+      dest.Limits = source.Limits;
       dest.enforcelimits(dest.Limits);
     } else {
       dest.setdefaultlimits();
     }
     dest.calc_no_voxels();
-    
+
     dest.interpkernel = source.interpkernel;
     dest.p_interpmethod = source.p_interpmethod;
     dest.p_extrapmethod = source.p_extrapmethod;
@@ -1198,7 +1198,7 @@ namespace NEWIMAGE {
     // doubly ensure that lazy properties are not valid
     dest.set_whole_cache_validity(false);
   }
-  
+
 
   template <class S, class D>
   void copybasicproperties(const volume4D<S>& source, volume4D<D>& dest)
@@ -1209,7 +1209,7 @@ namespace NEWIMAGE {
     dest.enforcelimits(dest.ROIbox);
     dest.activeROI = source.activeROI;
     if ((dest.activeROI) && (sameabssize(source,dest))) {
-      dest.Limits = source.Limits;  
+      dest.Limits = source.Limits;
       dest.enforcelimits(dest.Limits);
     } else {
       dest.setdefaultlimits();
@@ -1244,9 +1244,9 @@ namespace NEWIMAGE {
 		      source.ROIlimits(4),source.ROIlimits(5),
 		      source.ROIlimits(6),dest.ROIlimits(7));
     if (source.usingROI()) dest.activateROI(); else dest.deactivateROI();
-    if ((dest.usingROI()) && (dest.tsize()>=1) 
+    if ((dest.usingROI()) && (dest.tsize()>=1)
 	&& (sameabssize(source,dest[0]))) {
-      dest.setROIlimits(source.limits());  
+      dest.setROIlimits(source.limits());
     } else {
       dest.setdefaultlimits();
     }
@@ -1279,7 +1279,7 @@ namespace NEWIMAGE {
     // doubly ensure that lazy properties are not valid
     dest.set_whole_cache_validity(false);
   }
-  
+
 
 
   template <class S>

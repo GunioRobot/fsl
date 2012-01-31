@@ -16,7 +16,7 @@ wm title $w "Menu Demonstration"
 wm iconname $w "menu"
 positionWindow $w
 
-label $w.msg -font $font -wraplength 4i -justify left 
+label $w.msg -font $font -wraplength 4i -justify left
 if {[string equal [tk windowingsystem] "classic"]
 	|| [string equal [tk windowingsystem] "aqua"]} {
     catch {set origUseCustomMDEF $::tk::mac::useCustomMDEF; set ::tk::mac::useCustomMDEF 1}
@@ -57,7 +57,7 @@ set m $w.menu.basic
 $w.menu add cascade -label "Basic" -menu $m -underline 0
 menu $m -tearoff 0
 $m add command -label "Long entry that does nothing"
-if {[string equal [tk windowingsystem] "classic"] 
+if {[string equal [tk windowingsystem] "classic"]
 	|| [string equal [tk windowingsystem] "aqua"]} {
     set modifier Command
 } elseif {$tcl_platform(platform) == "windows"} {

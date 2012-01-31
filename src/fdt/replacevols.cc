@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -75,15 +75,15 @@ int read_avg_file (vector<vector<int> >& avgs,const string fname){
   bool nobbsize=true;
 
   int row = 0;
-  
+
   if(!avg_file){return -1;}
   else{
     while(nobbsize){
       avgs.push_back(vector<int>());
 
-      nobbsize=false;      
+      nobbsize=false;
       getline(avg_file,myline);
-      
+
       int pos=0;
       while(pos!=int(string::npos)) {
 	pos = myline.find(",",pos);
@@ -93,7 +93,7 @@ int read_avg_file (vector<vector<int> >& avgs,const string fname){
 	}
       }
 
-      istringstream mylinestr(myline.c_str());   
+      istringstream mylinestr(myline.c_str());
 
       while(!mylinestr.eof()){
 
@@ -122,7 +122,7 @@ int read_avg_file (vector<vector<int> >& avgs,const string fname){
 
   row--;
   avgs.pop_back();
- 
+
 //   for(int r=0;r<row;r++)
 //     {
 //       cout << "size=" << avgs[r].size() << endl;
@@ -130,10 +130,10 @@ int read_avg_file (vector<vector<int> >& avgs,const string fname){
 // 	cout << avgs[r][c] << " ";
 //       cout << endl;
 //     }
- 
+
   return 0;
 }
- 
+
 
 int main ( int argc, char **argv ){
   if(argc<5){
@@ -161,9 +161,9 @@ int main ( int argc, char **argv ){
   for(unsigned int j=0;j<avgs[0].size();j++){//loop over volume numbers
 
 
-    //Next loop is within volume number over averages just 
+    //Next loop is within volume number over averages just
     // Working out which ones to replace and which to keep.
-    
+
     vector<int> repthis,keepthis;
     for(unsigned int i=0;i<avgs.size();i++){ //loop over averages
       bool replaced=false;
@@ -178,48 +178,48 @@ int main ( int argc, char **argv ){
       }
 
     }
-      
+
 
     if(repthis.size()>0){
-      
+
       cerr<<"Replacing volumes: ";
-      for(unsigned int r=0;r<repthis.size();r++){  
+      for(unsigned int r=0;r<repthis.size();r++){
 	cerr<<repthis[r]<<" ";
       }
       cerr <<endl;
       cerr<<"with the average of volumes: ";
-      for(unsigned int r=0;r<keepthis.size();r++){  
+      for(unsigned int r=0;r<keepthis.size();r++){
 	cerr<<keepthis[r]<<" ";
       }
       cerr<<endl;
-      
+
 
       if(keepthis.size()>0){
-	// Next loop makes the average of all the ones we are keeping 
+	// Next loop makes the average of all the ones we are keeping
 	volume<float> tmp;
 	tmp=data4D[keepthis[0] ];
-	
+
 	for(unsigned int n=1;n<keepthis.size();n++){
-	  tmp=tmp+data4D[keepthis[n] ]; 
+	  tmp=tmp+data4D[keepthis[n] ];
 	}
 	tmp=tmp/keepthis.size(); //Average of all non-replaced ones.
-	
-	
-	
+
+
+
 	//Next loop replaces all the ones to be replaced with this average
 	for(unsigned int n=0;n<repthis.size();n++){
 	  data4D[repthis[n] ]=tmp; //replacing.
 	}
-	
-	
+
+
       }
       else{
 	cerr<<"Error: Volume number "<<j<<" has no averages to keep!!"<<endl;;
-	return -1; 
+	return -1;
       }
     }//repthis.size>0
-    
-    
+
+
   }// loop over volume numbers
 
 
@@ -231,25 +231,25 @@ int main ( int argc, char **argv ){
 //     cerr<<"Either you have different nums of volnos and vols, or you haven't specified input or output"<<endl;
 //     return(0);
 //   }
-    
+
 //   //  int numchanges=(argc-3)/2;
 //   tmpvec.reserve((argc-3)/2);
 //   vector<int> volnos;
 //   volume<float> tmp;
 //   tmpvec.reserve((argc-3)/2);
-  
+
 //   cout<<"number of vols to be replaced "<<(argc-3)/2<<endl;
 //   for(int i=2;i<=(argc-2);i+=2){
 //     volnos.push_back(atoi(argv[i]));
 //     read_volume(tmp,argv[i+1]);
 //     tmpvec.push_back(tmp);
 //   }
-  
+
 //   for(int i=0;i<(int)volnos.size();i++){
 //     int num=volnos[i];
 //     data4D[num]=tmpvec[i];
 //   }
-    
+
   save_volume4D(data4D,argv[argc-1]);
 }
 

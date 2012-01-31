@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
-    melica.cc - ICA estimation 
+
+    melica.cc - ICA estimation
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -86,55 +86,55 @@ using namespace Utilities;
 using namespace NEWIMAGE;
 
 namespace Melodic{
-    
+
   void MelodicICA::ica_fastica_symm(const Matrix &Data){
     // based on Aapo Hyvärinen's fastica method
     // see www.cis.hut.fi/projects/ica/fastica/
-    
+
     //initialize matrices
     Matrix redUMM_old, rank1_old;
-    Matrix tmpU;    
-    
+    Matrix tmpU;
+
     //srand((unsigned int)timer(NULL));
     redUMM = melodat.get_white()*
        unifrnd(melodat.get_white().Ncols(),dim); // got to start somewhere
-    
+
 	if(opts.debug.value())
 		cerr << "redUMM init submatrix : " << endl << redUMM.SubMatrix(1,2,1,2) << endl;
-		
+
     if(opts.guessfname.value().size()>1){
-      message("  Use columns in " << opts.guessfname.value() 
+      message("  Use columns in " << opts.guessfname.value()
 	      << " as initial values for the mixing matrix " <<endl);
       Matrix guess ;
       guess  = melodat.get_white()*read_ascii_matrix(opts.guessfname.value());
       redUMM.Columns(1,guess.Ncols()) = guess;
     }
-    
+
     symm_orth(redUMM);
 
-    int itt_ctr,itt_ctr2=1,cum_itt=0,newmaxitts = opts.maxNumItt.value(); 
+    int itt_ctr,itt_ctr2=1,cum_itt=0,newmaxitts = opts.maxNumItt.value();
     double minAbsSin = 1.0, minAbsSin2 = 1.0;
     if(opts.approach.value() == string("tica"))
       opts.maxNumItt.set_T(opts.rank1interval.value());
 
 		rank1_old = melodat.get_dewhite()*redUMM;
 		rank1_old = melodat.expand_dimred(rank1_old);
-	  rank1_old = krapprox(rank1_old,int(rank1_old.Nrows()/melodat.get_numfiles())); 
+	  rank1_old = krapprox(rank1_old,int(rank1_old.Nrows()/melodat.get_numfiles()));
 
     do{// TICA loop
       itt_ctr = 1;
       do{ // da loop!!!
-				redUMM_old = redUMM;      
+				redUMM_old = redUMM;
 				//calculate IC estimates
 				tmpU = Data.t() * redUMM;
-      
+
 				//update redUMM depending on nonlinearity
 				if(opts.nonlinearity.value()=="pow4"){
 	  			redUMM = (Data * pow(tmpU,3.0)) / samples - 3 * redUMM;
 				}
 				if(opts.nonlinearity.value()=="pow3"){
 	  			tmpU /= opts.nlconst1.value();
-	  			redUMM = 3 * (Data * pow(tmpU,2.0)) / samples  - 
+	  			redUMM = 3 * (Data * pow(tmpU,2.0)) / samples  -
 	    			(SP(ones(dim,1)*sum(tmpU,1),redUMM))/ samples;
 				}
 				if(opts.nonlinearity.value()=="tanh"){
@@ -155,8 +155,8 @@ namespace Melodic{
 	  			redUMM = (Data * gauss - SP(ones(dim,1)*
 				    sum(dgauss,1),redUMM))/samples;
 				}
-           
-				// orthogonalize the unmixing-matrix 
+
+				// orthogonalize the unmixing-matrix
 				symm_orth(redUMM);
 
 				if(opts.approach.value() == string("tica")){
@@ -169,7 +169,7 @@ namespace Melodic{
 		//		if((abs(minAbsSin) < opts.epsilon.value())&&
 		//		  (opts.approach.value()!=string("tica"))){ break;}
 				if((abs(minAbsSin) < opts.epsilon.value())){ break;}
-	
+
 				itt_ctr++;
       } while(itt_ctr < opts.maxNumItt.value());
       cum_itt += itt_ctr;
@@ -178,18 +178,18 @@ namespace Melodic{
 				message(" Rank-1 approximation of the time courses; ");
 	  		Matrix temp(melodat.get_dewhite() * redUMM);
 	  		temp = melodat.expand_dimred(temp);
-			  temp = krapprox(temp,int(temp.Nrows()/melodat.get_numfiles())); 
+			  temp = krapprox(temp,int(temp.Nrows()/melodat.get_numfiles()));
 				minAbsSin2 = 1 - diag(abs(corrcoef(temp,rank1_old))).Minimum();
 				rank1_old = temp;
 				temp = melodat.reduce_dimred(temp);
 				redUMM = melodat.get_white() * temp;
 
-				message(" change : " << minAbsSin2 << endl);	
+				message(" change : " << minAbsSin2 << endl);
 				if(abs(minAbsSin2) < opts.epsilonS.value() && abs(minAbsSin) < opts.epsilon.value()){ break;}
 			}
     } while(
-      (itt_ctr2 < newmaxitts/opts.maxNumItt.value()) && 
-			(opts.approach.value() ==  string("tica")) && 
+      (itt_ctr2 < newmaxitts/opts.maxNumItt.value()) &&
+			(opts.approach.value() ==  string("tica")) &&
 			cum_itt < newmaxitts);
 
     if((itt_ctr>=opts.maxNumItt.value() && (opts.approach.value()!=string("tica")))
@@ -203,15 +203,15 @@ namespace Melodic{
        melodat.set_mix(temp);}
       {Matrix temp(redUMM.t()*melodat.get_white());
       melodat.set_unmix(temp);}
-    } 
+    }
   }
-  
+
   void MelodicICA::ica_fastica_defl(const Matrix &Data){
     if(!opts.explicitnums || opts.numICs.value()>dim){
-      opts.numICs.set_T(dim); 
+      opts.numICs.set_T(dim);
       message("  Using numICs:" << opts.numICs.value() << endl);
     }
-     
+
     //redUMM = zeros(dim); // got to start somewhere
     redUMM = melodat.get_white()*
       unifrnd(melodat.get_white().Ncols(),opts.numICs.value());
@@ -226,19 +226,19 @@ namespace Melodic{
 
     int ctrIC = 1;
     int numRestart = 0;
-    while(ctrIC<=opts.numICs.value()){   
+    while(ctrIC<=opts.numICs.value()){
      	message("  Extracting IC " << ctrIC << "  ... ");
       ColumnVector w;
-      ColumnVector w_old;   
+      ColumnVector w_old;
       ColumnVector tmpU;
       if(ctrIC <= guesses){
       	w = w - redUMM * redUMM.t() * w;
-      	w = w / norm2(w);  
+      	w = w / norm2(w);
       	w_old = zeros(w.Nrows(),1);
-      	int itt_ctr = 1; 
+      	int itt_ctr = 1;
       	do{
 	 				w_old = w;
-	 				tmpU = Data.t() * w; 
+	 				tmpU = Data.t() * w;
 					if(opts.nonlinearity.value()=="pow4"){
 	  				w =  (Data * pow(tmpU,3.0)) / samples - 3 * w;
 					}
@@ -247,12 +247,12 @@ namespace Melodic{
           	hyptanh = tanh(opts.nlconst1.value()*tmpU);
  	  				w = (Data * hyptanh - opts.nlconst1.value()*SP(ones(dim,1)*
           		sum(1-pow(hyptanh,2),1),w))/samples;
-					} 
+					}
 					if(opts.nonlinearity.value()=="pow3"){
 	  				tmpU /= opts.nlconst1.value();
  	  				w = 3*(Data * pow(tmpU,2.0)) / samples - 2*(SP(ones(dim,1)*
            		sum(tmpU,1),w))/samples;
-					} 
+					}
 					if(opts.nonlinearity.value()=="gauss"){
 	  				ColumnVector tmpUsq;
 	  				ColumnVector tmpU2;
@@ -268,10 +268,10 @@ namespace Melodic{
 
 					// orthogonalize w
 					w = w - redUMM * redUMM.t() * w;
-					w = w / norm2(w);  
+					w = w / norm2(w);
 
 					//termination condition : angle between old and new < epsilon
-					if((norm2(w-w_old) < 0.001*opts.epsilon.value())&&(itt_ctr>10) || 
+					if((norm2(w-w_old) < 0.001*opts.epsilon.value())&&(itt_ctr>10) ||
 	   				(norm2(w+w_old) < 0.001*opts.epsilon.value())&&(itt_ctr>10)){
 	 					break;
 				  	}
@@ -282,17 +282,17 @@ namespace Melodic{
       if(itt_ctr<opts.maxNumItt.value()){
 				redUMM.Column(ctrIC) = w;
         message(" estimated using " << itt_ctr << " iterations " << endl);
-        ctrIC++; 
+        ctrIC++;
         numRestart = 0;
       } else{
         if(numRestart > opts.maxRestart.value()){
-	  			message(endl << "  Estimation failed after " 
-		  			<< numRestart << " attempts " 
+	  			message(endl << "  Estimation failed after "
+		  			<< numRestart << " attempts "
 		  			<< " giving up " << endl);
 	  			break;
 				}else{
           numRestart++;
-	  			message(endl <<"  Estimation failed - restart " 
+	  			message(endl <<"  Estimation failed - restart "
 		  			<< numRestart << endl);
 				}
       }
@@ -309,35 +309,35 @@ namespace Melodic{
 
   void MelodicICA::ica_maxent(const Matrix &Data){
     // based on Aapo Hyvärinen's fastica method
-    // see www.cis.hut.fi/projects/ica/fastica/ 
+    // see www.cis.hut.fi/projects/ica/fastica/
     message(" MAXENT " << endl);
     //initialize matrices
     Matrix redUMM_old;
-    Matrix tmpU;    
+    Matrix tmpU;
     Matrix gtmpU;
     double lambda = 0.015/std::log((double)melodat.get_white().Ncols());
-    
+
     //srand((unsigned int)timer(NULL));
     redUMM = melodat.get_white()*
      	unifrnd(melodat.get_white().Ncols(),dim); // got to start somewhere
-    
+
     if(opts.guessfname.value().size()>1){
-      message("  Use columns in " << opts.guessfname.value() 
+      message("  Use columns in " << opts.guessfname.value()
 	      << " as initial values for the mixing matrix " <<endl);
       Matrix guess ;
       guess  = melodat.get_white()*read_ascii_matrix(opts.guessfname.value());
       redUMM.Columns(1,guess.Ncols()) = guess;
     }
-    
+
     //    symm_orth(redUMM);
-    int itt_ctr=1; 
+    int itt_ctr=1;
     double minAbsSin = 1.0;
     Matrix Id;
     Id = IdentityMatrix(redUMM.Ncols());
     //cerr << " nonlinearity : " <<    opts.nonlinearity.value() << endl;
 
     do{ // da loop!!!
-      redUMM_old = redUMM;      
+      redUMM_old = redUMM;
       //calculate IC estimates
       tmpU = Data.t() * redUMM;
       if(opts.nonlinearity.value()=="tanh"){
@@ -352,15 +352,15 @@ namespace Melodic{
 				gtmpU = pow(1+exp(-(opts.nlconst2.value()/2) * tmpU),-1);
 				redUMM = redUMM + lambda*(Id - (gtmpU.t()-tmpU.t())*tmpU)*redUMM;
       }
- 
+
       //termination condition : angle between old and new < epsilon
       minAbsSin = abs(1 - diag(abs(redUMM.t()*redUMM_old)).Minimum());
       message("  Step no. " << itt_ctr << " change : " << minAbsSin << endl);
       if(abs(minAbsSin) < opts.epsilon.value()){ break;}
-      
+
       itt_ctr++;
     } while(itt_ctr < opts.maxNumItt.value());
-    
+
     if(itt_ctr>=opts.maxNumItt.value()){
       cerr << "  No convergence after " << itt_ctr <<" steps "<<endl;
     } else {
@@ -370,11 +370,11 @@ namespace Melodic{
        melodat.set_mix(temp);}
       {Matrix temp(redUMM.t()*melodat.get_white());
       melodat.set_unmix(temp);}
-    } 
+    }
   }
-  
-  void MelodicICA::ica_jade(const Matrix &Data){ 
-    int dim_sym = (int) (dim*(dim+1))/2;  
+
+  void MelodicICA::ica_jade(const Matrix &Data){
+    int dim_sym = (int) (dim*(dim+1))/2;
     int num_CM = dim_sym;
     Matrix CM;
     Matrix R; R = IdentityMatrix(dim);
@@ -391,7 +391,7 @@ namespace Melodic{
       if(im==1){CM = Qij; write_ascii_matrix("CM",CM);exit(2);}else{CM |= Qij;}
       for (int jm = 1; jm < im; jm++){
 				Xjm = Data.Row(jm);
-				Qij = (SP((scale * SP(Xim,Xjm)),Data) * Data.t() - 
+				Qij = (SP((scale * SP(Xim,Xjm)),Data) * Data.t() -
 					R.Column(im)*R.Column(jm).t() - R.Column(jm)*R.Column(im).t());
 				Qij *= sqrt(2);
 				CM  |= Qij;
@@ -400,7 +400,7 @@ namespace Melodic{
 
     write_ascii_matrix("CM",CM);
     Matrix redUMM; redUMM = IdentityMatrix(dim);
-  
+
     bool exitloop = false;
     int ctr_itt = 0;
     int ctr_updates = 0;
@@ -422,7 +422,7 @@ namespace Melodic{
 	    			Givens(1,ctr_i + 1) = CM(ctr_p,Ip) - CM(ctr_q,Iq);
 	    			Givens(2,ctr_i + 1) = CM(ctr_p,Iq) - CM(ctr_q,Ip);
 	  			}
-	  
+
 	  			Givens_ip = Givens * Givens.t();
 	  			det_on = Givens_ip(1,1) - Givens_ip(2,2);
 	  			det_off = Givens_ip(1,2) + Givens_ip(2,1);
@@ -433,7 +433,7 @@ namespace Melodic{
 	  			if(abs(theta) > opts.epsilon.value()){
 	    			ctr_updates++;
 	    			message("  Step No. "<< ctr_itt << " change : " << theta << endl);
-			
+
 	    			//create Givens rotation matrix
 	    			cos_theta = cos(theta);
 	    			sin_theta = sin(theta);
@@ -490,17 +490,17 @@ namespace Melodic{
       for(int ctr_j = 1; ctr_j <= Inp.Nrows(); ctr_j++){
 				if(Inp(ctr_j,ctr_i)<0){Res(ctr_j,ctr_i)=-1;}
       }
-    } 
+    }
     return Res;
   }
 
-  void MelodicICA::perf_ica(const Matrix &Data){ 
-    message("Starting ICA estimation using " << opts.approach.value() 
+  void MelodicICA::perf_ica(const Matrix &Data){
+    message("Starting ICA estimation using " << opts.approach.value()
 	    << endl << endl);
     dim = Data.Nrows();
     samples = Data.Ncols();
     no_convergence = true;
-    //switch to the chosen method   
+    //switch to the chosen method
     if(opts.approach.value()==string("symm") ||
        opts.approach.value()==string("tica") ||
        opts.approach.value()==string("parafac") ||
@@ -512,15 +512,15 @@ namespace Melodic{
       ica_jade(Data);
     if(opts.approach.value()==string("maxent"))
       ica_maxent(Data);
-    
+
     if(!no_convergence){//calculate the IC
       Matrix temp(melodat.get_unmix()*melodat.get_Data());
-      //  Add the mean time course again  
+      //  Add the mean time course again
       //      temp += melodat.get_unmix()*melodat.get_meanC()*ones(1,temp.Ncols());
 
       //re-normalise the decomposition to std(mix)=1
       Matrix scales;
-      scales = stdev(melodat.get_mix());   
+      scales = stdev(melodat.get_mix());
 
       //cerr << " SCALES 1 " << scales << endl;
       Matrix tmp, tmp2;
@@ -528,7 +528,7 @@ namespace Melodic{
       temp = SP(temp,scales.t()*ones(1,temp.Ncols()));
 
       scales = scales.t();
-  
+
       melodat.set_mix(tmp);
 
       melodat.set_IC(temp);
@@ -538,7 +538,7 @@ namespace Melodic{
 
 	    message("Calculating T- and S-modes " << endl);
       melodat.set_TSmode();
-		
+
     }
   }
 }

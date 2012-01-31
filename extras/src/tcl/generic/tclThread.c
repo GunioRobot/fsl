@@ -1,4 +1,4 @@
-/* 
+/*
  * tclThread.c --
  *
  *	This file implements   Platform independent thread operations.
@@ -37,13 +37,13 @@ static SyncObjRecord condRecord = {0, 0, NULL};
 /*
  * Prototypes of functions used only in this file
  */
- 
+
 static void		RememberSyncObject _ANSI_ARGS_((char *objPtr,
 			    SyncObjRecord *recPtr));
 static void		ForgetSyncObject _ANSI_ARGS_((char *objPtr,
 			    SyncObjRecord *recPtr));
 
-/* 
+/*
  * Several functions are #defined to nothing in tcl.h if TCL_THREADS is not
  * specified.  Here we undo that so the procedures are defined in the
  * stubs table.
@@ -207,14 +207,14 @@ RememberSyncObject(objPtr, recPtr)
     int i, j;
 
     /*
-     * Reuse any free slot in the list. 
+     * Reuse any free slot in the list.
      */
 
     for (i=0 ; i < recPtr->num ; ++i) {
 	if (recPtr->list[i] == NULL) {
 	    recPtr->list[i] = objPtr;
 	    return;
-	} 
+	}
     }
 
     /*

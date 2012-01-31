@@ -33,7 +33,7 @@
 /*
  * This variable is exported and can be used by extensions.  It is the
  * way Tk extensions should access the QD Globals.  This is so Tk
- * can support embedding itself in another window. 
+ * can support embedding itself in another window.
  */
 
 EXTERN QDGlobalsPtr tcl_macQdPtr;
@@ -43,9 +43,9 @@ EXTERN QDGlobalsPtr tcl_macQdPtr;
  * embedding where Tk does not control the top-level
  */
 typedef  int (Tk_MacEmbedRegisterWinProc) (int winID, Tk_Window window);
-typedef GWorldPtr (Tk_MacEmbedGetGrafPortProc) (Tk_Window window); 
-typedef int (Tk_MacEmbedMakeContainerExistProc) (Tk_Window window); 
-typedef void (Tk_MacEmbedGetClipProc) (Tk_Window window, RgnHandle rgn); 
+typedef GWorldPtr (Tk_MacEmbedGetGrafPortProc) (Tk_Window window);
+typedef int (Tk_MacEmbedMakeContainerExistProc) (Tk_Window window);
+typedef void (Tk_MacEmbedGetClipProc) (Tk_Window window, RgnHandle rgn);
 typedef void (Tk_MacEmbedGetOffsetInParentProc) (Tk_Window window, Point *ulCorner);
 
 #include "tkPlatDecls.h"

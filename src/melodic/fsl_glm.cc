@@ -1,4 +1,4 @@
-/*  fsl_glm - 
+/*  fsl_glm -
 
     Christian F. Beckmann, FMRIB Image Analysis Group
 
@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -129,7 +129,7 @@ using namespace std;
 	Option<bool> debug(string("--debug"), FALSE,
 		string("display debug information"),
 		false,no_argument,false);
-	// Output options	
+	// Output options
 	Option<string> outcope(string("--out_cope"),string(""),
 		string("output file name for COPEs (either as text file or image)"),
 		false, requires_argument);
@@ -166,7 +166,7 @@ using namespace std;
 		/*
 }
 */
-//Globals 
+//Globals
 	Melodic::basicGLM glm;
 	int voxels = 0;
 	Matrix data;
@@ -175,7 +175,7 @@ using namespace std;
 	Matrix fcontrasts;
 	Matrix meanR;
 	RowVector vnscales;
-	volume<float> mask;  
+	volume<float> mask;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -212,7 +212,7 @@ int setup(){
 		//input is 3D/4D vol
 		volume4D<float> tmpdata;
 		read_volume4D(tmpdata,fnin.value());
-		
+
 		// create mask
 		if(fnmask.value()>""){
 			if(debug.value())
@@ -228,19 +228,19 @@ int setup(){
 			mask=tmpdata[0]*0.0+1.0;
 			data=tmpdata.matrix(mask);
 			Melodic::update_mask(mask,data);
-		}	
+		}
 		data = tmpdata.matrix(mask);
 		voxels = data.Ncols();
-			
+
 		if(perfvn.value()){
 			if(debug.value())
-				cout << "Perform MELODIC variance normalisation (and demeaning)" << endl;			
+				cout << "Perform MELODIC variance normalisation (and demeaning)" << endl;
 			data = remmean(data,1);
-			vnscales = Melodic::varnorm(data);		
+			vnscales = Melodic::varnorm(data);
 		}
 	}
 	else
-		data = read_ascii_matrix(fnin.value());	
+		data = read_ascii_matrix(fnin.value());
 
 	if(fsl_imageexists(fndesign.value())){//read design
 		if(debug.value())
@@ -273,7 +273,7 @@ int setup(){
 	meanR=mean(data,1);
 	if(perf_demean.value()){
 		if(debug.value())
-			cout << "De-meaning design matrix" << endl;	
+			cout << "De-meaning design matrix" << endl;
 		design = remmean(design,1);
 	}
 	if(normdes.value()){
@@ -281,7 +281,7 @@ int setup(){
 			cout << "Normalising design matrix to unit std-deviation" << endl;
 		design =  SP(design,ones(design.Nrows(),1)*pow(stdev(design,1),-1));
 	}
-	if(fncontrasts.value()>""){//read contrast		
+	if(fncontrasts.value()>""){//read contrast
 		contrasts = read_ascii_matrix(fncontrasts.value());
 		if(!(contrasts.Ncols()==design.Ncols())){
 			cerr << "ERROR: contrast matrix GLM design does not match GLM design" << endl;
@@ -291,10 +291,10 @@ int setup(){
 		contrasts = IdentityMatrix(design.Ncols());
 		contrasts &= -1.0 * contrasts;
 	}
-	return 0;	
+	return 0;
 }
 
-void write_res(){	
+void write_res(){
 	if(fnout.value()>"")
 		saveit(glm.get_beta(),fnout.value());
 	if(outcope.value()>"")
@@ -364,7 +364,7 @@ int main(int argc,char *argv[]){
 			options.add(outvnscales);
 	    options.parse_command_line(argc, argv);
 
-	    // line below stops the program if the help was requested or 
+	    // line below stops the program if the help was requested or
 	    //  a compulsory option was not set
 	    if ( (help.value()) || (!options.check_compulsory_arguments(true)) ){
 				options.usage();
@@ -379,6 +379,6 @@ int main(int argc,char *argv[]){
 	    exit(EXIT_FAILURE);
 	  }catch(std::exception &e) {
 	    cerr << e.what() << endl;
-	  } 
+	  }
 	}
 

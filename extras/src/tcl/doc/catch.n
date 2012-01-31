@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: catch.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH catch n "8.0" Tcl "Tcl Built-In Commands"
 .BS
@@ -52,7 +52,7 @@ only errors that are not caught are syntax errors found when the
 script is compiled.  This is because the catch command only catches
 errors during runtime.  When the catch statement is compiled, the
 script is compiled as well and any syntax errors will generate a Tcl
-error. 
+error.
 
 .SH EXAMPLES
 The \fBcatch\fR command may be used in an \fBif\fR to branch based on
@@ -66,14 +66,14 @@ if { [\fBcatch\fR {open $someFile w} fid] } {
 .PP
 The \fBcatch\fR command will not catch compiled syntax errors.  The
 first time proc \fBfoo\fR is called, the body will be compiled and a
-Tcl error will be generated. 
+Tcl error will be generated.
 .CS
 proc foo {} {
     \fBcatch\fR {expr {1 +- }}
 }
 .CE
 
-.SH "SEE ALSO" 
+.SH "SEE ALSO"
 break(n), continue(n), error(n), return(n), tclvars(n)
 
 .SH KEYWORDS

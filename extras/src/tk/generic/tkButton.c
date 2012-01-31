@@ -1,4 +1,4 @@
-/* 
+/*
  * tkButton.c --
  *
  *	This module implements a collection of button-like
@@ -17,7 +17,7 @@
 #include "tkButton.h"
 #include "default.h"
 
-typedef struct ThreadSpecificData { 
+typedef struct ThreadSpecificData {
     int defaultsInitialized;
 } ThreadSpecificData;
 static Tcl_ThreadDataKey dataKey;
@@ -627,7 +627,7 @@ ButtonCreate(clientData, interp, objc, objv, type)
     TkButton *butPtr;
     Tk_OptionTable optionTable;
     Tk_Window tkwin;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!tsdPtr->defaultsInitialized) {
@@ -855,22 +855,22 @@ ButtonWidgetObjCmd(clientData, interp, objc, objv)
 	    if (butPtr->state != STATE_DISABLED) {
 		for (i = 0; i < 4; i++) {
 		    if (butPtr->state == STATE_NORMAL) {
-			butPtr->state = STATE_ACTIVE; 
+			butPtr->state = STATE_ACTIVE;
 			Tk_SetBackgroundFromBorder(butPtr->tkwin,
 				butPtr->activeBorder);
 		    } else {
-			butPtr->state = STATE_NORMAL; 
+			butPtr->state = STATE_NORMAL;
 			Tk_SetBackgroundFromBorder(butPtr->tkwin,
 				butPtr->normalBorder);
 		    }
 		    TkpDisplayButton((ClientData) butPtr);
-    
+
 		    /*
 		     * Special note: must cancel any existing idle handler
 		     * for TkpDisplayButton;  it's no longer needed, and
 		     * TkpDisplayButton cleared the REDRAW_PENDING flag.
 		     */
-    
+
 		    Tcl_CancelIdleCall(TkpDisplayButton, (ClientData) butPtr);
 		    XFlush(butPtr->display);
 		    Tcl_Sleep(50);
@@ -1042,12 +1042,12 @@ ConfigureButton(interp, butPtr, objc, objv)
      */
 
     if (butPtr->textVarNamePtr != NULL) {
-	Tcl_UntraceVar(interp, Tcl_GetString(butPtr->textVarNamePtr), 
+	Tcl_UntraceVar(interp, Tcl_GetString(butPtr->textVarNamePtr),
 		TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 		ButtonTextVarProc, (ClientData) butPtr);
     }
     if (butPtr->selVarNamePtr != NULL) {
-	Tcl_UntraceVar(interp, Tcl_GetString(butPtr->selVarNamePtr), 
+	Tcl_UntraceVar(interp, Tcl_GetString(butPtr->selVarNamePtr),
 		TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 		ButtonVarProc, (ClientData) butPtr);
     }
@@ -1114,21 +1114,21 @@ ConfigureButton(interp, butPtr, objc, objv)
 
 	if (butPtr->type >= TYPE_CHECK_BUTTON) {
 	    Tcl_Obj *valuePtr, *namePtr;
-    
+
 	    if (butPtr->selVarNamePtr == NULL) {
 		butPtr->selVarNamePtr = Tcl_NewStringObj(
 			Tk_Name(butPtr->tkwin), -1);
 		Tcl_IncrRefCount(butPtr->selVarNamePtr);
 	    }
 	    namePtr = butPtr->selVarNamePtr;
-    
+
 	    /*
 	     * Select the button if the associated variable has the
 	     * appropriate value, initialize the variable if it doesn't
 	     * exist, then set a trace on the variable to monitor future
 	     * changes to its value.
 	     */
-    
+
 	    valuePtr = Tcl_ObjGetVar2(interp, namePtr, NULL, TCL_GLOBAL_ONLY);
 	    butPtr->flags &= ~SELECTED;
 	    if (valuePtr != NULL) {
@@ -1162,7 +1162,7 @@ ConfigureButton(interp, butPtr, objc, objv)
 	 * new images before freeing the old ones, so that the reference
 	 * counts don't go to zero and cause image data to be discarded.
 	 */
-    
+
 	if (butPtr->imagePtr != NULL) {
 	    image = Tk_GetImage(butPtr->interp, butPtr->tkwin,
 		    Tcl_GetString(butPtr->imagePtr), ButtonImageProc,
@@ -1203,7 +1203,7 @@ ConfigureButton(interp, butPtr, objc, objv)
 	     * on the variable's value, create the variable if it doesn't
 	     * exist, and fetch its current value.
 	     */
-    
+
 	    Tcl_Obj *valuePtr, *namePtr;
 
 	    namePtr = butPtr->textVarNamePtr;
@@ -1222,7 +1222,7 @@ ConfigureButton(interp, butPtr, objc, objv)
 		Tcl_IncrRefCount(butPtr->textPtr);
 	    }
 	}
-    
+
 	if ((butPtr->bitmap != None) || (butPtr->imagePtr != NULL)) {
 	    /*
 	     * The button must display the contents of an image or
@@ -1275,7 +1275,7 @@ ConfigureButton(interp, butPtr, objc, objv)
 		TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 		ButtonVarProc, (ClientData) butPtr);
     }
-    
+
     TkButtonWorldChanged((ClientData) butPtr);
     if (error) {
 	Tcl_SetObjResult(interp, errorResult);
@@ -1303,7 +1303,7 @@ ConfigureButton(interp, butPtr, objc, objv)
  *
  *---------------------------------------------------------------------------
  */
- 
+
 void
 TkButtonWorldChanged(instanceData)
     ClientData instanceData;	/* Information about widget. */
@@ -1322,7 +1322,7 @@ TkButtonWorldChanged(instanceData)
     gcValues.font = Tk_FontId(butPtr->tkfont);
     gcValues.foreground = butPtr->normalFg->pixel;
     gcValues.background = Tk_3DBorderColor(butPtr->normalBorder)->pixel;
-    
+
     /*
      * Note: GraphicsExpose events are disabled in normalTextGC because it's
      * used to copy stuff from an off-screen pixmap onto the screen (we know
@@ -1674,7 +1674,7 @@ ButtonTextVarProc(clientData, interp, name1, name2, flags)
 
     if (flags & TCL_TRACE_UNSETS) {
 	if ((flags & TCL_TRACE_DESTROYED) && !(flags & TCL_INTERP_DESTROYED)) {
-	    Tcl_SetVar2Ex(interp, name, NULL, butPtr->textPtr, 
+	    Tcl_SetVar2Ex(interp, name, NULL, butPtr->textPtr,
 		    TCL_GLOBAL_ONLY);
 	    Tcl_TraceVar(interp, name,
 		    TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,

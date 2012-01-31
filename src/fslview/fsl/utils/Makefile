@@ -5,7 +5,7 @@ PROJNAME = utils
 USRINCFLAGS = -I${INC_NEWMAT}
 USRLIBFLAGS = -L${LIB_NEWMAT}
 
-USRCXXFLAGS = 
+USRCXXFLAGS =
 
 OptionsTestTarget = opttst
 OptionsTestObjects = opttst.o
@@ -25,6 +25,6 @@ ${LibraryTarget}: ${LibraryObjects}
 	${AR} -r $@ ${LibraryObjects}
 	${RANLIB} ${LibraryTarget}
 
-XFILES = 
+XFILES =
 AFILES = ${LibraryTarget}
 

@@ -137,7 +137,7 @@ struct rebinder
   template<typename Type>
   struct result
   {
-      typedef typename Allocator::BOOST_NESTED_TEMPLATE 
+      typedef typename Allocator::BOOST_NESTED_TEMPLATE
           rebind<Type>::other other;
   };
 };

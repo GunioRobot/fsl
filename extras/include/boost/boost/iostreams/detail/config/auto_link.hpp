@@ -12,7 +12,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #if defined(BOOST_EXTERNAL_LIB_NAME)
 # if defined(BOOST_MSVC) \
@@ -25,7 +25,7 @@
 # undef BOOST_EXTERNAL_LIB_NAME
 #endif
 
-//------------------Enable automatic library variant selection----------------// 
+//------------------Enable automatic library variant selection----------------//
 
 #if !defined(BOOST_IOSTREAMS_SOURCE) && \
     !defined(BOOST_ALL_NO_LIB) && \

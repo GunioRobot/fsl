@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -95,7 +95,7 @@ private:
 class Guesstimator
 {
  public:
-  virtual double GetGuess(double lower, double upper, 
+  virtual double GetGuess(double lower, double upper,
 			  double atLower, double atUpper) = 0;
   virtual ~Guesstimator() { return; }
 };
@@ -111,8 +111,8 @@ class LogBisectionGuesstimator : public Guesstimator
 {
  public:
   virtual double GetGuess(double lower, double upper, double, double)
-  { assert(lower>0 && upper>lower); 
-    double guess = sqrt(lower*upper); 
+  { assert(lower>0 && upper>lower);
+    double guess = sqrt(lower*upper);
     if (lower >= guess || guess >= upper)
       {
 	cout << "Uh-oh... lower = " << lower
@@ -125,7 +125,7 @@ class LogBisectionGuesstimator : public Guesstimator
 
 class RiddlersGuesstimator : public Guesstimator
 {
- public: 
+ public:
   virtual double GetGuess(double lower, double upper, double atLower, double atUpper);
   RiddlersGuesstimator() { halfDone = false; }
  private:
@@ -137,18 +137,18 @@ class LogRiddlersGuesstimator : public RiddlersGuesstimator
 {
  public:
   virtual double GetGuess(double lower, double upper, double atLower, double atUpper)
-    { 
+    {
       // Just a log transformation
-      return exp(RiddlersGuesstimator::GetGuess(log(lower),log(upper),atLower,atUpper)); 
+      return exp(RiddlersGuesstimator::GetGuess(log(lower),log(upper),atLower,atUpper));
     }
 };
 
 class InterpGuesstimator : public Guesstimator
 {
  public:
-  virtual double GetGuess(double lower, double upper, 
+  virtual double GetGuess(double lower, double upper,
 			  double atLower, double atUpper)
-  { 
+  {
     double guess = upper - atUpper*(upper-lower)/(atUpper-atLower);
 
     if (lower >= guess || guess >= upper)
@@ -170,10 +170,10 @@ class ZeroFinder
 {
 public:
     ZeroFinder(const GenericFunction1D& f)
-      : fcn(f), searchMin(-REALMAX), searchMax(REALMAX), 
+      : fcn(f), searchMin(-REALMAX), searchMax(REALMAX),
       searchGuess(0), searchScale(REALMAX), searchScaleGrowth(2),
-      maxEvaluations(1000000), tolX(REALMAX), tolY(REALMAX), 
-      ratioTolX(REALMAX), ratioTolY(REALMAX), 
+      maxEvaluations(1000000), tolX(REALMAX), tolY(REALMAX),
+      ratioTolX(REALMAX), ratioTolY(REALMAX),
       guesstimator(new BisectionGuesstimator()), verbosity(2)
       { return; }
     virtual double FindZero() const = 0;
@@ -181,13 +181,13 @@ public:
     virtual ~ZeroFinder() { return; }
 
     // Set optional parameters through these
-    ZeroFinder& InitialGuess(double guess) 
+    ZeroFinder& InitialGuess(double guess)
         { searchGuess = guess; return *this; }
-    ZeroFinder& SearchMin(double min) 
+    ZeroFinder& SearchMin(double min)
         { searchMin = min; return *this; }
-    ZeroFinder& SearchMax(double max) 
+    ZeroFinder& SearchMax(double max)
         { searchMax = max; return *this; }
-    ZeroFinder& InitialScale(double scale) 
+    ZeroFinder& InitialScale(double scale)
         { searchScale = scale; return *this; }
     ZeroFinder& ScaleGrowth(double growth)
         { assert(growth>1); searchScaleGrowth = growth; return *this; }

@@ -14,7 +14,7 @@
 class SliceVisitor
 {
 public:
-	SliceVisitor() {} 
+	SliceVisitor() {}
 	virtual ~SliceVisitor() {}
 
 	virtual void visit(SliceB::WeakHandle target) = 0;

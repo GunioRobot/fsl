@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_iarchive.ipp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,8 +14,8 @@
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::memcpy; 
+namespace std{
+    using ::memcpy;
 }
 #endif
 
@@ -59,7 +59,7 @@ basic_binary_iarchive<Archive>::init(){
     // support the format of the archive being read
     version_type input_library_version;
     * this->This() >> input_library_version;
-    
+
     #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
     this->set_library_version(input_library_version);
     #else
@@ -68,7 +68,7 @@ basic_binary_iarchive<Archive>::init(){
     #endif
     basic_iarchive::set_library_version(input_library_version);
     #endif
-    
+
     // extra little .t is to get around borland quirk
     if(ARCHIVE_VERSION() < input_library_version.t)
         boost::throw_exception(

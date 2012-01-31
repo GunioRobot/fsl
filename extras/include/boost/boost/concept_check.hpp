@@ -148,10 +148,10 @@ struct require_same { typedef T type; };
 
   template <class T>
   struct IntegerConcept {
-    void constraints() { 
+    void constraints() {
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       x.error_type_must_be_an_integer_type();
-#endif      
+#endif
     }
     T x;
   };
@@ -163,14 +163,14 @@ struct require_same { typedef T type; };
   template <> struct IntegerConcept<long> { void constraints() {} };
   template <> struct IntegerConcept<unsigned long> { void constraints() {} };
   // etc.
-#endif      
+#endif
 
   template <class T>
   struct SignedIntegerConcept {
-    void constraints() { 
+    void constraints() {
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       x.error_type_must_be_a_signed_integer_type();
-#endif      
+#endif
     }
     T x;
   };
@@ -182,14 +182,14 @@ struct require_same { typedef T type; };
   template <> struct SignedIntegerConcept< ::boost::long_long_type> { void constraints() {} };
 # endif
   // etc.
-#endif      
+#endif
 
   template <class T>
   struct UnsignedIntegerConcept {
-    void constraints() { 
+    void constraints() {
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       x.error_type_must_be_an_unsigned_integer_type();
-#endif      
+#endif
     }
     T x;
   };
@@ -201,7 +201,7 @@ struct require_same { typedef T type; };
   template <> struct UnsignedIntegerConcept<unsigned long>
     { void constraints() {} };
   // etc.
-#endif      
+#endif
 
   //===========================================================================
   // Basic Concepts
@@ -394,7 +394,7 @@ struct require_same { typedef T type; };
   {
     // required in case any of our template args are const-qualified:
     UnaryFunctionConcept();
-    
+
     void constraints() {
       r = f(arg); // require operator()
     }
@@ -406,7 +406,7 @@ struct require_same { typedef T type; };
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <class Func, class Arg>
   struct UnaryFunctionConcept<Func, void, Arg> {
-    void constraints() { 
+    void constraints() {
       f(arg);                 // require operator()
     }
     Func f;
@@ -417,7 +417,7 @@ struct require_same { typedef T type; };
   template <class Func, class Return, class First, class Second>
   struct BinaryFunctionConcept
   {
-    void constraints() { 
+    void constraints() {
       r = f(first, second); // require operator()
     }
     Func f;
@@ -463,7 +463,7 @@ struct require_same { typedef T type; };
   // use this when functor is used inside a container class like std::set
   template <class Func, class First, class Second>
   struct Const_BinaryPredicateConcept {
-    void constraints() { 
+    void constraints() {
       const_constraints(f);
     }
     void const_constraints(const Func& fun) {
@@ -508,7 +508,7 @@ struct require_same { typedef T type; };
       BOOST_STATIC_ASSERT((is_convertible<result_type, Return>::value));
       BOOST_STATIC_ASSERT((is_convertible<First, first_argument_type>::value));
       BOOST_STATIC_ASSERT((is_convertible<Second, second_argument_type>::value));
-      function_requires< BinaryFunctionConcept<Func, result_type, 
+      function_requires< BinaryFunctionConcept<Func, result_type,
         first_argument_type, second_argument_type> >();
     }
   };
@@ -604,7 +604,7 @@ struct require_same { typedef T type; };
       function_requires< ForwardIteratorConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
       typedef typename std::iterator_traits<TT>::iterator_category C;
-      function_requires< ConvertibleConcept<C, 
+      function_requires< ConvertibleConcept<C,
         std::bidirectional_iterator_tag> >();
 #endif
       --i;                // require predecrement operator
@@ -708,7 +708,7 @@ struct require_same { typedef T type; };
     typedef typename Container::reference reference;
     typedef typename Container::iterator iterator;
     typedef typename Container::pointer pointer;
-    
+
     void constraints() {
       function_requires< ContainerConcept<Container> >();
       function_requires< AssignableConcept<value_type> >();
@@ -730,7 +730,7 @@ struct require_same { typedef T type; };
       typedef typename ForwardContainer::const_iterator const_iterator;
       function_requires< ForwardIteratorConcept<const_iterator> >();
     }
-  };  
+  };
 
   template <class ForwardContainer>
   struct Mutable_ForwardContainerConcept
@@ -741,7 +741,7 @@ struct require_same { typedef T type; };
       typedef typename ForwardContainer::iterator iterator;
       function_requires< Mutable_ForwardIteratorConcept<iterator> >();
     }
-  };  
+  };
 
   template <class ReversibleContainer>
   struct ReversibleContainerConcept
@@ -753,7 +753,7 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< ForwardContainerConcept<ReversibleContainer> >();
       function_requires< BidirectionalIteratorConcept<const_iterator> >();
-      function_requires< 
+      function_requires<
         BidirectionalIteratorConcept<const_reverse_iterator> >();
       const_constraints(c);
     }
@@ -848,7 +848,7 @@ struct require_same { typedef T type; };
       function_requires< Mutable_ForwardContainerConcept<Sequence> >();
       function_requires< DefaultConstructibleConcept<Sequence> >();
 
-      Sequence 
+      Sequence
         c(n),
         c2(n, t),
         c3(first, last);
@@ -919,7 +919,7 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< ForwardContainerConcept<AssociativeContainer> >();
       function_requires< DefaultConstructibleConcept<AssociativeContainer> >();
-    
+
       i = c.find(k);
       r = c.equal_range(k);
       c.erase(k);
@@ -949,9 +949,9 @@ struct require_same { typedef T type; };
   {
     void constraints() {
       function_requires< AssociativeContainerConcept<UniqueAssociativeContainer> >();
-    
+
       UniqueAssociativeContainer c(first, last);
-      
+
       pos_flag = c.insert(t);
       c.insert(first, last);
 
@@ -969,7 +969,7 @@ struct require_same { typedef T type; };
       function_requires< AssociativeContainerConcept<MultipleAssociativeContainer> >();
 
       MultipleAssociativeContainer c(first, last);
-      
+
       pos = c.insert(t);
       c.insert(first, last);
 
@@ -1012,7 +1012,7 @@ struct require_same { typedef T type; };
       function_requires< AssociativeContainerConcept<SortedAssociativeContainer> >();
       function_requires< ReversibleContainerConcept<SortedAssociativeContainer> >();
 
-      SortedAssociativeContainer 
+      SortedAssociativeContainer
         c(kc),
         c2(first, last),
         c3(first, last, kc);
@@ -1020,9 +1020,9 @@ struct require_same { typedef T type; };
       p = c.upper_bound(k);
       p = c.lower_bound(k);
       r = c.equal_range(k);
-      
+
       c.insert(p, t);
-      
+
       ignore_unused_variable_warning(c);
       ignore_unused_variable_warning(c2);
       ignore_unused_variable_warning(c3);

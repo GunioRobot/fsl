@@ -224,4 +224,4 @@ namespace delete ::tcl::test::error
 # cleanup
 catch {rename p ""}
 ::tcltest::cleanupTests
-return 
+return

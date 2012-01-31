@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <boost/config.hpp>                             // SFINAE, MSVC.
 #include <boost/detail/workaround.hpp>
@@ -22,24 +22,24 @@
 #include <boost/ref.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
-                    
+
 //------------------Definition of wrap/unwrap traits--------------------------//
 
 template<typename T>
-struct wrapped_type 
+struct wrapped_type
     : mpl::if_<is_std_io<T>, reference_wrapper<T>, T>
     { };
 
 template<typename T>
-struct unwrapped_type 
+struct unwrapped_type
     : unwrap_reference<T>
     { };
 
 template<typename T>
-struct unwrap_ios 
+struct unwrap_ios
     : mpl::eval_if<
-          is_std_io<T>, 
-          unwrap_reference<T>, 
+          is_std_io<T>,
+          unwrap_reference<T>,
           mpl::identity<T>
       >
     { };
@@ -48,7 +48,7 @@ struct unwrap_ios
 
 #ifndef BOOST_NO_SFINAE //----------------------------------------------------//
     template<typename T>
-    inline T wrap(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) 
+    inline T wrap(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T))
     { return t; }
 
     template<typename T>
@@ -64,19 +64,19 @@ struct unwrap_ios
     wrap_impl(T& t, mpl::true_) { return boost::ref(t); }
 
     template<typename T>
-    inline typename wrapped_type<T>::type 
+    inline typename wrapped_type<T>::type
     wrap_impl(const T& t, mpl::false_) { return t; }
 
     template<typename T>
-    inline typename wrapped_type<T>::type 
+    inline typename wrapped_type<T>::type
     wrap_impl(T& t, mpl::false_) { return t; }
 
     template<typename T>
-    inline typename wrapped_type<T>::type 
+    inline typename wrapped_type<T>::type
     wrap(const T& t) { return wrap_impl(t, is_std_io<T>()); }
 
     template<typename T>
-    inline typename wrapped_type<T>::type 
+    inline typename wrapped_type<T>::type
     wrap(T& t) { return wrap_impl(t, is_std_io<T>()); }
 #endif // #ifndef BOOST_NO_SFINAE //------------------------------------------//
 
@@ -85,7 +85,7 @@ struct unwrap_ios
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310) //----------------------------------//
 
 template<typename T>
-typename unwrapped_type<T>::type& 
+typename unwrapped_type<T>::type&
 unwrap(const reference_wrapper<T>& ref) { return ref.get(); }
 
 template<typename T>
@@ -103,20 +103,20 @@ struct unwrap_impl;
 template<>
 struct unwrap_impl<true> {
     template<typename T>
-    static typename unwrapped_type<T>::type& unwrap(const T& t) 
+    static typename unwrapped_type<T>::type& unwrap(const T& t)
     { return t.get(); }
 };
 
 template<>
 struct unwrap_impl<false> {
     template<typename T>
-    static typename unwrapped_type<T>::type& unwrap(const T& t) 
+    static typename unwrapped_type<T>::type& unwrap(const T& t)
     { return const_cast<T&>(t); }
 };
 
 template<typename T>
-typename unwrapped_type<T>::type& 
-unwrap(const T& t) 
+typename unwrapped_type<T>::type&
+unwrap(const T& t)
 { return unwrap_impl<is_reference_wrapper<T>::value>::unwrap(t); }
 
 #endif // #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310) //------------------------//

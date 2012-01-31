@@ -42,7 +42,7 @@ int BOOST_TEST_CALL_DECL
 main( int argc, char* argv[] )
 {
     using namespace boost::unit_test;
-   
+
     try {
         framework::init( argc, argv );
 
@@ -50,18 +50,18 @@ main( int argc, char* argv[] )
 
         results_reporter::make_report();
 
-        return runtime_config::no_result_code() 
-                    ? boost::exit_success 
+        return runtime_config::no_result_code()
+                    ? boost::exit_success
                     : results_collector.results( framework::master_test_suite().p_id ).result_code();
     }
     catch( std::logic_error const& ex ) {
         std::cerr << "Boost.Test internal framework error: " << ex.what() << std::endl;
-        
+
         return boost::exit_exception_failure;
     }
     catch( ... ) {
         std::cerr << "Boost.Test internal framework error: unknown reason" << std::endl;
-        
+
         return boost::exit_exception_failure;
     }
 }

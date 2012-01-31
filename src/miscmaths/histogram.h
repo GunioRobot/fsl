@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,7 +81,7 @@
 using namespace NEWMAT;
 
 namespace MISCMATHS {
- 
+
   class Histogram
     {
     public:
@@ -96,19 +96,19 @@ namespace MISCMATHS {
       Histogram(const ColumnVector& psourceData, int numBins)
 	: sourceData(psourceData), calcRange(true), bins(numBins){}
 
-      Histogram(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) 
+      Histogram(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins)
 	: sourceData(psourceData), calcRange(false), histMin(phistMin), histMax(phistMax), bins(numBins){}
-      
-      void set(const ColumnVector& psourceData, int numBins) {	
+
+      void set(const ColumnVector& psourceData, int numBins) {
 	sourceData=psourceData; calcRange=true; bins=numBins;
       }
 
-      void set(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) {	
+      void set(const ColumnVector& psourceData, float phistMin, float phistMax, int numBins) {
 	sourceData=psourceData; calcRange=false; histMin=phistMin; histMax=phistMax; bins=numBins;
       }
 
       void generate();
-      
+
       float getHistMin() const {return histMin;}
       float getHistMax() const {return histMax;}
       void setHistMax(float phistMax) {histMax = phistMax;}
@@ -149,7 +149,7 @@ namespace MISCMATHS {
       float binwidth=(histMax-histMin)/bins;
       return Max(1, Min((int)((((float)bins)*((float)(value-(histMin-binwidth))))/((float)(histMax-histMin))),bins));
     }
-  
+
   inline float Histogram::getValue(int bin) const
     {
       return (bin*(histMax-histMin))/(float)bins + histMin;

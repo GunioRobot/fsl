@@ -849,7 +849,7 @@ proc NoteBook::_draw_page { path page create } {
 	set ximg $xtext
 	incr xtext [expr {[image width $img] + 2}]
     }
-	
+
     if { $data(select) == $page } {
         set bd    [Widget::cget $path -borderwidth]
 	if {$bd < 1} { set bd 1 }
@@ -905,7 +905,7 @@ proc NoteBook::_draw_page { path page create } {
     $path.c itemconfigure "$page:poly" -fill $bg  -outline $bg -width $bd
     $path.c itemconfigure "$page:top"  -fill $fgt -width $bd
     $path.c itemconfigure "$page:bot"  -fill $fgb -width $bd
-    
+
     # Sven end
 
     if { $img != "" } {
@@ -968,7 +968,7 @@ proc NoteBook::_draw_arrows { path } {
     # Sven end (all y positions where replaced with $y0 later)
 
     if { $data(base) > 0 } {
-        # Sven 
+        # Sven
         if { ![llength [$path.c find withtag "leftarrow"]] } {
             $path.c create window $xl $y0 \
                 -width  $_warrow            \
@@ -1048,7 +1048,7 @@ proc NoteBook::_draw_area { path } {
     # Sven
     if { [llength [$path.c find withtag rect]] == 0} {
         $path.c create line $xd $y0 $x0 $y0 $x0 $y1 \
-            -tags "rect toprect1" 
+            -tags "rect toprect1"
         $path.c create line $w $y0 $xf $y0 \
             -tags "rect toprect2"
         $path.c create line 1 $h $w $h $w $y0 \

@@ -66,7 +66,7 @@ protected:
 
   template<typename J>
   static void safe_execute(J& j){if(!j.dismissed_)j.execute();}
-  
+
   mutable bool dismissed_;
 
 private:
@@ -88,7 +88,7 @@ protected:
   F fun_;
 };
 
-template<typename F> 
+template<typename F>
 inline scope_guard_impl0<F> make_guard(F fun)
 {
   return scope_guard_impl0<F>(fun);
@@ -107,7 +107,7 @@ protected:
   const P1 p1_;
 };
 
-template<typename F,typename P1> 
+template<typename F,typename P1>
 inline scope_guard_impl1<F,P1> make_guard(F fun,P1 p1)
 {
   return scope_guard_impl1<F,P1>(fun,p1);

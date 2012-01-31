@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -78,7 +78,7 @@ public:
       collate = 1 << 21,                                // use locale specific collation
       nosubs = 1 << 22,                                 // don't mark sub-expressions
       optimize = 0,                                     // not really supported
-      
+
 
 
       basic = basic_syntax_group | collate | no_escape_in_lists,
@@ -104,7 +104,7 @@ public:
       restart_buf = 3,
       restart_continue = 4,
       restart_lit = 5,
-      restart_fixed_lit = 6, 
+      restart_fixed_lit = 6,
       restart_count = 7
    };
 };

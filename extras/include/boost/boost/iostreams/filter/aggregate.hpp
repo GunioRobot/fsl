@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                          // copy, min.
 #include <cassert>
@@ -76,7 +76,7 @@ public:
         data_.insert(data_.end(), s, s + n);
         return n;
     }
-    
+
     // Give detail::closer permission to call close().
     typedef aggregate_filter<Ch, Alloc> self;
     friend struct detail::closer<self>;
@@ -84,14 +84,14 @@ public:
     template<typename Sink>
     void close(Sink& sink, BOOST_IOS::openmode which)
     {
-        if ((state_ & f_read) && (which & BOOST_IOS::in)) 
+        if ((state_ & f_read) && (which & BOOST_IOS::in))
             close();
 
         if ((state_ & f_write) && (which & BOOST_IOS::out)) {
             detail::closer<self> closer(*this);
             vector_type filtered;
             do_filter(data_, filtered);
-            do_write( 
+            do_write(
                 sink, &filtered[0],
                 static_cast<std::streamsize>(filtered.size())
             );
@@ -123,15 +123,15 @@ private:
     }
 
     template<typename Sink>
-    void do_write(Sink& sink, const char* s, std::streamsize n) 
-    { 
+    void do_write(Sink& sink, const char* s, std::streamsize n)
+    {
         typedef typename iostreams::category_of<Sink>::type  category;
         typedef is_convertible<category, output>             can_write;
-        do_write(sink, s, n, can_write()); 
+        do_write(sink, s, n, can_write());
     }
 
     template<typename Sink>
-    void do_write(Sink& sink, const char* s, std::streamsize n, mpl::true_) 
+    void do_write(Sink& sink, const char* s, std::streamsize n, mpl::true_)
     { iostreams::write(sink, s, n); }
 
     template<typename Sink>

@@ -217,11 +217,11 @@ namespace boost { namespace spirit {
 //
 ///////////////////////////////////////////////////////////////////////////////
     template<
-        typename DerivedT, typename EmbedT, 
+        typename DerivedT, typename EmbedT,
         typename T0, typename T1, typename T2
     >
     bool
-    trace_parser(impl::rule_base<DerivedT, EmbedT, T0, T1, T2> 
+    trace_parser(impl::rule_base<DerivedT, EmbedT, T0, T1, T2>
         const& p);
 
     template <typename DerivedT, typename ContextT>

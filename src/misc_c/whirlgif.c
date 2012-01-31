@@ -315,8 +315,8 @@ void GifReadFile(FILE *fout, char *fname, int firstImage)
     if (debugFlag) fprintf(stderr, "  decoding picture no %d\n", count);
     GifDecode(fp, pix, gifimage);
     gifimage.i = 0;
-    k = gifMask[1+globscrn.pixbits]; 
-    l = gifMask[1+gifscrn.pixbits]; 
+    k = gifMask[1+globscrn.pixbits];
+    l = gifMask[1+gifscrn.pixbits];
     for (j = 0; j <= l; j++) {
       dsquare = 256*256*3;
       for (i = 0; i <= k; i++) {
@@ -349,12 +349,12 @@ void GifReadFile(FILE *fout, char *fname, int firstImage)
 	  }
 	}
       }
-      if (FALSE) { 
+      if (FALSE) {
 done: /* i.e. a preliminary left and top found */ ;
       }
       else goto alike;
 /* Then test from right to left, bottom to top */
-      k=hi*wi-1; 
+      k=hi*wi-1;
       p = &pix[k]; po = &pixold[k];
       for (i = hi-1; i >= top; i-- ) {
 	for (j = wi -1; j >= 0; j-- ) {
@@ -747,7 +747,7 @@ UBYTE Xgetc(FILE *fin)
 {
   int i;
   if ( ( i = fgetc(fin) ) == EOF ) {
-    TheEnd1("Unexpected EOF in input file\n"); 
+    TheEnd1("Unexpected EOF in input file\n");
   }
   return(i & 0xff);
 }

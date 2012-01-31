@@ -41,7 +41,7 @@ namespace boost { namespace fusion
 
     template <typename First, typename Last, typename Pred>
     filter_iterator<First,Last,Pred>::filter_iterator(First const& first)
-    :   first(filter::call(first_converter::convert(first))) 
+    :   first(filter::call(first_converter::convert(first)))
     {}
 }}
 

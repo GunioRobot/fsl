@@ -3,8 +3,8 @@
  * Copyright (c) 2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -71,26 +71,26 @@ inline bool can_start(wchar_t c, const unsigned char* map, unsigned char mask)
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
 template <class C, class T, class A>
 inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ 
+{
    if(0 == *p)
    {
       if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
          return 0;
    }
-   return s.compare(p); 
+   return s.compare(p);
 }
 #endif
 #else
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
 template <class C, class T, class A>
 inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ 
+{
    if(0 == *p)
    {
       if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
          return 0;
    }
-   return s.compare(p); 
+   return s.compare(p);
 }
 #endif
 inline int string_compare(const std::string& s, const char* p)
@@ -120,11 +120,11 @@ inline const charT* re_skip_past_null(const charT* p)
 }
 
 template <class iterator, class charT, class traits_type, class char_classT>
-iterator BOOST_REGEX_CALL re_is_set_member(iterator next, 
-                          iterator last, 
-                          const re_set_long<char_classT>* set_, 
+iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
+                          iterator last,
+                          const re_set_long<char_classT>* set_,
                           const regex_data<charT, traits_type>& e, bool icase)
-{   
+{
    const charT* p = reinterpret_cast<const charT*>(set_+1);
    iterator ptr;
    unsigned int i;
@@ -134,7 +134,7 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
 
    typedef typename traits_type::string_type traits_string_type;
    const ::boost::regex_traits_wrapper<traits_type>& traits_inst = *(e.m_ptraits);
-   
+
    // dwa 9/13/00 suppress incorrect MSVC warning - it claims this is never
    // referenced
    (void)traits_inst;
@@ -303,7 +303,7 @@ enum saved_state_type
    saved_state_rep_char = 10,
    saved_state_rep_short_set = 11,
    saved_state_rep_long_set = 12,
-   saved_state_non_greedy_long_repeat = 13, 
+   saved_state_non_greedy_long_repeat = 13,
    saved_state_count = 14
 };
 
@@ -323,8 +323,8 @@ public:
    typedef typename is_byte<char_type>::width_type width_type;
    typedef typename regex_iterator_traits<BidiIterator>::difference_type difference_type;
 
-   perl_matcher(BidiIterator first, BidiIterator end, 
-      match_results<BidiIterator, Allocator>& what, 
+   perl_matcher(BidiIterator first, BidiIterator end,
+      match_results<BidiIterator, Allocator>& what,
       const basic_regex<char_type, traits>& e,
       match_flag_type f,
       BidiIterator base);
@@ -402,7 +402,7 @@ private:
    // start of sequence being searched:
    BidiIterator base;
    // end of sequence being searched:
-   BidiIterator last; 
+   BidiIterator last;
    // current character being examined:
    BidiIterator position;
    // where to restart next search after failed match attempt:

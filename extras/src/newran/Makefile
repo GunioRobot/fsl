@@ -8,13 +8,13 @@ LIBS = -lnewran -lm
 AFILES = libnewran.a
 TESTXFILES = tryrand
 
-all:   libnewran.a 
+all:   libnewran.a
 tests: all ${TESTXFILES}
 
 %.o:          %.cpp
-	      ${CP} $*.cpp $*.cxx  
+	      ${CP} $*.cpp $*.cxx
 	      $(CXX) $(CXXFLAGS) -c $*.cxx
-	      ${RM} -f $*.cxx  
+	      ${RM} -f $*.cxx
 
 
 OBJ_LIB = hist.o newran.o extreal.o myexcept.o

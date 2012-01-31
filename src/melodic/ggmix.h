@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     ggmix.h - class for Gaussian/Gamma Mixture Model
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -83,11 +83,11 @@
 using namespace NEWIMAGE;
 
 namespace GGMIX{
-  
+
   class ggmix
     {
     public:
-    
+
       ggmix(){}
       //MelodicOptions &popts, Log &plogger):
       //	opts(popts),
@@ -95,25 +95,25 @@ namespace GGMIX{
       //	{
       //	}
 
-      ~ggmix() { 
+      ~ggmix() {
 	  }
 
       void save();
 
       void setup(const RowVector& dat, const string dirname,
-		 int here, volume<float> themask, 
-		 volume<float> themean, int num_mix = 3, 
+		 int here, volume<float> themask,
+		 volume<float> themean, int num_mix = 3,
 		 float eps = 0.0, bool fixdim = false);
-      
+
       void gmmfit();
       void ggmfit();
 
       inline void fit(string mtype = string("GGM"))
 	{
 	  mmtype = mtype;
-	  if(mmtype==string("GGM")) 
-	    this->ggmfit(); 
-	  else 
+	  if(mmtype==string("GGM"))
+	    this->ggmfit();
+	  else
 	    this->gmmfit();
 
 	  //re-insert mean and stdev
@@ -126,22 +126,22 @@ namespace GGMIX{
 
       inline Matrix threshold(string levels)
 	{return this->threshold(data, levels);}
-      inline Matrix threshold(RowVector& levels) 
+      inline Matrix threshold(RowVector& levels)
 	{return this->threshold(data, levels);}
       Matrix threshold(const RowVector& dat, Matrix& levels);
       Matrix threshold(const RowVector& dat, string levels);
 
       void status(const string &txt);
- 
+
       inline RowVector& get_means() {return means;}
       inline void set_means(RowVector& Arg) {means = Arg;}
-    
+
       inline RowVector& get_vars() {return vars;}
       inline void set_vars(RowVector& Arg) {vars = Arg;}
-      
+
       inline RowVector& get_pi() {return props;}
       inline void set_pi(RowVector& Arg) {props = Arg;}
-      
+
       inline RowVector& get_data() {return data;}
       inline void set_data(RowVector& Arg) {data = Arg;}
 
@@ -156,10 +156,10 @@ namespace GGMIX{
       inline bool isfitted(){return fitted;}
 
       inline int mixtures(){return nummix;}
-     
+
       inline string get_type() { return mmtype;}
       inline void set_type(string Arg) { mmtype = Arg;}
-      
+
       inline string get_prefix() { return prefix;}
       inline void  set_prefix(string Arg) { prefix = Arg;}
 
@@ -178,7 +178,7 @@ namespace GGMIX{
 	  tmp=vars(2);vars(2)=vars(3);vars(3)=tmp;
 	  tmp=props(2);props(2)=props(3);props(3)=tmp;
 	}
-      }      
+      }
 
       inline void add_infstr(string what){
 	threshinfo.push_back(what);
@@ -212,7 +212,7 @@ namespace GGMIX{
       double datastdev;
 
     private:
-      //    MelodicOptions &opts;     
+      //    MelodicOptions &opts;
       // Log &logger; //global log file
 
       //Log mainhtml;
@@ -220,9 +220,9 @@ namespace GGMIX{
       void gmmupdate();
       float gmmevidence();
       void gmmreducemm();
-      void add_params(Matrix& mu, Matrix& sig, Matrix& pi, 
+      void add_params(Matrix& mu, Matrix& sig, Matrix& pi,
 		      float logLH, float MDL, float Evi, bool advance = false);
-      void get_params(int index, Matrix& mu, Matrix& sig, Matrix& pi, 
+      void get_params(int index, Matrix& mu, Matrix& sig, Matrix& pi,
 		      float logLH, float MDL, float Evi);
 
       Matrix Params;

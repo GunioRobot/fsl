@@ -141,11 +141,11 @@ TkpInit(
 	long osVersion = 0;
 
 	initialized = 1;
-	
+
 	/*
 	 * Initialize/check OS version variable for runtime checks.
 	 */
-	
+
 	if (!uname(&name)) {
 	    osVersion = strtol(name.release, NULL, 10) - 4;
 	}

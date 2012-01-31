@@ -8,7 +8,7 @@ USRLDFLAGS = -L${LIB_PROB} -L${LIB_ZLIB}
 IOLIBS = -lfslio -lniftiio -lznz
 #LIBS = -lss_8UI $(IOLIBS) -lprob -lm -lz
 
-XFILES = whirlgif hist2prob morph_kernel ptoz tmpnam ztop 
+XFILES = whirlgif hist2prob morph_kernel ptoz tmpnam ztop
 
 all: $(XFILES)
 

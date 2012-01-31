@@ -4,13 +4,13 @@
 class ViewOptions {
 
 public:
-  ViewOptions(): 
+  ViewOptions():
     m_localVolIdx(true), m_globalVolIdx(true), m_globalLocIdx(true),
     m_labels(true), m_sliceLabels(false), m_voxels(true),
     m_showGap(true), m_gapSize(1), m_movieFrameRate(50)
   {
   }
-  
+
   ViewOptions& operator=(const ViewOptions& rhs)
   {
     if (this != &rhs) {
@@ -36,8 +36,8 @@ public:
   void setShowCursorGap(bool y) { m_showGap = y;    }
 
   bool inqVolumeIndexingWithinView() const
-  { 
-    return m_localVolIdx; 
+  {
+    return m_localVolIdx;
   }
   void setVolumeIndexingWithinView(bool y)
   {
@@ -45,8 +45,8 @@ public:
   }
 
   bool inqUseSharedVolume() const
-  { 
-    return m_globalVolIdx; 
+  {
+    return m_globalVolIdx;
   }
   void setUseSharedVolume(bool y)
   {

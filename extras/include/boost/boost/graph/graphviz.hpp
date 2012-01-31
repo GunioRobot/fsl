@@ -390,7 +390,7 @@ namespace boost {
 
     detail::write_graphviz_subgraph(out, g,
                                     vertex_marker.begin(),
-                                    edge_marker.begin(), 
+                                    edge_marker.begin(),
                                     get(vertex_index, g));
   }
 
@@ -408,20 +408,20 @@ namespace boost {
 
   template <typename Graph, typename VertexID>
   void write_graphviz(std::ostream& out, const subgraph<Graph>& g,
-                      VertexID vertex_id) 
+                      VertexID vertex_id)
   {
     std::vector<bool> edge_marker(num_edges(g), true);
     std::vector<bool> vertex_marker(num_vertices(g), true);
 
     detail::write_graphviz_subgraph(out, g,
                                     vertex_marker.begin(),
-                                    edge_marker.begin(), 
+                                    edge_marker.begin(),
                                     vertex_id);
   }
 
   template <typename Graph, typename VertexID>
   void write_graphviz(const std::string& filename, const subgraph<Graph>& g,
-                      VertexID vertex_id) 
+                      VertexID vertex_id)
   {
     std::ofstream out(filename.c_str());
     std::vector<bool> edge_marker(num_edges(g), true);
@@ -480,7 +480,7 @@ namespace boost {
     void operator()(std::ostream& out, Descriptor key) const
     {
       bool first = true;
-      for (dynamic_properties::const_iterator i = dp->begin(); 
+      for (dynamic_properties::const_iterator i = dp->begin();
            i != dp->end(); ++i) {
         if (typeid(key) == i->second->key()) {
           if (first) out << " [";
@@ -502,14 +502,14 @@ namespace boost {
   {
   public:
     dynamic_vertex_properties_writer(const dynamic_properties& dp,
-                                     const std::string& node_id) 
+                                     const std::string& node_id)
       : dp(&dp), node_id(&node_id) { }
 
     template<typename Descriptor>
     void operator()(std::ostream& out, Descriptor key) const
     {
       bool first = true;
-      for (dynamic_properties::const_iterator i = dp->begin(); 
+      for (dynamic_properties::const_iterator i = dp->begin();
            i != dp->end(); ++i) {
         if (typeid(key) == i->second->key()
             && i->first != *node_id) {
@@ -550,8 +550,8 @@ namespace boost {
     };
 
     template<typename Vertex>
-    inline std::string 
-    get(node_id_property_map<Vertex> pm, 
+    inline std::string
+    get(node_id_property_map<Vertex> pm,
         typename node_id_property_map<Vertex>::key_type v)
     { return get(*pm.node_id, *pm.dp, v); }
 
@@ -560,7 +560,7 @@ namespace boost {
   template<typename Graph>
   inline void
   write_graphviz(std::ostream& out, const Graph& g,
-                 const dynamic_properties& dp, 
+                 const dynamic_properties& dp,
                  const std::string& node_id = "node_id")
   {
     typedef typename graph_traits<Graph>::vertex_descriptor Vertex;
@@ -640,7 +640,7 @@ public:
     static int idx = 0;
     return edge_t(idx++);
   };
-  
+
   bool operator==(const edge_t& rhs) const {
     return idx_ == rhs.idx_;
   }
@@ -656,14 +656,14 @@ class mutate_graph
   virtual bool is_directed() const = 0;
   virtual void do_add_vertex(const node_t& node) = 0;
 
-  virtual void 
+  virtual void
   do_add_edge(const edge_t& edge, const node_t& source, const node_t& target)
     = 0;
 
-  virtual void 
+  virtual void
   set_node_property(const id_t& key, const node_t& node, const id_t& value) = 0;
 
-  virtual void 
+  virtual void
   set_edge_property(const id_t& key, const edge_t& edge, const id_t& value) = 0;
 };
 
@@ -682,7 +682,7 @@ class mutate_graph_impl : public mutate_graph
 
   bool is_directed() const
   {
-    return 
+    return
       boost::is_convertible<
         typename boost::graph_traits<MutableGraph>::directed_category,
         boost::directed_tag>::value;
@@ -695,17 +695,17 @@ class mutate_graph_impl : public mutate_graph
 
     // Set up a mapping from name to BGL vertex.
     bgl_nodes.insert(std::make_pair(node, v));
-    
+
     // node_id_prop_ allows the caller to see the real id names for nodes.
     put(node_id_prop_, dp_, v, node);
   }
 
-  void 
+  void
   do_add_edge(const edge_t& edge, const node_t& source, const node_t& target)
   {
     std::pair<bgl_edge_t, bool> result =
      add_edge(bgl_nodes[source], bgl_nodes[target], graph_);
-    
+
     if(!result.second) {
       // In the case of no parallel edges allowed
       throw bad_parallel_edge(source, target);
@@ -742,7 +742,7 @@ bool read_graphviz(std::istream& in, mutate_graph& graph);
 template <typename MutableGraph>
 bool read_graphviz(std::istream& in, MutableGraph& graph,
                    dynamic_properties& dp,
-                   std::string const& node_id = "node_id") 
+                   std::string const& node_id = "node_id")
 {
   detail::graph::mutate_graph_impl<MutableGraph> m_graph(graph, dp, node_id);
   return detail::graph::read_graphviz(in, m_graph);

@@ -66,7 +66,7 @@ according to the prefix options you provided in the correct directory
 structure.
 
 Note that in order to run tclsh84.exe, you must ensure that tcl84.dll
-and tclpip84.dll are on your path, in the system directory, or in the 
+and tclpip84.dll are on your path, in the system directory, or in the
 directory containing tclsh84.exe.
 
 Note: Tcl no longer provides support for Win32s.

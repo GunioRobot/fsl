@@ -43,8 +43,8 @@ main (void)
 
   /* Create output image, in true color. */
   im_out = gdImageCreateTrueColor (256 + 384, 384);
-  /* 2.0.2: first color allocated would automatically be background in a 
-     palette based image. Since this is a truecolor image, with an 
+  /* 2.0.2: first color allocated would automatically be background in a
+     palette based image. Since this is a truecolor image, with an
      automatic background of black, we must fill it explicitly. */
   white = gdImageColorAllocate (im_out, 255, 255, 255);
   gdImageFilledRectangle (im_out, 0, 0, gdImageSX (im_out),
@@ -156,7 +156,7 @@ main (void)
 		       (unsigned char *) "hi", red);
       y += fonts[i]->h;
     }
-  /* Random antialiased lines; coordinates all over the image, 
+  /* Random antialiased lines; coordinates all over the image,
      but the output will respect a small clipping rectangle */
   gdImageSetClip (im_out, 0, gdImageSY (im_out) - 100,
 		  100, gdImageSY (im_out));
@@ -168,8 +168,8 @@ main (void)
       int y1 = rand () % gdImageSY (im_out);
       int x2 = rand () % gdImageSX (im_out);
       int y2 = rand () % gdImageSY (im_out);
-      gdImageSetAntiAliased (im_out, white); 
-      gdImageLine (im_out, x1, y1, x2, y2, gdAntiAliased); 
+      gdImageSetAntiAliased (im_out, white);
+      gdImageLine (im_out, x1, y1, x2, y2, gdAntiAliased);
     }
   /* Make output image interlaced (progressive, in the case of JPEG) */
   gdImageInterlace (im_out, 1);

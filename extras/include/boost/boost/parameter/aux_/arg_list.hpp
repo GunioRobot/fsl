@@ -20,7 +20,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
 
-namespace boost { namespace parameter { 
+namespace boost { namespace parameter {
 
 // Forward declaration for aux::arg_list, below.
 template<class T> struct keyword;
@@ -37,7 +37,7 @@ namespace aux {
 // declarations to build member function overload sets that can
 // match against keywords.
 //
-  
+
 // Terminates arg_list<> and represents an empty list.  Since this
 // is just the terminating case you might want to look at arg_list
 // first, to get a feel for what's really happening here.
@@ -68,10 +68,10 @@ struct empty_arg_list
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
     || (BOOST_WORKAROUND(__GNUC__, < 3)) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    
+
     // The overload set technique doesn't work with these older
     // compilers, so they need some explicit handholding.
-      
+
     // A metafunction class that, given a keyword, returns the type
     // of the base sublist whose get() function can produce the
     // value for that key
@@ -259,7 +259,7 @@ struct arg_list : Next
     {
         return arg.value;
     }
-    
+
 #else
 
     reference operator[](keyword<key_type> const&) const
@@ -309,7 +309,7 @@ struct arg_list : Next
     // Comma operator to compose argument list without using parameters<>.
     // Useful for argument lists with undetermined length.
     template <class KW, class T2>
-    arg_list<tagged_argument<KW, T2>, self> 
+    arg_list<tagged_argument<KW, T2>, self>
     operator,(tagged_argument<KW,T2> x)
     {
         return arg_list<tagged_argument<KW,T2>, self>(x, *this);
@@ -318,7 +318,7 @@ struct arg_list : Next
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)  // ETI workaround
 template <> struct arg_list<int,int> {};
-#endif 
+#endif
 
 }}} // namespace boost::parameter::aux
 

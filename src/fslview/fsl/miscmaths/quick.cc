@@ -24,18 +24,18 @@ int main(int argc, char *argv[])
   try{
 
     Matrix X = read_vest("/usr/people/woolrich/matlab/vbbabe/data/design2.mat").t();
- 
+
     ColumnVector Y = read_vest("/usr/people/woolrich/matlab/vbbabe/data/sdf2.mat").t();
- 
+
     ColumnVector m_B;
     SymmetricMatrix ilambda_B;
 
     glm_vb(X, Y, m_B, ilambda_B, 30);
 
     write_ascii_matrix(m_B,"/usr/people/woolrich/matlab/vbbabe/data/m_B");
-    
+
   }
-  catch(Exception p_excp) 
+  catch(Exception p_excp)
     {
       cerr << p_excp.what() << endl;
     }

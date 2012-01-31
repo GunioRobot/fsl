@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixScale.c --
  *
  *	This file implements the X specific portion of the scrollbar
@@ -226,7 +226,7 @@ DisplayVerticalScale(scalePtr, drawable, drawnAreaPtr)
 
 	Tk_GetFontMetrics(scalePtr->tkfont, &fm);
 	Tk_DrawChars(scalePtr->display, drawable, scalePtr->textGC,
-		scalePtr->tkfont, scalePtr->label, 
+		scalePtr->tkfont, scalePtr->label,
                 scalePtr->labelLength, scalePtr->vertLabelX,
                 scalePtr->inset + (3*fm.ascent)/2);
     }
@@ -442,8 +442,8 @@ DisplayHorizontalScale(scalePtr, drawable, drawnAreaPtr)
 
 	Tk_GetFontMetrics(scalePtr->tkfont, &fm);
 	Tk_DrawChars(scalePtr->display, drawable, scalePtr->textGC,
-		scalePtr->tkfont, scalePtr->label, 
-                scalePtr->labelLength, scalePtr->inset + fm.ascent/2, 
+		scalePtr->tkfont, scalePtr->label,
+                scalePtr->labelLength, scalePtr->inset + fm.ascent/2,
                 scalePtr->horizLabelY + fm.ascent);
     }
 }
@@ -613,7 +613,7 @@ TkpDisplayScale(clientData)
 	}
 	if (scalePtr->highlightWidth != 0) {
 	    GC gc;
-    
+
 	    if (scalePtr->flags & GOT_FOCUS) {
 		gc = Tk_GCForColor(scalePtr->highlightColorPtr, pixmap);
 	    } else {

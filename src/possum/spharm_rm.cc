@@ -6,20 +6,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -31,13 +31,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -48,7 +48,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -70,7 +70,7 @@
 #include "newimage/newimageall.h"
 #include "miscmaths/miscmaths.h"
 #include "utils/options.h"
-  
+
 using namespace NEWIMAGE;
 using namespace MISCMATHS;
 using namespace Utilities;
@@ -88,8 +88,8 @@ string examples="spharm_rm [options] -i <input_image> -o <output_image>";
 // Note that they must also be included in the main() function or they
 //  will not be active.
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -148,9 +148,9 @@ volume4D<float> generate_spherical_harmonics(const volume<float>& ref, int n=9)
 }
 
 
-ColumnVector fit_functions(const volume<float>& invol, 
+ColumnVector fit_functions(const volume<float>& invol,
 			   const volume4D<float>& confounds)
-{			   
+{
   int num = confounds.tsize();
   ColumnVector params(num), xty(num);
   Matrix xtx(num,num);
@@ -179,13 +179,13 @@ volume<float> remove_fitted_functions(const volume<float>& invol,
 				      const ColumnVector& params)
 {
   if (confounds.tsize() != params.Nrows() ) {
-    cerr << "WARNING:: Do not have the correct number of parameters required" 
+    cerr << "WARNING:: Do not have the correct number of parameters required"
 	 << endl;
     cerr << "  Removing only a subset of functions" << endl;
   }
   volume<float> outvol = invol;
   int num = Min(confounds.tsize(),params.Nrows());
-  for (int n=0; n<num; n++) { 
+  for (int n=0; n<num; n++) {
     outvol -= ((float) params(n+1)) * confounds[n];
   }
   return outvol;
@@ -217,7 +217,7 @@ int do_work(int argc, char* argv[])
   fits = fit_functions(invol*mask,confounds);
   if (verbose.value()) {
     cout << "Spherical Harmonic Amplitudes: ";
-    for (int n=1; n<=fits.Nrows(); n++) { cout << fits(n) << "  "; }  
+    for (int n=1; n<=fits.Nrows(); n++) { cout << fits(n) << "  "; }
     cout << endl;
   }
   if (unmasked.value()) {
@@ -250,24 +250,24 @@ int main(int argc,char *argv[])
     options.add(numterms);
     options.add(verbose);
     options.add(help);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
 

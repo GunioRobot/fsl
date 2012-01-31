@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -73,7 +73,7 @@ template<typename ParamType, typename ParamIter>
 class param_test_case_generator : public test_unit_generator {
 public:
     param_test_case_generator( callback1<ParamType> const&  test_func,
-                               const_string                 tc_name, 
+                               const_string                 tc_name,
                                ParamIter                    par_begin,
                                ParamIter                    par_end )
     : m_test_func( test_func )
@@ -130,7 +130,7 @@ struct user_param_tc_method_invoker {
 template<typename ParamType, typename ParamIter>
 inline ut_detail::param_test_case_generator<ParamType,ParamIter>
 make_test_case( callback1<ParamType> const& test_func,
-                const_string   tc_name, 
+                const_string   tc_name,
                 ParamIter      par_begin,
                 ParamIter      par_end )
 {
@@ -143,7 +143,7 @@ template<typename ParamType, typename ParamIter>
 inline ut_detail::param_test_case_generator<
     BOOST_DEDUCED_TYPENAME remove_const<BOOST_DEDUCED_TYPENAME remove_reference<ParamType>::type>::type,ParamIter>
 make_test_case( void (*test_func)( ParamType ),
-                const_string  tc_name, 
+                const_string  tc_name,
                 ParamIter     par_begin,
                 ParamIter     par_end )
 {
@@ -163,8 +163,8 @@ make_test_case( void (UserTestCase::*test_method )( ParamType ),
                 ParamIter                              par_end )
 {
     typedef BOOST_DEDUCED_TYPENAME remove_const<BOOST_DEDUCED_TYPENAME remove_reference<ParamType>::type>::type param_value_type;
-    return ut_detail::param_test_case_generator<param_value_type,ParamIter>( 
-               ut_detail::user_param_tc_method_invoker<UserTestCase,ParamType>( user_test_case, test_method ), 
+    return ut_detail::param_test_case_generator<param_value_type,ParamIter>(
+               ut_detail::user_param_tc_method_invoker<UserTestCase,ParamType>( user_test_case, test_method ),
                tc_name,
                par_begin,
                par_end );
@@ -182,7 +182,7 @@ make_test_case( void (UserTestCase::*test_method )( ParamType ),
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: parameterized_test.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

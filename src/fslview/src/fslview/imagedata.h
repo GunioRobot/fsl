@@ -25,18 +25,18 @@ public:
   MetaImage::Handle getMetaImage();
   ColorRGBAHandle   getBuffer();
   void              setBuffer(ColorRGBAHandle);
-  Image::Handle     getImage();   
+  Image::Handle     getImage();
   ImageInfo::Handle getInfo();
   ImageDisplaySetting::Handle getDs();
   bool inqVisibility() const;
   int  inqDtiDisplay() const;
   float inqTransparency() const;
   virtual ~ImageData();
- 
+
 private:
   ImageData(MetaImage::Handle, ColorRGBAHandle);
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

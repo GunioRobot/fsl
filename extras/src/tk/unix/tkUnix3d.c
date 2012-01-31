@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnix3d.c --
  *
  *	This file contains the platform specific routines for
@@ -132,11 +132,11 @@ Tk_3DVerticalBevel(tkwin, drawable, border, x, y, width, height,
     }
 
     if (relief == TK_RELIEF_RAISED) {
-	XFillRectangle(display, drawable, 
+	XFillRectangle(display, drawable,
 		(leftBevel) ? borderPtr->lightGC : borderPtr->darkGC,
 		x, y, (unsigned) width, (unsigned) height);
     } else if (relief == TK_RELIEF_SUNKEN) {
-	XFillRectangle(display, drawable, 
+	XFillRectangle(display, drawable,
 		(leftBevel) ? borderPtr->darkGC : borderPtr->lightGC,
 		x, y, (unsigned) width, (unsigned) height);
     } else if (relief == TK_RELIEF_RIDGE) {
@@ -440,7 +440,7 @@ TkpGetShadows(borderPtr, tkwin)
 	    tmp2 = (MAX_INTENSITY + b)/2;
 	    lightColor.blue = (tmp1 > tmp2) ? tmp1 : tmp2;
 	}
-	
+
        /*
         * Allocate the light shadow color and its GC
         */

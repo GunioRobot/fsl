@@ -27,7 +27,7 @@
 #     - Widget::_test_boolean
 # ----------------------------------------------------------------------------
 # Each megawidget gets a namespace of the same name inside the Widget namespace
-# Each of these has an array opt, which contains information about the 
+# Each of these has an array opt, which contains information about the
 # megawidget options.  It maps megawidget options to a list with this format:
 #     {optionType defaultValue isReadonly {additionalOptionalInfo}}
 # Option types and their additional optional info are:
@@ -611,9 +611,9 @@ proc Widget::copyinit { class templatepath path options } {
 # Widget::parseArgs --
 #
 #	Given a widget class and a command-line spec, cannonize and validate
-#	the given options, and return a keyed list consisting of the 
+#	the given options, and return a keyed list consisting of the
 #	component widget and its masked portion of the command-line spec, and
-#	one extra entry consisting of the portion corresponding to the 
+#	one extra entry consisting of the portion corresponding to the
 #	megawidget itself.
 #
 # Arguments:
@@ -627,7 +627,7 @@ proc Widget::copyinit { class templatepath path options } {
 proc Widget::parseArgs {class options} {
     upvar 0 ${class}::opt classopt
     upvar 0 ${class}::map classmap
-    
+
     foreach {option val} $options {
 	if { ![info exists classopt($option)] } {
 	    error "unknown option \"$option\""
@@ -644,7 +644,7 @@ proc Widget::parseArgs {class options} {
 	    Widget::_get_tkwidget_options [lindex [lindex $optdesc 3] 0]
 	}
 	set val [$Widget::_optiontype($type) $option $val [lindex $optdesc 3]]
-		
+
 	if { [info exists classmap($option)] } {
 	    foreach {subpath subclass realopt} $classmap($option) {
 		lappend maps($subpath) $realopt $val
@@ -927,7 +927,7 @@ proc Widget::getoption { path option } {
 # Widget::getMegawidgetOption --
 #
 #	Bypass the superfluous checks in cget and just directly peer at the
-#	widget's data space.  This is much more fragile than cget, so it 
+#	widget's data space.  This is much more fragile than cget, so it
 #	should only be used with great care, in places where speed is critical.
 #
 # Arguments:
@@ -946,7 +946,7 @@ proc Widget::getMegawidgetOption {path option} {
 # Widget::setMegawidgetOption --
 #
 #	Bypass the superfluous checks in cget and just directly poke at the
-#	widget's data space.  This is much more fragile than configure, so it 
+#	widget's data space.  This is much more fragile than configure, so it
 #	should only be used with great care, in places where speed is critical.
 #
 # Arguments:
@@ -1446,7 +1446,7 @@ proc Widget::traverseTo { w } {
 # Widget::varForOption --
 #
 #	Retrieve a fully qualified variable name for the option specified.
-#	If the option is not one for which a variable exists, throw an error 
+#	If the option is not one for which a variable exists, throw an error
 #	(ie, those options that map directly to widget options).
 #
 # Arguments:

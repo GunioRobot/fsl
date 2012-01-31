@@ -55,7 +55,7 @@ typedef struct TkFontAttributes {
  * Possible values for the "slant" field in a TkFontAttributes structure.
  */
 
-#define TK_FS_ROMAN	0	
+#define TK_FS_ROMAN	0
 #define TK_FS_ITALIC	1
 #define TK_FS_OBLIQUE	2	/* This value is only used when parsing X
 				 * font names to determine the closest
@@ -199,9 +199,9 @@ EXTERN int		TkFontParseXLFD _ANSI_ARGS_((CONST char *string,
 			    TkFontAttributes *faPtr, TkXLFDAttributes *xaPtr));
 EXTERN char **		TkFontGetAliasList _ANSI_ARGS_((CONST char *faceName));
 EXTERN char ***		TkFontGetFallbacks _ANSI_ARGS_((void));
-EXTERN int		TkFontGetPixels _ANSI_ARGS_((Tk_Window tkwin, 
+EXTERN int		TkFontGetPixels _ANSI_ARGS_((Tk_Window tkwin,
 			    int size));
-EXTERN int		TkFontGetPoints _ANSI_ARGS_((Tk_Window tkwin, 
+EXTERN int		TkFontGetPoints _ANSI_ARGS_((Tk_Window tkwin,
 			    int size));
 EXTERN char **		TkFontGetGlobalClass _ANSI_ARGS_((void));
 EXTERN char **		TkFontGetSymbolClass _ANSI_ARGS_((void));
@@ -209,7 +209,7 @@ EXTERN int		TkFontGetFirstTextLayout _ANSI_ARGS_((
 			    Tk_TextLayout layout, Tk_Font *font, char *dst));
 
 /*
- * Low-level API exported by platform-specific code to generic code. 
+ * Low-level API exported by platform-specific code to generic code.
  */
 
 EXTERN void		TkpDeleteFont _ANSI_ARGS_((TkFont *tkFontPtr));

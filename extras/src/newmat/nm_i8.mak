@@ -9,7 +9,7 @@ PRE =
 .cpp.obj:
 		icl -c -GX -GR -Ge -GS -Qpc80 -Qprec -Qprec_div -nologo -Qlong_double $*.cpp
 
-everything:    	tmt.exe example.exe test_exc.exe nl_ex.exe sl_ex.exe garch.exe 
+everything:    	tmt.exe example.exe test_exc.exe nl_ex.exe sl_ex.exe garch.exe
 
 newmat_lobj = newmat1.obj newmat2.obj newmat3.obj newmat4.obj newmat5.obj newmat6.obj newmat7.obj newmat8.obj newmatex.obj bandmat.obj submat.obj myexcept.obj cholesky.obj evalue.obj fft.obj hholder.obj jacobi.obj newfft.obj sort.obj svd.obj newmatrm.obj newmat9.obj
 

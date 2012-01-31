@@ -41,7 +41,7 @@ namespace aux
       object trace(long offset = 0, long axis1 = 0, long axis2 = 1) const;
       object type() const;
       char typecode() const;
-      
+
       object factory(object const& buffer=object()
             , object const& type=object()
             , object const& shape=object()
@@ -57,28 +57,28 @@ namespace aux
       long itemsize() const;
       long nelements() const;
       object nonzero() const;
-   
+
       void put(object const& indices, object const& values);
-   
+
       void ravel();
-   
+
       object repeat(object const& repeats, long axis=0);
-   
+
       void resize(object const& shape);
-      
+
       void setflat(object const& flat);
       void setshape(object const& shape);
-   
+
       void swapaxes(long axis1, long axis2);
-   
+
       object take(object const& sequence, long axis = 0) const;
-   
+
       void tofile(object const& file) const;
-   
+
       str tostring() const;
-   
+
       void transpose(object const& axes = object());
-   
+
       object view() const;
 
    public: // implementation detail - do not touch.
@@ -98,7 +98,7 @@ class array : public aux::array_base
  public:
 
     object astype() { return base::astype(); }
-    
+
     template <class Type>
     object astype(Type const& type_)
     {
@@ -116,7 +116,7 @@ class array : public aux::array_base
     {
         base::resize(object(x));
     }
-    
+
 # define BOOST_PP_LOCAL_MACRO(n)                                \
       void resize(BOOST_PP_ENUM_PARAMS_Z(1, n, long x))              \
       {                                                         \
@@ -130,7 +130,7 @@ class array : public aux::array_base
     {
         base::setshape(object(x));
     }
-    
+
 # define BOOST_PP_LOCAL_MACRO(n)                                \
     void setshape(BOOST_PP_ENUM_PARAMS_Z(1, n, long x))              \
     {                                                           \
@@ -144,7 +144,7 @@ class array : public aux::array_base
     {
         base::put(object(indices), object(values));
     }
-    
+
     template <class Sequence>
     object take(Sequence const& sequence, long axis = 0)
     {
@@ -161,13 +161,13 @@ class array : public aux::array_base
     {
         return base::factory();
     }
-    
+
     template <class Buffer>
     object factory(Buffer const& buffer)
     {
         return base::factory(object(buffer));
     }
-    
+
     template <class Buffer, class Type>
     object factory(
         Buffer const& buffer
@@ -186,7 +186,7 @@ class array : public aux::array_base
     {
         return base::factory(object(buffer), object(type_), object(shape), copy, savespace);
     }
-    
+
     template <class Buffer, class Type, class Shape>
     object factory(
         Buffer const& buffer

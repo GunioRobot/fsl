@@ -205,7 +205,7 @@ TkRectInRegion(
 
 	if (!HIShapeIsEmpty(sectRgn)) {
 	    HIShapeRef diffRgn = HIShapeCreateDifference(rectRgn, sectRgn);
-	 
+
 	    if (HIShapeIsEmpty(diffRgn)) {
 		result = RectangleIn;
 	    } else {
@@ -245,7 +245,7 @@ TkClipBox(
     XRectangle* rect_return)
 {
     CGRect rect;
-    
+
     HIShapeGetBounds((HIShapeRef) r, &rect);
     rect_return->x = rect.origin.x;
     rect_return->y = rect.origin.y;
@@ -501,7 +501,7 @@ TkMacOSXHIShapeCreateEmpty(void)
 	result = HIShapeCreateEmpty();
     ) TK_ELSE_MAC_OS_X (4,
 	static HIShapeRef emptyRgn = NULL;
-	
+
 	if (!emptyRgn) {
 	    HIMutableShapeRef rgn = HIShapeCreateMutable();
 

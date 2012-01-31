@@ -8,10 +8,10 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct read_device_impl;
 
-template<typename T> 
+template<typename T>
 struct read_filter_impl;
 
 } // End namespace detail.
@@ -75,7 +75,7 @@ inline bool true_eof(T& t)
     const bool linked = is_linked<T>::value;
     return true_eof_impl<linked>::true_eof(t);
 }
-                    
+
 //------------------Definition of read_device_impl----------------------------//
 
 template<typename T>
@@ -202,7 +202,7 @@ struct read_filter_impl<multichar_tag> {
     struct inner {
         template<typename Source>
         static std::streamsize read
-            ( T& t, Source& src, typename char_type_of<T>::type* s,   
+            ( T& t, Source& src, typename char_type_of<T>::type* s,
               std::streamsize n )
         { return t.read(src, s, n); }
     };
@@ -214,7 +214,7 @@ struct read_filter_impl<any_tag> {
     struct inner {
         template<typename Source>
         static std::streamsize read
-            ( T& t, Source& src, typename char_type_of<T>::type* s, 
+            ( T& t, Source& src, typename char_type_of<T>::type* s,
               std::streamsize n )
         {
             typedef typename char_type_of<T>::type  char_type;

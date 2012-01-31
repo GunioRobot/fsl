@@ -29,32 +29,32 @@ namespace boost
 #if defined(__GNUC__) && (__GNUC__ < 3)
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
-        
+
         using    ::std::abs;
         using    ::std::sqrt;
         using    ::std::log;
-        
+
         using    ::std::numeric_limits;
 #endif
-        
+
         template<typename T>
         inline T    asinh(const T x)
         {
             using    ::std::abs;
             using    ::std::sqrt;
             using    ::std::log;
-            
+
             using    ::std::numeric_limits;
-            
-            
+
+
             T const            one = static_cast<T>(1);
             T const            two = static_cast<T>(2);
-            
+
             static T const    taylor_2_bound = sqrt(numeric_limits<T>::epsilon());
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
             static T const    upper_taylor_2_bound = one/taylor_2_bound;
             static T const    upper_taylor_n_bound = one/taylor_n_bound;
-            
+
             if        (x >= +taylor_n_bound)
             {
                 if        (x > upper_taylor_n_bound)
@@ -83,15 +83,15 @@ namespace boost
             {
                 // approximation by taylor series in x at 0 up to order 2
                 T    result = x;
-                
+
                 if    (abs(x) >= taylor_2_bound)
                 {
                     T    x3 = x*x*x;
-                    
+
                     // approximation by taylor series in x at 0 up to order 4
                     result -= x3/static_cast<T>(6);
                 }
-                
+
                 return(result);
             }
         }

@@ -6,7 +6,7 @@
  * See http://www.boost.org/libs/multi_index for library home page.
  *
  * The internal implementation of red-black trees is based on that of SGI STL
- * stl_tree.h file: 
+ * stl_tree.h file:
  *
  * Copyright (c) 1996,1997
  * Silicon Graphics Computer Systems, Inc.
@@ -109,7 +109,7 @@ struct ordered_index_node_impl
   }
 
   static ordered_index_node_impl* end(ordered_index_node_impl* header)
-  { 
+  {
     return header;
   }
 
@@ -122,7 +122,7 @@ struct ordered_index_node_impl
     x->right()=y->left();
     if(y->left())y->left()->parent()=x;
     y->parent()=x->parent();
-    
+
     if(x==root)                    root=y;
     else if(x==x->parent()->left())x->parent()->left()=y;
     else                           x->parent()->right()=y;
@@ -245,7 +245,7 @@ struct ordered_index_node_impl
     }
     else{                     /* y==z */
       x_parent=y->parent();
-      if(x)x->parent()=y->parent();   
+      if(x)x->parent()=y->parent();
       if(root==z){
         root=x;
       }
@@ -257,7 +257,7 @@ struct ordered_index_node_impl
         if(z->right()==0){      /* z->left() must be null also */
           leftmost=z->parent();
         }
-        else{              
+        else{
           leftmost=minimum(x);  /* makes leftmost==header if z==root */
         }
       }
@@ -285,9 +285,9 @@ struct ordered_index_node_impl
             w->color()=red;
             x=x_parent;
             x_parent=x_parent->parent();
-          } 
+          }
           else{
-            if(w->right()==0 
+            if(w->right()==0
                 || w->right()->color()==black){
               if(w->left()) w->left()->color()=black;
               w->color()=red;
@@ -300,7 +300,7 @@ struct ordered_index_node_impl
             rotate_left(x_parent,root);
             break;
           }
-        } 
+        }
         else{                   /* same as above,with right <-> left */
           ordered_index_node_impl* w=x_parent->left();
           if(w->color()==red){
@@ -376,7 +376,7 @@ struct ordered_index_node_impl
       if(node->color()==black)++sum;
       if(node==root)break;
       node=node->parent();
-    } 
+    }
     return sum;
   }
 #endif
@@ -384,7 +384,7 @@ struct ordered_index_node_impl
 private:
   ordered_index_node_impl();
 
-  ordered_index_color      color_; 
+  ordered_index_color      color_;
   ordered_index_node_impl* parent_;
   ordered_index_node_impl* left_;
   ordered_index_node_impl* right_;
@@ -413,7 +413,7 @@ struct ordered_index_node:Super,ordered_index_node_trampoline<Super>
   {
     return static_cast<ordered_index_node*>(static_cast<impl_type*>(x));
   }
-  
+
   static const ordered_index_node* from_impl(const ordered_index_node_impl* x)
   {
     return static_cast<const ordered_index_node*>(

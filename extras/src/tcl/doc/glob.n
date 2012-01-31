@@ -4,9 +4,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: glob.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH glob n 8.3 Tcl "Tcl Built-In Commands"
 .BS
@@ -49,21 +49,21 @@ switch an error is returned if the result list would be empty.
 \fB\-path\fR \fIpathPrefix\fR
 Search for files with the given \fIpathPrefix\fR where the rest of the name
 matches the given patterns.  This allows searching for files with names
-similar to a given file (as opposed to a directory) even when the names 
-contain glob-sensitive 
+similar to a given file (as opposed to a directory) even when the names
+contain glob-sensitive
 characters.  This option may not be used in conjunction with
 \fB\-directory\fR.  For example, to find all files with the same root name
-as $path, but differing extensions, you should use \fBglob 
+as $path, but differing extensions, you should use \fBglob
 -path [file rootname $path] .*\fR which will work even if $path contains
 numerous glob-sensitive characters.
 .TP
 \fB\-tails\fR
 Only return the part of each file found which follows the last directory
-named in any \fB\-directory\fR or \fB\-path\fR path specification.  
-Thus \fBglob -tails -directory $dir *\fR is equivalent to 
-\fBset pwd [pwd] ; cd $dir ; glob *; cd $pwd\fR.  For 
+named in any \fB\-directory\fR or \fB\-path\fR path specification.
+Thus \fBglob -tails -directory $dir *\fR is equivalent to
+\fBset pwd [pwd] ; cd $dir ; glob *; cd $pwd\fR.  For
 \fB\-path\fR specifications, the returned names will include the last
-path segment, so \fBglob -tails -path [file rootname ~/foo.tex] .*\fR 
+path segment, so \fBglob -tails -path [file rootname ~/foo.tex] .*\fR
 will return paths like \fBfoo.aux foo.bib foo.tex\fR etc.
 .TP
 \fB\-types\fR \fItypeList\fR
@@ -78,7 +78,7 @@ the Unix find command:
 \fIp\fR (named pipe),
 or \fIs\fR (socket), where multiple types may be specified in the list.
 \fBGlob\fR will return all files which match at least one of the types given.
-Note that symbolic links will be returned both if \fB\-types l\fR is given, 
+Note that symbolic links will be returned both if \fB\-types l\fR is given,
 or if the target of a link matches the requested type.  So, a link to
 a directory will be returned if \fB\-types d\fR was specified.
 .RS
@@ -133,7 +133,7 @@ Matches any of the strings \fIa\fR, \fIb\fR, etc.
 .LP
 On Unix, as with csh, a ``.'' at the beginning of a file's name or just
 after a ``/'' must be matched explicitly or with a {} construct,
-unless the ``-types hidden'' flag is given (since ``.'' at the beginning 
+unless the ``-types hidden'' flag is given (since ``.'' at the beginning
 of a file's name indicates that it is hidden).  On other platforms,
 files beginning with a ``.'' are handled no differently to any others,
 except the special directories ``.'' and ``..'' which must be matched
@@ -154,7 +154,7 @@ exist;  in csh no check for existence is made unless a pattern
 contains a ?, *, or [] construct.
 .LP
 When the \fBglob\fR command returns relative paths whose filenames
-start with a tilde ``~'' (for example through \fBglob *\fR or 
+start with a tilde ``~'' (for example through \fBglob *\fR or
 \fBglob -tails\fR, the returned list will not quote the tilde with
 ``./''.  This means care must be taken if those names are later to
 be used with \fBfile join\fR, to avoid them being interpreted as
@@ -164,7 +164,7 @@ absolute paths pointing to a given user's home directory.
 Unlike other Tcl commands that will accept both network and native
 style names (see the \fBfilename\fR manual entry for details on how
 native and network names are specified), the \fBglob\fR command only
-accepts native names.  
+accepts native names.
 .TP
 \fBWindows\fR
 .
@@ -177,18 +177,18 @@ the local computer.  On Windows 95 and 98, \fBglob\fR accepts patterns
 like ``.../'' and ``..../'' for successively higher up parent directories.
 
 .
-Since the backslash character has a special meaning to the glob 
-command, glob patterns containing Windows style path separators need 
-special care. The pattern \fIC:\e\efoo\e\e*\fR is interpreted as 
-\fIC:\efoo\e*\fR where \fI\ef\fR will match the single character \fIf\fR 
-and \fI\e*\fR will match the single character \fI*\fR and will not be 
-interpreted as a wildcard character. One solution to this problem is 
-to use the Unix style forward slash as a path separator. Windows style 
+Since the backslash character has a special meaning to the glob
+command, glob patterns containing Windows style path separators need
+special care. The pattern \fIC:\e\efoo\e\e*\fR is interpreted as
+\fIC:\efoo\e*\fR where \fI\ef\fR will match the single character \fIf\fR
+and \fI\e*\fR will match the single character \fI*\fR and will not be
+interpreted as a wildcard character. One solution to this problem is
+to use the Unix style forward slash as a path separator. Windows style
 paths can be converted to Unix style paths with the command \fBfile
-join $path\fR (or \fBfile normalize $path\fR in Tcl 8.4). 
-.TP 
-\fBMacintosh\fR 
-. 
+join $path\fR (or \fBfile normalize $path\fR in Tcl 8.4).
+.TP
+\fBMacintosh\fR
+.
 When using the options, \fB\-directory\fR, \fB\-join\fR or \fB\-path\fR, glob
 assumes the directory separator for the entire pattern is the standard
 ``:''.  When not using these options, glob examines each pattern argument

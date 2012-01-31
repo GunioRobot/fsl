@@ -40,8 +40,8 @@ class ImageWidget : public ViewWidget,
 public:
   ImageWidget(QWidget* parent,ImageGroup::Handle i,
               OverlayList::Handle,Cursor::Handle c);
-  ~ImageWidget();  
-  OverlayList::Handle getOverlayList(); 
+  ~ImageWidget();
+  OverlayList::Handle getOverlayList();
   void update(const DrawWidget* w);
   virtual void update(const OverlayList* i, OverlayListMsg msg);
   virtual void update(const Cursor::Handle& c);
@@ -84,7 +84,7 @@ protected:
 
 private:
   void connectControls();
-  void constructToolBar(); 
+  void constructToolBar();
   void loadOverlaysList();
   void clearUndoList();
   void dtiDisplayMode(int);
@@ -95,10 +95,10 @@ private:
   QToolButton         *m_maskModeButton;
   QSpinBox            *m_volSpinBox;
 
-  ImageGroup::Handle   m_imageGroup; 
+  ImageGroup::Handle   m_imageGroup;
 
   int m_xDim;
-  int m_yDim; 
+  int m_yDim;
   int m_zDim;
 
   int m_movieVols;
@@ -108,7 +108,7 @@ protected:
   QToolButton         *m_noneModeButton;
   Cursor::Handle       m_globalCursor;
   Cursor::Handle       m_cursor;
-  OverlayList::Handle  m_overlayList;  
+  OverlayList::Handle  m_overlayList;
   DrawSettings::Handle m_drawSettings;
   MainToolBarWidget   *m_mainToolbarWidget;
   ModeToolBarWidget   *m_modeWidget;
@@ -119,12 +119,12 @@ protected:
   DrawWidget          *m_drawWidget;
   OverlayInfoDialog   *m_overlayDialog;
 
-  QToolBar            *m_toolbar; 
-  QToolBar            *m_modebar; 
-  QToolBar            *m_briconToolbar; 
-  QToolBar            *m_cursorToolbar; 
-  QToolBar            *m_drawToolbar; 
-  QDockWindow         *m_overlayDock; 
+  QToolBar            *m_toolbar;
+  QToolBar            *m_modebar;
+  QToolBar            *m_briconToolbar;
+  QToolBar            *m_cursorToolbar;
+  QToolBar            *m_drawToolbar;
+  QDockWindow         *m_overlayDock;
 
   std::list<Shape::Handle>        m_undoList;
   std::list<Shape::Handle>        m_redoList;

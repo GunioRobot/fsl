@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -130,13 +130,13 @@ ReturnMatrix halfcos_hrf(const ColumnVector& t, const ColumnVector& halfcosparam
   int T = t.Nrows();
   ColumnVector y(T);
   y = 0;
-  
+
   for(int i = 1; i <= T; i++)
     {
       //	OUT(i);
       y(i) = halfcos_hrf(t(i),halfcosparams);
     }
-  
+
   y.Release();
   return y;
 }
@@ -150,13 +150,13 @@ ReturnMatrix samplehalfcosparams(const Matrix& halfcosparamsranges)
 
   ColumnVector halfcosparams(nparams);
   halfcosparams = 0;
-  
+
   for(int i = 1; i <= nparams; i++)
     {
       //	OUT(i);
       halfcosparams(i) = unifrnd(1,1,halfcosparamsranges(i,1),halfcosparamsranges(i,2)).AsScalar();
     }
-  
+
   halfcosparams.Release();
   return halfcosparams;
 }
@@ -164,10 +164,10 @@ ReturnMatrix samplehalfcosparams(const Matrix& halfcosparamsranges)
 int main(int argc, char *argv[])
 {
   try{
-  
+
     // Setup logging:
     Log& logger = LogSingleton::getInstance();
-    
+
     // parse command line - will output arguments to logfile
     HalfcosbasisOptions& opts = HalfcosbasisOptions::getInstance();
     opts.parse_command_line(argc, argv, logger);
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     //Tracer_Plus::setinstantstackon();
 
     Matrix halfcosparamranges = read_ascii_matrix(opts.halfcosparamrangesfile.value());
-    
+
     if(opts.verbose.value())
       OUT(halfcosparamranges);
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 
     int T = int(opts.nsecs.value()/opts.res.value());
 
-    if(opts.verbose.value()) 
+    if(opts.verbose.value())
       {
 	OUT(T);
 	OUT(opts.nsecs.value());
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 	OUT("Performing SVD");
 
     DiagonalMatrix eigenvals;
-    Matrix eigenvecs;    
+    Matrix eigenvecs;
 
     try
       {
@@ -242,14 +242,14 @@ int main(int argc, char *argv[])
         for(int i = 1; i <= eigenvecs.Nrows(); i++)
           eigenvecs.Row(i)=eigenvecs.Row(i).Reverse(); // reverse order of columns
       }
-    catch(Exception& e) 
+    catch(Exception& e)
       {
 	if(opts.verbose.value())
 	  cerr << endl << e.what() << endl;
-	
+
 	throw e;
       }
-	
+
     if(opts.verbose.value())
       {
 	OUT("Finished SVD");
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     // Output hrf samples
     write_ascii_matrix(hrfsamps, LogSingleton::getInstance().appendDir("hrfsamps.txt"));
     miscplot newplot;
-    newplot.add_xlabel("time (secs)");    
+    newplot.add_xlabel("time (secs)");
     newplot.set_xysize(610,300);
     newplot.timeseries(hrfsamps.t(), LogSingleton::getInstance().appendDir("hrfsamps"), "HRF Samples", opts.res.value(),400,3,0,false);
 
@@ -292,25 +292,25 @@ int main(int argc, char *argv[])
       {
 	newplot2.add_label(string("Basis fn ")+num2str(i));
       }
-    newplot2.add_xlabel("time (secs)");    
+    newplot2.add_xlabel("time (secs)");
     newplot2.set_xysize(600,300);
-    newplot2.timeseries(basisfns.t(), LogSingleton::getInstance().appendDir("hrfbasisfns"), "HRF Basis Functions", opts.res.value(),400,3,0,false);    
+    newplot2.timeseries(basisfns.t(), LogSingleton::getInstance().appendDir("hrfbasisfns"), "HRF Basis Functions", opts.res.value(),400,3,0,false);
 
-    // find number of eigenvalues to display:    
-    float sumeigs = eigenvals.Sum();    
+    // find number of eigenvalues to display:
+    float sumeigs = eigenvals.Sum();
     float runsum = 0.0;
-    int numeigs = 1;    
-    
+    int numeigs = 1;
+
     if(opts.verbose.value())
       OUT(sumeigs);
 
     for(; numeigs < 100; numeigs++)
       {
 	runsum += eigenvals(numeigs,numeigs);
-	
+
 	if(runsum>0.995*sumeigs) break;
       }
-    
+
     if(opts.verbose.value())
       {
 	OUT(runsum);
@@ -318,9 +318,9 @@ int main(int argc, char *argv[])
       }
 
     miscplot newplot3;
-    newplot3.add_xlabel("basis function number");    
+    newplot3.add_xlabel("basis function number");
     newplot3.set_xysize(300,300);
-    newplot3.timeseries((diag(eigenvals).Rows(1,numeigs)/eigenvals(1,1)).t(), LogSingleton::getInstance().appendDir("eigenvalues"), "Normalised Eigenvalues (99.5% of variance)", 0,400,3,0,false);    
+    newplot3.timeseries((diag(eigenvals).Rows(1,numeigs)/eigenvals(1,1)).t(), LogSingleton::getInstance().appendDir("eigenvalues"), "Normalised Eigenvalues (99.5% of variance)", 0,400,3,0,false);
 
     if(opts.verbose.value())
       OUT("Normalising HRF samples and basis set");
@@ -356,12 +356,12 @@ int main(int argc, char *argv[])
 
     Matrix paramsamps = pinv(basisfns)*hrfsamps;
     //write_ascii_matrix(paramsamps, LogSingleton::getInstance().appendDir("paramsamps"));
-    
+
     if(opts.verbose.value())
       OUT("Fitting MVN parameter constraints");
 
     ColumnVector priormeans = mean(paramsamps.t()).t();
-    Matrix priorcovars = cov(paramsamps.t());    
+    Matrix priorcovars = cov(paramsamps.t());
 
     // output constraints
     write_vest(priormeans, LogSingleton::getInstance().appendDir("priormeans.mat"));
@@ -378,19 +378,19 @@ int main(int argc, char *argv[])
 
     if(opts.timingon.value())
       Tracer_Plus::settimingon();
-    
+
     if(opts.timingon.value())
       Tracer_Plus::dump_times(logger.getDir());
-    
+
     cout << "Log directory was: " << logger.getDir() << endl;
 
   }
-  catch(Exception& e) 
+  catch(Exception& e)
     {
       cerr << endl << e.what() << endl;
       return 1;
     }
-  catch(X_OptionError& e) 
+  catch(X_OptionError& e)
     {
       cerr << endl << e.what() << endl;
       return 1;

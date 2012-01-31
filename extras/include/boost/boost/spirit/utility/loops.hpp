@@ -128,7 +128,7 @@ namespace boost { namespace spirit {
             {
                 typename ScannerT::iterator_t save = scan.first;
                 result_t next = this->subject().parse(scan);
- 
+
                 if (!next)
                 {
                     if (i >= n1)

@@ -7,20 +7,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -77,7 +77,7 @@ dtype=`$FSLDIR/bin/fslval $arg1 datatype`;
 if [ $dtype -eq 32 ] ; then
     phaseimt=${arg1}_realphase
     absim=${arg1}_realabs
-    $FSLDIR/bin/fslcomplex -realpolar $arg1 $absim $phaseimt 
+    $FSLDIR/bin/fslcomplex -realpolar $arg1 $absim $phaseimt
 else
     phaseimt=${arg1}_phase;
     $FSLDIR/bin/fslmaths ${arg1} $phaseimt
@@ -97,40 +97,40 @@ while [ $tt -lt $tmax ] ; do
     xdim=`$FSLDIR/bin/fslval $phaseim pixdim1`;
     ydim=`$FSLDIR/bin/fslval $phaseim pixdim2`;
     zdim=`$FSLDIR/bin/fslval $phaseim pixdim3`;
-    
+
     pixdim=`echo "scale=10; $xdim / 3.14159265 " | bc`;
     piydim=`echo "scale=10; $ydim / 3.14159265 " | bc`;
     pizdim=`echo "scale=10; $zdim / 3.14159265 " | bc`;
-    
+
     echo "dimension / PI = $pixdim , $piydim , $pizdim"
-    
+
     tmpfile=${phaseim}_$$
-    
+
     echo "$pixdim 0 0 0" > $tmpfile
     echo "0 $piydim 0 0" >> $tmpfile
     echo "0 0 $pizdim 0" >> $tmpfile
     echo "0 0 0 1" >> $tmpfile
-    
+
     echo "Creating xyzramp image"
-    
+
     $FSLDIR/bin/convertwarp -m $tmpfile -o xyzramp -r $phaseim
-    
+
     echo "Splitting into separate ramps"
-    
+
     $FSLDIR/bin/fslroi xyzramp xramp 0 1
     $FSLDIR/bin/fslroi xyzramp yramp 1 1
     $FSLDIR/bin/fslroi xyzramp zramp 2 1
   fi
 
   echo "Adding pi ramps to original phase image"
-  
+
   $FSLDIR/bin/fslmaths $phaseim -add xramp -add yramp -add zramp $2 -odt float
-  
+
   echo "Wrapping phase back to +/- pi range"
-  
+
   # Implements: ph_wrapped = ph - 2*pi*round(ph/(2*pi))
   #  where round(x) is implemented as int(x + 0.5) - (x<-0.5)
-  $FSLDIR/bin/fslmaths $2 -div 6.2831853 -add 0.5 ${2}_tmp -odt float 
+  $FSLDIR/bin/fslmaths $2 -div 6.2831853 -add 0.5 ${2}_tmp -odt float
   $FSLDIR/bin/fslmaths ${2}_tmp ${2}_tmp -odt int
   $FSLDIR/bin/fslmaths ${2} -uthr -0.5 -abs -bin -mul -1 -add ${2}_tmp ${2}_tmp -odt float
   $FSLDIR/bin/fslmaths ${2}_tmp -mul -6.2831853 -add ${2} ${2} -odt float
@@ -142,7 +142,7 @@ while [ $tt -lt $tmax ] ; do
   fi
 
   tt=`echo $tt + 1 | bc`;
-  # end while loop  
+  # end while loop
 done
 
 # Recombine phase with abs if complex arg1

@@ -70,7 +70,7 @@ LinOut linmin(// Input
               // Output
               pair<double,double>   *x);    // Best point
 
-pair<double,double> bracket(// Input 
+pair<double,double> bracket(// Input
                             const ColumnVector& p,      // Current parameter values
                             const ColumnVector& pdir,   // Search direction
                             const NonlinCF&     cfo,    // Cost-function object
@@ -117,7 +117,7 @@ ReturnMatrix NonlinCF::grad(const ColumnVector& p) const
     tmpp.element(i) -= step;
   }
   gradv.Release();
-  return(gradv);    
+  return(gradv);
 }
 
 // If user choses not to overide the hess-method of the NonlinCF
@@ -127,7 +127,7 @@ ReturnMatrix NonlinCF::grad(const ColumnVector& p) const
 // It is in general _not_ a good idea to use a method that explicitly
 // uses the Hessian (i.e. LM) when calculating it numerically.
 // Note that it returns a (safe) pointer to BFMatrix. BFMatrix has two
-// subclasses FullBFMatrix, and SparseBFMatrix which can be used 
+// subclasses FullBFMatrix, and SparseBFMatrix which can be used
 // used interchangeably depending on if the structure of the Hessian
 // renders it sparse or not.
 
@@ -145,13 +145,13 @@ boost::shared_ptr<BFMatrix> NonlinCF::hess(const ColumnVector&         p,
 
   // First calculate all f(x+dx_i) values
 
-  for (int i=0; i<p.Nrows(); i++) {         
+  for (int i=0; i<p.Nrows(); i++) {
     step.element(i) = tiny * std::max(tmpp.element(i),1.0);
     tmpp.element(i) += step.element(i);
     fdx.element(i) = cf(tmpp);
     tmpp.element(i) -= step.element(i);
   }
-  
+
   // Then values of matrix
 
   for (int i=0; i<p.Nrows(); i++) {
@@ -310,7 +310,7 @@ NonlinOut levmar(const NonlinParam& p, const NonlinCF& cfo)
         H->AddTo(i,i,(p.Lambda()-olambda)*H->Peek(i,i));
       }
       else if (p.GaussNewtonType() == LM_L) {                // If Levenberg
-        H->AddTo(i,i,p.Lambda()-olambda);             
+        H->AddTo(i,i,p.Lambda()-olambda);
       }
     }
     ColumnVector step = -H->SolveForx(g,SYM_POSDEF,p.EquationSolverTol(),p.EquationSolverMaxIter());
@@ -321,7 +321,7 @@ NonlinOut levmar(const NonlinParam& p, const NonlinCF& cfo)
       p.SetLambda(p.Lambda()/10.0);                           // Decrease nudge factor
       // Check for convergence based on small decrease of cf
       if (zero_cf_diff_conv(p.CF(),ncf,p.FractionalCFTolerance())) {
-        p.SetCF(ncf); p.SetStatus(NL_CFCONV); return(p.Status()); 
+        p.SetCF(ncf); p.SetStatus(NL_CFCONV); return(p.Status());
       }
       p.SetCF(ncf);                                           // Store value of cost-function
     }
@@ -361,7 +361,7 @@ NonlinOut levmar(const NonlinParam& p, const NonlinCF& cfo)
       else if (p.GaussNewtonType() == LM_L) {
         H->AddTo(i,i,p.Lambda()-olambda);
       }
-    }     
+    }
     ColumnVector step = -H->SolveForx(g,SYM_POSDEF,p.EquationSolverTol(),p.EquationSolverMaxIter());
     double ncf = cfo.cf(p.Par()+step);
     if (success = (ncf < p.CF())) {                  // If last step successful
@@ -370,7 +370,7 @@ NonlinOut levmar(const NonlinParam& p, const NonlinCF& cfo)
       p.SetPar(p.Par()+step);
       // Check for convergence based on small decrease of cf
       if (zero_cf_diff_conv(p.CF(),ncf,p.FractionalCFTolerance())) {
-	p.SetCF(ncf); p.SetStatus(NL_CFCONV); return(p.Status()); 
+	p.SetCF(ncf); p.SetStatus(NL_CFCONV); return(p.Status());
       }
       p.SetCF(ncf);
       g = cfo.grad(p.Par());
@@ -392,8 +392,8 @@ NonlinOut levmar(const NonlinParam& p, const NonlinCF& cfo)
   return(p.Status());
 }
   */
-// Main routine for conjugate-gradient optimisation. The 
-// implementation follows that of Numerical Recipies 
+// Main routine for conjugate-gradient optimisation. The
+// implementation follows that of Numerical Recipies
 // reasonably closely.
 
 NonlinOut congra(const NonlinParam& np, const NonlinCF& cfo)
@@ -407,7 +407,7 @@ NonlinOut congra(const NonlinParam& np, const NonlinCF& cfo)
     // Check for convergence based on zero gradient
     if (zero_grad_conv(np.Par(),r,np.CF(),np.FractionalGradientTolerance())) {
       np.SetStatus(NL_GRADCONV); return(np.Status());
-    }  
+    }
     // Bracket minimum along p
     pair<double,double> lp, mp;                                                                      // Leftmost and middle point of bracket
     pair<double,double> rp = bracket(np.Par(),p,cfo,np.FractionalParameterTolerance(),1.0,&lp,&mp);  // Rightmost point of bracket
@@ -423,7 +423,7 @@ NonlinOut congra(const NonlinParam& np, const NonlinCF& cfo)
     if (lm_status == LM_MAXITER) {np.SetStatus(NL_LM_MAXITER); return(np.Status());} // Ouch!
     // Set new cf value and parameters
     np.SetPar(np.Par() + minp.first*p);
-    np.SetCF(minp.second);  
+    np.SetCF(minp.second);
     // Check for convergence based on small decrease of cost-function
     if (zero_cf_diff_conv(np.CF(),minp.second,np.FractionalCFTolerance())) {np.SetStatus(NL_CFCONV); return(np.Status());}
     // Check for convergence based on neglible move in parameter space
@@ -447,21 +447,21 @@ NonlinOut congra(const NonlinParam& np, const NonlinCF& cfo)
   }
   // If we get here we have used too many iterations
   np.SetStatus(NL_MAXITER);
-    
+
   return(np.Status());
 }
 
 // Main routine for scaled conjugate-gradient optimisation. The
 // idea of the algorithm is similar to that of Levenberg-
-// Marquardt. In the LM algorithm the search direction is a 
+// Marquardt. In the LM algorithm the search direction is a
 // "compromise" between the Newton direction and the gradient
 // direction, where the compromise depends on a factor lambda.
-// A large lambda means that it is close to the gradient and a 
-// small lambda that it is close to the Newton direction. The 
+// A large lambda means that it is close to the gradient and a
+// small lambda that it is close to the Newton direction. The
 // value of lambda is updated each iteration depending on the
 // success of the last step. In this method the compromise is
 // between the "conjugate gradient" direction and the gradient
-// direction. The variable names follow the (excellent!) paper 
+// direction. The variable names follow the (excellent!) paper
 // by Martin Möller (1993) Neural Networks 6:525-533.
 // I have tried to follow the notation he uses in his paper, thus
 // enabling that to be the "documentation" for the routine below.
@@ -476,7 +476,7 @@ NonlinOut sccngr(const NonlinParam& np, const NonlinCF& cfo)
   ColumnVector p = r;                   // Search direction
   bool success = true;                  // True if previous step was successful
   double delta = 0.0;                   // Used to check pos def of H in loop below
-  ColumnVector s(np.NPar());            // Used as approximation to H*p in loop below 
+  ColumnVector s(np.NPar());            // Used as approximation to H*p in loop below
 
   while (np.NextIter()) {
     double p2 = DotProduct(p,p);                            // p'*p, Temporary variable to save some time
@@ -497,14 +497,14 @@ NonlinOut sccngr(const NonlinParam& np, const NonlinCF& cfo)
     double alpha = mu/delta;                              // Step size in direction p
     double tmp_cf = cfo.cf(np.Par()+alpha*p);             // Value of cost-function at attempted new point
 
-    char fname[100]; 
+    char fname[100];
     sprintf(fname,"/Users/jesper/Desktop/gradient_%02d.txt",np.NIter());
     print_newmat(r,fname);
     sprintf(fname,"/Users/jesper/Desktop/step_%02d.txt",np.NIter());
     ColumnVector  step(p); step *= alpha;
     print_newmat(step,fname);
-    
-    
+
+
     double Delta = 2.0*delta*(np.CF()-tmp_cf) / (mu*mu);  // > 0 means attempted step reduced cost-function
     if (Delta >= 0) {                                     // If step reduces cost-function
       np.SetCF(tmp_cf);                                   // Update lowest observed value of cost-function
@@ -520,7 +520,7 @@ NonlinOut sccngr(const NonlinParam& np, const NonlinCF& cfo)
         r = -cfo.grad(np.Par());
         double beta = (DotProduct(r,r)-DotProduct(oldr,r)) / mu;
         p = r + beta*p;                              // New search direction
-      } 
+      }
       if (Delta > 0.75) {                            // If attempted step was \emph{REALLY} good
 	np.SetLambda(np.Lambda()/2.0);
       }
@@ -540,7 +540,7 @@ NonlinOut sccngr(const NonlinParam& np, const NonlinCF& cfo)
   np.SetStatus(NL_MAXITER);
   return(np.Status());
 }
- 
+
 // Main routine for variable-metric optimisation. This implements
 // the variable-metric optimisation with the BFGS or DFP updating
 // schemes. The implementation details are mostly quite close to
@@ -585,7 +585,7 @@ NonlinOut varmet(const NonlinParam& p, const NonlinCF& cfo)
         pdir = -grad;
         continue;
       }
-      else {  
+      else {
         p.SetStatus(NL_PARCONV); return(p.Status());
       }
     }
@@ -608,8 +608,8 @@ NonlinOut varmet(const NonlinParam& p, const NonlinCF& cfo)
   // If we get here we have exceeded the allowed # of iterations
   p.SetStatus(NL_MAXITER);
 
-  return(p.Status());  
-}  
+  return(p.Status());
+}
 
 LinOut linsrch(// Input
                const ColumnVector&  dir,    // Search direction
@@ -627,8 +627,8 @@ LinOut linsrch(// Input
                double               *of,     // Value of cost-function on output
                ColumnVector         *np)     // New parameters
 {
-  const double lmin = 0.1;             
-  const double lmax = 0.5; 
+  const double lmin = 0.1;
+  const double lmax = 0.5;
 
   // First make sure that the step-length suggested
   // by pdir isn't completely unreasonable.
@@ -637,7 +637,7 @@ LinOut linsrch(// Input
   ColumnVector pdir(dir);
   if (totstep > sm) {pdir *= sm/totstep;}
 
-  // Calculate expected rate of change in the direction 
+  // Calculate expected rate of change in the direction
   // given by pdir.
 
   double fp0 = DotProduct(grad,pdir);
@@ -652,7 +652,7 @@ LinOut linsrch(// Input
   almin = ptol / almin;
 
   // First try a step of full lambda
-  
+
   *lambda = 1.0;                        // Start with that
   (*np) =  p0 + (*lambda)*pdir;         // First new parameters to try
   double f2 = sf * cfo.cf(*np);         // Cost-function value for par
@@ -678,8 +678,8 @@ LinOut linsrch(// Input
   double       l2 = 1.0;     // Second to last lambda
   double       l1 = *lambda; // Last lambda
   Matrix       X(2,2);
-  ColumnVector y(2);       
-  
+  ColumnVector y(2);
+
   for (int iter=0; iter<maxiter; iter++) {
     // See if present lambda might be too small
     if (*lambda < almin) {*of = f1; return(LM_LAMBDA_NILL);}
@@ -703,7 +703,7 @@ LinOut linsrch(// Input
   }
 
   // If we are here we have exceeded # of iterations
-  
+
   *of = f1;
   return(LM_MAXITER);
 }
@@ -711,11 +711,11 @@ LinOut linsrch(// Input
 // Will try and find a scale factor for the cost-function such that
 // the step length (lambda) for the first iteration of the variable-
 // metric method is ~0.25. Empricially I have found that such a scaling
-// that yields a first step length in the range 0.1 -- 0.5 will yield 
+// that yields a first step length in the range 0.1 -- 0.5 will yield
 // robust and fast convergence. N.B. though that I have only tested that
 // for non-linear reg, and it is concievable that it is different for
 // other applications with fewer parameters.
- 
+
 double scale_factor(const ColumnVector&  p,       // Current parameter values
                     const ColumnVector&  pdir,    // Search direction
                     const NonlinCF&      cfo,     // Cost-function object
@@ -727,7 +727,7 @@ double scale_factor(const ColumnVector&  p,       // Current parameter values
 
   // Start out by finding an upper bound for lambda such that
   // a minimum is guaranteed to be between 0 and rp
-  
+
   pair<double,double> lp;
   pair<double,double> mp;
   pair<double,double> rp = bracket(p,pdir,cfo,ftol,sf,&lp,&mp);
@@ -738,7 +738,7 @@ double scale_factor(const ColumnVector&  p,       // Current parameter values
   // Now find a minimum with a fractional accuracy of ~1%
 
   pair<double,double> minpoint;
-  
+
   if (linmin(p,pdir,cfo,sf,lp,mp,rp,ftol,maxiter,&minpoint) == LM_MAXITER) {
     throw NonlinException("Failed to find minimum along search direction");
   }
@@ -747,12 +747,12 @@ double scale_factor(const ColumnVector&  p,       // Current parameter values
   return(sf);
 }
 
-// Will find the minimum of the cost-function as a function of 
+// Will find the minimum of the cost-function as a function of
 // lambda. This routine will find the minimum to a fractional
 // tolerance of lambda. This is NOT practical to use for the
 // Variable Metric minimisation (too slow), but is used for
-// the conjugate-gradient method and for finding the initial 
-// scaling between parameters and cost-function for the 
+// the conjugate-gradient method and for finding the initial
+// scaling between parameters and cost-function for the
 // variable metric method.
 
 LinOut linmin(// Input
@@ -788,8 +788,8 @@ LinOut linmin(// Input
     // Try parabolic fit, but not before third iteration
     double tmp = 10.0*sqrt(MISCMATHS::EPS);
     if (std::abs(ostep) > tol/2.0 &&           // If second to last step big enough
-        std::abs(x->first-w.first) > tmp && 
-        std::abs(x->first-v.first) > tmp && 
+        std::abs(x->first-w.first) > tmp &&
+        std::abs(x->first-v.first) > tmp &&
         std::abs(w.first-v.first) > tmp) {     // And points not degenerate
       step = ostep;
       ostep = d;
@@ -799,7 +799,7 @@ LinOut linmin(// Input
 	   std::pow(v.first,2.0) << v.first << 1.0;
       ColumnVector b = X.i() * y;
       if (b.element(0) < 4*MISCMATHS::EPS ||                   // If on line or going for maximum
-          (test.first = -b.element(1)/(2.0*b.element(0))) <= lp.first 
+          (test.first = -b.element(1)/(2.0*b.element(0))) <= lp.first
           || test.first >= rp.first ||                         // If outside bracketed interval
           std::abs(test.first-x->first) > 0.5*step) {               // Or if step too big (indicates oscillation)
         // Take golden step into larger interval
@@ -807,18 +807,18 @@ LinOut linmin(// Input
           test.first = x->first + gold * (rp.first - x->first);
         }
         else {
-          test.first = x->first - gold * (x->first - lp.first); 
+          test.first = x->first - gold * (x->first - lp.first);
         }
       }
     }
-    else { // Take golden step into larger interval   
+    else { // Take golden step into larger interval
       if (x->first < midp) {            // If right interval larger
         ostep = rp.first - x->first;
         test.first = x->first + gold * (rp.first - x->first);
       }
       else {
         ostep = x->first - lp.first;
-        test.first = x->first - gold * (x->first - lp.first); 
+        test.first = x->first - gold * (x->first - lp.first);
       }
     }
     d = test.first - x->first;                              // Signed length of step
@@ -841,14 +841,14 @@ LinOut linmin(// Input
     }
   }
   // If we are here we have used too many iterations
-  return(LM_MAXITER); // Error status    
+  return(LM_MAXITER); // Error status
 }
-              
+
 // Will return a value lambda such that a function minimum is guaranteed to
 // lie somewhere in the interval between p and p+lambda*pdir. The second value
 // of the returned pair is the cost-function value at the point.
 
-pair<double,double> bracket(// Input 
+pair<double,double> bracket(// Input
                             const ColumnVector& p,      // Current parameter values
                             const ColumnVector& pdir,   // Search direction
                             const NonlinCF&     cfo,    // Cost-function object
@@ -887,7 +887,7 @@ pair<double,double> bracket(// Input
   if (cf1 < cf0 && cf1 < cf2) {
     p_l.first = l2; p_l.second = cf2;
     p_m->first = l1; p_m->second = cf1;
-    p_0->second = cf0; 
+    p_0->second = cf0;
     return(p_l);
   }
 
@@ -917,7 +917,7 @@ pair<double,double> bracket(// Input
         }
         else if (lt > 0 && lt < maxstep*l2) {       // If expansion in allowed range
           cft = sf*cfo.cf(p+lt*pdir);
-          l1 = l2; cf1 = cf2; 
+          l1 = l2; cf1 = cf2;
           l2 = lt; cf2 = cft;
           continue;
         }
@@ -935,8 +935,8 @@ pair<double,double> bracket(// Input
       cft = sf*cfo.cf(p+lt*pdir);
       l2 = l1; cf2 = cf1;
       l1 = lt; cf1 = cft;
-    }     
-  }  
+    }
+  }
 
   // If we are here we know that there is a minimum
   // somewhere between 0 and l2;
@@ -946,8 +946,8 @@ pair<double,double> bracket(// Input
   p_m->second = cf1;
   p_l.first = l2;
   p_l.second = cf2;
-  return(p_l);   
-}  
+  return(p_l);
+}
 
 // Utility routines that checks for convergence based on various criteria
 
@@ -995,7 +995,7 @@ pair<ColumnVector,ColumnVector> check_grad(const ColumnVector&  par,
                                            const NonlinCF&      cfo)
 {
   pair<ColumnVector,ColumnVector> rv;
-  
+
   rv.first = cfo.NonlinCF::grad(par);
   rv.second = cfo.grad(par);
 
@@ -1006,13 +1006,13 @@ pair<boost::shared_ptr<BFMatrix>,boost::shared_ptr<BFMatrix> > check_hess(const 
                                                                           const NonlinCF&     cfo)
 {
   pair<boost::shared_ptr<BFMatrix>,boost::shared_ptr<BFMatrix> > rv;
-  
+
   rv.first = cfo.NonlinCF::hess(par);
   rv.second = cfo.hess(par);
 
   return(rv);
-}     
-           
+}
+
 
 void print_newmat(const NEWMAT::GeneralMatrix&  m,
                   std::string                   fname)
@@ -1031,5 +1031,5 @@ void print_newmat(const NEWMAT::GeneralMatrix&  m,
     }
   }
 }
-  
+
 } // End namespace MISCMATHS

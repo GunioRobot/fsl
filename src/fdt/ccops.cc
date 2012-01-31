@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -93,7 +93,7 @@ using namespace CCOPS;
       EigenValues(Q,D,V);
       vector<pair<float,int> > myvec;
       vector<pair<float,int> > myvec2;
-      
+
       for(int i=1;i<=D.Nrows();i++){
 	pair<float,int> mypair;
 	mypair.first=D(i);
@@ -102,14 +102,14 @@ using namespace CCOPS;
       }
       sort(myvec.begin(),myvec.end());
       int ind=myvec[1].second; // index for second eigenval
-      
+
       ColumnVector v2scale(V.Nrows());
       for(int i=1;i<=V.Nrows();i++){
 	v2scale(i)=V(i,ind); //second eigvec
       }
       v2scale=t*v2scale; //scale it
-      
-      
+
+
       for(int i=1;i<=D.Nrows();i++){
 	pair<float,int> mypair;
 	mypair.first=v2scale(i);
@@ -117,18 +117,18 @@ using namespace CCOPS;
 	myvec2.push_back(mypair);
       }
       //myvec2 contains scaled second eigenvector and index for sorting.
-      
-      
+
+
       sort(myvec2.begin(),myvec2.end());
       r.ReSize(D.Nrows());
       y.ReSize(D.Nrows());
-      
+
       for(int i=1;i<=D.Nrows();i++){
 	y(i)=myvec2[i-1].first;
 	r(i)=myvec2[i-1].second;
       }
-      
-  } 
+
+  }
 
 bool compare(const pair<float,int> &r1,const pair<float,int> &r2){
   return (r1.first<r2.first);
@@ -139,7 +139,7 @@ void randomise(vector< pair<float,int> >& r){
     r[i-1]=p;
   }
   sort(r.begin(),r.end(),compare);
-  
+
 }
 void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
   int numiter=200;
@@ -152,7 +152,7 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
   ColumnVector nmeans(k);
   means=0;
   nmeans=0;
-  
+
   // // initialise random
 //   vector< pair<float,int> > rindex(n);
 //   randomise(rindex);
@@ -179,7 +179,7 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
   ColumnVector cog(d);
   for(int cl=2;cl<=k;cl++){
     cog = sum(means.SubMatrix(1,d,1,cl-1),2);
-    
+
     int maxi=1;float dist=0,maxdist=0;
     for(int i=1;i<=n;i++){
       float cdist=0,mindist=-1;int minc=1;
@@ -194,7 +194,7 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
   }
 
 
-  
+
   // iterate
   for(int iter=0;iter<numiter;iter++){
     // loop over datapoints and attribute z for closest mean
@@ -214,7 +214,7 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
       newmeans.Column(mm) += data.Row(i).t();
       nmeans(mm) += 1;
     }
-    
+
     // compute means
     for(int m=1;m<=k;m++){
       if(nmeans(m)==0){
@@ -226,7 +226,7 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
     }
     means = newmeans;
   }
-  
+
 }
 
 
@@ -234,23 +234,23 @@ void do_kmeans(const Matrix& data,ColumnVector& y,const int k){
 
 void kmeans_reord(const Matrix& A,ColumnVector& r,ColumnVector& y,const int k){
   do_kmeans(A,y,k);
- 
+
   vector< pair<float,int> > myvec2;
   for(int i=1;i<=A.Nrows();i++){
     pair<int,int> mypair;
     mypair.first=y(i);
     mypair.second=i;
     myvec2.push_back(mypair);
-  }  
-  
+  }
+
   sort(myvec2.begin(),myvec2.end());
   r.ReSize(A.Nrows());
   y.ReSize(A.Nrows());
-  
+
   for(int i=1;i<=A.Nrows();i++){
     y(i)=myvec2[i-1].first;
     r(i)=myvec2[i-1].second;
-  } 
+  }
 }
 
 void do_fuzzy(const Matrix& data,Matrix& u,const int k){
@@ -263,14 +263,14 @@ void do_fuzzy(const Matrix& data,Matrix& u,const int k){
   ColumnVector nmeans(k);
   means=0;
   nmeans=0;
-  
+
   // initialise with far-away trick
   // start with a random class centre. then each new class centre is
   // as far as possible from the cog of the previous classes
   means.Column(1) = data.Row(round(rand()/float(RAND_MAX)*float(n-1))+1).t();
   ColumnVector cog(d);
   for(int cl=2;cl<=k;cl++){
-    cog = sum(means.SubMatrix(1,d,1,cl-1),2);    
+    cog = sum(means.SubMatrix(1,d,1,cl-1),2);
     int maxi=1;float dist=0,maxdist=0;
     for(int i=1;i<=n;i++){
       float cdist=0,mindist=-1;int minc=1;
@@ -303,7 +303,7 @@ void do_fuzzy(const Matrix& data,Matrix& u,const int k){
       newmeans.Column(mm) += data.Row(i).t();
       nmeans(mm) += 1;
     }
-    
+
     // compute means
     for(int m=1;m<=k;m++){
       if(nmeans(m)!=0)
@@ -327,7 +327,7 @@ void do_fuzzy(const Matrix& data,Matrix& u,const int k){
       u(i,j) = 1/u(i,j);
     }
   }
-  
+
 
 }
 
@@ -344,32 +344,32 @@ void fuzzy_reord(const Matrix& A,Matrix& u,ColumnVector& r,ColumnVector& y,const
     junk = u.Row(i).Maximum1(index);
     y(i) = index;
   }
- 
+
   vector< pair<float,int> > myvec2;
   for(int i=1;i<=A.Nrows();i++){
     pair<int,int> mypair;
     mypair.first=y(i);
     mypair.second=i;
     myvec2.push_back(mypair);
-  }  
-  
+  }
+
   sort(myvec2.begin(),myvec2.end());
   r.ReSize(A.Nrows());
   y.ReSize(A.Nrows());
-  
-  
+
+
   for(int i=1;i<=A.Nrows();i++){
     y(i)=myvec2[i-1].first;
     r(i)=myvec2[i-1].second;
-  } 
-  
+  }
+
 }
 
 
 
 void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& tractcoordmat,const bool coordbool,const bool tractcoordbool,Matrix& newOMmat,Matrix& newcoordmat, Matrix& newtractcoordmat)
 {
- 
+
  vector<int> zerorows;
  vector<int> zerocols;
  int dimsum =0;
@@ -427,7 +427,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
      }
      else{zcolcounter++;} //move onto next z col
    }
-   
+
    else{  //No zero Columns
      for(int i=1;i<=myOMmat.Nrows();i++){
        if(zerorows.size()>0){
@@ -458,7 +458,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
        }
        else{zrowcounter++;}
      }
-   } 
+   }
    else{//No zero Rows
      newcoordmat=coordmat;
    }
@@ -478,7 +478,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
        else{zcolcounter++;}
      }
    }
-   else{//No zero Cols 
+   else{//No zero Cols
      newtractcoordmat=tractcoordmat;
    }
  }
@@ -495,7 +495,7 @@ void rem_zrowcol(const Matrix& myOMmat,const Matrix& coordmat,const Matrix& trac
 
 void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,const vector<int>& excl_cols)
 {
- 
+
 
  Matrix newOMmat,newtractcoordmat;
  newOMmat.ReSize(myOMmat.Nrows(),myOMmat.Ncols()-excl_cols.size());
@@ -509,7 +509,7 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
 
  for(int j=1;j<=myOMmat.Ncols();j++){
    zrowcounter=0;
-   nzrowcounter=1;   
+   nzrowcounter=1;
 
    if(excl_cols.size()>0){ //Are there any excl Columns
      if(excl_cols[zcolcounter]!=j){  // Only add a col if it's not the next zcol
@@ -542,7 +542,7 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
    }
 }
 
- 
+
  if(tractcoordbool){
    zcolcounter=0;nzcolcounter=1;
    if(excl_cols.size()>0){//Are there any zero cols?
@@ -556,14 +556,14 @@ void rem_cols(Matrix& myOMmat,Matrix& tractcoordmat,const bool tractcoordbool,co
        else{zcolcounter++;}
      }
    }
-   else{//No zero Cols 
+   else{//No zero Cols
      newtractcoordmat=tractcoordmat;
    }
  }
 
  myOMmat = newOMmat;
  tractcoordmat = newtractcoordmat;
-  
+
 }
 
 void add_connexity(SymmetricMatrix& CtCt,const Matrix& coord,const float p=.5){
@@ -588,7 +588,7 @@ void add_connexity(SymmetricMatrix& CtCt,const Matrix& coord,const float p=.5){
     for(int j=1;j<=i;j++){
       CtCt(i,j)=std::sqrt((1-p)*CtCt(i,j)*CtCt(i,j)+p*D(i,j)*D(i,j));
     }
- 
+
 }
 
 
@@ -603,7 +603,7 @@ int main ( int argc, char **argv ){
   }
   string ip=opts.inmatrix.value();
   make_basename(ip);
-  
+
   ColumnVector y1,r1,y2,r2;
   Matrix U;
   volume<int> myOM;
@@ -616,11 +616,11 @@ int main ( int argc, char **argv ){
   Matrix myOMmat(myOM.xsize(),myOM.ysize());
   Matrix mycoordmat,mytractcoordmat;
   Matrix newOMmat,newcoordmat,newtractcoordmat;
-  
+
   for(int j=0;j<myOM.ysize();j++){
     for(int i=0;i<myOM.xsize();i++){
       if(opts.bin.value()==0)
-	myOMmat(i+1,j+1)=float(myOM(i,j,0)); 
+	myOMmat(i+1,j+1)=float(myOM(i,j,0));
       else{
 	if(myOM(i,j,0)>opts.bin.value()){
 	  myOMmat(i+1,j+1)=1.0f;
@@ -664,11 +664,11 @@ int main ( int argc, char **argv ){
   else{
     cout<<"Tract Space Coordinate File Not present - Ignoring"<<endl;
   }
- 
 
 
-  // If user specifies an exclusion mask in tract space. 
-  // work out which columns in the matrix to remove 
+
+  // If user specifies an exclusion mask in tract space.
+  // work out which columns in the matrix to remove
   // This only works if there is a lookup matrix available
 
 
@@ -689,7 +689,7 @@ int main ( int argc, char **argv ){
 	for(int i=0;i<=excl.xsize();i++){
 	  if(excl(i,j,k)==1){
 	    if(lookup_tract(i,j,k)!=0){
-	     
+
 	      if(lookup_tract(i,j,k)<=mytractcoordmat.Nrows()){
 		excl_cols.push_back(lookup_tract(i,j,k)+1);
 	      }
@@ -699,8 +699,8 @@ int main ( int argc, char **argv ){
 		cerr<<"If so you can't use an exclusion mask as the"<<endl;
 		cerr<<"tractspace_lookup volume is not valid for this matrix"<<endl;
 	      }
-	     
-	     
+
+
 	    }
 	  }
 	}
@@ -710,12 +710,12 @@ int main ( int argc, char **argv ){
     rem_cols(myOMmat,mytractcoordmat,tractcoordbool,excl_cols);
   }
 
- 
+
   rem_zrowcol(myOMmat,mycoordmat,mytractcoordmat,coordbool,tractcoordbool,newOMmat,newcoordmat,newtractcoordmat);
   //   cerr<<"NOW"<<endl;
   //   cerr<<myOMmat.MaximumAbsoluteValue()<<endl;
   //   cerr<<newOMmat.MaximumAbsoluteValue()<<endl;
- 
+
   //write_ascii_matrix("ncm",newcoordmat);
   // write_ascii_matrix("nctm",newtractcoordmat);
 
@@ -745,24 +745,24 @@ int main ( int argc, char **argv ){
     CtCt << pow(CtCt,opts.power.value());
   }
 
- 
+
   if(!opts.reord1.value()){
-     
+
     for(int j=0;j<outCCvol.ysize();j++){
       for(int i=0;i<outCCvol.xsize();i++){
 	outCCvol(i,j,0)=CtCt(i+1,j+1);
       }
     }
-   
-   
+
+
     if(coordbool){
       for(int i=0;i<outcoords.xsize();i++){
 	outcoords(i,0,0)=(int)newcoordmat(i+1,1);
 	outcoords(i,1,0)=(int)newcoordmat(i+1,2);
 	outcoords(i,2,0)=(int)newcoordmat(i+1,3);
-      } 
+      }
     }
-   
+
     save_volume(outCCvol,opts.directory.value()+"/CC_"+base);
     save_volume(outcoords,opts.directory.value()+"/coords_for_"+base);
 
@@ -780,15 +780,15 @@ int main ( int argc, char **argv ){
       cerr << "unkown reordering scheme" << endl;
       return(-1);
     }
-   
+
     cout<<"Permuting seed CC matrix"<<endl;
     for(int j=0;j<outCCvol.ysize();j++){
       for(int i=0;i<outCCvol.xsize();i++){
 	outCCvol(i,j,0)=CtCt((int)r1(i+1),(int)r1(j+1));
       }
     }
-   
-   
+
+
     if(coordbool){
       cout<<"Permuting Seed Coordinates"<<endl;
 //       OUT(r1.Maximum());
@@ -800,7 +800,7 @@ int main ( int argc, char **argv ){
 	outcoords(i,0,0)=(int)newcoordmat(int(r1(i+1)),1);
 	outcoords(i,1,0)=(int)newcoordmat(int(r1(i+1)),2);
 	outcoords(i,2,0)=(int)newcoordmat(int(r1(i+1)),3);
-      } 
+      }
     }
     cout<<"Saving results"<<endl;
     write_ascii_matrix(r1,opts.directory.value()+"/"+base+"r1");
@@ -838,7 +838,7 @@ int main ( int argc, char **argv ){
 		   newtractcoordmat(j,3)) = maxind;
 	}
 
-	
+
 	opaths.setDisplayMaximumMinimum(opaths.max(),0);
 	save_volume(opaths,opts.directory.value()+"/tract_space_propagated_"+base);
       }
@@ -859,7 +859,7 @@ int main ( int argc, char **argv ){
       }
       mask.setDisplayMaximumMinimum(y1.Maximum(),0);
       save_volume(mask,opts.directory.value()+"/reord_mask_"+base);
-      
+
       // save memberships if fuzzy clustering used
       if(opts.scheme.value() == "fuzzy"){
 	volume<float> umask;
@@ -877,11 +877,11 @@ int main ( int argc, char **argv ){
 	  umask.setDisplayMaximumMinimum(1,0);
 	  save_volume(umask,opts.directory.value()+"/reord_membership_class"+num2str(cl)+"_"+base);
 	}
-	
+
       }
-	
+
     }
-    
+
   }
 
   if(opts.reord2.value()){
@@ -898,7 +898,7 @@ int main ( int argc, char **argv ){
       cerr << "unkown reordering scheme" << endl;
       return(-1);
     }
- 
+
     write_ascii_matrix(r2,opts.directory.value()+"/"+base+"r2");
     write_ascii_matrix(y2,opts.directory.value()+"/"+base+"y2");
 
@@ -919,7 +919,7 @@ int main ( int argc, char **argv ){
 	outtractcoords(i,0,0)=(int)newtractcoordmat(int(r2(i+1)),1);
 	outtractcoords(i,1,0)=(int)newtractcoordmat(int(r2(i+1)),2);
 	outtractcoords(i,2,0)=(int)newtractcoordmat(int(r2(i+1)),3);
-      } 
+      }
     }
     save_volume(outvol,opts.directory.value()+"/reord_"+base);
     save_volume(outtractcoords,opts.directory.value()+"/tract_space_coords_for_reord_"+base);
@@ -928,7 +928,7 @@ int main ( int argc, char **argv ){
   cout << "Done." << endl;
   return 0;
 }
- 
+
 
 
 

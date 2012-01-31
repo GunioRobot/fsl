@@ -24,7 +24,7 @@ package require tcltest 2.1
 namespace eval tk {
     namespace eval test {
 	namespace eval bg {
-	    # Manage a background process.  
+	    # Manage a background process.
 	    # Replace with slave interp or thread?
 	    namespace import ::tcltest::interpreter
 	    namespace export setup cleanup do
@@ -109,7 +109,7 @@ namespace eval tk {
 	    eval destroy [winfo children .]
 	}
 
-	namespace export fixfocus 
+	namespace export fixfocus
 	proc fixfocus {} {
             catch {destroy .focus}
             toplevel .focus

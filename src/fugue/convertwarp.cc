@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -83,8 +83,8 @@ using namespace NEWIMAGE;
 string title="convertwarp (Version 2.1)\nCopyright(c) 2001-2008, University of Oxford";
 string examples="convertwarp -m affine_matrix_file -r refvol -o output_warp\nconvertwarp --ref=refvol --premat=mat1 --warp1=vol1 --warp2=vol2 --postmat=mat2 --out=output_warp\nconvertwarp -r refvol -s shiftmapvol -o output_warp";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -152,11 +152,11 @@ bool abs_warp = true;
 void update_warp(volume4D<float>& totalwarp,  const volume4D<float>& newwarp,
 		 bool& warpset)
 {
-  if (warpset) { 
+  if (warpset) {
     volume4D<float> tmpwarp = totalwarp;  // previous warp (prewarp)
     concat_warps(tmpwarp,newwarp,totalwarp);
   } else {
-    totalwarp = newwarp; 
+    totalwarp = newwarp;
     warpset = true;
   }
 }
@@ -167,12 +167,12 @@ bool getabswarp(volume4D<float>& warpvol) {
   if (abswarp.value()) { absw = true; }
   else if (relwarp.value()) { absw = false; }
   else {
-    if (verbose.value()) { 
-      cout << "Automatically determining relative/absolute warp conventions" << endl; 
+    if (verbose.value()) {
+      cout << "Automatically determining relative/absolute warp conventions" << endl;
     }
     absw = is_abs_convention(warpvol);
     if (verbose.value()) {
-      if (absw) { cout << "Warp convention = absolute" << endl; } 
+      if (absw) { cout << "Warp convention = absolute" << endl; }
       else { cout << "Warp convention = relative" << endl; }
     }
   }
@@ -247,7 +247,7 @@ int convert_warp()
     affine2warp(IdentityMatrix(4),nextwarp,refvol);
     update_warp(finalwarp,nextwarp,warpset);
   }
-   
+
   if (jacobianstats.value() || jacobianname.set()) {
     ColumnVector jstats;
     if (jacobianname.set()) {
@@ -267,16 +267,16 @@ int convert_warp()
     constrain_topology(finalwarp,jmin.value(),jmax.value());
   }
 
-  
+
   if (relwarpout.value() || (!abswarpout.value() && (warp1file.AbsOrRel()==RelativeWarps || warp2file.AbsOrRel()==RelativeWarps))) {
     convertwarp_abs2rel(finalwarp);   // convert output to relative
   }
-  
+
 
   if (outname.set()) {
     save_volume4D(finalwarp,outname.value());
   }
-  
+
   return(EXIT_SUCCESS);
 }
 
@@ -311,7 +311,7 @@ int main(int argc, char* argv[])
     options.add(relwarpout);
     options.add(verbose);
     options.add(help);
-    
+
     int nparsed = options.parse_command_line(argc, argv);
     if (nparsed < argc) {
       for (; nparsed<argc; nparsed++) {
@@ -331,7 +331,7 @@ int main(int argc, char* argv[])
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   if (abswarp.value() && relwarp.value()) {
     cerr << "--abs and --rel flags cannot both be set" << endl;

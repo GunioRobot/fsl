@@ -1,20 +1,20 @@
-//  
+//
 //  Declarations/template-bodies for sparse matrix class SpMat
 //
 //  SpMat.h
 //
-//  Implements bare-bones sparse matrix class. 
+//  Implements bare-bones sparse matrix class.
 //  Main considerations has been efficiency when constructing
 //  from Compressed Column format, when multiplying with vector,
 //  transposing and multiplying with a vector and when concatenating.
-//  Other operations which have not been prioritised such as 
+//  Other operations which have not been prioritised such as
 //  for example inserting elements in a random order may be
-//  a bit slow.  
+//  a bit slow.
 //
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #ifndef SpMat_h
@@ -73,14 +73,14 @@ class Accumulator;
 //
 // Important implementation detail:
 // _nz or .NZ() isn't strictly speaking the # of non-zero elements,
-// but rather the number of elements that has an explicit 
+// but rather the number of elements that has an explicit
 // representation, where that representation may in principle
 // be 0. This is in contrast to e.g. Matlab which chooses
 // not to represent an element when its value is zero. I have
-// chosen this variant because of my main use of the class where 
+// chosen this variant because of my main use of the class where
 // it is very convenient if e.g. my Hessian and the Gibbs form
 // of membrane energy has the same sparsity pattern.
-// For most users this is of no consequence and they will 
+// For most users this is of no consequence and they will
 // never explicitly represent a zero.
 //
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -115,17 +115,17 @@ public:
   T operator()(unsigned int r, unsigned int c) const {return(Peek(r,c));}    // Read-only
 
   void Set(unsigned int r, unsigned int c, const T& v) {here(r,c) = v;}             // Set a single value
-  void SetColumn(unsigned int c, const NEWMAT::ColumnVector& col, double eps=0.0);  // Set a whole column (obliterating what was there before) 
+  void SetColumn(unsigned int c, const NEWMAT::ColumnVector& col, double eps=0.0);  // Set a whole column (obliterating what was there before)
   void AddTo(unsigned int r, unsigned int c, const T& v) {here(r,c) += v;}          // Add value to a single (possibly existing) value
 
-  SpMat<T>& operator+=(const SpMat& M) 
+  SpMat<T>& operator+=(const SpMat& M)
   {
     if (same_sparsity(M)) return(add_same_sparsity_mat_to_me(M,1));
     else return(add_diff_sparsity_mat_to_me(M,1));
   }
-  SpMat<T>& operator-=(const SpMat& M) 
+  SpMat<T>& operator-=(const SpMat& M)
   {
-    if (same_sparsity(M)) return(add_same_sparsity_mat_to_me(M,-1)); 
+    if (same_sparsity(M)) return(add_same_sparsity_mat_to_me(M,-1));
     else return(add_diff_sparsity_mat_to_me(M,-1));
   }
   const NEWMAT::ReturnMatrix operator*(const NEWMAT::ColumnVector& x) const;       // Multiplication with column vector
@@ -142,15 +142,15 @@ public:
   const SpMat<T> TransMultSelf() const {return(TransMult(*this));}                 // Returns transpose(*this)*(*this)
 
   const SpMat<T> t() const;                                                        // Returns transpose(*this). Avoid, if at all possible.
-  
-  friend class Accumulator<T>; 
+
+  friend class Accumulator<T>;
 
   template<class TT>
   friend const SpMat<TT> operator*(const SpMat<TT>& lh, const SpMat<TT>& rh);      // Multiplication of two sparse matrices
 
   NEWMAT::ReturnMatrix SolveForx(const NEWMAT::ColumnVector&           b,          // Solve for x in b=(*this)*x
                                  MatrixType                            type = UNKNOWN,
-                                 double                                tol = 1e-4, 
+                                 double                                tol = 1e-4,
                                  unsigned int                          miter = 200,
 				 boost::shared_ptr<Preconditioner<T> > C = boost::shared_ptr<Preconditioner<T> >()) const;
 
@@ -191,9 +191,9 @@ private:
 // this class was a special treat for me. A preconditioner is used
 // to render the coefficient-matrix corresponding to some set of
 // linear equations better conditioned. A concrete example would be
-// when some set of columns/rows have a different scale than the 
+// when some set of columns/rows have a different scale than the
 // others, resulting in poor convergence of for example a conjugate
-// gradient search. The simplest form of preconditioner might then 
+// gradient search. The simplest form of preconditioner might then
 // be inv(diag(A)), where A is the original matrix. It simply scales
 // the columns of A with the inverse of the diagonal elements. This
 // simple conditioning works fine when A is diagonal domninant, which
@@ -248,14 +248,14 @@ public:
 
 private:
   std::vector<T>   _diag;
-};  
-  
+};
+
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // Class Accumulator:
 //
-// The concept of an accumulator was "borrowed" from Gilbert et al. 
+// The concept of an accumulator was "borrowed" from Gilbert et al.
 // 92. It is intended as a helper class for SpMat and is used to
 // hold the content of one column of a matrix. This column can then
 // be accessed both by indexing a certain element, and also by indexing
@@ -267,7 +267,7 @@ template<class T>
 class Accumulator
 {
 public:
-  Accumulator(unsigned int sz) : _no(0), _sz(sz), _sorted(true), _occ(new bool [sz]), _val(new T [sz]), _occi(new unsigned int [sz]) 
+  Accumulator(unsigned int sz) : _no(0), _sz(sz), _sorted(true), _occ(new bool [sz]), _val(new T [sz]), _occi(new unsigned int [sz])
   {
     for (unsigned int i=0; i<_sz; i++) {_occ[i]=false; _val[i]=static_cast<T>(0.0);}
   }
@@ -280,19 +280,19 @@ public:
     return(_occi[i]);
   }
   const T& val(unsigned int i) {                                // i'th non-zero value. Call ri(i) to find what index that corresponds to
-    if (!_sorted) {sort(_occi,&(_occi[_no])); _sorted=true;}    
+    if (!_sorted) {sort(_occi,&(_occi[_no])); _sorted=true;}
     return(_val[_occi[i]]);
   }
   const T& val_at(unsigned int i) const {return(_val[i]);}      // Value for index i (or i+1)
   const bool& occ_at(unsigned int i) const {return(_occ[i]);}   // Is value for index i non-zero
-  
+
   const Accumulator<T>& ExtractCol(const SpMat<T>& M, unsigned int c);
-  
+
 private:
   unsigned int                   _no;       // Number of occupied positions
   unsigned int                   _sz;       // Max size of accumulated vector
   bool                           _sorted;   // True if _occi is ordered
-  bool                           *_occ;     // True if position is "occupied"  
+  bool                           *_occ;     // True if position is "occupied"
   T                              *_val;     // "Value" in position
   unsigned int                   *_occi;    // Unordered list of occupied indicies
 };
@@ -359,12 +359,12 @@ SpMat<T>::SpMat(const NEWMAT::GeneralMatrix& M)
       }
       _nz += cnz;
     }
-  }  
+  }
 }
 
 /////////////////////////////////////////////////////////////////////
 //
-// Constructs matrix from row col val format produced by 
+// Constructs matrix from row col val format produced by
 // Save/Print below.
 //
 /////////////////////////////////////////////////////////////////////
@@ -411,7 +411,7 @@ SpMat<T>::SpMat(const std::string&  fname)
       if (i && ri[i] >= static_cast<unsigned int>(rcv(indx,1)+0.5)) throw SpMatException("SpMat::SpMat(string& fname): Row index must be monotonously increasing");
       if (static_cast<unsigned int>(rcv(indx,1)+0.5) < 1 || static_cast<unsigned int>(rcv(indx,1)+0.5) > _m) {
         throw SpMatException("SpMat::SpMat(string& fname): Row index outside 1 -- -m range");
-      } 
+      }
       ri[i] = static_cast<unsigned int>(rcv(indx,1)+0.5) - 1;
       val[i] = rcv(indx,3);
       _nz++;
@@ -495,7 +495,7 @@ void SpMat<T>::Print(const std::string&  fname,
     }
   }
   (*sptr) << _m << "  " << _n << "  " << 0 << endl;
-  
+
   if (fname.length()) delete sptr;
 }
 
@@ -578,7 +578,7 @@ NEWMAT::ReturnMatrix SpMat<T>::SolveForx(const NEWMAT::ColumnVector&            
     cout << "Requested tolerance was " << ltol << ", and achieved tolerance was " << tol << endl;
     cout << "This may or may not be a problem in your application, but you should look into it" << endl;
   }
-  
+
   x.Release();
   return(x);
 }
@@ -602,7 +602,7 @@ const SpMat<T> SpMat<T>::t() const
 	t_col(old_col) = _val[old_col][pos];
       }
     }
-    t_mat._ri[new_col].resize(t_col.NO());  
+    t_mat._ri[new_col].resize(t_col.NO());
     t_mat._val[new_col].resize(t_col.NO());
     std::vector<unsigned int>&   t_mat_ri = t_mat._ri[new_col];
     std::vector<T>&              t_mat_val = t_mat._val[new_col];
@@ -612,7 +612,7 @@ const SpMat<T> SpMat<T>::t() const
     }
     t_mat._nz += t_col.NO();
   }
-  return(t_mat);  
+  return(t_mat);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -631,11 +631,11 @@ void SpMat<T>::SetColumn(unsigned int                 c,      // Column #
 
   Accumulator<T>    acc(_m);
   double            *colp = col.Store();
-  
+
   for (unsigned int i=0; i<_m; i++) {
     if (colp[i] > eps) acc(i) = static_cast<T>(colp[i]);
   }
-  
+
   std::vector<unsigned int>&   ri = _ri[c-1];
   std::vector<T>&              val = _val[c-1];
   unsigned int                 old_sz = ri.size();
@@ -644,7 +644,7 @@ void SpMat<T>::SetColumn(unsigned int                 c,      // Column #
     val = std::vector<T>(acc.NO());
   }
   else {
-    ri.resize(acc.NO()); 
+    ri.resize(acc.NO());
     val.resize(acc.NO());
   }
   for (unsigned int i=0; i<acc.NO(); i++) {
@@ -698,7 +698,7 @@ const NEWMAT::ReturnMatrix SpMat<T>::operator*(const NEWMAT::ColumnVector& x) co
   }
   b.Release();
   return(b);
-}  
+}
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -710,7 +710,7 @@ template<class T>
 const SpMat<T> SpMat<T>::TransMult(const SpMat<T>& B) const
 {
   if (_m != B._m) throw SpMatException("TransMult(SpMat& ): Left hand matrix must have same # of rows as right hand");
-  
+
   SpMat<T>        C(_n,B._n);
   Accumulator<T>  outacc(_n);
   Accumulator<T>  Bcol(B._m);
@@ -740,7 +740,7 @@ const SpMat<T> SpMat<T>::TransMult(const SpMat<T>& B) const
     }
     C._nz += outacc.NO();
   }
- 
+
   return(C);
 }
 
@@ -771,7 +771,7 @@ const NEWMAT::ReturnMatrix SpMat<T>::trans_mult(const NEWMAT::ColumnVector& x) c
   }
   b.Release();
   return(b);
-}  
+}
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -788,9 +788,9 @@ SpMat<T>& SpMat<T>::operator*=(double s)
       for (unsigned int i=0; i<val.size(); i++) val[i] *= s;
     }
   }
-  return(*this);  
+  return(*this);
 }
-      
+
 /////////////////////////////////////////////////////////////////////
 //
 // Concatenates rh to right of *this
@@ -801,7 +801,7 @@ template<class T>
 SpMat<T>& SpMat<T>::operator|=(const SpMat<T>& rh)
 {
   if (_m != rh._m) throw SpMatException("operator|=: Matrices must have same # of rows");
-  
+
   _ri.resize(_n+rh._n);
   _val.resize(_n+rh._n);
   for (unsigned int c=0; c<rh._n; c++) {
@@ -810,8 +810,8 @@ SpMat<T>& SpMat<T>::operator|=(const SpMat<T>& rh)
   }
   _n += rh._n;
   _nz += rh._nz;
-  
-  return(*this);    
+
+  return(*this);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -866,7 +866,7 @@ const SpMat<T> operator*(const SpMat<T>& lh, const SpMat<T>& rh)
 
   SpMat<T>              out(lh._m,rh._n);
   Accumulator<T>        acc(lh._m);
-  
+
   for (unsigned int cr=0; cr<rh._n; cr++) {
     acc.Reset();
     if (rh._ri[cr].size()) {
@@ -893,8 +893,8 @@ const SpMat<T> operator*(const SpMat<T>& lh, const SpMat<T>& rh)
     }
     out._nz += acc.NO();
   }
-               
-  return(out);     
+
+  return(out);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1010,7 +1010,7 @@ bool SpMat<T>::found(const std::vector<unsigned int>&  ri, unsigned int key, int
   else if (key>ri.back()) {pos=ri.size(); return(false);}
   else {
     int mp=0;
-    int ll=-1;       
+    int ll=-1;
     pos=int(ri.size());
     while ((pos-ll) > 1) {
       mp = (pos+ll) >> 1;   // Possibly faster than /2. Bit geeky though.
@@ -1020,7 +1020,7 @@ bool SpMat<T>::found(const std::vector<unsigned int>&  ri, unsigned int key, int
   }
   if (ri[pos] == key) return(true);
   return(false);
-} 
+}
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -1034,7 +1034,7 @@ template<class T>
 T& SpMat<T>::here(unsigned int r, unsigned int c)
 {
   if (r<1 || r>_m || c<1 || c>_n) throw SpMatException("here: index out of range");
-  
+
   int i = 0;
   if (!found(_ri[c-1],r-1,i)) {
     insert(_ri[c-1],i,r-1);
@@ -1046,7 +1046,7 @@ T& SpMat<T>::here(unsigned int r, unsigned int c)
 
 /////////////////////////////////////////////////////////////////////
 //
-// Open gap in vec at indx and fill with val. 
+// Open gap in vec at indx and fill with val.
 // Should have been templated, but I couldn't figure out how
 // to, and still hide it inside SpMat
 //

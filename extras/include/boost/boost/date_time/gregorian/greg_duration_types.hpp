@@ -1,6 +1,6 @@
 #ifndef GREG_DURATION_TYPES_HPP___
 #define GREG_DURATION_TYPES_HPP___
-                                                                                
+
 /* Copyright (c) 2004 CrystalClear Software, Inc.
  * Subject to Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -22,7 +22,7 @@ namespace gregorian {
   struct greg_durations_config {
     typedef date date_type;
     typedef date_time::int_adapter<int> int_rep;
-    typedef date_time::month_functor<date_type> month_adjustor_type; 
+    typedef date_time::month_functor<date_type> month_adjustor_type;
   };
 
   typedef date_time::months_duration<greg_durations_config> months;

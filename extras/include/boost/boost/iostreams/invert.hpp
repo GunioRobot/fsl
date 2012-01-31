@@ -9,11 +9,11 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
-#include <algorithm>                             // copy, min.  
+#include <algorithm>                             // copy, min.
 #include <cassert>
-#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.       
+#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.
 #include <boost/detail/workaround.hpp>           // default_filter_buffer_size.
 #include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/compose.hpp>
@@ -34,7 +34,7 @@ namespace boost { namespace iostreams {
 //
 // Template name: inverse.
 // Template paramters:
-//      Filter - A filter adapter which 
+//      Filter - A filter adapter which
 // Description: Returns an instance of an appropriate specialization of inverse.
 //
 template<typename Filter>
@@ -46,7 +46,7 @@ public:
     typedef typename char_type_of<Filter>::type  char_type;
     typedef typename int_type_of<Filter>::type   int_type;
     typedef char_traits<char_type>               traits_type;
-    typedef typename 
+    typedef typename
             mpl::if_<
                 is_convertible<
                     base_category,
@@ -55,15 +55,15 @@ public:
                 output,
                 input
             >::type                              mode;
-    struct category 
-        : mode, 
-          filter_tag, 
-          multichar_tag, 
-          closable_tag 
+    struct category
+        : mode,
+          filter_tag,
+          multichar_tag,
+          closable_tag
         { };
-    explicit inverse( const Filter& filter, 
-                      std::streamsize buffer_size = 
-                          default_filter_buffer_size) 
+    explicit inverse( const Filter& filter,
+                      std::streamsize buffer_size =
+                          default_filter_buffer_size)
         : pimpl_(new impl(filter, buffer_size))
         { }
 
@@ -88,10 +88,10 @@ public:
             buf().flush(snk);
         }
         return snk.second().count() == 0 &&
-               status == traits_type::eof() 
-                   ? 
+               status == traits_type::eof()
+                   ?
                -1
-                   : 
+                   :
                snk.second().count();
     }
 
@@ -106,7 +106,7 @@ public:
             flags() = f_write;
             buf().set(0, 0);
         }
-        
+
         filtered_array_source src(filter(), array_source(s, n));
         for (bool good = true; src.second().count() < n && good; ) {
             buf().fill(src);
@@ -116,8 +116,8 @@ public:
     }
 
     template<typename Device>
-    void close( Device& dev, 
-                BOOST_IOS::openmode which = 
+    void close( Device& dev,
+                BOOST_IOS::openmode which =
                     BOOST_IOS::in | BOOST_IOS::out )
     {
         if ((which & BOOST_IOS::out) != 0 && (flags() & f_write) != 0)
@@ -128,13 +128,13 @@ private:
     filter_ref filter() { return boost::ref(pimpl_->filter_); }
     detail::buffer<char_type>& buf() { return pimpl_->buf_; }
     int& flags() { return pimpl_->flags_; }
-    
+
     enum flags_ {
         f_read = 1, f_write = 2
     };
 
     struct impl {
-        impl(const Filter& filter, std::streamsize n) 
+        impl(const Filter& filter, std::streamsize n)
             : filter_(filter), buf_(n), flags_(0)
         { buf_.set(0, 0); }
         Filter                     filter_;
@@ -152,7 +152,7 @@ private:
 //
 template<typename Filter>
 inverse<Filter> invert(const Filter& f) { return inverse<Filter>(f); }
-                    
+
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.

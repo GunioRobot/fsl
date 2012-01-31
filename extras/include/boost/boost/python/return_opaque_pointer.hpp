@@ -36,7 +36,7 @@ namespace detail
 # endif
   ;
 }
-    
+
 struct return_opaque_pointer
 {
     template <class R>
@@ -44,7 +44,7 @@ struct return_opaque_pointer
     {
         BOOST_STATIC_CONSTANT(
             bool, ok = is_pointer<R>::value);
-        
+
         typedef typename mpl::if_c<
             ok
           , detail::opaque_conversion_holder<R>

@@ -42,7 +42,7 @@ with in the current version.
 <br>
 Unfortunately, there is no standard sequence for fieldmap acquisitions
 and different scanners return different images.  Normally these
-images require processing before they represent images with field values 
+images require processing before they represent images with field values
 in the desired units (of radians/second) in each voxel.
 
 <p>
@@ -89,14 +89,14 @@ have fMRI data for this - even single volumes can be processed in FEAT
 by selecting pre-stats only).  See the detailed documentation on <a
 href="../feat5/detail.html">FEAT</a> and documentation on using
 PRELUDE/FUGUE for <a href="feat_fieldmap.html">preparing fieldmaps for
-FEAT</a>. 
+FEAT</a>.
 
 <P>
 The rest of this document gives a brief description of the
 individual command line programs available in the FUGUE component of
-FSL - used for unwarping geometric distortion in EPI images. 
+FSL - used for unwarping geometric distortion in EPI images.
 For each of the programs described here, a full list of available options
-can be obtained by running the command with the <FONT COLOR=PURPLE>-h</FONT> 
+can be obtained by running the command with the <FONT COLOR=PURPLE>-h</FONT>
 option.
 
 <P>
@@ -123,21 +123,21 @@ then PRELUDE is run before FUGUE.
 
 
 <A NAME="section3"></A><HR><H2>FUGUE</H2>
- 
+
 <I>fugue</I> (FMRIB's Utility for Geometrically Unwarping EPIs)
 performs unwarping of an EPI image based on fieldmap data.  The input
 required consists of the EPI image, the fieldmap (as an unwrapped
 phase map or a scaled fieldmap in rad/s) and appropriate image
-sequence parameters for the EPI and fieldmap acquisitions: the dwell time for EPI (also known as the echo spacing); and the echo time difference (called asym time herein). 
+sequence parameters for the EPI and fieldmap acquisitions: the dwell time for EPI (also known as the echo spacing); and the echo time difference (called asym time herein).
 
 <P>
 The main forms of usage are:
 <dl>
-<dt> <FONT COLOR=PURPLE>fugue -i epi -p unwrappedphase --dwell=dwelltime --asym=asymtime -s 0.5 -u result</FONT> </dt>  
+<dt> <FONT COLOR=PURPLE>fugue -i epi -p unwrappedphase --dwell=dwelltime --asym=asymtime -s 0.5 -u result</FONT> </dt>
 <dd>fieldmap specified by a 4D file unwrappedphase containing two unwrapped
-phase images - from different echo times - plus the 
+phase images - from different echo times - plus the
 dwell time and echo time difference (asym time) </dd>
-<dt> <FONT COLOR=PURPLE>fugue -i epi --dwell=dwelltime --loadfmap=fieldmap -u result</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>fugue -i epi --dwell=dwelltime --loadfmap=fieldmap -u result</FONT> </dt>
 <dd>uses a previously calculated fieldmap </dd>
 </dl>
 
@@ -148,40 +148,40 @@ smoothing of sigma=0.5 in this case which is a reasonable default).
 There are many different forms of regularisation available which can
 be applied separately or together.  These are:
 <dl>
-<dt> <FONT COLOR=PURPLE>-s sigma</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>-s sigma</FONT> </dt>
 <dd>2D Gaussian smoothing </dd>
-<dt> <FONT COLOR=PURPLE>--smooth3=sigma</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--smooth3=sigma</FONT> </dt>
 <dd>3D Gaussian smoothing </dd>
-<dt> <FONT COLOR=PURPLE>-m</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>-m</FONT> </dt>
 <dd>2D median filtering </dd>
-<dt> <FONT COLOR=PURPLE>--poly=n</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--poly=n</FONT> </dt>
 <dd>3D Polynomial fitting of degree n </dd>
-<dt> <FONT COLOR=PURPLE>--fourier=n</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--fourier=n</FONT> </dt>
 <dd>3D Sinusoidal fitting of degree n </dd>
 </dl>
 
 <P>
 Some other uses are:
 <dl>
-<dt> <FONT COLOR=PURPLE>fugue -i undistortedimage -p unwrappedphase  --dwell=dwelltime --asym=asymtime --nokspace -s 0.5 -w warpedimage</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>fugue -i undistortedimage -p unwrappedphase  --dwell=dwelltime --asym=asymtime --nokspace -s 0.5 -w warpedimage</FONT> </dt>
 <dd>applies the fieldmap as a forward warp, turning an undistorted image into a distorted one - useful for creating a registration target for the EPI from the undistorted absolute fieldmap image </dd>
 </dl>
 
 <P>
 Additional options that are useful are:
 <dl>
-<dt> <FONT COLOR=PURPLE>--mask=maskname</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--mask=maskname</FONT> </dt>
 <dd>uses a user-defined mask (called maskname) instead of deriving it from the phasemaps or fieldmaps</dd>
-<dt> <FONT COLOR=PURPLE>--unwarpdir=dir</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--unwarpdir=dir</FONT> </dt>
 <dd>specifies the direction of
 the unwarping/warping - i.e. phase-encode direction - with<FONT COLOR=PURPLE> dir</FONT> being one of
 <FONT COLOR=PURPLE>x,y,z,x-,y-,z-</FONT> (default is y) </dd>
-<dt> <FONT COLOR=PURPLE>--phaseconj</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--phaseconj</FONT> </dt>
 <dd>uses the phase conjugate correction method, rather than pixel shifts </dd>
-<dt> <FONT COLOR=PURPLE>--nokspace</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--nokspace</FONT> </dt>
 <dd>for forward warping (only) - uses an image-space method for forward warping
 </dd>
-<dt> <FONT COLOR=PURPLE>--icorr</FONT> </dt> 
+<dt> <FONT COLOR=PURPLE>--icorr</FONT> </dt>
 <dd>applies an intensity correction term
 when using the pixel shift method - often poorly conditioned for standard
 fieldmap acquisitions </dd>

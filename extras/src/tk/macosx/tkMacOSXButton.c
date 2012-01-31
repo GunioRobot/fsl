@@ -1279,7 +1279,7 @@ UserPaneDraw(
     MacButton *mbPtr = (MacButton *)(intptr_t)GetControlReference(control);
     Rect contrlRect;
     CGrafPtr port;
-    
+
     GetPort(&port);
     GetControlBounds(control,&contrlRect);
     TkMacOSXSetColorInPort(mbPtr->userPaneBackground, 0, NULL, port);
@@ -1312,7 +1312,7 @@ UserPaneBackgroundProc(
 
     if (info->colorDevice) {
 	CGrafPtr port;
-	
+
 	GetPort(&port);
 	TkMacOSXSetColorInPort(mbPtr->userPaneBackground, 0, NULL, port);
     }

@@ -13,7 +13,7 @@ namespace Utilities {
   Log* LogSingleton::logger = NULL;
   int LogSingleton::count = 0;
 
-  void Log::makeDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout) 
+  void Log::makeDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout)
     {
       if(logEstablished)
 	{
@@ -26,7 +26,7 @@ namespace Utilities {
       stream_to_cout = pstream_to_cout;
 
       // make directory to place results into:
-      // keep adding "+" until directory is made:      
+      // keep adding "+" until directory is made:
       int count = 0;
       while(true)
 	{
@@ -44,7 +44,7 @@ namespace Utilities {
 	  dir = dir + "+";
 	  count++;
 	}
-      
+
       // setup logfile
       if(stream_to_logfile)
 	{
@@ -58,7 +58,7 @@ namespace Utilities {
       logEstablished = true;
     }
 
-  void Log::setDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout, ios_base::openmode mode) 
+  void Log::setDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout, ios_base::openmode mode)
     {
       if(logEstablished)
 	{
@@ -79,11 +79,11 @@ namespace Utilities {
 	      throw Exception(string(string("Unable to setup logfile ")+logfilename+string(" in directory ")+dir).c_str());
 	    }
 	}
-      
+
       logEstablished = true;
     }
 
-  void Log::setthenmakeDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout) 
+  void Log::setthenmakeDir(const string& pdirname, const string& plogfilename, bool pstream_to_logfile, bool pstream_to_cout)
     {
       if(logEstablished)
 	{
@@ -111,7 +111,7 @@ namespace Utilities {
 	      throw Exception(string(string("Unable to setup logfile ")+logfilename+string(" in directory ")+dir).c_str());
 	    }
 	}
-      
+
       logEstablished = true;
     }
 

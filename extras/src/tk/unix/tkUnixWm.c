@@ -988,7 +988,7 @@ Tk_WmObjCmd(clientData, interp, objc, objv)
         WMOPT_POSITIONFROM, WMOPT_PROTOCOL, WMOPT_RESIZABLE, WMOPT_SIZEFROM,
         WMOPT_STACKORDER, WMOPT_STATE, WMOPT_TITLE, WMOPT_TRANSIENT,
 	WMOPT_WITHDRAW };
-    int index; 
+    int index;
     int length;
     char *argv1;
     TkWindow *winPtr;
@@ -4448,17 +4448,17 @@ UpdateSizeHints(winPtr, newWidth, newHeight)
  *
  * UpdateTitle --
  *
- *	This procedure is called to update the window title and 
+ *	This procedure is called to update the window title and
  *	icon name.  It sets the ICCCM-defined properties WM_NAME
- *	and WM_ICON_NAME for older window managers, and the 
+ *	and WM_ICON_NAME for older window managers, and the
  *	freedesktop.org-defined _NET_WM_NAME and _NET_WM_ICON_NAME
  *	properties for newer ones.  The ICCCM properties are
  *	stored in the system encoding, the newer properties
  *	are stored in UTF-8.
  *
- *	NOTE: the ICCCM specifies that WM_NAME and WM_ICON_NAME are 
- *	stored in ISO-Latin-1.  Tk has historically used the default 
- *	system encoding (since 8.1).  It's not clear whether this is 
+ *	NOTE: the ICCCM specifies that WM_NAME and WM_ICON_NAME are
+ *	stored in ISO-Latin-1.  Tk has historically used the default
+ *	system encoding (since 8.1).  It's not clear whether this is
  *	correct or not.
  *
  * Side effects:
@@ -4486,7 +4486,7 @@ UpdateTitle(winPtr)
 
     XChangeProperty(winPtr->display, wmPtr->wrapperPtr->window,
 	    Tk_InternAtom((Tk_Window) winPtr, "_NET_WM_NAME"),
-	    XA_UTF8_STRING, 8, PropModeReplace, 
+	    XA_UTF8_STRING, 8, PropModeReplace,
 	    (const unsigned char*)string, (signed int)strlen(string));
 
     /*
@@ -4577,7 +4577,7 @@ UpdatePhotoIcon(winPtr)
  *	   of the top-level window:  it's hard to tell which of the
  *	   ConfigureNotify events coming back is for which request).
  *	While waiting, some events covered by StructureNotifyMask are
- *	processed (ConfigureNotify, MapNotify, and UnmapNotify) 
+ *	processed (ConfigureNotify, MapNotify, and UnmapNotify)
  *	and all others are deferred.
  *
  *----------------------------------------------------------------------
@@ -4645,7 +4645,7 @@ WaitForConfigureNotify(winPtr, serial)
  *
  * Side effects:
  *	While waiting for the desired event to occur, Configurenotify,
- *	MapNotify, and UnmapNotify events for window are processed, 
+ *	MapNotify, and UnmapNotify events for window are processed,
  *	as are all ReparentNotify events.
  *
  *----------------------------------------------------------------------
@@ -4734,7 +4734,7 @@ WaitRestrictProc(clientData, eventPtr)
 	infoPtr->foundEvent = 1;
 	return TK_PROCESS_EVENT;
     }
-    if (eventPtr->type == ConfigureNotify 
+    if (eventPtr->type == ConfigureNotify
 	   || eventPtr->type == MapNotify
 	   || eventPtr->type == UnmapNotify) {
 	return TK_PROCESS_EVENT;
@@ -5793,7 +5793,7 @@ TkWmRestackToplevel(winPtr, aboveBelow, otherPtr)
     /*
      * Reconfigure the window.  Note that we use XReconfigureWMWindow
      * instead of XConfigureWindow, in order to handle the case
-     * where the window is to be restacked with respect to another toplevel.  
+     * where the window is to be restacked with respect to another toplevel.
      * See [ICCCM] 4.1.5 "Configuring the Window" and XReconfigureWMWindow(3)
      * for details.
      */

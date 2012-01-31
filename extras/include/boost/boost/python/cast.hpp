@@ -13,12 +13,12 @@
 # include <boost/python/base_type_traits.hpp>
 # include <boost/python/detail/convertible.hpp>
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 namespace detail
 {
   template <class Source, class Target> inline Target* upcast_impl(Source*, Target*);
-  
+
   template <class Source, class Target>
   inline Target* upcast(Source* p, yes_convertible, no_convertible, Target*)
   {
@@ -29,7 +29,7 @@ namespace detail
   inline Target* upcast(Source* p, no_convertible, no_convertible, Target*)
   {
       typedef typename base_type_traits<Source>::type base;
-      
+
       return detail::upcast_impl((base*)p, (Target*)0);
   }
 
@@ -39,7 +39,7 @@ namespace detail
       template <class T>
       static inline T* execute(T* x, T*) { return x; }
   };
-  
+
   template <>
   struct upcaster<false>
   {
@@ -79,7 +79,7 @@ namespace detail
       typedef typename add_cv<Source>::type src_t;
       typedef typename add_cv<Target>::type target_t;
       bool const same = is_same<src_t,target_t>::value;
-      
+
       return detail::upcaster<same>::execute(x, (Target*)0);
   }
 }
@@ -90,7 +90,7 @@ inline Target* upcast(Source* x, Target* = 0)
     detail::assert_castable<Source>();
     detail::assert_castable<Target>();
     return detail::upcast_impl(x, (Target*)0);
-    
+
 }
 
 template <class Target, class Source>

@@ -33,10 +33,10 @@ namespace assign
     {
         return push_back( c )( v );
     }
-    
+
 }
 }
 
 #endif // BOOST_HAS_SLIST
 
-#endif 
+#endif

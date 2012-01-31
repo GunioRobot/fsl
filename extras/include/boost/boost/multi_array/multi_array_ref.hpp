@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -44,7 +44,7 @@ class const_multi_array_ref :
     public detail::multi_array::multi_array_impl_base<T,NumDims>
 {
   typedef detail::multi_array::multi_array_impl_base<T,NumDims> super_type;
-public: 
+public:
   typedef typename super_type::value_type value_type;
   typedef typename super_type::const_reference const_reference;
   typedef typename super_type::const_iterator const_iterator;
@@ -73,7 +73,7 @@ public:
   friend class const_multi_array_ref;
 #endif
 
-  // This ensures that const_multi_array_ref types with different TPtr 
+  // This ensures that const_multi_array_ref types with different TPtr
   // types can convert to each other
   template <typename OPtr>
   const_multi_array_ref(const const_multi_array_ref<T,NumDims,OPtr>& other)
@@ -94,10 +94,10 @@ public:
     index_base_list_.assign(0);
     init_multi_array_ref(extents.begin());
   }
-  
+
   template <typename ExtentList>
   explicit const_multi_array_ref(TPtr base, const ExtentList& extents,
-                       const general_storage_order<NumDims>& so) : 
+                       const general_storage_order<NumDims>& so) :
     base_(base), storage_(so) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -105,7 +105,7 @@ public:
     index_base_list_.assign(0);
     init_multi_array_ref(extents.begin());
   }
-  
+
   explicit const_multi_array_ref(TPtr base,
                          const detail::multi_array::
                          extent_gen<NumDims>& ranges) :
@@ -113,7 +113,7 @@ public:
 
     init_from_extent_gen(ranges);
   }
-  
+
   explicit const_multi_array_ref(TPtr base,
                            const detail::multi_array::
                            extent_gen<NumDims>& ranges,
@@ -122,7 +122,7 @@ public:
 
     init_from_extent_gen(ranges);
   }
-  
+
   template <class InputIterator>
   void assign(InputIterator begin, InputIterator end) {
     boost::function_requires<InputIteratorConcept<InputIterator> >();
@@ -132,7 +132,7 @@ public:
     std::size_t copy_count=0;
     while (in_iter != end && copy_count < num_elements_) {
       *out_iter++ = *in_iter++;
-      copy_count++;      
+      copy_count++;
     }
   }
 
@@ -223,7 +223,7 @@ public:
 #else
   template <int NumDims, int NDims> // else ICE
 #endif // BOOST_MSVC
-  typename const_array_view<NDims>::type 
+  typename const_array_view<NDims>::type
   operator[](const detail::multi_array::
              index_gen<NumDims,NDims>& indices)
     const {
@@ -236,7 +236,7 @@ public:
                                       index_bases(),
                                       origin());
   }
-  
+
   const_iterator begin() const {
     return const_iterator(*index_bases(),origin(),
                           shape(),strides(),index_bases());
@@ -358,8 +358,8 @@ private:
 
   void init_from_extent_gen(const
                         detail::multi_array::
-                        extent_gen<NumDims>& ranges) { 
-    
+                        extent_gen<NumDims>& ranges) {
+
     typedef boost::array<index,NumDims> extent_list;
 
     // get the index_base values
@@ -410,7 +410,7 @@ class multi_array_ref :
   public const_multi_array_ref<T,NumDims,T*>
 {
   typedef const_multi_array_ref<T,NumDims,T*> super_type;
-public: 
+public:
   typedef typename super_type::value_type value_type;
   typedef typename super_type::reference reference;
   typedef typename super_type::iterator iterator;
@@ -471,7 +471,7 @@ public:
   // Assignment from other ConstMultiArray types.
   template <typename ConstMultiArray>
   multi_array_ref& operator=(const ConstMultiArray& other) {
-    function_requires< 
+    function_requires<
       detail::multi_array::
       ConstMultiArrayConcept<ConstMultiArray,NumDims> >();
 
@@ -487,7 +487,7 @@ public:
   multi_array_ref& operator=(const multi_array_ref& other) {
     if (&other != this) {
       // make sure the dimensions agree
-      
+
       assert(other.num_dimensions() == this->num_dimensions());
       assert(std::equal(other.shape(),other.shape()+this->num_dimensions(),
                         this->shape()));
@@ -525,7 +525,7 @@ public:
 #else
   template <int NumDims, int NDims> // else ICE
 #endif // BOOST_MSVC
-  typename array_view<NDims>::type 
+  typename array_view<NDims>::type
   operator[](const detail::multi_array::
              index_gen<NumDims,NDims>& indices) {
     typedef typename array_view<NDims>::type return_type;
@@ -537,8 +537,8 @@ public:
                                       this->index_bases(),
                                       origin());
   }
-  
-  
+
+
   iterator begin() {
     return iterator(*this->index_bases(),origin(),this->shape(),
                     this->strides(),this->index_bases());
@@ -587,13 +587,13 @@ public:
 #else
   template <int NumDims, int NDims> // else ICE
 #endif // BOOST_MSVC
-  typename const_array_view<NDims>::type 
+  typename const_array_view<NDims>::type
   operator[](const detail::multi_array::
              index_gen<NumDims,NDims>& indices)
     const {
     return super_type::operator[](indices);
   }
-  
+
   const_iterator begin() const {
     return super_type::begin();
   }

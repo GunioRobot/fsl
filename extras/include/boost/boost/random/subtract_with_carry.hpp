@@ -60,7 +60,7 @@ namespace detail
     carry = value / modulus;
   }
 }
-# endif 
+# endif
 // subtract-with-carry generator
 // Marsaglia and Zaman
 
@@ -150,7 +150,7 @@ public:
 
 public:
   static bool validation(result_type x) { return x == val; }
-  
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -342,7 +342,7 @@ public:
 
   static bool validation(result_type x)
   { return x == val/pow(RealType(2), word_size); }
-  
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -355,7 +355,7 @@ public:
     // allow for Koenig lookup
     using std::pow;
 #endif
-    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
+    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left);
     for(unsigned int j = 0; j < f.long_lag; ++j)
       os << (f.compute(j) * f._modulus) << " ";
     os << (f.carry * f._modulus);
@@ -380,7 +380,7 @@ public:
     }
     is >> value >> std::ws;
     f.carry = value / f._modulus;
-# endif 
+# endif
     f.k = 0;
     return is;
   }
@@ -401,7 +401,7 @@ public:
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const subtract_with_carry_01& rhs) const
-  { 
+  {
     for(unsigned int j = 0; j < r; ++j)
       if(compute(j) != rhs.compute(j))
         return false;

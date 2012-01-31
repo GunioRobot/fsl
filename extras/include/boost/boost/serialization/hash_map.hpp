@@ -10,7 +10,7 @@
 // serialization/hash_map.hpp:
 // serialization for stl hash_map templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -39,7 +39,7 @@
 #define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -49,8 +49,8 @@ inline void save(
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::hash_map<Key, Compare, Allocator> 
+        Archive,
+        STD::hash_map<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -64,11 +64,11 @@ inline void load(
         Archive,
         STD::hash_map<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_map<
-            Archive, 
-            STD::hash_map<Key, Compare, Allocator> 
+            Archive,
+            STD::hash_map<Key, Compare, Allocator>
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_map<Key, Compare, Allocator> 
+            STD::hash_map<Key, Compare, Allocator>
         >
     >(ar, t);
 }
@@ -92,8 +92,8 @@ inline void save(
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
-        Archive, 
-        STD::hash_multimap<Key, Compare, Allocator> 
+        Archive,
+        STD::hash_multimap<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -107,11 +107,11 @@ inline void load(
         Archive,
         STD::hash_multimap<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_multimap<
-            Archive, 
-            STD::hash_multimap<Key, Compare, Allocator> 
+            Archive,
+            STD::hash_multimap<Key, Compare, Allocator>
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_multimap<Key, Compare, Allocator> 
+            STD::hash_multimap<Key, Compare, Allocator>
         >
     >(ar, t);
 }

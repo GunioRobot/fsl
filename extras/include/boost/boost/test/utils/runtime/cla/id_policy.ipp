@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -52,7 +52,7 @@ basic_naming_policy::match_prefix( argv_traverser& tr ) const
 }
 
 //____________________________________________________________________________//
-    
+
 BOOST_RT_PARAM_INLINE bool
 basic_naming_policy::match_name( argv_traverser& tr ) const
 {
@@ -64,7 +64,7 @@ basic_naming_policy::match_name( argv_traverser& tr ) const
 }
 
 //____________________________________________________________________________//
-    
+
 BOOST_RT_PARAM_INLINE bool
 basic_naming_policy::match_separator( argv_traverser& tr ) const
 {
@@ -91,7 +91,7 @@ basic_naming_policy::matching( parameter const&, argv_traverser& tr, bool ) cons
 {
     if( !match_prefix( tr ) )
         return false;
-        
+
     if( !match_name( tr ) )
         return false;
 

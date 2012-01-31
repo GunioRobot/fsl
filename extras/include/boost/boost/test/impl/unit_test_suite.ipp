@@ -177,7 +177,7 @@ void    traverse_test_tree( test_suite const& suite, test_tree_visitor& V )
             BOOST_TEST_FOREACH( test_unit_id, id, members )
                 traverse_test_tree( id, V );
         }
-        
+
     } catch( test_aborted const& ) {
         V.test_suite_finish( suite );
 

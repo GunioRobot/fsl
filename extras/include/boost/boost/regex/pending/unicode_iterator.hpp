@@ -3,12 +3,12 @@
  * Copyright (c) 2004
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         unicode_iterator.hpp
@@ -277,7 +277,7 @@ public:
    {
       --m_position;
       // if we have a low surrogate then go back one more:
-      if(detail::is_low_surrogate(*m_position)) 
+      if(detail::is_low_surrogate(*m_position))
          --m_position;
       m_value = pending_read;
    }
@@ -333,7 +333,7 @@ class u32_to_u8_iterator
    : public boost::iterator_facade<u32_to_u8_iterator<BaseIterator, U8Type>, U8Type, std::bidirectional_iterator_tag, const U8Type>
 {
    typedef boost::iterator_facade<u32_to_u8_iterator<BaseIterator, U8Type>, U8Type, std::bidirectional_iterator_tag, const U8Type> base_type;
-   
+
 #if !defined(BOOST_NO_STD_ITERATOR_TRAITS) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    typedef typename std::iterator_traits<BaseIterator>::value_type base_value_type;
 
@@ -353,7 +353,7 @@ public:
    {
       if(m_position == that.m_position)
       {
-         // either the m_current's must be equal, or one must be 0 and 
+         // either the m_current's must be equal, or one must be 0 and
          // the other 4: which means neither must have bits 1 or 2 set:
          return (m_current == that.m_current)
             || (((m_current | that.m_current) & 3) == 0);
@@ -535,7 +535,7 @@ private:
       }
       // we now need to remove a few of the leftmost bits, but how many depends
       // upon how many extra bytes we've extracted:
-      static const boost::uint32_t masks[4] = 
+      static const boost::uint32_t masks[4] =
       {
          0x7Fu,
          0x7FFu,

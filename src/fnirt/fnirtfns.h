@@ -43,10 +43,10 @@ private:
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-enum MaskType {InclusiveMask, ExclusiveMask, IgnoreMask}; 
+enum MaskType {InclusiveMask, ExclusiveMask, IgnoreMask};
 enum CostFunctionType {SSD};
 enum BasisFieldType   {Spline, DCT};
-enum IntensityMappingType {NONE, GLOBAL_LINEAR, GLOBAL_NON_LINEAR, LOCAL_LINEAR, 
+enum IntensityMappingType {NONE, GLOBAL_LINEAR, GLOBAL_NON_LINEAR, LOCAL_LINEAR,
 			   LOCAL_BIAS_WITH_GLOBAL_NON_LINEAR, LOCAL_NON_LINEAR};
 
 class fnirt_clp
@@ -195,7 +195,7 @@ public:
     NEWIMAGE::read_volume_hdr_only(vref,ref);
     rsz[0] = vref.xsize(); rsz[1] = vref.ysize(); rsz[2] = vref.zsize();
     return(rsz);
-  } 
+  }
   std::vector<double> RefVxs() const {
     std::vector<double>         vxs(3,0);
     NEWIMAGE::volume<float>     vref;
@@ -269,12 +269,12 @@ public:
     return(static_cast<double>(mpl_lambda[lev-1]));
   }
   const vector<unsigned int> IntKnotSpacing(unsigned int lev) const {
-    if (bf != Spline) throw fnirt_error("fnirt_clp::IntKnotSpacing: Knot spacing not defined for DCT basis");    
+    if (bf != Spline) throw fnirt_error("fnirt_clp::IntKnotSpacing: Knot spacing not defined for DCT basis");
     if (lev < 1 || lev > nlev) throw fnirt_error("fnirt_clp::IntKnotSpacing: Out-of-range value of lev");
     return(bias_ksp[lev-1]);
   }
   const vector<unsigned int> IntDCTOrder(unsigned int lev) const {
-    if (bf != DCT) throw fnirt_error("fnirt_clp::IntDCTOrder: Order not defined for Spline basis");    
+    if (bf != DCT) throw fnirt_error("fnirt_clp::IntDCTOrder: Order not defined for Spline basis");
     if (lev < 1 || lev > nlev) throw fnirt_error("fnirt_clp::IntDCTOrder: Out-of-range value of lev");
     return(bias_dco[lev-1]);
   }
@@ -306,10 +306,10 @@ std::vector<boost::shared_ptr<BASISFIELD::basisfield> > init_warpfield(const fni
 
 boost::shared_ptr<IntensityMapper> init_intensity_mapper(const fnirt_clp&  clp);
 
-boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&                   fname, 
-                                                     MaskType                        mt, 
-                                                     const NEWIMAGE::volume<float>&  ima, 
-                                                     bool                            impf, 
+boost::shared_ptr<NEWIMAGE::volume<char> > make_mask(const string&                   fname,
+                                                     MaskType                        mt,
+                                                     const NEWIMAGE::volume<float>&  ima,
+                                                     bool                            impf,
                                                      double                          impv);
 
 bool trying_to_register_to_self(const string&                    ref_fname,
@@ -327,7 +327,7 @@ bool is_identity(const NEWMAT::Matrix& A, double prec=1e-8);
 bool check_exist(const std::string& fname);
 std::string existing_conf_file(const std::string& cfname);
 std::string existing_ref_fname(const std::string& ref_fname);
-  
+
 } // End namespace FNIRT
 
 #endif // end #ifndef fnirtfns_h

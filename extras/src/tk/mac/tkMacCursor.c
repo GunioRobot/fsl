@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacCursor.c --
  *
  *	This file contains Macintosh specific cursor related routines.
@@ -69,7 +69,7 @@ static int gResizeOverride = false;	     /* A boolean indicating whether
 					      * cursor during installations. */
 static int gTkOwnsCursor = true;             /* A boolean indicating whether
                                                 Tk owns the cursor.  If not (for
-                                                instance, in the case where a Tk 
+                                                instance, in the case where a Tk
                                                 window is embedded in another app's
                                                 window, and the cursor is out of
                                                 the tk window, we will not attempt
@@ -94,15 +94,15 @@ static  void FindCursorByName _ANSI_ARGS_ ((TkMacCursor *macCursorPtr,
  *	cursor.
  *
  * Results:
- *	Fills the macCursorPtr record.  
+ *	Fills the macCursorPtr record.
  *
  * Side effects:
  *	None
  *
  *----------------------------------------------------------------------
  */
- 
-void 
+
+void
 FindCursorByName(
     TkMacCursor *macCursorPtr,
     CONST char *string)
@@ -110,7 +110,7 @@ FindCursorByName(
     Handle resource;
     Str255 curName;
     int destWrote, inCurLen;
-    
+
     inCurLen = strlen(string);
     if (inCurLen > 255) {
         return;
@@ -121,7 +121,7 @@ FindCursorByName(
      */
 
     Tcl_UtfToExternal(NULL, Tcl_GetEncoding(NULL, "macRoman"), string,
-	    inCurLen, 0, NULL, 
+	    inCurLen, 0, NULL,
 	    (char *) &curName[1],
 	    255, NULL, &destWrote, NULL); /* Internalize native */
     curName[0] = destWrote;
@@ -151,10 +151,10 @@ FindCursorByName(
  *
  * TkGetCursorByName --
  *
- *	Retrieve a system cursor by name.  
+ *	Retrieve a system cursor by name.
  *
  * Results:
- *	Returns a new cursor, or NULL on errors.  
+ *	Returns a new cursor, or NULL on errors.
  *
  * Side effects:
  *	Allocates a new cursor.
@@ -202,13 +202,13 @@ TkGetCursorByName(
 	if (macCursorPtr->macCursor == NULL) {
 	    CONST char **argv;
 	    int argc, err;
-	    
+
 	    /*
 	     * The user may be trying to specify an XCursor with fore
-	     * & back colors. We don't want this to be an error, so pick 
-	     * off the first word, and try again. 
+	     * & back colors. We don't want this to be an error, so pick
+	     * off the first word, and try again.
 	     */
-	     
+
             err = Tcl_SplitList(interp, string, &argc, &argv);
 	    if (err == TCL_OK ) {
 	        if (argc > 1) {
@@ -323,7 +323,7 @@ TkMacInstallCursor(
     CursHandle cursor;
 
     gResizeOverride = resizeOverride;
-    
+
     if (resizeOverride) {
 	cursor = (CursHandle) GetNamedResource('CURS', "\presize");
 	SetCursor(*cursor);

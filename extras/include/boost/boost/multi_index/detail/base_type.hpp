@@ -41,7 +41,7 @@ struct index_applier
     msvc_index_specifier<IndexSpecifierMeta::type>::
       template result_index_class<SuperMeta>
   {
-  }; 
+  };
 };
 #else
 struct index_applier
@@ -52,7 +52,7 @@ struct index_applier
     typedef typename IndexSpecifierMeta::type        index_specifier;
     typedef typename index_specifier::
       BOOST_NESTED_TEMPLATE index_class<Super>::type type;
-  }; 
+  };
 };
 #endif
 

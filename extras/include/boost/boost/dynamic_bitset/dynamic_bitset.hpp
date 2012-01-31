@@ -137,7 +137,7 @@ public:
     // NOTE:
     // Leave the parentheses around std::basic_string<CharT, Traits, Alloc>::npos.
     // g++ 3.2 requires them and probably the standard will - see core issue 325
-    // NOTE 2: 
+    // NOTE 2:
     // split into two constructors because of bugs in MSVC 6.0sp5 with STLport
 
     template <typename CharT, typename Traits, typename Alloc>

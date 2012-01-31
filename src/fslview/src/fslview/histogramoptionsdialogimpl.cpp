@@ -15,7 +15,7 @@ HistogramOptionsDialogImpl::HistogramOptionsDialogImpl(QWidget *parent, Histogra
   maxIntensity->setText(tr("%1").arg(options.inqMax()));
 
   logScale->setChecked(m_options.inqLogScale());
-  
+
   ignoreZeros->setChecked(m_options.inqIgnoreZeros());
 
   specifyBins->setChecked(m_options.inqSpecifyBins());

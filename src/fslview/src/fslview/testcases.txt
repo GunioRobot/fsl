@@ -2,7 +2,7 @@
 FSLView Testcases
 ===========================================================
 
-These manual testcases require several testfiles to verify 
+These manual testcases require several testfiles to verify
 various aspects of Fslview.
 
 Currently these images are:
@@ -23,7 +23,7 @@ These files are currently stored at /usr/fs3/jim/test_cases
 1.0 Basic Viewing Tasks
 ===========================================================
 
-Purpose: To ensure software can view a single structural image 
+Purpose: To ensure software can view a single structural image
          and be used as a basic viewer.
 
 1.1 Open up image test1_struct in Orthoganol view
@@ -40,7 +40,7 @@ Purpose: To ensure software can view a single structural image
 
 1.2 Check bricon control
     With test1_struct highlighted in overlaylist widget:
-        Change brightness slider 
+        Change brightness slider
         Change contrast slider
         Reset with brightness/contrast with buttons.
         Change combo boxes at either end of sliders.
@@ -51,15 +51,15 @@ Purpose: To ensure software can view a single structural image
     Ensure intensity combo updates
 
 1.4 Overlay List Widget
-    Highlight test1_struct 
+    Highlight test1_struct
     Change transparency
     Turn image on/off via button and double click
-    
+
 1.5 Overlay Dialog
-    Highlight test1_struct 
+    Highlight test1_struct
     Click info button.
     Open new lookup table, set image to new LUT
-    
+
 1.6 Lightbox View
     Open lightbox view
     Without scrolling change zoom to 20%
@@ -80,7 +80,7 @@ Purpose: To ensure software can view a single structural image
     Pan, zoom and reset.
 
 1.9 Histogram
-    Opend histogram widget 
+    Opend histogram widget
 
 ===========================================================
 2.0 Blending tasks
@@ -91,11 +91,11 @@ Purpose: To ensure the correct operation of multiple overlay management
 
 2.1 Transparency and ordering
     Open the 3 images test2_blendA, test2_blendB, test2_blendC
-    Vary the transparency on each image 
+    Vary the transparency on each image
     Turn random images on and off
     Alter the order of the slices
     Vary the brightness and contrast of the images
-        
+
 2.2 Multiwindow behaviour
     Open the lightbox widget
     Open the movie widget
@@ -110,11 +110,11 @@ Purpose: To ensure the correct operation of multiple overlay management
 
 Purpose: Confirm the operation of the functional data analysis
          features.
-        
+
 3.1 Check animation
     Load up test3_func into orthview
     Press the movie tool button
-        
+
 3.2 Time series presentation
     Open a time series widget
     Add/remove several time plots
@@ -154,5 +154,4 @@ Purpose: Confirm the operation of the functional data analysis
 7.0 GUI Operation
 ===========================================================
 7.1 Rename an image. Delete middle characters of name.(#581)
-7.2 Close all images from menu option.(#668)        
-         
+7.2 Close all images from menu option.(#668)

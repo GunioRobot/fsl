@@ -252,7 +252,7 @@ Tk_ParseArgv(interp, tkwin, argcPtr, argv, argTable, flags)
 		break;
 	    }
 	    case TK_ARGV_GENFUNC: {
-		typedef int (ArgvGenFunc)_ANSI_ARGS_((char *, Tcl_Interp *, 
+		typedef int (ArgvGenFunc)_ANSI_ARGS_((char *, Tcl_Interp *,
 			char *, int, CONST char **));
 		ArgvGenFunc *handlerProc;
 
@@ -294,7 +294,7 @@ Tk_ParseArgv(interp, tkwin, argcPtr, argv, argTable, flags)
 		break;
 	    default: {
 		char buf[64 + TCL_INTEGER_SPACE];
-		
+
 		sprintf(buf, "bad argument type %d in Tk_ArgvInfo",
 			infoPtr->type);
 		Tcl_SetResult(interp, buf, TCL_VOLATILE);

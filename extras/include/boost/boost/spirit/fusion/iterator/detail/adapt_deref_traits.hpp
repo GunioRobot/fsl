@@ -23,7 +23,7 @@ namespace boost { namespace fusion { namespace detail
 
             static type
             call(Iterator const& i);
-        };        
+        };
 
         template<typename Iterator>
         typename deref_traits_impl<Iterator>::type

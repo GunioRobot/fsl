@@ -6,20 +6,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -31,13 +31,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -48,7 +48,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -96,14 +96,14 @@ using namespace Utilities;
 string title="test_possum (Version 1.0)\nCopyright(c) 2003, University of Oxford (Ivana Drobnjak)";
 string examples="test_possum ";
 
-Option<bool>   verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool>   verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool>   help(string("-h,--help"), false,
 		  string("display this message"),
 		  false, no_argument);
 
-//INPUT for the determination of testing a specific module 
+//INPUT for the determination of testing a specific module
 Option<string> opt_mod(string("--mod"), "",
 		  string("Defines which modules is to be tested: implementation, image_contrast, motion, b0, chemical_shift, rf, noise,eddy_currents, bold "),
 		  true,requires_argument);
@@ -178,9 +178,9 @@ int nonoptarg;
 
 ///////////////////////////////////
 double bessj1(const double x){
-  
+
   double ax,z,xx,y,ans,ans1,ans2;
-  
+
   if ((ax=fabs(x)) <8.0){
     y=x*x;
     ans1=x*(72362614232.0+y*(-7895059235.0+y*(242396853.1+y*(-2972611.439+y*(15704.48260+y*(-30.16036606))))));
@@ -198,16 +198,16 @@ double bessj1(const double x){
   return ans;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-int implementation(){ 
-  
+int implementation(){
+
   cout<<"Starting TESTING_implementation..."<<endl;
   //////////////////////////////////////////////////////////////////////////
-  // READ IN THE OBJECT                                      
+  // READ IN THE OBJECT
   //////////////////////////////////////////////////////////////////////////
   string obj=opt_object.value();
   cout<<obj<<endl;
   float a=opt_a.value()*1e-3;
-  float b=opt_b.value()*1e-3; 
+  float b=opt_b.value()*1e-3;
   float x0=opt_x0.value()*1e-3;
   float y0=opt_y0.value()*1e-3;
   float theta=opt_theta.value()*M_PI/180;
@@ -236,7 +236,7 @@ int implementation(){
   //int seq=(int) (pulseinfo(1));//epi or ge
   ////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////
-  // SIGNAL                                                             
+  // SIGNAL
   /////////////////////////////////////////////////////////////////////////
   int nreadp=resX*resY;
   cout<<"Number of read out points is "<<nreadp<<endl;
@@ -280,8 +280,8 @@ int implementation(){
 /////////////////////////////////////////////////////////////////////////////////////////
 int compute_volume(int argc, char *argv[])
 {
-  
-  if (opt_mod.value()=="implementation") implementation(); 
+
+  if (opt_mod.value()=="implementation") implementation();
   return 0;
 }
 
@@ -312,8 +312,8 @@ int main (int argc, char *argv[])
     options.add(opt_RFtrans);
     options.add(opt_mod);
     options.add(opt_signal);
-   
-    
+
+
     nonoptarg = options.parse_command_line(argc, argv);
 
     // line below stops the program if there are less than 2 non-optional args
@@ -323,14 +323,14 @@ int main (int argc, char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
   compute_volume(argc, argv);

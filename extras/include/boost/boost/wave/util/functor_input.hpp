@@ -20,19 +20,19 @@ namespace wave {
 namespace util {
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 //  class functor_input
-// 
-//      Implementation of the InputPolicy used by multi_pass 
+//
+//      Implementation of the InputPolicy used by multi_pass
 //      functor_input gets tokens from a functor
 //      Note: the functor must have a typedef for result_type
-//            It also must have a static variable of type result_type defined 
+//            It also must have a static variable of type result_type defined
 //            to represent eof that is called eof.
 //
-//      This functor input policy template is essentially the same as the 
-//      predefined multi_pass functor_input policy. The difference is, 
-//      that the first token is not read at initialization time, but only 
-//      just before returning the first token. 
+//      This functor input policy template is essentially the same as the
+//      predefined multi_pass functor_input policy. The difference is,
+//      that the first token is not read at initialization time, but only
+//      just before returning the first token.
 //
 ///////////////////////////////////////////////////////////////////////////////
 struct functor_input {
@@ -47,15 +47,15 @@ struct functor_input {
 
     private:
         struct Data {
-            Data(FunctorT const &ftor_) 
+            Data(FunctorT const &ftor_)
             :   ftor(ftor_), was_initialized(false)
             {}
-            
+
             FunctorT ftor;
             value_type curtok;
             bool was_initialized;
         };
-        
+
        // Needed by compilers not implementing the resolution to DR45. For
        // reference, see
        // http://www.open-std.org/JTC1/SC22/WG21/docs/cwg_defects.html#45.
@@ -95,7 +95,7 @@ struct functor_input {
         {
             boost::spirit::impl::mp_swap(data, x.data);
         }
-        
+
         void ensure_initialized() const
         {
             if (data && !data->was_initialized) {
@@ -103,7 +103,7 @@ struct functor_input {
                 data->was_initialized = true;
             }
         }
-        
+
     public:
         reference get_input() const
         {
@@ -138,6 +138,6 @@ struct functor_input {
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util
 }   // namespace wave
-}   // namespace boost 
+}   // namespace boost
 
 #endif // !defined(FUNCTOR_INPUT_HPP_ED3A4C21_8F8A_453F_B438_08214FAC106A_INCLUDED)

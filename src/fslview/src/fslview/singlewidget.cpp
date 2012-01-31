@@ -29,7 +29,7 @@
 // static const char * viewText = "View Button.<br><hr>"
 // "Press to move through axial, coronal and sagittal views.";
 
-SingleWidget::SingleWidget(QWidget *parent, ImageGroup::Handle i,OverlayList::Handle ol, Cursor::Handle& c) :  
+SingleWidget::SingleWidget(QWidget *parent, ImageGroup::Handle i,OverlayList::Handle ol, Cursor::Handle& c) :
   ImageWidget(parent,i,ol,c), m_image(i),m_viewNumber(SliceWidget::Axial)
 {
   TRACKER("SingleWidget::SingleWidget");
@@ -41,7 +41,7 @@ SingleWidget::SingleWidget(QWidget *parent, ImageGroup::Handle i,OverlayList::Ha
   m_modeWidget->enableSliceRollMode(true);
   m_sliceRollTimer = new QTimer( this );
   connect(m_sliceRollTimer, SIGNAL(timeout()), this, SLOT(nextSlice()));
-  connect(m_modeWidget, SIGNAL(sliceRollStateChanged(int)), 
+  connect(m_modeWidget, SIGNAL(sliceRollStateChanged(int)),
 	  SLOT(toggleSliceRoll(int)));
 
   m_modeWidget->enableSwitchViews(true);
@@ -73,7 +73,7 @@ void SingleWidget::setMovieFrameRate(int ms)
 // void SingleWidget::update(const Cursor::Handle& c)
 // {
 //   TRACKER("SingleWidget::update(Cursor)");
-  
+
 //   m_slice->setImageCursor(c->inqX(), c->inqY(), c->inqZ(), c->inqV());
 // }
 
@@ -84,17 +84,17 @@ void SingleWidget::nextSlice()
   switch(m_slice->inqOrient())
     {
     case SliceWidget::Axial:
-      n = (m_cursor->inqZ() + 1) % m_image->inqZ(); 
+      n = (m_cursor->inqZ() + 1) % m_image->inqZ();
       m_cursor->setCursorRepaint(m_cursor->inqX(),m_cursor->inqY(),n);
       break;
-    
+
     case SliceWidget::Coronal:
-      n = (m_cursor->inqY() + 1) % m_image->inqY(); 
+      n = (m_cursor->inqY() + 1) % m_image->inqY();
       m_cursor->setCursorRepaint(m_cursor->inqX(), n ,m_cursor->inqZ());
       break;
-    
+
     case SliceWidget::Sagittal:
-      n = (m_cursor->inqX() + 1) % m_image->inqX(); 
+      n = (m_cursor->inqX() + 1) % m_image->inqX();
       m_cursor->setCursorRepaint(n, m_cursor->inqY(),m_cursor->inqZ());
       break;
    }
@@ -112,37 +112,37 @@ void SingleWidget::newSlice(int orient, int mode)
 {
 
  if(orient == SliceWidget::Coronal)
-   m_slice = SliceWidget::Handle(new CoronalWidget(this, "coronal", m_cursor, 
+   m_slice = SliceWidget::Handle(new CoronalWidget(this, "coronal", m_cursor,
 						   m_overlayList, m_drawSettings, m_undoList,
-						   m_opts)); 
+						   m_opts));
 
   if(orient == SliceWidget::Sagittal)
-   m_slice = SliceWidget::Handle(new SagittalWidget(this, "sagittal", m_cursor, 
+   m_slice = SliceWidget::Handle(new SagittalWidget(this, "sagittal", m_cursor,
 						    m_overlayList, m_drawSettings, m_undoList,
-						    m_opts)); 
+						    m_opts));
 
   if(orient == SliceWidget::Axial)
-   m_slice = SliceWidget::Handle(new AxialWidget(this, "axial", m_cursor, 
+   m_slice = SliceWidget::Handle(new AxialWidget(this, "axial", m_cursor,
                                                  m_overlayList, m_drawSettings, m_undoList,
-						 m_opts)); 
+						 m_opts));
 
   setCentralWidget(m_slice.get());
-  
+
   connect(m_mainToolbarWidget, SIGNAL(modeChanged(SliceWidget::Mode)),
 	  m_slice.get(), SLOT(setMode(SliceWidget::Mode)));
   connect(this, SIGNAL(zoomValueChanged(int)),          m_slice.get(), SLOT(setZoom(int)));
   connect(this, SIGNAL(resetZoom()),                    m_slice.get(), SLOT(resetZoom()));
-  connect(this, SIGNAL(crossHairModeChanged(bool)),     m_slice.get(), SLOT(crossHairMode(bool)));  
-  connect(m_slice.get(),SIGNAL(message(const QString&, int )), 
+  connect(this, SIGNAL(crossHairModeChanged(bool)),     m_slice.get(), SLOT(crossHairMode(bool)));
+  connect(m_slice.get(),SIGNAL(message(const QString&, int )),
           this ,SIGNAL(message(const QString&, int )));
 
   m_slice->crossHairMode(m_mainToolbarWidget->inqCrossHairState());
-  
-  m_slice->setImageCursor(m_cursor->inqX(), m_cursor->inqY(), m_cursor->inqZ(), m_cursor->inqV());  
+
+  m_slice->setImageCursor(m_cursor->inqX(), m_cursor->inqY(), m_cursor->inqZ(), m_cursor->inqV());
 
   //  emit modeChanged(mode);
 
-  m_slice->show(); 
+  m_slice->show();
 }
 
 #include <qfiledialog.h>
@@ -150,11 +150,11 @@ void SingleWidget::newSlice(int orient, int mode)
 
 void SingleWidget::print()
 {
-  QString fn = QFileDialog::getSaveFileName("screenshot.png", 
+  QString fn = QFileDialog::getSaveFileName("screenshot.png",
 					    "PNG files (*.png)", this,
 					    "Screenshot dialog",
 					    "Select a filename for saving");
-  if(!fn.isNull()) 
+  if(!fn.isNull())
     {
       QPixmap pm(centralWidget()->size());
       bitBlt(&pm, 0, 0, centralWidget());

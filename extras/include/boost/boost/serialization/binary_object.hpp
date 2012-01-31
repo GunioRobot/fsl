@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // nvp.hpp: interface for serialization system.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -21,8 +21,8 @@
 #include <cstddef> // std::size_t
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -59,11 +59,11 @@ struct binary_object {
 
 // just a little helper to support the convention that all serialization
 // wrappers follow the naming convention make_xxxxx
-inline 
+inline
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 const
 #endif
-binary_object 
+binary_object
 make_binary_object(/* const */ void * t, std::size_t size){
     return binary_object(t, size);
 }
@@ -73,7 +73,7 @@ make_binary_object(/* const */ void * t, std::size_t size){
 
 // don't need versioning info for this type
 BOOST_CLASS_IMPLEMENTATION(
-    binary_object, 
+    binary_object,
     boost::serialization::object_serializable
 )
 
@@ -83,6 +83,6 @@ BOOST_CLASS_IMPLEMENTATION(
 // other structure which itself is tracked, so as a practical matter
 // suppressing tracking shouldn't cause any redundancy.
 
-BOOST_CLASS_TRACKING(binary_object, boost::serialization::track_never) 
+BOOST_CLASS_TRACKING(binary_object, boost::serialization::track_never)
 
 #endif // BOOST_SERIALIZATION_BINARY_OBJECT_HPP

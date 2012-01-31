@@ -260,7 +260,7 @@ test pkg-2.16 {Tcl_PkgRequire procedure, "package unknown" error} !tip268 {
     proc pkgUnknown args {
 	error "testing package unknown"
     }
-    package forget t 
+    package forget t
     package unknown pkgUnknown
     set result [list [catch {package require t} msg] $msg $errorInfo]
     package unknown {}
@@ -278,7 +278,7 @@ test pkg-2.16-268 {Tcl_PkgRequire procedure, "package unknown" error} tip268 {
     proc pkgUnknown args {
 	error "testing package unknown"
     }
-    package forget t 
+    package forget t
     package unknown pkgUnknown
     set result [list [catch {package require t} msg] $msg $errorInfo]
     package unknown {}

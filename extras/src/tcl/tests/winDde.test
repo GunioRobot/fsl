@@ -61,7 +61,7 @@ proc createChildProcess { ddeServerName } {
 	exit
     }
     close $f
-    
+
     set f [open |[list [interpreter] $::scriptName] r]
     fconfigure $f -buffering line -blocking 1
     gets $f

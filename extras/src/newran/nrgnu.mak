@@ -14,21 +14,21 @@ tryrand:      $(OBJ_TR)
 
 newranxx = include.h newran.h boolean.h myexcept.h
 
-tryrand.o:    $(newranxx) tryrand.cpp 
+tryrand.o:    $(newranxx) tryrand.cpp
 
-tryrand1.o:   $(newranxx) tryrand1.cpp 
+tryrand1.o:   $(newranxx) tryrand1.cpp
 
-tryrand2.o:   $(newranxx) tryrand2.cpp 
+tryrand2.o:   $(newranxx) tryrand2.cpp
 
-tryrand3.o:   $(newranxx) tryrand3.cpp 
+tryrand3.o:   $(newranxx) tryrand3.cpp
 
-tryrand4.o:   $(newranxx) tryrand4.cpp 
+tryrand4.o:   $(newranxx) tryrand4.cpp
 
-hist.o:       $(newranxx) hist.cpp 
+hist.o:       $(newranxx) hist.cpp
 
-newran.o:     $(newranxx) newran.cpp 
+newran.o:     $(newranxx) newran.cpp
 
-extreal.o:    include.h boolean.h extreal.h myexcept.h extreal.cpp 
+extreal.o:    include.h boolean.h extreal.h myexcept.h extreal.cpp
 
-myexcept.o:   include.h boolean.h myexcept.h myexcept.cpp 
+myexcept.o:   include.h boolean.h myexcept.h myexcept.cpp
 

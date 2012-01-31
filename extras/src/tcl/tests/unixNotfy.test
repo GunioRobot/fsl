@@ -50,7 +50,7 @@ test unixNotfy-1.1 {Tcl_DeleteFileHandler} \
 	list [catch {vwait x} msg] $msg
     } \
     -result {1 {can't wait for variable "x":  would wait forever}} \
-    -cleanup { 
+    -cleanup {
 	catch { close $f }
 	catch { removeFile foo }
     }
@@ -87,7 +87,7 @@ test unixNotfy-2.1 {Tcl_DeleteFileHandler} \
 	close $f
 	testthread create "testthread send [testthread id] {set x ok}"
 	vwait x
-	threadReap	
+	threadReap
 	set x
     } \
     -result {ok} \
@@ -110,11 +110,11 @@ test unixNotfy-2.2 {Tcl_DeleteFileHandler} \
 	close $f2
 	testthread create "testthread send [testthread id] {set x ok}"
 	vwait x
-	threadReap	
+	threadReap
 	set x
     } \
     -result {ok} \
-    -cleanup { 
+    -cleanup {
 	catch { close $f1 }
 	catch { close $f2 }
 	catch { removeFile foo }

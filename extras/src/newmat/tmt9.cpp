@@ -35,7 +35,7 @@ void trymat9()
    {
       Tracer et1("Stage 2");
       Matrix DXE = D.i() * X * E;
-      DXE = E.i() * DXE.t() * D - X.t(); Clean(DXE, 0.00000001); Print(DXE); 
+      DXE = E.i() * DXE.t() * D - X.t(); Clean(DXE, 0.00000001); Print(DXE);
       E=D; for (i=1;i<=7;i++) E(i,i)=i*3+1;
    }
    DiagonalMatrix F=D;

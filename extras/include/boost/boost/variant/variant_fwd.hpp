@@ -38,7 +38,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_REFERENCE_SUPPORT
 //
-// Defined if variant does not support references as bounded types. 
+// Defined if variant does not support references as bounded types.
 //
 #if defined(BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING) \
  && !defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND) \
@@ -49,7 +49,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
-// Defined if variant does not support make_variant_over (see below). 
+// Defined if variant does not support make_variant_over (see below).
 //
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
@@ -107,7 +107,7 @@ namespace detail { namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class void_ and class template convert_void
-// 
+//
 // Provides the mechanism by which void(NN) types are converted to
 // mpl::void_ (and thus can be passed to mpl::list).
 //

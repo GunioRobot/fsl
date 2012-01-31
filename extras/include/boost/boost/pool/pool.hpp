@@ -363,7 +363,7 @@ bool pool<UserAllocator>::release_memory()
       //     free points to the first free chunk in some next memory block, or
       //       0 if there is no such chunk.
       //     prev_free points to the last free chunk in this memory block.
-      
+
       // We are just about to advance ptr.  Maintain the invariant:
       // prev is the PODptr whose next() is ptr, or !valid()
       // if there is no such PODptr

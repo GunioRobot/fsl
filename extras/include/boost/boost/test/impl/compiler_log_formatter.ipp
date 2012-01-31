@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -103,7 +103,7 @@ compiler_log_formatter::test_unit_skipped( std::ostream& output, test_unit const
 {
     output  << "Test " << tu.p_type_name << " \"" << tu.p_name << "\"" << "is skipped" << std::endl;
 }
-    
+
 //____________________________________________________________________________//
 
 void
@@ -123,7 +123,7 @@ compiler_log_formatter::log_exception( std::ostream& output, log_checkpoint_data
         print_prefix( output, checkpoint_data.m_file, checkpoint_data.m_line );
         output << "last checkpoint: " << checkpoint_data.m_message;
     }
-    
+
     output << std::endl;
 }
 

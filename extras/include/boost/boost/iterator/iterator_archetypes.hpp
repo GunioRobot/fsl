@@ -51,19 +51,19 @@ namespace iterator_archetypes
   // Not quite tags, since dispatching wouldn't work.
   typedef mpl::int_<readable_iterator_bit>::type readable_iterator_t;
   typedef mpl::int_<writable_iterator_bit>::type writable_iterator_t;
-  
+
   typedef mpl::int_<
       (readable_iterator_bit|writable_iterator_bit)
           >::type readable_writable_iterator_t;
-  
+
   typedef mpl::int_<
       (readable_iterator_bit|lvalue_iterator_bit)
           >::type readable_lvalue_iterator_t;
-  
+
   typedef mpl::int_<
       (lvalue_iterator_bit|writable_iterator_bit)
           >::type writable_lvalue_iterator_t;
-  
+
   typedef mpl::int_<swappable_iterator_bit>::type swappable_iterator_t;
   typedef mpl::int_<lvalue_iterator_bit>::type lvalue_iterator_t;
 
@@ -141,7 +141,7 @@ namespace detail
           >::type
       >::type
   {};
-  
+
   template <class TraversalCategory>
   struct traversal_archetype_impl
   {
@@ -161,11 +161,11 @@ namespace detail
       typedef typename
         traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
       base;
-      
+
       traversal_archetype_() {}
 
       traversal_archetype_(ctor_arg arg)
-        : base(arg) 
+        : base(arg)
       {}
   };
 
@@ -202,13 +202,13 @@ namespace detail
   template <class Derived, class Value>
   bool operator==(traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&,
                   traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&) { return true; }
-  
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
   // doesn't seem to pick up != from equality_comparable
   template <class Derived, class Value>
   bool operator!=(traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&,
                   traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&) { return true; }
-#endif 
+#endif
   template <>
   struct traversal_archetype_impl<forward_traversal_tag>
   {
@@ -216,7 +216,7 @@ namespace detail
       struct archetype
         : public traversal_archetype_<Derived, Value, single_pass_traversal_tag>
       {
-          archetype() 
+          archetype()
             : traversal_archetype_<Derived, Value, single_pass_traversal_tag>(ctor_arg())
           {}
           typedef std::ptrdiff_t difference_type;
@@ -240,7 +240,7 @@ namespace detail
   {
       template<class Derived, class Value>
       struct archetype
-        : public traversal_archetype_<Derived, Value, bidirectional_traversal_tag> 
+        : public traversal_archetype_<Derived, Value, bidirectional_traversal_tag>
       {
           Derived& operator+=(std::ptrdiff_t) { return static_object<Derived>::get(); }
           Derived& operator-=(std::ptrdiff_t) { return static_object<Derived>::get(); }
@@ -299,7 +299,7 @@ namespace detail
 
 
 template <class> struct undefined;
-  
+
 template <class AccessCategory>
 struct iterator_access_archetype_impl
 {
@@ -344,7 +344,7 @@ struct iterator_access_archetype_impl<
     {
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
         BOOST_STATIC_ASSERT(!is_const<Value>::value);
-# endif 
+# endif
         typedef void value_type;
         typedef void reference;
         typedef void pointer;
@@ -385,7 +385,7 @@ struct iterator_access_archetype_impl<iterator_archetypes::readable_lvalue_itera
         Value* operator->() const { return 0; }
     };
 };
-  
+
 template <>
 struct iterator_access_archetype_impl<iterator_archetypes::writable_lvalue_iterator_t>
 {
@@ -397,16 +397,16 @@ struct iterator_access_archetype_impl<iterator_archetypes::writable_lvalue_itera
     {
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
         BOOST_STATIC_ASSERT((!is_const<Value>::value));
-# endif 
+# endif
     };
 };
-  
+
 
 template <class Value, class AccessCategory, class TraversalCategory>
 struct iterator_archetype;
-  
+
 template <class Value, class AccessCategory, class TraversalCategory>
-struct traversal_archetype_base 
+struct traversal_archetype_base
   : detail::operator_brackets<
         typename remove_cv<Value>::type
       , AccessCategory
@@ -428,7 +428,7 @@ namespace detail
     , traversal_archetype_base<Value, AccessCategory, TraversalCategory>
   {
       typedef iterator_access_archetype<Value, AccessCategory> access;
-      
+
       typedef typename detail::facade_iterator_category<
           TraversalCategory
         , typename mpl::eval_if<
@@ -466,18 +466,18 @@ struct iterator_archetype
   , public detail::iterator_archetype_base<
         Value, AccessCategory, TraversalCategory
     >::workaround_iterator_base
-# endif 
+# endif
 {
     // Derivation from std::iterator above caused references to nested
     // types to be ambiguous, so now we have to redeclare them all
     // here.
 # if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, < 310)           \
     || BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(0x20101))
-    
+
     typedef detail::iterator_archetype_base<
         Value,AccessCategory,TraversalCategory
     > base;
-    
+
     typedef typename base::value_type value_type;
     typedef typename base::reference reference;
     typedef typename base::pointer pointer;

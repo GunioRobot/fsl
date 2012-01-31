@@ -8,13 +8,13 @@ LIBS = -lnewmat -lm
 AFILES = libnewmat.a
 TESTXFILES = tmt example nl_ex sl_ex garch test_exc
 
-all:   libnewmat.a 
+all:   libnewmat.a
 tests: all ${TESTXFILES}
 
 %.o:          %.cpp
-	      ${CP} $*.cpp $*.cxx  
+	      ${CP} $*.cpp $*.cxx
 	      $(CXX) $(CXXFLAGS) -c $*.cxx
-	      ${RM} -f $*.cxx  
+	      ${RM} -f $*.cxx
 
 
 OBJ_LIB = bandmat.o cholesky.o evalue.o fft.o hholder.o     \

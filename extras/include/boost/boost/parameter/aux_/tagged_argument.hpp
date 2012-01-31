@@ -14,7 +14,7 @@ namespace boost { namespace parameter { namespace aux {
 
 // Holds a reference to an argument of type Arg associated with
 // keyword Keyword
-    
+
 template <class Keyword, class Arg>
 struct tagged_argument
 {
@@ -29,19 +29,19 @@ struct tagged_argument
     template <class Keyword2, class Arg2>
     arg_list<
         tagged_argument<Keyword, Arg>
-      , arg_list<tagged_argument<Keyword2, Arg2> > 
+      , arg_list<tagged_argument<Keyword2, Arg2> >
     >
     operator,(tagged_argument<Keyword2, Arg2> x) const
     {
         return arg_list<
             tagged_argument<Keyword, Arg>
-          , arg_list<tagged_argument<Keyword2, Arg2> > 
+          , arg_list<tagged_argument<Keyword2, Arg2> >
         >(
             *this
           , arg_list<tagged_argument<Keyword2, Arg2> >(x, empty_arg_list())
         );
     }
-    
+
     reference value;
 };
 

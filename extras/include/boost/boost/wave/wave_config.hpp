@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Global application configuration
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -20,10 +20,10 @@
 #include <boost/wave/wave_version.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Define the maximal include nesting depth allowed. If this value isn't 
+//  Define the maximal include nesting depth allowed. If this value isn't
 //  defined it defaults to 1024
 //
-//  To define a new initial include nesting depth uncomment the following and 
+//  To define a new initial include nesting depth uncomment the following and
 //  supply a new integer value.
 //
 #if !defined(BOOST_WAVE_MAX_INCLUDE_LEVEL_DEPTH)
@@ -40,7 +40,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Decide, whether to implement a #warning directive as an extension to the 
+//  Decide, whether to implement a #warning directive as an extension to the
 //  C++ Standard (same as #error, but emits a warning, not an error)
 //
 //  To implement #warning directives, uncomment the following
@@ -50,7 +50,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Decide, whether to implement #pragma once 
+//  Decide, whether to implement #pragma once
 //
 //  To implement #pragma once, uncomment the following
 //
@@ -70,11 +70,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Undefine the following, to enable some MS specific language extensions:
-//  __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
+//  __int8, __int16, __int32, __int64, __based, __declspec, __cdecl,
 //  __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,
 //  __asm, #region, #endregion
 //
-//  Note: By default this is enabled for Windows based systems, otherwise it's 
+//  Note: By default this is enabled for Windows based systems, otherwise it's
 //        disabled.
 #if !defined(BOOST_WAVE_SUPPORT_MS_EXTENSIONS)
 #if defined(BOOST_WINDOWS)
@@ -85,7 +85,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Allow the message body of the #error and #warning directives to be 
+//  Allow the message body of the #error and #warning directives to be
 //  preprocessed before the diagnostic is issued.
 //
 //  Uncommenting the following will preprocess the message bodies of #error and
@@ -96,8 +96,8 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Allow the #pragma directives to be returned to the caller (optionally after 
-//  preprocessing the body) 
+//  Allow the #pragma directives to be returned to the caller (optionally after
+//  preprocessing the body)
 //
 //  Uncommenting the following will skip #pragma directives, so that the caller
 //  will not see them.
@@ -107,7 +107,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Allow the body of a #pragma directive to be preprocessed before the 
+//  Allow the body of a #pragma directive to be preprocessed before the
 //  directive is returned to the caller.
 //
 //  Uncommenting the following will preprocess the bodies of #pragma directives
@@ -127,14 +127,14 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Define the string type to be used to store the token values and the file 
+//  Define the string type to be used to store the token values and the file
 //  names inside a file_position template class
 //
 #if !defined(BOOST_WAVE_STRINGTYPE)
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
     BOOST_WORKAROUND(__MWERKS__, < 0x3200)
-// VC7 isn't able to compile the flex_string class, fallback to std::string 
+// VC7 isn't able to compile the flex_string class, fallback to std::string
 // CW upto 8.3 chokes as well *sigh*
 #define BOOST_WAVE_STRINGTYPE std::string
 
@@ -147,7 +147,7 @@
         > \
     > \
     /**/
-    
+
 /* #define BOOST_WAVE_STRINGTYPE boost::wave::util::flex_string< \
         char, std::char_traits<char>, boost::fast_pool_allocator<char>, \
         boost::wave::util::CowString<char, \
@@ -157,12 +157,12 @@
         > \
     > \
 */    /**/
-    
-//  This include is needed for the flex_string class used in the 
+
+//  This include is needed for the flex_string class used in the
 //  BOOST_WAVE_STRINGTYPE above.
 #include <boost/wave/util/flex_string.hpp>
 
-//  This include is needed for the boost::fast_allocator class used in the 
+//  This include is needed for the boost::fast_allocator class used in the
 //  BOOST_WAVE_STRINGTYPE above.
 //  Configure Boost.Pool thread support (for now: no thread support at all)
 //#define BOOST_NO_MT
@@ -181,8 +181,8 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Uncomment the following, if you need debug output, the 
-//  BOOST_SPIRIT_DEBUG_FLAGS_CPP constants below help to fine control the 
+//  Uncomment the following, if you need debug output, the
+//  BOOST_SPIRIT_DEBUG_FLAGS_CPP constants below help to fine control the
 //  amount of the generated debug output.
 //#define BOOST_SPIRIT_DEBUG
 
@@ -201,15 +201,15 @@
 
 #if !defined(BOOST_SPIRIT_DEBUG_FLAGS_CPP)
 #define BOOST_SPIRIT_DEBUG_FLAGS_CPP    0    // default is no debugging
-#endif 
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  For all recognized preprocessor statements the output parse trees 
-//  formatted as xml are printed. The formatted parse trees are streamed to the 
+//  For all recognized preprocessor statements the output parse trees
+//  formatted as xml are printed. The formatted parse trees are streamed to the
 //  std::ostream defined by the WAVE_DUMP_PARSE_TREE_OUT constant.
 //
-//  Uncomment the following, if you want to see these parse trees. 
+//  Uncomment the following, if you want to see these parse trees.
 //
 #if !defined(BOOST_WAVE_DUMP_PARSE_TREE)
 #define BOOST_WAVE_DUMP_PARSE_TREE 0
@@ -221,7 +221,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  For all #if and #elif directives the preprocessed expressions are printed.
-//  These expressions are streamed to the std::ostream defined by the 
+//  These expressions are streamed to the std::ostream defined by the
 //  BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT constant.
 //
 //  Uncomment the following, if you want to see the preprocessed expressions
@@ -235,28 +235,28 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Decide, whether to use the separate compilation model for the instantiation 
+//  Decide, whether to use the separate compilation model for the instantiation
 //  of the C++ lexer objects.
 //
 //  If this is defined, you should explicitly instantiate the C++ lexer
 //  template with the correct parameters in a separate compilation unit of
-//  your program (see the file instantiate_re2c_lexer.cpp). 
+//  your program (see the file instantiate_re2c_lexer.cpp).
 //
-//  To use the lexer inclusion model, uncomment the following 
+//  To use the lexer inclusion model, uncomment the following
 //
 #if !defined(BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION)
 #define BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION 1
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Decide, whether to use the separate compilation model for the instantiation 
+//  Decide, whether to use the separate compilation model for the instantiation
 //  of the grammar objects.
 //
 //  If this is defined, you should explicitly instantiate the grammar
 //  templates with the correct parameters in a separate compilation unit of
-//  your program (see the files instantiate_cpp_grammar.cpp et.al.). 
+//  your program (see the files instantiate_cpp_grammar.cpp et.al.).
 //
-//  To use the grammar inclusion model, uncomment the following 
+//  To use the grammar inclusion model, uncomment the following
 //
 #if !defined(BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION)
 #define BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION 1
@@ -278,7 +278,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Auto library naming
-#if BOOST_VERSION >= 103100   
+#if BOOST_VERSION >= 103100
 // auto link features work beginning from Boost V1.31.0
 #if !defined(BOOST_WAVE_SOURCE) && !defined(BOOST_ALL_NO_LIB) && \
     !defined(BOOST_WAVE_NO_LIB)

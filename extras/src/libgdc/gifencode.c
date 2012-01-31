@@ -1,6 +1,6 @@
 /* GDCHART 0.10.0dev  GIFENCODE.C 2 Nov 2000 */
 
-/* Code drawn from gd.c, from gd1.3 
+/* Code drawn from gd.c, from gd1.3
 ** All original comments on GIF, miGIF, LZW, associated Copyrights,
 ** contributors, etc. have been maintained in their entirety.
 */
@@ -31,7 +31,7 @@
 ** CompuServe Incorporated.  GIF(sm) is a Service Mark property of
 ** CompuServe Incorporated.
 *
-*  Heavily modified by Mouse, 1998-02-12.  
+*  Heavily modified by Mouse, 1998-02-12.
 *  Remove LZW compression.
 *  Added miGIF run length compression.
 *
@@ -370,22 +370,22 @@ putword(int w, FILE *fp)
  * documentation for any purpose and without fee is hereby granted, provided
  * that the above copyright notice appear in all copies and that both that
  * copyright notice and this permission notice appear in supporting
- * documentation.  This software is provided "AS IS." The Hutchison Avenue 
- * Software Corporation disclaims all warranties, either express or implied, 
- * including but not limited to implied warranties of merchantability and 
+ * documentation.  This software is provided "AS IS." The Hutchison Avenue
+ * Software Corporation disclaims all warranties, either express or implied,
+ * including but not limited to implied warranties of merchantability and
  * fitness for a particular purpose, with respect to this code and accompanying
- * documentation. 
- * 
- * The miGIF compression routines do not, strictly speaking, generate files 
- * conforming to the GIF spec, since the image data is not LZW-compressed 
- * (this is the point: in order to avoid transgression of the Unisys patent 
- * on the LZW algorithm.)  However, miGIF generates data streams that any 
+ * documentation.
+ *
+ * The miGIF compression routines do not, strictly speaking, generate files
+ * conforming to the GIF spec, since the image data is not LZW-compressed
+ * (this is the point: in order to avoid transgression of the Unisys patent
+ * on the LZW algorithm.)  However, miGIF generates data streams that any
  * reasonably sane LZW decompresser will decompress to what we want.
  *
- * miGIF compression uses run length encoding. It compresses horizontal runs 
+ * miGIF compression uses run length encoding. It compresses horizontal runs
  * of pixels of the same color. This type of compression gives good results
- * on images with many runs, for example images with lines, text and solid 
- * shapes on a solid-colored background. It gives little or no compression 
+ * on images with many runs, for example images with lines, text and solid
+ * shapes on a solid-colored background. It gives little or no compression
  * on images with few runs, for example digital or scanned photos.
  *
  *                               der Mouse
@@ -538,7 +538,7 @@ static void output_plain(int c)
   }
 }
 
-#ifdef __GNUC__ 
+#ifdef __GNUC__
 static unsigned int isqrt(unsigned int) __attribute__((__const__));
 #endif
 static unsigned int isqrt(unsigned int x)
@@ -717,7 +717,7 @@ static void compress(int init_bits, FILE *outfile, gdImagePtr im, int background
  rl_basecode = code_eof + 1;
  out_bump_init = (1 << (init_bits - 1)) - 1;
  /* for images with a lot of runs, making out_clear_init larger will
-    give better compression. */ 
+    give better compression. */
  out_clear_init = (init_bits <= 3) ? 9 : (out_bump_init-1);
 #ifdef DEBUGGING_ENVARS
   { const char *ocienv;
@@ -925,7 +925,7 @@ gdImageCreateFromGif(FILE *fd)
                                } else {
                                        break;
                                }
-                       } 
+                       }
                        return im;
                }
 
@@ -958,21 +958,21 @@ gdImageCreateFromGif(FILE *fd)
 	       }
                im->interlace = BitSet(buf[8], INTERLACE);
                if (! useGlobalColormap) {
-                       if (ReadColorMap(fd, bitPixel, localColorMap)) { 
+                       if (ReadColorMap(fd, bitPixel, localColorMap)) {
                                  return 0;
                        }
-                       ReadImage(im, fd, imw, imh, localColorMap, 
-                                 BitSet(buf[8], INTERLACE), 
+                       ReadImage(im, fd, imw, imh, localColorMap,
+                                 BitSet(buf[8], INTERLACE),
                                  imageCount != imageNumber);
                } else {
                        ReadImage(im, fd, imw, imh,
-                                 ColorMap, 
-                                 BitSet(buf[8], INTERLACE), 
+                                 ColorMap,
+                                 BitSet(buf[8], INTERLACE),
                                  imageCount != imageNumber);
                }
                if (Transparent != (-1)) {
                        gdImageColorTransparent(im, Transparent);
-               }	   
+               }
        }
 }
 
@@ -1077,7 +1077,7 @@ GetCode_(FILE *fd, int code_size, int flag)
                if (done) {
                        if (curbit >= lastbit) {
                                 /* Oh well */
-                       }                        
+                       }
                        return -1;
                }
                buf[0] = buf[last_byte-2];
@@ -1131,7 +1131,7 @@ LWZReadByte_(FILE *fd, int flag, int input_code_size)
                max_code = clear_code+2;
 
                GetCode(fd, 0, TRUE);
-               
+
                fresh = TRUE;
 
                for (i = 0; i < clear_code; ++i) {
@@ -1234,15 +1234,15 @@ LWZReadByte(FILE *fd, int flag, int input_code_size)
 static void
 ReadImage(gdImagePtr im, FILE *fd, int len, int height, unsigned char (*cmap)[256], int interlace, int ignore)
 {
-       unsigned char   c;      
+       unsigned char   c;
        int             v;
        int             xpos = 0, ypos = 0, pass = 0;
        int i;
        /* Stash the color map into the image */
        for (i=0; (i<gdMaxColors); i++) {
-               im->red[i] = cmap[CM_RED][i];	
-               im->green[i] = cmap[CM_GREEN][i];	
-               im->blue[i] = cmap[CM_BLUE][i];	
+               im->red[i] = cmap[CM_RED][i];
+               im->green[i] = cmap[CM_GREEN][i];
+               im->blue[i] = cmap[CM_BLUE][i];
                im->open[i] = 1;
        }
        /* Many (perhaps most) of these colors will remain marked open. */
@@ -1251,7 +1251,7 @@ ReadImage(gdImagePtr im, FILE *fd, int len, int height, unsigned char (*cmap)[25
        **  Initialize the Compression routines
        */
        if (! ReadOK(fd,&c,1)) {
-               return; 
+               return;
        }
        if (LWZReadByte(fd, TRUE, c) < 0) {
                return;

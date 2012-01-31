@@ -1,4 +1,4 @@
-/* 
+/*
  * tkConsole.c --
  *
  *	This file implements a Tcl console for systems that may not
@@ -11,7 +11,7 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
  * RCS: @(#) $Id: tkConsole.c,v 1.1.1.1 2007/07/10 15:05:17 duncan Exp $
- *    
+ *
  */
 
 #include "tk.h"
@@ -42,7 +42,7 @@ typedef struct ChannelData {
     int type;			/* TCL_STDOUT or TCL_STDERR */
 } ChannelData;
 
-/* 
+/*
  * Prototypes for local procedures defined in this file:
  */
 
@@ -149,7 +149,7 @@ static int ShouldUseConsoleChannel(type)
     /*
      * Note that we need to check for 0 because Windows will return 0 if this
      * is not a console mode application, even though this is not a valid
-     * handle. 
+     * handle.
      */
 
     if ((handle == INVALID_HANDLE_VALUE) || (handle == 0)) {
@@ -188,7 +188,7 @@ static int ShouldUseConsoleChannel(type)
 	     * Don't use a CHAR type channel for stdio, otherwise Tk
 	     * runs into trouble with the MS DevStudio debugger.
 	     */
-	    
+
 	    return 1;
 	}
     } else if (fileType == FILE_TYPE_UNKNOWN) {
@@ -349,7 +349,7 @@ Tk_InitConsoleChannels(interp)
  *----------------------------------------------------------------------
  */
 
-int 
+int
 Tk_CreateConsoleWindow(interp)
     Tcl_Interp *interp;			/* Interpreter to use for prompting. */
 {
@@ -374,7 +374,7 @@ Tk_CreateConsoleWindow(interp)
     if (Tk_Init(consoleInterp) != TCL_OK) {
 	goto error;
     }
-    
+
     /*
      * Fetch the instance data from whatever std channel is a
      * console channel.  If none, create fresh instance data.
@@ -433,9 +433,9 @@ Tk_CreateConsoleWindow(interp)
     info->refCount++;
     Tcl_CreateThreadExitHandler(DeleteConsoleInterp,
 	(ClientData) consoleInterp);
-    
-    /* 
-     * Add console commands to the interp 
+
+    /*
+     * Add console commands to the interp
      */
 
     token = Tcl_CreateObjCommand(interp, "console", ConsoleObjCmd,
@@ -490,7 +490,7 @@ Tk_CreateConsoleWindow(interp)
 	goto error;
     }
     return TCL_OK;
-    
+
     error:
     Tcl_AddErrorInfo(interp, "\n    (creating console window)");
     if (!Tcl_InterpDeleted(consoleInterp)) {

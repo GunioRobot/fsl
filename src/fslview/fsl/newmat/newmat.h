@@ -180,7 +180,7 @@ public:
    bool IsDiagonal() const { return (attribute & Diagonal) != 0; }
    bool IsSymmetric() const { return (attribute & Symmetric) != 0; }
    bool CannotConvert() const { return (attribute & LUDeco) != 0; }
-                                               // used by operator== 
+                                               // used by operator==
    FREE_CHECK(MatrixType)
 };
 
@@ -1533,7 +1533,7 @@ class LinearEquationSolver : public BaseMatrix
 public:
    LinearEquationSolver(const BaseMatrix& bm);
    ~LinearEquationSolver() { delete gm; }
-   void CleanUp() { delete gm; } 
+   void CleanUp() { delete gm; }
    GeneralMatrix* Evaluate(MatrixType) { return gm; }
    // probably should have an error message if MatrixType != UnSp
    NEW_DELETE(LinearEquationSolver)

@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -20,7 +20,7 @@
 
 struct BaseCluster::Implementation
 {
-  Implementation(): 
+  Implementation():
     m_index(0), m_voxels(0),
     m_p(0.0), m_minusLog10P(0.0),
     m_maxZ(0.0), m_maxCOPE(0.0), m_meanCOPE(0.0),
@@ -137,23 +137,23 @@ Cluster::Handle Cluster::create(const ColumnList& cl)
 
 void Cluster::setCursorToMaxZ(Cursor::Handle& c) const
 {
-  return c->setCursor(m_impl->m_maxZx, m_impl->m_maxZy, m_impl->m_maxZz); 
+  return c->setCursor(m_impl->m_maxZx, m_impl->m_maxZy, m_impl->m_maxZz);
 }
 
 void Cluster::setCursorToCOG(Cursor::Handle& c) const
 {
-  return c->setCursor(m_impl->m_COGx, m_impl->m_COGy, m_impl->m_COGz); 
+  return c->setCursor(m_impl->m_COGx, m_impl->m_COGy, m_impl->m_COGz);
 }
 
 void Cluster::setCursorToMaxCOPE(Cursor::Handle& c) const
 {
-  return c->setCursor(m_impl->m_maxCOPEx, m_impl->m_maxCOPEy, m_impl->m_maxCOPEz); 
+  return c->setCursor(m_impl->m_maxCOPEx, m_impl->m_maxCOPEy, m_impl->m_maxCOPEz);
 }
 
 bool Cluster::readColumn(std::istream& is, const std::string& col)
 {
   bool flag(true);
-  
+
   if(!is.eof())
     if(!BaseCluster::readColumn(is, col)) {
 
@@ -186,7 +186,7 @@ void Cluster::scanFrom(std::istream& is)
 
   for(ColumnList::iterator it = m_columns.begin();
       it != m_columns.end(); ++it) {
-    
+
     if(!readColumn(is, *it)) {
       std::string dummy;
       is >> dummy;
@@ -282,11 +282,11 @@ TalairachCluster::Handle TalairachCluster::create(const ColumnList& cl)
   return TalairachCluster::Handle(new TalairachCluster(cl));
 }
 
-void TalairachCluster::setCursorToMaxZ(ImageInfo::Handle& i, 
+void TalairachCluster::setCursorToMaxZ(ImageInfo::Handle& i,
 				       Cursor::Handle& c) const
 {
   short x, y, z;
-  i->mmToVoxCoord(m_impl->m_maxZx, m_impl->m_maxZy, m_impl->m_maxZz, 
+  i->mmToVoxCoord(m_impl->m_maxZx, m_impl->m_maxZy, m_impl->m_maxZz,
 		  x, y, z);
   return c->setCursor(x, y, z);
 }
@@ -325,7 +325,7 @@ void TalairachCluster::scanFrom(std::istream& is)
 
   for(ColumnList::iterator it = m_columns.begin();
       it != m_columns.end(); ++it) {
-    
+
     if(!readColumn(is, *it)) {
       std::string dummy;
       is >> dummy;

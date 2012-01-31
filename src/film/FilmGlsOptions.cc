@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -89,15 +89,15 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
     print_usage(argc,argv);
     exit(1);
   }
-  
+
   int inp = 1;
   int n=1;
   string arg;
   char first;
-  
+
   while (n<argc) {
     arg=argv[n];
-  
+
     if (arg.size()<1) { n++; continue; }
     first = arg[0];
     if (first!='-' || inp==3) {
@@ -117,7 +117,7 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
       inp++;
       continue;
     }
-    
+
     // put options without arguments here
     if ( arg == "-help" ) {
       print_usage(argc,argv);
@@ -143,7 +143,7 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
     } else if ( arg == "-sa" ) {
       gopt->smoothACEst = true;
       n++;
-      continue;    
+      continue;
     } else if ( arg == "-noest" ) {
       gopt->noest = true;
       n++;
@@ -152,9 +152,9 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
       gopt->output_pwdata = true;
       n++;
       continue;
-    } 
+    }
 
-    if (n+1>=argc) 
+    if (n+1>=argc)
       throw Exception(("Lacking argument to option "+arg).c_str());
 
     // put options with 1 argument here
@@ -171,19 +171,19 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
       n++;
       int size=1;
 	while(strspn(argv[n],"0123456789")==strlen(argv[n])) {
-	 voxelwise_ev_numbers.resize(size++,atoi(argv[n++]));      
-	 if (n>=argc) 
+	 voxelwise_ev_numbers.resize(size++,atoi(argv[n++]));
+	 if (n>=argc)
 	   throw Exception("Not enough arguments for -ven option");
       }
     } else if ( arg == "-vef" ) {
       n++;
       if (n+(signed)voxelwise_ev_numbers.size()>=argc)
 	throw Exception("Not enough arguments for -ven option");
-      voxelwiseEvFilenames.resize(voxelwise_ev_numbers.size()); 
+      voxelwiseEvFilenames.resize(voxelwise_ev_numbers.size());
       for (int i=0;i<(int)voxelwise_ev_numbers.size();i++)
 	voxelwiseEvFilenames[i]=argv[n++];
     } else if ( arg == "-rn" ) {
-      gopt->datadir = argv[n+1];      
+      gopt->datadir = argv[n+1];
       n+=2;
     } else if ( arg == "-tukey" ) {
       gopt->tukeysize = atoi(argv[n+1]);
@@ -196,7 +196,7 @@ void FilmGlsOptions::parse_command_line(int argc, char** argv, Log& logger)
       n+=2;
     }
     else if ( arg == "-epith" ) {
-      gopt->epith = atoi(argv[n+1]);      
+      gopt->epith = atoi(argv[n+1]);
       n+=2;
     } else throw Exception(("Unrecognised option "+arg).c_str());
   }  // while (n<argc)
@@ -226,21 +226,21 @@ void FilmGlsOptions::print_usage(int argc, char *argv[])
        << "        -ms <num>                          (susan mask size)\n"
        << "        -epith <num>                       (set susan brightness threshold - otherwise it is estimated)\n"
        << "        -v                                 (outputs full data)\n"
-       << "        -ven                               ( List of numbers indicating voxelwise EVs position in the design matrix, list corresponds in order to files in -vef. caution BETA option)\n" 
-       << "        -vef                               ( List of 4D niftii files containing voxelwise EVs, list corresponds in order to numbers in -ven. caution BETA option)\n" 
-       << "        -ac                                (perform autocorrelation estimation only)" 
-       << "        -ar                                (fits autoregressive model - default " 
+       << "        -ven                               ( List of numbers indicating voxelwise EVs position in the design matrix, list corresponds in order to files in -vef. caution BETA option)\n"
+       << "        -vef                               ( List of 4D niftii files containing voxelwise EVs, list corresponds in order to numbers in -ven. caution BETA option)\n"
+       << "        -ac                                (perform autocorrelation estimation only)"
+       << "        -ar                                (fits autoregressive model - default "
        << "is to use tukey with M=sqrt(numvols))\n"
        << "        -tukey <num>                       (uses tukey window to estimate autocorr with window size num - default "
        << "is to use tukey with M=sqrt(numvols))\n"
-       << "        -mt <num>                          (uses multitapering with slepian tapers and num is the time-bandwidth product - default " 
+       << "        -mt <num>                          (uses multitapering with slepian tapers and num is the time-bandwidth product - default "
        << "is to use tukey with M=sqrt(numvols))\n"
-       << "        -pava                              (estimates autocorr using PAVA - default " 
+       << "        -pava                              (estimates autocorr using PAVA - default "
        << "is to use tukey with M=sqrt(numvols))\n"
        << "        -noest                             (do not estimate auto corrs)\n"
        << "        -mf <file>                         (re-estimate mean_func baseline - for use with perfusion subtraction)\n"
        << "        -mft <file>                        (minimum timepoint file)\n"
-       << "        -output_pwdata                     (output prewhitened data and average design matrix)\n" 
+       << "        -output_pwdata                     (output prewhitened data and average design matrix)\n"
        << "        -rn <dir>                          (directory name to store results in, default is "
        << gopt->datadir << ")\n"
        << "        -help\n\n";

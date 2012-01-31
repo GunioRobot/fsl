@@ -111,7 +111,7 @@ test winWm-2.2 {TkpWmSetState} {pcOnly} {
     update
     lappend result [wm state .t]
     wm deiconify .t
-    update 
+    update
     lappend result [wm state .t]
     destroy .t
     set result
@@ -128,7 +128,7 @@ test winWm-2.2 {TkpWmSetState} {pcOnly} {
     update
     lappend result [wm state .t]
     wm state .t normal
-    update 
+    update
     lappend result [wm state .t]
     destroy .t
     set result

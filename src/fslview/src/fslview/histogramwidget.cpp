@@ -30,7 +30,7 @@ class QWT_EXPORT QwtStdVectorData: public QwtData
 public:
     /*!
       Constructor
-      
+
       \sa QwtCurve::setData and QwtPlot::setCurveData.
      */
     QwtStdVectorData(const std::vector<double> &x,
@@ -70,24 +70,24 @@ QwtStdVectorData& QwtStdVectorData::operator=(const QwtStdVectorData &data)
     return *this;
 }
 
-size_t QwtStdVectorData::size() const 
-{ 
-    return QMIN(d_x.size(), d_y.size()); 
+size_t QwtStdVectorData::size() const
+{
+    return QMIN(d_x.size(), d_y.size());
 }
 
-double QwtStdVectorData::x(size_t i) const 
-{ 
-    return d_x[int(i)]; 
+double QwtStdVectorData::x(size_t i) const
+{
+    return d_x[int(i)];
 }
 
-double QwtStdVectorData::y(size_t i) const 
-{ 
-    return d_y[int(i)]; 
+double QwtStdVectorData::y(size_t i) const
+{
+    return d_y[int(i)];
 }
 
-QwtData *QwtStdVectorData::copy() const 
-{ 
-    return new QwtStdVectorData(d_x, d_y); 
+QwtData *QwtStdVectorData::copy() const
+{
+    return new QwtStdVectorData(d_x, d_y);
 }
 
 /*!
@@ -132,7 +132,7 @@ void QwtStdVectorData::initCache()
         if ( yv > maxY )
             maxY = yv;
     }
-    
+
     d_cache.setRect(minX, maxX, minY, maxY);
 }
 #endif
@@ -161,30 +161,30 @@ public:
  * @param binSize     The calculated size for each bin
  * @param isInteger   Set to true if you want only integer binning
  */
-unsigned int AutoBin(double min, 
-		     double max, 
-		     double &adjustedMin, 
-		     double &adjustedMax, 
+unsigned int AutoBin(double min,
+		     double max,
+		     double &adjustedMin,
+		     double &adjustedMax,
 		     double &binSize,
 		     bool   isInteger)
 {
   double range(max - min);
-  
+
   //
   // Find a natural bin size by rounding log10 of the range.
-  // 
+  //
   binSize = pow(10, int(ceil(log10(range) - 1) - 1));
 
   //
   // Half the bin size if there's going to be less than 100 bins.
-  // 
+  //
   float nbins(range / binSize);
   while( nbins < 100.0 )  { binSize /= 2.0; nbins = range / binSize; }
 
-  // 
+  //
   // We don't want to use fractional binSizes unless absolutely
   // necessary so clamp the size for indicated integer images.
-  // 
+  //
   if( isInteger ) binSize = std::max(1.0, ceil(binSize));
 
   adjustedMin = floor(min / binSize) * binSize;
@@ -250,7 +250,7 @@ public:
     unsigned int bins(0U);
 
     if(!m_options.inqIntensityRange()) {
-      bins = AutoBin(m_volume->inqMin(), m_volume->inqMax(), 
+      bins = AutoBin(m_volume->inqMin(), m_volume->inqMax(),
 		     m_adjustedMin, m_adjustedMax, m_delta, m_isIntegerData);
     } else {
       bins = AutoBin(m_options.inqMin(), m_options.inqMax(),
@@ -337,12 +337,12 @@ private:
 class Plot: public QwtPlot
 {
 public:
-  Plot(QWidget *parent, const QString& title): 
-    QwtPlot(parent), 
+  Plot(QWidget *parent, const QString& title):
+    QwtPlot(parent),
     m_curve(0)
   {
     setTitle(title);
-    
+
     setAxisTitle(xBottom, "Intensity");
     setAxisTitle(yLeft,   "#voxels");
 
@@ -388,17 +388,17 @@ public:
 private:
   long m_curve;
 };
- 
+
 #include "histogramtoolbar.h"
 
-/** 
+/**
  * Constructor
- * 
+ *
  * @param parent Parent widget.
  * @param vol The volume to be analysed.
  * @param isInteger If set the binning will use integer bins sizes.
  */
-HistogramWidget::HistogramWidget(QWidget *parent, Volume::Handle vol, const std::string& name, unsigned int n, bool isInteger): 
+HistogramWidget::HistogramWidget(QWidget *parent, Volume::Handle vol, const std::string& name, unsigned int n, bool isInteger):
   ViewWidget(parent), m_zoom(false)
 {
   QString title = QString("Histogram of %1 volume %2").arg(name.c_str()).arg(n);
@@ -416,7 +416,7 @@ HistogramWidget::HistogramWidget(QWidget *parent, Volume::Handle vol, const std:
   QToolBar *t = new QToolBar(this);
   HistogramToolbar *ht = new HistogramToolbar(t);
 
-  addToolBar(t, Top, FALSE);  
+  addToolBar(t, Top, FALSE);
 
   statusBar()->addWidget(new QLabel(statusBar()), 1, FALSE);
 
@@ -431,7 +431,7 @@ HistogramWidget::HistogramWidget(QWidget *parent, Volume::Handle vol, const std:
 	  SLOT(plotMouseReleased(const QMouseEvent&)));
 }
 
-HistogramWidget::~HistogramWidget() { delete m_histogram; } 
+HistogramWidget::~HistogramWidget() { delete m_histogram; }
 
 void HistogramWidget::showInfo(QString text)
 {
@@ -477,13 +477,13 @@ void HistogramWidget::toggleZoom(bool on)
       m_graphWidget->replot();
       m_zoom = false;
     }
-  
+
 //   if (m_zoom)
 //     showInfo(zoomInfo);
 //   else
 //     showInfo(cursorInfo);
 }
-  
+
 void HistogramWidget::plotMousePressed(const QMouseEvent &e)
 {
   m_p1 = e.pos();
@@ -494,7 +494,7 @@ void HistogramWidget::plotMousePressed(const QMouseEvent &e)
     {
       m_graphWidget->enableOutline(true);
       m_graphWidget->setOutlineStyle(Qwt::Rect);
-    } 
+    }
   else
     m_graphWidget->enableOutline(false);
 }
@@ -503,14 +503,14 @@ void HistogramWidget::plotMouseMoved(const QMouseEvent &e)
 {
   QString info;
   float x = m_graphWidget->invTransform(QwtPlot::xBottom, e.pos().x());
-  
+
   if(!m_zoom)
-    {  
+    {
       info.sprintf("Intensity %g #voxels %g",  m_histogram->inqXValue(x), m_histogram->inqYValue(x));
       m_graphWidget->showMarker(m_histogram->inqXValue(x), m_histogram->inqYValue(x));
       showInfo(info);
     }
-  
+
 }
 
 void HistogramWidget::plotMouseReleased(const QMouseEvent &e)
@@ -524,7 +524,7 @@ void HistogramWidget::plotMouseReleased(const QMouseEvent &e)
       int x2 = std::max(m_p1.x(), e.pos().x());
       int y1 = std::min(m_p1.y(), e.pos().y());
       int y2 = std::max(m_p1.y(), e.pos().y());
-        
+
       // limit selected area to a minimum of 11x11 points
       int lim = 5 - (y2 - y1) / 2;
       if (lim > 0)
@@ -540,12 +540,12 @@ void HistogramWidget::plotMouseReleased(const QMouseEvent &e)
         }
 
       // Set fixed scales
-      m_graphWidget->setAxisScale(axl, m_graphWidget->invTransform(axl,y1), 
+      m_graphWidget->setAxisScale(axl, m_graphWidget->invTransform(axl,y1),
 				  m_graphWidget->invTransform(axl,y2));
-      m_graphWidget->setAxisScale(axb, m_graphWidget->invTransform(axb,x1), 
+      m_graphWidget->setAxisScale(axb, m_graphWidget->invTransform(axb,x1),
 				  m_graphWidget->invTransform(axb,x2));
       m_graphWidget->replot();
-        
+
       m_graphWidget->setOutlineStyle(Qwt::Triangle);
 
       m_zoom = false;

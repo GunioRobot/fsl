@@ -1,7 +1,7 @@
 /*=============================================================================
     Boost.Wave: A Standard compliant C++ preprocessor library
     Definition of the preprocessor context
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -37,10 +37,10 @@ namespace boost {
 namespace wave {
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 //  The C preprocessor context template class
 //
-//      The boost::wave::context template is the main interface class to 
+//      The boost::wave::context template is the main interface class to
 //      control the behaviour of the preprocessing engine.
 //
 //      The following template parameters has to be supplied:
@@ -48,8 +48,8 @@ namespace wave {
 //      IteratorT       The iterator type of the underlying input stream
 //      LexIteratorT    The lexer iterator type to use as the token factory
 //      InputPolicyT    The input policy type to use for loading the files
-//                      to be included. This template parameter is optional and 
-//                      defaults to the 
+//                      to be included. This template parameter is optional and
+//                      defaults to the
 //                          iteration_context_policies::load_file_to_string
 //                      type
 //      TraceT          The trace policy to use for trace and include file
@@ -59,7 +59,7 @@ namespace wave {
 
 template <
     typename IteratorT,
-    typename LexIteratorT, 
+    typename LexIteratorT,
     typename InputPolicyT = iteration_context_policies::load_file_to_string,
     typename TraceT = context_policies::default_preprocessing_hooks
 >
@@ -70,45 +70,45 @@ public:
 // concept checks
 // the given iterator shall be at least a forward iterator type
     BOOST_CLASS_REQUIRE(IteratorT, boost, ForwardIteratorConcept);
-    
+
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
-    typedef context<IteratorT, LexIteratorT, InputPolicyT, TraceT> 
+    typedef context<IteratorT, LexIteratorT, InputPolicyT, TraceT>
         self_type;
-    
+
     typedef IteratorT                               target_iterator_type;
     typedef LexIteratorT                            lexer_type;
     typedef pp_iterator<self_type>                  iterator_type;
 
     typedef InputPolicyT                            input_policy_type;
     typedef typename token_type::position_type      position_type;
-        
+
 // type of a token sequence
-    typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
+    typedef std::list<token_type, boost::fast_pool_allocator<token_type> >
         token_sequence_type;
 
 // types of the policies
     typedef TraceT                                  trace_policy_type;
-    
+
 private:
-// stack of shared_ptr's to the pending iteration contexts 
-    typedef boost::shared_ptr<base_iteration_context<lexer_type> > 
+// stack of shared_ptr's to the pending iteration contexts
+    typedef boost::shared_ptr<base_iteration_context<lexer_type> >
         iteration_ptr_type;
-    typedef boost::wave::util::iteration_context_stack<iteration_ptr_type> 
+    typedef boost::wave::util::iteration_context_stack<iteration_ptr_type>
             iteration_context_stack_type;
     typedef typename iteration_context_stack_type::size_type iter_size_type;
 
 // the context object should not be copied around
     context(context const& rhs);
     context& operator= (context const& rhs);
-    
+
 public:
-    context(target_iterator_type const &first_, target_iterator_type const &last_, 
+    context(target_iterator_type const &first_, target_iterator_type const &last_,
             char const *fname = "<Unknown>", TraceT const &trace_ = TraceT())
     :   first(first_), last(last_), filename(fname)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
-#endif 
+#endif
         , macros(*this), language(boost::wave::support_cpp), trace(trace_)
     {
         macros.init_predefined_macros(fname);
@@ -116,13 +116,13 @@ public:
     }
 
 // iterator interface
-    iterator_type begin() 
-    { 
+    iterator_type begin()
+    {
         includes.set_current_directory(filename.c_str());
         return iterator_type(*this, first, last, position_type(filename.c_str()),
-            get_language()); 
+            get_language());
     }
-    iterator_type end() const 
+    iterator_type end() const
         { return iterator_type(); }
 
 // maintain include paths
@@ -131,50 +131,50 @@ public:
     bool add_sysinclude_path(char const *path_)
         { return includes.add_include_path(path_, true);}
     void set_sysinclude_delimiter() { includes.set_sys_include_delimiter(); }
-    typename iteration_context_stack_type::size_type get_iteration_depth() const 
+    typename iteration_context_stack_type::size_type get_iteration_depth() const
         { return iter_ctxs.size(); }
 
 // maintain defined macros
 #if BOOST_WAVE_ENABLE_COMMANDLINE_MACROS != 0
-    bool add_macro_definition(std::string macrostring, 
+    bool add_macro_definition(std::string macrostring,
             bool is_predefined = false)
-        { return boost::wave::util::add_macro_definition(*this, macrostring, 
+        { return boost::wave::util::add_macro_definition(*this, macrostring,
             is_predefined, get_language()); }
-#endif 
+#endif
     bool add_macro_definition(token_type const &name, bool has_params,
             std::vector<token_type> &parameters, token_sequence_type &definition,
             bool is_predefined = false)
-        { return macros.add_macro(name, has_params, parameters, definition, 
+        { return macros.add_macro(name, has_params, parameters, definition,
             is_predefined); }
     template <typename IteratorT2>
-    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
+    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end)
         { return macros.is_defined(begin, end); }
-    bool remove_macro_definition(typename token_type::string_type const &name, 
+    bool remove_macro_definition(typename token_type::string_type const &name,
             bool even_predefined = false)
-        { 
+        {
             return macros.remove_macro(
-                token_type(T_IDENTIFIER, name, macros.get_main_pos()), 
-                even_predefined); 
+                token_type(T_IDENTIFIER, name, macros.get_main_pos()),
+                even_predefined);
         }
-    bool remove_macro_definition(token_type const &token, 
+    bool remove_macro_definition(token_type const &token,
             bool even_predefined = false)
         { return macros.remove_macro(token, even_predefined); }
-    void reset_macro_definitions() 
+    void reset_macro_definitions()
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
-// get the pp-iterator version information 
-    static std::string get_version()  
+// get the pp-iterator version information
+    static std::string get_version()
         { return boost::wave::util::predefined_macros::get_fullversion(false); }
-    static std::string get_version_string()  
+    static std::string get_version_string()
         { return boost::wave::util::predefined_macros::get_versionstr(false); }
 
-    void set_language(boost::wave::language_support language_) 
-    { 
-        language = language_; 
+    void set_language(boost::wave::language_support language_)
+    {
+        language = language_;
         reset_macro_definitions();
     }
     boost::wave::language_support get_language() const { return language; }
-        
+
 // change and ask for maximal possible include nesting depth
     void set_max_include_nesting_depth(iter_size_type new_depth)
         { iter_ctxs.set_max_include_nesting_depth(new_depth); }
@@ -182,7 +182,7 @@ public:
         { return iter_ctxs.get_max_include_nesting_depth(); }
 
 // access the trace policy
-    trace_policy_type &get_trace_policy() 
+    trace_policy_type &get_trace_policy()
         { return trace; }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
@@ -192,23 +192,23 @@ protected:
     friend class boost::wave::impl::pp_iterator_functor<
         boost::wave::context<IteratorT, lexer_type, InputPolicyT, TraceT> >;
 #endif
-    
+
 // maintain include paths (helper functions)
-    bool find_include_file (std::string &s, std::string &d, bool is_system, 
+    bool find_include_file (std::string &s, std::string &d, bool is_system,
         char const *current_file) const
     { return includes.find_include_file(s, d, is_system, current_file); }
-    void set_current_directory(char const *path_) 
+    void set_current_directory(char const *path_)
         { includes.set_current_directory(path_); }
-    
+
 // conditional compilation contexts
     bool get_if_block_status() const { return ifblocks.get_status(); }
-    void enter_if_block(bool new_status) 
+    void enter_if_block(bool new_status)
         { ifblocks.enter_if_block(new_status); }
-    bool enter_elif_block(bool new_status) 
+    bool enter_elif_block(bool new_status)
         { return ifblocks.enter_elif_block(new_status); }
     bool enter_else_block() { return ifblocks.enter_else_block(); }
     bool exit_if_block() { return ifblocks.exit_if_block(); }
-    typename boost::wave::util::if_block_stack::size_type get_if_block_depth() const 
+    typename boost::wave::util::if_block_stack::size_type get_if_block_depth() const
         { return ifblocks.get_if_block_depth(); }
 
 // stack of iteration contexts
@@ -218,32 +218,32 @@ protected:
         { iter_ctxs.push(act_pos, iter_ctx); }
 
     position_type &get_main_pos() { return macros.get_main_pos(); }
-    
+
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  expand_tokensequence(): 
-//      expands all macros contained in a given token sequence, handles '##' 
-//      and '#' pp operators and re-scans the resulting sequence 
+//  expand_tokensequence():
+//      expands all macros contained in a given token sequence, handles '##'
+//      and '#' pp operators and re-scans the resulting sequence
 //      (essentially preprocesses the token sequence).
 //
 //      The expand_undefined parameter is true during macro expansion inside
-//      a C++ expression given for a #if or #elif statement. 
+//      a C++ expression given for a #if or #elif statement.
 //
 ///////////////////////////////////////////////////////////////////////////////
     template <typename IteratorT2>
-    token_type expand_tokensequence(IteratorT2 &first, IteratorT2 const &last, 
-        token_sequence_type &pending, token_sequence_type &expanded, 
+    token_type expand_tokensequence(IteratorT2 &first, IteratorT2 const &last,
+        token_sequence_type &pending, token_sequence_type &expanded,
         bool expand_undefined = false)
     {
-        return macros.expand_tokensequence(first, last, pending, expanded, 
+        return macros.expand_tokensequence(first, last, pending, expanded,
             expand_undefined);
     }
 
     template <typename IteratorT2>
-    void expand_whole_tokensequence(IteratorT2 &first, IteratorT2 const &last, 
+    void expand_whole_tokensequence(IteratorT2 &first, IteratorT2 const &last,
         token_sequence_type &expanded, bool expand_undefined = true)
     {
-        macros.expand_whole_tokensequence(expanded, first, last, 
+        macros.expand_whole_tokensequence(expanded, first, last,
             expand_undefined);
 
     // remove any contained placeholder
@@ -256,37 +256,37 @@ public:
 // maintain the real name of the current preprocessed file
     void set_current_filename(char const *real_name)
         { current_filename = real_name; }
-    std::string const &get_current_filename() const 
+    std::string const &get_current_filename() const
         { return current_filename; }
 
-// maintain the list of known headers containing #pragma once 
+// maintain the list of known headers containing #pragma once
     bool has_pragma_once(std::string const &filename)
         { return includes.has_pragma_once(filename); }
     bool add_pragma_once_header(std::string const &filename)
         { return includes.add_pragma_once_header(filename); }
-#endif 
+#endif
 
-// forwarding functions for the context policy hooks    
+// forwarding functions for the context policy hooks
     template <typename ContainerT>
-    bool interpret_pragma(ContainerT &pending, token_type const &option, 
+    bool interpret_pragma(ContainerT &pending, token_type const &option,
         ContainerT const &values, token_type const &act_token)
     {
-        return trace.interpret_pragma(*this, pending, option, values, 
+        return trace.interpret_pragma(*this, pending, option, values,
             act_token);
     }
     template <typename ParametersT, typename DefinitionT>
-    void defined_macro(token_type const &name, bool is_functionlike, 
-        ParametersT const &parameters, DefinitionT const &definition, 
+    void defined_macro(token_type const &name, bool is_functionlike,
+        ParametersT const &parameters, DefinitionT const &definition,
         bool is_predefined)
     {
-        trace.defined_macro(name, is_functionlike, parameters, definition, 
+        trace.defined_macro(name, is_functionlike, parameters, definition,
             is_predefined);
     }
     void undefined_macro(token_type const &token)
     {
         trace.undefined_macro(token);
     }
-    
+
 private:
 // the main input stream
     target_iterator_type first;         // underlying input stream
@@ -294,8 +294,8 @@ private:
     std::string filename;               // associated main filename
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     std::string current_filename;       // real name of current preprocessed file
-#endif 
-    
+#endif
+
     boost::wave::util::if_block_stack ifblocks;   // conditional compilation contexts
     boost::wave::util::include_paths includes;    // lists of include directories to search
     iteration_context_stack_type iter_ctxs;       // iteration contexts

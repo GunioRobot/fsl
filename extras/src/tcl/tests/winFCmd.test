@@ -136,7 +136,7 @@ test winFCmd-1.2 {TclpRenameFile: errno: EEXIST} {pcOnly} {
     file mkdir td1/td2/td3
     file mkdir td2
     list [catch {testfile mv td2 td1/td2} msg] $msg
-} {1 EEXIST} 
+} {1 EEXIST}
 test winFCmd-1.3 {TclpRenameFile: errno: EINVAL} {pcOnly} {
     cleanup
     list [catch {testfile mv / td1} msg] $msg
@@ -220,11 +220,11 @@ test winFCmd-1.16 {TclpRenameFile: MoveFile() != FALSE} {pcOnly} {
 test winFCmd-1.17 {TclpRenameFile: MoveFile() == FALSE} {pcOnly} {
     cleanup
     list [catch {testfile mv tf1 tf2} msg] $msg
-} {1 ENOENT} 
+} {1 ENOENT}
 test winFCmd-1.18 {TclpRenameFile: srcAttr == -1} {pcOnly} {
     cleanup
     list [catch {testfile mv tf1 tf2} msg] $msg
-} {1 ENOENT} 
+} {1 ENOENT}
 test winFCmd-1.19 {TclpRenameFile: errno == EACCES} {pcOnly win2000orXP} {
     cleanup
     list [catch {testfile mv nul tf1} msg] $msg
@@ -234,7 +234,7 @@ test winFCmd-1.19.1 {TclpRenameFile: errno == EACCES} {pcOnly winOlderThan2000} 
     list [catch {testfile mv nul tf1} msg] $msg
 } {1 EACCES}
 test winFCmd-1.20 {TclpRenameFile: src is dir} {pcOnly nt} {
-    # under 95, this would actually succeed and move the current dir out from 
+    # under 95, this would actually succeed and move the current dir out from
     # under the current process!
     cleanup
     file delete /tf1
@@ -262,7 +262,7 @@ test winFCmd-1.25 {TclpRenameFile: cross file systems} {pcOnly cdrom} {
     cleanup
     file mkdir td1
     list [catch {testfile mv td1 $cdrom/td1} msg] $msg
-} {1 EXDEV} 
+} {1 EXDEV}
 test winFCmd-1.26 {TclpRenameFile: readonly fs} {pcOnly cdrom} {
     cleanup
     list [catch {testfile mv $cdfile $cdrom/dummy~~.fil} msg] $msg
@@ -273,7 +273,7 @@ test winFCmd-1.27 {TclpRenameFile: open file} {pcOnly} {
     set msg [list [catch {testfile mv tf1 tf2} msg] $msg]
     close $fd
     set msg
-} {1 EACCES}    
+} {1 EACCES}
 test winFCmd-1.28 {TclpRenameFile: errno == EEXIST} {pcOnly} {
     cleanup
     createfile tf1
@@ -286,7 +286,7 @@ test winFCmd-1.29 {TclpRenameFile: src is dir} {pcOnly} {
     file mkdir td1
     createfile tf1
     list [catch {testfile mv td1 tf1} msg] $msg
-} {1 ENOTDIR} 
+} {1 ENOTDIR}
 test winFCmd-1.30 {TclpRenameFile: dst is dir} {pcOnly} {
     cleanup
     file mkdir td1
@@ -334,7 +334,7 @@ test winFCmd-1.36 {TclpRenameFile: src and dst not dir} {pcOnly} {
     contents tf2
 } {tf1}
 test winFCmd-1.37 {TclpRenameFile: need to restore temp file} {pcOnly} {
-    # Can't figure out how to cause this. 
+    # Can't figure out how to cause this.
     # Need a file that can't be copied.
 } {}
 
@@ -411,7 +411,7 @@ test winFCmd-2.13 {TclpCopyFile: CopyFile fails} {pcOnly} {
     createfile tf1
     file mkdir td1
     list [catch {testfile cp tf1 td1} msg] $msg
-} {1 EISDIR} 
+} {1 EISDIR}
 test winFCmd-2.14 {TclpCopyFile: errno == EACCES} {pcOnly} {
     cleanup
     file mkdir td1
@@ -445,7 +445,7 @@ test winFCmd-2.18 {TclpCopyFile: still can't copy onto dst} {pcOnly 95} {
     set msg [list [catch {testfile cp tf1 tf2} msg] $msg]
     close $fd
     set msg "$msg [file writable tf2]"
-} {1 EACCES 0}    
+} {1 EACCES 0}
 
 test winFCmd-3.1 {TclpDeleteFile: errno: EACCES} {pcOnly cdrom} {
     list [catch {testfile rm $cdfile $cdrom/dummy~~.fil} msg] $msg
@@ -454,7 +454,7 @@ test winFCmd-3.2 {TclpDeleteFile: errno: EISDIR} {pcOnly} {
     cleanup
     file mkdir td1
     list [catch {testfile rm td1} msg] $msg
-} {1 EISDIR} 
+} {1 EISDIR}
 test winFCmd-3.3 {TclpDeleteFile: errno: ENOENT} {pcOnly} {
     cleanup
     list [catch {testfile rm tf1} msg] $msg
@@ -673,7 +673,7 @@ test winFCmd-7.7 {TraverseWinTree: append \ to source if necessary} {pcOnly} {
     createfile td1/tf1 tf1
     testfile cpdir td1 td2
     contents td2/tf1
-} {tf1}    
+} {tf1}
 test winFCmd-7.8 {TraverseWinTree: append \ to source if necessary} {pcOnly 95 cdrom} {
     # cdrom can return either d:\ or D:/, but we only care about the errcode
     list [catch {testfile rmdir $cdrom/} msg] [lindex $msg 1]
@@ -706,7 +706,7 @@ test winFCmd-7.13 {TraverseWinTree: append \ to target if necessary} {pcOnly} {
     createfile td1/tf1 tf1
     testfile cpdir td1 td2
     contents td2/tf1
-} {tf1}    
+} {tf1}
 test winFCmd-7.14 {TraverseWinTree: append \ to target if necessary} {pcOnly 95} {
     cleanup
     file mkdir td1
@@ -842,9 +842,9 @@ test winFCmd-11.5 {GetWinFileAttributes} {pcOnly} {
 
     set old [pwd]
     cd c:/
-    file attr c:	    
+    file attr c:
     file attr c:.
-    file attr . 
+    file attr .
     cd $old
 } {}
 test winFCmd-11.6 {GetWinFileAttributes} {pcOnly} {

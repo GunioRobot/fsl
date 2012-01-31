@@ -2,10 +2,10 @@
 #define DATE_TIME_GREG_YMD_HPP__
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland 
+ * Author: Jeff Garland
  * $Date: 2007/06/12 15:03:23 $
  */
 
@@ -17,17 +17,17 @@
 
 namespace boost {
 namespace gregorian {
-  
-  typedef date_time::year_month_day_base<greg_year, 
-                                         greg_month, 
+
+  typedef date_time::year_month_day_base<greg_year,
+                                         greg_month,
                                          greg_day> greg_year_month_day;
-  
-  
-  
+
+
+
 } } //namespace gregorian
 
 
 
 
 #endif
-  
+

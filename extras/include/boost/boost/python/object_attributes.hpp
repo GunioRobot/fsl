@@ -18,7 +18,7 @@ struct const_attribute_policies
     typedef char const* key_type;
     static object get(object const& target, char const* key);
 };
-  
+
 struct attribute_policies : const_attribute_policies
 {
     static object const& set(object const& target, char const* key, object const& value);

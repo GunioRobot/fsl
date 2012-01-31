@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_archive.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -72,9 +72,9 @@ struct class_name_type : private boost::noncopyable {
     operator char * () {
         return t;
     }
-    explicit class_name_type(const char *key_) 
+    explicit class_name_type(const char *key_)
     : t(const_cast<char *>(key_)){}
-    explicit class_name_type(char *key_) 
+    explicit class_name_type(char *key_)
     : t(key_){}
     class_name_type & operator=(const class_name_type & rhs){
         t = rhs.t;

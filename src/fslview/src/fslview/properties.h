@@ -8,7 +8,7 @@ public:
   typedef boost::shared_ptr< Properties > Handle;
 
   ~Properties();
-  
+
   bool inqAskCreate4dMask() const;
   bool inqCreate4dMask() const;
   void setAskCreate4dMask(bool);
@@ -18,7 +18,7 @@ public:
 private:
   Properties();
 
-  struct Implementation;  
+  struct Implementation;
   const std::auto_ptr< Implementation > m_impl;
 };
 

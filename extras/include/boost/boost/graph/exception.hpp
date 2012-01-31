@@ -22,7 +22,7 @@ namespace boost {
 
   struct not_a_dag : public bad_graph {
     not_a_dag()
-        : bad_graph("The graph must be a DAG.") { } 
+        : bad_graph("The graph must be a DAG.") { }
   };
 
   struct negative_edge : public bad_graph {

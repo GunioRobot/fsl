@@ -30,13 +30,13 @@ namespace detail
   {
       // For a while, this wasn't true, but we rely on it below. This is a regression assert.
       BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
-      
+
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-      
+
       BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<T>::is_specialized);
-      
+
 # else
-      
+
 #  if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
       BOOST_STATIC_CONSTANT(
           bool, value = (
@@ -46,7 +46,7 @@ namespace detail
 #  else
     BOOST_STATIC_CONSTANT(bool, value = ::boost::is_arithmetic<T>::value);
 #  endif
-      
+
 # endif
   };
 
@@ -59,7 +59,7 @@ namespace detail
   template <>
   struct is_numeric< ::boost::long_long_type>
     : mpl::true_ {};
-  
+
   template <>
   struct is_numeric< ::boost::ulong_long_type>
     : mpl::true_ {};
@@ -69,7 +69,7 @@ namespace detail
   template <>
   struct is_numeric<wchar_t>
     : mpl::true_ {};
-  
+
   template <class T>
   struct numeric_difference
   {
@@ -77,7 +77,7 @@ namespace detail
   };
 
   BOOST_STATIC_ASSERT(is_numeric<int>::value);
-  
+
   template <class Incrementable, class CategoryOrTraversal, class Difference>
   struct counting_iterator_base
   {
@@ -89,7 +89,7 @@ namespace detail
             , iterator_traversal<Incrementable>
           >
       >::type traversal;
-      
+
       typedef typename detail::ia_dflt_help<
           Difference
         , mpl::eval_if<
@@ -98,7 +98,7 @@ namespace detail
             , iterator_difference<Incrementable>
           >
       >::type difference;
-      
+
       typedef iterator_adaptor<
           counting_iterator<Incrementable, CategoryOrTraversal, Difference> // self
         , Incrementable                                           // Base
@@ -106,7 +106,7 @@ namespace detail
 # ifndef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
           const  // MSVC won't strip this.  Instead we enable Thomas'
                  // criterion (see boost/iterator/detail/facade_iterator_category.hpp)
-# endif 
+# endif
         , traversal
         , Incrementable const&                                    // reference
         , difference
@@ -154,14 +154,14 @@ class counting_iterator
     typedef typename detail::counting_iterator_base<
         Incrementable, CategoryOrTraversal, Difference
     >::type super_t;
-    
+
     friend class iterator_core_access;
 
  public:
     typedef typename super_t::difference_type difference_type;
 
     counting_iterator() { }
-    
+
     counting_iterator(counting_iterator const& rhs) : super_t(rhs.base()) {}
 
     counting_iterator(Incrementable x)
@@ -177,10 +177,10 @@ class counting_iterator
     )
       : super_t(t.base())
     {}
-# endif 
+# endif
 
  private:
-    
+
     typename super_t::reference dereference() const
     {
         return this->base_reference();

@@ -1,6 +1,6 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
-    Authors:    David Flitney 
+    Authors:    David Flitney
 
     FMRIB Image Analysis Group
 
@@ -23,7 +23,7 @@ struct MeshOptionsDialog::Implementation
 {
   Implementation(): m_selectedMesh(0) { TRACKER("MeshOptionsDialog::Implementation"); }
   ~Implementation() { TRACKER("MeshOptionsDialog::~Implementation"); CHECKPOINT(); }
-  
+
   vector<VTKMeshSurface::Handle> m_meshes;
   unsigned int m_selectedMesh;
 };

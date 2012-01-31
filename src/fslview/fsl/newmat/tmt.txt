@@ -4,79 +4,79 @@ Now print a real number: 3.14159
 
 Matrix type: Rect  (1, 8)
 
-0	0	0	0	0	0	0	1	
+0	0	0	0	0	0	0	1
 
-+     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT    
-LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT    
-Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Sym   Rect  Rect  Rect  Sym   Sym   Rect  Rect  Rect  Sym   Sym   
-Diag  UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag  
-Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band  
-UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd 
-LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd 
-SmBnd Rect  Rect  Rect  Sym   SmBnd Band  Band  Band  SmBnd SmBnd 
-Ident UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
++     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT
+LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT
+Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Sym   Rect  Rect  Rect  Sym   Sym   Rect  Rect  Rect  Sym   Sym
+Diag  UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag
+Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band
+UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd
+LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd
+SmBnd Rect  Rect  Rect  Sym   SmBnd Band  Band  Band  SmBnd SmBnd
+Ident UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
 
-*     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT    
-LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT    
-Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Sym   Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Diag  UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Diag  
-Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band  
-UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd 
-LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd 
-SmBnd Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band  
-Ident UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Ident 
+*     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT
+LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT
+Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Sym   Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Diag  UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Diag
+Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band
+UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd
+LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd
+SmBnd Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band
+Ident UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Ident
 
-|     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-LT    Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Sym   Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Diag  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Band  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-UpBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-LwBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-SmBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Ident Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
+|     UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+LT    Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Sym   Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Diag  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Band  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+UpBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+LwBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+SmBnd Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Ident Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
 
-SP    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    UT    Diag  UT    UT    Diag  UpBnd UpBnd Diag  UpBnd Diag  
-LT    Diag  LT    LT    LT    Diag  LwBnd Diag  LwBnd LwBnd Diag  
-Rect  UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Diag  
-Sym   UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag  
-Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  
-Band  UpBnd LwBnd Band  Band  Diag  Band  UpBnd LwBnd Band  Diag  
-UpBnd UpBnd Diag  UpBnd UpBnd Diag  UpBnd UpBnd Diag  UpBnd Diag  
-LwBnd Diag  LwBnd LwBnd LwBnd Diag  LwBnd Diag  LwBnd LwBnd Diag  
-SmBnd UpBnd LwBnd Band  SmBnd Diag  Band  UpBnd LwBnd SmBnd Diag  
-Ident Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Ident 
+SP    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    UT    Diag  UT    UT    Diag  UpBnd UpBnd Diag  UpBnd Diag
+LT    Diag  LT    LT    LT    Diag  LwBnd Diag  LwBnd LwBnd Diag
+Rect  UT    LT    Rect  Rect  Diag  Band  UpBnd LwBnd Band  Diag
+Sym   UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag
+Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag
+Band  UpBnd LwBnd Band  Band  Diag  Band  UpBnd LwBnd Band  Diag
+UpBnd UpBnd Diag  UpBnd UpBnd Diag  UpBnd UpBnd Diag  UpBnd Diag
+LwBnd Diag  LwBnd LwBnd LwBnd Diag  LwBnd Diag  LwBnd LwBnd Diag
+SmBnd UpBnd LwBnd Band  SmBnd Diag  Band  UpBnd LwBnd SmBnd Diag
+Ident Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Diag  Ident
 
-KP    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT    
-LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT    
-Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  
-Sym   Rect  Rect  Rect  Sym   Sym   Rect  Rect  Rect  Sym   Sym   
-Diag  UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag  
-Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band  
-UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd 
-LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd 
-SmBnd Rect  Rect  Rect  Sym   SmBnd Band  Band  Band  SmBnd SmBnd 
-Ident UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag  
+KP    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    UT    Rect  Rect  Rect  UT    Rect  UT    Rect  Rect  UT
+LT    Rect  LT    Rect  Rect  LT    Rect  Rect  LT    Rect  LT
+Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect  Rect
+Sym   Rect  Rect  Rect  Sym   Sym   Rect  Rect  Rect  Sym   Sym
+Diag  UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag
+Band  Rect  Rect  Rect  Rect  Band  Band  Band  Band  Band  Band
+UpBnd UT    Rect  Rect  Rect  UpBnd Band  UpBnd Band  Band  UpBnd
+LwBnd Rect  LT    Rect  Rect  LwBnd Band  Band  LwBnd Band  LwBnd
+SmBnd Rect  Rect  Rect  Sym   SmBnd Band  Band  Band  SmBnd SmBnd
+Ident UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Diag
 
->=    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident 
-UT    Yes   No    Yes   No    No    No    No    No    No    No    
-LT    No    Yes   Yes   No    No    No    No    No    No    No    
-Rect  No    No    Yes   No    No    No    No    No    No    No    
-Sym   No    No    Yes   Yes   No    No    No    No    No    No    
-Diag  Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   No    
-Band  No    No    Yes   No    No    Yes   No    No    No    No    
-UpBnd Yes   No    Yes   No    No    Yes   Yes   No    No    No    
-LwBnd No    Yes   Yes   No    No    Yes   No    Yes   No    No    
-SmBnd No    No    Yes   Yes   No    Yes   No    No    Yes   No    
-Ident Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   
+>=    UT    LT    Rect  Sym   Diag  Band  UpBnd LwBnd SmBnd Ident
+UT    Yes   No    Yes   No    No    No    No    No    No    No
+LT    No    Yes   Yes   No    No    No    No    No    No    No
+Rect  No    No    Yes   No    No    No    No    No    No    No
+Sym   No    No    Yes   Yes   No    No    No    No    No    No
+Diag  Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   No
+Band  No    No    Yes   No    No    Yes   No    No    No    No
+UpBnd Yes   No    Yes   No    No    Yes   Yes   No    No    No
+LwBnd No    Yes   Yes   No    No    Yes   No    Yes   No    No
+SmBnd No    No    Yes   Yes   No    Yes   No    No    Yes   No
+Ident Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes   Yes
 
 
   * First test of Matrix package

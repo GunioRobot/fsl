@@ -25,11 +25,11 @@ Obtaining Libmoto:
 
 Installing Libmoto:
 
-	Just follow the instructions provided by the Motorola 
+	Just follow the instructions provided by the Motorola
 	README file.  You need to make sure that the Libmoto
 	library is before the ANSI and MathLib libraries in
 	link order.  Also, you will get several warnings stateing
-	that certain functions have already been defined in 
+	that certain functions have already been defined in
 	Libmoto.  (These can safely be ignored.)
 
 Finally, you can thank Kate Stewart of Motorola for twisting my

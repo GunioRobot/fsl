@@ -61,7 +61,7 @@
 #ifdef __ZTC__                          // Zortech
    #include <stdlib.h>
    #ifdef WANT_STREAM
-      #include <iostream.hpp> 
+      #include <iostream.hpp>
       #include <iomanip.hpp>
       #define flush ""                  // not defined in iomanip?
    #endif

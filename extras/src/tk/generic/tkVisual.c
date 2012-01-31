@@ -1,4 +1,4 @@
-/* 
+/*
  * tkVisual.c --
  *
  *	This file contains library procedures for allocating and
@@ -487,7 +487,7 @@ Tk_FreeColormap(display, colormap)
 	    }
 	    return;
 	}
-    } 
+    }
 }
 
 /*
@@ -537,5 +537,5 @@ Tk_PreserveColormap(display, colormap)
 	    cmapPtr->refCount += 1;
 	    return;
 	}
-    } 
+    }
 }

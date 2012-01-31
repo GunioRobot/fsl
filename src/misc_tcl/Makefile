@@ -6,7 +6,7 @@ PROJNAME = misc_tcl
 
 SCRIPTS = runfsl
 
-TCLFILES = *.tcl *xbm *.sh *.ppm *.ico 
+TCLFILES = *.tcl *xbm *.sh *.ppm *.ico
 
 all:
 	@if [ ! -d ${DESTDIR}/bin ] ; then \
@@ -18,4 +18,4 @@ all:
 	cd ${DESTDIR}/bin ; \
 	${RM} -f fsl fsl_gui ; \
 	ln -s Runtcl fsl ; \
-	ln -s Runtcl fsl_gui 
+	ln -s Runtcl fsl_gui

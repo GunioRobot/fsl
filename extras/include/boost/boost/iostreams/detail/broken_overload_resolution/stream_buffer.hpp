@@ -11,14 +11,14 @@
 
 namespace boost { namespace iostreams {
 
-template< typename T, 
-          typename Tr = 
+template< typename T,
+          typename Tr =
               BOOST_IOSTREAMS_CHAR_TRAITS(
-                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type 
+                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type
               ),
-          typename Alloc = 
+          typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type 
+                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type
               >,
           typename Mode = BOOST_DEDUCED_TYPENAME mode_of<T>::type >
 class stream_buffer
@@ -30,7 +30,7 @@ private:
             BOOST_DEDUCED_TYPENAME iostreams::category_of<T>::type, Mode
         >::value
     ));
-    typedef typename 
+    typedef typename
             detail::stream_buffer_traits<
                 T, Tr, Alloc, Mode
             >::type                           base_type;
@@ -40,11 +40,11 @@ public:
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     stream_buffer() { }
     ~stream_buffer()
-    { 
-        try { 
-            if (this->is_open() && this->auto_close()) 
-                this->close(); 
-        } catch (std::exception&) { } 
+    {
+        try {
+            if (this->is_open() && this->auto_close())
+                this->close();
+        } catch (std::exception&) { }
     }
     template<typename U0>
     stream_buffer(const U0& u0)
@@ -173,7 +173,7 @@ private:
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     void check_open()
     {
-        if (this->is_open()) 
+        if (this->is_open())
             throw BOOST_IOSTREAMS_FAILURE("already open");
     }
 };

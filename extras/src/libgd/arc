@@ -1,6 +1,6 @@
 /* s and e are integers modulo 360 (degrees), with 0 degrees
   being the rightmost extreme and degrees changing clockwise.
-  cx and cy are the center in pixels; w and h are the horizontal 
+  cx and cy are the center in pixels; w and h are the horizontal
   and vertical diameter in pixels. Nice interface, but slow, since
   I don't yet use Bresenham (I'm using an inefficient but
   simple solution with too much work going on in it; generalizing
@@ -20,10 +20,10 @@ void gdImageArc(gdImagePtr im, int cx, int cy, int w, int h, int s, int e, int c
 	}
 	for (i=s; (i <= e); i++) {
 		int x, y;
-		x = ((long)gdCosT[i % 360] * (long)w2 / 1024) + cx; 
+		x = ((long)gdCosT[i % 360] * (long)w2 / 1024) + cx;
 		y = ((long)gdSinT[i % 360] * (long)h2 / 1024) + cy;
 		if (i != s) {
-			gdImageLine(im, lx, ly, x, y, color);	
+			gdImageLine(im, lx, ly, x, y, color);
 		}
 		lx = x;
 		ly = y;

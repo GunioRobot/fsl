@@ -33,7 +33,7 @@ public:
   typedef IntType argument_type;
   typedef IntType result_type;
   random_number_generator(base_type& rng) : _rng(rng)
-  { 
+  {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
 #endif

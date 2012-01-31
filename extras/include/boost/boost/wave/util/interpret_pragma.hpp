@@ -48,45 +48,45 @@ namespace util {
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  The function interpret_pragma interprets the given token sequence as the
-//  body of a #pragma directive (or parameter to the _Pragma operator) and 
+//  body of a #pragma directive (or parameter to the _Pragma operator) and
 //  executes the actions associated with recognized Wave specific options.
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT, typename IteratorT, typename ContainerT>
-inline bool 
+inline bool
 interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
     IteratorT it, IteratorT const &end, ContainerT &pending)
 {
     typedef typename ContextT::token_type token_type;
     typedef typename token_type::string_type string_type;
-    
+
     using namespace cpplexer;
     if (T_IDENTIFIER == token_id(*it) && "wave" == (*it).get_value()) {
     //  this is a wave specific option, it should have the form:
     //      #pragma wave option(value)
     //  where '(value)' is required only for some pragma directives
-    //  all of the given #pragma operators are forwarded to the supplied 
-    //  context_policy    
+    //  all of the given #pragma operators are forwarded to the supplied
+    //  context_policy
         using namespace boost::spirit;
         token_type option;
         ContainerT values;
-        
-        if (!parse (++it, end, 
+
+        if (!parse (++it, end,
                         (   ch_p(T_IDENTIFIER)
                             [
                                 spirit_assign_actor(option)
-                            ] 
+                            ]
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
                             [
                                 spirit_assign_actor(option)
-                            ] 
-                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                            ]
+                        |   pattern_p(OperatorTokenType|AltExtTokenType,
                                 ExtTokenTypeMask)   // and, bit_and etc.
                             [
                                 spirit_assign_actor(option)
-                            ] 
+                            ]
                         )
-                    >> !(   ch_p(T_LEFTPAREN) 
+                    >> !(   ch_p(T_LEFTPAREN)
                         >>  lexeme_d[
                                 *(anychar_p[spirit_append_actor(values)] - ch_p(T_RIGHTPAREN))
                             ]
@@ -96,12 +96,12 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
         {
             return false;
         }
-    
+
     // remove the falsely matched closing parenthesis
         if (values.size() > 0) {
             if (T_RIGHTPAREN == values.back()) {
             typename ContainerT::reverse_iterator rit = values.rbegin();
-            
+
                 values.erase((++rit).base());
             }
             else {
@@ -109,11 +109,11 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                     "missing matching ')'", act_token.get_position());
             }
         }
-        
+
     // decode the option (call the context_policy hook)
-        if (!ctx.interpret_pragma(pending, option, values, act_token)) 
+        if (!ctx.interpret_pragma(pending, option, values, act_token))
         {
-        // unknown #pragma option 
+        // unknown #pragma option
         string_type option_str (option.get_value());
 
             if (values.size() > 0) {
@@ -131,7 +131,7 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
     // #pragma once
         return ctx.add_pragma_once_header(ctx.get_current_filename());
     }
-#endif 
+#endif
 
     return false;
 }

@@ -1,8 +1,8 @@
 /*=============================================================================
     Boost.Wave: A Standard compliant C++ preprocessor library
-    The definition of a default set of token identifiers and related 
+    The definition of a default set of token identifiers and related
     functions.
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -38,7 +38,7 @@ namespace wave {
 #define BASEID_FROM_TOKEN(tok)   ((tok) & ~ExtTokenTypeMask)
 
 ///////////////////////////////////////////////////////////////////////////////
-//  the token_category helps to classify the different token types 
+//  the token_category helps to classify the different token types
 enum token_category {
     IdentifierTokenType         = 0x10000000,
     ParameterTokenType          = 0x11000000,
@@ -59,7 +59,7 @@ enum token_category {
     EOFTokenType                = 0xC0000000,
     WhiteSpaceTokenType         = 0xD0000000,
     InternalTokenType           = 0xE0000000,
-    
+
     TokenTypeMask               = 0xFF000000,
     AltTokenType                = 0x00100000,
     TriGraphTokenType           = 0x00200000,
@@ -256,7 +256,7 @@ enum token_id {
     T_PP_HHEADER_NEXT   = TOKEN_FROM_ID(401, PPTokenType|AltTokenType),
     T_EOF          = TOKEN_FROM_ID(402, EOFTokenType),      // end of file reached
     T_EOI          = TOKEN_FROM_ID(403, EOFTokenType),      // end of input reached
-    
+
 // MS extensions
     T_MSEXT_INT8   = TOKEN_FROM_ID(404, KeywordTokenType),
     T_MSEXT_INT16  = TOKEN_FROM_ID(405, KeywordTokenType),
@@ -276,11 +276,11 @@ enum token_id {
 
     T_MSEXT_PP_REGION    = TOKEN_FROM_ID(419, PPTokenType),
     T_MSEXT_PP_ENDREGION = TOKEN_FROM_ID(420, PPTokenType),
-    
+
     T_LAST_TOKEN_ID,
     T_LAST_TOKEN = ID_FROM_TOKEN(T_LAST_TOKEN_ID),
-    
-// pseudo tokens to help streamlining macro replacement, these should not 
+
+// pseudo tokens to help streamlining macro replacement, these should not
 // returned from the lexer nor should these be returned from the pp-iterator
     T_NONREPLACABLE_IDENTIFIER = TOKEN_FROM_ID(T_LAST_TOKEN+1, IdentifierTokenType),
     T_PLACEHOLDER = TOKEN_FROM_ID(T_LAST_TOKEN+2, WhiteSpaceTokenType),
@@ -490,8 +490,8 @@ static char const *tok_names[] = {
     /* 418 */   "MSEXT_ASM",
     /* 419 */   "MSEXT_REGION",
     /* 420 */   "MSEXT_ENDREGION",
-    };   
-     
+    };
+
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
 
     BOOST_ASSERT(id < T_LAST_TOKEN-T_FIRST_TOKEN);
@@ -675,8 +675,8 @@ static char const *tok_names[] = {
     /* 418 */   "__asm",
     /* 419 */   "#region",
     /* 420 */   "#endregion",
-    };   
-     
+    };
+
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
 
     BOOST_ASSERT(id < T_LAST_TOKEN-T_FIRST_TOKEN);

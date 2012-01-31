@@ -28,12 +28,12 @@ typename VolumeStore<VoxelType>::Handle VolumeStore<VoxelType>::getVolume(FSLIO*
   FslSeekVolume(avw, n);
   FslReadVolumes(avw, buf, 1);
 
-  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL) 
+  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL)
     {
       for(short z = 0; z < zDim; z++)
 	for(short y = 0; y < yDim; y++)
 	  for(short x = 0; x < xDim/2; x++)
-	    std::swap(buf[((z * yDim) + y) * xDim + x], 
+	    std::swap(buf[((z * yDim) + y) * xDim + x],
 		      buf[((z * yDim) + y) * xDim + xDim - 1 - x]);
 
     }
@@ -41,7 +41,7 @@ typename VolumeStore<VoxelType>::Handle VolumeStore<VoxelType>::getVolume(FSLIO*
   Handle dst(new VolumeStore(xDim, yDim, zDim, buf));
 
   dst->m_doscaling = FslGetIntensityScaling(avw,&(dst->m_slope),&(dst->m_intercept));
-  
+
   if((max - min) != 0.0) {
     dst->setMin(min);
     dst->setMax(max);
@@ -54,22 +54,22 @@ typename VolumeStore<VoxelType>::Handle VolumeStore<VoxelType>::getVolume(FSLIO*
 template <class VoxelType>
 bool VolumeStore<VoxelType>::saveVolume(FSLIO* avw)
 {
-  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL) 
+  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL)
   {
     for(short z = 0; z < inqZ(); z++)
       for(short y = 0; y < inqY(); y++)
 	for(short x = 0; x < inqX()/2; x++)
-	  std::swap(m_buffer[((z * inqY()) + y) * inqX() + x], 
+	  std::swap(m_buffer[((z * inqY()) + y) * inqX() + x],
 		    m_buffer[((z * inqY()) + y) * inqX() + inqX() - 1 - x]);
 
   }
   return FslWriteVolumes(avw, m_buffer, 1);
-  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL) 
+  if(FslGetLeftRightOrder(avw) != FSL_RADIOLOGICAL)
   {
     for(short z = 0; z < inqZ(); z++)
       for(short y = 0; y < inqY(); y++)
 	for(short x = 0; x < inqX()/2; x++)
-	  std::swap(m_buffer[((z * inqY()) + y) * inqX() + x], 
+	  std::swap(m_buffer[((z * inqY()) + y) * inqX() + x],
 		    m_buffer[((z * inqY()) + y) * inqX() + inqX() - 1 - x]);
 
   }
@@ -88,7 +88,7 @@ template <class VoxelType>
 typename VolumeStore<VoxelType>::Handle VolumeStore<VoxelType>::clone(const Handle& src)
 {
   VoxelType* buf = new VoxelType[src->inqX() * src->inqY() * src->inqZ() * sizeof(VoxelType)];
-	
+
   // Copy src's buffer here
   Handle dst(new VolumeStore(src->inqX(), src->inqY(), src->inqZ(), buf));
 
@@ -108,7 +108,7 @@ float VolumeStore<VoxelType>::minValue() const
 {
   VoxelType min = *std::min_element(&m_buffer[0], &m_buffer[m_x * m_y * m_z]);
    // scale these values for now (want to redo this as robust in the future)
-  if (m_doscaling) 
+  if (m_doscaling)
     min = VoxelType(m_slope * min + m_intercept);
   return float(min);
 }
@@ -129,7 +129,7 @@ void VolumeStore<VoxelType>::calculateMinMax()
   m_min = *std::min_element(&m_buffer[0], &m_buffer[m_x * m_y * m_z]);
   m_max = *std::max_element(&m_buffer[0], &m_buffer[m_x * m_y * m_z]);
   // scale these values for now (want to redo this as robust in the future)
-  if (m_doscaling) { 
+  if (m_doscaling) {
     m_min = m_slope * m_min + m_intercept;
     m_max = m_slope * m_max + m_intercept;
   }
@@ -145,22 +145,22 @@ void VolumeStore<VoxelType>::calculateRobustMinMax(const bool ignoreZeros)
 
   for(unsigned int i = 0; i < n; ++i)
     data[i] = value(i);
- 
+
   std::valarray<int> histogram;
-  
-  //  find_thresholds(std::valarray<float>(data[data != float(0)]), histogram, 1000, m_min, m_max); 
+
+  //  find_thresholds(std::valarray<float>(data[data != float(0)]), histogram, 1000, m_min, m_max);
   m_min=data.min(); m_max=data.max();
 
   if(ignoreZeros)
-    find_thresholds(std::valarray<float>(data[data != float(0)]), histogram, 1000, m_min, m_max); 
+    find_thresholds(std::valarray<float>(data[data != float(0)]), histogram, 1000, m_min, m_max);
   else
-    find_thresholds(data, histogram, 1000, m_min, m_max); 
-   
-  if (m_doscaling) { 
+    find_thresholds(data, histogram, 1000, m_min, m_max);
+
+  if (m_doscaling) {
     m_min = m_slope * m_min + m_intercept;
     m_max = m_slope * m_max + m_intercept;
   }
-  
+
   if(minValue() == 0)
     m_min = 0;
   if(maxValue() == 0)
@@ -183,11 +183,11 @@ typename VolumeStore<VoxelType>::Handle VolumeStore<VoxelType>::createBlank(shor
   unsigned int height = dst->inqY();
   unsigned int depth  = dst->inqZ();
 
-  for(unsigned int zl = 0; zl< depth; ++zl)  
+  for(unsigned int zl = 0; zl< depth; ++zl)
     {
       for(unsigned int yl = 0; yl < height; ++yl)
-        {            
-        for(unsigned int xl = 0; xl < width; ++xl) 
+        {
+        for(unsigned int xl = 0; xl < width; ++xl)
           {
             (*dst)(xl,yl,zl) = 0;
           }

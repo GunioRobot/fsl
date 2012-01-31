@@ -21,12 +21,12 @@ ImageData::ImageData(MetaImage::Handle mi, ColorRGBAHandle rgba):
 
 ImageData::~ImageData(){}
 
-ImageData::Handle ImageData::create(MetaImage::Handle mi, 
+ImageData::Handle ImageData::create(MetaImage::Handle mi,
                                     ColorRGBAHandle rgba)
 {
   Handle dst(new ImageData(mi,rgba));
   return dst;
-}  
+}
 
 MetaImage::Handle ImageData::getMetaImage()
 {
@@ -70,5 +70,5 @@ ImageDisplaySetting::Handle ImageData::getDs()
 
 void ImageData::setBuffer(ColorRGBAHandle rgba)
 {
-  m_impl->m_rgba = rgba; 
+  m_impl->m_rgba = rgba;
 }

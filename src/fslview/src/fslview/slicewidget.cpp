@@ -64,7 +64,7 @@ QCursor* SliceWidget::m_fillCursor = 0;
 struct Detach
 {
   Detach(SliceWidget* s): m_sliceWidget(s) {}
-  void operator()(const BriCon::Handle& bh) 
+  void operator()(const BriCon::Handle& bh)
   {
     bh->detach(m_sliceWidget);
   }
@@ -97,30 +97,30 @@ struct Attach
 //!          mask drawing options.
 //! @param u List of shapes drawn in mask mode. Used for the undo functionality
 //!
-SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient, 
-			 Cursor::Handle c, OverlayList::Handle l, 
-			 DrawSettings::Handle d, 
+SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient,
+			 Cursor::Handle c, OverlayList::Handle l,
+			 DrawSettings::Handle d,
 			 std::list<Shape::Handle>& u,
-			 const ViewOptions& vo): 
+			 const ViewOptions& vo):
   QWidget(parent, name),
   m_sliceIsFixed(false), m_updatesEnabled(true), m_crossHairsOn(true),
-  m_imagesEnabled(true), 
+  m_imagesEnabled(true),
   m_slice(0), m_noSliceSet(true),m_volume(0), m_cursor(c),
   m_zoom(1.0),m_origX(0),m_origY(0),m_scaleX(1.0),m_scaleY(1.0),
   m_overlayList(l), m_drawSettings(d),m_undoList(u),
   m_orient(orient),m_mode(None),m_zooming(false),m_trueScale(true),
-  m_forceRender(false), 
+  m_forceRender(false),
   m_imageBuffersValid(false),m_displayPixmapValid(false),
   m_displayBufferValid(false),
   m_opts(vo)
 {
-  TRACKER("SliceWidget::SliceWidget");  
+  TRACKER("SliceWidget::SliceWidget");
 
   m_cursor->attach(this);
   m_overlayList->attach(this);
   std::for_each(m_overlayList->begin(), m_overlayList->end(), Attach(this, m_briconList));
   m_drawSettings->attach(this);
-  
+
   setFocusPolicy(StrongFocus);
   loadStore();
 
@@ -157,7 +157,7 @@ SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient,
 
       m_panCursor = new QCursor(panPixmap, 9, 9);
     }
- 
+
   if(!m_penCursor)
     {
       QPixmap penPixmap = QPixmap(pencursor_xpm);
@@ -167,7 +167,7 @@ SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient,
 
       m_penCursor = new QCursor(penPixmap, 1, 1);
     }
-  
+
   if(!m_fillCursor)
     {
       QPixmap fillPixmap = QPixmap(fillcursor_xpm);
@@ -177,7 +177,7 @@ SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient,
 
       m_fillCursor = new QCursor(fillPixmap, 2, 10);
     }
-  
+
   if(!m_eraserCursor)
     {
       QPixmap eraserPixmap = QPixmap(erasercursor_xpm);
@@ -187,23 +187,23 @@ SliceWidget::SliceWidget(QWidget* parent, const char *name, Orientation orient,
 
       m_eraserCursor = new QCursor(eraserPixmap, 5, 2);
     }
-  
+
 //   setCursor(*m_crossCursor);
   setMode(m_mode);
 
   setBackgroundMode(NoBackground);
-   
+
   //Need this or lightbox will crash
   m_viewRect = Rect::createRect(0,0,64,64);
   m_zoomRect = Rect::createRect(0,0,0,0);
   m_dataRect = Rect::createRect(0,0,64,64);
-   
+
   m_displayPixmap = new QPixmap();
-  
+
   m_timer = new QTimer(this);
   connect( m_timer, SIGNAL(timeout()), this, SLOT(showSlice()));
   m_timer->start(50,false);
-  
+
   emitZoomFactor(100);
 
   m_dtiColors.push_back(QColor(255, 0,   0));
@@ -222,19 +222,19 @@ SliceWidget::~SliceWidget()
 }
 
 void SliceWidget::polish()
-{  
+{
   TRACKER("SliceWidget::polish");
   m_viewRect = Rect::createRect(0,0,inqWidth(),inqHeight());
   m_zoomRect = Rect::createRect(0,0,0,0);
-  m_dataRect = Rect::createRect(0,0,inqWidth(),inqHeight());           
+  m_dataRect = Rect::createRect(0,0,inqWidth(),inqHeight());
   m_displayPixels = ColorRGBAHandle( new ColorRGBA[inqWidth() * inqHeight()] );
 }
 
-//! @brief 
+//! @brief
 //!
 //!
 void SliceWidget::resizeEvent(QResizeEvent* e)
-{  
+{
   TRACKER("SliceWidget::resizeEvent");
 
   initZoom();
@@ -244,8 +244,8 @@ void SliceWidget::resizeEvent(QResizeEvent* e)
 void SliceWidget::initZoom()
 {
   int l  = std::min(width(), height());
-  m_zoom = std::min( (l/(float)inqWidth()), 
-		     std::min( (l/((float)inqHeight()*(float)inqRatio())), 
+  m_zoom = std::min( (l/(float)inqWidth()),
+		     std::min( (l/((float)inqHeight()*(float)inqRatio())),
 			       (l/((float)inqDepth()*(float)depthRatio()))) );
 }
 
@@ -272,8 +272,8 @@ void SliceWidget::paintEvent(QPaintEvent*)
   if(!m_updatesEnabled) { m_imagesEnabled = true; return; }
   TRACKER("SliceWidget::paintEvent");
 
-  if(!imageBuffersValid()) 
-    renderBuffer();  
+  if(!imageBuffersValid())
+    renderBuffer();
 
   CHECKPOINT();
   QPixmap pm(size());
@@ -297,56 +297,56 @@ void SliceWidget::paintEvent(QPaintEvent*)
   float zoom(m_zoom * fit);
 
   m_origX  = int(width() -  (m_viewRect->width()            *zoom))/2;
-  m_origY  = int(height() - (m_viewRect->height()*inqRatio()*zoom))/2; 
+  m_origY  = int(height() - (m_viewRect->height()*inqRatio()*zoom))/2;
   m_scaleX = (float)(m_viewRect->width()*zoom)/(float)m_viewRect->width();
   m_scaleY = (float)(m_viewRect->height()*inqRatio()*zoom)/(float)(m_viewRect->height());
-  
+
 
   m_paint.setViewport(m_origX, m_origY,
 		      (int)(m_viewRect->width()*zoom),
-		      (int)(m_viewRect->height()*inqRatio()*zoom));  
-  
+		      (int)(m_viewRect->height()*inqRatio()*zoom));
+
   m_paint.setWindow(m_viewRect->left(),
                     m_viewRect->top(),
                     m_viewRect->width(),
                     -m_viewRect->height());
-  
+
   m_paint.setClipRect(m_paint.viewport().left(),
                        m_paint.viewport().top(),
                        m_paint.viewport().width() + 1,
                        m_paint.viewport().height()+ 1);
- 
+
   m_paint.setClipping(true);
 
   if(m_imagesEnabled)
     {
       m_prevCursor.reset();
       paintImages();
-      
+
       m_paint.setWindow(m_viewRect->left()   *256,
                         m_viewRect->top()    *256,
                         m_viewRect->width()  *256,
                         -m_viewRect->height()*256);
       drawDtiLines();
-    } 
- 
+    }
+
   m_paint.setWindow(m_viewRect->left(),
                     m_viewRect->top(),
                     m_viewRect->width(),
                     -m_viewRect->height());
-  
-  if(m_zooming) drawZoomRectangle();   
+
+  if(m_zooming) drawZoomRectangle();
   if(m_mode == Masking) paintGraphics();
   m_paint.setWindow(m_viewRect->left()   *2,
                     m_viewRect->top()    *2,
                     m_viewRect->width()  *2,
                     -m_viewRect->height()*2);
-  
+
 //    if(hasMouseTracking())
 //    m_paint.setBrush(QColor(255, 255, 0));
 //    else m_paint.setBrush(QColor(255, 0, 0));
 //    m_paint.drawRoundRect(m_viewRect->left(),m_viewRect->top(),10, 10);
-  
+
   m_paint.setPen(QColor(128, 128, 128));
 
   if(m_crossHairsOn)
@@ -363,12 +363,12 @@ void SliceWidget::paintEvent(QPaintEvent*)
     }
 
   m_forceRender = false;
-  m_imagesEnabled = true; 
+  m_imagesEnabled = true;
 
   if(m_opts.inqShowSliceLabels())
     {
       QFont font = m_paint.font();
-      font.setStyleHint(QFont::SansSerif, 
+      font.setStyleHint(QFont::SansSerif,
 			QFont::NoAntialias);
       font.setPointSize(12);
       m_paint.setPen(QColor(255, 255, 255));
@@ -380,7 +380,7 @@ void SliceWidget::paintEvent(QPaintEvent*)
     }
 
   m_paint.end();
-  
+
   bitBlt(this, 0, 0, &pm);
 }
 
@@ -439,7 +439,7 @@ void SliceWidget::paintGraphics()
 
 
 void SliceWidget::paintImages()
-{ 
+{
   TRACKER("SliceWidget::paintImages()");
 
   bool isBottomImage(true);
@@ -447,15 +447,15 @@ void SliceWidget::paintImages()
   if(!displayBufferValid())
     {
       m_store->resetPos();
-      
+
       while(!m_store->currentEmpty())
 	{
 	  ImageData::Handle i = m_store->current();
-	  if(i->inqVisibility() && (i->inqDtiDisplay() != DtiDisplay(Lines)) && 
+	  if(i->inqVisibility() && (i->inqDtiDisplay() != DtiDisplay(Lines)) &&
 	     (i->inqDtiDisplay() != DtiDisplay(LinesRGB)) )
             {
-	      ImageBuffer::blendBuffers(m_displayPixels, i->getBuffer(), i->inqTransparency(), 
-					isBottomImage, inqWidth()*inqHeight());    
+	      ImageBuffer::blendBuffers(m_displayPixels, i->getBuffer(), i->inqTransparency(),
+					isBottomImage, inqWidth()*inqHeight());
               isBottomImage = false;
             }
 
@@ -463,24 +463,24 @@ void SliceWidget::paintImages()
 	}
     }
   if(isBottomImage)setToZero(m_displayPixels);
-    
+
   if(!displayPixmapValid())
-    {  
+    {
       if(QImage::BigEndian == QImage::systemByteOrder())reorderBytes(m_displayPixels);
-      
-      QImage image((unsigned char*)m_displayPixels.get(),                   
+
+      QImage image((unsigned char*)m_displayPixels.get(),
 		   inqWidth(),
 		   inqHeight(),
-		   32,NULL,0,QImage::IgnoreEndian);         
+		   32,NULL,0,QImage::IgnoreEndian);
 
       m_displayPixmap->convertFromImage(image);
     }
- 
+
   m_paint.drawPixmap(m_dataRect->left(), m_dataRect->bottom(),
 		     *m_displayPixmap,
                      m_dataRect->left(), m_dataRect->bottom(),
                      m_dataRect->width(),m_dataRect->height());
-   
+
   validateDisplayPixmap();
   validateDisplayBuffer();
 }
@@ -492,11 +492,11 @@ void SliceWidget::crossHairMode(bool mode)
   QWidget::repaint();
 }
 
-/** 
+/**
  * A fixed slice will not change with the cursor. Use this if
  * you want to force the slice to stay the same regardless of the
  * cursor "depth" value.
- * 
+ *
  * @param fixed true if the slice is fixed.
  */
 void SliceWidget::setSliceIsFixed(bool fixed)
@@ -505,7 +505,7 @@ void SliceWidget::setSliceIsFixed(bool fixed)
 }
 
 void SliceWidget::setSlice(int s, int v)
-{  
+{
   TRACKER("SliceWidget::setSlice");
   CHECKPOINT();
 
@@ -513,11 +513,11 @@ void SliceWidget::setSlice(int s, int v)
 
   m_imagesEnabled = false;
   if(( m_slice  != s) ||
-     ((m_volume != v) && (ds->inqDtiDisplay() == DtiDisplay(None))) || 
-     ( m_noSliceSet) || 
+     ((m_volume != v) && (ds->inqDtiDisplay() == DtiDisplay(None))) ||
+     ( m_noSliceSet) ||
      ( m_forceRender))
   {
-      if(!m_sliceIsFixed || (m_volume != v)|| (m_forceRender)) 
+      if(!m_sliceIsFixed || (m_volume != v)|| (m_forceRender))
       {
       if(!m_sliceIsFixed)m_slice = s;
       m_volume = v;
@@ -529,12 +529,12 @@ void SliceWidget::setSlice(int s, int v)
 
   QWidget::repaint();
 }
-    
+
 
 
 
 void CoronalWidget::setImageCursor(int x, int y, int z, int v)
-{  
+{
   TRACKER("CoronalWidget::setImageCursor");
   CHECKPOINT();
   setSlice(y,v);
@@ -542,7 +542,7 @@ void CoronalWidget::setImageCursor(int x, int y, int z, int v)
 
 void AxialWidget::setImageCursor(int x, int y, int z, int v)
 
-{  
+{
   TRACKER("AxialWidget::setImageCursor");
   CHECKPOINT();
   setSlice(z,v);
@@ -555,7 +555,7 @@ void SliceWidget::update(const Cursor::Handle& c)
   CHECKPOINT();
 
   if(c->inqRepaint()){m_forceRender = true;invalidateImageBuffers();}
- 
+
   setImageCursor(c->inqX(), c->inqY(), c->inqZ(), c->inqV());
 }
 
@@ -572,7 +572,7 @@ void SliceWidget::update(const BriCon* b)
 void SliceWidget::update(const DrawSettings* d)
 {
   TRACKER("SliceWidget::update(const DrawSettings* d)");
-  if(m_mode == Masking) 
+  if(m_mode == Masking)
     switch(d->inqMode())
       {
       case DrawSettings::FreeHand:
@@ -580,7 +580,7 @@ void SliceWidget::update(const DrawSettings* d)
 	break;
       case DrawSettings::Erase:
 	setCursor(*m_eraserCursor);
-	break;    
+	break;
       case DrawSettings::Fill:
 	setCursor(*m_fillCursor);
 	break;
@@ -589,16 +589,16 @@ void SliceWidget::update(const DrawSettings* d)
 
 //! @brief OverlayList objects update the SliceWidget via this method
 void SliceWidget::update(const OverlayList* i, OverlayListMsg msg)
-{  
+{
   TRACKER("SliceWidget::update(const OverlayList* i, OverlayListMsg msg)");
 
   if( msg != Select )
     {
       invalidateDisplayBuffer();
       if( (msg == Add) || (msg == Rem) ) {
-	std::for_each(m_briconList.begin(), m_briconList.end(), 
+	std::for_each(m_briconList.begin(), m_briconList.end(),
 		      Detach(this));
-	std::for_each(m_overlayList->begin(), m_overlayList->end(), 
+	std::for_each(m_overlayList->begin(), m_overlayList->end(),
 		      Attach(this, m_briconList));
       }
       loadStore();
@@ -608,7 +608,7 @@ void SliceWidget::update(const OverlayList* i, OverlayListMsg msg)
 
 //   switch(msg)
 //   {
-//    case OverlayListMsg(Select):      MESSAGE("Select");break;     
+//    case OverlayListMsg(Select):      MESSAGE("Select");break;
 //    case OverlayListMsg(Visibility):  MESSAGE("Visibility");
 //                                      invalidateDisplayBuffer();
 //                                      QWidget::repaint();break;
@@ -616,28 +616,28 @@ void SliceWidget::update(const OverlayList* i, OverlayListMsg msg)
 //                                      invalidateDisplayBuffer();
 //                                      QWidget::repaint(); break;
 //    case OverlayListMsg(Order):       MESSAGE("Order");
-//                                      loadStore();invalidateImageBuffers(); 
+//                                      loadStore();invalidateImageBuffers();
 //                                      QWidget::repaint(); break;
 //    case OverlayListMsg(Add):         MESSAGE("Add");
 //    case OverlayListMsg(Rem):         MESSAGE("Rem");
 //      std::for_each(m_briconList.begin(), m_briconList.end(), Detach(this));
 //      std::for_each(m_overlayList->begin(), m_overlayList->end(), Attach(this, m_briconList));
 //      loadStore();
-//    case OverlayListMsg(LookUpTable): MESSAGE("LookUpTable");invalidateImageBuffers(); 
+//    case OverlayListMsg(LookUpTable): MESSAGE("LookUpTable");invalidateImageBuffers();
 //                                      QWidget::repaint();
-//                                      break;   
-//    case OverlayListMsg(ModImage):    MESSAGE("ModImage");invalidateImageBuffers(); 
+//                                      break;
+//    case OverlayListMsg(ModImage):    MESSAGE("ModImage");invalidateImageBuffers();
 //                                      QWidget::repaint();
 //                                      break;
 //    case OverlayListMsg(DtiMode):     MESSAGE("DtiMode");
-//                                      invalidateImageBuffers(); 
+//                                      invalidateImageBuffers();
 //                                      QWidget::repaint();
 //                                      break;
 //   }
 }
 
 void SliceWidget::mouseMoveEvent(QMouseEvent *e)
-{ 
+{
   QPoint w = convMouseToWorld(QPoint(e->x(),e->y()));
 
   bool lButton(e->state() & LeftButton);
@@ -646,20 +646,20 @@ void SliceWidget::mouseMoveEvent(QMouseEvent *e)
 
   int dx = m_startX - w.x();
   int dy = m_startY - w.y();
-  
+
   if(lButton) {
     switch(m_mode)
       {
       case None:
-      case Cursing: 
-        cursorEvent(w.x(), w.y()); 
-  
+      case Cursing:
+        cursorEvent(w.x(), w.y());
+
         break;
       case Pan:
         {
           transEvent(dx, dy);
           QPoint v = convMouseToWorld(QPoint(e->x(),e->y()));
-          setStartMove(v.x(),v.y()); 
+          setStartMove(v.x(),v.y());
         }
         break;
       case Zoom:
@@ -675,7 +675,7 @@ void SliceWidget::mouseMoveEvent(QMouseEvent *e)
   } else if(mButton) {
     transEvent(dx, dy);
     QPoint v = convMouseToWorld(QPoint(e->x(),e->y()));
-    setStartMove(v.x(),v.y()); 
+    setStartMove(v.x(),v.y());
   } else if(rButton) {
     zoomEvent(w.x(),w.y());
   }
@@ -695,13 +695,13 @@ void SliceWidget::mousePressEvent(QMouseEvent *e)
     switch(m_mode)
       {
       case None:
-      case Cursing: 
+      case Cursing:
         cursorEvent(w.x(), w.y()); break;
-      case Pan: 	  
+      case Pan:
         setCursor(*m_panCursor);
         break;
-      case Zoom: 
-        if(e->state() & ControlButton) 
+      case Zoom:
+        if(e->state() & ControlButton)
           zoomOut(w.x(), w.y());
         else {
           setCursor(*m_zoomCursor);
@@ -709,10 +709,10 @@ void SliceWidget::mousePressEvent(QMouseEvent *e)
         }
         break;
 
-      case Masking:       
+      case Masking:
 
         if(layerValidForDrawing())
-          {  
+          {
             MetaImage::Handle mi = m_overlayList->getActiveMetaImage();
             if(mi)
               {
@@ -720,7 +720,7 @@ void SliceWidget::mousePressEvent(QMouseEvent *e)
                                         mi->getImage()->getVolume(m_volume),
                                         m_orient,
                                         m_slice);
-                
+
 		switch(m_drawSettings->inqMode())
 		  {
 		  case DrawSettings::FreeHand:
@@ -734,7 +734,7 @@ void SliceWidget::mousePressEvent(QMouseEvent *e)
                 mi->getInfo()->setTarnished(true);
               }
           }
-        
+
         break;
 
       default:
@@ -742,7 +742,7 @@ void SliceWidget::mousePressEvent(QMouseEvent *e)
       }
   } else if(mButton) {
   } else if(rButton) {
-    if(e->state() & ControlButton) 
+    if(e->state() & ControlButton)
       zoomOut(w.x(), w.y());
     else
       m_zooming = true;
@@ -760,18 +760,18 @@ void SliceWidget::mouseReleaseEvent(QMouseEvent *e)
     switch(m_mode)
       {
       case None:
-      case Cursing: 
+      case Cursing:
         break;
 
-      case Pan:  
+      case Pan:
         setCursor(*m_panCursor);
         break;
 
-      case Zoom:    
+      case Zoom:
         if(!(e->state() & ControlButton))
           setViewRect(m_zoomRect->left(),m_zoomRect->bottom(),
                       m_zoomRect->right(),m_zoomRect->top());
-        
+
         m_zoomRect->setRect(0,0,0,0);
         setCursor(*m_zoomCursor);
         m_zooming = false;
@@ -790,7 +790,7 @@ void SliceWidget::mouseReleaseEvent(QMouseEvent *e)
     setViewRect(m_zoomRect->left(),m_zoomRect->bottom(),
 		m_zoomRect->right(),m_zoomRect->top());
     m_zoomRect->setRect(0,0,0,0);
-    m_zooming = false;    
+    m_zooming = false;
   }
 }
 
@@ -804,12 +804,12 @@ void SliceWidget::commitGraphics()
       Shape::Handle undoBuffer = m_shape->getBuffer();
       m_undoList.push_back(undoBuffer);
       if(m_undoList.size() > 20) m_undoList.pop_front();
-       
+
       m_shape->commit();
 
       mi->getInfo()->setTarnished(true);
     }
- 
+
      m_cursor->repaint();
 }
 
@@ -834,7 +834,7 @@ void SliceWidget::leaveEvent( QEvent *e )
 }
 
 const QPoint  SliceWidget::convMouseToWorld(const QPoint & p) const
-{   
+{
   QPoint world;
 
   world.setX ((int)((float)(p.x() - m_origX)/(float)m_scaleX) + m_viewRect->left());
@@ -853,7 +853,7 @@ void SliceWidget::transEvent(int dx, int dy)
 void SliceWidget::zoomEvent(int x, int y)
 {
   m_zoomRect->setRect(m_startX,m_startY,x,y);
-  m_zoomRect->setUnion(m_viewRect); 
+  m_zoomRect->setUnion(m_viewRect);
 
   QWidget::repaint();
 }
@@ -863,7 +863,7 @@ void SliceWidget::briconEvent(int dx, int dy)
 }
 
 void AxialWidget::setZoom(int factor)
-{  
+{
   TRACKER("AxialWidget::setZoom(int)");
 
   float f = (factor/100.0);
@@ -876,8 +876,8 @@ void AxialWidget::setZoom(int factor)
 }
 
 void CoronalWidget::setZoom(int factor)
-{  
-  TRACKER("CoronalWidget::setZoom(int)");  
+{
+  TRACKER("CoronalWidget::setZoom(int)");
 
   float f = (factor/100.0);
   int dx = (int)(inqWidth()/f/2);
@@ -889,8 +889,8 @@ void CoronalWidget::setZoom(int factor)
 }
 
 void SagittalWidget::setZoom(int factor)
-{  
-  TRACKER("SagittalWidget::setZoom(int)");  
+{
+  TRACKER("SagittalWidget::setZoom(int)");
 
   float f = (factor/100.0);
   int dx = (int)(inqWidth()/f/2);
@@ -911,7 +911,7 @@ void SliceWidget::zoomOut(int x,int y)
     }
 
   setDataRect();
-  QWidget::repaint(); 
+  QWidget::repaint();
 
 }
 
@@ -924,9 +924,9 @@ void SliceWidget::resetZoom()
   m_viewRect = Rect::createRect(0,0,inqWidth(),inqHeight());
   m_zoomRect = Rect::createRect(0,0,inqWidth(),inqHeight());
   m_dataRect = Rect::createRect(0,0,inqWidth(),inqHeight());
-  
+
   m_trueScale = true;
-  
+
   emitZoomFactor(100);
 
   initZoom();
@@ -935,64 +935,64 @@ void SliceWidget::resetZoom()
 }
 
 void SliceWidget::setViewRect(int startX,int startY,int curX,int curY)
-{ 
+{
   TRACKER("SliceWidget::setViewRect(int startX,int startY,int curX,int curY)");
 
 
   if(!(startX == curX && startY == curY))
-    { 
+    {
       m_zoomHistory.push(std::make_pair(m_viewRect->clone(),m_trueScale));
 
       float winRatio = height()/(float)width();
 
       m_viewRect->setRect(startX,startY,curX,curY);
       m_trueScale = false;
-      
+
       if( m_viewRect->height() >= m_viewRect->width()*winRatio)
         m_viewRect->setWidth((int)((m_viewRect->height()*inqRatio())/winRatio));
       else if( m_viewRect->height() < m_viewRect->width()*winRatio)
-        m_viewRect->setHeight((int)((m_viewRect->width()/inqRatio())*winRatio));  
+        m_viewRect->setHeight((int)((m_viewRect->width()/inqRatio())*winRatio));
 
       //fix zero sizes to avoid divide by zeros later on
       if(m_viewRect->width() == 0){m_viewRect->setWidth(m_viewRect->width() +1);}
       if(m_viewRect->height() == 0){m_viewRect->setHeight(m_viewRect->height() +1);}
 
-      setDataRect();  
+      setDataRect();
     }
   else if((startX == curX) && (startY == curY))
-    {  
+    {
       //if right button just pressed not moved
       if(m_trueScale)
         {
-          m_zoomHistory.push(std::make_pair(m_viewRect->clone(),m_trueScale));  
+          m_zoomHistory.push(std::make_pair(m_viewRect->clone(),m_trueScale));
           m_trueScale = false;
-        }  
-    }  
+        }
+    }
 
-  QWidget::repaint(); 
+  QWidget::repaint();
 }
 
 void SliceWidget::setDataRect()
 {
   TRACKER("SliceWidget::setDataRect");
- 
+
   m_dataRect->setRect(0,0,inqWidth(),inqHeight());
   m_dataRect->setUnion(m_viewRect);
 }
 
 void SliceWidget::loadStore()
-{  
+{
   TRACKER("SliceWidget::loadStore");
   m_store = ImageDataStore::create(m_overlayList);
 }
 
 void SliceWidget::renderBuffer()
-{   
+{
   TRACKER("SliceWidget::renderBuffer");
   CHECKPOINT();
 
   m_store->resetPos();
-      
+
   bool isBottomImage(true);
 
   while(!m_store->currentEmpty())
@@ -1026,7 +1026,7 @@ void SliceWidget::renderBuffer()
 }
 
 void SliceWidget::setMode(SliceWidget::Mode m)
-{  
+{
   TRACKER("SliceWidget::setMode");
   m_mode = Mode(m);
   switch(m_mode)
@@ -1062,7 +1062,7 @@ void SliceWidget::setMode(SliceWidget::Mode m)
 }
 
 void SliceWidget::drawZoomRectangle()
-{  
+{
   TRACKER("SliceWidget::drawZoomRectangle");
   m_paint.setPen(QColor(0,255,0));
   m_paint.drawRect(m_zoomRect->left(),
@@ -1075,9 +1075,9 @@ void SliceWidget::drawCrossHairs()
 {
   if(m_prevCursor.get() != NULL)
       drawCrossHairLines(m_prevCursor,m_prevSlice);
- 
+
   drawCrossHairLines(m_cursor,m_slice);
- 
+
   m_prevCursor = m_cursor->clone();
   m_prevSlice = m_slice;
 }
@@ -1151,7 +1151,7 @@ void SliceWidget::pageDownPressed()
 }
 
 void SliceWidget::drawEvent(int x, int y)
-{  
+{
   int   size  = m_drawSettings->inqPenSize();
   int   value = m_drawSettings->inqPenValue();
 
@@ -1183,13 +1183,13 @@ void SliceWidget::floodEvent(int x, int y)
 }
 
 bool SliceWidget::layerValidForDrawing()
-{  
+{
   bool result(false);
 
   MetaImage::Handle mi = m_overlayList->getActiveMetaImage();
-  
+
   if(mi)
-    { 
+    {
       if(!mi->inqReadOnly())
         {result = true;}
       else
@@ -1208,7 +1208,7 @@ bool SliceWidget::layerValidForDrawing()
 *
 ****************************************/
 void SagittalWidget::setImageCursor(int x, int y, int z, int v)
-{  
+{
   TRACKER("SagittalWidget::setImageCursor");
   CHECKPOINT();
   setSlice(x,v);
@@ -1217,10 +1217,10 @@ void SagittalWidget::setImageCursor(int x, int y, int z, int v)
 //! @brief Renders the cross hairs.
 //! @param c the Cursor::Handle for the location at which the cross hairs will
 //!        be drawn
-//! @param slice the highlighted slice (rendered brighter than the 
+//! @param slice the highlighted slice (rendered brighter than the
 //! crosshairs of the other slices)
 void SagittalWidget::drawCrossHairLines(const Cursor::Handle c,int slice)
-{ 
+{
   if(c->inqX() == slice) {
     m_paint.setRasterOp(Qt::XorROP);
     m_paint.setPen( QColor(0,255,0));
@@ -1237,14 +1237,14 @@ void SagittalWidget::cursorEvent(int x, int y)
   m_cursor->setCursor(m_slice, x, y);
 }
 
-int SagittalWidget::inqWidth() const 
+int SagittalWidget::inqWidth() const
 {
-  return m_overlayList->inqY(); 
+  return m_overlayList->inqY();
 }
 
-int SagittalWidget::inqHeight() const 
-{ 
-  return m_overlayList->inqZ(); 
+int SagittalWidget::inqHeight() const
+{
+  return m_overlayList->inqZ();
 }
 
 int SagittalWidget::inqDepth() const
@@ -1254,14 +1254,14 @@ int SagittalWidget::inqDepth() const
 
 float SagittalWidget::depthRatio() const
 {
-  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());  
+  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());
   return info->inqNoDimensions()? 1.0 : fabs(info->inqXDim() / info->inqYDim());
 }
 
 
 float SagittalWidget::inqRatio() const
 {
-  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());  
+  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());
   return info->inqNoDimensions()? 1.0 : fabs(info->inqZDim() / info->inqYDim());
 }
 
@@ -1280,7 +1280,7 @@ ColorRGBAHandle SagittalWidget::bufferVolume(MetaImage::Handle mi)
 void SagittalWidget::setCursorSlice(short s)
 {
   m_cursor->setCursor(s, m_cursor->inqY(), m_cursor->inqZ());
-}  
+}
 
 // QColor SliceWidget::getDTIVectorColor(const Image::Handle& i,
 // 				      int x, int y, int z)
@@ -1293,7 +1293,7 @@ void SagittalWidget::setCursorSlice(short s)
 //   int g = fabs(vG->value(m_slice, y, z)) * 255;
 //   int b = fabs(vB->value(m_slice, y, z)) * 255;
 
-//   return QColor(r, g, b);  
+//   return QColor(r, g, b);
 // }
 
 void SagittalWidget::drawDtiLines()
@@ -1357,18 +1357,18 @@ void SagittalWidget::moveCursor(short dx, short dy)
 *
 ************************************/
 void AxialWidget::cursorEvent(int x, int y)
-{  
+{
   m_cursor->setCursor(x, y, m_slice);
 }
 
-int AxialWidget::inqWidth() const 
-{ 
-  return m_overlayList->inqX(); 
+int AxialWidget::inqWidth() const
+{
+  return m_overlayList->inqX();
 }
 
-int AxialWidget::inqHeight() const 
+int AxialWidget::inqHeight() const
 {
-  return m_overlayList->inqY(); 
+  return m_overlayList->inqY();
 }
 
 int AxialWidget::inqDepth() const
@@ -1384,7 +1384,7 @@ float AxialWidget::depthRatio() const
 
 float AxialWidget::inqRatio() const
 {
-  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());  
+  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());
   return info->inqNoDimensions()? 1.0 : fabs(info->inqYDim() / info->inqXDim());
 }
 
@@ -1427,10 +1427,10 @@ void SliceWidget::drawBrokenCrossHairLines(int x, int y)
 //! @brief Renders the cross hairs.
 //! @param c the Cursor::Handle for the location at which the cross hairs will
 //!        be drawn
-//! @param slice the highlighted slice (rendered brighter than the 
+//! @param slice the highlighted slice (rendered brighter than the
 //! crosshairs of the other slices)
 void AxialWidget::drawCrossHairLines(const Cursor::Handle c,int slice)
-{  
+{
   if(c->inqZ() == slice) {
     m_paint.setRasterOp(Qt::XorROP);
     m_paint.setPen( QColor(0,255,0));
@@ -1444,20 +1444,20 @@ void AxialWidget::drawCrossHairLines(const Cursor::Handle c,int slice)
 
 void AxialWidget::moveCursor(short dx, short dy)
 {
-  m_cursor->setCursor(m_cursor->inqX() + dx, 
-                      m_cursor->inqY() + dy, 
+  m_cursor->setCursor(m_cursor->inqX() + dx,
+                      m_cursor->inqY() + dy,
                       m_slice);
 }
 
-void AxialWidget::setCursorSlice(short s)   
-{      
-  m_cursor->setCursor(m_cursor->inqX(), m_cursor->inqY(),s); 
+void AxialWidget::setCursorSlice(short s)
+{
+  m_cursor->setCursor(m_cursor->inqX(), m_cursor->inqY(),s);
 }
 
 void AxialWidget::drawDtiLines()
 {
   m_store->resetPos();
-  
+
   unsigned int c = 0;
 
   while(!m_store->currentEmpty())
@@ -1465,27 +1465,27 @@ void AxialWidget::drawDtiLines()
       ImageData::Handle i(m_store->current());
       ImageInfo::Handle info(i->getImage()->getInfo());
 
-      if( i->inqVisibility() && ( (i->inqDtiDisplay() == DtiDisplay(Lines)) || 
+      if( i->inqVisibility() && ( (i->inqDtiDisplay() == DtiDisplay(Lines)) ||
 				  (i->inqDtiDisplay() == DtiDisplay(LinesRGB)) ) )
 	{
 	  int xVec,yVec;
-	  
+
 	  Volume::Handle vR(i->getImage()->getVolume(0));
 	  Volume::Handle vG(i->getImage()->getVolume(1));
-	  
+
 	  unsigned int width  = vR->inqX();
 	  unsigned int height = vR->inqY();
 	  float minDimension = std::min(info->inqXDim(), std::min(info->inqYDim(), info->inqZDim()));
-	  
-	  //qDebug("XDim = %f, YDim = %f, ZDim = %f, minDimension = %f", 
+
+	  //qDebug("XDim = %f, YDim = %f, ZDim = %f, minDimension = %f",
 	  //      info->inqXDim(), info->inqYDim(), info->inqZDim(), minDimension);
 
 	  m_paint.setPen(m_dtiColors[c]);
-	  
+
 	  for(unsigned int y = 0; y < height; ++y)
-	    { 
-	      for( unsigned int x = 0; x < width; ++x) 
-		{          
+	    {
+	      for( unsigned int x = 0; x < width; ++x)
+		{
 		  xVec = int(vR->value(x, y, m_slice)*( 255.0/info->inqXDim() )*minDimension);
 		  yVec = int(vG->value(x, y, m_slice)*( 255.0/info->inqYDim() )*minDimension);
 		  //qDebug("xVec = %d, yVec = %d", xVec, yVec);
@@ -1516,10 +1516,10 @@ void AxialWidget::drawDtiLines()
 //! @brief Renders the cross hairs.
 //! @param c the Cursor::Handle for the location at which the cross hairs will
 //!        be drawn
-//! @param slice the highlighted slice (rendered brighter than the 
+//! @param slice the highlighted slice (rendered brighter than the
 //! crosshairs of the other slices)
 void CoronalWidget::drawCrossHairLines(const Cursor::Handle c,int slice)
-{ 
+{
   if(c->inqY() == slice) {
     m_paint.setRasterOp(Qt::XorROP);
     m_paint.setPen( QColor(0,255,0));
@@ -1533,15 +1533,15 @@ void CoronalWidget::drawCrossHairLines(const Cursor::Handle c,int slice)
 
 void CoronalWidget::cursorEvent(int x, int y)
 {
-  m_cursor->setCursor(x, m_slice, y); 
+  m_cursor->setCursor(x, m_slice, y);
 }
 
-int CoronalWidget::inqWidth() const 
-{ 
+int CoronalWidget::inqWidth() const
+{
   return m_overlayList->inqX();
 }
 
-int CoronalWidget::inqHeight() const 
+int CoronalWidget::inqHeight() const
 {
   return m_overlayList->inqZ();
 }
@@ -1553,13 +1553,13 @@ int CoronalWidget::inqDepth() const
 
 float CoronalWidget::depthRatio() const
 {
-  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());  
+  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());
   return info->inqNoDimensions()? 1.0 : fabs(info->inqYDim() / info->inqXDim());
 }
 
 float CoronalWidget::inqRatio() const
 {
-  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());  
+  ImageInfo::Handle info(m_overlayList->getMainImage()->getInfo());
   return info->inqNoDimensions()? 1.0 : fabs(info->inqZDim() / info->inqXDim());
 }
 
@@ -1582,9 +1582,9 @@ void CoronalWidget::moveCursor(short dx, short dy)
                       m_cursor->inqZ() + dy);
 }
 
-void CoronalWidget::setCursorSlice(short s) 
+void CoronalWidget::setCursorSlice(short s)
 {
-  m_cursor->setCursor(m_cursor->inqX(), s, m_cursor->inqZ());  
+  m_cursor->setCursor(m_cursor->inqX(), s, m_cursor->inqZ());
 }
 
 void CoronalWidget::drawDtiLines()
@@ -1597,7 +1597,7 @@ void CoronalWidget::drawDtiLines()
     ImageData::Handle i(m_store->current());
     ImageInfo::Handle info(i->getImage()->getInfo());
 
-    if( i->inqVisibility() && ( (i->inqDtiDisplay() == DtiDisplay(Lines)) || 
+    if( i->inqVisibility() && ( (i->inqDtiDisplay() == DtiDisplay(Lines)) ||
 				(i->inqDtiDisplay() == DtiDisplay(LinesRGB)) ) )
       {
         int xVec,zVec;
@@ -1608,13 +1608,13 @@ void CoronalWidget::drawDtiLines()
 
         unsigned int width  = vR->inqX();
         unsigned int height = vR->inqZ();
-       
+
 	m_paint.setPen(m_dtiColors[c]);
-        
+
         for(unsigned int z = 0; z < height; ++z)
-        { 
-          for( unsigned int x = 0; x < width; ++x) 
-            {          
+        {
+          for( unsigned int x = 0; x < width; ++x)
+            {
               xVec = int(vR->value(x, m_slice, z)*( 255.0/info->inqXDim() )*minDimension);
               zVec = int(vB->value(x, m_slice, z)*( 255.0/info->inqZDim() )*minDimension);
 	      //qDebug("xVec = %d, zVec = %d", xVec, zVec);

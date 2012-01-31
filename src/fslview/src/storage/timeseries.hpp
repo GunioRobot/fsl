@@ -21,7 +21,7 @@ typename TimeSeriesStore<VoxelType>::Handle TimeSeriesStore<VoxelType>::create(s
 
   Handle dst(new TimeSeriesStore(buf));
   dst->setMin(0);
-  dst->setMax(0);  
+  dst->setMax(0);
   dst->setVolCount(n);
   dst->calculateMinVal();
   dst->calculateMaxVal();
@@ -49,7 +49,7 @@ typename TimeSeriesStore<VoxelType>::Handle TimeSeriesStore<VoxelType>::getTimeS
   dst->m_doscaling = FslGetIntensityScaling(avw,&(dst->m_slope),&(dst->m_intercept));
 
   dst->setMin(VoxelType(0));
-  dst->setMax(VoxelType(0));  
+  dst->setMax(VoxelType(0));
   dst->setVolCount(vDim);
   dst->calculateMinVal();
   dst->calculateMaxVal();

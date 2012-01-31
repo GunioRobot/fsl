@@ -9,20 +9,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -101,7 +101,7 @@ vector<TextWriter> textWriterVector;
 //template <class T>
 void miscpic::read_lut()
 {
-  FILE *tmpfp; 
+  FILE *tmpfp;
 
   if ((tmpfp=fopen(lut.c_str(),"rb"))!=NULL)
     {
@@ -135,7 +135,7 @@ string float2str(float f, int prec)
     }
     else
       os << "0.0";
-    return os.str();    
+    return os.str();
   }
 
 /* }}} */
@@ -161,9 +161,9 @@ int miscpic::add_title(int width)
 {
   if(title.length()>0)
     {
-      
+
       string tmptitle = title;
-      int strlen=0, numns = 1; 
+      int strlen=0, numns = 1;
 
       //work out number of lines etc
       while(tmptitle.find("\n")>=0 && tmptitle.find("\n")<tmptitle.length()){
@@ -176,15 +176,15 @@ int miscpic::add_title(int width)
       strlen = max(strlen,int(tmptitle.length()));
 
       int linebrk = 3;
-      int xsize = max(width, int(strlen*gdFontSmall->w)), 
+      int xsize = max(width, int(strlen*gdFontSmall->w)),
 	ysize = 3*linebrk + numns*(linebrk+gdFontSmall->h);
-     
+
       gdImagePtr tmpim;
       tmpim = gdImageCreateTrueColor(xsize, ysize);
       int fontclr   = gdImageColorResolve(tmpim,240, 240, 240);
 
       tmptitle = title;
-      int xcoor = linebrk, ycoor = 2*linebrk; 
+      int xcoor = linebrk, ycoor = 2*linebrk;
       while(tmptitle.find("\n")>=0 && tmptitle.find("\n")<tmptitle.length()){
 	strlen = (int)tmptitle.find("\n");
 	string tmp = tmptitle;
@@ -204,8 +204,8 @@ int miscpic::add_title(int width)
 
       gdImagePtr all;
       xsize = tmpim->sx + outim->sx - width;
-      ysize = tmpim->sy + outim->sy; 
-      all = gdImageCreateTrueColor(xsize, ysize);      
+      ysize = tmpim->sy + outim->sy;
+      all = gdImageCreateTrueColor(xsize, ysize);
       gdImageCopy(all, tmpim, 0,0,0,0, tmpim->sx, tmpim->sy);
       gdImageCopy(all, outim, 0,tmpim->sy,0,0,outim->sx, outim->sy);
 
@@ -213,7 +213,7 @@ int miscpic::add_title(int width)
       outim = all;
       //outim = gdImageCreateTrueColor(xsize, ysize);
       //gdImageCopy(outim, all, 0, 0 ,0,0,outim->sx, outim->sy);
-      
+
       //gdImageDestroy(all);
       gdImageDestroy(tmpim);
     }
@@ -226,9 +226,9 @@ int miscpic::add_title(int width)
 //template <class T>
 int miscpic::add_cbar(string cbartype)
 {
-  if(outim){ 
+  if(outim){
     if(cbarptr) gdImageDestroy(cbarptr);
-    
+
     cbarptr = gdImageCreateTrueColor(10,outim->sy);
     create_cbar(cbartype);
 
@@ -242,20 +242,20 @@ int miscpic::add_cbar(string cbartype)
 
     gdImageDestroy(outim);
     outim = tmpim;
-    
+
     if(cbarptr){gdImageDestroy(cbarptr); cbarptr=NULL;}
 
- 
+
 //     tmpim = gdImageCreateTrueColor(outim->sx,outim->sy);
 //     gdImageCopy(tmpim, outim, 0, 0, 0, 0, outim->sx,outim->sy);
-    
-    
+
+
 //     gdImageDestroy(outim);
 //     int xsize = tmpim->sx + cbarptr->sx;
 //     int ysize = max(int(tmpim->sy),int(cbarptr->sy));
 //     outim = gdImageCreateTrueColor(xsize, ysize);
- 
-//     gdImageCopy(outim, tmpim, 0, (ysize-tmpim->sy) / 2, 0, 0,tmpim->sx, tmpim->sy); 
+
+//     gdImageCopy(outim, tmpim, 0, (ysize-tmpim->sy) / 2, 0, 0,tmpim->sx, tmpim->sy);
 //     gdImageCopy(outim, cbarptr, tmpim->sx, (ysize-cbarptr->sy)/2, 0, 0, cbarptr->sx, cbarptr->sy);
 //     if(cbarptr) gdImageDestroy(cbarptr);
 //     if(tmpim) gdImageDestroy(tmpim);
@@ -267,12 +267,12 @@ int miscpic::add_cbar(string cbartype)
 //template <class T>
 int miscpic::write_cbar(string fname, string cbartype)
 {
-  
+
   if(cbarptr){
-    gdImageDestroy(cbarptr);   
+    gdImageDestroy(cbarptr);
     cbarptr = NULL;
   }
-  
+
   //output colorbar
   if((create_cbar(cbartype)==0)&&cbarptr){
     // if(debug)
@@ -283,7 +283,7 @@ int miscpic::write_cbar(string fname, string cbartype)
 	cerr << "ERROR: Can't open " << fname << "for writing" << endl;
 	return(1);
       }
-    
+
     gdImagePng(cbarptr, pngout);
     fclose(pngout);
     gdImageDestroy(cbarptr); cbarptr=NULL;
@@ -313,7 +313,7 @@ int miscpic::create_cbar(string cbartype)
   int width = 14;
   int y_size = 100;
   gdImagePtr redyell, bluecyn, grays;
-  
+
   redyell = gdImageCreateTrueColor(width, y_size);
   bluecyn = gdImageCreateTrueColor(width, y_size);
   grays   = gdImageCreateTrueColor(width, y_size);
@@ -322,10 +322,10 @@ int miscpic::create_cbar(string cbartype)
       black = gdImageColorResolve(redyell, 0,0,0);
 
       //if(debug)
-      // cerr << "  black allocated" << endl; 
+      // cerr << "  black allocated" << endl;
   //create gray bar
   for(int y=0; y < y_size; y++){
-    int col = gdImageColorResolve(grays, 
+    int col = gdImageColorResolve(grays,
 	      (int)rlut[y],(int)glut[y],(int)blut[y]);
     if(minmax[0]<minmax[1])
       for(int i = 0; i < width; i++)
@@ -339,25 +339,25 @@ int miscpic::create_cbar(string cbartype)
   //  cerr << "  gray created" << endl;
   //create redyell bar
   for(int y=0; y < y_size; y++){
-    int col = gdImageColorResolve(redyell, 
+    int col = gdImageColorResolve(redyell,
 		(int)rlut[y+100],(int)glut[y+100],(int)blut[y+100]);
     if(minmax[2]<minmax[3])
       for(int i = 0; i < width; i++)
-	gdImageSetPixel(redyell, i, y_size-(y+1), col);	
+	gdImageSetPixel(redyell, i, y_size-(y+1), col);
     else{
       for(int i = 0; i < width; i++)
 	gdImageSetPixel(redyell, i, y, col);
     }
-  } 
+  }
   //if(debug)
   //  cerr << "  red created" << endl;
   if((nlut>200)&&(minmax.size()>5)){
     for(int y=0; y < y_size; y++){
-      int col = gdImageColorResolve(bluecyn, 
+      int col = gdImageColorResolve(bluecyn,
 		    (int)rlut[y+200],(int)glut[y+200],(int)blut[y+200]);
       if(minmax[4]<minmax[5]){
 	for(int i = 0; i < width; i++)
-	  gdImageSetPixel(bluecyn, i, y_size-(y+1), col);	
+	  gdImageSetPixel(bluecyn, i, y_size-(y+1), col);
       }
       else{
 	for(int i = 0; i < width; i++)
@@ -367,7 +367,7 @@ int miscpic::create_cbar(string cbartype)
     //if(debug)
     //  cerr << "  blue created" << endl;
   }
- 
+
   if(minmax[0]>minmax[1]){
     float tmp = minmax[1]; minmax[1] = minmax[0]; minmax[0]=tmp;
   }
@@ -388,11 +388,11 @@ int miscpic::create_cbar(string cbartype)
 
   vector<string> lbls(minmax.size());
   vector<int> lsize(minmax.size());
-  
+
   for(int ctr= 0; ctr< int(minmax.size()); ctr++){
     lbls[ctr]=float2str(minmax[ctr],2);
     lsize[ctr] = int((lbls[ctr].length() + 2) * gdFontSmall->w);
-  }     
+  }
   //if(debug)
   //    cerr << "  labels created" << endl;
   int ignores = 0;
@@ -401,29 +401,29 @@ int miscpic::create_cbar(string cbartype)
   int topmargin = 10, leftmargin = 10;
   int xsize = 2*leftmargin, ysize = 0;
   int rctr=0, bctr=0, gctr=0;
-  
+
   if(cbartype.length()>5){
     cerr << "ERROR: to many colorbars requested" << endl;
     return -1;
   }
-  
+
   // parse the first letter
 
   switch(char(cbartype[0])){
-  case 'y':  
-    xsize += max(lsize[2],lsize[3]) + width;rctr++;  
+  case 'y':
+    xsize += max(lsize[2],lsize[3]) + width;rctr++;
     break;
-  case 'b':  
+  case 'b':
     if(nlut>200){
       xsize += max(lsize[4],lsize[5]) + width;
       bctr++;
   }
   break;
-  case 'g':  
+  case 'g':
     xsize += max(lsize[0],lsize[1]);gctr++;
-    break; 
-  default : 
-    cerr << endl<< 
+    break;
+  default :
+    cerr << endl<<
       "ERROR: Only use 'y','b' or 'g' as the first colorbar option"
 	 << endl; return -1;
   }
@@ -439,10 +439,10 @@ int miscpic::create_cbar(string cbartype)
       if(char(cbartype[ctr-1])=='s')
 	xsize = max(xsize,leftmargin+width + max(lsize[2],lsize[3]));
       else
-	xsize += max(lsize[2],lsize[3]) + width; 
+	xsize += max(lsize[2],lsize[3]) + width;
       break;
-      
-    case 'b':  
+
+    case 'b':
       if(nlut>200){
 	bctr++;
 	if(char(cbartype[ctr-1])=='s')
@@ -458,15 +458,15 @@ int miscpic::create_cbar(string cbartype)
       else
 	xsize += max(lsize[0],lsize[1]);
       break;
-      
-    case 's': 
-      nrows++; 
+
+    case 's':
+      nrows++;
       break;
-    default : 
-      cerr << endl<< 
+    default :
+      cerr << endl<<
 	"ERROR: Only use 'y','b','g' or 's' to specify type of colorbar"
 	   << endl; return -1;
-    } 
+    }
   }
   //if(debug)
   //    cerr << "  completed parsing" << endl;
@@ -510,17 +510,17 @@ int miscpic::create_cbar(string cbartype)
   //define the color for labels
   //int lineclr   = gdImageColorResolve(cbarptr,230,230,230);
   int fontclr   = gdImageColorResolve(cbarptr,255, 0, 0);
-    
+
   int xcoor = leftmargin;
   int ycoor = topmargin;
   gdImagePtr src =  NULL;
   int inmin = 0;
   int inmax = 0;
 
-  //parse colorbar option again and create plot 
+  //parse colorbar option again and create plot
   for(int ctr=0; ctr<int(cbartype.length()); ctr++){
     switch(char(cbartype[ctr])) {
-    case 'y': 
+    case 'y':
       src = redyell;
       inmin = 2;
       inmax = 3;
@@ -557,18 +557,18 @@ int miscpic::create_cbar(string cbartype)
 	gdImageCopyResized(cbarptr, src, xcoor,ycoor, 0, 0, width, stepy+1, width, y_size);
       }
       //gdImageLine(cbarptr, xcoor+10, ycoor, xcoor+18, ycoor, lineclr);
-      //gdImageLine(cbarptr, xcoor+10, ycoor+stepy-1, xcoor+18, 
+      //gdImageLine(cbarptr, xcoor+10, ycoor+stepy-1, xcoor+18,
       //		  ycoor+stepy-1, lineclr);
       {
 	char *s = (char*)lbls[inmax].c_str();
-	gdImageString(cbarptr, gdFontSmall, xcoor + width + 
-		      gdFontSmall->w  , ycoor + 1, 
+	gdImageString(cbarptr, gdFontSmall, xcoor + width +
+		      gdFontSmall->w  , ycoor + 1,
 		      (unsigned char*) s, fontclr);
       }
       {
 	char *s = (char*)lbls[inmin].c_str();
-	gdImageString(cbarptr, gdFontSmall, xcoor + width + 
-		      gdFontSmall->w  , ycoor + stepy-1 - 
+	gdImageString(cbarptr, gdFontSmall, xcoor + width +
+		      gdFontSmall->w  , ycoor + stepy-1 -
 		      gdFontSmall->h, (unsigned char*) s, fontclr);
       }
       xcoor += width + max(lsize[inmin],lsize[inmax]);
@@ -578,7 +578,7 @@ int miscpic::create_cbar(string cbartype)
   if(redyell) gdImageDestroy(redyell);
   if(bluecyn) gdImageDestroy(bluecyn);
   if(grays)   gdImageDestroy(grays);
-  
+
   return 0;
 }
 
@@ -594,14 +594,14 @@ void miscpic::write_pic(char *fname, int width, int height)
       if(strstr(fname,".png")==0)
 	write_ppm(fname,width,height,picr,picg,picb);
       else
-	write_png(fname,width,height,picr,picg,picb); 
+	write_png(fname,width,height,picr,picg,picb);
     }
   else
     {
       if(strstr(fname,".png")==0)
 	write_pgm(fname,width,height,picr);
       else
-	write_png(fname,width,height,picr,picr,picr); 
+	write_png(fname,width,height,picr,picr,picr);
     }
 }
 
@@ -609,9 +609,9 @@ void miscpic::write_pic(char *fname, int width, int height)
 /* {{{ write_png */
 
 //template <class T>
-int miscpic::write_png ( char *filename, int x_size, int y_size, 
+int miscpic::write_png ( char *filename, int x_size, int y_size,
 			    unsigned char *r, unsigned char *g, unsigned char *b)
-{  
+{
   FILE *pngout;
 
   if(strstr(filename,".png")==NULL)
@@ -621,11 +621,11 @@ int miscpic::write_png ( char *filename, int x_size, int y_size,
 
   for(int x=0; x < x_size; x++){
     for(int y=0; y < y_size; y++){
-      int col = gdImageColorResolve(outim, 
-				    (int) r[y*x_size+x], 
-				    (int) g[y*x_size+x], 
+      int col = gdImageColorResolve(outim,
+				    (int) r[y*x_size+x],
+				    (int) g[y*x_size+x],
 				    (int) b[y*x_size+x]);
-      gdImageSetPixel(outim, x, y, col);	
+      gdImageSetPixel(outim, x, y, col);
     }
   }
 
@@ -656,7 +656,7 @@ int miscpic::write_png ( char *filename, int x_size, int y_size,
 
 /* }}} */
 /* {{{ write_pgm */
- 
+
 
 //template <class T>
 int miscpic::write_pgm ( char *filename, int x_size, int y_size,	unsigned char *i )
@@ -718,8 +718,8 @@ int miscpic::write_ppm ( char *filename, int x_size, int y_size,
 
 /* {{{ add Right label */
 
-void miscpic::addRlabel(unsigned char* picr, int p, int width, int size_pic, 
-			int alt_size_pic, bool onleft) 
+void miscpic::addRlabel(unsigned char* picr, int p, int width, int size_pic,
+			int alt_size_pic, bool onleft)
 {
   if (!LR_label_flag) { return; }
   int xstart=0;
@@ -742,7 +742,7 @@ void miscpic::addRlabel(unsigned char* picr, int p, int width, int size_pic,
   picr[p+(size_pic-1-1)*width+xstart+4]=255;
 }
 
-void miscpic::addRlabel(int p, int width, int size_pic, int alt_size_pic, 
+void miscpic::addRlabel(int p, int width, int size_pic, int alt_size_pic,
 			bool onleft)
 {
   if (!LR_label_flag) { return; }
@@ -832,7 +832,7 @@ void miscpic::cor(float yy, int p, int imageWidth)
 
 	if (nlut==0) {
 	  picr[p+(z_size_pic-1-z)*imageWidth+x] = (unsigned char)MISCMATHS::Min(255,MISCMATHS::Max(0,inp1.interpolate(xx,yy,zz)));
-	  
+
 	  if (compare)
 	    {
 	      picg[p+(z_size_pic-1-z)*imageWidth+x] = picr[p+(z_size_pic-1-z)*imageWidth+x];
@@ -940,7 +940,7 @@ float intensity_min(inp1.percentile(0.02)), intensity_max(inp1.percentile(0.98))
     {
       fclose(tmpfp);
       intensity_max=vol1.getDisplayMaximum();
-      intensity_min=vol1.getDisplayMinimum(); 
+      intensity_min=vol1.getDisplayMinimum();
     }
 }
 
@@ -973,10 +973,10 @@ if (vol2.nvoxels() > 1 )
 
   volume<float> tmpedge(inp2.xsize(),inp2.ysize(),inp2.zsize());
   volume<char>  orient(inp2.xsize(),inp2.ysize(),inp2.zsize());
-  
+
   inp2.setextrapolationmethod(mirror);
   tmpedge.setextrapolationmethod(zeropad);
-   
+
   for(z=inp2.minz(); z<=inp2.maxz(); z++)
     for(y=inp2.miny(); y<=inp2.maxy(); y++)
       for(x=inp2.minx(); x<=inp2.maxx(); x++)
@@ -1000,15 +1000,15 @@ if (vol2.nvoxels() > 1 )
 	  tmpedge.value(x,y,z) = (float) xx+yy+zz;
 	}
 
-  edge = 0; 
+  edge = 0;
   for(z=tmpedge.minz(); z<=tmpedge.maxz(); z++)
     for(y=tmpedge.miny(); y<=tmpedge.maxy(); y++)
       for(x=tmpedge.minx(); x<=tmpedge.maxx(); x++)
 	{
 	  if (orient.value(x,y,z)==0)
 	    {
-	      if ( (tmpedge.value(x,y,z)>tmpedge(x-1,y,z)) 
-		   && (tmpedge.value(x,y,z)>=tmpedge(x+1,y,z)) ) 
+	      if ( (tmpedge.value(x,y,z)>tmpedge(x-1,y,z))
+		   && (tmpedge.value(x,y,z)>=tmpedge(x+1,y,z)) )
 		edge.value(x,y,z)=std::sqrt(tmpedge.value(x,y,z))/2;
 	    }
 	  else
@@ -1020,7 +1020,7 @@ if (vol2.nvoxels() > 1 )
 		}
 	      else
 		{
-		  if ( (tmpedge.value(x,y,z)>tmpedge(x,y,z-1)) && 
+		  if ( (tmpedge.value(x,y,z)>tmpedge(x,y,z-1)) &&
 		       (tmpedge.value(x,y,z)>=tmpedge(x,y,z+1)) )
 		    edge.value(x,y,z)=std::sqrt(tmpedge.value(x,y,z))/2;
 		}
@@ -1034,17 +1034,17 @@ if (vol2.nvoxels() > 1 )
     edgethreshold = 0.5*(edge.max()-edge.min())+edge.min();
   else
     edgethreshold = 0.5*(edge98-edge2)+edge2;
-  
+
 
   for(z=inp2.minz(); z<=inp2.maxz(); z++)
     for(y=inp2.miny(); y<=inp2.maxy(); y++)
       for(x=inp2.minx(); x<=inp2.maxx(); x++)
-	if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1; 
+	if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1;
 	else inp2.value(x,y,z) = 0;
 }
 
 /* }}} */
-  
+
  for (unsigned int current=0;current<inputOptions.size();current++ ) {
    char* input=new char[inputOptions[current].size()+1];
    strcpy(input,inputOptions[current].c_str());
@@ -1054,7 +1054,7 @@ if (vol2.nvoxels() > 1 )
       /* {{{ lut option lut */
 
 {
-  theopt = strtok(NULL,discard); 
+  theopt = strtok(NULL,discard);
   if (!theopt || strncmp(theopt,"-",1)==0 )
     {
       cerr << "Error - must have a LUT name after the -l option." << endl;
@@ -1121,19 +1121,19 @@ if (vol2.nvoxels() > 1 )
 	    exit (1);
 	  }
 	edgethresh=atof(theopt);
-	
+
 	if (edgethresh<0) edgethreshold=-edgethresh;  // negative values are abs (like in -x)
 	else edgethreshold = edgethresh*(edge.max()-edge.min()) + edge.min();
-	
+
 	if (inp2.nvoxels()>0) {
 	  for(int z=inp2.minz(); z<=inp2.maxz(); z++)
 	    for(int y=inp2.miny(); y<=inp2.maxy(); y++)
 	      for(int x=inp2.minx(); x<=inp2.maxx(); x++)
-		if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1; 
+		if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1;
 		else inp2.value(x,y,z) = 0;
 	}
       }
-    
+
 /* }}} */
     else if (strncmp(theopt, "-t", 2)==0)
       /* {{{ transparent edges? */
@@ -1151,7 +1151,7 @@ inp1.setinterpolationmethod(nearestneighbour);
 
 /* }}} */
     else
-      { 
+      {
 	if ( !picsetup )
 	  {
 	    /* {{{ read lut */
@@ -1164,7 +1164,7 @@ read_lut();
 inp1.setxdim(inp1.xdim()/scale);
 inp1.setydim(inp1.ydim()/scale);
 inp1.setzdim(inp1.zdim()/scale);
-  
+
 x_size_pic = (int)round(x_size*inp1.xdim());
 y_size_pic = (int)round(y_size*inp1.ydim());
 z_size_pic = (int)round(z_size*inp1.zdim());
@@ -1198,18 +1198,18 @@ if(debug)
   cerr << "Entries in LUT: " << nlut << endl;
 
 if(debug)
-  cerr << " Intensity min, max : " << intensity_min 
+  cerr << " Intensity min, max : " << intensity_min
        << "  " << intensity_max << endl;
 
 
 if (nlut==0) /* otherwise (if using luts) then the display range should already have been set correctly */
-{ 
+{
   for(int z=inp1.minz(); z<=inp1.maxz(); z++)
     for(int y=inp1.miny(); y<=inp1.maxy(); y++)
       for(int x=inp1.minx(); x<=inp1.maxx(); x++)
 	if(intensity_max>intensity_min)
-	  inp1.value(x,y,z) =  (int)(((inp1.value(x,y,z) 
-				       - intensity_min ) * 255.001 ) 
+	  inp1.value(x,y,z) =  (int)(((inp1.value(x,y,z)
+				       - intensity_min ) * 255.001 )
 				     / (intensity_max-intensity_min));
 	else
 	  inp1.value(x,y,z) = 0;
@@ -1225,10 +1225,10 @@ if (nlut==0) /* otherwise (if using luts) then the display range should already 
     for(int y=inp1.miny(); y<=inp1.maxy(); y++)
       for(int x=inp1.minx(); x<=inp1.maxx(); x++)
   {
-    int tmp; 
+    int tmp;
     if(intensity_max>intensity_min)
-      tmp = (int)(((float)inp1.value(x,y,z) - intensity_min ) * (nlut-1) 
-		  / (intensity_max-intensity_min));   
+      tmp = (int)(((float)inp1.value(x,y,z) - intensity_min ) * (nlut-1)
+		  / (intensity_max-intensity_min));
     else
       tmp = 0;
 
@@ -1407,7 +1407,7 @@ memset(picb,0,picsize);
   width=x_size_pic*nx;
   height=y_size_pic*ny;
   /*printf("%d %d %d %d %d\n",slices,nx,ny,width,height);*/
-    
+
   for(row=0;row<ny;row++)
     for(column=0;column<nx;column++)
       {
@@ -1463,7 +1463,7 @@ float intensity_min(inp1.percentile(0.02)), intensity_max(inp1.percentile(0.98))
     {
       fclose(tmpfp);
       intensity_max=vol1.getDisplayMaximum();
-      intensity_min=vol1.getDisplayMinimum(); 
+      intensity_min=vol1.getDisplayMinimum();
     }
 }
 
@@ -1494,10 +1494,10 @@ if (vol2.nvoxels() > 1 )
   volume<float> edge(inp2.xsize(),inp2.ysize(),inp2.zsize());
   volume<float> tmpedge(inp2.xsize(),inp2.ysize(),inp2.zsize());
   volume<char>  orient(inp2.xsize(),inp2.ysize(),inp2.zsize());
-  
+
   inp2.setextrapolationmethod(mirror);
   tmpedge.setextrapolationmethod(zeropad);
-   
+
   for(z=inp2.minz(); z<=inp2.maxz(); z++)
     for(y=inp2.miny(); y<=inp2.maxy(); y++)
       for(x=inp2.minx(); x<=inp2.maxx(); x++)
@@ -1521,15 +1521,15 @@ if (vol2.nvoxels() > 1 )
 	  tmpedge.value(x,y,z) = (float) xx+yy+zz;
 	}
 
-  edge = 0; 
+  edge = 0;
   for(z=tmpedge.minz(); z<=tmpedge.maxz(); z++)
     for(y=tmpedge.miny(); y<=tmpedge.maxy(); y++)
       for(x=tmpedge.minx(); x<=tmpedge.maxx(); x++)
 	{
 	  if (orient.value(x,y,z)==0)
 	    {
-	      if ( (tmpedge.value(x,y,z)>tmpedge(x-1,y,z)) 
-		   && (tmpedge.value(x,y,z)>=tmpedge(x+1,y,z)) ) 
+	      if ( (tmpedge.value(x,y,z)>tmpedge(x-1,y,z))
+		   && (tmpedge.value(x,y,z)>=tmpedge(x+1,y,z)) )
 		edge.value(x,y,z)=std::sqrt(tmpedge.value(x,y,z))/2;
 	    }
 	  else
@@ -1541,7 +1541,7 @@ if (vol2.nvoxels() > 1 )
 		}
 	      else
 		{
-		  if ( (tmpedge.value(x,y,z)>tmpedge(x,y,z-1)) && 
+		  if ( (tmpedge.value(x,y,z)>tmpedge(x,y,z-1)) &&
 		       (tmpedge.value(x,y,z)>=tmpedge(x,y,z+1)) )
 		    edge.value(x,y,z)=std::sqrt(tmpedge.value(x,y,z))/2;
 		}
@@ -1560,7 +1560,7 @@ if (vol2.nvoxels() > 1 )
   for(z=inp2.minz(); z<=inp2.maxz(); z++)
     for(y=inp2.miny(); y<=inp2.maxy(); y++)
       for(x=inp2.minx(); x<=inp2.maxx(); x++)
-	if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1; 
+	if(edge.value(x,y,z) > edgethreshold) inp2.value(x,y,z) = 1;
 	else inp2.value(x,y,z) = 0;
 }
 
@@ -1580,7 +1580,7 @@ if (vol2.nvoxels() > 1 )
       /* {{{ lut option lut */
 
 {
-  theopt = strtok(NULL,discard); 
+  theopt = strtok(NULL,discard);
   if (!theopt || strncmp(theopt,"-",1)==0 )
     {
       cerr << "Error - must have a LUT name after the -l option." << endl;
@@ -1650,7 +1650,7 @@ inp1.setinterpolationmethod(nearestneighbour);
 
 /* }}} */
     else
-      { 
+      {
 	if ( !picsetup )
 	  {
 	    /* {{{ read lut */
@@ -1663,7 +1663,7 @@ read_lut();
 inp1.setxdim(inp1.xdim()/scale);
 inp1.setydim(inp1.ydim()/scale);
 inp1.setzdim(inp1.zdim()/scale);
-  
+
 x_size_pic = (int)round(x_size*inp1.xdim());
 y_size_pic = (int)round(y_size*inp1.ydim());
 z_size_pic = (int)round(z_size*inp1.zdim());
@@ -1697,18 +1697,18 @@ if(debug)
   cerr << "Entries in LUT: " << nlut << endl;
 
 if(debug)
-  cerr << " Intensity min, max : " << intensity_min 
+  cerr << " Intensity min, max : " << intensity_min
        << "  " << intensity_max << endl;
 
 
 if (nlut==0) /* otherwise (if using luts) then the display range should already have been set correctly */
-{ 
+{
   for(int z=inp1.minz(); z<=inp1.maxz(); z++)
     for(int y=inp1.miny(); y<=inp1.maxy(); y++)
       for(int x=inp1.minx(); x<=inp1.maxx(); x++)
 	if(intensity_max>intensity_min)
-	  inp1.value(x,y,z) =  (int)(((inp1.value(x,y,z) 
-				       - intensity_min ) * 255.001 ) 
+	  inp1.value(x,y,z) =  (int)(((inp1.value(x,y,z)
+				       - intensity_min ) * 255.001 )
 				     / (intensity_max-intensity_min));
 	else
 	  inp1.value(x,y,z) = 0;
@@ -1724,10 +1724,10 @@ if (nlut==0) /* otherwise (if using luts) then the display range should already 
     for(int y=inp1.miny(); y<=inp1.maxy(); y++)
       for(int x=inp1.minx(); x<=inp1.maxx(); x++)
   {
-    int tmp; 
+    int tmp;
     if(intensity_max>intensity_min)
-      tmp = (int)(((float)inp1.value(x,y,z) - intensity_min ) * (nlut-1) 
-		  / (intensity_max-intensity_min));   
+      tmp = (int)(((float)inp1.value(x,y,z) - intensity_min ) * (nlut-1)
+		  / (intensity_max-intensity_min));
     else
       tmp = 0;
 
@@ -1906,7 +1906,7 @@ memset(picb,0,picsize);
   width=x_size_pic*nx;
   height=y_size_pic*ny;
   /*printf("%d %d %d %d %d\n",slices,nx,ny,width,height);*/
-    
+
   for(row=0;row<ny;row++)
     for(column=0;column<nx;column++)
       {
@@ -1930,11 +1930,11 @@ memset(picb,0,picsize);
 /* {{{ overlay */
 
 //template <class T>
-int miscpic::overlay(volume<float>& newvol, volume<float>& bg, 
-			volume<float>& s1,volume<float>& s2, 
+int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
+			volume<float>& s1,volume<float>& s2,
 			float bgmin, float bgmax, float s1min,
-			float s1max, float s2min, float s2max, 
-			int colour_type, int checker, 
+			float s1max, float s2min, float s2max,
+			int colour_type, int checker,
 			string cbarfname, string cbartype, bool out_int, bool dbg)
 {
   float latitude = 0.00001, hrange, A , B;
@@ -1971,7 +1971,7 @@ int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
     factor1 *= -1.0;
     s1min *= -1.0; s1max *= -1.0;
   }
-  
+
   if(s2min != s2max) ns=2;
 
   if((ns==2)&&(s2max<s2min)){
@@ -1998,7 +1998,7 @@ int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
   for(int z = bg.minz(); z<=bg.maxz();z++){
     for(int y = bg.miny(); y<=bg.maxy();y++){
       for(int x = bg.minx(); x<=bg.maxx();x++){
-	
+
 	float newbg;
 	if(bgmin==bgmax)
 	  newbg = float(0.0);
@@ -2010,15 +2010,15 @@ int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
 	if(s1max==s1min)
 	  news1 = float(0.0);
 	else
-	  news1 = (MISCMATHS::Min(factor1*s1(x,y,z),s1max)-s1min) / (s1max-s1min); 
-	int   mask1 = ((factor1*s1(x,y,z)) >= (s1min - latitude));          
+	  news1 = (MISCMATHS::Min(factor1*s1(x,y,z),s1max)-s1min) / (s1max-s1min);
+	int   mask1 = ((factor1*s1(x,y,z)) >= (s1min - latitude));
 
 	if(checker > 0)
 	  mask1 *= (x+y+z) % 2;
 
 	if (ns == 1){
 	  if ( colour_type == 0 )
-	    tmpvol.value(x,y,z) = A + newbg*0.95*hrange*(1-mask1) 
+	    tmpvol.value(x,y,z) = A + newbg*0.95*hrange*(1-mask1)
 	      + ( news1*0.9*hrange + 1.05*hrange ) * mask1;
 	  else
 	    tmpvol.value(x,y,z) = A + newbg*0.95*hrange*(1-mask1) +
@@ -2026,12 +2026,12 @@ int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
 		newbg*hrange*0.5*0.2 + 1.05*hrange) * mask1;
 	}
 	else{
-	  float news2 = (MISCMATHS::Min((factor2*s2(x,y,z)),s2max)-s2min)/(s2max-s2min); 
+	  float news2 = (MISCMATHS::Min((factor2*s2(x,y,z)),s2max)-s2min)/(s2max-s2min);
 	  int   mask2 = ((factor2*s2(x,y,z)) >= (s2min - latitude));
-	  
-	  if (checker > 0) 
+
+	  if (checker > 0)
 	    mask2 *=(x+y+z)%2;
-	  
+
 	  if ( colour_type == 0 )
 	    tmpvol.value(x,y,z) = A + newbg*hrange*0.95*(1-mask1)*(1-mask2) +
 	      ( news1*hrange*0.9 + hrange*1.05 ) * mask1 +
@@ -2044,20 +2044,20 @@ int miscpic::overlay(volume<float>& newvol, volume<float>& bg,
 		newbg*hrange*0.5*0.2 + 2.05*hrange) * mask2*(1-mask1) +
 	      ( ((int)((news1+news2)*5*0.999)) * 0.2*hrange +
 		newbg*hrange*0.5*0.4 + 3.05*hrange) * mask1*mask2;
-	}  
+	}
       }
     }
-  }   
-    
+  }
+
   if (ns == 1)
     lut = string("render1");
   else
     lut = string("render2");
 
   if (colour_type == 1)
-    lut += string("t"); 
+    lut += string("t");
   tmpvol.setAuxFile(lut);
-  
+
   lut = lutbase + lut + ".lut";
 
   copyconvert(tmpvol,newvol);

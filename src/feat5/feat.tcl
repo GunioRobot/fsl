@@ -8,20 +8,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -72,7 +72,7 @@ set VARS(history) {}
 
 proc feat5 { w } {
     global fmri PXHOME FSLDIR USER feat_files unwarp_files unwarp_files_mag initial_highres_files highres_files VARS argc argv PWD gui_ext HOME tempSpin
- 
+
     #{{{ main window
 
 feat5:setupdefaults
@@ -92,19 +92,19 @@ set fmri(donemodel) 0
 
 frame $w.mode
 
-optionMenu2 $w.mode.level fmri(level) -command "feat5:updatelevel $w" 1 "First-level analysis" 2 "Higher-level analysis" 
+optionMenu2 $w.mode.level fmri(level) -command "feat5:updatelevel $w" 1 "First-level analysis" 2 "Higher-level analysis"
 #bind  $w.mode.level.menu <Leave>  "feat5:updatelevel $w"
 #trace variable fmri(level) w "feat5:updatelevel $w" (need to put 3 dummys in proc header)
 #two other ways of running "feat5:updatelevel $w" when the menu is used, each with their own drawbacks
 #NB The trace is probably the WORST method, and should be replaced for other optionmenus
 
-balloonhelp_for $w.mode.level "Use \"First-level analysis\" for analysing each session's data 
+balloonhelp_for $w.mode.level "Use \"First-level analysis\" for analysing each session's data
 -i.e. the time-series analysis of the raw 4D FMRI data.
 
 Use \"Higher-level analysis\" for combining first-level analyses. You
 can use this hierarchically - for example at second-level to analyse
 across several sessions and then at third-level to analyse across
-several subjects."                       
+several subjects."
 
 optionMenu2 $w.mode.analysis fmri(analysis) -command "feat5:updateanalysis $w" 7 "Full analysis" 1 "Pre-stats" 3 "Pre-stats + Stats" 2 "                     Stats" 6 "                     Stats + Post-stats"  4 "                                  Post-stats" 0 "Registration only"
 
@@ -126,10 +126,10 @@ pack $w.mode.level $w.mode.analysis -in $w.mode -side left -anchor w
 #}}}
     #{{{ notebook
 
-NoteBook $w.nb -side top -bd 2 -tabpady {5 10} -arcradius 3 
-$w.nb insert 0 misc -text "Misc"    
-$w.nb insert 1 data      -text "Data"     
-$w.nb insert 2 filtering -text "Pre-stats"  
+NoteBook $w.nb -side top -bd 2 -tabpady {5 10} -arcradius 3
+$w.nb insert 0 misc -text "Misc"
+$w.nb insert 1 data      -text "Data"
+$w.nb insert 2 filtering -text "Pre-stats"
 $w.nb insert 3 stats     -text "Stats"
 $w.nb insert 4 poststats -text "Post-stats"
 $w.nb insert 5 reg       -text "Registration"
@@ -288,13 +288,13 @@ zero in the \"mask\" image will get zeroed in this masking process."
 #}}}
 #{{{ thresholding
 
-TitleFrame   $w.thresh -text "Thresholding" -relief groove 
+TitleFrame   $w.thresh -text "Thresholding" -relief groove
 set fmri(lfthresh) [ $w.thresh getframe ]
 
 optionMenu2 $w.thresh.menu fmri(thresh) -command "feat5:updatepoststats $w" 0 "None" 1 "Uncorrected" 2 "Voxel" 3 "Cluster"
 
-LabelSpinBox $w.prob_thresh -label "Cluster P threshold" -textvariable fmri(prob_thresh) -range {0.0 1 0.005 }  
-LabelSpinBox $w.z_thresh -label "Z threshold" -textvariable fmri(z_thresh) -range {0.0 10000 0.1 } 
+LabelSpinBox $w.prob_thresh -label "Cluster P threshold" -textvariable fmri(prob_thresh) -range {0.0 1 0.005 }
+LabelSpinBox $w.z_thresh -label "Z threshold" -textvariable fmri(z_thresh) -range {0.0 10000 0.1 }
 
 pack $w.thresh.menu -in $fmri(lfthresh) -side top -padx 5 -side left
 balloonhelp_for $w.thresh "After carrying out the initial statistical test, the resulting Z
@@ -337,12 +337,12 @@ As a further option, the generated masks can be derived from all
 positive Z statistic voxels in the mask contrasts rather than all
 voxels that survived thresholding."
 
-balloonhelp_for $w.conmask $fmri(conmask_help) 
+balloonhelp_for $w.conmask $fmri(conmask_help)
 
 #}}}
 #{{{ rendering
 
-TitleFrame  $w.render -text "Rendering" -relief groove 
+TitleFrame  $w.render -text "Rendering" -relief groove
 set fmri(lfrendering) [ $w.render getframe ]
 
 set fmri(lfrenderingtop) [ frame $fmri(lfrendering).top ]
@@ -353,8 +353,8 @@ set tmpvalzdisplay $fmri(zdisplay)
 
 optionMenu2 $w.zmaxmenu fmri(zdisplay) -command "feat5:updatepoststats $w" 0 "Use actual Z min/max" 1 "Use preset Z min/max"
 
-LabelSpinBox $w.zmin -label "Min" -textvariable fmri(zmin) -range {0.0 10000 1 } 
-LabelSpinBox $w.zmax -label "Max" -textvariable fmri(zmax) -range {0.0 10000 1 } 
+LabelSpinBox $w.zmin -label "Min" -textvariable fmri(zmin) -range {0.0 10000 1 }
+LabelSpinBox $w.zmax -label "Max" -textvariable fmri(zmax) -range {0.0 10000 1 }
 balloonhelp_for $w.zmaxmenu "The Z statistic range selected for rendering is automatically
 calculated by default, to run from red (minimum Z statistic after
 thresholding) to yellow (maximum Z statistic). If more than one colour
@@ -438,7 +438,7 @@ set fmri(level) 1
 set fmri(analysis) 7
 
 set tmpval $fmri(paradigm_hp)
-feat5:updatelevel $w 
+feat5:updatelevel $w
 set fmri(paradigm_hp) $tmpval
 
 $w.nb raise data
@@ -447,7 +447,7 @@ $w.nb raise data
     #{{{ button Frame
 
 frame $w.btns
-    
+
 button $w.btns.apply -command "feat5:apply $w" -text "Go"
 
 button $w.btns.save -command "feat_file:setup_dialog $w a a a [namespace current] *.fsf {Save Feat setup} {feat5:write $w 1 1 0} {}" -text "Save"
@@ -476,8 +476,8 @@ pack $w.btns.apply $w.btns.save $w.btns.load $w.btns.cancel $w.btns.help $w.btns
 
 #}}}
 
-    pack $w.mode $w.nb -in $w -side top -anchor n -padx 10 -pady 10 
-    pack $w.btns -in $w -side bottom -fill x -padx 10 -pady 10 
+    pack $w.mode $w.nb -in $w -side top -anchor n -padx 10 -pady 10
+    pack $w.btns -in $w -side bottom -fill x -padx 10 -pady 10
 
     #{{{ load fsf file
 

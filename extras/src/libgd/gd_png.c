@@ -27,7 +27,7 @@
     out all fprintf() statements to disable that).
 
     GD 2.0 supports RGBA truecolor and will read and write truecolor PNGs.
-    GD 2.0 supports 8 bits of color resolution per channel and 
+    GD 2.0 supports 8 bits of color resolution per channel and
     7 bits of alpha channel resolution. Images with more than 8 bits
     per channel are reduced to 8 bits. Images with an alpha channel are
     only able to resolve down to '1/128th opaque' instead of '1/256th',
@@ -221,7 +221,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromPngCtx (gdIOCtx * infile)
       if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS))
 	{
 	  /* gd 2.0: we support this rather thoroughly now. Grab the
-	     first fully transparent entry, if any, as the value of 
+	     first fully transparent entry, if any, as the value of
 	     the simple-transparency index, mostly for backwards
 	     binary compatibility. The alpha channel is where it's
 	     really at these days. */
@@ -315,7 +315,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromPngCtx (gdIOCtx * infile)
   if (overflow2(rowbytes, height)) {
     png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
     return NULL;
-  }  
+  }
   if ((image_data = (png_bytep) gdMalloc (rowbytes * height)) == NULL)
     {
       fprintf (stderr, "gd-png error: cannot allocate image data\n");
@@ -326,7 +326,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromPngCtx (gdIOCtx * infile)
     png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
     gdFree (image_data);
     return NULL;
-  }    
+  }
   if ((row_pointers =
        (png_bytepp) gdMalloc (height * sizeof (png_bytep))) == NULL)
     {
@@ -394,7 +394,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromPngCtx (gdIOCtx * infile)
 	      register png_byte g = row_pointers[j][boffset++];
 	      register png_byte b = row_pointers[j][boffset++];
 	      /* gd has only 7 bits of alpha channel resolution, and
-	         127 is transparent, 0 opaque. A moment of convenience, 
+	         127 is transparent, 0 opaque. A moment of convenience,
 	         a lifetime of compatibility. */
 	      register png_byte a = gdAlphaMax -
 		(row_pointers[j][boffset++] >> 1);
@@ -621,7 +621,7 @@ BGD_DECLARE(void) gdImagePngCtxEx (gdImagePtr im, gdIOCtx * outfile, int level)
     }
   if (!im->trueColor)
     {
-      /* Oy veh. Remap the PNG palette to put the 
+      /* Oy veh. Remap the PNG palette to put the
          entries with interesting alpha channel
          values first. This minimizes the size
          of the tRNS chunk and thus the size
@@ -726,7 +726,7 @@ BGD_DECLARE(void) gdImagePngCtxEx (gdImagePtr im, gdIOCtx * outfile, int level)
       int saveAlphaFlag = im->saveAlphaFlag;
       if (overflow2(sizeof (png_bytep), height)) {
         return;
-      } 
+      }
       row_pointers = gdMalloc (sizeof (png_bytep) * height);
       if (row_pointers == NULL)
 	{

@@ -158,7 +158,7 @@ foreach mode $modes {
     catch {tk_getOpenFile -foo 1} msg
     regsub -all ,      $msg "" options
     regsub \"-foo\" $options "" options
-    
+
     foreach option $options {
         if {[string index $option 0] == "-"} {
     	test filebox-1.2 "tk_getOpenFile command" {
@@ -166,31 +166,31 @@ foreach mode $modes {
     	} [list 1 "value for \"$option\" missing"]
         }
     }
-    
+
     test filebox-1.3 "tk_getOpenFile command" {
         list [catch {tk_getOpenFile -foo bar} msg] $msg
     } $unknownOptionsMsg(tk_getOpenFile)
-    
+
     test filebox-1.4 "tk_getOpenFile command" {
         list [catch {tk_getOpenFile -initialdir} msg] $msg
     } {1 {value for "-initialdir" missing}}
-    
+
     test filebox-1.5 "tk_getOpenFile command" {
         list [catch {tk_getOpenFile -parent foo.bar} msg] $msg
     } {1 {bad window path name "foo.bar"}}
-    
+
     test filebox-1.6 "tk_getOpenFile command" {
         list [catch {tk_getOpenFile -filetypes {Foo}} msg] $msg
     } {1 {bad file type "Foo", should be "typeName {extension ?extensions ...?} ?{macType ?macTypes ...?}?"}}
-    
+
     if {[info commands tk::MotifFDialog] == "" && [info commands ::tk::dialog::file::] == ""} {
         set isNative 1
     } else {
         set isNative 0
     }
-    
+
     set parent .
-    
+
     set verylongstring longstring:
     set verylongstring $verylongstring$verylongstring
     set verylongstring $verylongstring$verylongstring
@@ -207,37 +207,37 @@ foreach mode $modes {
         ToPressButton $parent cancel
         tk_getOpenFile -title "Press Cancel ($verylongstring)" -parent $parent
     } ""
-    
+
     set fileName $tmpFile
     set fileDir [pwd]
     set pathName [file join $fileDir $fileName]
-    
+
     test filebox-2.2 "tk_getOpenFile command" {nonUnixUserInteraction} {
         ToPressButton $parent ok
         set choice [tk_getOpenFile -title "Press Ok" \
     		    -parent $parent -initialfile $fileName -initialdir $fileDir]
     } $pathName
-    
+
     test filebox-2.3 "tk_getOpenFile command" {nonUnixUserInteraction} {
         ToEnterFileByKey $parent $fileName $fileDir
         set choice [tk_getOpenFile -title "Enter \"$fileName\" and press Ok" \
     		    -parent $parent -initialdir $fileDir]
     } $pathName
-    
+
     test filebox-2.4 "tk_getOpenFile command" {nonUnixUserInteraction} {
         ToPressButton $parent ok
         set choice [tk_getOpenFile -title "Enter \"$fileName\" and press Ok" \
     		    -parent $parent -initialdir . \
     		    -initialfile $fileName]
     } $pathName
-    
+
     test filebox-2.5 "tk_getOpenFile command" {nonUnixUserInteraction} {
         ToPressButton $parent ok
         set choice [tk_getOpenFile -title "Enter \"$fileName\" and press Ok" \
     		    -parent $parent -initialdir /badpath \
     		    -initialfile $fileName]
     } $pathName
-    
+
     test filebox-2.6 "tk_getOpenFile command" {nonUnixUserInteraction} {
         toplevel .t1; toplevel .t2
         wm geometry .t1 +0+0

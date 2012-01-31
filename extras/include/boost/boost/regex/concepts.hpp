@@ -3,12 +3,12 @@
  * Copyright (c) 2004
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         concepts.hpp
@@ -133,7 +133,7 @@ namespace global_regex_namespace = ::std::tr1;
 template <class Bitmask>
 struct BitmaskConcept
 {
-   void constraints() 
+   void constraints()
    {
       function_requires<CopyConstructibleConcept<Bitmask> >();
       function_requires<AssignableConcept<Bitmask> >();
@@ -162,7 +162,7 @@ struct RegexTraitsConcept
    typedef typename traits::locale_type locale_type;
    typedef typename traits::char_class_type char_class_type;
 
-   void constraints() 
+   void constraints()
    {
       function_requires<UnsignedIntegerConcept<size_type> >();
       function_requires<RandomAccessContainerConcept<string_type> >();
@@ -177,7 +177,7 @@ struct RegexTraitsConcept
       char_type c = m_ctraits.translate(m_char);
       ignore_unused_variable_warning(c);
       c = m_ctraits.translate_nocase(m_char);
-      
+
       //string_type::foobar bar;
       string_type s1 = m_ctraits.transform(m_pointer, m_pointer);
       ignore_unused_variable_warning(s1);
@@ -314,7 +314,7 @@ struct BaseRegexConcept
       function_requires< RegexTraitsConcept<global_regex_namespace::regex_traits<char> > >();
       function_requires< BaseRegexConcept<global_regex_namespace::basic_regex<char> > >();
    }
-   void constraints() 
+   void constraints()
    {
       global_constraints();
 
@@ -367,7 +367,7 @@ struct BaseRegexConcept
       m_flags = ce.flags();
       e.imbue(ce.getloc());
       e.swap(e1);
-      
+
       global_regex_namespace::swap(e, e1);
 
       // sub_match:
@@ -560,7 +560,7 @@ struct RegexConcept
    typedef output_iterator_archetype<value_type> OutIterator;
 
 
-   void constraints() 
+   void constraints()
    {
       function_requires<BaseRegexConcept<Regex> >();
       // string based construct:
@@ -758,7 +758,7 @@ struct BoostRegexConcept
    typedef global_regex_namespace::sub_match<BidiIterator> sub_match_type;
    typedef global_regex_namespace::match_results<BidiIterator> match_results_type;
 
-   void constraints() 
+   void constraints()
    {
       global_regex_namespace::regex_constants::match_flag_type mopts
          = global_regex_namespace::regex_constants::match_default

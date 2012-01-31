@@ -1,4 +1,4 @@
-#{{{ copyright and setup 
+#{{{ copyright and setup
 
 #   FEAT TCL FSLIO wrappers
 #

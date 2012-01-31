@@ -1,4 +1,4 @@
-/* 
+/*
  * tkConfig.c --
  *
  *	This file contains procedures that manage configuration options
@@ -47,7 +47,7 @@
  * for each application.  Thus we create structures of the following
  * two types to hold all of the dynamic information; this is done
  * by Tk_CreateOptionTable.
- * 
+ *
  * One of the following structures corresponds to each Tk_OptionSpec.
  * These structures exist as arrays inside TkOptionTable structures.
  */
@@ -55,7 +55,7 @@
 typedef struct TkOption {
     CONST Tk_OptionSpec *specPtr;	/* The original spec from the template
 					 * passed to Tk_CreateOptionTable.*/
-    Tk_Uid dbNameUID;		 	/* The Uid form of the option database 
+    Tk_Uid dbNameUID;		 	/* The Uid form of the option database
 					 * name. */
     Tk_Uid dbClassUID;			/* The Uid form of the option database
 					 * class name. */
@@ -116,11 +116,11 @@ typedef struct OptionTable {
 
 static int		DoObjConfig _ANSI_ARGS_((Tcl_Interp *interp,
 			    char *recordPtr, Option *optionPtr,
-			    Tcl_Obj *valuePtr, Tk_Window tkwin, 
+			    Tcl_Obj *valuePtr, Tk_Window tkwin,
 			    Tk_SavedOption *savePtr));
 static void		DestroyOptionHashTable _ANSI_ARGS_((
 			    ClientData clientData, Tcl_Interp *interp));
-static void		FreeResources _ANSI_ARGS_((Option *optionPtr, 
+static void		FreeResources _ANSI_ARGS_((Option *optionPtr,
 			    Tcl_Obj *objPtr, char *internalPtr,
 			    Tk_Window tkwin));
 static Tcl_Obj *	GetConfigList _ANSI_ARGS_((char *recordPtr,
@@ -267,7 +267,7 @@ Tk_CreateOptionTable(interp, templatePtr)
 		optionPtr->dbNameUID = Tk_GetUid(specPtr->dbName);
 	    }
 	    if (specPtr->dbClass != NULL) {
-		optionPtr->dbClassUID = 
+		optionPtr->dbClassUID =
 			Tk_GetUid(specPtr->dbClass);
 	    }
 	    if (specPtr->defValue != NULL) {
@@ -324,7 +324,7 @@ Tk_CreateOptionTable(interp, templatePtr)
  *
  * Tk_DeleteOptionTable --
  *
- *	Called to release resources used by an option table when 
+ *	Called to release resources used by an option table when
  *	the table is no longer needed.
  *
  * Results:
@@ -509,7 +509,7 @@ Tk_InitOptions(interp, recordPtr, optionTable, tkwin)
 
 	valuePtr = NULL;
 	if (optionPtr->dbNameUID != NULL) {
-	    value = Tk_GetOption(tkwin, optionPtr->dbNameUID, 
+	    value = Tk_GetOption(tkwin, optionPtr->dbNameUID,
 		    optionPtr->dbClassUID);
 	    if (value != NULL) {
 		valuePtr = Tcl_NewStringObj(value, -1);
@@ -536,10 +536,10 @@ Tk_InitOptions(interp, recordPtr, optionTable, tkwin)
 	 */
 
 	if (valuePtr == NULL) {
-	    if ((tkwin != NULL) 
+	    if ((tkwin != NULL)
 		    && ((optionPtr->specPtr->type == TK_OPTION_COLOR)
 		    || (optionPtr->specPtr->type == TK_OPTION_BORDER))
-		    && (Tk_Depth(tkwin) <= 1) 
+		    && (Tk_Depth(tkwin) <= 1)
 		    && (optionPtr->extra.monoColorPtr != NULL)) {
 		valuePtr = optionPtr->extra.monoColorPtr;
 	    } else {
@@ -557,12 +557,12 @@ Tk_InitOptions(interp, recordPtr, optionTable, tkwin)
 	 * regardless of what DoObjConfig does.
 	 */
 	Tcl_IncrRefCount(valuePtr);
-	
+
 	if (DoObjConfig(interp, recordPtr, optionPtr, valuePtr, tkwin,
 		(Tk_SavedOption *) NULL) != TCL_OK) {
 	    if (interp != NULL) {
 		char msg[200];
-    
+
 		switch (source) {
 		    case OPTION_DATABASE:
 			sprintf(msg, "\n    (database entry for \"%.50s\")",
@@ -693,7 +693,7 @@ DoObjConfig(interp, recordPtr, optionPtr, valuePtr, tkwin, savedOptionPtr)
 	}
 	case TK_OPTION_INT: {
 	    int new;
-	    
+
 	    if (Tcl_GetIntFromObj(interp, valuePtr, &new) != TCL_OK) {
 		return TCL_ERROR;
 	    }
@@ -705,7 +705,7 @@ DoObjConfig(interp, recordPtr, optionPtr, valuePtr, tkwin, savedOptionPtr)
 	}
 	case TK_OPTION_DOUBLE: {
 	    double new;
-	    
+
 	    if (nullOK && ObjectIsEmpty(valuePtr)) {
 		valuePtr = NULL;
 		new = 0;
@@ -954,7 +954,7 @@ DoObjConfig(interp, recordPtr, optionPtr, valuePtr, tkwin, savedOptionPtr)
 	    }
 	    break;
 	}
-	    
+
 	default: {
 	    char buf[40+TCL_INTEGER_SPACE];
 	    sprintf(buf, "bad config table: unknown type %d",
@@ -1231,7 +1231,7 @@ TkGetOptionSpec(name, optionTable)
  *
  * Results:
  *	The return value is always TCL_ERROR, and an error message is
- *	left in interp's result if interp isn't NULL. 
+ *	left in interp's result if interp isn't NULL.
  *
  * Side effects:
  *	None.
@@ -1265,13 +1265,13 @@ SetOptionFromAny(interp, objPtr)
  *	Tk_FreeSavedOptions to free the contents of *savePtr).  In
  *	addition, if maskPtr isn't NULL then *maskPtr is filled in with
  *	the OR of the typeMask bits from all modified options.  If an
- *	error occurs then TCL_ERROR is returned and a message 
+ *	error occurs then TCL_ERROR is returned and a message
  *	is left in interp's result unless interp is NULL; nothing is
  *	saved in *savePtr or *maskPtr in this case.
  *
  * Side effects:
  *	The fields of recordPtr get filled in with object pointers
- *	from objc/objv.  Old information in widgRec's fields gets 
+ *	from objc/objv.  Old information in widgRec's fields gets
  * 	recycled.  Information may be left at *savePtr.
  *
  *--------------------------------------------------------------
@@ -1633,7 +1633,7 @@ Tk_FreeConfigOptions(recordPtr, optionTable, tkwin)
     OptionTable *tablePtr;
     Option *optionPtr;
     int count;
-    Tcl_Obj **oldPtrPtr, *oldPtr; 
+    Tcl_Obj **oldPtrPtr, *oldPtr;
     char *oldInternalPtr;
     CONST Tk_OptionSpec *specPtr;
 
@@ -1814,7 +1814,7 @@ FreeResources(optionPtr, objPtr, internalPtr, tkwin)
 
 Tcl_Obj *
 Tk_GetOptionInfo(interp, recordPtr, optionTable, namePtr, tkwin)
-    Tcl_Interp *interp;		/* Interpreter for error reporting.  If	
+    Tcl_Interp *interp;		/* Interpreter for error reporting.  If
 				 * NULL, then no error message is created. */
     char *recordPtr;		/* Record whose fields contain current
 				 * values for options. */
@@ -1893,7 +1893,7 @@ GetConfigList(recordPtr, optionPtr, tkwin)
     Tcl_Obj *listPtr, *elementPtr;
 
     listPtr = Tcl_NewListObj(0, (Tcl_Obj **) NULL);
-    Tcl_ListObjAppendElement((Tcl_Interp *) NULL, listPtr, 
+    Tcl_ListObjAppendElement((Tcl_Interp *) NULL, listPtr,
 	    Tcl_NewStringObj(optionPtr->specPtr->optionName, -1));
 
     if (optionPtr->specPtr->type == TK_OPTION_SYNONYM) {
@@ -1999,7 +1999,7 @@ GetObjectForOption(recordPtr, optionPtr, tkwin)
 		    *((int *) internalPtr)], -1);
 	    break;
 	}
-	case TK_OPTION_COLOR: { 
+	case TK_OPTION_COLOR: {
 	    XColor *colorPtr = *((XColor **) internalPtr);
 	    if (colorPtr != NULL) {
 		objPtr = Tcl_NewStringObj(Tk_NameOfColor(colorPtr), -1);
@@ -2136,9 +2136,9 @@ Tk_GetOptionValue(interp, recordPtr, optionTable, namePtr, tkwin)
 	     * object pointer.  We can't return the null pointer, since that
 	     * would indicate an error.  Instead, return a new empty object.
 	     */
-    
+
 	    resultPtr = Tcl_NewObj();
-	} 
+	}
     } else {
 	resultPtr = GetObjectForOption(recordPtr, optionPtr, tkwin);
     }

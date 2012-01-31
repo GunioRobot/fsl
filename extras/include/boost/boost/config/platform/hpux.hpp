@@ -1,9 +1,9 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Jens Maurer 2001 - 2003. 
-//  (C) Copyright David Abrahams 2002. 
-//  (C) Copyright Toon Knapen 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Jens Maurer 2001 - 2003.
+//  (C) Copyright David Abrahams 2002.
+//  (C) Copyright Toon Knapen 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -18,7 +18,7 @@
 // (verifyable with gcc 2.95.3, assumed for HP aCC)
 // #define BOOST_HAS_STDINT_H
 
-#define BOOST_NO_SWPRINTF 
+#define BOOST_NO_SWPRINTF
 #define BOOST_NO_CWCTYPE
 
 #if defined(__GNUC__)

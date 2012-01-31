@@ -1,9 +1,9 @@
-//  
+//
 //  point_list.h
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2008 University of Oxford 
+// Copyright (C) 2008 University of Oxford
 //
 
 #ifndef point_list_h
@@ -35,7 +35,7 @@ public:
 //
 // 1. A first output file
 // 2. A text file with a coordinate triplet on each row/column.
-// 
+//
 // The PointList will also be responsible for translating from the native formats of
 // these files into "mm-coordinates", which is what we will ask PointList to output
 // for us. Hence the constructor for each of those cases will also take an image
@@ -65,7 +65,7 @@ private:
   NEWMAT::Matrix    _vox2mm;   // Voxel->mm-coordinates transform of _ifname
   NEWMAT::Matrix    _affine;   // Optional affine transform
   NEWMAT::Matrix    _points;   // Points in mm-coordinates of _ifname
-}; 
+};
 
 } // End namespace NEWIMAGE
 

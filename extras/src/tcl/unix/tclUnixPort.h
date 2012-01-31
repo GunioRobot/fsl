@@ -628,8 +628,8 @@ extern int copyfile(const char *from, const char *to, void *state,
 
 /*
  *---------------------------------------------------------------------------
- * The following macros and declarations represent the interface between 
- * generic and unix-specific parts of Tcl.  Some of the macros may override 
+ * The following macros and declarations represent the interface between
+ * generic and unix-specific parts of Tcl.  Some of the macros may override
  * functions declared in tclInt.h.
  *---------------------------------------------------------------------------
  */
@@ -645,7 +645,7 @@ extern int copyfile(const char *from, const char *to, void *state,
 #endif
 
 /*
- * The following macros have trivial definitions, allowing generic code to 
+ * The following macros have trivial definitions, allowing generic code to
  * address platform-specific issues.
  */
 
@@ -705,7 +705,7 @@ typedef int TclpMutex;
  * known-to-be-MT-unsafe library calls.
  * Instead of returning pointers to the
  * static storage, those return pointers
- * to the TSD data. 
+ * to the TSD data.
  */
 
 #include <pwd.h>

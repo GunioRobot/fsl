@@ -2,7 +2,7 @@
 #define LOCAL_TIME_LOCAL_TIME_HPP__
 
 /* Copyright (c) 2003-2004 CrystalClear Software, Inc.
- * Subject to the Boost Software License, Version 1.0. 
+ * Subject to the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $

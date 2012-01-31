@@ -59,7 +59,7 @@ namespace TRACT{
     float m_y_s_init;
     float m_z_s_init;
 
-    // Streamliner needs to know about matrix3 
+    // Streamliner needs to know about matrix3
     volume<int>  m_mask3;
     volume<int>  m_beenhere3;
     vector<ColumnVector> m_inmask3;
@@ -89,7 +89,7 @@ namespace TRACT{
 	delete tmpptr;
       }
       m_own_waymasks.pop_back();
-      
+
     }
     void clear_waymasks(){
       // clear all waymasks
@@ -135,7 +135,7 @@ namespace TRACT{
     volume<int> m_beenhere;
     Matrix m_I;
     vector<ColumnVector> m_path;
-    
+
     vector<ColumnVector> m_seedcounts;
     Matrix m_SeedCountMat;
     int    m_SeedRow;
@@ -150,7 +150,7 @@ namespace TRACT{
     volume<int> m_targets_vol2mat;
     Matrix      m_targets_mat2vol;
 
-    
+
     volume<int> m_ConMat;
     volume<int> m_CoordMat;
     int m_Conrow;
@@ -167,12 +167,12 @@ namespace TRACT{
     volume<int>  m_ConMat3;
     volume<int>  m_Lookup3;
     volume<int>  m_CoordMat3;
-    
+
     const volume<float>& m_seeds;
     ColumnVector m_seedsdim;
     Streamliner& m_stline;
     Streamliner& m_nonconst_stline;
-    
+
   public:
     Counter(const volume<float>& seeds,Streamliner& stline):opts(probtrackxOptions::getInstance()),
 							  logger(LogSingleton::getInstance()),
@@ -183,11 +183,11 @@ namespace TRACT{
       m_seedsdim.ReSize(3);
       m_seedsdim << m_seeds.xdim() <<m_seeds.ydim() <<m_seeds.zdim();
       m_I=IdentityMatrix(4);
-      
+
     }
-    
+
     void initialise();
-    
+
     void initialise_path_dist(){
       m_prob.reinitialize(m_seeds.xsize(),m_seeds.ysize(),m_seeds.zsize());
       copybasicproperties(m_seeds,m_prob);
@@ -196,32 +196,32 @@ namespace TRACT{
       m_prob=0;
     }
     void initialise_seedcounts();
-    
+
     void initialise_matrix1(); //Need to make sure that initialise_path_dist is run first
     void initialise_matrix2();
     void initialise_matrix3();
-    
+
     void initialise_maskmatrix(){} //not written yet
-    
+
     inline void store_path(){ m_path=m_stline.get_path();}
-    
+
     void count_streamline();
     void count_seed();
     void clear_streamline(const bool& forwardflag,const bool& backwardflag);
-    
-    
+
+
     void update_pathdist();
     void reset_beenhere(const bool& forwardflag,const bool& backwardflag);
-    
+
     void reset_prob(){m_prob=0;}
     void update_seedcounts();
     void reset_targetflags(){
       for(unsigned int i=0;i<m_targflags.size();i++) m_targflags[i]=0;
     }
-    
-    
+
+
     void update_matrix1(); //update path_dist after each streamline, only run this after each voxel!!
-    
+
     void update_matrix2_row(); //but run this one every streamline as with the others
     void next_matrix2_row(){m_Conrow2++;}//and then run this after each voxel..
     void reset_beenhere2(const bool& forwardflag,const bool& backwardflag);
@@ -230,7 +230,7 @@ namespace TRACT{
     void reset_beenhere3();
 
     void update_maskmatrix(){} //not written yet
-    
+
     void save_total(const int& keeptotal);
     void save_total(const vector<int>& keeptotal);
     void save();
@@ -241,19 +241,19 @@ namespace TRACT{
     void save_matrix2();
     void save_matrix3();
     void save_maskmatrix(){}//not written yet
-    
+
 
     inline const Streamliner& get_streamline() const {return m_stline;}
     inline Streamliner& get_nonconst_streamline() const {return m_nonconst_stline;}
     inline const volume<float>& get_seeds() const {return m_seeds;}
 
-    
+
   };
-  
+
   class Seedmanager{
     probtrackxOptions& opts;
     Log& logger;
-    Counter& m_counter;    
+    Counter& m_counter;
     Streamliner& m_stline;
     const volume<float>& m_seeds;
     ColumnVector m_seeddims;

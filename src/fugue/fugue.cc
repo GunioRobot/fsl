@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,8 +81,8 @@ using namespace Utilities;
 string title="fugue (Version 2.5 in d minor)\nFMRIB's Utility for Geometric Unwarping of EPIs\nCopyright(c) 2000-2008, University of Oxford (Mark Jenkinson)";
 string examples="fugue -i <epi> -p <unwrapped phase map> -d <dwell-to-asym-ratio> -u <result> [options]\nfugue  -i <unwarped-image> -p <unwrapped phase map> -d <dwell-to-asym-ratio> -w <epi-like-result> [options]\nfugue -p <unwrapped phase map> -d <dwell-to-asym-ratio> --saveshift=<shiftmap> [options]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -182,7 +182,7 @@ string unwarpdir_value;
 
 ////////////////////////////////////////////////////////////////////////////
 
-void pava_regularise(volume<float>& pixshift, const volume<float>& mask) 
+void pava_regularise(volume<float>& pixshift, const volume<float>& mask)
 {
   volume<float> regshift = pixshift;
   int ysize = pixshift.ysize();
@@ -215,7 +215,7 @@ void fftshift(volume<float>& vol) {
   mida = (Na+1)/2;  // effectively a ceil()
   midb = (Nb+1)/2;  // effectively a ceil()
 
-  for (int z=vol.minz(); z<=vol.maxz(); z++) { 
+  for (int z=vol.minz(); z<=vol.maxz(); z++) {
 
     for (int a=0; a<Na; a++) {
       for (int b=midb; b<=Nb-1; b++) {
@@ -241,7 +241,7 @@ void fftshift(volume<float>& vol) {
 }
 
 
-volume<float> warplikeepi(const volume<float>& absfmap, 
+volume<float> warplikeepi(const volume<float>& absfmap,
 			  const volume<float>& fmap, float dwelltime)
 {
   volume<float> kre, kim, epir, epii;
@@ -252,14 +252,14 @@ volume<float> warplikeepi(const volume<float>& absfmap,
   float tab, Nxsize = absfmap.xsize(), Nysize=absfmap.ysize();
   // convert to k-space
   cout << "Z-limits are "<<absfmap.minz()<<" and "<<absfmap.maxz()<<endl;
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
     for (int b=0; b<Nysize; b++) {
       for (int a=0; a<Nxsize; a++) {
-	tab = b + Nysize/2;  
+	tab = b + Nysize/2;
 	if (tab>Nysize)  tab-=Nysize;
 	for (int n=0; n<Nysize; n++) {
 	  for (int m=0; m<Nxsize; m++) {
-	    float angle = tab*dwelltime*fmap(m,n,z) 
+	    float angle = tab*dwelltime*fmap(m,n,z)
 	      + 2.0*M_PI*(a*m/Nxsize + b*n/Nysize);
 	    kre(a,b,z) += absfmap(m,n,z)*cos(angle);
 	    kim(a,b,z) += absfmap(m,n,z)*sin(angle);
@@ -274,8 +274,8 @@ volume<float> warplikeepi(const volume<float>& absfmap,
 //    fftshift(kre);
 //    fftshift(kim);
 
-  // convert back to image space 
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  // convert back to image space
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
     for (int q=0; q<Nysize; q++) {
       for (int p=0; p<Nxsize; p++) {
 	for (int b=0; b<Nysize; b++) {
@@ -291,17 +291,17 @@ volume<float> warplikeepi(const volume<float>& absfmap,
     if (verbose.value()) { cout << "."; }
   }
   if (verbose.value()) { cout << endl; }
-  
+
   float normalisefac = 1.0/((float) Nxsize * Nysize);
   return abs(epir,epii) * normalisefac;
 }
 
 
 
-float partial_intensity(float ydash, float y0, float y1, float I0) 
+float partial_intensity(float ydash, float y0, float y1, float I0)
 {
-  // calculate the part of the intensity that maps into distorted 
-  //  voxel at coordinate ydash, given the half voxel end-point coords 
+  // calculate the part of the intensity that maps into distorted
+  //  voxel at coordinate ydash, given the half voxel end-point coords
   //  of y0 and y1
   // That is, undistorted voxel centre maps to y0, edge maps to y1 in
   //  distorted space and undistorted intensity, I0, is mapped across
@@ -327,12 +327,12 @@ float partial_intensity(float ydash, float y0, float y1, float I0)
 }
 
 
-volume<float> warplikeepi1D_imspace(const volume<float>& undistvol, 
+volume<float> warplikeepi1D_imspace(const volume<float>& undistvol,
 				   const volume<float>& fmap, float dwelltime)
 {
   // MJ NOTE: ASSUMING FMAP AND UNDISTVOL ARE SAME SIZE (FOR NOW!) - TEMP!!!
   // Use the same dimensions for the output as for the undistvol
-  // And only warp in the Y direction (do a swapdim before passing in to 
+  // And only warp in the Y direction (do a swapdim before passing in to
   //  this function for other directions)
   volume<float> distvol(undistvol);
   distvol = 0.0;
@@ -346,9 +346,9 @@ volume<float> warplikeepi1D_imspace(const volume<float>& undistvol,
 	// coordinates of undistorted voxel centre + left and right edges
 	ys1 = y + fmap(x,y,z) * f2vox;
 	if (y<undistvol.maxy()) { ys2 = y + 1 + fmap(x,y+1,z) * f2vox; }
-	else { ys2 = ys1 + 1; }  
+	else { ys2 = ys1 + 1; }
 	if (y>0) { ys0 = y - 1 + fmap(x,y-1,z) * f2vox; }
-	else { ys0 = ys1 - 1; }  
+	else { ys0 = ys1 - 1; }
 	ys15 = 0.5 * ( ys1 + ys2 );
 	ys05 = 0.5 * ( ys1 + ys0 );
 	// undistorted voxel intensity (to be distributed in output image)
@@ -368,7 +368,7 @@ volume<float> warplikeepi1D_imspace(const volume<float>& undistvol,
 }
 
 
-volume<float> warplikeepi1D_kspace(const volume<float>& absfmap, 
+volume<float> warplikeepi1D_kspace(const volume<float>& absfmap,
 				   const volume<float>& fmap, float dwelltime)
 {
   // 1D form of warp (where tab MUST ONLY DEPEND ON b)
@@ -381,11 +381,11 @@ volume<float> warplikeepi1D_kspace(const volume<float>& absfmap,
   fim = kim;
   float tb, Nxsize = absfmap.xsize(), Nysize=absfmap.ysize();
   // convert to k-space
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
 
     for (int b=0; b<Nysize; b++) {
       // assume dwell-time is 1 (factored into fmap already)
-      tb = b + Nysize/2;  
+      tb = b + Nysize/2;
       if (tb>Nysize)  tb-=Nysize;
       for (int n=0; n<Nysize; n++) {
 	for (int m=0; m<Nxsize; m++) {
@@ -395,7 +395,7 @@ volume<float> warplikeepi1D_kspace(const volume<float>& absfmap,
 	}
       }
     }
-    
+
     for (int b=0; b<Nysize; b++) {
       for (int a=0; a<Nxsize; a++) {
 	for (int m=0; m<Nxsize; m++) {
@@ -406,15 +406,15 @@ volume<float> warplikeepi1D_kspace(const volume<float>& absfmap,
 	}
       }
     }
-    
+
     if (verbose.value()) { cout << "."; }
   }
   if (verbose.value()) { cout << endl; }
 
   fre *= 0.0f;
   fim *= 0.0f;
-  // convert back to image space 
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  // convert back to image space
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
 
     for (int q=0; q<Nysize; q++) {
       for (int b=0; b<Nysize; b++) {
@@ -448,7 +448,7 @@ volume<float> warplikeepi1D_kspace(const volume<float>& absfmap,
 
 
 
-volume<float> warplikeepi1D(const volume<float>& absfmap, 
+volume<float> warplikeepi1D(const volume<float>& absfmap,
 			    const volume<float>& fmap, float dwelltime,
 			    bool usekspace=true)
 {
@@ -462,7 +462,7 @@ volume<float> warplikeepi1D(const volume<float>& absfmap,
 
 
 
-volume<float> unwarpPhaseConj1D(const volume<float>& absfmap, 
+volume<float> unwarpPhaseConj1D(const volume<float>& absfmap,
 			 const volume<float>& fmap, float dwelltime)
 {
   // 1D form of warp (where tab MUST ONLY DEPEND ON b)
@@ -475,7 +475,7 @@ volume<float> unwarpPhaseConj1D(const volume<float>& absfmap,
   fim = kim;
   float tb, Nxsize=absfmap.xsize(), Nysize=absfmap.ysize();
   // convert to k-space
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
 
     for (int b=0; b<Nysize; b++) {
       for (int n=0; n<Nysize; n++) {
@@ -486,7 +486,7 @@ volume<float> unwarpPhaseConj1D(const volume<float>& absfmap,
 	}
       }
     }
-    
+
     for (int b=0; b<Nysize; b++) {
       for (int a=0; a<Nxsize; a++) {
 	for (int m=0; m<Nxsize; m++) {
@@ -497,15 +497,15 @@ volume<float> unwarpPhaseConj1D(const volume<float>& absfmap,
 	}
       }
     }
-    
+
     if (verbose.value()) { cout << "."; }
   }
   if (verbose.value()) { cout << endl; }
 
   fre *= 0.0f;
   fim *= 0.0f;
-  // convert back to image space 
-  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) { 
+  // convert back to image space
+  for (int z=absfmap.minz(); z<=absfmap.maxz(); z++) {
 
     for (int p=0; p<Nxsize; p++) {
       for (int b=0; b<Nysize; b++) {
@@ -521,7 +521,7 @@ volume<float> unwarpPhaseConj1D(const volume<float>& absfmap,
     for (int q=0; q<Nysize; q++) {
       for (int p=0; p<Nxsize; p++) {
 	for (int b=0; b<Nysize; b++) {
-	  tb = b + Nysize/2;  
+	  tb = b + Nysize/2;
 	  if (tb>Nysize)  tb-=Nysize;
 	  float angle = -tb*dwelltime*fmap(p,q,z) -2.0*M_PI*(b*q)/Nysize;
 	  float cosa = cos(angle), sina = sin(angle);
@@ -549,7 +549,7 @@ void ComplexInvertMatrix(const Matrix& Ar, const Matrix& Ai,
 }
 
 
-volume<float> unwarpMatrixInverse1D(const volume<float>& warpedvol, 
+volume<float> unwarpMatrixInverse1D(const volume<float>& warpedvol,
 				    const volume<float>& fmap, float dwelltime)
 {
   float tb;
@@ -568,7 +568,7 @@ volume<float> unwarpMatrixInverse1D(const volume<float>& warpedvol,
 	for (int n=0; n<Nysize; n++) {
 	  Fwarpr(q+1,n+1)=0.0; Fwarpi(q+1,n+1)=0.0;
 	  for (int b=0; b<Nysize; b++) {
-	    tb = b + Nysize/2;  
+	    tb = b + Nysize/2;
 	    if (tb>Nysize)  tb-=Nysize;
 	    float angle = tb*dwelltime*fmap(x,n,z) + 2.0*M_PI*b*(n-q)/Nysize;
 	    Fwarpr(q+1,n+1) += cos(angle);
@@ -593,12 +593,12 @@ volume<float> unwarpMatrixInverse1D(const volume<float>& warpedvol,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <class T> 
-void swapdirections(T& invol, const string& dir) 
+template <class T>
+void swapdirections(T& invol, const string& dir)
 {
   // This is used for swapping the required dimension to the +y axis
   // and for swapping it back
-  // Each case must preserve LR order and when repeated give the identity 
+  // Each case must preserve LR order and when repeated give the identity
       if (dir=="x")  { invol.swapdimensions(2,1,-3); }
       if (dir=="y")  { /* do nothing */ }
       if (dir=="z")  { invol.swapdimensions(-1,3,2); }
@@ -644,7 +644,7 @@ void rigidextend_y(volume<float>& pixshift, const volume<float>& mask)
 	    pixshift(x,p,z) = (i1-i0)*((float) (p-y0))/((float) (y1-y0)) + i0;
 	  }
 	  y=y1;
-	} 
+	}
 	y++;
       }
     }
@@ -653,9 +653,9 @@ void rigidextend_y(volume<float>& pixshift, const volume<float>& mask)
 
 
 
-void regularise_pixshift(volume<float>& pixshift, 
+void regularise_pixshift(volume<float>& pixshift,
 			 volume<float>& validmask,
-			 volume<float>& filledmask) 
+			 volume<float>& filledmask)
 {
   if (unwarpdir.set()) swapdirections(pixshift,unwarpdir_value);
   if (unwarpdir.set()) swapdirections(validmask,unwarpdir_value);
@@ -708,7 +708,7 @@ void regularise_pixshift(volume<float>& pixshift,
     rigidextend_y(pixshift,filledmask);
   }
 
-  if (unwarpdir.set()) swapdirections(pixshift,unwarpdir_value);       
+  if (unwarpdir.set()) swapdirections(pixshift,unwarpdir_value);
   if (unwarpdir.set()) swapdirections(validmask,unwarpdir_value);
   if (unwarpdir.set()) swapdirections(filledmask,unwarpdir_value);
 
@@ -719,24 +719,24 @@ int get_dwell_and_asym(float& dwellval, float& asymval) {
   asymval = asym.value();
   dwellval = dwell.value();
   bool needasym = inphase.set() && savefmap.set();
-  bool needdwell = loadfmap.set() && ( unwarpfname.set() || warpfname.set() 
+  bool needdwell = loadfmap.set() && ( unwarpfname.set() || warpfname.set()
 				       || saveshift.set() );
   needdwell = needdwell || ( loadshift.set() && savefmap.set() );
-  bool needratio = inphase.set() && ( unwarpfname.set() || warpfname.set() 
+  bool needratio = inphase.set() && ( unwarpfname.set() || warpfname.set()
 				       || saveshift.set() );
 
   if (needasym && asym.unset() && (dwelltoasym.unset() || dwell.unset())) {
-    cerr << "Must set a value for asym time (or both dwell time and ratio)" 
+    cerr << "Must set a value for asym time (or both dwell time and ratio)"
 	 << endl;
     return -1;
   }
   if (needdwell && dwell.unset() && (dwelltoasym.unset() || asym.unset())) {
-    cerr << "Must set a value for dwell time (or both asym time and ratio)" 
+    cerr << "Must set a value for dwell time (or both asym time and ratio)"
 	 << endl;
     return -1;
   }
   if (needratio && dwelltoasym.unset() && (dwell.unset() || asym.unset())) {
-    cerr << "Must set the dwell to asym ratio (or both dwell and asym times)" 
+    cerr << "Must set the dwell to asym ratio (or both dwell and asym times)"
 	 << endl;
     return -1;
   }
@@ -782,7 +782,7 @@ int do_unwarping()
     if (verbose.value()) { cout << "Reading input volume" << endl; }
     read_volume4D(invol,inputname.value());
   } else if (unwarpfname.set() || warpfname.set()) {
-    cerr << "Must specify an input volume (-i or --in) to use (un)warping." 
+    cerr << "Must specify an input volume (-i or --in) to use (un)warping."
 	 << endl;
     return -1;
   }
@@ -820,12 +820,12 @@ int do_unwarping()
       mask1 = 1.0f - binarise(uphase[0],-1e-6f,1e-6f);
       mask2 = 1.0f - binarise(uphase[1],-1e-6f,1e-6f);
     }
-    
+
     if (verbose.value()) { cout << "Calculating pixel-shift map" << endl; }
     fmap = calc_fmap(uphase[0],uphase[1],mask1,mask2,asymval);
     if (inputname.unset()) { invol.addvolume(fmap); }  // needed for voxdims
     pixshift = fmap * fmap2pixshift_factor(invol[0],dwellval,unwarpdir_value);
-  } 
+  }
   else { // LOAD SHIFTMAP or FIELDMAP
     if (loadshift.set()) {
       if (verbose.value()) { cout << "Reading pixel-shift map" << endl; }
@@ -858,18 +858,18 @@ int do_unwarping()
   if (verbose.value()) { cout << "Calculating valid and filled masks" << endl; }
   volume<float> validmask, filledmask;
   validmask = mask1*mask2;
-  
+
   filledmask = mask1;
   filledmask += mask2;
   filledmask.binarise(0.5);
   filledmask = fill_head_mask(filledmask);
-  
+
 //    if (verbose.value()) {
 //      save_volume(validmask,inputname.value()+"_valid");
 //      save_volume(filledmask,inputname.value()+"_mask");
 //    }
-  
-  
+
+
   // regularise the pixshift map if required
   if (verbose.value()) { cout << "Regularising the fieldmap" << endl; }
   regularise_pixshift(pixshift,validmask,filledmask);
@@ -886,7 +886,7 @@ int do_unwarping()
   if (savefmap.set()) {
     if (asym.unset() && ( dwell.unset() || dwelltoasym.unset() )
 	&& loadfmap.unset()) {
-      if ( !(dwell.set() && asym.unset() && dwelltoasym.unset() 
+      if ( !(dwell.set() && asym.unset() && dwelltoasym.unset()
 	  && loadshift.set()) ) {
 	cerr << "Warning in Save Fieldmap: no asym value was set, so fieldmap "
 	     << "has undetermined scale factor." << endl;
@@ -898,17 +898,17 @@ int do_unwarping()
       save_volume(fmap,savefmap.value());
     }
   }
-  
+
 
   // THE UNWARPING PART
   if (unwarpfname.set()) {
     if (verbose.value()) { cout << "Applying unwarping" << endl; }
     resvol = invol;
     for (int t0=invol.mint(); t0<=invol.maxt(); t0++) {
-      if (unwarpdir.set()) { 
-	swapdirections(invol[t0],unwarpdir_value); 
-	swapdirections(pixshift,unwarpdir_value);       
-      }      
+      if (unwarpdir.set()) {
+	swapdirections(invol[t0],unwarpdir_value);
+	swapdirections(pixshift,unwarpdir_value);
+      }
       if (phaseconj.value()) {
 	// Phase Conjugate method
 	resvol[t0] = unwarpPhaseConj1D(invol[t0],fmap,dwellval);
@@ -929,11 +929,11 @@ int do_unwarping()
 	  resvol[t0] *= derivshift;
 	}
       }
-      if (unwarpdir.set()) { 
-	swapdirections(resvol[t0],unwarpdir_value); 
-	swapdirections(invol[t0],unwarpdir_value); 
-	swapdirections(pixshift,unwarpdir_value);       
-      }      
+      if (unwarpdir.set()) {
+	swapdirections(resvol[t0],unwarpdir_value);
+	swapdirections(invol[t0],unwarpdir_value);
+	swapdirections(pixshift,unwarpdir_value);
+      }
     }
     // save_volume(derivshift,unwarpfname.value()+"_deriv");
     save_volume4D(resvol,unwarpfname.value());
@@ -945,21 +945,21 @@ int do_unwarping()
     if (verbose.value()) { cout << "Applying forward warping" << endl; }
     resvol = invol;
     for (int t0=invol.mint(); t0<=invol.maxt(); t0++) {
-      // warp invol to look like an EPI acquired volume    
-      if (unwarpdir.set()) { 
-	swapdirections(invol[t0],unwarpdir_value); 
-	swapdirections(fmap,unwarpdir_value);       
-      }      
+      // warp invol to look like an EPI acquired volume
+      if (unwarpdir.set()) {
+	swapdirections(invol[t0],unwarpdir_value);
+	swapdirections(fmap,unwarpdir_value);
+      }
       resvol[t0] = warplikeepi1D(invol[t0],fmap,dwellval,!nokspace.value());
-      if (unwarpdir.set()) { 
-	swapdirections(resvol[t0],unwarpdir_value); 
-	swapdirections(invol[t0],unwarpdir_value); 
-	swapdirections(fmap,unwarpdir_value);       
-      }      
-    }    
+      if (unwarpdir.set()) {
+	swapdirections(resvol[t0],unwarpdir_value);
+	swapdirections(invol[t0],unwarpdir_value);
+	swapdirections(fmap,unwarpdir_value);
+      }
+    }
     save_volume4D(resvol,warpfname.value());
   }
-    
+
   return 0;
 }
 
@@ -1004,7 +1004,7 @@ int main(int argc,char *argv[])
     options.add(nokspace);
     options.add(verbose);
     options.add(help);
-    
+
     options.parse_command_line(argc, argv);
 
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -1012,32 +1012,32 @@ int main(int argc,char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-        
-    if ( inphase.unset() && loadshift.unset() && loadfmap.unset() ) 
+
+    if ( inphase.unset() && loadshift.unset() && loadfmap.unset() )
       {
 	options.usage();
-	cerr << endl 
-	     << "Either --phasemap , --loadshift or --loadfmap MUST be used." 
+	cerr << endl
+	     << "Either --phasemap , --loadshift or --loadfmap MUST be used."
 	     << endl;
 	exit(EXIT_FAILURE);
       }
 
-    if (unwarpdir.value()!="x" && unwarpdir.value()!="y" && 
-	unwarpdir.value()!="z" && unwarpdir.value()!="x-" && 
-	unwarpdir.value()!="y-" && unwarpdir.value()!="z-") 
+    if (unwarpdir.value()!="x" && unwarpdir.value()!="y" &&
+	unwarpdir.value()!="z" && unwarpdir.value()!="x-" &&
+	unwarpdir.value()!="y-" && unwarpdir.value()!="z-")
      {
 	cerr << "Illegal value for unwarpdir!" << endl
    	     << "Use x, y, z, x-, y- or z- only." << endl;
   	exit(EXIT_FAILURE);
      }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   int retval = do_unwarping();
   if (retval!=0) {

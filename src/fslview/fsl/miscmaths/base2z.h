@@ -13,26 +13,26 @@
 #include <fstream>
 
 namespace MISCMATHS {
-  
+
   class Base2z
     {
     public:
       Base2z()
 	{}
-      
-      virtual ~Base2z() { delete base2z; }      
-      
-      float convertlogp2z(float logp); 
+
+      virtual ~Base2z() { delete base2z; }
+
+      float convertlogp2z(float logp);
       float logp2largez(float logp);
       float logbeta(float v, float w);
 
       virtual bool issmalllogp(float logp) = 0;
 
     private:
-      
+
       const Base2z& operator=(Base2z&);
       Base2z(Base2z&);
-      
+
       static Base2z* base2z;
 
     };

@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -92,7 +92,7 @@ pack $w.f -in $w -side top
 
 
 
-FileEntry $w.f.featdir -textvariable entries($w,1) -label "Select a FEAT directory" -title "Select a FEAT directory"  -width 20 -filedialog directory -filetypes "*.feat" -dirasfile "design.fsf" 
+FileEntry $w.f.featdir -textvariable entries($w,1) -label "Select a FEAT directory" -title "Select a FEAT directory"  -width 20 -filedialog directory -filetypes "*.feat" -dirasfile "design.fsf"
 #FSLFileEntry $w.f.featdir -varia entries($w,1)-pattern "*.feat" -directory "~" -label "Select a FEAT directory" -title "Select a FEAT directory" -width 20 -dirasfile "design.fsf" -filterhist VARS(history)
 
 frame $w.f.space
@@ -134,7 +134,7 @@ pack $w.f.featdir $w.f.space $w.f.background $w.f.autothresh -in $w.f -padx 5 -p
 
 frame $w.btns
 frame $w.btns.b -relief raised -borderwidth 1
-    
+
 button $w.apply -command "feat5:renderhighres_proc $w" -text "Go"
 
 button $w.cancel -command "destroy $w" -text "Exit"

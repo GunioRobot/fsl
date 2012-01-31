@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2005
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -132,13 +132,13 @@ namespace boost{ namespace re_detail{
    //
    // MSVC 8 will either emit warnings or else refuse to compile
    // code that makes perfectly legitimate use of std::copy, when
-   // the OutputIterator type is a user-defined class (apparently all user 
+   // the OutputIterator type is a user-defined class (apparently all user
    // defined iterators are "unsafe").  This code works around that:
    //
    template<class InputIterator, class OutputIterator>
    inline OutputIterator copy(
-      InputIterator first, 
-      InputIterator last, 
+      InputIterator first,
+      InputIterator last,
       OutputIterator dest
    )
    {
@@ -154,7 +154,7 @@ namespace boost{ namespace re_detail{
    inline std::size_t strcpy_s(
       char *strDestination,
       std::size_t sizeInBytes,
-      const char *strSource 
+      const char *strSource
    )
    {
       if(std::strlen(strSource)+1 > sizeInBytes)
@@ -165,7 +165,7 @@ namespace boost{ namespace re_detail{
    inline std::size_t strcat_s(
       char *strDestination,
       std::size_t sizeInBytes,
-      const char *strSource 
+      const char *strSource
    )
    {
       if(std::strlen(strSource) + std::strlen(strDestination) + 1 > sizeInBytes)

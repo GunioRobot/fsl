@@ -31,7 +31,7 @@ class TimeSeriesWidget : public TimeSeriesWindowBase
 public:
   TimeSeriesWidget(QWidget *parent,
                    Image::Handle& image,
-                   Cursor::Handle& cursor);  
+                   Cursor::Handle& cursor);
 
   TimeSeriesWidget(QWidget *parent,
                    Image::Handle& image,
@@ -40,9 +40,9 @@ public:
                    ModelFit::Handle& modelFit);
 
   virtual ~TimeSeriesWidget();
-  
+
   void addFeatComboBox(QToolBar *);
-  
+
 private:
 
   void constructor();
@@ -52,11 +52,11 @@ private:
   PlotOptions::Handle m_options;
   //int              m_viewNumber;
   int              m_contrListIndex;
-  
+
   TimeSeriesDisplay::Handle  m_displayWidget;
 
 public  slots:
-  void closeEvent(QCloseEvent*);  
+  void closeEvent(QCloseEvent*);
 
   void addPressed();
   void removePressed();

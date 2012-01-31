@@ -47,7 +47,7 @@ int main ( int argc, char **argv ){
     cerr<< "<x> <y> <z> in mni mm coords"<<endl;
     return 0;
   }
- 
+
   vector<string> masknames;
   volume<int> inside_mask;
   read_volume(inside_mask,argv[1]);
@@ -58,7 +58,7 @@ int main ( int argc, char **argv ){
     read_volume(tmpcort,masknames[m]);
     cortex_masks.push_back(tmpcort);
   }
-  
+
   float x_mm=atof(argv[3]);
   float y_mm=atof(argv[4]);
   float z_mm=atof(argv[5]);
@@ -72,13 +72,13 @@ int main ( int argc, char **argv ){
   float xvox=(x_mm+x_orig_mm)/cortex_masks[0].xdim()-x_roi_start_vox;
   float yvox=(y_mm+y_orig_mm)/cortex_masks[0].ydim()-y_roi_start_vox;
   float zvox=(z_mm+z_orig_mm)/cortex_masks[0].zdim()-z_roi_start_vox;
-  
+
   if(inside_mask((int)round(xvox),(int)round(yvox),(int)round(zvox))==0){
     cout<<"Sorry - Your input is not in our defined thalamus"<<endl;
     for(unsigned int i=0;i<masknames.size();i++){
       cout<<0<<endl;
     }
-  }  
+  }
   else{
     cout<<"Input inside thalamus"<<endl;
     for(unsigned int i=0;i<masknames.size();i++){
@@ -95,7 +95,7 @@ int main ( int argc, char **argv ){
 }
 
 
- 
+
 
 
 

@@ -23,11 +23,11 @@ namespace boost {
 // comparison.
 #ifndef BOOST_RECURSIVE_DFS
 
-    template <typename IncidenceGraph, typename DFSVisitor, 
+    template <typename IncidenceGraph, typename DFSVisitor,
               typename VertexColorMap, typename EdgeColorMap>
     void undir_dfv_impl
       (const IncidenceGraph& g,
-       typename graph_traits<IncidenceGraph>::vertex_descriptor u, 
+       typename graph_traits<IncidenceGraph>::vertex_descriptor u,
        DFSVisitor& vis,
        VertexColorMap vertex_color,
        EdgeColorMap edge_color)
@@ -85,11 +85,11 @@ namespace boost {
 
 #else // BOOST_RECURSIVE_DFS
 
-    template <typename IncidenceGraph, typename DFSVisitor, 
+    template <typename IncidenceGraph, typename DFSVisitor,
               typename VertexColorMap, typename EdgeColorMap>
     void undir_dfv_impl
       (const IncidenceGraph& g,
-       typename graph_traits<IncidenceGraph>::vertex_descriptor u, 
+       typename graph_traits<IncidenceGraph>::vertex_descriptor u,
        DFSVisitor& vis,  // pass-by-reference here, important!
        VertexColorMap vertex_color,
        EdgeColorMap edge_color)
@@ -126,11 +126,11 @@ namespace boost {
 
   } // namespace detail
 
-  template <typename Graph, typename DFSVisitor, 
-            typename VertexColorMap, typename EdgeColorMap, 
+  template <typename Graph, typename DFSVisitor,
+            typename VertexColorMap, typename EdgeColorMap,
             typename Vertex>
   void
-  undirected_dfs(const Graph& g, DFSVisitor vis, 
+  undirected_dfs(const Graph& g, DFSVisitor vis,
                  VertexColorMap vertex_color, EdgeColorMap edge_color,
                  Vertex start_vertex)
   {
@@ -163,7 +163,7 @@ namespace boost {
   template <typename Graph, typename DFSVisitor, typename VertexColorMap,
     typename EdgeColorMap>
   void
-  undirected_dfs(const Graph& g, DFSVisitor vis, 
+  undirected_dfs(const Graph& g, DFSVisitor vis,
                  VertexColorMap vertex_color, EdgeColorMap edge_color)
   {
     undirected_dfs(g, vis, vertex_color, edge_color, *vertices(g).first);
@@ -173,7 +173,7 @@ namespace boost {
     template <typename VertexColorMap>
     struct udfs_dispatch {
 
-      template <typename Graph, typename Vertex, 
+      template <typename Graph, typename Vertex,
                 typename DFSVisitor, typename EdgeColorMap,
                 typename P, typename T, typename R>
       static void
@@ -210,15 +210,15 @@ namespace boost {
     };
 
   } // namespace detail
-  
+
 
   // Named Parameter Variant
   template <typename Graph, typename P, typename T, typename R>
   void
-  undirected_dfs(const Graph& g, 
+  undirected_dfs(const Graph& g,
                  const bgl_named_params<P, T, R>& params)
   {
-    typedef typename property_value< bgl_named_params<P, T, R>, 
+    typedef typename property_value< bgl_named_params<P, T, R>,
       vertex_color_t>::type C;
     detail::udfs_dispatch<C>::apply
       (g,
@@ -231,13 +231,13 @@ namespace boost {
        get_param(params, vertex_color)
        );
   }
-  
 
-  template <typename IncidenceGraph, typename DFSVisitor, 
+
+  template <typename IncidenceGraph, typename DFSVisitor,
     typename VertexColorMap, typename EdgeColorMap>
   void undirected_depth_first_visit
     (const IncidenceGraph& g,
-     typename graph_traits<IncidenceGraph>::vertex_descriptor u, 
+     typename graph_traits<IncidenceGraph>::vertex_descriptor u,
      DFSVisitor vis, VertexColorMap vertex_color, EdgeColorMap edge_color)
   {
     detail::undir_dfv_impl(g, u, vis, vertex_color, edge_color);

@@ -139,7 +139,7 @@ MAN2TCL			= man2tcl$(EXEEXT)
 
 @SET_MAKE@
 
-# Setting the VPATH variable to a list of paths will cause the 
+# Setting the VPATH variable to a list of paths will cause the
 # makefile to look into these paths when resolving .c to .obj
 # dependencies.
 
@@ -351,7 +351,7 @@ CORE_DOCS = $(TCL_DOCS) $(TK_DOCS)
 
 DEMOPROGS = browse hello ixset rmt rolodex square tcolor timer widget
 
-# Main targets.  The default target -- all -- builds the binaries, 
+# Main targets.  The default target -- all -- builds the binaries,
 # performs any post processing on libraries or documents.
 
 all: binaries libraries doc
@@ -426,7 +426,7 @@ install-binaries: binaries
 		$(COPY) $$i "$(BIN_INSTALL_DIR)"; \
 	    fi; \
 	    done
-	@echo "Creating package index $(PKG_INDEX)"; 
+	@echo "Creating package index $(PKG_INDEX)";
 	@$(RM) $(PKG_INDEX);
 	@(\
 	echo "if {[package vcompare [package provide Tcl]\

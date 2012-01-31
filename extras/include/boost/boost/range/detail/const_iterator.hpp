@@ -18,10 +18,10 @@
 // missing partial specialization  workaround.
 //////////////////////////////////////////////////////////////////////////////
 
-namespace boost 
+namespace boost
 {
-    namespace range_detail 
-    {      
+    namespace range_detail
+    {
         template< typename T >
         struct range_const_iterator_;
 
@@ -48,22 +48,22 @@ namespace boost
 
         template<>
         struct range_const_iterator_<array_>
-        { 
+        {
             template< typename T >
             struct pts
             {
-                typedef const BOOST_RANGE_DEDUCED_TYPENAME 
+                typedef const BOOST_RANGE_DEDUCED_TYPENAME
                     remove_extent<T>::type* type;
             };
         };
-        
+
         template<>
         struct range_const_iterator_<char_array_>
-        { 
+        {
             template< typename T >
             struct pts
             {
-                typedef const BOOST_RANGE_DEDUCED_TYPENAME 
+                typedef const BOOST_RANGE_DEDUCED_TYPENAME
                     remove_extent<T>::type* type;
             };
         };
@@ -74,18 +74,18 @@ namespace boost
             template< typename S >
             struct pts
             {
-                typedef const char* type; 
-            };         
+                typedef const char* type;
+            };
         };
-        
+
         template<>
         struct range_const_iterator_<const_char_ptr_>
         {
             template< typename S >
             struct pts
             {
-                typedef const char* type; 
-            };         
+                typedef const char* type;
+            };
         };
 
         template<>
@@ -94,8 +94,8 @@ namespace boost
             template< typename S >
             struct pts
             {
-                typedef const wchar_t* type; 
-            };         
+                typedef const wchar_t* type;
+            };
         };
 
         template<>
@@ -104,18 +104,18 @@ namespace boost
              template< typename S >
              struct pts
              {
-                 typedef const wchar_t* type; 
-             };         
+                 typedef const wchar_t* type;
+             };
          };
 
-    } 
-    
+    }
+
     template< typename C >
     class range_const_iterator
     {
         typedef BOOST_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:
-        typedef BOOST_DEDUCED_TYPENAME range_detail::range_const_iterator_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
+        typedef BOOST_DEDUCED_TYPENAME range_detail::range_const_iterator_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type;
     };
 
 }

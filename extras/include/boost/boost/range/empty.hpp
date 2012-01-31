@@ -23,9 +23,9 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 
-namespace boost 
-{ 
-namespace range_detail 
+namespace boost
+{
+namespace range_detail
 {
 
         //////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ namespace range_detail
         {
             return s == 0 || s[0] == 0;
         }
-        
+
 } // namespace 'range_detail'
 
 template< class T >

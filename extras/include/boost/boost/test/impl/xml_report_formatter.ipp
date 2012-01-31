@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -66,7 +66,7 @@ xml_report_formatter::test_unit_report_start( test_unit const& tu, std::ostream&
     else
         descr = "failed";
 
-    ostr << '<' << ( tu.p_type == tut_case ? "TestCase" : "TestSuite" ) 
+    ostr << '<' << ( tu.p_type == tut_case ? "TestCase" : "TestSuite" )
          << " name"     << attr_value() << tu.p_name.get()
          << " result"   << attr_value() << descr
          << " assertions_passed"        << attr_value() << tr.p_assertions_passed
@@ -77,8 +77,8 @@ xml_report_formatter::test_unit_report_start( test_unit const& tu, std::ostream&
         ostr << " test_cases_passed"    << attr_value() << tr.p_test_cases_passed
              << " test_cases_failed"    << attr_value() << tr.p_test_cases_failed
              << " test_cases_skipped"   << attr_value() << tr.p_test_cases_skipped;
-             
-    
+
+
     ostr << '>';
 }
 
@@ -96,7 +96,7 @@ void
 xml_report_formatter::do_confirmation_report( test_unit const& tu, std::ostream& ostr )
 {
     test_unit_report_start( tu, ostr );
-    test_unit_report_finish( tu, ostr );    
+    test_unit_report_finish( tu, ostr );
 }
 
 //____________________________________________________________________________//

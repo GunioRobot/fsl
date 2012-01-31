@@ -39,7 +39,7 @@ extern struct	GDC_FONT_T	GDC_fontc[];
 #define CY( i,d )		( cy                -	\
 						  (d? ydepth_3D: 0) -	\
 						  (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * cos((double)(slice_angle[0][i])) ) )
-/* expect slice number:     i (index into slice_angle array) *\ 
+/* expect slice number:     i (index into slice_angle array) *\
  *   and position on slice: f (0: slice middle,              *
  *                             1: leading (clockwise),       *
  *                             2: trailing edge)             *
@@ -58,7 +58,7 @@ extern struct	GDC_FONT_T	GDC_fontc[];
 #define TO_RAD(o)			( (o)/360.0*(2.0*M_PI) )
 																					/* assume !> 4*PI */
 #define MOD_2PI(o)			( (o)>=(2.0*M_PI)? ((o)-(2.0*M_PI)): (((o)<0)? ((o)+(2.0*M_PI)): (o)) )
-#define MOD_360(o)			( (o)>=360? (o)-360: (o) )								/* assume !> 720 */ 
+#define MOD_360(o)			( (o)>=360? (o)-360: (o) )								/* assume !> 720 */
 
 struct tmp_slice_t { int	i;					/* original index */
 					 char	hidden;				/* 'behind' top [3D] pie */
@@ -72,7 +72,7 @@ static float				pie_3D_rad;			/* user requested 3D angle in radians */
 #define RAD_DIST2( a )		( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) )
 static float				dist_foo1, dist_foo2;
 
-/* ------------------------------------------------------- *\ 
+/* ------------------------------------------------------- *\
  * oof!  cleaner way???
  * order by angle opposite (180) of depth angle
  * comparing across 0-360 line
@@ -104,9 +104,9 @@ ocmpr( struct tmp_slice_t *a,
 	return 0;
 }
 
-/* ======================================================= *\ 
+/* ======================================================= *\
  * PIE
- * 
+ *
  * Notes:
  *  always drawn from 12:00 position clockwise
  *  'missing' slices don't get labels
@@ -282,16 +282,16 @@ GDC_out_pie( short			IMGWIDTH,
 				else
 					lbl_wdth = lbl_hgt = 0;
 				/* end label height, width */
-				
+
 				/* diamiter limited by this piont's: explosion, label                 */
 				/* (radius to box @ slice_angle) - (explode) - (projected label size) */
 				/* radius constraint due to labels */
 				this_y_explode_limit = (float)this_cos==0.0? FLT_MAX:
-										(	(float)( (double)cheight/ABS(this_cos) ) - 
+										(	(float)( (double)cheight/ABS(this_cos) ) -
 											(float)( this_explode + (lbl&&lbl[i]? GDCPIE_label_dist: 0) ) -
 											(float)( lbl_hgt/2 ) / (float)ABS(this_cos)	);
 				this_x_explode_limit = (float)this_sin==0.0? FLT_MAX:
-										(	(float)( (double)cwidth/ABS(this_sin) ) - 
+										(	(float)( (double)cwidth/ABS(this_sin) ) -
 											(float)( this_explode + (lbl&&lbl[i]? GDCPIE_label_dist: 0) ) -
 											(float)( lbl_wdth ) / (float)ABS(this_sin)	);
 
@@ -392,7 +392,7 @@ GDC_out_pie( short			IMGWIDTH,
 			}
 
 	pscl = (2.0*M_PI)/tot_val;
-	
+
 	/* ----- calc: smallest a slice can be ----- */
 	/* 1/2 circum / num slices per side. */
 	/*              determined by number of labels that'll fit (height) */
@@ -421,7 +421,7 @@ GDC_out_pie( short			IMGWIDTH,
 								TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
 								TO_INT_DEG_CEIL(slice_angle[2][i])+270,
 								SliceColorShd[i] );
-					
+
 /*				gdImageFilledArc( im, CX(i,1), CY(i,1), */
 /*									  rad*ellipsex*2, rad*ellipsey*2, */
 /*									  TO_INT_DEG_FLOOR(slice_angle[1][i])+270, */
@@ -436,7 +436,7 @@ GDC_out_pie( short			IMGWIDTH,
 					{
 					gdImageLine( im, CX(i,1), CY(i,1), IX(i,1,1), IY(i,1,1), EdgeColorShd );
 					gdImageLine( im, CX(i,1), CY(i,1), IX(i,2,1), IY(i,2,1), EdgeColorShd );
-					gdImageArc( im, CX(i,1), CY(i,1), 
+					gdImageArc( im, CX(i,1), CY(i,1),
 									rad*ellipsex*2, rad*ellipsey*2,
 									TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
 									EdgeColorShd);
@@ -511,7 +511,7 @@ GDC_out_pie( short			IMGWIDTH,
 				gdp[3].x  = OX(i,slice_angle[2][i],0);	gdp[3].y = OY(i,slice_angle[2][i],0);
 				gdImageFilledPolygon( im, gdp, 4, SliceColorShd[i] );
 				}
-				
+
 
 			if( GDCPIE_EdgeColor != GDC_NOCOLOR )
 				{
@@ -540,7 +540,7 @@ GDC_out_pie( short			IMGWIDTH,
 			gdImageLine( im, CX(i,0), CY(i,0), IX(i,1,0), IY(i,1,0), SliceColor[i] );
 			gdImageLine( im, CX(i,0), CY(i,0), IX(i,2,0), IY(i,2,0), SliceColor[i] );
 
-			gdImageArc( im, CX(i,0), CY(i,0), 
+			gdImageArc( im, CX(i,0), CY(i,0),
 							(int)(rad*ellipsex*2.0), (int)(rad*ellipsey*2.0),
 							(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)%360,
 							(TO_INT_DEG_CEIL(slice_angle[2][i])+270)%360,
@@ -567,7 +567,7 @@ GDC_out_pie( short			IMGWIDTH,
 				gdImageLine( im, CX(i,0), CY(i,0), IX(i,1,0), IY(i,1,0), EdgeColor );
 				gdImageLine( im, CX(i,0), CY(i,0), IX(i,2,0), IY(i,2,0), EdgeColor );
 
-				gdImageArc( im, CX(i,0), CY(i,0), 
+				gdImageArc( im, CX(i,0), CY(i,0),
 								rad*ellipsex*2, rad*ellipsey*2,
 								(TO_INT_DEG(slice_angle[1][i])+270)%360,
 								(TO_INT_DEG(slice_angle[2][i])+270)%360,

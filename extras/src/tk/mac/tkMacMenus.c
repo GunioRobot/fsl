@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacMenus.c --
  *
  *	These calls set up and manage the menubar for the
@@ -70,7 +70,7 @@ static void SourceDialog _ANSI_ARGS_((void));
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkMacHandleMenuSelect(
     long mResult,
     int optionKeyPressed)
@@ -89,13 +89,13 @@ TkMacHandleMenuSelect(
     }
 
     switch (theMenu) {
-	
+
 	case kAppleMenu:
 	    switch (theItem) {
 		case kAppleAboutItem:
 		    {
 			Tcl_CmdInfo dummy;
-			
+
 			if (optionKeyPressed || gInterp == NULL ||
 			    Tcl_GetCommandInfo(gInterp,
 				    "tkAboutDialog", &dummy) == 0) {
@@ -175,14 +175,14 @@ TkMacHandleMenuSelect(
  *----------------------------------------------------------------------
  */
 
-void 
+void
 TkMacInitMenus(
     Tcl_Interp 	*interp)
 {
     gInterp = interp;
 
-    /* 
-     * At this point, InitMenus() should have already been called. 
+    /*
+     * At this point, InitMenus() should have already been called.
      */
 
     if (TkMacUseMenuID(256) != TCL_OK) {
@@ -225,10 +225,10 @@ TkMacInitMenus(
     if (TkMacUseMenuID(kHMHelpMenuID) != TCL_OK) {
     	panic("Help menu ID %s is already in use!", kHMHelpMenuID);
     }
-    
+
     DrawMenuBar();
     TkMacSetHelpMenuItemCount();
-    
+
     return;
 }
 
@@ -237,7 +237,7 @@ TkMacInitMenus(
  *
  * GenerateEditEvent --
  *
- *	Takes an edit menu item and posts the corasponding a virtual 
+ *	Takes an edit menu item and posts the corasponding a virtual
  *	event to Tk's event queue.
  *
  * Results:
@@ -249,7 +249,7 @@ TkMacInitMenus(
  *----------------------------------------------------------------------
  */
 
-static void 
+static void
 GenerateEditEvent(
     int flag)
 {
@@ -279,29 +279,29 @@ GenerateEditEvent(
     event.root = XRootWindow(Tk_Display(tkwin), 0);
     event.subwindow = None;
     event.time = TkpGetMS();
-    
+
     GetMouse(&where);
-    tkwin = Tk_TopCoordsToWindow(tkwin, where.h, where.v, 
+    tkwin = Tk_TopCoordsToWindow(tkwin, where.h, where.v,
 	    &event.x, &event.y);
     LocalToGlobal(&where);
     event.x_root = where.h;
     event.y_root = where.v;
     event.state = TkMacButtonKeyState();
     event.same_screen = true;
-    
+
     switch (flag) {
 	case EDIT_CUT:
 	    event.name = Tk_GetUid("Cut");
 	    break;
-	    
+
 	case EDIT_COPY:
 	    event.name = Tk_GetUid("Copy");
 	    break;
-	    
+
 	case EDIT_PASTE:
 	    event.name = Tk_GetUid("Paste");
 	    break;
-	    
+
 	case EDIT_CLEAR:
 	    event.name = Tk_GetUid("Clear");
 	    break;
@@ -326,30 +326,30 @@ GenerateEditEvent(
  *----------------------------------------------------------------------
  */
 
-static void 
+static void
 SourceDialog()
 {
     int result;
     CONST char *path;
     char openCmd[] = "tk_getOpenFile -filetypes {\
             {{TCL Scripts} {.tcl} TEXT} {{Text Files} {} TEXT}}";
-    
+
     if (gInterp == NULL) {
 	return;
     }
-    
+
     if (Tcl_Eval(gInterp, openCmd) != TCL_OK) {
 	return;
     }
-    
+
     path = Tcl_GetStringResult(gInterp);
-    
+
     if (strlen(path) == 0) {
         return;
     }
-    
+
     result = Tcl_EvalFile(gInterp, path);
     if (result == TCL_ERROR) {
 	Tcl_BackgroundError(gInterp);
-    }	   
+    }
 }

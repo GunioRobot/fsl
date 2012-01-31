@@ -26,14 +26,14 @@ namespace Utilities {
 class OverlayOption
 {
 public:
-  OverlayOption(const string& filename, 
-		const Utilities::Option<string>& lutname, 
-		const Utilities::Option<float>& trans, 
+  OverlayOption(const string& filename,
+		const Utilities::Option<string>& lutname,
+		const Utilities::Option<float>& trans,
 		const Utilities::Option< std::pair<float,float> >& bricon):
   m_filename(filename), m_lutname(lutname), m_trans(trans), m_bricon(bricon)
   {
   }
-  
+
   QFileInfo fileInfo() const
   {
     return QFileInfo(FslMakeBaseName(m_filename.c_str()));
@@ -48,7 +48,7 @@ public:
 
   bool transparencySpecified() const { return m_trans.set(); }
   float transparency() const { return m_trans.value(); }
-  
+
   virtual ~OverlayOption() {}
 
 private:
@@ -79,14 +79,14 @@ public:
     for(std::vector<string>::const_iterator it = modeStrings.begin();
 	it != modeStrings.end(); ++it)
       {
-	if(!it->compare("ortho")) { 
-	  m_modes.push_back(Ortho); 
-	} else if(!it->compare("lightbox")) { 
-	  m_modes.push_back(Lightbox); 
-	} else if(!it->compare("single")) { 
-	  m_modes.push_back(Single); 
-	} else if(!it->compare("3d")) { 
-	  m_modes.push_back(ThreeD); 
+	if(!it->compare("ortho")) {
+	  m_modes.push_back(Ortho);
+	} else if(!it->compare("lightbox")) {
+	  m_modes.push_back(Lightbox);
+	} else if(!it->compare("single")) {
+	  m_modes.push_back(Single);
+	} else if(!it->compare("3d")) {
+	  m_modes.push_back(ThreeD);
 	} else {
 	  std::string msg(*it + ": bad mode!");
 	  throw std::runtime_error(msg.c_str());

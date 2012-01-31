@@ -1,4 +1,4 @@
-/* 
+/*
  * tkTrig.c --
  *
  *	This file contains a collection of trigonometry utility
@@ -189,7 +189,7 @@ TkLineToArea(end1Ptr, end2Ptr, rectPtr)
 	/*
 	 * Vertical line.
 	 */
-    
+
 	if (((end1Ptr[1] >= rectPtr[1]) ^ (end2Ptr[1] >= rectPtr[1]))
 		&& (end1Ptr[0] >= rectPtr[0])
 		&& (end1Ptr[0] <= rectPtr[2])) {
@@ -199,7 +199,7 @@ TkLineToArea(end1Ptr, end2Ptr, rectPtr)
 	/*
 	 * Horizontal line.
 	 */
-    
+
 	if (((end1Ptr[0] >= rectPtr[0]) ^ (end2Ptr[0] >= rectPtr[0]))
 		&& (end1Ptr[1] >= rectPtr[1])
 		&& (end1Ptr[1] <= rectPtr[3])) {
@@ -207,44 +207,44 @@ TkLineToArea(end1Ptr, end2Ptr, rectPtr)
 	}
     } else {
 	double m, x, y, low, high;
-    
+
 	/*
 	 * Diagonal line.  Compute slope of line and use
 	 * for intersection checks against each of the
 	 * sides of the rectangle: left, right, bottom, top.
 	 */
-    
+
 	m = (end2Ptr[1] - end1Ptr[1])/(end2Ptr[0] - end1Ptr[0]);
 	if (end1Ptr[0] < end2Ptr[0]) {
 	    low = end1Ptr[0];  high = end2Ptr[0];
 	} else {
 	    low = end2Ptr[0]; high = end1Ptr[0];
 	}
-    
+
 	/*
 	 * Left edge.
 	 */
-    
+
 	y = end1Ptr[1] + (rectPtr[0] - end1Ptr[0])*m;
 	if ((rectPtr[0] >= low) && (rectPtr[0] <= high)
 		&& (y >= rectPtr[1]) && (y <= rectPtr[3])) {
 	    return 0;
 	}
-    
+
 	/*
 	 * Right edge.
 	 */
-    
+
 	y += (rectPtr[2] - rectPtr[0])*m;
 	if ((y >= rectPtr[1]) && (y <= rectPtr[3])
 		&& (rectPtr[2] >= low) && (rectPtr[2] <= high)) {
 	    return 0;
 	}
-    
+
 	/*
 	 * Bottom edge.
 	 */
-    
+
 	if (end1Ptr[1] < end2Ptr[1]) {
 	    low = end1Ptr[1];  high = end2Ptr[1];
 	} else {
@@ -255,11 +255,11 @@ TkLineToArea(end1Ptr, end2Ptr, rectPtr)
 		&& (rectPtr[1] >= low) && (rectPtr[1] <= high)) {
 	    return 0;
 	}
-    
+
 	/*
 	 * Top edge.
 	 */
-    
+
 	x += (rectPtr[3] - rectPtr[1])/m;
 	if ((x >= rectPtr[0]) && (x <= rectPtr[2])
 		&& (rectPtr[3] >= low) && (rectPtr[3] <= high)) {
@@ -312,7 +312,7 @@ TkThickPolyLineToArea(coordPtr, numPoints, width, capStyle, joinStyle, rectPtr)
 				 * means everything seen so far was
 				 * inside the area;  -1 means everything
 				 * was outside the area.  0 means overlap
-				 * has been found. */ 
+				 * has been found. */
 
     radius = width/2.0;
     inside = -1;
@@ -922,7 +922,7 @@ TkIncludePoint(itemPtr, pointPtr)
  *
  * Results:
  *	The array at *xPointPtr gets filled in with numSteps XPoints
- *	corresponding to the Bezier spline defined by the four 
+ *	corresponding to the Bezier spline defined by the four
  *	control points.  Note:  no output point is generated for the
  *	first input point, but an output point *is* generated for
  *	the last input point.
@@ -1052,7 +1052,7 @@ TkMakeBezierCurve(canvas, pointPtr, numPoints, numSteps, xPoints, dblPoints)
     double dblPoints[];			/* Array of points to fill in as
 					 * doubles, in the form x0, y0,
 					 * x1, y1, ....  NULL means don't
-					 * fill in anything in this form. 
+					 * fill in anything in this form.
 					 * Caller must make sure that this
 					 * array has enough space. */
 {

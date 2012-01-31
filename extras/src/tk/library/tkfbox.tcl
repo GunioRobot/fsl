@@ -23,7 +23,7 @@
 #
 #		      I C O N   L I S T
 #
-# This is a pseudo-widget that implements the icon list inside the 
+# This is a pseudo-widget that implements the icon list inside the
 # ::tk::dialog::file:: dialog box.
 #
 #----------------------------------------------------------------------
@@ -349,7 +349,7 @@ proc ::tk::IconList_Add {w image items} {
 		-tags [list text $data(numItems) item$data(numItems)]]
 	set rTag [$data(canvas) create rect  0 0 0 0 -fill "" -outline "" \
 		-tags [list rect $data(numItems) item$data(numItems)]]
-	
+
 	foreach {x1 y1 x2 y2} [$data(canvas) bbox $iTag] {
 	    break
 	}
@@ -361,7 +361,7 @@ proc ::tk::IconList_Add {w image items} {
 	if {$data(maxIH) < $iH} {
 	    set data(maxIH) $iH
 	}
-    
+
 	foreach {x1 y1 x2 y2} [$data(canvas) bbox $tTag] {
 	    break
 	}
@@ -373,7 +373,7 @@ proc ::tk::IconList_Add {w image items} {
 	if {$data(maxTH) < $tH} {
 	    set data(maxTH) $tH
 	}
-    
+
 	lappend data(list) [list $iTag $tTag $rTag $iW $iH $tW \
 		$tH $data(numItems)]
 	set itemList($rTag) [list $iTag $tTag $text $data(numItems)]
@@ -544,7 +544,7 @@ proc ::tk::IconList_Btn1 {w x y} {
 
 proc ::tk::IconList_CtrlBtn1 {w x y} {
     upvar ::tk::$w data
-    
+
     if { $data(-multiple) } {
 	focus $data(canvas)
 	set x [expr {int([$data(canvas) canvasx $x])}]
@@ -562,7 +562,7 @@ proc ::tk::IconList_CtrlBtn1 {w x y} {
 
 proc ::tk::IconList_ShiftBtn1 {w x y} {
     upvar ::tk::$w data
-    
+
     if { $data(-multiple) } {
 	focus $data(canvas)
 	set x [expr {int([$data(canvas) canvasx $x])}]
@@ -987,8 +987,8 @@ proc ::tk::dialog::file::Config {dataName type argList} {
     # like "yes") so we can use it in tests more easily.
     if {$type eq "save"} {
 	set data(-multiple) 0
-    } elseif {$data(-multiple)} { 
-	set data(-multiple) 1 
+    } elseif {$data(-multiple)} {
+	set data(-multiple) 1
     } else {
 	set data(-multiple) 0
     }
@@ -1007,7 +1007,7 @@ proc ::tk::dialog::file::Create {w class} {
     set f1 [frame $w.f1]
     bind [::tk::AmpWidget label $f1.lab -text "[mc "&Directory:"]" ] \
 	<<AltUnderlined>> [list focus $f1.menu]
-    
+
     set data(dirMenuBtn) $f1.menu
     set data(dirMenu) [tk_optionMenu $f1.menu [format %s(selectPath) ::tk::dialog::file::$dataName] ""]
     set data(upBtn) [button $f1.up]
@@ -1176,7 +1176,7 @@ proc ::tk::dialog::file::SetSelectMode {w multi} {
 	set fNameCaption "[mc {File &name:}]"
     }
     set iconListCommand [list ::tk::dialog::file::OkCmd $w]
-    ::tk::SetAmpText $w.f2.lab $fNameCaption 
+    ::tk::SetAmpText $w.f2.lab $fNameCaption
     ::tk::IconList_Config $data(icons) \
 	    [list -multiple $multi -command $iconListCommand]
     return
@@ -1334,7 +1334,7 @@ rSASvJTGhnhcV3EJlo3kh53ltF5nAhQAOw==}]
 #
 proc ::tk::dialog::file::SetPathSilently {w path} {
     upvar ::tk::dialog::file::[winfo name $w] data
-    
+
     trace remove variable data(selectPath) write [list ::tk::dialog::file::SetPath $w]
     set data(selectPath) $path
     trace add variable data(selectPath) write [list ::tk::dialog::file::SetPath $w]
@@ -1388,7 +1388,7 @@ proc ::tk::dialog::file::SetFilter {w type} {
     }
 
     $icons(sbar) set 0.0 0.0
-    
+
     ::tk::dialog::file::UpdateWhenIdle $w
 }
 
@@ -1491,7 +1491,7 @@ proc ::tk::dialog::file::ResolveFile {context text defaultext} {
 
 
 # Gets called when the entry box gets keyboard focus. We clear the selection
-# from the icon list . This way the user can be certain that the input in the 
+# from the icon list . This way the user can be certain that the input in the
 # entry box is the selection.
 #
 proc ::tk::dialog::file::EntFocusIn {w} {
@@ -1738,7 +1738,7 @@ proc ::tk::dialog::file::ListBrowse {w} {
     }
 }
 
-# Gets called when user invokes the IconList widget (double-click, 
+# Gets called when user invokes the IconList widget (double-click,
 # Return key, etc)
 #
 proc ::tk::dialog::file::ListInvoke {w filenames} {
@@ -1750,7 +1750,7 @@ proc ::tk::dialog::file::ListInvoke {w filenames} {
 
     set file [::tk::dialog::file::JoinFile $data(selectPath) \
 	    [lindex $filenames 0]]
-    
+
     set class [winfo class $w]
     if {$class eq "TkChooseDir" || [file isdirectory $file]} {
 	set appPWD [pwd]
@@ -1795,7 +1795,7 @@ proc ::tk::dialog::file::Done {w {selectFilePath ""}} {
 	    set selectFilePath [::tk::dialog::file::JoinFile \
 		    $data(selectPath) $data(selectFile)]
 	}
-	
+
 	set Priv(selectFile)     $data(selectFile)
 	set Priv(selectPath)     $data(selectPath)
 

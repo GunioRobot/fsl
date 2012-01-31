@@ -19,7 +19,7 @@ namespace eval PasswdDlg {
     Widget::bwinclude PasswdDlg Dialog :cmd \
 	    remove     {-image -bitmap -side -default -cancel -separator} \
 	    initialize {-modal local -anchor e}
-    
+
     Widget::bwinclude PasswdDlg LabelEntry .frame.lablog \
 	    remove [list -command -justify -name -show -side	        \
 		-state -takefocus -width -xscrollcommand -padx -pady	\
@@ -32,7 +32,7 @@ namespace eval PasswdDlg {
 	    initialize [list -relief sunken -borderwidth 2		\
 		-labelanchor w -width 15 -loginlabel "Login"		\
 		]
-    
+
     Widget::bwinclude PasswdDlg LabelEntry .frame.labpass		\
 	    remove [list -command -width -show -side -takefocus		\
 		-xscrollcommand -dragenabled -dragendcmd -dragevent	\
@@ -45,7 +45,7 @@ namespace eval PasswdDlg {
 	    initialize [list -relief sunken -borderwidth 2		\
 		-labelanchor w -width 15 -passwdlabel "Password"	\
 		]
-    
+
     Widget::declare PasswdDlg {
         {-type        Enum       ok           0 {ok okcancel}}
         {-labelwidth  TkResource -1           0 {label -width}}
@@ -173,6 +173,6 @@ proc PasswdDlg::_verifonpasswd { path lablog } {
 # -----------------------------------------------------------------------------
 #  Command PasswdDlg::_max
 # -----------------------------------------------------------------------------
-proc PasswdDlg::_max { val1 val2 } { 
-    return [expr {($val1 > $val2) ? ($val1) : ($val2)}] 
+proc PasswdDlg::_max { val1 val2 } {
+    return [expr {($val1 > $val2) ? ($val1) : ($val2)}]
 }

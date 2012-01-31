@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_wiarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -30,7 +30,7 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 template<class CharType>
@@ -38,7 +38,7 @@ class basic_xml_grammar;
 typedef basic_xml_grammar<wchar_t> xml_wgrammar;
 
 template<class Archive>
-class xml_wiarchive_impl : 
+class xml_wiarchive_impl :
     public basic_text_iprimitive<std::wistream>,
     public basic_xml_iarchive<Archive>
 {
@@ -79,11 +79,11 @@ protected:
     }
     BOOST_WARCHIVE_DECL(void)
     load_override(class_name_type & t, int);
-    BOOST_WARCHIVE_DECL(void) 
+    BOOST_WARCHIVE_DECL(void)
     init();
-    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
     xml_wiarchive_impl(std::wistream & is, unsigned int flags) ;
-    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
     ~xml_wiarchive_impl();
 };
 
@@ -93,7 +93,7 @@ protected:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from xml_wiarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class xml_wiarchive : 
+class xml_wiarchive :
     public xml_wiarchive_impl<xml_wiarchive>
 {
 public:
@@ -106,7 +106,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
+// required by smart_cast for compilers not implementing
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::xml_wiarchive)
 

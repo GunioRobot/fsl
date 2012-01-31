@@ -36,7 +36,7 @@ namespace boost { namespace fusion
         {
             typedef typename Iterator::single_view_type single_view_type;
             typedef typename detail::single_view_access_result<
-                single_view_type>::type 
+                single_view_type>::type
             type;
 
             static type

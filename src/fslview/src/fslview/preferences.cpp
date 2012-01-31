@@ -2,7 +2,7 @@
 
     Authors:    Rama Aravind Vorray
 		James Saunders
-		David Flitney 
+		David Flitney
 		Mark Jenkinson
 		Stephen Smith
 
@@ -35,7 +35,7 @@ string Preferences::inqAtlasPath() const
   }
 
   if(m_atlaspath == "")
-    m_atlaspath = string(getenv("FSLATLASPATH") ? 
+    m_atlaspath = string(getenv("FSLATLASPATH") ?
 			 getenv("FSLATLASPATH") :
 			 inqFSLDir() + "/data/atlases");
 
@@ -54,7 +54,7 @@ string Preferences::inqAtlasPath() const
 QRect Preferences::inqGeometry(int dw, int dh) const
 {
   QRect result;
-    
+
   int x( readNumEntry("/fslview/geometry/x", -1) );
   int y( readNumEntry("/fslview/geometry/y", -1) );
   int w( readNumEntry("/fslview/geometry/width", -1) );
@@ -104,23 +104,23 @@ vector<string> Preferences::inqAtlasPathElements() const
       lastPos = str.find_first_not_of(delimiters, pos);
       pos = str.find_first_of(delimiters, lastPos);
     }
-  
+
   return result;
 }
-   
+
 //! @brief Prefered value of FSLDIR
 //!
 //! Returns the prefered value of FSLDIR
 //!
 //! @return The users prefered value of FSLDIR
-string Preferences::inqFSLDir() const 
+string Preferences::inqFSLDir() const
 {
   if(m_fsldir == "")
     m_fsldir = readEntry("/fsl/fsldir", "").ascii();
   if(m_fsldir == "")
     m_fsldir = string(getenv("FSLDIR") ? getenv("FSLDIR") : "/usr/local/fsl");
 
-  return m_fsldir; 
+  return m_fsldir;
 }
 
 //! @brief Prefered location of MNI152 T1 brain
@@ -143,13 +143,13 @@ string Preferences::inqAssistantPath() const
   if(m_assistantpath == "")
     m_assistantpath = readEntry("/qt/assistantpath","").ascii();
   if(m_assistantpath == "")
-    m_assistantpath = string(getenv("FSLQTASSISTANTPATH") ? 
+    m_assistantpath = string(getenv("FSLQTASSISTANTPATH") ?
 			     getenv("FSLQTASSISTANTPATH") : "");
   if(m_assistantpath == "")
-    m_assistantpath = string(getenv("QTDIR") ? 
-			     string(getenv("QTDIR")) + "/bin" : 
+    m_assistantpath = string(getenv("QTDIR") ?
+			     string(getenv("QTDIR")) + "/bin" :
 			     inqFSLDir() + "/bin");
-  
+
   return m_assistantpath;
 }
 

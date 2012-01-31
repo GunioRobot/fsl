@@ -1,7 +1,7 @@
 /*
  * gd_jpeg.c: Read and write JPEG (JFIF) format image files using the
  * gd graphics library (http://www.boutell.com/gd/).
- * 
+ *
  * This software is based in part on the work of the Independent JPEG
  * Group.  For more information on the IJG JPEG software (and JPEG
  * documentation, etc.), see ftp://ftp.uu.net/graphics/jpeg/.
@@ -18,7 +18,7 @@
  * major CGI brain damage
  *
  * 2.0.10: more efficient gdImageCreateFromJpegCtx, thanks to
- * Christian Aberger 
+ * Christian Aberger
  */
 
 #ifdef HAVE_CONFIG_H
@@ -284,7 +284,7 @@ void jpeg_gdIOCtx_src (j_decompress_ptr cinfo, gdIOCtx * infile);
 
 static int CMYKToRGB (int c, int m, int y, int k, int inverted);
 
-/* 
+/*
  * Create a gd-format image from the JPEG-format INFILE.  Returns the
  * image, or NULL upon error.
  */
@@ -422,7 +422,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromJpegCtx (gdIOCtx * infile)
      latest libjpeg, replaced by something else. Unfortunately
      there is still no right way to find out if the file was
      progressive or not; just declare your intent before you
-     write one by calling gdImageInterlace(im, 1) yourself. 
+     write one by calling gdImageInterlace(im, 1) yourself.
      After all, we're not really supposed to rework JPEGs and
      write them out again anyway. Lossy compression, remember? */
 #if 0
@@ -529,7 +529,7 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromJpegCtx (gdIOCtx * infile)
   if (jpeg_finish_decompress (&cinfo) != TRUE)
     fprintf (stderr, "gd-jpeg: warning: jpeg_finish_decompress"
 	     " reports suspended data source\n");
-  /* TBB 2.0.29: we should do our best to read whatever we can read, and a 
+  /* TBB 2.0.29: we should do our best to read whatever we can read, and a
     warning is a warning. A fatal error on warnings doesn't make sense. */
 #if 0
   /* This was originally added by Truxton Fulton */
@@ -701,7 +701,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
 {
   my_src_ptr src = (my_src_ptr) cinfo->src;
   /* 2.0.12: signed size. Thanks to Geert Jansen */
-  /* 2.0.14: some platforms (mingw-msys) don't have ssize_t. Call 
+  /* 2.0.14: some platforms (mingw-msys) don't have ssize_t. Call
      an int an int. */
   int nbytes = 0;
   memset (src->buffer, 0, INPUT_BUF_SIZE);

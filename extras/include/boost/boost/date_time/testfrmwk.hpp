@@ -3,7 +3,7 @@
 #define TEST_FRMWK_HPP___
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * $Date: 2007/06/12 15:03:23 $
@@ -33,14 +33,14 @@ public:
     }
     out << std::endl;
   }
-private:  
+private:
   TestStats() : testcount_(0), passcount_(0) {}
   unsigned int testcount_;
   unsigned int passcount_;
 };
 
 
-bool check(const std::string& testname, bool testcond) 
+bool check(const std::string& testname, bool testcond)
 {
   TestStats& stat = TestStats::instance();
   if (testcond) {
@@ -56,7 +56,7 @@ bool check(const std::string& testname, bool testcond)
 }
 
 
-int printTestStats() 
+int printTestStats()
 {
   TestStats& stat = TestStats::instance();
   stat.print();

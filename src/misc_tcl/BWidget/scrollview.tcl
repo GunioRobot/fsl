@@ -84,7 +84,7 @@ proc ScrollView::create { path args } {
 proc ScrollView::configure { path args } {
     Widget::getVariable $path _widget
 
-    set oldw [Widget::getoption $path -window] 
+    set oldw [Widget::getoption $path -window]
     set res  [Widget::configure $path $args]
 
     if { [Widget::hasChanged $path -window w] } {
@@ -244,7 +244,7 @@ proc ScrollView::_resize { path } {
 proc ScrollView::_destroy { path } {
     Widget::getVariable $path _widget
 
-    set w [Widget::getoption $path -window] 
+    set w [Widget::getoption $path -window]
     if { [winfo exists $w] } {
         $w configure \
             -xscrollcommand $_widget(oldxscroll) \

@@ -19,8 +19,8 @@ namespace MISCMATHS {
 
   T2z* T2z::t2z = NULL;
   Z2t* Z2t::z2t = NULL;
- 
-  float Z2t::convert(float z, int dof) 
+
+  float Z2t::convert(float z, int dof)
     {
       float t = 0.0;
 
@@ -37,9 +37,9 @@ namespace MISCMATHS {
   float T2z::larget2logp(float t, int dof)
   {
     //    static float logbeta[] = {   1.144729885849, 0.693147180560,
-    //			 0.451582705289, 0.287682072452, 
+    //			 0.451582705289, 0.287682072452,
     //			 0.163900632838, 0.064538521138,
-    //			 -0.018420923956, -0.089612158690, 
+    //			 -0.018420923956, -0.089612158690,
     //			 -0.151952316581, -0.207395194346 } ;
 
     //static const float pi = 3.141592653590;
@@ -54,13 +54,13 @@ namespace MISCMATHS {
     //  following formulae:
     //  (1) T to log(p)    NB: n = DOF
     //       log(p) = -1/2*log(n) - log(beta(n/2,1/2)) - (n-1)/2*log(1+t*t/n)
-    //                + log(1 - (n/(n+2))/(t*t) + 3*n*n/((n+2)*(n+4)*t*t*t*t)) 
+    //                + log(1 - (n/(n+2))/(t*t) + 3*n*n/((n+2)*(n+4)*t*t*t*t))
     //  (2) Z to log(p)
-    //       log(p) = -1/2*z*z - 1/2*log(2*pi) - log(z) 
+    //       log(p) = -1/2*z*z - 1/2*log(2*pi) - log(z)
     //                + log(1 - 1/(z*z) + 3/(z*z*z*z))
     // equation (2) is then solved by the recursion:
     //   z_0 = sqrt(2*(-log(p) - 1/2*log(2*pi)))
-    //   z_{n+1} = sqrt(2*(-log(p) - 1/2*log(2*pi) - log(z_n) 
+    //   z_{n+1} = sqrt(2*(-log(p) - 1/2*log(2*pi) - log(z_n)
     //             + log(1 - 1/(zn*zn) + 3/(zn*zn*zn*zn))
     // In practice this recursion is quite accurate in 3 to 5 iterations
     // Equation (1) is accurate to 1 part in 10^3 for T>7.5  (any n)
@@ -70,12 +70,12 @@ namespace MISCMATHS {
     if (t<0) {
       return larget2logp(-t,dof);
     }
-  
+
     float logp, lbeta;
 
-    if (dof<=0) { 
+    if (dof<=0) {
       cerr << "DOF cannot be zero or negative!" << endl;
-      return 0.0; 
+      return 0.0;
     }
 
     float n = (float) dof;
@@ -87,7 +87,7 @@ namespace MISCMATHS {
     //} else {
     //lbeta = log2pi/2 - log(n)/2 + 1/(4*n);
     //}
-    
+
     // log p from t value
     // logp = log( (1 - n/((n+2)*t*t) + 3*n*n/((n+2)*(n+4)*t*t*t*t))/(sqrt(n)*t))
     //          - ((n-1)/2)*log(1 + t*t/n) - lbeta;
@@ -98,7 +98,7 @@ namespace MISCMATHS {
   }
 
   bool T2z::islarget(float t, int dof, float &logp) {
-    // aymptotic formalae are valid if 
+    // aymptotic formalae are valid if
     //   log(p) < -14.5  (derived from Z-statistic approximation error)
     // For dof>=15, can guarantee that log(p)>-33 (p > 1e-14) if T<7.5
     //  and so in this region use conventional means, not asymptotic
@@ -117,7 +117,7 @@ namespace MISCMATHS {
   float T2z::convert(float t, int dof) {
 
       float z = 0.0, logp=0.0;
-      
+
       if(!islarget(t,dof,logp)) {
 	//	cerr << "t = " << t << endl;
 	double p = MISCMATHS::stdtr(dof, t);
@@ -125,7 +125,7 @@ namespace MISCMATHS {
 	z = MISCMATHS::ndtri(p);
       }
       else {
-	
+
 	z = logp2largez(logp);
 
 	//	cerr<<endl<<"logp="<<logp<<endl;
@@ -138,16 +138,16 @@ namespace MISCMATHS {
     }
 
 
-  float T2z::converttologp(float t, int dof) 
+  float T2z::converttologp(float t, int dof)
     {
       float logp=0.0;
-      
+
       if(!islarget(t,dof,logp)) {
 	logp = log(1-MISCMATHS::stdtr(dof, t));
       }
       else if(t<0) {
 	// t < 0 and abs(t) is large enough to require asymptotic approx.
-	// but t to logp is not available for negative t 
+	// but t to logp is not available for negative t
 	// so just hardcode it to be -1e-12
 	logp=-1e-12;
       }
@@ -182,7 +182,7 @@ namespace MISCMATHS {
 	      else
 		{
 		  p_ps(i) = t2z.converttologp(p_cbs(i)/sqrt(p_vars(i)),p_dof);
-		  
+
 		  //if(p_zs(i) == 0.0)
 		  //cerr << " at index " << i << endl;
 		}
@@ -223,7 +223,7 @@ namespace MISCMATHS {
 	      else
 		{
 		  p_zs(i) = t2z.convert(p_cbs(i)/sqrt(p_vars(i)),int(p_dof(i)));
-		  
+
 		  //if(p_zs(i) == 0.0)
 		  //cerr << " at index " << i << endl;
 		}

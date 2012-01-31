@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -83,19 +83,19 @@ string SimpleFwdModel::ModelVersion() const
 void SimpleFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) const
 {
 //  ColumnVector Qn = id.Qn(params);
-  ColumnVector tcModulated = id.Q0(params) 
+  ColumnVector tcModulated = id.Q0(params)
 	* ( 1 + basis * id.Qn(params) / 100.0);
-  ColumnVector tcUnmodulated = id.U0(params) 
+  ColumnVector tcUnmodulated = id.U0(params)
 	* ( 1 + basis * id.Un(params) / 100.0);
   ColumnVector R2s = id.R0(params) * (1 + basis * id.Rn(params) / 100.0);
   ColumnVector S = SP(rho, tcModulated) + tcUnmodulated; // SP means .*
-  
+
   int Ntimes = R2s.Nrows();
   if (result.Nrows() != 2*Ntimes)
     result.ReSize(2*Ntimes);
-    
+
 //  result = 0.0/0.0; // pre-fill with nans to check all overwritten
-  
+
   for (int te = 1; te <= echoTime.Nrows(); te++)
     {
       for (int i = 1; i <= Ntimes; i++)
@@ -103,7 +103,7 @@ void SimpleFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
       // Fill order: te1 te2 te1 te2 te1 te2 te1 te2 ...
     }
 
-/*    
+/*
   LOG << "Fwdmodel input:\n" << params;
   LOG << "tcModulated:" << endl;
   LOG << tcModulated;
@@ -114,7 +114,7 @@ void SimpleFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
   LOG << "S" << endl << S;
   LOG << "echoTime" << echoTime;
   LOG << "Output:\n" << result;
-*/   
+*/
 //    LOG << "BASIS\n" << basis.t()*basis;
 
   return;
@@ -122,7 +122,7 @@ void SimpleFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 
 SimpleFwdModel::SimpleFwdModel(ArgsType& args)
 {
-    
+
   string scanParams = args.ReadWithDefault("scan-params","hardcoded");
   if (scanParams == "hardcoded")
     {
@@ -153,7 +153,7 @@ SimpleFwdModel::SimpleFwdModel(ArgsType& args)
       //      LOG << "echoTime:\n" << echoTime << endl;
       //      LOG << "rho:\n" << rho << endl;
 
-    } 
+    }
   else
     throw Invalid_option("Only --scan-params=hardcoded is accepted at the moment");
 }
@@ -169,25 +169,25 @@ void SimpleFwdModel::DumpParameters(const ColumnVector& vec,
     LOG << indent << "  Un == " << id.Un(vec).t();// << "]\n";
     LOG << indent << "  Qn == " << id.Qn(vec).t();// << "]\n";
     LOG << indent << "  Rn == " << id.Rn(vec).t();// << "]\n";
-}    
+}
 
 void SimpleFwdModelIdStruct::NameParams(vector<string>& names) const
 {
     names.clear();
-    
+
     for (int p = 1; p <= 3; p++)
     {
         string letter;
-        switch(p) { 
+        switch(p) {
             case 1: letter="Q"; break;
             case 2: letter="U"; break;
             case 3: letter="R"; break;
-        } 
+        }
         names.push_back(letter + "0");
         for (int i = 1; i <= Nbasis; i++)
         {
             names.push_back(letter + "_percchg_" + stringify(i));
         }
     }
-    assert(names.size() == unsigned(3+3*Nbasis)); 
+    assert(names.size() == unsigned(3+3*Nbasis));
 }

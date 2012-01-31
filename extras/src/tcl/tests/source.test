@@ -196,7 +196,7 @@ test source-3.5 {return with special code etc.} -setup {
 test source-4.1 {source error conditions} -constraints macOnly -body {
     source -rsrc _no_exist_
 } -result {The resource "_no_exist_" could not be loaded from application.} \
-  -returnCodes error 
+  -returnCodes error
 
 test source-4.2 {source error conditions} -constraints macOnly -body {
     source -rsrcid bad_id
@@ -214,7 +214,7 @@ test source-4.5 {source error conditions} -constraints macOnly -body {
     source -bad_switch argument
 } -returnCodes error -result {bad argument: should be "source fileName" or "source -rsrc name ?fileName?" or "source -rsrcid id ?fileName?" or "source -encoding name fileName"}
 
- 
+
 testConstraint testWriteTextResource \
 	[llength [info commands testWriteTextResource]]
 
@@ -258,7 +258,7 @@ test source-5.4 {source resource files} -constraints {
 	    -file $rsrcFile {set msg2 ok; return}
 } -body {
     source -rsrc fileRsrcName $rsrcFile
-    set result [catch {source -rsrc fileRsrcName} msg]    
+    set result [catch {source -rsrc fileRsrcName} msg]
     list $msg2 $result $msg
 } -cleanup {
     removeFile rsrc.file

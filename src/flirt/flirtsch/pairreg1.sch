@@ -8,7 +8,7 @@ search
 setscale 4
 setoption smoothing 4
 clear U
-clear UA 
+clear UA
 clear UB
 clear US
 clear UP

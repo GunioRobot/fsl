@@ -4,25 +4,25 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -135,14 +135,14 @@ ReturnMatrix basisfield::vox2mm(unsigned int sz) const
 
 double basisfield::Peek(unsigned int x, unsigned int y, unsigned int z, FieldIndex fi)
 {
-  if (x<0 || y<0 || z<0 || x>=FieldSz_x() || y>=FieldSz_y() || z>=FieldSz_z()) { 
+  if (x<0 || y<0 || z<0 || x>=FieldSz_x() || y>=FieldSz_y() || z>=FieldSz_z()) {
     throw BasisfieldException("basisfield::PeekField:: Co-ordinates out of bounds");
   }
   if (!coef) {return(0.0);} // Consider field as zero if no coefficients set
   if (!UpToDate(fi)) {Update(fi);}
 
   return(UnsafePeek(z*FieldSz_x()*FieldSz_y()+y*FieldSz_x()+x,fi));
-}    
+}
 
 double basisfield::Peek(unsigned int vi, FieldIndex fi)
 {
@@ -162,8 +162,8 @@ double basisfield::PeekWide(int i, int j, int k, FieldIndex fi)
     return(peek_outside_fov(i,j,k,fi));
   }
 }
-  
-void basisfield::SetCoef(const ColumnVector& pcoef) 
+
+void basisfield::SetCoef(const ColumnVector& pcoef)
 {
   if (pcoef.Nrows() != int(CoefSz())) {throw BasisfieldException("basisfield::SetCoef::Mismatch between input vector and # of coefficients");}
   if (!coef) {coef = boost::shared_ptr<NEWMAT::ColumnVector>(new NEWMAT::ColumnVector(pcoef));}
@@ -203,18 +203,18 @@ void basisfield::Set(const volume<float>& pfield)
 
 /////////////////////////////////////////////////////////////////////
 //
-// Optional gateway to the Set( volume<float>& ) method. 
+// Optional gateway to the Set( volume<float>& ) method.
 //
 /////////////////////////////////////////////////////////////////////
 
-void basisfield::Set(const ColumnVector& pfield) 
+void basisfield::Set(const ColumnVector& pfield)
 {
   if (pfield.Nrows() != int(FieldSz())) {throw BasisfieldException("basisfield::Set::Mismatch between input vector and size of field");}
 
   volume<float>  vol_pfield(FieldSz_x(),FieldSz_y(),FieldSz_z());
   vol_pfield.setdims(Vxs_x(),Vxs_y(),Vxs_z());
   vol_pfield.insert_vec(pfield);
-  
+
   Set(vol_pfield);
 }
 
@@ -278,7 +278,7 @@ boost::shared_ptr<NEWMAT::ColumnVector> basisfield::get_ptr(FieldIndex fi)
 boost::shared_ptr<NEWMAT::ColumnVector> basisfield::get_coef() const
 {
   if (!coef) {throw BasisfieldException("basisfield::get_coef: Coefficients undefined");}
-  return(coef);  
+  return(coef);
 }
 
 double basisfield::get_coef(unsigned int i, unsigned int j, unsigned int k) const

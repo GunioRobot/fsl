@@ -16,11 +16,11 @@ namespace boost {
   struct true_tag;
 
   namespace graph_detail {
-    
+
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template <class U, class V>
     struct is_same {
-      typedef boost::false_tag is_same_tag; 
+      typedef boost::false_tag is_same_tag;
     };
     template <class U>
     struct is_same<U, U> {

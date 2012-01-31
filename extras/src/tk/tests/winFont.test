@@ -1,10 +1,10 @@
-# This file is a Tcl script to test out the procedures in tkWinFont.c. 
+# This file is a Tcl script to test out the procedures in tkWinFont.c.
 # It is organized in the standard fashion for Tcl tests.
 #
 # Many of these tests are visually oriented and cannot be checked
 # programmatically (such as "does an underlined font appear to be
 # underlined?"); these tests attempt to exercise the code in question,
-# but there are no results that can be checked.  
+# but there are no results that can be checked.
 #
 # Copyright (c) 1996-1997 Sun Microsystems, Inc.
 # Copyright (c) 1998-1999 by Scriptics Corporation.
@@ -128,7 +128,7 @@ test winfont-5.5 {Tk_MeasureChars procedure: include last partial char} {pcOnly}
     .b.c insert $t 0 "0000"
     .b.c index $t @[expr int($cx*2.5)],1
 } {2}
-test winfont-5.6 {Tk_MeasureChars procedure: at least one char on line} {pcOnly} { 
+test winfont-5.6 {Tk_MeasureChars procedure: at least one char on line} {pcOnly} {
     .b.l config -text "000000" -wrap 1
     getsize
 } "$ax [expr $ay*6]"

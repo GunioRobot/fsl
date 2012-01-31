@@ -4,7 +4,7 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\" RCS: @(#) $Id: resource.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH resource n 8.0 Tcl "Tcl Built-In Commands"
 .BS
@@ -40,7 +40,7 @@ give you several ways to specify the resource to be deleted.
 .TP
 \fB\-id\fR \fIresourceId\fR
 If the \fB-id\fR option is given the id \fIresourceId\fR (see RESOURCE
-IDS below) is used to specify the resource to be deleted.  The id must 
+IDS below) is used to specify the resource to be deleted.  The id must
 be a number - to specify a name use the \fB\-name\fR option.
 .TP
 \fB\-name\fR \fIresourceName\fR
@@ -54,14 +54,14 @@ of the name of the actual resource.
 If the \fB-file\fR option is specified then the resource will be
 deleted from the file pointed to by \fIresourceRef\fR.  Otherwise the
 first resource with the given \fIresourceName\fR and or
-\fIresourceId\fR which is found on the resource file path will be 
+\fIresourceId\fR which is found on the resource file path will be
 deleted.  To inspect the file path, use the \fIresource files\fR command.
 .RE
 .TP
 \fBresource files ?\fIresourceRef\fR?
 If \fIresourceRef\fRis not provided, this command returns a Tcl list
 of the resource references for all the currently open resource files.
-The list is in the normal Macintosh search order for resources.  If 
+The list is in the normal Macintosh search order for resources.  If
 \fIresourceRef\fR is specified, the command will
 return the path to the file whose resource fork is represented by that
 token.

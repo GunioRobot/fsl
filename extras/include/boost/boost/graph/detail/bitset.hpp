@@ -55,11 +55,11 @@ namespace boost {
       typedef WordType word_type;
       static const std::size_t word_size = CHAR_BIT * sizeof(word_type);
     };
-    
+
     //=========================================================================
     template <class WordTraits, class SizeType, class Derived>
     class bitset_base
-      : public bitset_adaptor< SizeType, 
+      : public bitset_adaptor< SizeType,
                                bitset_base<WordTraits, SizeType, Derived> >
     {
       //    private:
@@ -77,13 +77,13 @@ namespace boost {
         return pos % WordTraits::word_size;
       }
       static word_type s_mask_bit(size_type pos) {
-        return (static_cast<word_type>(1)) << s_which_bit(pos); 
+        return (static_cast<word_type>(1)) << s_which_bit(pos);
       }
       word_type& m_get_word(size_type pos) {
-        return data()[s_which_word(pos)]; 
+        return data()[s_which_word(pos)];
       }
       word_type m_get_word(size_type pos) const {
-        return data()[s_which_word(pos)]; 
+        return data()[s_which_word(pos)];
       }
       word_type& m_hi_word() { return data()[num_words() - 1]; }
       word_type  m_hi_word() const { return data()[num_words() - 1]; }
@@ -131,12 +131,12 @@ namespace boost {
           return *this;
         }
         // flips the bit
-        bool operator~() const { 
-          return (*(m_word_ptr) & s_mask_bit(m_bit_pos)) == 0; 
+        bool operator~() const {
+          return (*(m_word_ptr) & s_mask_bit(m_bit_pos)) == 0;
         }
         // for x = b[i];
-        operator bool() const { 
-          return (*(m_word_ptr) & s_mask_bit(m_bit_pos)) != 0; 
+        operator bool() const {
+          return (*(m_word_ptr) & s_mask_bit(m_bit_pos)) != 0;
         }
         // for b[i].flip();
         reference& flip() {
@@ -153,7 +153,7 @@ namespace boost {
           if ( val & 0x1 )
             m_get_word(i) |= s_mask_bit(i);
       }
-      
+
       // intersection: this = this & x
       Derived& operator&=(const Derived& x) {
         for (size_type i = 0; i < num_words(); ++i)
@@ -194,7 +194,7 @@ namespace boost {
           m_get_word(pos) &= ~s_mask_bit(pos);
         return static_cast<Derived&>(*this);
       }
-      
+
       Derived& reset() {
         for (size_type i = 0; i < num_words(); ++i)
           data()[i] = 0;
@@ -211,7 +211,7 @@ namespace boost {
       Derived operator~() const {
         return Derived(static_cast<const Derived&>(*this)).flip();
       }
-      
+
       Derived& flip() {
         for (size_type i = 0; i < num_words(); ++i)
           data()[i] = ~data()[i];
@@ -232,19 +232,19 @@ namespace boost {
 
       // to_string
 
-      
+
       size_type count() const {
         size_type result = 0;
         const unsigned char* byte_ptr = (const unsigned char*)data();
-        const unsigned char* end_ptr = 
+        const unsigned char* end_ptr =
           (const unsigned char*)(data() + num_words());
         while ( byte_ptr < end_ptr ) {
           result += bit_count<>::value[*byte_ptr];
           byte_ptr++;
         }
         return result;
-      }   
-      
+      }
+
       // size() must be provided by Derived class
 
       bool operator==(const Derived& x) const {
@@ -302,7 +302,7 @@ namespace boost {
       void m_copy_to_string(basic_string<CharT, Traits, Alloc>& s) const
       {
         s.assign(size(), '0');
-        
+
         for (size_type i = 0; i < size(); ++i)
           if (test(i))
             s[size() - 1 - i] = '1';
@@ -336,7 +336,7 @@ namespace boost {
       // find the index of the next "on" bit after prev
       size_type find_next(size_type prev) const;
 
-      
+
       size_type _Find_first() const { return find_first(); }
 
       // find the index of the next "on" bit after prev
@@ -346,13 +346,13 @@ namespace boost {
       word_type* data()
         { return static_cast<Derived*>(this)->data(); }
 
-      const word_type* data() const 
+      const word_type* data() const
         { return static_cast<const Derived*>(this)->data(); }
 
-      size_type num_words() const 
+      size_type num_words() const
         { return static_cast<const Derived*>(this)->num_words(); }
 
-      size_type size() const 
+      size_type size() const
         { return static_cast<const Derived*>(this)->size(); }
     };
 
@@ -394,7 +394,7 @@ namespace boost {
     inline int compare_3way(const bitset_base<W,S,D>& x,
                             const bitset_base<W,S,D>& y) {
       return std::lexicographical_compare_3way
-        (x.data(), x.data() + x.num_words(), 
+        (x.data(), x.data() + x.num_words(),
          y.data(), y.data() + y.num_words());
     }
 
@@ -439,7 +439,7 @@ namespace boost {
     }
 
     template <class W, class S, class D>
-    std::ostream& operator<<(std::ostream& os, 
+    std::ostream& operator<<(std::ostream& os,
                              const bitset_base<W,S,D>& x) {
       std::string tmp;
       x.m_copy_to_string(tmp);
@@ -463,9 +463,9 @@ namespace boost {
       static const size_type word_size = WordTraits::word_size;
 
     public:
-      dyn_size_bitset(unsigned long val, 
+      dyn_size_bitset(unsigned long val,
                       size_type n,
-                      const Allocator& alloc = Allocator()) 
+                      const Allocator& alloc = Allocator())
         : m_data(alloc.allocate((n + word_size - 1) / word_size)),
           m_size(n),
           m_num_words((n + word_size - 1) / word_size),
@@ -476,7 +476,7 @@ namespace boost {
 
       dyn_size_bitset(size_type n,  // size of the set's "universe"
                       const Allocator& alloc = Allocator())
-        : m_data(alloc.allocate((n + word_size - 1) / word_size)), 
+        : m_data(alloc.allocate((n + word_size - 1) / word_size)),
           m_size(n), m_num_words((n + word_size - 1) / word_size),
           m_alloc(alloc)
       { }
@@ -487,7 +487,7 @@ namespace boost {
          std::size_t pos = 0,
          std::size_t n = std::size_t(basic_string<CharT,Traits,Alloc>::npos),
          const Allocator& alloc = Allocator())
-        : m_data(alloc.allocate((n + word_size - 1) / word_size)), 
+        : m_data(alloc.allocate((n + word_size - 1) / word_size)),
           m_size(n), m_num_words((n + word_size - 1) / word_size),
           m_alloc(alloc)
       {
@@ -500,7 +500,7 @@ namespace boost {
         (InputIterator first, InputIterator last,
          size_type n,  // size of the set's "universe"
          const Allocator& alloc = Allocator())
-        : m_data(alloc.allocate((n + word_size - 1) / word_size)), 
+        : m_data(alloc.allocate((n + word_size - 1) / word_size)),
           m_size(N), m_num_words((n + word_size - 1) / word_size),
           m_alloc(alloc)
       {
@@ -508,10 +508,10 @@ namespace boost {
           this->set(*first++);
       }
 
-      ~dyn_size_bitset() { 
-        m_alloc.deallocate(m_data, m_num_words); 
+      ~dyn_size_bitset() {
+        m_alloc.deallocate(m_data, m_num_words);
       }
-      
+
       size_type size() const { return m_size; }
 
       // protected:
@@ -587,7 +587,7 @@ namespace boost {
 
     template <std::size_t N = 0, // 0 means use dynamic
       typename WordType = unsigned long,
-      typename Size_type = std::size_t, 
+      typename Size_type = std::size_t,
       typename Allocator = std::allocator<WordType>
              >
     class bitset_generator {
@@ -654,7 +654,7 @@ namespace boost {
 
     template <class WordTraits, class SizeType, class Derived>
     unsigned long bitset_base<WordTraits, SizeType, Derived>::
-    to_ulong() const 
+    to_ulong() const
     {
       typedef typename WordTraits::word_type word_type;
       typedef SizeType size_type;
@@ -664,11 +664,11 @@ namespace boost {
       if (sizeof(word_type) >= sizeof(unsigned long)) {
         for (size_type i = 1; i < num_words(); ++i)
           BOOST_ASSERT_THROW(! data()[i], overflow);
-        
-        const word_type mask 
+
+        const word_type mask
           = static_cast<word_type>(static_cast<unsigned long>(-1));
         BOOST_ASSERT_THROW(! (data()[0] & ~mask), overflow);
-        
+
         return static_cast<unsigned long>(data()[0] & mask);
       }
       else { // sizeof(word_type) < sizeof(unsigned long).
@@ -691,8 +691,8 @@ namespace boost {
 #if 0
         // bug in here?
         // >> to far?
-        BOOST_ASSERT_THROW((part != 0 
-                            && nwords <= num_words() 
+        BOOST_ASSERT_THROW((part != 0
+                            && nwords <= num_words()
                             && (data()[min_nwords - 1] >>
                                 ((sizeof(word_type) - part) * CHAR_BIT)) != 0),
                            overflow);

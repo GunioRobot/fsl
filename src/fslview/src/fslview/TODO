@@ -4,36 +4,36 @@ $Id: TODO,v 1.6 2007/07/30 09:59:32 cowboy Exp $
 
 Version 1 - 16/12/2002
 
-image display: 
+image display:
 	lightbox (all slices)
 	ortho (three orthogonal views)
-control of: 
+control of:
 	zoom,
 	translation,
 	intensity,
 	contrast
 
-image information display when cursor clicked: 
-	voxel coords, 
-	mm coords, 
+image information display when cursor clicked:
+	voxel coords,
+	mm coords,
 	voxel intensity
 
 dual display of two images (for purposes of evaluating: stats overlay,
 registration quality, segmentation quality) - all methods:
 	colour overlay eg of 1 or 2 stats images onto underlying image
-	two displays, 
+	two displays,
 	linked cursors,
         like mni "register"
 
-4D data: 
-	associate a 3D image with a 4D dataset; 
+4D data:
+	associate a 3D image with a 4D dataset;
 	click in image and view timeseries.
   	view more than one time series at a time...or a grid of ts views
 
 histogram display
 
 movies of:
-	slices through a volume or 
+	slices through a volume or
 	slices (or 3-ortho-views) through 4D
 
 --------------------------------

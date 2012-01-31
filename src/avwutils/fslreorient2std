@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -lt 2 ] ; then 
+if [ $# -lt 2 ] ; then
   echo "Usage: `basename $0` <input_image> <output_image>"
   echo " "
   echo "`basename $0` is a tool for reorienting the image to match the"

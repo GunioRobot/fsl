@@ -17,7 +17,7 @@
 #include <boost/range/detail/common.hpp>
 #include <boost/range/detail/remove_extent.hpp>
 
-namespace boost 
+namespace boost
 {
     namespace range_detail
     {
@@ -27,43 +27,43 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<std_container_>
         {
             template< typename C >
             struct inner {
-                static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type 
+                static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<C>::type
                 fun( C& c )
                 {
                     return c.end();
                 };
             };
         };
-                    
+
         //////////////////////////////////////////////////////////////////////
         // pair
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<std_pair_>
         {
             template< typename P >
             struct inner {
-                static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<P>::type 
+                static BOOST_RANGE_DEDUCED_TYPENAME range_result_iterator<P>::type
                 fun( const P& p )
                 {
                     return p.second;
                 }
             };
         };
- 
+
         //////////////////////////////////////////////////////////////////////
         // array
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
-        struct range_end<array_>  
+        struct range_end<array_>
         {
             template< typename T >
             struct inner {
@@ -75,7 +75,7 @@ namespace boost
             };
         };
 
-                
+
         template<>
         struct range_end<char_array_>
         {
@@ -88,7 +88,7 @@ namespace boost
                 }
             };
         };
-        
+
         template<>
         struct range_end<wchar_t_array_>
         {
@@ -105,7 +105,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // string
         //////////////////////////////////////////////////////////////////////
-        
+
         template<>
         struct range_end<char_ptr_>
         {
@@ -154,16 +154,16 @@ namespace boost
                 }
             };
         };
-        
+
     } // namespace 'range_detail'
-    
+
     template< typename C >
-    inline BOOST_DEDUCED_TYPENAME range_result_iterator<C>::type 
+    inline BOOST_DEDUCED_TYPENAME range_result_iterator<C>::type
     end( C& c )
     {
         return range_detail::range_end<range_detail::range<C>::type>::inner<C>::fun( c );
     }
-    
+
 } // namespace 'boost'
 
 

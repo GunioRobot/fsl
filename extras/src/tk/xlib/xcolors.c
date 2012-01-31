@@ -1,4 +1,4 @@
-/* 
+/*
  * xcolors.c --
  *
  *	This file contains the routines used to map from X color

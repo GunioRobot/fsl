@@ -1,4 +1,4 @@
-// {{{ Copyright etc. 
+// {{{ Copyright etc.
 
 /*  feat_model - create FEAT design matrix, contrasts etc.
 
@@ -8,20 +8,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,16 +85,16 @@ using namespace NEWIMAGE;
 #define NEGSECS           30.0 /* amount of negative modelling allowed, for custom 3 etc, in seconds */
 
 // }}}
-// {{{ z2t 
+// {{{ z2t
 
 float z2t(float z, int dof)
 {
   float tmin=0, tmax=1e10, absz=fabs(z), old_diff=1e11;
-  
+
   while (old_diff-(tmax-tmin)>1e-5)
     {
       old_diff=tmax-tmin;
-      
+
       float t=(tmax+tmin)/2;
       float z=T2z::getInstance().convert(t,dof);
       if (z>absz)
@@ -112,12 +112,12 @@ float z2t(float z, int dof)
 }
 
 // }}}
-// {{{ mygammapdf 
+// {{{ mygammapdf
 
 ReturnMatrix mygammapdf(const int npts, const float mult, const float delay, const float sigma)
 {
   ColumnVector grot(npts);
-  
+
   for(int i=0; i<npts; i++)
     grot(i+1)=i/mult;
 
@@ -128,7 +128,7 @@ ReturnMatrix mygammapdf(const int npts, const float mult, const float delay, con
 }
 
 // }}}
-// {{{ estimate_X_heights 
+// {{{ estimate_X_heights
 
 ReturnMatrix estimate_X_heights(const Matrix real_X)
 {
@@ -149,12 +149,12 @@ ReturnMatrix estimate_X_heights(const Matrix real_X)
 }
 
 // }}}
-// {{{ feat_svd 
+// {{{ feat_svd
 
 ReturnMatrix feat_svd(const Matrix real_X)
 {
   DiagonalMatrix eigenvals(1);
-      
+
   if (real_X.Ncols()>1)
     {
       SVD(real_X,eigenvals);
@@ -179,7 +179,7 @@ ReturnMatrix feat_svd(const Matrix real_X)
 }
 
 // }}}
-// {{{ renorm kernel 
+// {{{ renorm kernel
 
 // void renorm_kernel(ColumnVector &X)
 // {
@@ -192,7 +192,7 @@ ReturnMatrix feat_svd(const Matrix real_X)
 // }
 
 // }}}
-// {{{ orth_i_wrt_j 
+// {{{ orth_i_wrt_j
 
 // B -= B.A * A / A.A
 
@@ -207,12 +207,12 @@ void orth_i_wrt_j(Matrix &X, int i, int j)
 }
 
 // }}}
-// {{{ carry out the convolution 
+// {{{ carry out the convolution
 
 ReturnMatrix do_convolve(const ColumnVector input, const ColumnVector kernel, const int phase, const int renorm)
 {
   ColumnVector output(input);
-  
+
   output=0;
 
   for(int t=0; t<input.Nrows(); t++)
@@ -232,7 +232,7 @@ ReturnMatrix do_convolve(const ColumnVector input, const ColumnVector kernel, co
 }
 
 // }}}
-// {{{ resample down in time 
+// {{{ resample down in time
 
 /* sample in the MIDDLE of the upsampled period */
 
@@ -243,7 +243,7 @@ void do_resample(const ColumnVector input, Matrix &output, const int real_ev, fl
 }
 
 // }}}
-// {{{ find_line 
+// {{{ find_line
 
 /* finds LAST matching entry in setup file */
 
@@ -280,7 +280,7 @@ char *find_line(char *filename, char *key, char *fl)
 }
 
 // }}}
-// {{{ setup_font 
+// {{{ setup_font
 
 /* taken (I think) from pbmtext etc by Jef Poskanzer and George Phillips */
 
@@ -304,7 +304,7 @@ void error_exit(char *outkey )
 
 void setup_font(FONT_DATA *font_data)
 {
-    // {{{ Default Font 
+    // {{{ Default Font
 
 /* The default font, packed in hex so this source file doesn't get huge.
    You can replace this with your own font using pbm_dumpfont().
@@ -475,7 +475,7 @@ static unsigned long defaultfont_bits[DEFAULTFONT_ROWS][(DEFAULTFONT_COLS+31)/32
         bcol, ch;
     unsigned long l;
 
-    // {{{ text explanation 
+    // {{{ text explanation
 
     /*
     ** This routine expects a font bitmap representing the following text:
@@ -504,7 +504,7 @@ static unsigned long defaultfont_bits[DEFAULTFONT_ROWS][(DEFAULTFONT_COLS+31)/32
     */
 
 // }}}
-    // {{{ create font bits 
+    // {{{ create font bits
 
   for ( rows = 0; rows < DEFAULTFONT_ROWS; ++rows )
   {
@@ -527,7 +527,7 @@ static unsigned long defaultfont_bits[DEFAULTFONT_ROWS][(DEFAULTFONT_COLS+31)/32
   }
 
 // }}}
-    // {{{ Find first blank row 
+    // {{{ Find first blank row
 
     for ( brow = 0; brow < DEFAULTFONT_ROWS / 6; ++brow )
 	{
@@ -542,7 +542,7 @@ static unsigned long defaultfont_bits[DEFAULTFONT_ROWS][(DEFAULTFONT_COLS+31)/32
     error_exit("Couldn't find blank row in font\n");
 
 // }}}
-    // {{{ gotblankrow: 
+    // {{{ gotblankrow:
 
 gotblankrow:
     /* Find first blank col. */
@@ -558,7 +558,7 @@ gotblankrow:
     error_exit("Couldn't find blank col in font.\n");
 
 // }}}
-    // {{{ gotblankcol: 
+    // {{{ gotblankcol:
 
 gotblankcol:
     /* Now compute character cell size. */
@@ -593,7 +593,7 @@ gotblankcol:
 }
 
 // }}}
-// {{{ write_string 
+// {{{ write_string
 
 void write_string(unsigned char *in, int x, int y, char *the_string,
 		  FONT_DATA *font_data, int colour, int x_size, int y_size)
@@ -616,7 +616,7 @@ void write_string(unsigned char *in, int x, int y, char *the_string,
   }
 }
 
-void write_string_rgb(unsigned char *r, unsigned char *g, unsigned char *b, 
+void write_string_rgb(unsigned char *r, unsigned char *g, unsigned char *b,
 		      int x, int y, char *the_string,
 		      FONT_DATA *font_data, int cr, int cg, int cb,
 		      int x_size, int y_size)
@@ -630,7 +630,7 @@ void write_string_rgb(unsigned char *r, unsigned char *g, unsigned char *b,
 
 int main(int argc, char **argv)
 {
-  // {{{ variables 
+  // {{{ variables
 
 FILE   *ofp, *cofp;
 int    i, t, con, npts, ndelete, mnpts, level, *negpts,
@@ -644,7 +644,7 @@ DiagonalMatrix eigenvals;
 ColumnVector real_X_heights;
 
 // }}}
-  // {{{ read arguments and prepare variables 
+  // {{{ read arguments and prepare variables
 
 if (argc<2)
 {
@@ -717,7 +717,7 @@ Matrix pwA = (Cholesky(pwV)).i(); // note newmat definition opposite of matlab
 //cout << pwA * pwV * pwA.t() << endl; // should be identity
 
 // }}}
-  // {{{ read contrasts 
+  // {{{ read contrasts
 
 C=0;
 
@@ -771,7 +771,7 @@ for(con=1; con<=ncon; con++)
 	break;
       }
     }
-  
+
   if (allzeros)
     {
       cout << "Contrast " << con << " is empty!" << endl;
@@ -780,11 +780,11 @@ for(con=1; con<=ncon; con++)
 }
 
 // }}}
-  // {{{ read and create design matrix 
+  // {{{ read and create design matrix
 
 if (level==1)
 {
-  // {{{ create basic shape 
+  // {{{ create basic shape
 
 for(orig_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++)
   {
@@ -795,7 +795,7 @@ for(orig_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++)
     switch (shape[orig_ev])
       {
       case 0:
-	// {{{ square wave 
+	// {{{ square wave
 
 {
   sprintf(key,"fmri(skip%d)",orig_ev+1);  float skip=atof(find_line(fn, key, fl))*mult;
@@ -805,7 +805,7 @@ for(orig_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++)
   sprintf(key,"fmri(stop%d)",orig_ev+1);  float stop=atof(find_line(fn, key, fl))*mult;
 
   if ( (stop<0) || (stop+skip>mnpts) ) stop=mnpts-skip;
-  
+
   for(t=(int)skip;t<(int)(skip+stop);t++)
     { // do modulo maths in float not int - necessary for very short TR and block length
       if ( t+phase-skip - ((int)((t+phase-skip)/(off+on)))*(off+on) >= off )
@@ -824,7 +824,7 @@ break;
 //   sprintf(key,"fmri(stop%d)",orig_ev+1);  int stop=(int)(atof(find_line(fn, key, fl))*mult);
 
 //   if ( (stop<0) || (stop+skip>mnpts) ) stop=mnpts-skip;
-  
+
 //   for(t=skip;t<skip+stop;t++)
 //     {
 //       if ( (t+phase-skip)%(off+on) >= off )
@@ -838,7 +838,7 @@ break;
 
 // }}}
       case 1:
-	// {{{ sinusoid 
+	// {{{ sinusoid
 
 {
   sprintf(key,"fmri(skip%d)",orig_ev+1);   int skip=(int)(atof(find_line(fn, key, fl))*mult);
@@ -855,7 +855,7 @@ break;
 
 // }}}
       case 2:
-	// {{{ custom single column 
+	// {{{ custom single column
 
 {
   FILE *ifp2;
@@ -871,7 +871,7 @@ break;
   for(i=0,t=0; t<npts; t++)
     {
       float tmpf;
-	  
+
       if (fscanf(ifp2,"%f",&tmpf)!=1)
 	{
 	  cout << "Not enough data in " << filename << endl;
@@ -888,7 +888,7 @@ break;
 
 // }}}
       case 3:
-	// {{{ custom 3 columns 
+	// {{{ custom 3 columns
 
 {
   FILE *ifp2;
@@ -1006,14 +1006,14 @@ break;
     if (shape[orig_ev]>1) // demean this orig EV
       orig_X.Column(orig_ev+1)=remmean(orig_X.Column(orig_ev+1));
 
-    // {{{ triggers 
+    // {{{ triggers
 
 #define TRIGGER_THRESH 0.001
 
 {
   float previous=0;
   int trigger_count=0;
-  
+
   for(t=0;t<npts*trmult;t++)
     {
       if ( (orig_X(t+negpts[orig_ev]+1,orig_ev+1)>TRIGGER_THRESH) && (previous<=TRIGGER_THRESH) && (trigger_count<npts*2) )
@@ -1044,14 +1044,14 @@ break;
  {
    if ( downsampledOriginalModel.Row(row).Sum() < downsampledOriginalModel.Row(minimumTimepoint).Sum() )
      minimumTimepoint=row;
- }  
+ }
  ofstream outputFile((string(argv[1])+".min").c_str());
  if(outputFile.is_open()) {
    outputFile << minimumTimepoint;
    outputFile.close();
  }
 // }}}
-  // {{{ convolve and resample down in time 
+  // {{{ convolve and resample down in time
 
 for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++, real_ev++)
   if (shape[orig_ev]<10)
@@ -1083,7 +1083,7 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++, rea
 	  switch (convolve)
 	    {
 	    case 1:
-	      // {{{ Gaussian 
+	      // {{{ Gaussian
 
 {
   sprintf(key,"fmri(gausssigma%d)",c_orig_ev+1); float sigma=atof(find_line(fn, key, fl))*mult;
@@ -1108,7 +1108,7 @@ break;
 
 // }}}
 	    case 2:
-	      // {{{ Gamma 
+	      // {{{ Gamma
 
 {
   sprintf(key,"fmri(gammasigma%d)",c_orig_ev+1); float sigma=atof(find_line(fn, key, fl));
@@ -1126,7 +1126,7 @@ break;
 
 // }}}
 	    case 3:
-	      // {{{ double-gamma HRF 
+	      // {{{ double-gamma HRF
 
 {
   float sigma1=2.449, delay1=6, // first gamma
@@ -1145,7 +1145,7 @@ break;
 
 // }}}
 	    case 4:
-	      // {{{ Gamma basis functions 
+	      // {{{ Gamma basis functions
 
 #define WINDOW_FRAC 0.25
 
@@ -1182,7 +1182,7 @@ break;
 
 // }}}
 	    case 5:
-	      // {{{ Sine basis functions 
+	      // {{{ Sine basis functions
 
 {
   sprintf(key,"fmri(basisfnum%d)",c_orig_ev+1);   int fnumber=atoi(find_line(fn, key, fl));
@@ -1214,7 +1214,7 @@ break;
 
 // }}}
 	    case 6:
-	      // {{{ FIR basis functions 
+	      // {{{ FIR basis functions
 
 {
   sprintf(key,"fmri(basisfnum%d)",c_orig_ev+1);   int fnumber=atoi(find_line(fn, key, fl));
@@ -1246,7 +1246,7 @@ break;
 
 // }}}
 	    case 7:
-	      // {{{ Custom basis functions 
+	      // {{{ Custom basis functions
 
 {
   sprintf(key,"fmri(basisfnum%d)",c_orig_ev+1);   int fnumber=atoi(find_line(fn, key, fl));
@@ -1254,7 +1254,7 @@ break;
 
   Matrix icX(mnpts,fnumber);
   orig_ev_nreal[orig_ev]+=fnumber-1;
-  
+
   FILE *ifp2;
   if ((ifp2=fopen(bfcustomname,"rb"))==NULL)
     {
@@ -1275,7 +1275,7 @@ break;
   fw--;
   fclose(ifp2);
   maxconvwin=MAX(fw,maxconvwin);
-  
+
   for(int fnum=0; fnum<fnumber; fnum++)
     {
       ColumnVector cX=icX.SubMatrix(1,fw,fnum+1,fnum+1);
@@ -1297,7 +1297,7 @@ break;
 	{
 	  do_resample(orig_X.Column(orig_ev+1), real_X, real_ev, trmult, negpts[orig_ev]);
 	  if ( shape[orig_ev]==1 )
-	    // {{{ create sinusoid harmonics 
+	    // {{{ create sinusoid harmonics
 
 /* this is treated like a convolution to keep the structure simple -
 thus the file key value searching is just a duplicate of that from the
@@ -1325,7 +1325,7 @@ principal sinusoid EV already created */
 
 	  for(t=skip;t<skip+stop;t++)
 	    orig_X(t+1,orig_ev+1) = 0.5 * ( 1.0 + sin( M_PI + (harm+1)*(t+phase-skip) / period ) );
-	
+
 	  do_resample(orig_X.Column(orig_ev+1), real_X, real_ev, trmult, negpts[orig_ev]);
 	}
     }
@@ -1365,7 +1365,7 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); real_ev+=orig_
     }
 
 // }}}
-  // {{{ add motion params to model if required 
+  // {{{ add motion params to model if required
 
 if ( motionparams.Ncols() > 0 )
   {
@@ -1392,7 +1392,7 @@ if ( motionparams.Ncols() > 0 )
 	} else {
 	  real_X=tmp_real_X;
 	  memcpy(orig_ev_nreal,tmp_orig_ev_nreal,sizeof(int)*orig_evs);
-          // {{{ temporal filtering 
+          // {{{ temporal filtering
 
 temphp_yn = atoi(find_line(fn, "fmri(temphp_yn)", fl));
 templp_yn = atoi(find_line(fn, "fmri(templp_yn)", fl));
@@ -1432,12 +1432,12 @@ if ( (templp_yn) || (temphp_yn) )
 // }}}
 	}
 
-      // {{{ demean 
+      // {{{ demean
 
 real_X=remmean(real_X);
 
 // }}}
-      // {{{ orthogonalisation 
+      // {{{ orthogonalisation
 
 // basis function orthing (within orig_ev)
 for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); real_ev+=orig_ev_nreal[orig_ev], orig_ev++)
@@ -1488,7 +1488,7 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); real_ev+=orig_
 		tmp_orth = tmp_orth | real_X.Column(tmp_real_ev+tmp+1);
 	  }
       if (tmp_orth.Ncols()>0)
-	for(int tmp=0; tmp<orig_ev_nreal[orig_ev]; tmp++)  // ORTH real_X.Column(real_ev+tmp+1) WRT tmp_orth		
+	for(int tmp=0; tmp<orig_ev_nreal[orig_ev]; tmp++)  // ORTH real_X.Column(real_ev+tmp+1) WRT tmp_orth
 	  real_X.Column(real_ev+tmp+1) = real_X.Column(real_ev+tmp+1) - tmp_orth*(pinv(tmp_orth)*real_X.Column(real_ev+tmp+1));
     }
 }
@@ -1509,14 +1509,14 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); real_ev+=orig_
 //       for (int j=real_ev; j<real_ev+motionparams.Ncols(); j++)
 // 	{
 // 	  if (motionevs==1)
-// 	    orth_i_wrt_j(real_X,i+1,j+1);	  
+// 	    orth_i_wrt_j(real_X,i+1,j+1);
 // 	  else if (motionevs==2)
-// 	    orth_i_wrt_j(real_X,j+1,i+1);	  
+// 	    orth_i_wrt_j(real_X,j+1,i+1);
 // 	}
 //   }
 
 // }}}
-      // {{{ add temporal derivs 
+      // {{{ add temporal derivs
 
 for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++)
 {
@@ -1547,7 +1547,7 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs-(motionparams.Ncols()>0); orig_ev++)
 }
 
 // }}}
-      // {{{ demean 
+      // {{{ demean
 
 real_X=remmean(real_X);
 
@@ -1556,7 +1556,7 @@ real_X=remmean(real_X);
       if (pass==0)
 	{
 	  real_X_heights = estimate_X_heights(real_X);
-	  // {{{ check rank of DM and get "real" contrast h2 heights (ie before HP filtering) 
+	  // {{{ check rank of DM and get "real" contrast h2 heights (ie before HP filtering)
 
 // first do real rank deficiency test
 // actually, no - we don't need this now we've switched to using pinv() below
@@ -1582,7 +1582,7 @@ for(con=1; con<=ncon; con++)
         }
       else
 	{
-          // {{{ output submodel group information 
+          // {{{ output submodel group information
 
 {
   sprintf(filename,"%s.frf",argv[1]);
@@ -1600,7 +1600,7 @@ for(con=1; con<=ncon; con++)
 }
 
 // }}}
-	  // {{{ check rank of DM and do final contrast estimability test 
+	  // {{{ check rank of DM and do final contrast estimability test
 
 // first do real rank deficiency test
 eigenvals = feat_svd(real_X);
@@ -1630,7 +1630,7 @@ for(con=1; con<=ncon; con++)
       //       ncon=0;
       //       real_evs=orig_evs=1;
       //       orig_ev_nreal[0]=1;
-      
+
       float D = h2 / sqrt( (X2.t() * X2).AsScalar() );
       RE(con) = critical_t * D * noise;
     }
@@ -1647,7 +1647,7 @@ for(con=1; con<=ncon; con++)
     }
 
 } else {
-  // {{{ group level design 
+  // {{{ group level design
 
 for(real_ev=0; real_ev<real_evs; real_ev++)
   {
@@ -1665,13 +1665,13 @@ for(real_ev=0; real_ev<real_evs; real_ev++)
 	  cout << "Warning: voxelwise EV " << 1+real_ev-vox_evs << " isn't readable" << endl;
 	for(t=0;t<npts;t++)
 	  real_X(t+1,real_ev+1)=ev_image[t].mean();
-	  
+
       }
     orig_ev_nreal[real_ev]=1;
   }
 
 // }}}
-  // {{{ orthogonalisation 
+  // {{{ orthogonalisation
 
 for(real_ev=0; real_ev<real_evs-vox_evs; real_ev++)
   for(int tmp_real_ev=0; tmp_real_ev<real_evs-vox_evs; tmp_real_ev++)
@@ -1684,7 +1684,7 @@ for(real_ev=0; real_ev<real_evs-vox_evs; real_ev++)
 
 // }}}
   real_X_heights = estimate_X_heights(real_X);
-  // {{{ check rank of DM and do efficiency test 
+  // {{{ check rank of DM and do efficiency test
 
 // first do real rank deficiency test
 eigenvals = feat_svd(real_X);
@@ -1717,7 +1717,7 @@ for(con=1; con<=ncon; con++)
 }
 
 // }}}
-  // {{{ write matrix 
+  // {{{ write matrix
 
 sprintf(filename,"%s.mat",argv[1]);
 if ((ofp=fopen(filename,"wb"))==NULL)
@@ -1746,7 +1746,7 @@ for(t=1; t<=npts; t++)
 fclose(ofp);
 
 // }}}
-  // {{{ write triggers 
+  // {{{ write triggers
 
 if (level==1)
 {
@@ -1785,7 +1785,7 @@ if (level==1)
 }
 
 // }}}
-  // {{{ write contrasts 
+  // {{{ write contrasts
 
 fprintf(cofp,"/NumWaves	%d\n",real_evs);
 fprintf(cofp,"/NumContrasts	%d\n",ncon);
@@ -1794,7 +1794,7 @@ fprintf(cofp,"/NumContrasts	%d\n",ncon);
 fprintf(cofp,"/PPheights	");
 for(con=1; con<=ncon; con++)
   fprintf(cofp,"	%e",real_CON_heights(con));
-    
+
 fprintf(cofp,"\n");
 
 fprintf(cofp,"/RequiredEffect	");
@@ -1814,7 +1814,7 @@ for(con=1; con<=ncon; con++)
 fclose(cofp);
 
 // }}}
-  // {{{ ftests 
+  // {{{ ftests
 
 if (nftests>0)
 {
@@ -1868,7 +1868,7 @@ if (nftests>0)
 }
 
 // }}}
-  // {{{ second-level group memberships 
+  // {{{ second-level group memberships
 
 if (level==2)
 {
@@ -1913,7 +1913,7 @@ if (level==2)
 	    printf("Warning - design matrix uses different groups (for different variances), but these do not contain \"separable\" EVs for the different groups (it is necessary that, for each EV, only one of the groups has non-zero values).\n");
 	}
     }
-  
+
   fprintf(ofp,"/NumWaves	1\n");
   fprintf(ofp,"/NumPoints	%d\n",npts);
   fprintf(ofp,"\n/Matrix\n");
@@ -1925,10 +1925,10 @@ if (level==2)
 }
 
 // }}}
-  // {{{ write covariance image 
+  // {{{ write covariance image
 
 {
-  // {{{ setup vars 
+  // {{{ setup vars
 
 FILE *ofp2;
 unsigned char *r,*g,*b;
@@ -1948,7 +1948,7 @@ ysize = size   + border*2 + (level==1)*(border*(2+ncon) + FONT_HEIGHT*(ncon+1));
 
 // }}}
 
-  // {{{ malloc images and fill in background 
+  // {{{ malloc images and fill in background
 
 r=(unsigned char *)malloc(xsize*ysize);
 g=(unsigned char *)malloc(xsize*ysize);
@@ -1961,8 +1961,8 @@ memset((void *)b,(unsigned char)255,xsize*ysize);
 // }}}
 
   if (real_evs>1)
-  {						  
-    // {{{ cov matrix orig 
+  {
+    // {{{ cov matrix orig
 
 for(evx=0; evx<real_evs; evx++)
   {
@@ -1995,7 +1995,7 @@ for(evx=0; evx<real_evs; evx++)
 	  b[(border+evy*mag+y)*xsize+border+evx*mag+x] = (int)(255*cov[evy*real_evs+evx]);
 
 // }}}
-    // {{{ cov matrix SVD 
+    // {{{ cov matrix SVD
 
 for(evx=0; evx<real_evs; evx++) for(evy=0; evy<real_evs; evy++) {
   int tmp=0;
@@ -2014,7 +2014,7 @@ for(evx=0; evx<real_evs; evx++) for(evy=0; evy<real_evs; evy++)
   if (evx==evy)
     {
       sprintf(the_string,"%.3f",eigenvals(evx+1)/eigenvals.Maximum());
-      write_string_rgb(r, g, b, 
+      write_string_rgb(r, g, b,
 		       3*border+size+evx*mag + evx*(mag-2*border-5*FONT_WIDTH)/(real_evs-1),
 		       border+evy*mag+mag/2-FONT_HEIGHT/2,
 		       the_string, font_data, 255, 0, 0, xsize, ysize);
@@ -2024,13 +2024,13 @@ for(evx=0; evx<real_evs; evx++) for(evy=0; evy<real_evs; evy++)
   }
 
   if (level==1)
-    // {{{ contrast efficiencies 
+    // {{{ contrast efficiencies
 
 {
   int yy;
 
   sprintf(the_string,"   Effect required (%%)");
-  write_string_rgb(r, g, b, 
+  write_string_rgb(r, g, b,
 		   border,
 		   size+3*border,
 		   the_string, font_data, 0, 0, 0, xsize, ysize);
@@ -2038,12 +2038,12 @@ for(evx=0; evx<real_evs; evx++) for(evy=0; evy<real_evs; evy++)
   for(yy=0; yy<ncon; yy++)
     {
       sprintf(the_string,"C%d %.3f",yy+1,RE(yy+1));
-      
+
       int red_colour=0;
       /*if (RE(yy+1)>5)
 	red_colour=255;*/
 
-      write_string_rgb(r, g, b, 
+      write_string_rgb(r, g, b,
 		       border,
 		       size+(4+yy)*border+(yy+1)*FONT_HEIGHT,
 		       the_string, font_data, red_colour, 0, 0, xsize, ysize);
@@ -2052,7 +2052,7 @@ for(evx=0; evx<real_evs; evx++) for(evy=0; evy<real_evs; evy++)
 
 // }}}
 
-  // {{{ output image 
+  // {{{ output image
 
 sprintf(filename,"%s_cov.ppm",argv[1]);
 if ((ofp2=fopen(filename,"wb"))==NULL)
@@ -2082,9 +2082,9 @@ system(filename);
 }
 
 // }}}
-  // {{{ write image preview (corrupts X[]) 
+  // {{{ write image preview (corrupts X[])
 
-// {{{ setup vars 
+// {{{ setup vars
 
 FILE *ofp2;
 unsigned char *r,*g,*b;
@@ -2106,14 +2106,14 @@ xsize=real_evs*xmag + border*(real_evs+3+nftests+(nftests>0)) + name_length + nf
 ysize=npts*ymag + (ncon+1)*FONT_HEIGHT + border*(4+ncon);
 
 // }}}
-// {{{ reset X[] range (but don't change offset) 
+// {{{ reset X[] range (but don't change offset)
 
 for(real_ev=0; real_ev<real_evs; real_ev++)
   if ( real_X.Column(real_ev+1).MaximumAbsoluteValue() > 0 )
     real_X.Column(real_ev+1) /= real_X.Column(real_ev+1).MaximumAbsoluteValue();
 
 // }}}
-// {{{ malloc images and fill in background 
+// {{{ malloc images and fill in background
 
 r=(unsigned char *)malloc(xsize*ysize);
 g=(unsigned char *)malloc(xsize*ysize);
@@ -2124,7 +2124,7 @@ memset((void *)g,(unsigned char)215,xsize*ysize);
 memset((void *)b,(unsigned char)255,xsize*ysize);
 
 // }}}
-// {{{ time 
+// {{{ time
 
 if (level==1)
 for(yy=0; yy<npts; yy++)
@@ -2153,7 +2153,7 @@ for(yy=0; yy<npts; yy++)
     }
 
 // }}}
-// {{{ DM: grey 
+// {{{ DM: grey
 
   for(yy=0; yy<npts; yy++)
     for(xx=0; xx<real_evs; xx++)
@@ -2168,14 +2168,14 @@ for(yy=0; yy<npts; yy++)
 	  }
 
 // }}}
-// {{{ DM: red 
+// {{{ DM: red
 
   for(yy=0; yy<npts; yy++)
     for(xx=0; xx<real_evs; xx++)
       for(y=0; y<ymag; y++)
 	{
 	  float XX = real_X(yy+1,xx+1);
-	  
+
 	  x = (int)((XX*0.8+1.0)*xmag/2);
 
 	  r[(border+yy*ymag+y)*xsize+border*(xx+3)+xx*xmag+x+name_length]=255;
@@ -2196,7 +2196,7 @@ for(yy=0; yy<npts; yy++)
 	}
 
 // }}}
-// {{{ EV names 
+// {{{ EV names
 
 for(orig_ev=real_ev=0; orig_ev<orig_evs; orig_ev++)
   {
@@ -2210,7 +2210,7 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs; orig_ev++)
 
     for(i=0; i<orig_ev_nreal[orig_ev]; i++)
       {
-	write_string_rgb(r, g, b, 
+	write_string_rgb(r, g, b,
 			 border*(real_ev+3)+real_ev*xmag+xmag/2+name_length-FONT_WIDTH*strlen(the_string)/2,
 			 3*border+npts*ymag,
 			 the_string, font_data, 150, 50, 50, xsize, ysize);
@@ -2220,19 +2220,19 @@ for(orig_ev=real_ev=0; orig_ev<orig_evs; orig_ev++)
   }
 
 // }}}
-// {{{ contrasts 
+// {{{ contrasts
 
 for(yy=0; yy<ncon; yy++)
 {
   sprintf(the_string,"C%d",yy+1);
-  write_string_rgb(r, g, b, 
+  write_string_rgb(r, g, b,
 		   border,
 		   (4+yy)*border+(yy+1)*FONT_HEIGHT+npts*ymag,
 		   the_string, font_data, 0, 0, 0, xsize, ysize);
 
   sprintf(key,"fmri(conname_real.%d)",yy+1);
   strcpy(the_string,find_line(fn, key, fl));
-  write_string_rgb(r, g, b, 
+  write_string_rgb(r, g, b,
 		   border+4*FONT_WIDTH,
 		   (4+yy)*border+(yy+1)*FONT_HEIGHT+npts*ymag,
 		   the_string, font_data, 150, 50, 50, xsize, ysize);
@@ -2243,8 +2243,8 @@ for(yy=0; yy<ncon; yy++)
 	sprintf(the_string,"%d",(int)C(xx+1,yy+1));
       else
 	sprintf(the_string,"%.3f",C(xx+1,yy+1));
-      
-      write_string_rgb(r, g, b, 
+
+      write_string_rgb(r, g, b,
 		       border*(xx+3)+xx*xmag+xmag/2+name_length-FONT_WIDTH*strlen(the_string)/2,
 		       (4+yy)*border+(yy+1)*FONT_HEIGHT+npts*ymag,
 		       the_string, font_data, 0, 0, 0, xsize, ysize);
@@ -2252,7 +2252,7 @@ for(yy=0; yy<ncon; yy++)
 }
 
 // }}}
-// {{{ ftests 
+// {{{ ftests
 
 for(f=0; f<nftests; f++)
 {
@@ -2296,7 +2296,7 @@ for(f=0; f<nftests; f++)
 }
 
 // }}}
-// {{{ second-level group memberships 
+// {{{ second-level group memberships
 
 if (level==2)
   for(t=0;t<npts;t++)
@@ -2309,7 +2309,7 @@ if (level==2)
     }
 
 // }}}
-// {{{ output image 
+// {{{ output image
 
 sprintf(filename,"%s.ppm",argv[1]);
 if ((ofp2=fopen(filename,"wb"))==NULL)

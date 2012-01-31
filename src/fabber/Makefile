@@ -5,7 +5,7 @@ PROJNAME = fabber
 USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${BOOSTDIR}
 USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_PROB}
 
-LIBS = -lutils -lnewimage -lmiscmaths -lprob -lnewmat -lfslio -lniftiio -lznz -lz 
+LIBS = -lutils -lnewimage -lmiscmaths -lprob -lnewmat -lfslio -lniftiio -lznz -lz
 
 XFILES = fabber mvntool
 

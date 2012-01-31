@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacInit.c --
  *
  *	This file contains Mac-specific interpreter initialization
@@ -99,7 +99,7 @@ tkInit";
      *		2) env array
      *		3) System Folder:Extensions:Tool Command Language:
      */
-     
+
     libDir = Tcl_GetVar(interp, "tk_library", TCL_GLOBAL_ONLY);
     if (libDir == NULL) {
     libDir = TclGetEnv("TK_LIBRARY", &ds);
@@ -109,9 +109,9 @@ tkInit";
     if ((tempPath != NULL) && (tempPath[0] != '\0')) {
 	    Tcl_DString libPath;
 	    CONST char *argv[3];
-	    
+
 	    argv[0] = tempPath;
-	    argv[1] = "Tool Command Language";	    
+	    argv[1] = "Tool Command Language";
 	    Tcl_DStringInit(&libPath);
 	    Tcl_DStringAppend(&libPath, "tk", -1);
 	    argv[2] = Tcl_DStringAppend(&libPath, TK_VERSION, -1);
@@ -141,7 +141,7 @@ tkInit";
  *
  *	Retrieves the name of the current application from a platform
  *	specific location.  On the Macintosh we look to see if the
- *	App Name is specified in a resource.  If not, the application 
+ *	App Name is specified in a resource.  If not, the application
  *	name is the root of the tail of the path contained in the tcl
  *	variable argv0.
  *
@@ -172,7 +172,7 @@ TkpGetAppName(
 	ReleaseResource(h);
 	return;
     }
-    
+
     name = Tcl_GetVar(interp, "argv0", TCL_GLOBAL_ONLY);
     if (name != NULL) {
 	Tcl_SplitPath(name, &argc, &argv);

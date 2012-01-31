@@ -58,7 +58,7 @@ extern "C" {
 #define TK_VERSION	"8.4"
 #define TK_PATCH_LEVEL	"8.4.19"
 
-/* 
+/*
  * A special definition used to allow this header file to be included
  * from windows or mac resource files so that they can obtain version
  * information.  RC_INVOKED is defined by default by the windows RC tool
@@ -67,9 +67,9 @@ extern "C" {
  * Resource compilers don't like all the C stuff, like typedefs and
  * procedure declarations, that occur below, so block them out.
  */
-    
+
 #ifndef RC_INVOKED
-    
+
 #ifndef _XLIB_H
 #   if defined (MAC_TCL)
 #	include <Xlib.h>
@@ -160,10 +160,10 @@ typedef enum {
  */
 
 typedef struct Tk_OptionSpec {
-    Tk_OptionType type;		/* Type of option, such as TK_OPTION_COLOR; 
+    Tk_OptionType type;		/* Type of option, such as TK_OPTION_COLOR;
 				 * see definitions above. Last option in
 				 * table must have type TK_OPTION_END. */
-    char *optionName;		/* Name used to specify option in Tcl	
+    char *optionName;		/* Name used to specify option in Tcl
 				 * commands. */
     char *dbName;		/* Name for option in option database. */
     char *dbClass;		/* Class for option in database. */
@@ -222,7 +222,7 @@ typedef void (Tk_CustomOptionRestoreProc) _ANSI_ARGS_((ClientData clientData,
 	Tk_Window tkwin, char *internalPtr, char *saveInternalPtr));
 typedef void (Tk_CustomOptionFreeProc) _ANSI_ARGS_((ClientData clientData,
 	Tk_Window tkwin, char *internalPtr));
-    
+
 typedef struct Tk_ObjCustomOption {
     char *name;				/* Name of the custom option. */
     Tk_CustomOptionSetProc *setProc;	/* Function to use to set a record's
@@ -294,11 +294,11 @@ typedef struct Tk_SavedOptions {
 					 * restore configuration options. */
     Tk_Window tkwin;			/* Window associated with recordPtr;
 					 * needed to restore certain options. */
-    int numItems;			/* The number of valid items in 
+    int numItems;			/* The number of valid items in
 					 * items field. */
     Tk_SavedOption items[TK_NUM_SAVED_OPTIONS];
 					/* Items used to hold old values. */
-    struct Tk_SavedOptions *nextPtr;	/* Points to next structure in list;	
+    struct Tk_SavedOptions *nextPtr;	/* Points to next structure in list;
 					 * needed if too many options changed
 					 * to hold all the old values in a
 					 * single structure.  NULL means no
@@ -375,10 +375,10 @@ typedef struct Tk_ConfigSpec {
 typedef enum {
     TK_CONFIG_BOOLEAN, TK_CONFIG_INT, TK_CONFIG_DOUBLE, TK_CONFIG_STRING,
     TK_CONFIG_UID, TK_CONFIG_COLOR, TK_CONFIG_FONT, TK_CONFIG_BITMAP,
-    TK_CONFIG_BORDER, TK_CONFIG_RELIEF, TK_CONFIG_CURSOR, 
-    TK_CONFIG_ACTIVE_CURSOR, TK_CONFIG_JUSTIFY, TK_CONFIG_ANCHOR, 
+    TK_CONFIG_BORDER, TK_CONFIG_RELIEF, TK_CONFIG_CURSOR,
+    TK_CONFIG_ACTIVE_CURSOR, TK_CONFIG_JUSTIFY, TK_CONFIG_ANCHOR,
     TK_CONFIG_SYNONYM, TK_CONFIG_CAP_STYLE, TK_CONFIG_JOIN_STYLE,
-    TK_CONFIG_PIXELS, TK_CONFIG_MM, TK_CONFIG_WINDOW, TK_CONFIG_CUSTOM, 
+    TK_CONFIG_PIXELS, TK_CONFIG_MM, TK_CONFIG_WINDOW, TK_CONFIG_CUSTOM,
     TK_CONFIG_END
 } Tk_ConfigTypes;
 
@@ -515,7 +515,7 @@ typedef enum {
 
 /*
  * The following structure is used by Tk_GetFontMetrics() to return
- * information about the properties of a Tk_Font.  
+ * information about the properties of a Tk_Font.
  */
 
 typedef struct Tk_FontMetrics {
@@ -1101,7 +1101,7 @@ typedef struct Tk_ItemType {
 typedef struct Tk_CanvasTextInfo {
     Tk_3DBorder selBorder;	/* Border and background for selected
 				 * characters.  Read-only to items.*/
-    int selBorderWidth;		/* Width of border around selection. 
+    int selBorderWidth;		/* Width of border around selection.
 				 * Read-only to items. */
     XColor *selFgColorPtr;	/* Foreground color for selected text.
 				 * Read-only to items. */
@@ -1593,9 +1593,9 @@ typedef int (Tk_SelectionProc) _ANSI_ARGS_((ClientData clientData,
 /*
  * end block for C++
  */
-    
+
 #ifdef __cplusplus
 }
 #endif
-    
+
 #endif /* _TK */

@@ -41,7 +41,7 @@ namespace boost {
   // Algorithms", and the application to connected components is
   // similar to the algorithm described in Ch. 22 of "Intro to
   // Algorithms" by Cormen, et. all.
-  //  
+  //
   // RankContainer is a random accessable container (operator[] is
   // defined) with a value type that can represent an integer part of
   // a binary log of the value type of the corresponding
@@ -50,7 +50,7 @@ namespace boost {
 
   // An implementation of disjoint sets can be found in
   // boost/pending/disjoint_sets.hpp
-  
+
   template <class EdgeListGraph, class DisjointSets>
   void incremental_components(EdgeListGraph& g, DisjointSets& ds)
   {
@@ -58,35 +58,35 @@ namespace boost {
     for (tie(e,end) = edges(g); e != end; ++e)
       ds.union_set(source(*e,g),target(*e,g));
   }
-  
+
   template <class ParentIterator>
   void compress_components(ParentIterator first, ParentIterator last)
   {
-    for (ParentIterator current = first; current != last; ++current) 
+    for (ParentIterator current = first; current != last; ++current)
       detail::find_representative_with_full_compression(first, current-first);
   }
-  
+
   template <class ParentIterator>
   typename boost::detail::iterator_traits<ParentIterator>::difference_type
   component_count(ParentIterator first, ParentIterator last)
   {
     std::ptrdiff_t count = 0;
-    for (ParentIterator current = first; current != last; ++current) 
-      if (*current == current - first) ++count; 
+    for (ParentIterator current = first; current != last; ++current)
+      if (*current == current - first) ++count;
     return count;
   }
-  
+
   // This algorithm can be applied to the result container of the
   // connected_components algorithm to normalize
   // the components.
   template <class ParentIterator>
   void normalize_components(ParentIterator first, ParentIterator last)
   {
-    for (ParentIterator current = first; current != last; ++current) 
+    for (ParentIterator current = first; current != last; ++current)
       detail::normalize_node(first, current - first);
   }
-  
-  template <class VertexListGraph, class DisjointSets> 
+
+  template <class VertexListGraph, class DisjointSets>
   void initialize_incremental_components(VertexListGraph& G, DisjointSets& ds)
   {
     typename graph_traits<VertexListGraph>
@@ -103,7 +103,7 @@ namespace boost {
 
   // considering changing the so that it initializes with a pair of
   // vertex iterators and a parent PA.
-  
+
   template <class IndexT>
   class component_index
   {
@@ -114,14 +114,14 @@ namespace boost {
     typedef typename MyIndexContainer::size_type SizeT;
     typedef typename MyIndexContainer::const_iterator IndexIter;
   public:
-    typedef detail::component_iterator<IndexIter, IndexT, SizeT> 
+    typedef detail::component_iterator<IndexIter, IndexT, SizeT>
       component_iterator;
     class component {
       friend class component_index;
     protected:
       IndexT number;
       const component_index<IndexT>* comp_ind_ptr;
-      component(IndexT i, const component_index<IndexT>* p) 
+      component(IndexT i, const component_index<IndexT>* p)
         : number(i), comp_ind_ptr(p) {}
     public:
       typedef component_iterator iterator;
@@ -132,26 +132,26 @@ namespace boost {
                          (comp_ind_ptr->header)[number] );
       }
       iterator end() const {
-        return iterator( comp_ind_ptr->index.begin(), 
+        return iterator( comp_ind_ptr->index.begin(),
                          comp_ind_ptr->index.size() );
       }
     };
     typedef SizeT size_type;
     typedef component value_type;
-    
+
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
     template <class Iterator>
-    component_index(Iterator first, Iterator last) 
+    component_index(Iterator first, Iterator last)
     : index(std::distance(first, last))
-    { 
+    {
       std::copy(first, last, index.begin());
       detail::construct_component_index(index, header);
     }
 #else
     template <class Iterator>
-    component_index(Iterator first, Iterator last) 
+    component_index(Iterator first, Iterator last)
       : index(first, last)
-    { 
+    {
       detail::construct_component_index(index, header);
     }
 #endif
@@ -162,7 +162,7 @@ namespace boost {
     SizeT size() const {
       return header.size();
     }
-    
+
   };
 
 } // namespace boost

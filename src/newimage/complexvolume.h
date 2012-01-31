@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -65,7 +65,7 @@
 #if !defined(__complexvolume_h)
 #define __complexvolume_h
 
-#include "newimage.h" 
+#include "newimage.h"
 
 
 namespace NEWIMAGE {
@@ -106,9 +106,9 @@ namespace NEWIMAGE {
     inline float re() const { return m_real; }
     inline float im() const { return m_imag; }
 
-    const complexpoint& operator+=(const complexpoint& val); 
-    const complexpoint& operator-=(const complexpoint& val); 
-    const complexpoint& operator*=(const complexpoint& val); 
+    const complexpoint& operator+=(const complexpoint& val);
+    const complexpoint& operator-=(const complexpoint& val);
+    const complexpoint& operator*=(const complexpoint& val);
     const complexpoint& operator/=(const complexpoint& val);
     complexpoint operator+(const complexpoint& val) const;
     complexpoint operator-(const complexpoint& val) const;
@@ -122,7 +122,7 @@ namespace NEWIMAGE {
   };
 
   class complexvolume {
-    
+
   private:
     volume<float> real;
     volume<float> imag;
@@ -135,11 +135,11 @@ namespace NEWIMAGE {
     complexvolume(const volume<float>& r);
     ~complexvolume();
     float operator=(const float val);
-    complexvolume& operator=(const complexvolume& source); 
+    complexvolume& operator=(const complexvolume& source);
     void destroy();
     int copyproperties(const complexvolume& source);
     int copydata(const complexvolume& source);
- 
+
     const float& re(int x,int y, int z) const { return real(x,y,z); }
     const float& im(int x,int y, int z) const { return imag(x,y,z); }
     float& re(int x,int y, int z) { return real(x,y,z); }
@@ -156,15 +156,15 @@ namespace NEWIMAGE {
     void setzdim(float z) { real.setzdim(z); imag.setzdim(z); }
     void setdims(float x, float y, float z){ setxdim(x); setydim(y); setzdim(z); }
     int nvoxels() const { return real.nvoxels(); }
-  
+
     const complexvolume& operator+=(const complexpoint& val);
     const complexvolume& operator-=(const complexpoint& val);
     const complexvolume& operator*=(const complexpoint& val);
     const complexvolume& operator/=(const complexpoint& val);
-    const complexvolume& operator+=(const complexvolume& source); 
-    const complexvolume& operator-=(const complexvolume& source); 
-    const complexvolume& operator*=(const complexvolume& source); 
-    const complexvolume& operator/=(const complexvolume& source); 
+    const complexvolume& operator+=(const complexvolume& source);
+    const complexvolume& operator-=(const complexvolume& source);
+    const complexvolume& operator*=(const complexvolume& source);
+    const complexvolume& operator/=(const complexvolume& source);
     complexvolume operator+(const complexpoint& val) const;
     complexvolume operator-(const complexpoint& val) const;
     complexvolume operator*(const complexpoint& val) const;
@@ -191,8 +191,8 @@ namespace NEWIMAGE {
     inline void setROIlimits(const std::vector<int>& lims) const
       { real.setROIlimits(lims);imag.setROIlimits(lims); }
     inline void activateROI() const
-      { real.activateROI(); imag.activateROI(); } 
-    inline void deactivateROI() const 
+      { real.activateROI(); imag.activateROI(); }
+    inline void deactivateROI() const
       { real.deactivateROI(); imag.deactivateROI(); }
 
     volume<float> abs() const;
@@ -205,7 +205,7 @@ namespace NEWIMAGE {
     complexref operator()(int x,int y, int z)
       { return(complexref(&real(x,y,z),&imag(x,y,z))); }
 
-    
+
     complexvolume extract_slice(int slice) const;
     void overwrite_slice(const complexvolume& data,int slice);
 

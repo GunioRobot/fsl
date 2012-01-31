@@ -151,7 +151,7 @@ typedef struct TkScrollbar {
 
 /*
  * Flag bits for scrollbars:
- * 
+ *
  * REDRAW_PENDING:		Non-zero means a DoWhenIdle handler
  *				has already been queued to redraw
  *				this window.
@@ -181,7 +181,7 @@ extern Tk_ConfigSpec tkpScrollbarConfigSpecs[];
 
 /*
  * Declaration of procedures used in the implementation of the scrollbar
- * widget. 
+ * widget.
  */
 
 EXTERN void		TkScrollbarEventProc _ANSI_ARGS_((

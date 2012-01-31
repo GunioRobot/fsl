@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -76,7 +76,7 @@
 #include <set>
 #include <cmath>
 #include "newmat.h"
-      
+
 using namespace NEWMAT;
 using namespace std;
 
@@ -109,7 +109,7 @@ namespace MISCMATHS {
       float *storez;
 
       kernelstorage(const ColumnVector& kx, const ColumnVector& ky,
-		    const ColumnVector& kz, int wx, int wy, int wz)	
+		    const ColumnVector& kz, int wx, int wy, int wz)
         {
 	  p_kernelx = kx; p_kernely = ky; p_kernelz = kz;
 	  p_widthx = wx;  p_widthy = wy;  p_widthz = wz;
@@ -119,28 +119,28 @@ namespace MISCMATHS {
  	}
 
       ~kernelstorage()
-      { 
+      {
 	delete storex;
 	delete storey;
 	delete storez;
       }
-      
+
       class comparer
 	{
 	public:
-	  bool operator()(const kernelstorage* k1, 
+	  bool operator()(const kernelstorage* k1,
 			  const kernelstorage* k2) const
 	    {
 	      // comparison of sizes and values (toleranced)
-	      if ( (k1->p_widthx!=k2->p_widthx) || 
-		   (k1->p_widthy!=k2->p_widthy) || 
+	      if ( (k1->p_widthx!=k2->p_widthx) ||
+		   (k1->p_widthy!=k2->p_widthy) ||
 		   (k1->p_widthz!=k2->p_widthz) )
 		return false;
 	      if ( ( (k1->p_kernelx - k2->p_kernelx).MaximumAbsoluteValue()
 		     > 1e-8 * k1->p_kernelx.MaximumAbsoluteValue() ) ||
-		   ( (k1->p_kernely - k2->p_kernely).MaximumAbsoluteValue() 
+		   ( (k1->p_kernely - k2->p_kernely).MaximumAbsoluteValue()
 		     > 1e-8 * k1->p_kernely.MaximumAbsoluteValue() ) ||
-		   ( (k1->p_kernelz - k2->p_kernelz).MaximumAbsoluteValue() 
+		   ( (k1->p_kernelz - k2->p_kernelz).MaximumAbsoluteValue()
 		     > 1e-8 * k1->p_kernelz.MaximumAbsoluteValue() ) )
 		return false;
 	      return true;
@@ -186,20 +186,20 @@ namespace MISCMATHS {
 	this->operator=(source);
       }
 
-      virtual ~kernel() 
-      { 
+      virtual ~kernel()
+      {
 	// signal storedkernel it has one less reference
       }
-      
-      
+
+
       void setkernel(const ColumnVector& kx, const ColumnVector& ky,
 		     const ColumnVector& kz, int wx, int wy, int wz)
-      {		  
+      {
 	// see if already in list:
 	storedkernel = new kernelstorage(kx,ky,kz,wx,wy,wz);
-	set<kernelstorage*, kernelstorage::comparer>::iterator 
+	set<kernelstorage*, kernelstorage::comparer>::iterator
 	  it = existingkernels.find(storedkernel);
-	if (it==existingkernels.end()) {		  
+	if (it==existingkernels.end()) {
 	  existingkernels.insert(storedkernel);
 	  // signal that this is the first reference for storedkernel
 	} else {
@@ -210,14 +210,14 @@ namespace MISCMATHS {
       }
 
       const kernelstorage* kernelvals() { return storedkernel; }
-      
+
   };
 
 
   /////////////////////////////////////////////////////////////////////////
 
   //////// Support functions /////////
-  
+
   float kernelval(float x, int w, const ColumnVector& kernel);
   float sincfn(float x);
   float hanning(float x, int w);
@@ -225,7 +225,7 @@ namespace MISCMATHS {
   float rectangular(float x, int w);
   ColumnVector sinckernel1D(const string& sincwindowtype, int w, int n);
   kernel sinckernel(const string& sincwindowtype, int w, int nstore);
-  kernel sinckernel(const string& sincwindowtype, 
+  kernel sinckernel(const string& sincwindowtype,
 		    int wx, int wy, int wz, int nstore);
   float extrapolate_1d(const ColumnVector data, const int index);
   float interpolate_1d(ColumnVector data, const float index);

@@ -1,29 +1,29 @@
-/*  MELODIC - Multivariate exploratory linear optimized decomposition into 
+/*  MELODIC - Multivariate exploratory linear optimized decomposition into
               independent components
-    
+
     melreport.h - report generation
 
     Christian F. Beckmann, FMRIB Image Analysis Group
-    
+
     Copyright (C) 1999-2008 University of Oxford */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -35,13 +35,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -52,7 +52,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -93,10 +93,10 @@ using namespace MISCPLOT;
 using namespace MISCPIC;
 
 namespace Melodic{
-  
+
   class MelodicReport{
     public:
-      MelodicReport(MelodicData &pmelodat, MelodicOptions &popts, Log &plogger):  
+      MelodicReport(MelodicData &pmelodat, MelodicOptions &popts, Log &plogger):
 				melodat(pmelodat),
 				opts(popts),
 				logger(plogger){
@@ -105,14 +105,14 @@ namespace Melodic{
 		    		system(("mkdir "+ logger.appendDir("report") + " 2>/dev/null").c_str());
 				report.setDir(logger.appendDir("report"),"00index.html",true,false,ios::out);
 						report << "<HTML><HEAD><link REL=stylesheet TYPE=text/css href=file:" +
-							(string) getenv("FSLDIR") +"/doc/fsl.css>" 
+							(string) getenv("FSLDIR") +"/doc/fsl.css>"
 						  << "<TITLE>MELODIC report</TITLE></HEAD><BODY>"
 							<< endl <<endl;
 						loghtml.setDir(report.getDir(),"log.html");
 						loghtml << "<HTML><HEAD><link REL=stylesheet TYPE=text/css href=file:" +
-							(string) getenv("FSLDIR") +"/doc/fsl.css>" 
+							(string) getenv("FSLDIR") +"/doc/fsl.css>"
 						  << "<TITLE>MELODIC report</TITLE></HEAD><BODY>"
-							<< endl <<endl;						
+							<< endl <<endl;
 						navigator.setDir(report.getDir(),"nav.html");
 						head.setDir(report.getDir(),"head.html");
 	  				navigator << "<link REL=stylesheet TYPE=text/css href=file:"+
@@ -140,9 +140,9 @@ namespace Melodic{
 				   		report <<"<OBJECT data="<<opts.guireport.value()<< "></OBJECT>"<< endl;
 							loghtml <<"<OBJECT data="<<opts.guireport.value()<< "></OBJECT>"<< endl;
 						}
-						report << "<IFRAME  height=80px width=100% src=nav.html frameborder=0></IFRAME><p>"<< endl;		
+						report << "<IFRAME  height=80px width=100% src=nav.html frameborder=0></IFRAME><p>"<< endl;
 						loghtml << "<IFRAME  height=100px width=100% src=nav.html frameborder=0></IFRAME><p>"
-							<<"<IFRAME width=100% height=100% src=\"../log.txt\"></IFRAME>" <<endl;		
+							<<"<IFRAME width=100% height=100% src=\"../log.txt\"></IFRAME>" <<endl;
 						navigator <<"<CENTER><TABLE BORDER=0><TR>" << endl
 							<<"<TD ALIGN=CENTER WIDTH=100%><FONT SIZE=-1>"<<endl
 							<<"<A HREF=\"00index.html\" target=\"_top\">Main</A>&nbsp;-&nbsp;";
@@ -157,12 +157,12 @@ namespace Melodic{
       ~MelodicReport(){
 				if( bool(opts.genreport.value()) ){
 					report << "<HR><CENTER><FONT SIZE=1>This page produced automatically by "
-		      	<< "<A HREF=\"http://www.fmrib.ox.ac.uk/fsl/melodic/index.html\"> MELODIC</A> Version "  
+		      	<< "<A HREF=\"http://www.fmrib.ox.ac.uk/fsl/melodic/index.html\"> MELODIC</A> Version "
 		      	<< version << " - a part of <A HREF=\"http://www.fmrib.ox.ac.uk/fsl\">FSL - "
 		      	<< "FMRIB Software Library</A>.</FONT></CENTER>" << endl
 		      	<< "</BODY></HTML>" <<endl;
 					loghtml << "<HR><CENTER><FONT SIZE=1>This page produced automatically by "
-		      	<< "<A HREF=\"http://www.fmrib.ox.ac.uk/fsl/melodic/index.html\"> MELODIC</A> Version "  
+		      	<< "<A HREF=\"http://www.fmrib.ox.ac.uk/fsl/melodic/index.html\"> MELODIC</A> Version "
 		      	<< version << " - a part of <A HREF=\"http://www.fmrib.ox.ac.uk/fsl\">FSL - "
 		      	<< "FMRIB Software Library</A>.</FONT></CENTER>" << endl
 		      	<< "</BODY></HTML>" <<endl;
@@ -175,37 +175,37 @@ namespace Melodic{
 
 	  			report << "<b>Analysis methods</b> <br>"<<endl;
 					report << "Analysis was carried out using ";
-	
+
 					if(opts.approach.value() != string("tica"))
 						report << "Probabilistic Independent Component Analysis"
 						  <<" [Beckmann 2004] as implemented in "<<endl;
-					else	
+					else
 						report << "Tensorial Independent Component Analysis "
 					  	<<"[Beckmann 2005] as implemented in "<< endl;
-	
+
 					report << " MELODIC (Multivariate"
 						<<" Exploratory Linear Decomposition into Independent Components)"
 						<<" Version "<< version <<", part of FSL (FMRIB's Software"
 						<<" Library, <A HREF=\"http://www.fmrib.ox.ac.uk/fsl/\">"
 						<<"www.fmrib.ox.ac.uk/fsl</A>).<br>";
-			
+
 	  			report << "The following data pre-processing was applied to"
 						<<" the input data: "<< endl;
 
 	  			if(opts.use_mask.value())
 	    			report << " masking of non-brain voxels;";
-	  
+
 	  			report << " voxel-wise de-meaning of the data;" << endl;
-	  
+
 	  			if(opts.varnorm.value())
 	    			report << " normalisation of the voxel-wise variance; ";
 	  	    if(opts.pbsc.value())
 						report << " conversion to %BOLD signal change; ";
 	  			report << "<br>"<<endl;
-	  
-	  			report << " Pre-processed data were whitened and projected into a " 
+
+	  			report << " Pre-processed data were whitened and projected into a "
 		 				<< melodat.get_mix().Ncols()<< "-dimensional subspace using ";
-	  			if(melodat.get_PPCA().Storage()>0){	    
+	  			if(melodat.get_PPCA().Storage()>0){
 	    			report << "probabilistic Principal Component Analysis where the"
 							<<" number of dimensions was estimated using ";
 	    			if(opts.pca_est.value() == string("lap"))
@@ -226,10 +226,10 @@ namespace Melodic{
 		  			else
 		    			report << " approximations to Bayesian the"
 								<<" model order [Beckmann 2004]. " << endl;
-	  			}	  
+	  			}
 	  			else
 	    			report << "Principal Component Analysis. ";
-	  
+
 	  			report << " <BR>The whitened observations were decomposed into "
 						<<" sets of vectors which describe signal variation across"
 						<<" the temporal domain (time-courses)";
@@ -238,24 +238,24 @@ namespace Melodic{
 						report << ", the session/subject domain ";
 					report <<"  and across the spatial domain (maps) by optimising for"
 						<<" non-Gaussian spatial source distributions using a"
-						<<" fixed-point iteration technique [Hyv&auml;rinen 1999]. " << endl;	  
+						<<" fixed-point iteration technique [Hyv&auml;rinen 1999]. " << endl;
 	  			report << "Estimated Component maps were divided by the standard"
 						<<" deviation of the residual noise";
-	  
+
 	  			if(opts.perf_mm.value())
 	    			report << " and thresholded by fitting a mixture model "
 	 						<<"to the histogram of intensity values [Beckmann 2004]. <p>" << endl;
 	  			else
 	    			report <<".<p>" << endl;
-	 
-	  			refstxt(); 
+
+	  			refstxt();
 				}
       }
 
       inline void refstxt(){
 				if( bool(opts.genreport.value()) ){
 	  			report << "<b>References</b> <br>"<<endl;
-	  
+
 	  			report << "[Hyv&auml;rinen 1999] A. Hyv&auml;rinen. Fast and"
 						<<" Robust Fixed-Point Algorithms for Independent Component"
 						<<" Analysis. IEEE Transactions on Neural Networks 10(3):"
@@ -264,14 +264,14 @@ namespace Melodic{
 							<<" Probabilistic Independent Component Analysis for Functional"
 							<<" Magnetic Resonance Imaging. IEEE Transactions on Medical"
 							<<" Imaging 23(2):137-152 2004. <br>" << endl;
-					if(opts.approach.value() == string("tica") || 
+					if(opts.approach.value() == string("tica") ||
 						opts.approach.value() == string("concat") )
 						report << "[Beckmann 2005] C.F. Beckmann and S.M. Smith."
 							<<" Tensorial extensions of independent component analysis"
 							<< " for multisubject FMRI analysis. Neuroimage "
 							<< " 25(1):294-311 2005. <br>";
 
-	  			if(melodat.get_PPCA().Storage()>0){	    
+	  			if(melodat.get_PPCA().Storage()>0){
 	    			report << "[Everson 2000] R. Everson and S. Roberts."
 							<<" Inferring the eigenvalues of covariance matrices from"
 							<<" limited, noisy data. IEEE Trans Signal Processing,"
@@ -316,13 +316,13 @@ namespace Melodic{
 	  			report << what << endl;
 				}
       }
-      
+
       inline void addpar(string what){
 				if( bool(opts.genreport.value()) ){
 	  			report << "<p>" << what << endl;
 				}
       }
-      
+
       inline void addlink(string where, string what){
 				if( bool(opts.genreport.value()) ){
 	  			navigator << "<A HREF=\"" << where << " \"target=\"_top\"> " << what << "</A> ";
@@ -363,9 +363,9 @@ namespace Melodic{
       Log IChtml;
       Log IChtml2;
       string axials_instr;
-	
+
       void IC_rep_det(MelGMix &mmodel, int cnum, int dim);
-      
+
       string int2str(int n){
 	  		ostrstream os;
 	  	//    os.fill(' ');
@@ -374,7 +374,7 @@ namespace Melodic{
 	  		os << n << '\0';
 	  		return os.str();
 			}
-      
+
       string float2str(float f, int width, int prec, int scientif){
 	    	ostrstream os;
 	    	int redw = int(std::abs(std::log10(std::abs(f))))+1;
@@ -387,7 +387,7 @@ namespace Melodic{
 	    	os << f << '\0';
 	    	return os.str();
 			}
-  };   
+  };
 
 }
 #endif

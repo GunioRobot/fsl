@@ -1,4 +1,4 @@
-/* 
+/*
  * tclIOSock.c --
  *
  *	Common routines used by all socket based channel types.
@@ -49,7 +49,7 @@ TclSockGetPort(interp, string, proto, portPtr)
 	/*
 	 * Don't bother translating 'proto' to native.
 	 */
-	 
+
 	native = Tcl_UtfToExternalDString(NULL, string, -1, &ds);
 	sp = getservbyname(native, proto);		/* INTL: Native. */
 	Tcl_DStringFree(&ds);

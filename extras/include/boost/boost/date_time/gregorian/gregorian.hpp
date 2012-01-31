@@ -2,16 +2,16 @@
 #define GREGORIAN_HPP__
 
 /* Copyright (c) 2002-2004 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland, Bart Garst 
+ * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $
  */
 
 /*! @file gregorian.hpp
-  Single file header that provides overall include for all elements of 
-  the gregorian date-time system.  This includes the various types 
+  Single file header that provides overall include for all elements of
+  the gregorian date-time system.  This includes the various types
   defined, but also other functions for formatting and parsing.
 */
 

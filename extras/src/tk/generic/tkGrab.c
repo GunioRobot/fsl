@@ -1,4 +1,4 @@
-/* 
+/*
  * tkGrab.c --
  *
  *	This file provides procedures that implement grabs for Tk.
@@ -41,7 +41,7 @@
  *
  * The transitions between different states is given in the following
  * table:
- * 
+ *
  * Event\State	U	B	G	GB
  * -----------	--	--	--	--
  * FirstPress	B	B	GB	GB
@@ -87,7 +87,7 @@
  */
 
 /*
- * The following structure is used to pass information to 
+ * The following structure is used to pass information to
  * GrabRestrictProc from EatGrabEvents.
  */
 
@@ -204,12 +204,12 @@ Tk_GrabObjCmd(clientData, interp, objc, objv)
     int len;
     static CONST char *optionStrings[] = { "current", "release",
 					 "set", "status", (char *) NULL };
-  
+
     static CONST char *flagStrings[] = { "-global", (char *) NULL };
 
     enum options { GRABCMD_CURRENT, GRABCMD_RELEASE,
 		       GRABCMD_SET, GRABCMD_STATUS };
-    
+
     if (objc < 2) {
 	/*
 	 * Can't use Tcl_WrongNumArgs here because we want the message to
@@ -272,7 +272,7 @@ Tk_GrabObjCmd(clientData, interp, objc, objv)
 	    &index) != TCL_OK) {
 	return TCL_ERROR;
     }
-    
+
     switch ((enum options) index) {
 	case GRABCMD_CURRENT: {
 	    /* [grab current ?window?] */
@@ -318,7 +318,7 @@ Tk_GrabObjCmd(clientData, interp, objc, objv)
 	    }
 	    break;
 	}
-	
+
 	case GRABCMD_SET: {
 	    /* [grab set ?-global? window] */
 	    if ((objc != 3) && (objc != 4)) {
@@ -505,7 +505,7 @@ Tk_Grab(interp, tkwin, grabGlobal)
 			TCL_STATIC);
 	    } else {
 		char msg[64 + TCL_INTEGER_SPACE];
-	
+
 		sprintf(msg, "grab failed for unknown reason (code %d)",
 			grabResult);
 		Tcl_AppendResult(interp, msg, (char *) NULL);
@@ -1062,7 +1062,7 @@ TkInOutEvents(eventPtr, sourcePtr, destPtr, leaveType, enterType, position)
     }
 
     if (downLevels == 0) {
-    
+
 	/*
 	 * SourcePtr is an inferior of destPtr.
 	 */

@@ -89,7 +89,7 @@ namespace detail
           , mpl::not_<is_member_function_pointer<T> >
         >
   {};
-  
+
 # ifdef BOOST_PYTHON_NO_MEMBER_POINTER_ORDERING
 #  define BOOST_PYTHON_DATA_MEMBER_HELPER(D) , detail::is_data_member_pointer<D>()
 #  define BOOST_PYTHON_YES_DATA_MEMBER , mpl::true_
@@ -98,12 +98,12 @@ namespace detail
 #  define BOOST_PYTHON_DATA_MEMBER_HELPER(D) , 0
 #  define BOOST_PYTHON_YES_DATA_MEMBER , int
 #  define BOOST_PYTHON_NO_DATA_MEMBER , ...
-# else 
+# else
 #  define BOOST_PYTHON_DATA_MEMBER_HELPER(D)
 #  define BOOST_PYTHON_YES_DATA_MEMBER
 #  define BOOST_PYTHON_NO_DATA_MEMBER
 # endif
-  
+
   namespace error
   {
     //
@@ -114,7 +114,7 @@ namespace detail
     //
     // where C is an MPL metafunction class
     //
-    
+
     template <class C> struct assertion_failed { };
     template <class C> struct assertion_ok { typedef C failed; };
 
@@ -127,10 +127,10 @@ namespace detail
     // Checks for validity of arguments used to define virtual
     // functions with default implementations.
     //
-    
+
     template <class Default>
     void not_a_derived_class_member(Default) {}
-    
+
     template <class T, class Fn>
     struct virtual_function_default
     {
@@ -141,7 +141,7 @@ namespace detail
             typedef typename assertion<mpl::not_<is_same<Default,Fn> > >::failed test0;
 # if !BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
             typedef typename assertion<is_polymorphic<T> >::failed test1;
-# endif 
+# endif
             typedef typename assertion<is_member_function_pointer<Fn> >::failed test2;
             not_a_derived_class_member<Default>(Fn());
         }
@@ -164,7 +164,7 @@ class class_ : public objects::class_base
     typedef class_<W,X1,X2,X3> self;
     typedef typename objects::class_metadata<W,X1,X2,X3> metadata;
     typedef W wrapped_type;
-    
+
  private: // types
 
     // A helper class which will contain an array of id objects to be
@@ -172,7 +172,7 @@ class class_ : public objects::class_base
     struct id_vector
     {
         typedef typename metadata::bases bases;
-        
+
         id_vector()
         {
             // Stick the derived class id into the first element of the array
@@ -190,7 +190,7 @@ class class_ : public objects::class_base
     friend struct id_vector;
 
  public: // constructors
-    
+
     // Construct with the class name, with or without docstring, and default __init__() function
     class_(char const* name, char const* doc = 0);
 
@@ -217,7 +217,7 @@ class class_ : public objects::class_base
     }
 
  public: // member functions
-    
+
     // Generic visitation
     template <class Derived>
     self& def(def_visitor<Derived> const& visitor)
@@ -287,7 +287,7 @@ class class_ : public objects::class_base
     {
         return this->def_readwrite_impl(name, d, doc BOOST_PYTHON_DATA_MEMBER_HELPER(D));
     }
-    
+
     template <class D>
     self& def_readonly(char const* name, D& d, char const* doc=0)
     {
@@ -333,7 +333,7 @@ class class_ : public objects::class_base
         return *this;
     }
 
- public:    
+ public:
     template <class Get>
     self& add_property(char const* name, Get fget)
     {
@@ -357,7 +357,7 @@ class class_ : public objects::class_base
         return *this;
     }
 # endif
-        
+
     template <class Get>
     self& add_static_property(char const* name, Get fget)
     {
@@ -371,7 +371,7 @@ class class_ : public objects::class_base
         base::add_static_property(name, object(fget), object(fset));
         return *this;
     }
-        
+
     template <class U>
     self& setattr(char const* name, U const& x)
     {
@@ -417,24 +417,24 @@ class class_ : public objects::class_base
     object make_getter(F f)
     {
         typedef typename api::is_object_operators<F>::type is_obj_or_proxy;
-        
+
         return this->make_fn_impl(
             detail::unwrap_wrapper((W*)0)
           , f, is_obj_or_proxy(), (char*)0, detail::is_data_member_pointer<F>()
         );
     }
-    
+
     template <class F>
     object make_setter(F f)
     {
         typedef typename api::is_object_operators<F>::type is_obj_or_proxy;
-        
+
         return this->make_fn_impl(
             detail::unwrap_wrapper((W*)0)
           , f, is_obj_or_proxy(), (int*)0, detail::is_data_member_pointer<F>()
         );
     }
-    
+
     template <class T, class F>
     object make_fn_impl(T*, F const& f, mpl::false_, void*, mpl::false_)
     {
@@ -461,7 +461,7 @@ class class_ : public objects::class_base
         return x;
     }
     // }
-    
+
     template <class D, class B>
     self& def_readonly_impl(
         char const* name, D B::*pm_, char const* doc BOOST_PYTHON_YES_DATA_MEMBER)
@@ -494,19 +494,19 @@ class class_ : public objects::class_base
     inline void initialize(DefVisitor const& i)
     {
         metadata::register_(); // set up runtime metadata/conversions
-        
+
         typedef typename metadata::holder holder;
         this->set_instance_size( objects::additional_instance_size<holder>::value );
-        
+
         this->def(i);
     }
-    
+
     inline void initialize(no_init_t)
     {
         metadata::register_(); // set up runtime metadata/conversions
         this->def_no_init();
     }
-    
+
     //
     // These two overloads discriminate between def() as applied to a
     // generic visitor and everything else.
@@ -564,19 +564,19 @@ class class_ : public objects::class_base
     {
         detail::error::virtual_function_default<W,Fn>::must_be_derived_class_member(
             helper.default_implementation());
-            
+
         objects::add_to_namespace(
             *this, name,
             make_function(
                 helper.default_implementation(), helper.policies(), helper.keywords())
             );
     }
-    
+
     template <class Fn, class Helper>
     inline void def_default(char const*, Fn, Helper const&, mpl::bool_<false>)
     { }
     // }
-    
+
     //
     // These two overloads discriminate between def() as applied to
     // regular functions and def() as applied to the result of

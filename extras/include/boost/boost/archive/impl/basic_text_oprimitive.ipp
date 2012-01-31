@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_text_oprimitive.ipp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -27,20 +27,20 @@ namespace archive {
 template<class OStream>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_oprimitive<OStream>::save_binary(
-    const void *address, 
+    const void *address,
     std::size_t count
 ){
     typedef BOOST_DEDUCED_TYPENAME OStream::char_type CharType;
-    
+
     if(0 == count)
         return;
-    
+
     if(os.fail())
         boost::throw_exception(archive_exception(archive_exception::stream_error));
-        
+
     os.put('\n');
-    
-    typedef 
+
+    typedef
         boost::archive::iterators::insert_linebreaks<
             boost::archive::iterators::base64_from_binary<
                 boost::archive::iterators::transform_width<
@@ -48,10 +48,10 @@ basic_text_oprimitive<OStream>::save_binary(
                     6,
                     8
                 >
-            > 
+            >
             ,72
             ,const char // cwpro8 needs this
-        > 
+        >
         base64_text;
 
     boost::archive::iterators::ostream_iterator<CharType> oi(os);
@@ -75,7 +75,7 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_oprimitive<OStream>::basic_text_oprimitive(
     OStream & os_,
     bool no_codecvt
-) : 
+) :
     os(os_),
     flags_saver(os_),
     precision_saver(os_),
@@ -85,7 +85,7 @@ basic_text_oprimitive<OStream>::basic_text_oprimitive(
     if(! no_codecvt){
         archive_locale.reset(
             add_facet(
-                std::locale::classic(), 
+                std::locale::classic(),
                 new codecvt_null<BOOST_DEDUCED_TYPENAME OStream::char_type>
             )
         );
@@ -104,5 +104,5 @@ basic_text_oprimitive<OStream>::~basic_text_oprimitive(){
         BOOST_CATCH_END
 }
 
-} //namespace boost 
-} //namespace archive 
+} //namespace boost
+} //namespace archive

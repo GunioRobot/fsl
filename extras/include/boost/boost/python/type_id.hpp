@@ -23,7 +23,7 @@
 #   endif
 #  endif
 
-namespace boost { namespace python { 
+namespace boost { namespace python {
 
 // for this compiler at least, cross-shared-library type_info
 // comparisons don't work, so use typeid(x).name() instead. It's not
@@ -33,7 +33,7 @@ namespace boost { namespace python {
  || (   defined(__sgi) && defined(__host_mips)) \
  || (defined(linux) && defined(__INTEL_COMPILER) && defined(__ICC))
 #  define BOOST_PYTHON_TYPE_ID_NAME
-# endif 
+# endif
 
 // type ids which represent the same information as std::type_info
 // (i.e. the top-level reference and cv-qualifiers are stripped), but
@@ -41,21 +41,21 @@ namespace boost { namespace python {
 struct type_info : private totally_ordered<type_info>
 {
     inline type_info(std::type_info const& = typeid(void));
-    
+
     inline bool operator<(type_info const& rhs) const;
     inline bool operator==(type_info const& rhs) const;
 
     char const* name() const;
     friend BOOST_PYTHON_DECL std::ostream& operator<<(
         std::ostream&, type_info const&);
-    
+
  private: // data members
 #  ifdef BOOST_PYTHON_TYPE_ID_NAME
     typedef char const* base_id_t;
 #  else
     typedef std::type_info const* base_id_t;
 #  endif
-    
+
     base_id_t m_base_type;
 };
 
@@ -75,7 +75,7 @@ inline type_info type_id(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
         typeid(T)
 #  else // strip the decoration which msvc and Intel mistakenly leave in
         python::detail::msvc_typeid((boost::type<T>*)0)
-#  endif 
+#  endif
         );
 }
 
@@ -123,7 +123,7 @@ inline bool type_info::operator<(type_info const& rhs) const
     return std::strcmp(m_base_type, rhs.m_base_type) < 0;
 #  else
     return m_base_type->before(*rhs.m_base_type);
-#  endif 
+#  endif
 }
 
 inline bool type_info::operator==(type_info const& rhs) const
@@ -132,7 +132,7 @@ inline bool type_info::operator==(type_info const& rhs) const
     return !std::strcmp(m_base_type, rhs.m_base_type);
 #  else
     return *m_base_type == *rhs.m_base_type;
-#  endif 
+#  endif
 }
 
 #  ifdef BOOST_PYTHON_HAVE_GCC_CP_DEMANGLE
@@ -141,7 +141,7 @@ namespace detail
   BOOST_PYTHON_DECL char const* gcc_demangle(char const*);
 }
 #  endif
-    
+
 inline char const* type_info::name() const
 {
     char const* raw_name
@@ -150,12 +150,12 @@ inline char const* type_info::name() const
           ->name()
 #  endif
         ;
-    
+
 #  ifdef BOOST_PYTHON_HAVE_GCC_CP_DEMANGLE
     return detail::gcc_demangle(raw_name);
 #  else
     return raw_name;
-#  endif 
+#  endif
 }
 
 

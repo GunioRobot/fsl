@@ -30,7 +30,7 @@ namespace boost {
     {
       typedef typename property_traits<ComponentsMap>::value_type comp_type;
     public:
-      components_recorder(ComponentsMap c, 
+      components_recorder(ComponentsMap c,
                           comp_type& c_count)
         : m_component(c), m_count(c_count) {}
 
@@ -57,7 +57,7 @@ namespace boost {
 
   template <class Graph, class ComponentMap, class P, class T, class R>
   inline typename property_traits<ComponentMap>::value_type
-  connected_components(const Graph& g, ComponentMap c, 
+  connected_components(const Graph& g, ComponentMap c,
                        const bgl_named_params<P, T, R>& params)
   {
     if (num_vertices(g) == 0) return 0;
@@ -94,7 +94,7 @@ namespace boost {
     return c_count + 1;
   }
 
-  
+
 } // namespace boost
 
 

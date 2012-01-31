@@ -1,4 +1,4 @@
-/* 
+/*
  * tclBinary.c --
  *
  *	This file contains the implementation of the "binary" Tcl built-in
@@ -103,7 +103,7 @@ Tcl_ObjType tclByteArrayType = {
  * The following structure is the internal rep for a ByteArray object.
  * Keeps track of how much memory has been used and how much has been
  * allocated for the byte array to enable growing and shrinking of the
- * ByteArray object with fewer mallocs.  
+ * ByteArray object with fewer mallocs.
  */
 
 typedef struct ByteArray {
@@ -309,7 +309,7 @@ Tcl_GetByteArrayFromObj(objPtr, lengthPtr)
 				 * array of bytes in the ByteArray object. */
 {
     ByteArray *baPtr;
-    
+
     SetByteArrayFromAny(NULL, objPtr);
     baPtr = GET_BYTEARRAY(objPtr);
 
@@ -347,7 +347,7 @@ Tcl_SetByteArrayLength(objPtr, length)
     int length;			/* New length for internal byte array. */
 {
     ByteArray *byteArrayPtr, *newByteArrayPtr;
-    
+
     if (Tcl_IsShared(objPtr)) {
 	panic("Tcl_SetObjLength called with shared object");
     }
@@ -398,7 +398,7 @@ SetByteArrayFromAny(interp, objPtr)
     unsigned char *dst;
     ByteArray *byteArrayPtr;
     Tcl_UniChar ch;
-    
+
     typePtr = objPtr->typePtr;
     if (typePtr != &tclByteArrayType) {
 	src = Tcl_GetStringFromObj(objPtr, &length);
@@ -434,7 +434,7 @@ SetByteArrayFromAny(interp, objPtr)
  *	None.
  *
  * Side effects:
- *	Frees memory. 
+ *	Frees memory.
  *
  *----------------------------------------------------------------------
  */
@@ -453,7 +453,7 @@ FreeByteArrayInternalRep(objPtr)
  *
  *	Initialize the internal representation of a ByteArray Tcl_Obj
  *	to a copy of the internal representation of an existing ByteArray
- *	object. 
+ *	object.
  *
  * Results:
  *	None.
@@ -470,7 +470,7 @@ DupByteArrayInternalRep(srcPtr, copyPtr)
     Tcl_Obj *copyPtr;		/* Object with internal rep to set. */
 {
     int length;
-    ByteArray *srcArrayPtr, *copyArrayPtr;    
+    ByteArray *srcArrayPtr, *copyArrayPtr;
 
     srcArrayPtr = GET_BYTEARRAY(srcPtr);
     length = srcArrayPtr->used;
@@ -492,7 +492,7 @@ DupByteArrayInternalRep(srcPtr, copyPtr)
  *
  *	Update the string representation for a ByteArray data object.
  *	Note: This procedure does not invalidate an existing old string rep
- *	so storage will be lost if this has not already been done. 
+ *	so storage will be lost if this has not already been done.
  *
  * Results:
  *	None.
@@ -524,7 +524,7 @@ UpdateStringOfByteArray(objPtr)
     /*
      * How much space will string rep need?
      */
-     
+
     size = length;
     for (i = 0; i < length; i++) {
 	if ((src[i] == 0) || (src[i] > 127)) {
@@ -585,10 +585,10 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 				 * cursor has visited.*/
     char *errorString, *errorValue, *str;
     int offset, size, length, index;
-    static CONST char *options[] = { 
-	"format",	"scan",		NULL 
+    static CONST char *options[] = {
+	"format",	"scan",		NULL
     };
-    enum options { 
+    enum options {
 	BINARY_FORMAT,	BINARY_SCAN
     };
 
@@ -679,7 +679,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 		    }
 		    case 'd': {
 			size = sizeof(double);
-			
+
 			doNumbers:
 			if (arg >= objc) {
 			    goto badIndex;
@@ -705,7 +705,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 			    if (count == BINARY_ALL) {
 				count = listc;
 			    } else if (count > listc) {
-			        Tcl_AppendResult(interp, 
+			        Tcl_AppendResult(interp,
 					"number of elements in list does not match count",
 					(char *) NULL);
 				return TCL_ERROR;
@@ -716,7 +716,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 		    }
 		    case 'x': {
 			if (count == BINARY_ALL) {
-			    Tcl_AppendResult(interp, 
+			    Tcl_AppendResult(interp,
 				    "cannot use \"*\" in format string with \"x\"",
 				    (char *) NULL);
 			    return TCL_ERROR;
@@ -826,7 +826,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 		    case 'b':
 		    case 'B': {
 			unsigned char *last;
-			
+
 			str = Tcl_GetStringFromObj(objv[arg++], &length);
 			if (count == BINARY_ALL) {
 			    count = length;
@@ -885,7 +885,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 		    case 'H': {
 			unsigned char *last;
 			int c;
-			
+
 			str = Tcl_GetStringFromObj(objv[arg++], &length);
 			if (count == BINARY_ALL) {
 			    count = length;
@@ -1145,7 +1145,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 			    }
 			}
 
-			Tcl_IncrRefCount(valuePtr);			
+			Tcl_IncrRefCount(valuePtr);
 			resultPtr = Tcl_ObjSetVar2(interp, objv[arg],
 				NULL, valuePtr, TCL_LEAVE_ERR_MSG);
 			Tcl_DecrRefCount(valuePtr);
@@ -1202,7 +1202,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 				*dest++ = hexdigit[(value >> 4) & 0xf];
 			    }
 			}
-			
+
 			Tcl_IncrRefCount(valuePtr);
 			resultPtr = Tcl_ObjSetVar2(interp, objv[arg],
 				NULL, valuePtr, TCL_LEAVE_ERR_MSG);
@@ -1243,7 +1243,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 
 			size = sizeof(double);
 			/* fall through */
-			
+
 			scanNumber:
 			if (arg >= objc) {
 			    DeleteScanNumberCache(numberCachePtr);
@@ -1275,7 +1275,7 @@ Tcl_BinaryObjCmd(dummy, interp, objc, objv)
 			    offset += count*size;
 			}
 
-			Tcl_IncrRefCount(valuePtr); 
+			Tcl_IncrRefCount(valuePtr);
 			resultPtr = Tcl_ObjSetVar2(interp, objv[arg],
 				NULL, valuePtr, TCL_LEAVE_ERR_MSG);
 			Tcl_DecrRefCount(valuePtr);
@@ -1631,7 +1631,7 @@ ScanNumber(buffer, type, numberCachePtrPtr)
 	    goto returnNumericObject;
 
 	case 'i':
-	    value = (long) (buffer[0] 
+	    value = (long) (buffer[0]
 		    + (buffer[1] << 8)
 		    + (buffer[2] << 16)
 		    + (buffer[3] << 24));
@@ -1733,7 +1733,7 @@ ScanNumber(buffer, type, numberCachePtrPtr)
  *----------------------------------------------------------------------
  *
  * DeleteScanNumberCache --
- * 
+ *
  *	Deletes the hash table acting as a scan number cache.
  *
  * Results:

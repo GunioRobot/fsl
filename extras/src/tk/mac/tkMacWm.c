@@ -5127,10 +5127,10 @@ TkUnsupported1Cmd(
                     Tcl_ListObjAppendElement(interp, attributeList,
                             Tcl_NewStringObj("none", -1));
                 } else if (wmPtr->attributes == kWindowStandardDocumentAttributes) {
-		    Tcl_ListObjAppendElement(interp, attributeList, 
+		    Tcl_ListObjAppendElement(interp, attributeList,
                             Tcl_NewStringObj("standardDocument", -1));
                 } else if (wmPtr->attributes == kWindowStandardFloatingAttributes) {
-		    Tcl_ListObjAppendElement(interp, attributeList, 
+		    Tcl_ListObjAppendElement(interp, attributeList,
                             Tcl_NewStringObj("standardFloating", -1));
                 } else {
                     if (wmPtr->attributes & kWindowCloseBoxAttribute) {

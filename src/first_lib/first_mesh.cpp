@@ -1,12 +1,12 @@
 /*
  *  first_mesh.h
- *  
+ *
  *
  *  Created by Brian Patenaude on 12/08/2008.
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
- 
+
 #include "first_mesh.h"
 using namespace std;
 using namespace NEWIMAGE;
@@ -14,16 +14,16 @@ using namespace NEWIMAGE;
 namespace FIRST_LIB{
 
 	first_mesh::first_mesh(){
-	
+
 	}
 
 	first_mesh::~first_mesh(){
-	
+
 	}
 
 
 void first_mesh::getBounds(const vector<float> & m, int *bounds, const float & xdim, const float & ydim, const float & zdim)
-{	
+{
 	float xmin=1000,xmax=-1000,ymin=1000,ymax=-1000,zmin=1000,zmax=-1000;
 	for (vector<float>::const_iterator i=m.begin();i!=m.end();i+=3)
 	{
@@ -34,13 +34,13 @@ void first_mesh::getBounds(const vector<float> & m, int *bounds, const float & x
 		if ( *(i+2) < zmin)	zmin=*(i+2);
 		if ( *(i+2) > zmax)	zmax=*(i+2);
 	}
-	
+
 	*bounds=static_cast<int>(floor(xmin/xdim)-1);
 	*(bounds+1)=static_cast<int>(ceil(xmax/xdim)+1);
 	*(bounds+2)=static_cast<int>(floor(ymin/ydim)-1);
 	*(bounds+3)=static_cast<int>(ceil(ymax/ydim)+1);
 	*(bounds+4)=static_cast<int>(floor(zmin/zdim)-1);
-	*(bounds+5)=static_cast<int>(ceil(zmax/zdim)+1);	
+	*(bounds+5)=static_cast<int>(ceil(zmax/zdim)+1);
 }
 
 
@@ -61,7 +61,7 @@ void  first_mesh::draw_segment(::volume<short>& image, const float & p1x,const f
 	nx/=d;
 	ny/=d;
 	nz/=d;
-	
+
 	for (double i=0; i<=d; i+=mininc)
 		image(static_cast<int>(floor((p2x+i*nx)/xdim +.5)),static_cast<int>(floor((p2y+i*ny)/ydim +.5)),static_cast<int>(floor((p2z+i*nz)/zdim +.5))) = label;
 }
@@ -75,33 +75,33 @@ volume<short>  first_mesh::draw_mesh(const volume<short> & image, const vector<f
   	double xdim = (double) image.xdim();
 	double ydim = (double) image.ydim();
 	double zdim = (double) image.zdim();
-	
+
 	//in new version of bet2
 	double mininc = min(xdim,min(ydim,zdim)) * 0.5;
-	
+
 	for (vector< vector<unsigned int> >::const_iterator i = triangles.begin(); i!=triangles.end(); i++)
-	{	
+	{
 		float px1= pts.at(i->at(1)*3);
 		float py1= pts.at(i->at(1)*3+1);
 		float pz1= pts.at(i->at(1)*3+2);
-						  
+
 		float vx=pts.at(i->at(0)*3) - px1;
 		float vy=pts.at(i->at(0)*3+1) - py1;
 		float vz=pts.at(i->at(0)*3+2) - pz1;
-						  
-		float px2=pts.at(i->at(2)*3); 
-		float py2=pts.at(i->at(2)*3+1); 
+
+		float px2=pts.at(i->at(2)*3);
+		float py2=pts.at(i->at(2)*3+1);
 		float pz2=pts.at(i->at(2)*3+2);
-						  
+
 		float d=sqrt(vx*vx+vy*vy+vz*vz);
-						  
+
 		vx/=d;
 		vy/=d;
 		vz/=d;
-						  
+
 		for (float j=0; j<=d ;  j+=mininc)
 			draw_segment(imout, px1+j*vx,py1+j*vy,pz1+j*vz,px2,py2,pz2,label+100);
-						  
+
     }
 	return imout;
 }
@@ -111,31 +111,31 @@ volume<short> first_mesh::make_mask_from_mesh(const volume<float> & image, const
 {
 	volume<short> mask;
 	copyconvert(image,mask);
-	
+
 	mask = 0;
 	mask = draw_mesh(mask, m, triangles, label);
-	
+
 	volume<short> otl=mask;
-	
+
 	vector<float> currentX,currentY,currentZ;
-	
+
 	mask.value(bounds[0]-2, bounds[2]-2, bounds[4]-2) = label;
 	currentX.push_back(bounds[0]-2);
 	currentY.push_back(bounds[2]-2);
 	currentZ.push_back(bounds[4]-2);
-	
+
 	while (!currentX.empty())
 	{
 		int x, y, z;
-		x=static_cast<int>(currentX.back()); 
-		y=static_cast<int>(currentY.back()); 
-		z=static_cast<int>(currentZ.back()); 
+		x=static_cast<int>(currentX.back());
+		y=static_cast<int>(currentY.back());
+		z=static_cast<int>(currentZ.back());
 
 		currentX.pop_back();
 		currentY.pop_back();
 		currentZ.pop_back();
 
-		if (bounds[0]<=x-1 && mask.value(x-1, y, z)==0) 
+		if (bounds[0]<=x-1 && mask.value(x-1, y, z)==0)
 		{
 			mask.value(x-1, y, z) = label;
 			currentX.push_back(x-1);
@@ -143,7 +143,7 @@ volume<short> first_mesh::make_mask_from_mesh(const volume<float> & image, const
 			currentZ.push_back(z);
 
 		}
-		if (bounds[2]<=y-1 && mask.value(x, y-1, z)==0) 
+		if (bounds[2]<=y-1 && mask.value(x, y-1, z)==0)
 		{
 			mask.value(x, y-1, z) = label;
 			currentX.push_back(x);
@@ -151,7 +151,7 @@ volume<short> first_mesh::make_mask_from_mesh(const volume<float> & image, const
 			currentZ.push_back(z);
 
 		}
-		if (bounds[4]<=z-1 && mask.value(x, y, z-1)==0) 
+		if (bounds[4]<=z-1 && mask.value(x, y, z-1)==0)
 		{
 			mask.value(x, y, z-1) = label;
 			currentX.push_back(x);
@@ -178,12 +178,12 @@ volume<short> first_mesh::make_mask_from_mesh(const volume<float> & image, const
 		if (bounds[5]>=z+1 && mask.value(x, y, z+1)==0)
 		{
 			mask.value(x, y, z+1) = label;
-			currentX.push_back(x); 
-			currentY.push_back(y); 
-			currentZ.push_back(z+1); 
+			currentX.push_back(x);
+			currentY.push_back(y);
+			currentZ.push_back(z+1);
 
 		}
-		
+
 	}
 
 	for (int i=bounds[0];i<bounds[1];i++)
@@ -198,17 +198,17 @@ volume<short> first_mesh::make_mask_from_mesh(const volume<float> & image, const
 template<class T,class T2>
 void first_mesh::normal(const vector<T> & pts, const vector< vector<T2> > & localTri, const vector< vector<T2> > & cells,vector<T> & vx, vector<T> & vy, vector<T> & vz )
 {
-	
+
 	vx.clear();
 	vy.clear();
 	vz.clear();
 	//calculate the normals for each triangle then references
-		
+
 	for (typename vector< vector<T2> >::const_iterator i=localTri.begin();i!=localTri.end();i++)
 	{
 		float nx=0,ny=0,nz=0;
 		float vx1,vy1,vz1,vx2,vy2,vz2;
-	
+
 		for (typename vector<T2>::const_iterator j=i->begin();j!=i->end();j++)
 		{
 			vx1=pts.at(cells.at(*j).at(2)*3)-pts.at(cells.at(*j).at(0)*3);
@@ -217,7 +217,7 @@ void first_mesh::normal(const vector<T> & pts, const vector< vector<T2> > & loca
 			vy2=pts.at(cells.at(*j).at(1)*3+1)-pts.at(cells.at(*j).at(0)*3+1);
 			vz1=pts.at(cells.at(*j).at(2)*3+2)-pts.at(cells.at(*j).at(0)*3+2);
 			vz2=pts.at(cells.at(*j).at(1)*3+2)-pts.at(cells.at(*j).at(0)*3+2);
-			
+
 		float nxt=(vy1*vz2-vz1*vy2);
 			float nyt=(vz1*vx2-vx1*vz2);
 			float nzt=(vx1*vy2-vy1*vx2);
@@ -226,7 +226,7 @@ void first_mesh::normal(const vector<T> & pts, const vector< vector<T2> > & loca
 			ny+=nyt;
 			nz+=nzt;
 		}
-		
+
 		float d=sqrt(nx*nx+ny*ny+nz*nz);
 		vx.push_back(nx/d);
 		vy.push_back(ny/d);
@@ -244,7 +244,7 @@ vector< vector<T> >  first_mesh::findNeighbours(const vector< vector<T> > & tria
 		for (typename vector< vector<T> >::const_iterator tri_i=triangles.begin(); tri_i!=triangles.end(); tri_i++)
 			for ( typename vector<T> ::const_iterator vert_i= tri_i->begin(); vert_i!=tri_i->end(); vert_i++)
 				if ( static_cast<unsigned int>(*vert_i) == i )//if point belongs to triangle add neigbours
-				{	
+				{
 					for ( typename vector<T> ::const_iterator vert_ii= tri_i->begin(); vert_ii!=tri_i->end(); vert_ii++)
 						if  ( static_cast<unsigned int>(*vert_ii) != i )
 						{
@@ -256,7 +256,7 @@ vector< vector<T> >  first_mesh::findNeighbours(const vector< vector<T> > & tria
 						}
 					break;
 				}
-	
+
 		neighbours.push_back(pt_neigh);
 		}
 	return neighbours;
@@ -273,11 +273,11 @@ vector< vector<T> >  first_mesh::findNeighbourTriangles(const vector< vector<T> 
 		for (typename vector< vector<T> >::const_iterator tri_i=cells.begin(); tri_i!=cells.end(); tri_i++,count++)
 			for ( typename vector<T> ::const_iterator tri_j= tri_i->begin(); tri_j!=tri_i->end(); tri_j++)
 				if ( static_cast<unsigned int>(*tri_j) == i )//if point belongs to triangle add neigbours
-				{	
+				{
 					tri_neigh.push_back(count);
 					break;
 				}
-	
+
 		neighbours.push_back(tri_neigh);
 		}
 	return neighbours;
@@ -289,23 +289,23 @@ template<class T,class T2>
 void  first_mesh::medium_neighbours(const vector<T> & pts, const vector< vector<T2> > & neighbours, const vector< vector<T2> > & cells,\
 									vector<T> & vx, vector<T> & vy, vector<T> & vz )
 {
-	
+
 	vx.clear();
 	vy.clear();
 	vz.clear();
 	//calculate the normals for each triangle then references
-		
+
 	for ( typename vector< vector<T2> >::const_iterator i=neighbours.begin();i!=neighbours.end();i++)
 	{
 		float nx=0,ny=0,nz=0;
-			
+
 		for (typename vector<T2>::const_iterator j=i->begin();j!=i->end();j++)
 		{
 			nx+=pts.at( (*j)*3 );
 			ny+=pts.at( (*j)*3 + 1);
 			nz+=pts.at( (*j)*3 + 2);
 		}
-	
+
 		vx.push_back(nx/i->size());
 		vy.push_back(ny/i->size());
 		vz.push_back(nz/i->size());
@@ -320,8 +320,8 @@ void first_mesh::maxTriangle(const vector<T> & pts, const vector< vector<T2> > &
 	vy.clear();
 	vz.clear();
 
-	typename vector<T>::const_iterator pts_i = pts.begin(); 
-	
+	typename vector<T>::const_iterator pts_i = pts.begin();
+
 	for (typename vector< vector<T2> >::const_iterator i=localTri.begin();i!=localTri.end();i++ , pts_i+=3)
 	{
 		float vx1,vy1,vz1,vx2,vy2,vz2;
@@ -335,25 +335,25 @@ void first_mesh::maxTriangle(const vector<T> & pts, const vector< vector<T2> > &
 			vy2=pts.at(cells.at(*j).at(1)*3+1)-pts.at(cells.at(*j).at(0)*3+1);
 			vz1=pts.at(cells.at(*j).at(2)*3+2)-pts.at(cells.at(*j).at(0)*3+2);
 			vz2=pts.at(cells.at(*j).at(1)*3+2)-pts.at(cells.at(*j).at(0)*3+2);
-			
+
 			float nxt=(vy1*vz2-vz1*vy2);
 			float nyt=(vz1*vx2-vx1*vz2);
 			float nzt=(vx1*vy2-vy1*vx2);
 
-			float area=0.5* sqrt(nxt*nxt+nyt*nyt+nzt*nzt); 
-			
+			float area=0.5* sqrt(nxt*nxt+nyt*nyt+nzt*nzt);
+
 			//find bisecting vector
 			//cout<<"area "<<area<<endl;
-			
+
 			if ( area > max_area )
-			{	
+			{
 				va_x=(      pts.at(cells.at(*j).at(0)*3) + pts.at(cells.at(*j).at(1)*3)      + pts.at(cells.at(*j).at(2)*3 )     ) / 3 - *pts_i ;
 				va_y=( pts.at(cells.at(*j).at(0)*3 + 1 ) + pts.at(cells.at(*j).at(1)*3 + 1 ) + pts.at(cells.at(*j).at(2)*3 + 1 ) ) / 3 - *(pts_i+1);
 				va_z=( pts.at(cells.at(*j).at(0)*3 + 2 ) + pts.at(cells.at(*j).at(1)*3 + 2 ) + pts.at(cells.at(*j).at(2)*3 + 2 ) ) / 3 - *(pts_i+2);
 				max_area=area;
 			//	cout<<"MAX AREA "<<max_area<<endl;
 			}
-			
+
 		}
 		float norm=sqrt(va_x*va_x + va_y*va_y + va_z*va_z );
 		vx.push_back( va_x/norm * max_area );
@@ -374,10 +374,10 @@ bool first_mesh::triangle_intersection(const T* V10, const T* V11, const T* V12,
 	if ( pt_equal(V12,V20) || pt_equal(V12,V21) ||  pt_equal(V12,V22) ) eq++;
 
 	if (eq==1) return false;
-	 
+
 	T* N2 = cross_prod<T>( vec_sub(V21,V20),  vec_sub(V22,V20) );
 	T  d2 = -dot_prod(N2,V20);
-	
+
 //	T testV[]={1,2,3};
 //	T testV2[]= {4,5,6};
 //	T* test=cross_prod<T>(testV,testV2);
@@ -434,11 +434,11 @@ bool first_mesh::triangle_intersection(const T* V10, const T* V11, const T* V12,
 			max_axis=1;
 		else if (abs(D[2])>abs(D[max_axis]))
 			max_axis=2;
-		
+
 		delete N1;
 		delete N2;
 		delete D;
-		
+
 		T p10 = V10[max_axis];
 		T p11 = V11[max_axis];
 		T p12 = V12[max_axis];
@@ -454,7 +454,7 @@ bool first_mesh::triangle_intersection(const T* V10, const T* V11, const T* V12,
 		T p20 =dot_prod(D,V20);
 		T p21 =dot_prod(D,V21);
 		T p22 = dot_prod(D,V22);
-		
+
 if (abs(dist10)<1e-4) dist10=0;
 if (abs(dist11)<1e-4) dist11=0;
 if (abs(dist12)<1e-4) dist12=0;
@@ -488,7 +488,7 @@ if ( (dist20==0) || (dist21==0) || (dist22==0) )
 			t11= p11 - (p11 - p10)*(dist11/(dist11 - dist10));
 			t12= p12 - (p12 - p10)*(dist12/(dist12 - dist10));
 		}
-		
+
 		//get triangle 2 interval
 		if ( ((dist20>=0) && (dist21>=0)) || ((dist20<=0) && (dist21<=0)) )
 		{
@@ -503,7 +503,7 @@ if ( (dist20==0) || (dist21==0) || (dist22==0) )
 			t21= p21 - (p21 - p20)*(dist21/(dist21 - dist20));
 			t22= p22 - (p22 - p20)*(dist22/(dist22 - dist20));
 		}
-		
+
 //		cout<<V10[0]<<" "<<V10[1]<<" "<<V10[2]<<endl;
 //		cout<<V11[0]<<" "<<V11[1]<<" "<<V11[2]<<endl;
 //		cout<<V12[0]<<" "<<V12[1]<<" "<<V12[2]<<endl;
@@ -512,7 +512,7 @@ if ( (dist20==0) || (dist21==0) || (dist22==0) )
 //		cout<<V22[0]<<" "<<V22[1]<<" "<<V22[2]<<endl;
 //		cout<<"dist "<<dist10<<" "<<dist11<<" "<<dist12<<" "<<dist20<<" "<<dist21<<" "<<dist22<<endl;
 //		cout<<"intervals "<<t11<<" "<<t12<<" "<<t21<<" "<<t22<<endl;
-		//check interval overlap 
+		//check interval overlap
 		if ( ((t21<=t11) && (t21<=t12) &&  (t22<=t11) && (t22<=t12)) || \
 			 ((t21>=t11) && (t21>=t12) &&  (t22>=t11) && (t22>=t12)) )
 			return false;
@@ -534,7 +534,7 @@ bool first_mesh::self_intersection_test(const vector< vector<T2> > & tri_cells, 
 		pts_z.push_back(*(i+2));
 
 	}
-	
+
 	typename vector< vector<T2> >::const_iterator start_j=tri_cells.begin()+1;
 
 	T* V10 = new T[3];
@@ -554,7 +554,7 @@ bool first_mesh::self_intersection_test(const vector< vector<T2> > & tri_cells, 
 		V12[0]=pts_x.at(i->at(2));
 		V12[1]=pts_y.at(i->at(2));
 		V12[2]=pts_z.at(i->at(2));
-		
+
 		for (typename vector< vector<T2> >::const_iterator j=start_j; j!=tri_cells.end() ;j++)
 		{
 			V20[0]=pts_x.at(j->at(0));
@@ -587,7 +587,7 @@ bool first_mesh::self_intersection_test(const vector< vector<T2> > & tri_cells, 
 				delete V21;
 				delete V22;
 				return false;
-				
+
 }
 
 
@@ -612,16 +612,16 @@ template void  first_mesh::medium_neighbours<float,unsigned int>(const vector<fl
 																  vector<float> & vx, vector<float> & vy, vector<float> & vz );
 template void  first_mesh::medium_neighbours<double,unsigned int>(const vector<double> & pts, const vector< vector<unsigned int> > & localTri, const vector< vector<unsigned int> > & cells,\
 																  vector<double> & vx, vector<double> & vy, vector<double> & vz );
-																  
+
 
 //find neighbours
 template vector< vector<short> >  first_mesh::findNeighbours<short>(const vector< vector<short> > & triangles, const unsigned int & N);
 template vector< vector<unsigned int> >  first_mesh::findNeighbours<unsigned int>(const vector< vector<unsigned int> > & triangles, const unsigned int & N);
 template vector< vector<int> >  first_mesh::findNeighbours<int>(const vector< vector<int> > & triangles, const unsigned int & N);
-																  
+
 template vector< vector<short> >  first_mesh::findNeighbourTriangles<short>(const vector< vector<short> > & triangles, const unsigned int & N);
 template vector< vector<unsigned int> >  first_mesh::findNeighbourTriangles<unsigned int>(const vector< vector<unsigned int> > & triangles, const unsigned int & N);
-template vector< vector<int> >  first_mesh::findNeighbourTriangles<int>(const vector< vector<int> > & triangles, const unsigned int & N);			
+template vector< vector<int> >  first_mesh::findNeighbourTriangles<int>(const vector< vector<int> > & triangles, const unsigned int & N);
 
 template void first_mesh::maxTriangle<float, short>(const vector<float> & pts, const vector< vector<short> > & localTri, const vector< vector<short> > & cells,vector<float> & vx, vector<float> & vy, vector<float> & vz );
 template void first_mesh::maxTriangle<float, unsigned int>(const vector<float> & pts, const vector< vector<unsigned int> > & localTri, const vector< vector<unsigned int> > & cells,vector<float> & vx, vector<float> & vy, vector<float> & vz );

@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_woarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -23,8 +23,8 @@
 
 #include <cstddef> // size_t
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -46,7 +46,7 @@ BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char t);
 
 template<class Archive>
-class xml_woarchive_impl : 
+class xml_woarchive_impl :
     public basic_text_oprimitive<std::wostream>,
     public basic_xml_oarchive<Archive>
 {
@@ -62,27 +62,27 @@ protected:
         basic_xml_oarchive<Archive>::end_preamble();
     }
     template<class T>
-    void 
+    void
     save(const T & t){
         basic_text_oprimitive<std::wostream>::save(t);
     }
     BOOST_WARCHIVE_DECL(void)
     save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    BOOST_WARCHIVE_DECL(void) 
+    BOOST_WARCHIVE_DECL(void)
     save(const wchar_t * t);
     #endif
-    BOOST_WARCHIVE_DECL(void) 
+    BOOST_WARCHIVE_DECL(void)
     save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
     BOOST_WARCHIVE_DECL(void)
     save(const std::wstring &ws);
     #endif
-    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
     xml_woarchive_impl(std::wostream & os, unsigned int flags);
     ~xml_woarchive_impl(){}
 public:
-    void 
+    void
     save_binary(const void *address, std::size_t count){
         this->end_preamble();
         #if ! defined(__MWERKS__)
@@ -90,7 +90,7 @@ public:
         #else
         this->basic_text_oprimitive::save_binary(
         #endif
-            address, 
+            address,
             count
         );
         this->indent_next = true;
@@ -103,7 +103,7 @@ public:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from xml_woarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class xml_woarchive : 
+class xml_woarchive :
     public xml_woarchive_impl<xml_woarchive>
 {
 public:
@@ -116,7 +116,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
+// required by smart_cast for compilers not implementing
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::xml_woarchive)
 

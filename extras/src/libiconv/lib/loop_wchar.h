@@ -90,7 +90,7 @@ static void wc_to_mb_write_replacement (const char *buf, size_t buflen,
       else if (errno == E2BIG)
         /* Output buffer too small. */
         plocals->l_errno = E2BIG;
-      else 
+      else
         abort();
     } else {
       /* Successful conversion. */

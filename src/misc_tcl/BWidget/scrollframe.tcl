@@ -33,7 +33,7 @@ namespace eval ScrollableFrame {
     }
 
     Widget::addmap ScrollableFrame "" :cmd {
-        -background {} -width {} -height {} 
+        -background {} -width {} -height {}
         -xscrollcommand {} -yscrollcommand {}
         -xscrollincrement {} -yscrollincrement {}
     }
@@ -137,7 +137,7 @@ proc ScrollableFrame::see { path widget {vert top} {horz left} {xOffset 0} {yOff
     set yb1 [$path:cmd canvasy [winfo height $path]]
     set dx  0
     set dy  0
-    
+
     if { [string equal $horz "left"] } {
 	if { $x1 > $xb1 } {
 	    set dx [expr {$x1-$xb1}]

@@ -39,7 +39,7 @@ namespace eval SelectFont {
     array set _styleOff [list bold normal italic roman]
     variable _sizes     {4 5 6 7 8 9 10 11 12 13 14 15 16 \
 	    17 18 19 20 21 22 23 24}
-    
+
     # Set up preset lists of fonts, so the user can avoid the painfully slow
     # loadfont process if desired.
     if { [string equal $::tcl_platform(platform) "windows"] } {
@@ -218,29 +218,29 @@ proc SelectFont::create { path args } {
 	if { [Widget::getoption "$path#SelectFont" -initialcolor] != ""} {
 		set thecolor [Widget::getoption "$path#SelectFont" -initialcolor]
 		set colf [frame $frame.colf]
-			
+
 		set frc [frame $colf.frame -width 50 -height 20 -bg $thecolor -bd 0 -relief flat\
 			-highlightthickness 1 -takefocus 0 \
 			-highlightbackground black \
 			-highlightcolor black]
-			
+
 		set script "set [list SelectFont::${path}(fontcolor)] \[tk_chooseColor -parent $colf.button -initialcolor \[set [list SelectFont::${path}(fontcolor)]\]\];\
 			SelectFont::_update [list $path]"
-		
+
 		set but  [button $colf.button -command $script \
 			-text "Color..."]
-		
+
 		$lab configure -foreground $thecolor
 		$frc configure -bg $thecolor
-		
+
 		pack $but -side left
 		pack $frc -side left -padx 5
-		
+
 		set data(frc) $frc
 		set data(fontcolor) $thecolor
 
-		pack $colf -pady 4 -fill x -expand true        
-	
+		pack $colf -pady 4 -fill x -expand true
+
 	} else {
 		set data(fontcolor) -1
 	}
@@ -425,7 +425,7 @@ proc SelectFont::_draw { path } {
     if { [Dialog::draw $path] == 0 } {
         set result [Widget::getoption "$path#SelectFont" -font]
     	set color $data(fontcolor)
-	
+
 	if { $color == "" } {
 		set color #000000
 	}

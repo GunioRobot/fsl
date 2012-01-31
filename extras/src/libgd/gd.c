@@ -131,8 +131,8 @@ BGD_DECLARE(gdImagePtr) gdImageCreateTrueColor (int sx, int sy)
   im->trueColor = 1;
   /* 2.0.2: alpha blending is now on by default, and saving of alpha is
      off by default. This allows font antialiasing to work as expected
-     on the first try in JPEGs -- quite important -- and also allows 
-     for smaller PNGs when saving of alpha channel is not really 
+     on the first try in JPEGs -- quite important -- and also allows
+     for smaller PNGs when saving of alpha channel is not really
      desired, which it usually isn't! */
   im->saveAlphaFlag = 0;
   im->alphaBlendingFlag = 1;
@@ -202,7 +202,7 @@ BGD_DECLARE(int) gdImageColorClosestAlpha (gdImagePtr im, int r, int g, int b, i
       gd = (im->green[i] - g);
       bd = (im->blue[i] - b);
       /* gd 2.02: whoops, was - b (thanks to David Marwood) */
-      /* gd 2.16: was blue rather than alpha! Geez! Thanks to 
+      /* gd 2.16: was blue rather than alpha! Geez! Thanks to
          Artur Jakub Jerzak */
       ad = (im->alpha[i] - a);
       dist = rd * rd + gd * gd + bd * bd + ad * ad;
@@ -217,8 +217,8 @@ BGD_DECLARE(int) gdImageColorClosestAlpha (gdImagePtr im, int r, int g, int b, i
 }
 
 /* This code is taken from http://www.acm.org/jgt/papers/SmithLyons96/hwb_rgb.html, an article
- * on colour conversion to/from RBG and HWB colour systems. 
- * It has been modified to return the converted value as a * parameter. 
+ * on colour conversion to/from RBG and HWB colour systems.
+ * It has been modified to return the converted value as a * parameter.
  */
 
 #define RETURN_HWB(h, w, b) {HWB->H = h; HWB->W = w; HWB->B = b; return HWB;}
@@ -233,8 +233,8 @@ BGD_DECLARE(int) gdImageColorClosestAlpha (gdImagePtr im, int r, int g, int b, i
 
 
 /*
- * Theoretically, hue 0 (pure red) is identical to hue 6 in these transforms. Pure 
- * red always maps to 6 in this implementation. Therefore UNDEFINED can be 
+ * Theoretically, hue 0 (pure red) is identical to hue 6 in these transforms. Pure
+ * red always maps to 6 in this implementation. Therefore UNDEFINED can be
  * defined as 0 in situations where only unsigned numbers are desired.
  */
 typedef struct
@@ -253,8 +253,8 @@ RGB_to_HWB (RGBType RGB, HWBType * HWB)
 {
 
   /*
-   * RGB are each on [0, 1]. W and B are returned on [0, 1] and H is  
-   * returned on [0, 6]. Exception: H is returned UNDEFINED if W == 1 - B.  
+   * RGB are each on [0, 1]. W and B are returned on [0, 1] and H is
+   * returned on [0, 6]. Exception: H is returned UNDEFINED if W == 1 - B.
    */
 
   float R = RGB.R, G = RGB.G, B = RGB.B, w, v, b, f;
@@ -320,9 +320,9 @@ static RGBType *
 HWB_to_RGB (HWBType HWB, RGBType * RGB)
 {
 
-  /* 
-   * H is given on [0, 6] or UNDEFINED. W and B are given on [0, 1].  
-   * RGB are each returned on [0, 1]. 
+  /*
+   * H is given on [0, 6] or UNDEFINED. W and B are given on [0, 1].
+   * RGB are each returned on [0, 1].
    */
 
   float h = HWB.H, w = HWB.W, b = HWB.B, v, n, f;
@@ -957,12 +957,12 @@ BGD_DECLARE(void) gdImageLine (gdImagePtr im, int x1, int y1, int x2, int y2, in
   int thick;
   if (color == gdAntiAliased)
     {
-      /* 
+      /*
         gdAntiAliased passed as color: use the much faster, much cheaper
         and equally attractive gdImageAALine implementation. That
         clips too, so don't clip twice.
       */
-      gdImageAALine(im, x1, y1, x2, y2, im->AA_color); 
+      gdImageAALine(im, x1, y1, x2, y2, im->AA_color);
       return;
     }
   /* 2.0.10: Nick Atty: clip to edges of drawing rectangle, return if no
@@ -1479,9 +1479,9 @@ lsqrt (long n)
 
 /* s and e are integers modulo 360 (degrees), with 0 degrees
    being the rightmost extreme and degrees changing clockwise.
-   cx and cy are the center in pixels; w and h are the horizontal 
+   cx and cy are the center in pixels; w and h are the horizontal
    and vertical diameter in pixels. Nice interface, but slow.
-   See gd_arc_f_buggy.c for a better version that doesn't 
+   See gd_arc_f_buggy.c for a better version that doesn't
    seem to be bug-free yet. */
 
 BGD_DECLARE(void) gdImageArc (gdImagePtr im, int cx, int cy, int w, int h, int s, int e,
@@ -1894,7 +1894,7 @@ BGD_DECLARE(void) gdImageCopy (gdImagePtr dst, gdImagePtr src, int dstX, int dst
 	    {
 	      /* 2.05: remap to the palette available in the
 	         destination image. This is slow and
-	         works badly, but it beats crashing! Thanks 
+	         works badly, but it beats crashing! Thanks
 	         to Padhrig McCarthy. */
 	      mapTo = gdImageColorResolveAlpha (dst,
 						gdTrueColorGetRed (c),
@@ -2006,10 +2006,10 @@ BGD_DECLARE(void) gdImageCopyMergeGray (gdImagePtr dst, gdImagePtr src, int dstX
 	      tox++;
 	      continue;
 	    }
-	  /* 
-	   * If it's the same image, mapping is NOT trivial since we 
-	   * merge with greyscale target, but if pct is 100, the grey 
-	   * value is not used, so it becomes trivial. pjw 2.0.12. 
+	  /*
+	   * If it's the same image, mapping is NOT trivial since we
+	   * merge with greyscale target, but if pct is 100, the grey
+	   * value is not used, so it becomes trivial. pjw 2.0.12.
 	   */
 	  if (dst == src && pct == 100)
 	    {
@@ -2101,7 +2101,7 @@ BGD_DECLARE(void) gdImageCopyResized (gdImagePtr dst, gdImagePtr src, int dstX, 
 		}
 	      if (dst->trueColor)
 		{
-		  /* 2.0.9: Thorben Kundinger: Maybe the source image is not 
+		  /* 2.0.9: Thorben Kundinger: Maybe the source image is not
 		     a truecolor image */
 		  if (!src->trueColor)
 		    {
@@ -2192,12 +2192,12 @@ BGD_DECLARE(void) gdImageCopyResized (gdImagePtr dst, gdImagePtr src, int dstX, 
   gdFree (sty);
 }
 
-/* gd 2.0.8: gdImageCopyRotated is added. Source 
+/* gd 2.0.8: gdImageCopyRotated is added. Source
 	is a rectangle, with its upper left corner at
 	srcX and srcY. Destination is the *center* of
         the rotated copy. Angle is in degrees, same as
         gdImageArc. Floating point destination center
-	coordinates allow accurate rotation of 
+	coordinates allow accurate rotation of
 	objects of odd-numbered width or height. */
 
 BGD_DECLARE(void) gdImageCopyRotated (gdImagePtr dst,
@@ -2271,7 +2271,7 @@ BGD_DECLARE(void) gdImageCopyRotated (gdImagePtr dst,
    arithmetic. The routine below is shamelessly, gloriously
    floating point. TBB */
 
-/* 2.0.10: cast instead of floor() yields 35% performance improvement. 
+/* 2.0.10: cast instead of floor() yields 35% performance improvement.
 	Thanks to John Buckman. */
 
 #define floor2(exp) ((long) exp)
@@ -2348,7 +2348,7 @@ BGD_DECLARE(void) gdImageCopyResampled (gdImagePtr dst,
 		      xportion = 1.0;
 		    }
 		  pcontribution = xportion * yportion;
-		  /* 2.08: previously srcX and srcY were ignored. 
+		  /* 2.08: previously srcX and srcY were ignored.
 		     Andrew Pattison */
 		  p = gdImageGetTrueColorPixel (src,
 						(int) sx + srcX,
@@ -2673,7 +2673,7 @@ BGD_DECLARE(void) gdImageFilledPolygon (gdImagePtr im, gdPointPtr p, int n, int 
 	  /* Do the following math as float intermediately, and round to ensure
 	   * that Polygon and FilledPolygon for the same set of points have the
 	   * same footprint. */
- 
+
 	  if ((y >= y1) && (y < y2))
 	    {
 	      im->polyInts[ints++] = (int) ((float) ((y - y1) * (x2 - x1)) /
@@ -2685,7 +2685,7 @@ BGD_DECLARE(void) gdImageFilledPolygon (gdImagePtr im, gdPointPtr p, int n, int 
 		(float) (y2 - y1) + 0.5 + x1);
 	    }
 	}
-      /* 
+      /*
         2.0.26: polygons pretty much always have less than 100 points,
         and most of the time they have considerably less. For such trivial
         cases, insertion sort is a good choice. Also a good choice for
@@ -2716,7 +2716,7 @@ BGD_DECLARE(void) gdImageFilledPolygon (gdImagePtr im, gdPointPtr p, int n, int 
   /* This doesn't work as well as I'd like, but it doesn't clash either. */
   if (c == gdAntiAliased) {
     gdImagePolygon (im, p, n, c);
-  } 
+  }
 }
 
 #if 0
@@ -2728,10 +2728,10 @@ static void horizontalLine(gdImagePtr im, int minx, int maxx, int y,
   if (maxx < minx) maxx = minx;
   if (maxx > im->cx2) maxx = im->cx2;
   if (minx > maxx) minx = maxx;
-                                                                                                                                        
+
   if (y < im->cy1) y = im->cy1;
   if (y > im->cy2) y = im->cy2;
-                                                                                                                                        
+
   if (im->trueColor) {
     while (minx <= maxx) {
       im->tpixels[y][minx++] = fill_color;
@@ -2754,7 +2754,7 @@ BGD_DECLARE(void) gdImageSetStyle (gdImagePtr im, int *style, int noOfPixels)
     }
   if (overflow2(sizeof (int), noOfPixels)) {
     return;
-  }   	
+  }
   im->style = (int *) gdMalloc (sizeof (int) * noOfPixels);
   memcpy (im->style, style, sizeof (int) * noOfPixels);
   im->styleLength = noOfPixels;
@@ -2946,7 +2946,7 @@ BGD_DECLARE(int) gdAlphaBlend (int dst, int src)
     src_weight = gdAlphaTransparent - src_alpha;
     dst_weight = (gdAlphaTransparent - dst_alpha) * src_alpha / gdAlphaMax;
     tot_weight = src_weight + dst_weight;
-    
+
 /* -------------------------------------------------------------------- */
 /*      What red, green and blue result values will we use?             */
 /* -------------------------------------------------------------------- */
@@ -3053,7 +3053,7 @@ static void gdImageSetAAPixelColor(gdImagePtr im, int x, int y, int color, int t
 	BLEND_COLOR(t, dg, g, dg);
 	BLEND_COLOR(t, db, b, db);
 	im->tpixels[y][x]=gdTrueColorAlpha(dr, dg, db,  gdAlphaOpaque);
-}  
+}
 
 static void gdImageAALine (gdImagePtr im, int x1, int y1, int x2, int y2, int col)
 {

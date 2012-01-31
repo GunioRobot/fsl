@@ -64,6 +64,6 @@ void init_module_##name()
 
 #  endif
 
-# endif 
+# endif
 
 #endif // MODULE_INIT_DWA20020722_HPP

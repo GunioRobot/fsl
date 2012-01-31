@@ -22,9 +22,9 @@
 
 
 /*
- * The following structure is built from assembly equates in MPW 3.0 
+ * The following structure is built from assembly equates in MPW 3.0
  * AIncludes file: "Private.a." We're forced to update several locations not
- * documented in "Inside Mac" to make our MDEF behave properly with hierarchical 
+ * documented in "Inside Mac" to make our MDEF behave properly with hierarchical
  * menus.
  */
 
@@ -83,7 +83,7 @@ main(
     				 * messages. */
     short *whichItemPtr)	/* Output result. Which item was hit by
     				 * the user? */
-{	
+{
     /*
      * The constant 'MDEF' is what will be punched during menu intialization.
      */
@@ -91,7 +91,7 @@ main(
     TkMenuDefProcPtr procPtr = (TkMenuDefProcPtr) 'MDEF';
     TkMenuLowMemGlobals globals;
     short oldItem;
-   
+
     globals.menuDisable = LMGetMenuDisable();
     globals.menuTop = LMGetTopMenuItem();
     globals.menuBottom = LMGetAtMenuBottom();
@@ -101,14 +101,14 @@ main(
     if (message == mChooseMsg) {
         oldItem = *whichItemPtr;
     }
-    
+
     TkCallMenuDefProc(procPtr, message, menu, menuRect, hitPt, whichItemPtr,
     	    &globals);
-    
+
     LMSetMenuDisable(globals.menuDisable);
     LMSetTopMenuItem(globals.menuTop);
     LMSetAtMenuBottom(globals.menuBottom);
-    if ((message == mChooseMsg) && (oldItem != *whichItemPtr) 
+    if ((message == mChooseMsg) && (oldItem != *whichItemPtr)
     	    && (MBSAVELOC != -1)) {
     	(**(mbPrivate***)&MBSAVELOC)->mbItemRect = globals.itemRect;
       	SELECTRECT = globals.itemRect;

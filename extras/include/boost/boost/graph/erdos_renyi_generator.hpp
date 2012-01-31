@@ -39,20 +39,20 @@ namespace boost {
     typedef void difference_type;
 
     erdos_renyi_iterator() : gen(0), n(0), edges(0), allow_self_loops(false) {}
-    erdos_renyi_iterator(RandomGenerator& gen, vertices_size_type n, 
+    erdos_renyi_iterator(RandomGenerator& gen, vertices_size_type n,
                          double prob = 0.0, bool allow_self_loops = false)
       : gen(&gen), n(n), edges(edges_size_type(prob * n * n)),
         allow_self_loops(allow_self_loops)
-    { 
+    {
       if (is_undirected) edges = edges / 2;
-      next(); 
+      next();
     }
 
     reference operator*() const { return current; }
     pointer operator->() const { return &current; }
-    
+
     erdos_renyi_iterator& operator++()
-    { 
+    {
       --edges;
       next();
       return *this;

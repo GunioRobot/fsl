@@ -1,5 +1,5 @@
 /*  minimize
- 
+
     Tim Behrens, FMRIB Image Analysis Group
 
     Copyright (C) 1999-2000 University of Oxford  */
@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -120,7 +120,7 @@ float diff1(const ColumnVector& x, const EvalFunction& func, int i,float h,int e
 
 float diff2(const ColumnVector& x, const EvalFunction& func, int i,float h,int errorord)
 {
-  //computes the second derivative of "eval" wrt the i^th parameter at point "x" with step size h 
+  //computes the second derivative of "eval" wrt the i^th parameter at point "x" with step size h
    ColumnVector xtmp=x;
    float deriv=0;
    if(errorord==1){
@@ -155,10 +155,10 @@ float diff2(const ColumnVector& x, const EvalFunction& func, int i,float h,int e
 }
 
 float diff2(const ColumnVector& x, const EvalFunction& func, int i,int j,float h,int errorord)
-{//computes the cross derivative of "eval" wrt the i^th and j^th  parameter at point "x" with step size h 
+{//computes the cross derivative of "eval" wrt the i^th and j^th  parameter at point "x" with step size h
   ColumnVector xtmp=x;
   float deriv=0;
-  if(errorord==1){ 
+  if(errorord==1){
     xtmp(i)=xtmp(i)+h; xtmp(j)=xtmp(j)+h;
     float  en_iplus_jplus=func.evaluate(xtmp);
     xtmp(j)=xtmp(j)-h;
@@ -176,7 +176,7 @@ float diff2(const ColumnVector& x, const EvalFunction& func, int i,int j,float h
     float en_iminus_jplus=func.evaluate(xtmp);
     xtmp(j)=xtmp(j)-2*h;
     float en_iminus_jminus=func.evaluate(xtmp);
-    deriv=(en_iplus_jplus-en_iplus_jminus-en_iminus_jplus+en_iminus_jminus)/(4*h*h); 
+    deriv=(en_iplus_jplus-en_iplus_jminus-en_iminus_jplus+en_iminus_jminus)/(4*h*h);
   }
   else{
     xtmp(i)=xtmp(i)+2*h;xtmp(j)=xtmp(j)+2*h;
@@ -191,7 +191,7 @@ float diff2(const ColumnVector& x, const EvalFunction& func, int i,int j,float h
     float en_i2minus_jplus=func.evaluate(xtmp);
     xtmp(i)=xtmp(i)+h;
     float en_iminus_jplus=func.evaluate(xtmp);
-    xtmp(i)=xtmp(i)+2*h;  
+    xtmp(i)=xtmp(i)+2*h;
     float en_iplus_jplus=func.evaluate(xtmp);
     xtmp(i)=xtmp(i)+h;
     float en_i2plus_jplus=func.evaluate(xtmp);
@@ -250,7 +250,7 @@ ReturnMatrix hessian(const ColumnVector& x, const EvalFunction& func, float h,in
   }
   hess.Release();
   return hess;
-  
+
 }
 
 
@@ -271,12 +271,12 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
       n_nonvary++;
     }
   }
-  
-  
+
+
   //Number of parameters to estimate
   int n=x.Nrows()-n_nonvary, maxiter=200*n,iter=0;
   int ntot=x.Nrows();
-  int func_evals=0;  
+  int func_evals=0;
   // Some things we'll need.
   float rho=1,chi=2,psi=0.5,sigma=0.5;
   float tolx=1e-6,tolf=1e-6;
@@ -287,11 +287,11 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
     one2n(i)=i;
     two2np1(i)=i+1;
   }
-  
+
   // We want to store the best n+1 parameter estimates
-  // I'm going to store them as a vector of pairs of floats and ColVecs 
+  // I'm going to store them as a vector of pairs of floats and ColVecs
   // so I can sort them based on energy
-  
+
   vector<pair<float, ColumnVector> > v;
   float en=func.evaluate(x);
   func_evals++;
@@ -299,30 +299,30 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
   tmppair.first=en;
   tmppair.second=x;
   v.push_back(tmppair);
-  
+
   float usual_delta=0.05,zero_term_delta=0.00025;
   //perturb each parameter by a bit, and store the cost.
   ColumnVector y=x;
 
   for(int i=1;i<=ntot;i++){
-    // The values of nonvarying parameters should be the same in 
+    // The values of nonvarying parameters should be the same in
     // all of the optional param vectors and therefore in all
     // combinations of them in the remainder of the code.
-    
+
     if(paramstovary(i)==1){
       if(y(i)!=0){y(i)=(1+usual_delta)*y(i);}
       else{y(i)=(1+zero_term_delta);}
       en=func.evaluate(y);
-      
+
       func_evals++;
       tmppair.first=en;
       tmppair.second=y;
       v.push_back(tmppair);
     }
-    
+
   }
 
-  
+
   sort(v.begin(),v.end(),pair_comparer()); //wasn't that easy...
   string how="";
   ColumnVector xbar(ntot),xr(ntot),xe(ntot),xc(ntot),xcc(ntot),xtmp(ntot);
@@ -340,9 +340,9 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
 	}
       }
       if(stopsearch){break;}
-    } 
+    }
     //compute reflection point
-  
+
   // xbar is average of best n paramsets.
     xbar=0;
     for(int i=0;i<n;i++){
@@ -352,11 +352,11 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
     xr=(1+rho)*xbar-rho*v[n].second; //reflection point
     float en_xr=func.evaluate(xr);func_evals++;
     if(en_xr < v[0].first){ //en_xr is better than our current best
- 
+
       //compute expansion point
       xe=(1+rho*chi)*xbar-rho*chi*v[n].second;
       float en_xe=func.evaluate(xe);func_evals++;
-    
+
       if(en_xe<en_xr){
 	tmppair.first=en_xe;
 	tmppair.second=xe;
@@ -427,13 +427,13 @@ void minsearch(ColumnVector& x, const EvalFunction& func, ColumnVector& paramsto
 
 
   } //closing while
- 
+
   x=v[0].second;
-    
+
 }
 
 void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, float tol, float eps, int niters){
-  
+
   //number of nonvarying parameters.
   int n_nonvary=0;
   for(int i=1;i<=paramstovary.Nrows();i++){
@@ -445,7 +445,7 @@ void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, 
       n_nonvary++;
     }
   }
-  
+
   int fevals=0;
   int gevals=0;
   int nparams=x.Nrows();
@@ -455,16 +455,16 @@ void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, 
   //Comput gradient wrt all parameters which we wish to estimate
   ColumnVector gradold=func.g_evaluate(x);gevals++;
   gradold=SP(gradold,paramstovary);
-  
+
   ColumnVector gradnew=gradold;
   ColumnVector d=-gradnew;       // search direction
   ColumnVector xplus,xnew,gplus;
   bool success=true;
   int nsuccess=0;
   float lambda=1.0;
-  float lambdamin = 1.0e-15; 
-  float lambdamax = 1.0e15;			
-  int j = 1;	
+  float lambdamin = 1.0e-15;
+  float lambdamax = 1.0e15;
+  int j = 1;
   float mu=0,kappa=0,sigma=0,gamma=0,alpha=0,delta=0,Delta,beta=0;
 
   // main loop..
@@ -482,23 +482,23 @@ void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, 
 	break;
       }
 
-      sigma=sigma0/std::sqrt(kappa);      
+      sigma=sigma0/std::sqrt(kappa);
       xplus = x + sigma*d;
 
       gplus=func.g_evaluate(xplus);gevals++;
       gplus=SP(gplus,paramstovary);
-	
+
       gamma = (d.t()*(gplus - gradnew)).AsScalar()/sigma;
 
     }
 
     delta = gamma + lambda*kappa;
-    if (delta <= 0){ 
+    if (delta <= 0){
       delta = lambda*kappa;
       lambda = lambda - gamma/kappa;
     }
     alpha = - mu/delta;
-    
+
     xnew = x + alpha*d;
     fnew=func.evaluate(xnew);fevals++;
     Delta = 2*(fnew - fold)/(alpha*mu);
@@ -511,27 +511,27 @@ void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, 
     else{
       success = false;
       fnow = fold;
-    }    
-    
+    }
+
     if (success == 1){
-      
+
       //Test for termination...
-      
+
       if ( (max(abs(d*alpha))).AsScalar() < tol && std::abs(fnew-fold) < tol){
 	break;
       }
       else{
 	fold = fnew;
 	gradold = gradnew;
-	
+
 	gradnew=func.g_evaluate(x);gevals++;
 	gradnew=SP(gradnew,paramstovary);
-	
+
 	if ((gradnew.t()*gradnew).AsScalar() == 0){
 	  break;
 	}
       }
-      
+
     }
     if (Delta < 0.25){
       //   lambda = min(4.0*lambda, lambdamax);
@@ -547,12 +547,12 @@ void scg(ColumnVector& x,const gEvalFunction& func, ColumnVector& paramstovary, 
        nsuccess = 0;
      }
      else{
-       if (success == 1){	 
+       if (success == 1){
 	 beta = ((gradold - gradnew).t()*gradnew).AsScalar()/mu;
 	 d = beta*d - gradnew;
        }
      }
-     j++; 
+     j++;
   }
 
 }

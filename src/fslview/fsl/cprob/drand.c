@@ -65,7 +65,7 @@ static union {
 /* This function implements the three
  * congruential generators.
  */
- 
+
 static int ranwh()
 {
 int r, s;

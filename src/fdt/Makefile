@@ -34,7 +34,7 @@ CCOPSOBJS=ccops.o ccopsOptions.o
 PTXOBJS=probtrackx.o probtrackxOptions.o streamlines.o ptx_simple.o ptx_seedmask.o ptx_twomasks.o ptx_nmasks.o ptx_meshmask.o
 FTBOBJS=find_the_biggest.o
 PJOBJS=proj_thresh.o
-MEDOBJS=medianfilter.o 
+MEDOBJS=medianfilter.o
 ROMOBJS=reord_OM.o
 SAUSOBJS=sausages.o
 XFIBOBJS=xfibres.o xfibresoptions.o diffmodels.o
@@ -43,17 +43,17 @@ RVOBJS=replacevols.o
 MDVOBJS=make_dyadic_vectors.o
 FMOOBJS=fdt_matrix_ops.o
 INDEXEROBJS=indexer.o
-TESTOBJS=testfile.o 
+TESTOBJS=testfile.o
 VECREGOBJS=vecreg.o
 KURTOSISOBJS=kurtosis.o dtifitOptions.o
 SWAPDYADSOBJS=swap_dyadic_vectors.o
 PVMFITOBJS=pvmfit.o pvmfitOptions.o diffmodels.o
 DTIGENOBJS=dtigen.o
 
-SGEBEDPOST = bedpost 
+SGEBEDPOST = bedpost
 SGEBEDPOSTX = bedpostx bedpostx_postproc.sh bedpostx_preproc.sh bedpostx_single_slice.sh bedpostx_datacheck
 
-SCRIPTS = eddy_correct zeropad maskdyads probtrack rotate_bvecs ${SGEBEDPOST} ${SGEBEDPOSTX} 
+SCRIPTS = eddy_correct zeropad maskdyads probtrack rotate_bvecs ${SGEBEDPOST} ${SGEBEDPOSTX}
 FSCRIPTS = correct_and_average ocmr_preproc
 
 XFILES = dtifit ccops find_the_biggest medianfilter make_dyadic_vectors proj_thresh vecreg xfibres probtrackx pvmfit
@@ -63,27 +63,27 @@ FXFILES = reord_OM sausages replacevols fdt_matrix_ops indexer
 
 RUNTCLS = Fdt
 
-all: ${XFILES} ${FXFILES} 
+all: ${XFILES} ${FXFILES}
 
 ${PTX}:		   ${PTXOBJS}
 		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PTXOBJS} ${DLIBS}
 
 ${PT}:		   ${PTOBJS}
-		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PTOBJS} ${DLIBS} 
+		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PTOBJS} ${DLIBS}
 
 ${FTB}:    	${FTBOBJS}
-		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FTBOBJS} ${DLIBS} 
+		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${FTBOBJS} ${DLIBS}
 
 ${PJ}:    	${PJOBJS}
-		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PJOBJS} ${DLIBS} 
+		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${PJOBJS} ${DLIBS}
 
 ${MED}:    	${MEDOBJS}
-		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${MEDOBJS} ${DLIBS} 
+		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${MEDOBJS} ${DLIBS}
 
 ${DTIFIT}:    	${DTIFITOBJS}
 		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${DTIFITOBJS} ${DLIBS}
 
-${CCOPS}:    	${CCOPSOBJS}	
+${CCOPS}:    	${CCOPSOBJS}
 		   ${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${CCOPSOBJS} ${DLIBS}
 
 ${ROM}:    	${ROMOBJS}

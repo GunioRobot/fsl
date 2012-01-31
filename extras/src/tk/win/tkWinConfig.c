@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinConfig.c --
  *
  *	This module implements the Windows system defaults for

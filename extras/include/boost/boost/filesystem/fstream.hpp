@@ -7,7 +7,7 @@
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_FSTREAM_HPP
 #define BOOST_FILESYSTEM_FSTREAM_HPP
@@ -178,7 +178,7 @@ namespace boost
 #endif
       virtual ~basic_fstream() {}
     };
- 
+
     typedef basic_fstream<char> fstream;
 #   ifndef BOOST_NO_STD_WSTRING
     typedef basic_fstream<wchar_t> wfstream;

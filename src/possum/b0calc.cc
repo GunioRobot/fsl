@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -78,7 +78,7 @@
 #define _GNU_SOURCE 1
 #define POSIX_SOURCE 1
 
-using namespace Utilities;  
+using namespace Utilities;
 using namespace NEWIMAGE;
 
 // Global constants
@@ -86,8 +86,8 @@ using namespace NEWIMAGE;
 string title="b0calc (Version 2.4)\nB0 field calculation program\nCopyright(c) 2001, University of Oxford (Mark Jenkinson)";
 string examples="b0calc -i <input> -o <output> [options]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -148,7 +148,7 @@ Option<string> outname(string("-o,--out"), string(""),
 
 float arctan(float num, float den)
 {
-  if (fabs(den)>1e-8) { 
+  if (fabs(den)>1e-8) {
     return atan(num/den);
   } else {
     return atan2(num,den);
@@ -158,7 +158,7 @@ float arctan(float num, float den)
 
 float arcsinh(float num, float den)
 {
-  if (fabs(den)>1e-8) { 
+  if (fabs(den)>1e-8) {
     return asinh(num/den);
   } else {
     return log(num + sqrt(num*num + den*den)) - log(den);
@@ -166,7 +166,7 @@ float arcsinh(float num, float den)
   }
 }
 
-volume<float> partbzkernel(const volume<float>& obj, 
+volume<float> partbzkernel(const volume<float>& obj,
 			   float xoff, float yoff, float zoff,
 			   const string& b0type)
 {
@@ -191,11 +191,11 @@ volume<float> partbzkernel(const volume<float>& obj,
 	  kernel(x1+nx-1,y1+ny-1,z1+nz-1) = -arcsinh(x,sqrt(y*y+z*z));
 	} else if (b0type=="z,0,x") {
 	  kernel(x1+nx-1,y1+ny-1,z1+nz-1) = (x-xoff)*arctan(x*y,z*r)
-	    + x*arctan(z*y,x*r) + zoff*arcsinh(y,sqrt(x*x+z*z)) 
+	    + x*arctan(z*y,x*r) + zoff*arcsinh(y,sqrt(x*x+z*z))
 	    - y*arcsinh(z,sqrt(y*y+x*x));
 	} else if (b0type=="0,z,y") {
 	  kernel(x1+nx-1,y1+ny-1,z1+nz-1) = (y-yoff)*arctan(x*y,z*r)
-	    + y*arctan(z*x,y*r) + zoff*arcsinh(x,sqrt(y*y+z*z)) 
+	    + y*arctan(z*x,y*r) + zoff*arcsinh(x,sqrt(y*y+z*z))
 	    - x*arcsinh(z,sqrt(y*y+x*x));
 	} else if (b0type=="-x,0,z") {
 	  kernel(x1+nx-1,y1+ny-1,z1+nz-1) = -xoff*arcsinh(y,sqrt(x*x+z*z))
@@ -214,11 +214,11 @@ volume<float> partbzkernel(const volume<float>& obj,
 }
 
 
-volume<float> calculate_kernel(const volume<float>& obj, 
+volume<float> calculate_kernel(const volume<float>& obj,
 			       const string& b0type="0,0,1")
 {
   // Combines the partial voxel Bz solutions to get a full solution
-  // Answer is for position x,y,z (relative to voxel centre) 
+  // Answer is for position x,y,z (relative to voxel centre)
   //   given a voxel of size (dx,dy,dz)
   cout << "Calculating kernel" << endl;
   float dx2, dy2, dz2;
@@ -234,7 +234,7 @@ volume<float> calculate_kernel(const volume<float>& obj,
   kernel -= partbzkernel(obj,-dx2,-dy2,-dz2,b0type);
   return kernel;
 }
-  
+
 /////////////////////////////////////////////////////////////////////////////
 
 volume<float> gradientfield(const volume<float>& chi, const string& dir)
@@ -255,7 +255,7 @@ volume<float> gradientfield(const volume<float>& chi, const string& dir)
 	} else if (dir=="z") {
 	  gfield(x1,y1,z1)=(z1-nz)*dz;
 	} else {
-	  cerr << "Unknown direction '"<<dir<<"' specified in gradientfield" 
+	  cerr << "Unknown direction '"<<dir<<"' specified in gradientfield"
 	       << endl;
 	  return gfield;
 	}
@@ -268,7 +268,7 @@ volume<float> gradientfield(const volume<float>& chi, const string& dir)
 /////////////////////////////////////////////////////////////////////////////
 
 
-volume<float> convolve3_complex(const volume<float>& chi, 
+volume<float> convolve3_complex(const volume<float>& chi,
 				const volume<float>& kernel,
 				complexvolume& kernelc)
 {
@@ -313,15 +313,15 @@ volume<float> convolve3_complex(const volume<float>& chi,
 }
 
 
-volume<float> direct_convolve(const volume<float>& source, 
+volume<float> direct_convolve(const volume<float>& source,
 			      const volume<float>& kernel)
-{ 
+{
   extrapolation oldex = source.getextrapolationmethod();
-  if ((oldex==boundsassert) || (oldex==boundsexception)) 
+  if ((oldex==boundsassert) || (oldex==boundsexception))
     { source.setextrapolationmethod(constpad); }
-  if (    (( (kernel.maxz() - kernel.minz()) % 2)==1) || 
+  if (    (( (kernel.maxz() - kernel.minz()) % 2)==1) ||
 	  (( (kernel.maxy() - kernel.miny()) % 2)==1) ||
-	  (( (kernel.maxx() - kernel.minx()) % 2)==1) ) 
+	  (( (kernel.maxx() - kernel.minx()) % 2)==1) )
     {
       cerr << "WARNING:: Off-centre convolution being performed as kernel"
 	   << " has even dimensions" << endl;
@@ -352,7 +352,7 @@ volume<float> direct_convolve(const volume<float>& source,
 }
 
 
-volume<float> convolve3(const volume<float>& chi, 
+volume<float> convolve3(const volume<float>& chi,
 			const volume<float>& kernel,
 			complexvolume& kernelc)
 {
@@ -365,7 +365,7 @@ volume<float> convolve3(const volume<float>& chi,
 
 /////////////////////////////////////////////////////////////////////////////
 
-volume4D<float> BzField(const volume4D<float>& chi1, 
+volume4D<float> BzField(const volume4D<float>& chi1,
 			float gx, float gy, float gz,
 			float b0x, float b0y, float b0z)
 {
@@ -481,7 +481,7 @@ volume4D<float> BxField(volume4D<float>& chi1)  // chi1 is const (but needs swap
 {
   volume4D<float> bx;
   // flip object axes
-  chi1.swapdimensions(2,3,1);  
+  chi1.swapdimensions(2,3,1);
   bx = BzField(chi1,gy.value(),gz.value(),gx.value(),
 		 b0y.value(),b0z.value(),b0x.value());
   // restore original axes
@@ -527,7 +527,7 @@ int main(int argc, char* argv[])
     options.add(direct_conv);
     options.add(verbose);
     options.add(help);
-    
+
     options.parse_command_line(argc, argv);
 
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -535,14 +535,14 @@ int main(int argc, char* argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-        
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
   return do_calculation();
 }
 

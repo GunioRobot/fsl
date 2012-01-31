@@ -60,9 +60,9 @@ public:
   {
     CPPUNIT_ASSERT((m_i->m_x == 5) && (m_i->m_y == 5) && (m_i->m_z == 5) &&
 		   (m_i->m_v == 5) && (m_i->m_dt == DT_SIGNED_SHORT));
-    CPPUNIT_ASSERT((m_i->m_xDim == -2.0) && 
+    CPPUNIT_ASSERT((m_i->m_xDim == -2.0) &&
 		   (m_i->m_yDim == 2.0) &&
-		   (m_i->m_zDim == 2.0));		   
+		   (m_i->m_zDim == 2.0));
   }
 
   void testValidCoordinate()
@@ -81,7 +81,7 @@ public:
     m_i->setTarnished(false);
     CPPUNIT_ASSERT(m_i->inqTarnished() == false);
   }
-    
+
   void testImageName()
   {
     CPPUNIT_ASSERT(m_i->inqImageName() == "CleanTestImage");
@@ -90,7 +90,7 @@ public:
   void testStdMat()
   {
     mat44 stdmat = m_i->inqStdMat();
-    
+
     for (int i=0; i<4; i++)
       for (int j=0; j<4; j++) {
 	if ((i == 0) && (j == 0))
@@ -116,7 +116,7 @@ class testImage: public CppUnit::TestCase
   CPPUNIT_TEST_SUITE( testImage );
   CPPUNIT_TEST( testSave );
   CPPUNIT_TEST( testData );
-  CPPUNIT_TEST( testMask );  
+  CPPUNIT_TEST( testMask );
   CPPUNIT_TEST( testStat );
   CPPUNIT_TEST( testSXForm );
   CPPUNIT_TEST_SUITE_END();
@@ -130,7 +130,7 @@ public:
 
     m_i = Image::Handle(new Image(info));
 
-    for(int v = 0; v < info->inqNumVolumes(); v++) 
+    for(int v = 0; v < info->inqNumVolumes(); v++)
       {
 
 	Volume::Handle vol = m_i->getVolume(v);
@@ -151,7 +151,7 @@ public:
   {
     ImageInfo::Handle info(m_i->getInfo());
 
-    for(int v = 0; v < info->inqNumVolumes(); v++) 
+    for(int v = 0; v < info->inqNumVolumes(); v++)
       {
 
 	Volume::Handle vol = m_i->getVolume(v);
@@ -169,7 +169,7 @@ public:
   }
 
   void testSave()
-  { 
+  {
     bool success = true;
 
     try {
@@ -188,7 +188,7 @@ public:
     m_i->save("data/stat_mask");
     Image::Handle i = Image::load("data/mask");
     Image::Handle j = Image::load("data/stat_mask");
-    
+
     CPPUNIT_ASSERT(!i->getInfo()->isStatImage());
     CPPUNIT_ASSERT( i->getInfo()->isMaskImage());
     CPPUNIT_ASSERT(!j->getInfo()->isStatImage());
@@ -199,7 +199,7 @@ public:
   {
     m_i->save("data/stat");
     Image::Handle i = Image::load("data/stat");
-    
+
     CPPUNIT_ASSERT( i->getInfo()->isStatImage());
     CPPUNIT_ASSERT(!i->getInfo()->isMaskImage());
   }
@@ -240,7 +240,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(testImage, "testImage");
 
 CppUnit::Test *suite(const std::string& name)
 {
-  CppUnit::TestFactoryRegistry &reg = 
+  CppUnit::TestFactoryRegistry &reg =
     CppUnit::TestFactoryRegistry::getRegistry();
 
   reg.registerFactory(&CppUnit::TestFactoryRegistry::getRegistry(name));
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 
   runner.addTest( suite("testImageInfo") );
   runner.addTest( suite("testImage") );
-  
+
   bool wasSuccessful = runner.run( "testImageInfo", false, true );
   wasSuccessful = wasSuccessful && runner.run( "testImage", false, true );
 

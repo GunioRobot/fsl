@@ -1,4 +1,4 @@
-/* 
+/*
  * tclAsync.c --
  *
  *	This file provides low-level support needed to invoke signal
@@ -87,7 +87,7 @@ static Tcl_ThreadDataKey dataKey;
  *	async subsystem.
  *
  * Results:
- *	None.	
+ *	None.
  *
  * Side effects:
  *	Forgets knowledge of the mutex should it have been created.

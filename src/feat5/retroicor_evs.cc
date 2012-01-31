@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -90,8 +90,8 @@ string examples="retroicor_evs [options] -c <cardiac phase file> -r <respiratory
 // Note that they must also be included in the main() function or they
 //  will not be active.
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -141,24 +141,24 @@ int nonoptarg;
 int sanity_check()
 {
   // sanity checking
-  if (cardorder.value()<0) { 
-    cerr << "Invalid order for cardiac (" << cardorder.value() << ") - must be non-negative" << endl; 
+  if (cardorder.value()<0) {
+    cerr << "Invalid order for cardiac (" << cardorder.value() << ") - must be non-negative" << endl;
     return 1;
   }
-  if (resporder.value()<0) { 
-    cerr << "Invalid order for respiratory (" << resporder.value() << ") - must be non-negative" << endl; 
+  if (resporder.value()<0) {
+    cerr << "Invalid order for respiratory (" << resporder.value() << ") - must be non-negative" << endl;
     return 2;
   }
-  if (amodcorder.value()<0) { 
-    cerr <<"Invalid order for amplitude modulated cardiac terms (" << amodcorder.value() << ") - must be non-negative"<<endl; 
+  if (amodcorder.value()<0) {
+    cerr <<"Invalid order for amplitude modulated cardiac terms (" << amodcorder.value() << ") - must be non-negative"<<endl;
     return 3;
   }
-  if (amodrorder.value()<0) { 
-    cerr <<"Invalid order for amplitude modulated respiratory terms (" << amodrorder.value() << ") - must be non-negative"<<endl; 
+  if (amodrorder.value()<0) {
+    cerr <<"Invalid order for amplitude modulated respiratory terms (" << amodrorder.value() << ") - must be non-negative"<<endl;
     return 4;
   }
   int nt=ntimepoints.value();
-  if (nt<2) { 
+  if (nt<2) {
     cerr << "Invalid number of timepoints (" << nt << ")" << endl;
     return 5;
   }
@@ -166,7 +166,7 @@ int sanity_check()
 }
 
 
-Matrix calc_confoundmat(int cardorder, int resporder, int amodcorder, int amodrorder, 
+Matrix calc_confoundmat(int cardorder, int resporder, int amodcorder, int amodrorder,
 			int nt, float tcsmap, float trsamp, float tr, float toffset)
 {
   Matrix confoundmat(nt,cardorder*2 + resporder*2 + amodcorder*amodrorder*4);
@@ -218,7 +218,7 @@ Matrix calc_confoundmat(int cardorder, int resporder, int amodcorder, int amodro
 }
 
 
-int do_work(int argc, char* argv[]) 
+int do_work(int argc, char* argv[])
 {
   if (sanity_check()!=0) { exit(EXIT_FAILURE); }
 
@@ -230,9 +230,9 @@ int do_work(int argc, char* argv[])
   // setup matrix
   Matrix confoundmat;
 
-  confoundmat = calc_confoundmat(cardorder.value(), resporder.value(), 
-				 amodcorder.value(), amodrorder.value(), 
-				 ntimepoints.value(), tcsmap.value(), trsamp.value(), 
+  confoundmat = calc_confoundmat(cardorder.value(), resporder.value(),
+				 amodcorder.value(), amodrorder.value(),
+				 ntimepoints.value(), tcsmap.value(), trsamp.value(),
 				 tr.value(), toffset.value());
 
   // save output
@@ -265,24 +265,24 @@ int main(int argc,char *argv[])
     options.add(toffset);
     options.add(verbose);
     options.add(help);
-    
+
     nonoptarg = options.parse_command_line(argc, argv);
 
-    // line below stops the program if the help was requested or 
+    // line below stops the program if the help was requested or
     //  a compulsory option was not set
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
       {
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   // Call the local functions
 

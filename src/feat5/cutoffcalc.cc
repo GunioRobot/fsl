@@ -2,20 +2,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -27,13 +27,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -44,7 +44,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -114,9 +114,9 @@ double min_std_ratio(double sigma, volume4D<float>& vorig, const volume<float>& 
   vtmp=bandpass_temporal_filter(vorig,sigma,0.0);
   std1 = stddevvol(vtmp);
   float maxstd=std0.max();
-  for (int z=0; z<=std0.maxz(); z++) { 
-    for (int y=0; y<=std0.maxy(); y++) { 
-      for (int x=0; x<=std0.maxx(); x++) { 
+  for (int z=0; z<=std0.maxz(); z++) {
+    for (int y=0; y<=std0.maxy(); y++) {
+      for (int x=0; x<=std0.maxx(); x++) {
 	if (std0(x,y,z)>1e-12*maxstd) {  // in case there are zero regressors
 	  std1(x,y,z) = std1(x,y,z) / std0(x,y,z);
 	} else {
@@ -126,7 +126,7 @@ double min_std_ratio(double sigma, volume4D<float>& vorig, const volume<float>& 
     }
   }
   stdratio=std1.min();
-  return stdratio; 
+  return stdratio;
 }
 
 int do_work(int argc, char* argv[])
@@ -145,7 +145,7 @@ int do_work(int argc, char* argv[])
  float usig(uppersig), lsig(lowersig), hsig;
  // sanity check at ends
  if (min_std_ratio(usig,vorig,std0)<=varthreshold.value()) {
-   if (verbose.value()) { cout << "Failed to meet threshold criterion: extreme period still removes too much variance" << endl; } 
+   if (verbose.value()) { cout << "Failed to meet threshold criterion: extreme period still removes too much variance" << endl; }
    cout << usig*sig2sec << endl;
    return 0;
  }
@@ -160,7 +160,7 @@ int do_work(int argc, char* argv[])
    if (stdratio>varthreshold.value()) { usig=hsig; }
    else { lsig=hsig; }
  } while ((usig-lsig)>1);
- 
+
  if (verbose.value()) { cout << "Sigma bounds are " << lsig << " and " << usig << endl; }
  if (verbose.value()) { cout << "stdratios are " << min_std_ratio(lsig,vorig,std0) << " and " << min_std_ratio(usig,vorig,std0) << endl; }
 
@@ -169,7 +169,7 @@ int do_work(int argc, char* argv[])
  if (verbose.value()) { cout << "FEAT highpass filter value (in seconds) should be: " << endl; }
  cout << sigma*sig2sec << endl;
  volume4D<float> vtmp;
- if ( verbose.value() ) { 
+ if ( verbose.value() ) {
    vtmp=bandpass_temporal_filter(vorig,sigma,0);
    float baseSum=(dm-vtmp.matrix(mask)).SumSquare();
    Matrix base=vtmp.matrix(mask);

@@ -55,7 +55,7 @@
 #if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_THREAD_NO_LIB) && !defined(BOOST_THREAD_BUILD_DLL) && !defined(BOOST_THREAD_BUILD_LIB)
 //
 // Tell the autolink to link dynamically, this will get undef'ed by auto_link.hpp
-// once it's done with it: 
+// once it's done with it:
 //
 #if defined(BOOST_THREAD_USE_DLL)
 #   define BOOST_DYN_LINK

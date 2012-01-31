@@ -2,7 +2,7 @@
  * tkMacResources.r --
  *
  *	This file creates resources for use in a simple shell.
- *	This is designed to be an example of using the Tcl/Tk 
+ *	This is designed to be an example of using the Tcl/Tk
  *	libraries in a Macintosh Application.
  *
  * Copyright (c) 1993-1994 Lockheed Missle & Space Company, AI Center
@@ -15,7 +15,7 @@
  */
 
 /*
- * We define SystemSevenOrLater so that our dialogs may use the 
+ * We define SystemSevenOrLater so that our dialogs may use the
  * auto center feature.
  */
 #define SystemSevenOrLater 1
@@ -32,7 +32,7 @@
 #include "tcl.h"
 #include "tk.h"
 
-/* 
+/*
  * The mechanisim below loads Tcl source into the resource fork of the
  * application.  The example below creates a TEXT resource named
  * "Init" from the file "init.tcl".  This allows applications to use
@@ -56,7 +56,7 @@
  * default dialog will not be shown and the Tcl procedure is expected to
  * create and manage an About Dialog box.
  */
- 
+
 resource 'DLOG' (128, "Default About Box", purgeable) {
     {85, 107, 260, 412}, dBoxProc, visible, goAway, 0,
      128, "", centerMainScreen
@@ -65,12 +65,12 @@ resource 'DLOG' (128, "Default About Box", purgeable) {
 resource 'DITL' (128, "About Box", purgeable) {
     {
 	{143, 147, 167, 201}, Button	    {enabled, "Ok"},
-	{ 14, 108, 137, 314}, StaticText    {disabled, 
-	    "Wish - Windowing Shell" "\n" "based on Tcl " 
-	    TCL_PATCH_LEVEL " & Tk " TK_PATCH_LEVEL "\n\n" 
+	{ 14, 108, 137, 314}, StaticText    {disabled,
+	    "Wish - Windowing Shell" "\n" "based on Tcl "
+	    TCL_PATCH_LEVEL " & Tk " TK_PATCH_LEVEL "\n\n"
             "Jim Ingham & Ray Johnson" "\n"
 	    "© 2001 Tcl Core Team" "\n"
-            "jingham@apple.com"},	    
+            "jingham@apple.com"},
         { 19,  24, 119,  92}, Picture  {enabled, 128}
     }
 };
@@ -406,15 +406,15 @@ resource 'DLOG' (130, purgeable) {
 resource 'DITL' (130, "File Open Box", purgeable) {
     {
 	{135, 252, 155, 332}, Button   {enabled, "Open"},
-	{104, 252, 124, 332}, Button   {enabled, "Cancel"},	    
+	{104, 252, 124, 332}, Button   {enabled, "Cancel"},
         {  0,   0,   0,   0}, HelpItem {disabled, HMScanhdlg {130}},
         {  8, 235,  24, 337}, UserItem {enabled},
         { 32, 252,  52, 332}, Button   {enabled, "Eject"},
-        { 60, 252,  80, 332}, Button   {enabled, "Desktop"},    
+        { 60, 252,  80, 332}, Button   {enabled, "Desktop"},
         { 29,  12, 159, 230}, UserItem {enabled},
         {  6,  12,  25, 230}, UserItem {enabled},
         { 91, 251,  92, 333}, Picture  {disabled, 11},
-        {168,  20, 187, 300}, Control  {enabled, 131} 
+        {168,  20, 187, 300}, Control  {enabled, 131}
     }
 };
 

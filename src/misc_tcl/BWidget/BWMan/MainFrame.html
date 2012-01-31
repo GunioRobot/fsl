@@ -3,7 +3,7 @@
 <BODY BGCOLOR=white>
 <DL><DT><I><A HREF="#descr">NAME</A></I></DT>
 <DD><B>MainFrame</B>
- - Manage toplevel with menu, toolbar and statusbar 
+ - Manage toplevel with menu, toolbar and statusbar
 </DD></DL>
 <DL>
 <DT><I>CREATION</I></DT>
@@ -84,7 +84,7 @@ MainFrame manage toplevel to have:<BR>
 <LI>simple menu creation, with automatic accelerator bindings and
 <A HREF="DynamicHelp.html">DynamicHelp</A> association,
 <LI>one or more toolbars that user can hide,
-<LI>a status bar, displaying a user message or a menu description, and optionally a 
+<LI>a status bar, displaying a user message or a menu description, and optionally a
 <A HREF="ProgressBar.html">ProgressBar</A>.
 </UL>
 </P>
@@ -154,7 +154,7 @@ set descmenu {
         {command "E&xit" {} "Exit the application" {} -command Menu::exit}
     }
     "&Options" {} {} 0 {
-        {checkbutton "Toolbar" {} "Show/hide toolbar" {} 
+        {checkbutton "Toolbar" {} "Show/hide toolbar" {}
             -variable Menu::_drawtoolbar
             -command  {$Menu::_mainframe showtoolbar toolbar $Menu::_drawtoolbar}
         }

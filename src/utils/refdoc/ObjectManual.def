@@ -4,9 +4,9 @@
 # To use the definitions in this file, remove the # sign and
 # provide your definition assignment.
 
-# The following line informs ObjectManual that the 
-# C++ files are following the file extension of ".C". 
-# Usually this definition is not necessary. 
+# The following line informs ObjectManual that the
+# C++ files are following the file extension of ".C".
+# Usually this definition is not necessary.
 
 #ObjectManualDefCPlusExt = .C
 
@@ -14,14 +14,14 @@
 # where the documentation i.e., html files will be generated. No
 # relative paths or environmental variables are allowed. The
 # last character of this provided directory should not be '/'.
-# Also create the directory as ObjectManual will not create 
+# Also create the directory as ObjectManual will not create
 # this directory for you. Please make sure that the permissions
 # for this created directory are open for writing.
 
 ObjectManualDefWriteHtmlDir = /usr/local/fsl/src/utils/refdoc/html
 
 # The following line informs ObjectManual about the directory
-# where the documentation i.e., "man" pages (files) will be 
+# where the documentation i.e., "man" pages (files) will be
 # generated. No relative paths or environmental variables are
 # allowed. The last character of this provided directory should
 # not be '/'. Also create the directory before its use. Please
@@ -31,22 +31,22 @@ ObjectManualDefWriteHtmlDir = /usr/local/fsl/src/utils/refdoc/html
 #ObjectManualDefWriteManDir = /usr/local/fsl/src/utils/refdoc/man3
 
 # The following line informs ObjectManual about the directory
-# where the documentation i.e., "rtf" (Rich Text Format) files 
-# will be generated. No relative paths or environmental 
-# variables are allowed. The last character of this provided 
-# directory should not be '/'. Also create the directory 
-# before its use. Please make sure that the permissions for 
+# where the documentation i.e., "rtf" (Rich Text Format) files
+# will be generated. No relative paths or environmental
+# variables are allowed. The last character of this provided
+# directory should not be '/'. Also create the directory
+# before its use. Please make sure that the permissions for
 # this created directory are are open for writing.
 
 #ObjectManualDefWriteRTFDir = /usr/local/fsl/src/utils/refdoc/rtf
 
 # The following line(s) can be defined to generate post
-# documentation. The information assigned will be generated in 
+# documentation. The information assigned will be generated in
 # each HTML file that is generated. Multiple definitions of
 # ObjectManualGenerateAtEnd can be provided. Each definition
 # can handle data up to 512 characters.
 
-ObjectManualGenerateAtEnd = Copyright (C) 2000 University of Oxford, FMRIB Centre. 
+ObjectManualGenerateAtEnd = Copyright (C) 2000 University of Oxford, FMRIB Centre.
 
 # The following line is used for generating a pre-processed file.
 # Avoid using this definition if the option used by your compiler
@@ -54,7 +54,7 @@ ObjectManualGenerateAtEnd = Copyright (C) 2000 University of Oxford, FMRIB Centr
 
 #ObjectManualDefGenerator = -E
 
-# The following line informs ObjectManual to suppress documentation 
+# The following line informs ObjectManual to suppress documentation
 # generation for the class name provided. Regular
 # expressions can be used in assignment. Multiple definitions
 # of ObjectManualDefSuppressClass can be provided.
@@ -63,7 +63,7 @@ ObjectManualGenerateAtEnd = Copyright (C) 2000 University of Oxford, FMRIB Centr
 #ObjectManualDefSuppressClass = *str*
 #ObjectManualDefSuppressClass = *ios*
 
-# The following line informs ObjectManual to suppress documentation 
+# The following line informs ObjectManual to suppress documentation
 # generation for classes contained in the mentioned directory.
 # Regular expressions can be used in assignment. Multiple definitions
 # of ObjectManualDefSuppressDirectoryClasses can be provided.
@@ -89,13 +89,13 @@ ObjectManualDefGenerateOnly = X_MissingArguments
 # no prefix, declare the definition with the assignment operator
 # and do not assign any value. i.e., ObjectManualDefFileNamePrefix =
 
-#ObjectManualDefFileNamePrefix = 
+#ObjectManualDefFileNamePrefix =
 
 # The following definition are applicable for special comments rule:
 # The following option defines that the class names are identified
 # in the source file via the following assignment.
 
-#ObjectManualDefClassName = ClassName 
+#ObjectManualDefClassName = ClassName
 
 # The following definition are applicable for special comments rule:
 # The following option defines that the method names are identified
@@ -104,14 +104,14 @@ ObjectManualDefGenerateOnly = X_MissingArguments
 
 #ObjectManualDefMethodName = MethodName
 
-# The following definition allows ObjectManual to generate 
+# The following definition allows ObjectManual to generate
 # text mixed with images. To generate text that has no images
-# assign value N to ObjectManualDefImages. The default behavior 
+# assign value N to ObjectManualDefImages. The default behavior
 # is to allow text with images.
 
 ObjectManualDefImages = N
 
-# To replace existing HTML documentation files or not. Possible 
+# To replace existing HTML documentation files or not. Possible
 # values allowed are 'N' or 'Y'. If the value to this definition
 # is set to 'N', then ObjectManual will not overwrite the existing
 # HTML files.
@@ -120,7 +120,7 @@ ObjectManualDefImages = N
 
 # To generate HTML files with a specific extension. By default the
 # generated documentation files are named with a suffix of ".html"
-# extension. If users would like to have a specific extension on 
+# extension. If users would like to have a specific extension on
 # their generated HTML files then assign this definition with the
 # specific extension name. e.g., ObjectManualDefHtmlExt = .htm
 
@@ -135,7 +135,7 @@ ObjectManualDefImages = N
 
 #ObjectManualDefSuperClassLink = Y
 
-# To generate Hypertext links for C++ Source files where the 
+# To generate Hypertext links for C++ Source files where the
 # C++ class declaration was found. The default behaviour is to
 # generate link for source files.
 
@@ -156,12 +156,12 @@ ObjectManualDefMethodTree = Y
 
 #ObjectManualDefGenerateDependencyData = Y
 
-# The following definition allows the customization of organization 
-# name. The organization name is generated as part of "man" pages. 
+# The following definition allows the customization of organization
+# name. The organization name is generated as part of "man" pages.
 # The length of the organization name should not be more than 512
 # characters.
 
-ObjectManualDefOrganizationName = Copyright (C) 2000 University of Oxford, FMRIB Centre. 
+ObjectManualDefOrganizationName = Copyright (C) 2000 University of Oxford, FMRIB Centre.
 
 # The following definition allows whether "man" pages should be
 # generated by ObjectManual or not. To suppress generation of "man"
@@ -185,7 +185,7 @@ ObjectManualDefGenerateManPages = N
 
 # The following definition informs ObjectManual whether the
 # C++ files provided as an argument need to be compiled or not. By
-# default the C++ files are compiled. 
+# default the C++ files are compiled.
 
 ObjectManualDefCompile = N
 
@@ -198,8 +198,8 @@ ObjectManualDefCompile = N
 
 # The following definition informs ObjectManual that the C++
 # classes that belong to the directory need to be suppressed from
-# documentation generation. Multiple such assignments are allowed 
-# and also regular expressions are allowed. So to suppress 
+# documentation generation. Multiple such assignments are allowed
+# and also regular expressions are allowed. So to suppress
 # C++ classes from /usr/include  and /opt, the following two
 # defintions will be provided.
 
@@ -229,7 +229,7 @@ ObjectManualDefGenerateXMLPages = N
 # where the XML documentation files will be generated. No
 # relative paths or environmental variables are allowed. The
 # last character of this provided directory should not be '/'.
-# Also create the directory as ObjectManual will not create 
+# Also create the directory as ObjectManual will not create
 # this directory for you. Please make sure that the permissions
 # for this created directory are open for writing.
 

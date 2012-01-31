@@ -10,7 +10,7 @@ OBJS=nifti1_io.o
 NOBJS=nifti1_test.o nifti1_io.o
 MOBJS=mjtest.o
 
-SCRIPTS = 
+SCRIPTS =
 TESTXFILES = nifti1_test mjtest
 
 all: libniftiio.a

@@ -49,7 +49,7 @@ void skip(Filter& flt, Device& dev, stream_offset off, mpl::true_)
 
 template<typename Filter, typename Device>
 void skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
-{ 
+{
     typedef typename char_type_of<Device>::type char_type;
     char_type c;
     for (stream_offset z = 0; z < off; ) {
@@ -65,14 +65,14 @@ void skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
 
 template<typename Device>
 void skip(Device& dev, stream_offset off)
-{ 
+{
     typedef typename mode_of<Device>::type mode;
     detail::skip(dev, off, is_convertible<mode, seekable>());
 }
 
 template<typename Filter, typename Device>
 void skip(Filter& flt, Device& dev, stream_offset off)
-{ 
+{
     typedef typename mode_of<Filter>::type                     filter_mode;
     typedef typename mode_of<Device>::type                     device_mode;
     typedef mpl::and_<

@@ -8,20 +8,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -76,7 +76,7 @@ source [ file dirname [ info script ] ]/fslstart.tcl
 
 proc render { w } {
     global entries fentries vars FSLDIR argc argv PWD USER
- 
+
     #{{{ setup main window
 
 toplevel $w
@@ -106,7 +106,7 @@ while { $i <= $vars($w,maxstatss) } {
 FileEntry $w.f.sel$i -textvariable fentries($w,$i) -label " Stats image ${i} " -title "Select" -width 35 -filetypes IMAGE
 $w.f.sel$i.labf configure -width 15
 #FSLFileEntry $w.f.sel$i -variable fentries($w,$i)-pattern "IMAGE"-directory $PWD-label " Stats image ${i} "-labelwidth 17 -title "Select"-width 35 -filterhist VARS(history)
-    
+
 
     label $w.f.uelmin($i) -text " Min"
     entry $w.f.uemin($i) -textvariable vars($w,statsmin,$i) -width 7
@@ -116,7 +116,7 @@ $w.f.sel$i.labf configure -width 15
     incr i 1
 }
 
-render:updatestats $w 
+render:updatestats $w
 
 $w.f.uelmin(1) configure -fg "red"
 $w.f.uelmax(1) configure -fg "yellow"
@@ -134,7 +134,7 @@ frame $w.f.statsentries(0)
 FileEntry $w.f.sel0 -textvariable fentries($w,0) -label " Background image " -title "Select" -width 35 -filetypes IMAGE
 $w.f.sel0.labf configure -width 15
 #FSLFileEntry $w.f.sel0 -variable fentries($w,0) -pattern "IMAGE" -directory $PWD -label " Background image " -labelwidth 17 -title "Select" -width 35 -filterhist VARS(history)
-    
+
 
 label $w.f.uelmin(0) -text " Min"
 entry $w.f.uemin(0) -textvariable vars($w,statsmin,0) -width 7
@@ -194,13 +194,13 @@ pack $w.f.statsentries(0) -anchor w -side bottom
     frame $w.btns
     frame $w.btns.b -relief raised -borderwidth 1
     pack $w.btns.b -side bottom -fill x -padx 3 -pady 3
-    
+
     button $w.apply -command "render:apply $w" -text "Go" -width 5
     bind $w.apply <Return> {
 	[winfo toplevel %W].apply invoke
     }
     pack $w.apply -in $w.btns.b -side left -expand yes -padx 3 -pady 3 -fill y
-	    
+
     set vars($w,cmap) 0
 
 
@@ -218,7 +218,7 @@ pack $w.f.statsentries(0) -anchor w -side bottom
     pack $w.cancel $w.help -in $w.btns.b -side left -expand yes -padx 3 -pady 3 -fill y
 
 #}}}
-		
+
     pack $w.f $w.btns -expand yes -fill both
 }
 
@@ -328,7 +328,7 @@ if {$result != 0} {
 
 
 #}}}
-    
+
     set vars($w,cmap) 0
     puts Done
     update idletasks

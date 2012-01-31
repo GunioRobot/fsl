@@ -12,7 +12,7 @@ fi
   cat <<EOF
 Usage: pbatch [-v] [-h] [-q <queuename>] [-N <jobname>] <control-file>
 
-pbatch -q short.q tasklist.txt 
+pbatch -q short.q tasklist.txt
 
   -q <queuename>        Possible values for <queuename> are "long.q" and "short.q"
                         for jobs under 2 hours duration. Default is "long.q".

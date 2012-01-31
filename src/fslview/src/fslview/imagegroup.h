@@ -33,9 +33,9 @@ public:
  * @author James Saunders <jim@fmrib.ox.ac.uk>
  *
  * @date   Mon Dec 23 17:25:52 2002
- * 
+ *
  * @brief ImageGroup groups a collection of images in a common
- * object. 
+ * object.
  *
  * A main image and several overlays with associated look up
  * tables can be stored in an ImageGroup object. It has responsibility
@@ -49,7 +49,7 @@ public:
   typedef boost::shared_ptr< ImageGroup > Handle;
   typedef boost::weak_ptr< ImageGroup > WeakHandle;
   typedef enum {None, NewLookUpTable, NewOverlay, RemOverlay, Lock, NameChange} Msg;
- 
+
   static Handle create(Image::Handle image);
   static Handle createNullImage();
 
@@ -59,7 +59,7 @@ public:
   bool remOverlay(Image::Handle image);
   ImageList::iterator begin();
   ImageList::iterator end();
-  ImageList::size_type size(); 
+  ImageList::size_type size();
 
   Image::Handle getImage(int n) const;
   LutList::iterator beginLutList();

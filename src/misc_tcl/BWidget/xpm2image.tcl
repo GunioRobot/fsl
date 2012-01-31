@@ -7,7 +7,7 @@
 #  Copyright 1996 by Roger E. Critchlow Jr., San Francisco, California
 #  All rights reserved, fair use permitted, caveat emptor.
 #  rec@elf.org
-# 
+#
 # ----------------------------------------------------------------------------
 
 proc xpm-to-image { file } {

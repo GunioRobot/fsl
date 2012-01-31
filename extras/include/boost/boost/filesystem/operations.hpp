@@ -2,15 +2,15 @@
 
 //  Copyright © 2002, 2003 Beman Dawes
 //  Copyright © 2002 Jan Langer
-//  Copyright © 2001 Dietmar Kühl                                        
-//  
+//  Copyright © 2001 Dietmar Kühl
+//
 //  Use, modification, and distribution is subject to the Boost Software
 //  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy
-//  at http://www.boost.org/LICENSE_1_0.txt)                             
+//  at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_DIRECTORY_HPP
 #define BOOST_FILESYSTEM_DIRECTORY_HPP
@@ -134,7 +134,7 @@ struct path_proxy // allows *r++ to work, as required by 24.1.1
     private:
       detail::dir_itr_imp_ptr  m_imp;
       friend class boost::iterator_core_access;
-      reference dereference() const 
+      reference dereference() const
         { return detail::dir_itr_dereference( m_imp ); }
       void increment()
         { detail::dir_itr_increment( m_imp ); }

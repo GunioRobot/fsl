@@ -14,7 +14,7 @@ namespace boost {
     bool set_contains(const std::set<K,C,A>& s, const T& x) {
       return s.find(x) != s.end();
     }
-    
+
     template <class K, class C, class A>
     bool set_equal(const std::set<K,C,A>& x,
                    const std::set<K,C,A>& y)
@@ -61,7 +61,7 @@ namespace boost {
     void set_remove(std::set<K,C,A>& x, const T& a) {
       x.erase(a);
     }
-    
+
     template <class K, class C, class A>
     void set_intersect(const std::set<K,C,A>& x,
                        const std::set<K,C,A>& y,
@@ -109,9 +109,9 @@ namespace boost {
                         std::set<K,C,A>& z)
     {
       z.clear();
-      
+
     }
-    
-} // namespace boost    
+
+} // namespace boost
 
 #endif // BOOST_SET_ADAPTOR_HPP

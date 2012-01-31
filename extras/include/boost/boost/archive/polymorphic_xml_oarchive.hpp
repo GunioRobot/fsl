@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // polymorphic_xml_oarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -20,17 +20,17 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/detail/polymorphic_oarchive_impl.hpp>
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 typedef detail::polymorphic_oarchive_impl<
-        xml_oarchive_impl<xml_oarchive> 
+        xml_oarchive_impl<xml_oarchive>
 > polymorphic_xml_oarchive;
 
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
+// required by smart_cast for compilers not implementing
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
     boost::archive::polymorphic_xml_oarchive

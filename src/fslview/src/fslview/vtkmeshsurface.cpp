@@ -1,7 +1,7 @@
 /*  FSLView - 2D/3D Interactive Image Viewer
 
     Authors:    Brian Patenaude
-                David Flitney 
+                David Flitney
 
     FMRIB Image Analysis Group
 
@@ -59,7 +59,7 @@ VTKMeshSurface::VTKMeshSurface(vtkRenderer *ren, const string& filename, float x
   m_warp = vtkWarpVector::New();
   m_warp->SetInput(trans->GetOutput());
   m_warp->SetScaleFactor(m_warpFactor);
-  
+
   m_modelNormals = vtkPolyDataNormals::New();
   m_modelNormals->SetInput(m_warp->GetPolyDataOutput());
   m_modelNormals->SetFeatureAngle(60);
@@ -92,10 +92,10 @@ VTKMeshSurface::VTKMeshSurface(vtkRenderer *ren, const string& filename, float x
   m_glyph->SetScaleFactor(m_glyphScaleFactor);
   m_glyph->ScalingOn();
   m_glyph->SetRange(0,1);
- 
+
   m_glyphMap = vtkPolyDataMapper::New();
   m_glyphMap->SetInput(m_glyph->GetOutput());
-  m_glyphMap->ScalarVisibilityOn();	
+  m_glyphMap->ScalarVisibilityOn();
   ///This should me the same as for the surface
   m_glyphMap->SetScalarRange(m_lower, m_upper);
 

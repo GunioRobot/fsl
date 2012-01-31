@@ -3,12 +3,12 @@
  * Copyright (c) 2004
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         w32_regex_traits.hpp
@@ -44,14 +44,14 @@
 #pragma warning(disable:4786)
 #endif
 
-namespace boost{ 
+namespace boost{
 
 //
 // forward declaration is needed by some compilers:
 //
 template <class charT>
 class w32_regex_traits;
-   
+
 namespace re_detail{
 
 //
@@ -178,7 +178,7 @@ private:
 };
 
 template <class charT>
-w32_regex_traits_char_layer<charT>::w32_regex_traits_char_layer(::boost::re_detail::lcid_type l) 
+w32_regex_traits_char_layer<charT>::w32_regex_traits_char_layer(::boost::re_detail::lcid_type l)
    : w32_regex_traits_base<charT>(l)
 {
    // we need to start by initialising our syntax map so we know which
@@ -224,7 +224,7 @@ w32_regex_traits_char_layer<charT>::w32_regex_traits_char_layer(::boost::re_deta
 }
 
 template <class charT>
-typename w32_regex_traits_char_layer<charT>::string_type 
+typename w32_regex_traits_char_layer<charT>::string_type
    w32_regex_traits_char_layer<charT>::get_default_message(regex_constants::syntax_type i)
 {
    const char* ptr = get_default_syntax(i);
@@ -332,7 +332,7 @@ private:
 };
 
 template <class charT>
-typename w32_regex_traits_implementation<charT>::string_type 
+typename w32_regex_traits_implementation<charT>::string_type
    w32_regex_traits_implementation<charT>::transform_primary(const charT* p1, const charT* p2) const
 {
    string_type result;
@@ -378,7 +378,7 @@ typename w32_regex_traits_implementation<charT>::string_type
 }
 
 template <class charT>
-typename w32_regex_traits_implementation<charT>::string_type 
+typename w32_regex_traits_implementation<charT>::string_type
    w32_regex_traits_implementation<charT>::lookup_collatename(const charT* p1, const charT* p2) const
 {
    typedef typename std::map<string_type, string_type>::const_iterator iter_type;
@@ -445,8 +445,8 @@ w32_regex_traits_implementation<charT>::w32_regex_traits_implementation(::boost:
       //
       // Error messages:
       //
-      for(boost::regex_constants::error_type i = static_cast<boost::regex_constants::error_type>(0); 
-         i <= boost::regex_constants::error_unknown; 
+      for(boost::regex_constants::error_type i = static_cast<boost::regex_constants::error_type>(0);
+         i <= boost::regex_constants::error_unknown;
          i = static_cast<boost::regex_constants::error_type>(i + 1))
       {
          const char* p = get_default_error_string(i);
@@ -467,7 +467,7 @@ w32_regex_traits_implementation<charT>::w32_regex_traits_implementation(::boost:
       //
       // Custom class names:
       //
-      static const char_class_type masks[14] = 
+      static const char_class_type masks[14] =
       {
          0x0104u, // C1_ALPHA | C1_DIGIT
          0x0100u, // C1_ALPHA
@@ -499,10 +499,10 @@ w32_regex_traits_implementation<charT>::w32_regex_traits_implementation(::boost:
 }
 
 template <class charT>
-typename w32_regex_traits_implementation<charT>::char_class_type 
+typename w32_regex_traits_implementation<charT>::char_class_type
    w32_regex_traits_implementation<charT>::lookup_classname_imp(const charT* p1, const charT* p2) const
 {
-   static const char_class_type masks[20] = 
+   static const char_class_type masks[20] =
    {
       0,
       0x0104u, // C1_ALPHA | C1_DIGIT
@@ -521,8 +521,8 @@ typename w32_regex_traits_implementation<charT>::char_class_type
       0x0001u, // C1_UPPER
       w32_regex_traits_implementation<charT>::mask_unicode,
       0x0001u, // C1_UPPER
-      0x0104u | w32_regex_traits_implementation<charT>::mask_word, 
-      0x0104u | w32_regex_traits_implementation<charT>::mask_word, 
+      0x0104u | w32_regex_traits_implementation<charT>::mask_word,
+      0x0104u | w32_regex_traits_implementation<charT>::mask_word,
       0x0080u, // C1_XDIGIT
    };
    if(m_custom_class_names.size())
@@ -612,7 +612,7 @@ public:
    }
    bool isctype(charT c, char_class_type f) const
    {
-      if((f & re_detail::w32_regex_traits_implementation<charT>::mask_base) 
+      if((f & re_detail::w32_regex_traits_implementation<charT>::mask_base)
          && (this->m_pimpl->isctype(f & re_detail::w32_regex_traits_implementation<charT>::mask_base, c)))
          return true;
       else if((f & re_detail::w32_regex_traits_implementation<charT>::mask_unicode) && re_detail::is_extended(c))

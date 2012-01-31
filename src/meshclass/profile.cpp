@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -151,7 +151,7 @@ void Profile::set_rroi(const double abs)
 }
 
 
-const double Profile::value(const double d) const 
+const double Profile::value(const double d) const
 {
   vector<pro_pair>::const_iterator i = v.begin();
   while ((*i).abs < d && i!=v.end())
@@ -165,7 +165,7 @@ const double Profile::value(const double d) const
 }
 
 
-const double Profile::min() 
+const double Profile::min()
 {
   if (mindef) return v[amin].val;
   double result = v[lroi].val;
@@ -180,7 +180,7 @@ const double Profile::min()
 }
 
 
-const double Profile::max() 
+const double Profile::max()
 {
   if (maxdef) {return v[amax - 1].val;};
   double result = v[lroi].val;
@@ -216,7 +216,7 @@ const double Profile::maxabs()
 
 const double Profile::threshold(const double d)
 {
-  return min() + d* (max() - min()); 
+  return min() + d* (max() - min());
 }
 
 
@@ -242,9 +242,9 @@ const double Profile::next_point_over (const double abs, const double thr)
   if (i == v.end()) return -500;
 
   while ((*i).val < t && counter < rroi) {counter ++; i++; if(i == v.end()) return -500;};
-  
+
   if (counter == rroi) return -500;
-  else 
+  else
     return (v[counter].abs);
 }
 
@@ -258,9 +258,9 @@ const double Profile::next_point_under (const double abs, const double thr)
   while ((*i).abs < abs && (i++)!=v.end()) counter ++;
 
   while ((*i).val > t && counter < rroi) {counter ++; i++; if(i == v.end()) return -500;};
-  
+
   if (counter == rroi) return -500;
-  else 
+  else
     return (v[counter].abs);
 }
 
@@ -276,9 +276,9 @@ const double Profile::last_point_under (const double abs, const double thr)
   while ((*i).abs > abs && i!=v.begin()) {counter --; i--;}
 
   while (counter > lroi && (*i).val > t && i!=v.begin()) {counter --; i--;};
-  
+
   if (counter == lroi | i==v.begin()) return -500;
-  else 
+  else
     return (v[counter - 1].abs);
 }
 
@@ -294,9 +294,9 @@ const double Profile::last_point_over (const double abs, const double thr)
   while ((*i).abs > abs && i!=v.begin()) {counter --; i--;}
 
   while ((*i).val < t && counter > lroi && i!=v.begin()) {counter --; i--;};
-  
+
   if (counter == lroi | i==v.begin()) return -500;
-  else 
+  else
     return (v[counter - 1].abs);
 }
 

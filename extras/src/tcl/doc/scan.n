@@ -5,9 +5,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: scan.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH scan n 8.4 Tcl "Tcl Built-In Commands"
 .BS
@@ -39,13 +39,13 @@ performed.
 If the next character in \fIformat\fR is a blank or tab then it
 matches any number of white space characters in \fIstring\fR (including
 zero).
-Otherwise, if it isn't a \fB%\fR character then it 
+Otherwise, if it isn't a \fB%\fR character then it
 must match the next character of \fIstring\fR.
 When a \fB%\fR is encountered in \fIformat\fR, it indicates
 the start of a conversion specifier.
 .VS 8.4
 A conversion specifier contains up to four fields after the \fB%\fR:
-a \fB*\fR, which indicates that the converted value is to be discarded 
+a \fB*\fR, which indicates that the converted value is to be discarded
 instead of assigned to a variable; a XPG3 position specifier; a number
 indicating a maximum field width; a field size modifier; and a
 conversion character.
@@ -56,7 +56,7 @@ The fields that are present must appear in the order given above.
 When \fBscan\fR finds a conversion specifier in \fIformat\fR, it
 first skips any white-space characters in \fIstring\fR (unless the
 specifier is \fB[\fR or \fBc\fR).
-Then it converts the next input characters according to the 
+Then it converts the next input characters according to the
 conversion specifier and stores the result in the variable given
 by the next argument to \fBscan\fR.
 .PP
@@ -82,7 +82,7 @@ size.
 .VE 8.4
 .TP 10
 \fBo\fR
-The input field must be an octal integer. It is read in and the 
+The input field must be an octal integer. It is read in and the
 value is stored in the variable as a decimal string.
 .VS 8.4
 If the \fBl\fR or \fBL\fR field size modifier is given, the scanned
@@ -95,7 +95,7 @@ appear as -1 on a 32-bit machine by default.
 .VE 8.4
 .TP 10
 \fBx\fR
-The input field must be a hexadecimal integer. It is read in 
+The input field must be a hexadecimal integer. It is read in
 and the value is stored in the variable as a decimal string.
 .VS 8.4
 If the \fBl\fR or \fBL\fR field size modifier is given, the scanned
@@ -116,7 +116,7 @@ value will have an internal representation that is at least 64-bits in
 size.
 .VE 8.4
 .TP 10
-\fBi\fR 
+\fBi\fR
 The input field must be an integer.  The base (i.e. decimal, octal, or
 hexadecimal) is determined in the same fashion as described in
 \fBexpr\fR.  The value is stored in the variable as a decimal string.
@@ -127,7 +127,7 @@ size.
 .VE 8.4
 .TP 10
 \fBc\fR
-A single character is read in and its binary value is stored in 
+A single character is read in and its binary value is stored in
 the variable as a decimal string.
 Initial white space is not skipped in this case, so the input
 field may be a white-space character.
@@ -136,19 +136,19 @@ input field always consists of a single character and no field
 width may be specified.
 .TP 10
 \fBs\fR
-The input field consists of all the characters up to the next 
+The input field consists of all the characters up to the next
 white-space character; the characters are copied to the variable.
 .TP 10
 \fBe\fR or \fBf\fR or \fBg\fR
-The input field must be a floating-point number consisting 
+The input field must be a floating-point number consisting
 of an optional sign, a string of decimal digits possibly
-containing a decimal point, and an optional exponent consisting 
-of an \fBe\fR or \fBE\fR followed by an optional sign and a string of 
+containing a decimal point, and an optional exponent consisting
+of an \fBe\fR or \fBE\fR followed by an optional sign and a string of
 decimal digits.
 It is read in and stored in the variable as a floating-point string.
 .TP 10
 \fB[\fIchars\fB]\fR
-The input field consists of any number of characters in 
+The input field consists of any number of characters in
 \fIchars\fR.
 The matching string is stored in the variable.
 If the first character between the brackets is a \fB]\fR then
@@ -161,11 +161,11 @@ If the first or last character between the brackets is a \fB\-\fR, then
 it is treated as part of \fIchars\fR rather than indicating a range.
 .TP 10
 \fB[^\fIchars\fB]\fR
-The input field consists of any number of characters not in 
+The input field consists of any number of characters not in
 \fIchars\fR.
 The matching string is stored in the variable.
-If the character immediately following the \fB^\fR is a \fB]\fR then it is 
-treated as part of the set rather than the closing bracket for 
+If the character immediately following the \fB^\fR is a \fB]\fR then it is
+treated as part of the set rather than the closing bracket for
 the set.
 If \fIchars\fR
 contains a sequence of the form \fIa\fB\-\fIb\fR then any
@@ -180,12 +180,12 @@ of characters scanned from the input string so far is stored in the variable.
 .LP
 The number of characters read from the input for a conversion is the
 largest number that makes sense for that particular conversion (e.g.
-as many decimal digits as possible for \fB%d\fR, as 
+as many decimal digits as possible for \fB%d\fR, as
 many octal digits as possible for \fB%o\fR, and so on).
 The input field for a given conversion terminates either when a
-white-space character is encountered or when the maximum field 
+white-space character is encountered or when the maximum field
 width has been reached, whichever comes first.
-If a \fB*\fR is present in the conversion specifier 
+If a \fB*\fR is present in the conversion specifier
 then no variable is assigned and the next scan argument is not consumed.
 .SH "DIFFERENCES FROM ANSI SSCANF"
 .PP

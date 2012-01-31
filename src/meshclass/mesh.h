@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -98,12 +98,12 @@ class Mesh {
   void clear();                 //clear the mesh and delete its components
   const int nvertices() const;
   Mpoint * get_point(int n){return _points[n];};
-  
+
   double distance(const Pt& p) const; //signed distance of the point to the mesh
   void reorientate();     //puts the triangles in a coherent orientation
   void addvertex(Triangle *const t,const Pt p);
   void retessellate(); //global retesselation
-  void update();       //puts _update_coord into _coords for each point  
+  void update();       //puts _update_coord into _coords for each point
   void translation(const double x,const double y,const double z);
   void translation(const Vec v);
   void rotation(const double r11, const double r12, const double r13,const double r21, const double r22, const double r23,const double r31, const double r32, const double r33, const double x, const double y, const double z);

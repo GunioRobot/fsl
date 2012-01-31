@@ -89,7 +89,7 @@ namespace Utilities{
 	}
 
       Time_Tracer(char* str)
-	{		  	  
+	{
 	  construct(str);
 	}
 
@@ -105,7 +105,7 @@ namespace Utilities{
 		  pad++;
 		  for(unsigned int i = 0; i < pad; i++)
 		    tmp = tmp + "  ";
-		  
+
 		  std::cout << tmp << str << std::endl;
 		}
 	    }
@@ -115,7 +115,7 @@ namespace Utilities{
 	      timingFunction = new TimingFunction(str);
 	      set<TimingFunction*, TimingFunction::comparer_name>::iterator it = timingFunctions.find(timingFunction);
 	      if(it== timingFunctions.end())
-		{		  
+		{
 		  timingFunctions.insert(timingFunction);
 		}
 	      else
@@ -123,19 +123,19 @@ namespace Utilities{
 		  delete timingFunction;
 		  timingFunction = *it;
 		}
-		
+
 	      timingFunction->start();
 	    }
 	}
 
-      virtual ~Time_Tracer() 
-	{ 
+      virtual ~Time_Tracer()
+	{
 	  if(instantstack)
 	    {
 	      stk.pop();
 	    }
 
-	  if(runningstack && pad > 0) 
+	  if(runningstack && pad > 0)
 	    {
 		  std::cout << tmp << "finished" << std::endl;
 	      pad--;
@@ -144,7 +144,7 @@ namespace Utilities{
 	    {
 	      timingFunction->end();
 	    }
-	  
+
 	}
 
       static void dump_times(const string& dir)
@@ -153,10 +153,10 @@ namespace Utilities{
 	  //copy(timingFunctions.begin(), timingFunctions.end(), timingFunctionsByTimeTaken.begin());
 
 	  ofstream out;
-	  out.open((dir + "/timings.html").c_str(), ios::out);	  
+	  out.open((dir + "/timings.html").c_str(), ios::out);
 	  out << "<HTML><TITLE>Tracer Timings</TITLE><BODY><table border=3 cellspacing=5>" << endl;
-	  out << "<tr><td>Function<td align=center>Total Time(secs)<td align=center>Num of calls<td align=center>Time per call(secs)</tr>" << endl;	  
-	  copy(timingFunctionsByTimeTaken.begin(), timingFunctionsByTimeTaken.end(), ostream_iterator<TimingFunction*>(out, "\n"));	
+	  out << "<tr><td>Function<td align=center>Total Time(secs)<td align=center>Num of calls<td align=center>Time per call(secs)</tr>" << endl;
+	  copy(timingFunctionsByTimeTaken.begin(), timingFunctionsByTimeTaken.end(), ostream_iterator<TimingFunction*>(out, "\n"));
 	  out << "</table></BODY></HTML>" << endl;
 	  out.close();
 	}
@@ -168,7 +168,7 @@ namespace Utilities{
 
 	  while(!stk.empty())
 	    {
-	  
+
 		  std::cout << stk.top() << std::endl;
 	      tmpstk.push(stk.top());
 	      stk.pop();

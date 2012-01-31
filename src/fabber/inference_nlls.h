@@ -24,7 +24,7 @@ class NLLSInferenceTechnique : public InferenceTechnique {
 class NLLSCF : public NonlinCF
 {
  public:
- NLLSCF(const ColumnVector& pdata, const FwdModel* pm) 
+ NLLSCF(const ColumnVector& pdata, const FwdModel* pm)
    : y(pdata), model(pm), linear(pm) {}
   ~NLLSCF() { return; }
   virtual double cf(const ColumnVector& p) const;

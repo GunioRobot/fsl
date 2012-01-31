@@ -3,8 +3,8 @@
  * Copyright (c) 2003
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -27,7 +27,7 @@
 //
 // Borland C++ Builder 6, and Visual C++ 6,
 // can't cope with the array template constructor
-// so we have a template member that will accept any type as 
+// so we have a template member that will accept any type as
 // argument, and then assert that is really is an array:
 //
 #include <boost/static_assert.hpp>
@@ -47,7 +47,7 @@ namespace boost{
 template <class BidirectionalIterator,
           class charT,
           class traits>
-class regex_token_iterator_implementation 
+class regex_token_iterator_implementation
 {
    typedef basic_regex<charT, traits> regex_type;
    typedef sub_match<BidirectionalIterator>      value_type;
@@ -117,11 +117,11 @@ public:
    bool compare(const regex_token_iterator_implementation& that)
    {
       if(this == &that) return true;
-      return (&re.get_data() == &that.re.get_data()) 
-         && (end == that.end) 
-         && (flags == that.flags) 
-         && (N == that.N) 
-         && (what[0].first == that.what[0].first) 
+      return (&re.get_data() == &that.re.get_data())
+         && (end == that.end)
+         && (flags == that.flags)
+         && (N == that.N)
+         && (what[0].first == that.what[0].first)
          && (what[0].second == that.what[0].second);
    }
    const value_type& get()
@@ -159,17 +159,17 @@ private:
    regex_token_iterator_implementation& operator=(const regex_token_iterator_implementation&);
 };
 
-template <class BidirectionalIterator, 
+template <class BidirectionalIterator,
           class charT = BOOST_DEDUCED_TYPENAME re_detail::regex_iterator_traits<BidirectionalIterator>::value_type,
           class traits = regex_traits<charT> >
-class regex_token_iterator 
+class regex_token_iterator
 #ifndef BOOST_NO_STD_ITERATOR
    : public std::iterator<
-         std::forward_iterator_tag, 
+         std::forward_iterator_tag,
          sub_match<BidirectionalIterator>,
          typename re_detail::regex_iterator_traits<BidirectionalIterator>::difference_type,
          const sub_match<BidirectionalIterator>*,
-         const sub_match<BidirectionalIterator>& >         
+         const sub_match<BidirectionalIterator>& >
 #endif
 {
 private:
@@ -178,21 +178,21 @@ private:
 public:
    typedef          basic_regex<charT, traits>                   regex_type;
    typedef          sub_match<BidirectionalIterator>                        value_type;
-   typedef typename re_detail::regex_iterator_traits<BidirectionalIterator>::difference_type 
+   typedef typename re_detail::regex_iterator_traits<BidirectionalIterator>::difference_type
                                                                             difference_type;
    typedef          const value_type*                                       pointer;
-   typedef          const value_type&                                       reference; 
+   typedef          const value_type&                                       reference;
    typedef          std::forward_iterator_tag                               iterator_category;
-   
+
    regex_token_iterator(){}
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
                         int submatch = 0, match_flag_type m = match_default)
                         : pdata(new impl(&re, b, submatch, m))
    {
       if(!pdata->init(a))
          pdata.reset();
    }
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
                         const std::vector<int>& submatches, match_flag_type m = match_default)
                         : pdata(new impl(&re, b, submatches, m))
    {
@@ -231,10 +231,10 @@ public:
       return *this;
    }
    bool operator==(const regex_token_iterator& that)const
-   { 
+   {
       if((pdata.get() == 0) || (that.pdata.get() == 0))
          return pdata.get() == that.pdata.get();
-      return pdata->compare(*(that.pdata.get())); 
+      return pdata->compare(*(that.pdata.get()));
    }
    bool operator!=(const regex_token_iterator& that)const
    { return !(*this == that); }

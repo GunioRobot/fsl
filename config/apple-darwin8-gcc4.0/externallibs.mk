@@ -60,7 +60,7 @@ INC_BOOST = ${BOOSTDIR}
 QWTDIR = /usr/local/qwt
 INC_QWT = ${QWTDIR}/include
 LIB_QWT = ${QWTDIR}/lib
- 
+
 # FFTW3 library
 LIB_FFTW3 = ${FSLEXTLIB}
 INC_FFTW3 = ${FSLEXTINC}/fftw3

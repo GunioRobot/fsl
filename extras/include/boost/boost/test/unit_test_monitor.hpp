@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 1.1.1.1 $
 //
-//  Description : defines specific version of execution monitor used to managed 
+//  Description : defines specific version of execution monitor used to managed
 //  run unit of test cases. Translates execution exception into error level
 // ***************************************************************************
 
@@ -36,13 +36,13 @@ namespace unit_test {
 
 class unit_test_monitor_t : public singleton<unit_test_monitor_t>, public execution_monitor {
 public:
-    enum error_level { 
+    enum error_level {
         test_fail               =  1,
         test_ok                 =  0,
-        constructor_error       = -1, 
-        unexpected_exception    = -2, 
-        os_exception            = -3, 
-        os_timeout              = -4, 
+        constructor_error       = -1,
+        unexpected_exception    = -2,
+        os_exception            = -3,
+        os_timeout              = -4,
         fatal_error             = -5,  // includes both system and user
         destructor_error        = -6
     };
@@ -68,7 +68,7 @@ BOOST_TEST_SINGLETON_INST( unit_test_monitor )
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: unit_test_monitor.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

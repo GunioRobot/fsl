@@ -16,7 +16,7 @@ href="../fsl.css"><TITLE>FSL</TITLE></HEAD>
 
 <p>After <b>bedpostx</b> has been applied it is possible to run tractography analyses using <b>probtrackx</b>.
 
-<p>To call the FDT GUI, either run <b>Fdt</b>, or run <b>fsl</b> and press the <b>FDT</b> button.  Use the top left drop down menu to select <b>PROBTRACKX</b>. 
+<p>To call the FDT GUI, either run <b>Fdt</b>, or run <b>fsl</b> and press the <b>FDT</b> button.  Use the top left drop down menu to select <b>PROBTRACKX</b>.
 
 <p>
 PROBTRACKX GUI has two main sections:
@@ -40,7 +40,7 @@ that tractography itself ALWAYS takes place in diffusion space - it is
 simply the <em>results</em> of <b>probtrackx</b> that are stored in the
 required space.  If <b>probtrackx</b> results are to be stored in a space
 other than diffusion space then you will need transformations from
-this space back into the space of the diffusion data. 
+this space back into the space of the diffusion data.
 <br><br>
 You can use the <a href="fdt_reg.html">FDT registration tab</a> to create the required transformations, which will all be stored in the <code>xfms</code> subdirectory of the bedpostX directory.<br>
 Probtrackx can take either linear (FLIRT) or nonlinear (FNIRT) transformations. In the latter case, both <i>forward</i> (diffusion to seed space) and <i>backward</i> (seed space to diffusion) transformations are needed. Eg:
@@ -66,14 +66,14 @@ A common feature for all seed specification modes is the ability to provide the 
 
 <p><h4>Single voxel</h4>
 
-<IMG ALIGN=RIGHT height=100 SRC="fdt_images/fdt_simple_tract3.gif" ALT="simple tract">  
+<IMG ALIGN=RIGHT height=100 SRC="fdt_images/fdt_simple_tract3.gif" ALT="simple tract">
 Generates a connectivity distribution from a single, user-specified voxel.
 
 <p>GUI Options: <br>
 <b>Seed reference image</b> Use the browse button to locate a reference image  (e.g., subject1.bedpostX/struct.nii.gz if seed space is structral space or subject1.bedpostX/standard.nii.gz if seed space is standard space).<br>
 <b>Seeds:</b> Enter the x,y,z co-ordinates of a single seed voxel.  Use the buttons to the right to specify whether the co-ordinates are given in voxels or millimetres. Note if the "seed space is not diffusion" is set, and the seed space reference image is the MNI152 average brain, then mm coordinates will have their origin at the AC.
 
-<p>The output will be a single image <b>in the space of the specified seed</b>.  All brain voxels will have a value (though many of these will be zero) representing the connectivity value between that voxel and the seed voxel (i.e., the number of samples that pass through that voxel).  The example on the right shows the connectivity distribution from a single seed in the internal capsule overlaid on an FA image. Note that when the seed space is a single voxel, the classification targets in the <a href="#targets">Optional Targets</a> tab is turned off. 
+<p>The output will be a single image <b>in the space of the specified seed</b>.  All brain voxels will have a value (though many of these will be zero) representing the connectivity value between that voxel and the seed voxel (i.e., the number of samples that pass through that voxel).  The example on the right shows the connectivity distribution from a single seed in the internal capsule overlaid on an FA image. Note that when the seed space is a single voxel, the classification targets in the <a href="#targets">Optional Targets</a> tab is turned off.
 
 <p><h4>Single mask</h4>
 
@@ -92,7 +92,7 @@ The output connectivity distribution file will be a single image in the space of
 
 <p><h4>Multiple masks</h4>
 
-Generates a connectivity distribution between a group of seed masks. This option repeatedly samples tracts from every seed mask in a list, and retains only those tracts that pass through at least <b>one of the other</b> seed masks. The output is the sum of the connectivity distributions from each of the seed masks. 
+Generates a connectivity distribution between a group of seed masks. This option repeatedly samples tracts from every seed mask in a list, and retains only those tracts that pass through at least <b>one of the other</b> seed masks. The output is the sum of the connectivity distributions from each of the seed masks.
 
 <p>GUI Options: <br>
 <b>Masks list</b>: Use the add button to locate each seed mask. Seed masks should all be in the same space (e.g., diffusion, structural or standard space). When all masks are loaded you can press the save list button to save the list of masks as a text file.  If you already have a text file list of required seed masks (including their path) then you can load it with the load list button.
@@ -115,11 +115,11 @@ Generates a connectivity distribution between a group of seed masks. This option
 Targets can be waypoint masks (a.k.a. inclusion masks), for selecting only tracts passing through particular points in the brain; exclusion masks, for excluding tracts passing through parts of the brain; termination masks, for forcing tracts to stop whenever they reach a certain area; or classification target masks for connectivity-based seed classification. All these targets are optional.
 
 <p><h4>Waypoint masks</h4>
-<IMG ALIGN=RIGHT height=200 SRC="fdt_images/fdt_twomasks_tracts.gif" ALT="constraining tracts"> 
+<IMG ALIGN=RIGHT height=200 SRC="fdt_images/fdt_twomasks_tracts.gif" ALT="constraining tracts">
 Use inclusion masks in the tractography. Tracts that do not pass through ALL these masks will be discarded from the calculation of the connectivity distribution.<br>
 The example on the right shows the outputs from two different analyses which use the same seed mask (orange) but different waypoint masks (red).
 <br><br>
-Use the add and remove buttons to make a list of waypoint masks. 
+Use the add and remove buttons to make a list of waypoint masks.
 <br>
 Note that the criterion to keep a streamline here is to pass through ALL the waypoint masks in the list. If you need an OR condition, i.e. you want to keep streamlines that pass through at least one of the waypoint masks, then first add all these masks with fslmaths and include the result as a single waypoint mask:<br><br>
 
@@ -128,14 +128,14 @@ fslmaths mywaypoint1 -add mywaypoint2 -add ... myORwaypoint
 </code>
 
 <p><h4>Exclusion mask</h4>
-If an <b>exclusion mask</b> is to be used then check the box and use the browse button to locate the mask file.  Pathways will be discarded if they enter the exclusion mask.  For example, an exclusion mask of the midline will remove pathways that cross into the other hemisphere. 
+If an <b>exclusion mask</b> is to be used then check the box and use the browse button to locate the mask file.  Pathways will be discarded if they enter the exclusion mask.  For example, an exclusion mask of the midline will remove pathways that cross into the other hemisphere.
 
 <p><h4>Termination mask</h4>
 If a <b>termination mask</b> is to be used then check the box and use the browse button to locate the mask file.  Pathways will be terminated as soon as they enter the termination mask.  The difference between an exclusion and a termination mask is that in the latter case, the tract is stopped at the target mask, but included in the calculation of the connectivity distribution, while in the former case, the tract is completely discarded. (Note that paths are always terminated when they reach the brain surface as defined by nodif_brain_mask)
 
 <p><h4>Classification targets</h4>
 <IMG ALIGN=RIGHT height=150 SRC="fdt_images/fdt_seeds2targets_quant_eg.gif" ALT="connectivity-based classification of thalamus">
-When using classification targets, <b>probtrackx</b> will quantify connectivity values between a seed mask and any number of user-specified target masks. This option is only active when the seed mask is a single mask. In the example on the right, seed voxels in the thalamus are classified according to the probability of connection to different cortical target masks. 
+When using classification targets, <b>probtrackx</b> will quantify connectivity values between a seed mask and any number of user-specified target masks. This option is only active when the seed mask is a single mask. In the example on the right, seed voxels in the thalamus are classified according to the probability of connection to different cortical target masks.
 <br><br>
 Use the add button to locate each target mask. Targets must be in the same space as the seed mask.  When all targets are loaded you can press the save list button to save the list of targets as a text file.  If you already have a text file list of required targets (including their path) then you can load it with the load list button.<br>
 
@@ -154,9 +154,9 @@ There are command line utilities that can be run on these outputs:
 <h3>Options Tab </h3>
 Before running <b>probtrackx</b>, the user is able to change the setting of certain parameters by clicking the <b>options</b> tab.
 
-<p><b>Number of samples</b> (default 5000): This determines the number of individual pathways (or samples) that are drawn through the probability distributions on principle fibre direction (see <a href="http://www.fmrib.ox.ac.uk/analysis/techrep/tr03tb1/tr03tb1/"> appendix </a>for more details on the modelling and tractography methods).  By default this is set to 5000 as we are confident that convergence is reached with this number of samples. However, reducing this number will speed up processing and can be useful for preliminary or exploratory analyses. 
+<p><b>Number of samples</b> (default 5000): This determines the number of individual pathways (or samples) that are drawn through the probability distributions on principle fibre direction (see <a href="http://www.fmrib.ox.ac.uk/analysis/techrep/tr03tb1/tr03tb1/"> appendix </a>for more details on the modelling and tractography methods).  By default this is set to 5000 as we are confident that convergence is reached with this number of samples. However, reducing this number will speed up processing and can be useful for preliminary or exploratory analyses.
 
-<p><b>Curvature Threshold</b> (default 0.2): We limit how sharply pathways can turn in order to exclude implausible pathways. This number is the cosine of the minimum allowable angle between two steps.  By default this is set to 0.2 (corresponding to a minimum angle of approximately &#177;80 degrees).  Adjusting this number can enable pathways with sharper angles to be detected. 
+<p><b>Curvature Threshold</b> (default 0.2): We limit how sharply pathways can turn in order to exclude implausible pathways. This number is the cosine of the minimum allowable angle between two steps.  By default this is set to 0.2 (corresponding to a minimum angle of approximately &#177;80 degrees).  Adjusting this number can enable pathways with sharper angles to be detected.
 
 <p><b>Verbose:</b> If this option is selected then FDT prints additional logging information to screen while it is running.
 

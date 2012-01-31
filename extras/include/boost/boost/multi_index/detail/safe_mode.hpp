@@ -315,9 +315,9 @@ inline bool check_outside_range(
     Iterator first=it0;
     for(;first!=last;++first){
       if(first==it1)break;
-    
+
       /* crucial that this check goes after previous break */
-    
+
       if(first==it)found=true;
     }
     if(first!=it1)return false;

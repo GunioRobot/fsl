@@ -81,7 +81,7 @@ istream& operator>>(istream &is, vector<int>& iv)
 
 ostream& operator<<(ostream &os, vector<int>& iv)
 {
-  os << "Volume " << setw(3) << iv.at(0) << 
+  os << "Volume " << setw(3) << iv.at(0) <<
     " at (" << setw(3) << iv.at(1) << "," << setw(3) << iv.at(2) << "," << setw(3) << iv.at(3) << ")";
 
   return os;
@@ -114,7 +114,7 @@ void TestImageImpl::test()
   } while( !f.eof() );
 }
 
-string title = 
+string title =
 "testimage (Version 1.0)\n\n\
 Copyright(c) 2000, University of Oxford\n\
 Dave Flitney";
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
   options.add(imagename);
   options.add(cursorfile);
 
-  for(unsigned int a = options.parse_command_line(argc, argv); 
+  for(unsigned int a = options.parse_command_line(argc, argv);
       a < argc; ) ;
 
   TestImage t;

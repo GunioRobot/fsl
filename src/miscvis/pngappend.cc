@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -81,7 +81,7 @@ void usage(void)
 
   cerr << endl << " + appends horizontally," << endl << " - appends vertically (i.e. works like a linebreak)" << endl;
   cerr << "[n] number ofgap pixels" <<  endl;
-  cerr << "note that files with .gif extension will be input/output in GIF format" << endl; 
+  cerr << "note that files with .gif extension will be input/output in GIF format" << endl;
   exit(1);
 }
 
@@ -90,7 +90,7 @@ void help()
   cerr<< endl << " pngappend  -  append PNG files horizontally and/or vertically into a new PNG (or GIF) file" << endl;
   usage();
 }
-    
+
 int max (int a, int b)
 {
   if (a<b) return b;
@@ -109,10 +109,10 @@ int main(int argc, char *argv[])
   FILE *in;
   string filename;
   bool GIFOUT;
-  // read in the first image 
+  // read in the first image
 
   if((in = fopen(argv[argidx++], "rb"))==NULL){
-    cerr << endl<< " Cannot open " << argv[argidx-1] << " for reading" << endl; 
+    cerr << endl<< " Cannot open " << argv[argidx-1] << " for reading" << endl;
     fclose(in);
     exit(1);
   }
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
   {
     rewind(in);
     if ((im_read = gdImageCreateFromGif(in))==NULL)
-    { 
+    {
       cerr << endl <<argv[argidx-1] << " is not a valid png2 or gif file" << endl;
       fclose(in);
       exit(1);
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
   };
   fclose(in);
 
-  //copy it to im_out 
+  //copy it to im_out
 
   im_out = gdImageCreateTrueColor(im_read->sx,im_read->sy); //dImageCreate rather than TrueColour for GIF - does it matter?
   gdImageCopy(im_out, im_read, 0, 0, 0, 0,im_read->sx, im_read->sy);
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
   topry = 0;
 
   while(argidx < argc-1){
-    
+
     //copy im_out to im_tmp
     im_tmp = gdImageCreateTrueColor(im_out->sx,im_out->sy);
     gdImageCopy(im_tmp, im_out, 0, 0, 0, 0,im_out->sx, im_out->sy);
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
     else if(strcmp(argv[argidx],"-")==0)
       appendh = false;
     else{
-      cerr << endl << "ERROR: use '+' or '-' to indicate horizontal or vertical concatenation" 
+      cerr << endl << "ERROR: use '+' or '-' to indicate horizontal or vertical concatenation"
 	   << endl;
        usage();
     }
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
     }
 
     if((in = fopen(argv[argidx], "rb"))==NULL){
-	cerr << endl<< " Cannot open " << argv[argidx] << " for reading" << endl; 
+	cerr << endl<< " Cannot open " << argv[argidx] << " for reading" << endl;
 	fclose(in);
 	exit(1);
     }
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     {
       rewind(in);
       if ((im_read = gdImageCreateFromGif(in))==NULL)
-      { 
+      {
         cerr << endl <<argv[argidx-1] << " is not a valid png or gif file" << endl;
         fclose(in);
         exit(1);
@@ -182,20 +182,20 @@ int main(int argc, char *argv[])
     //copy everything into img_out
     {
       int newx, newy;
-  
+
       if(!appendh){
 	toprx = 0;
 	topry = im_tmp->sy + gap;
       }else
-	toprx += gap;      
+	toprx += gap;
 
       newx = max(toprx + im_read->sx, im_tmp->sx);
       newy = max(topry + im_read->sy, im_tmp->sy);
 
       im_out = gdImageCreateTrueColor(newx,newy);
-      black = gdImageColorAllocate(im_out, 0, 0, 0); 
+      black = gdImageColorAllocate(im_out, 0, 0, 0);
       gdImageCopy(im_out, im_tmp, 0, 0, 0, 0,im_tmp->sx, im_tmp->sy);
-      gdImageCopy(im_out, im_read, toprx, topry, 0, 0, im_read->sx, im_read->sy);       
+      gdImageCopy(im_out, im_read, toprx, topry, 0, 0, im_read->sx, im_read->sy);
 
       toprx += im_read->sx;
     }
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 
     argidx++;
   }
-	
+
   //output im_out
   FILE *imageout;
   filename=string(argv[argc-1]);

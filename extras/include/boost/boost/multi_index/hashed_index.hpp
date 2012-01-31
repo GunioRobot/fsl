@@ -86,7 +86,7 @@ class hashed_index:
   BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type
 #endif
 
-{ 
+{
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
     BOOST_WORKAROUND(__MWERKS__,<=0x3003)
 /* The "ISO C++ Template Parser" option in CW8.3 has a problem with the
@@ -120,7 +120,7 @@ public:
   typedef typename allocator_type::const_pointer     const_pointer;
   typedef typename allocator_type::reference         reference;
   typedef typename allocator_type::const_reference   const_reference;
-  typedef std::size_t                                size_type;      
+  typedef std::size_t                                size_type;
   typedef std::ptrdiff_t                             difference_type;
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
@@ -149,7 +149,7 @@ public:
 protected:
   typedef typename super::final_node_type     final_node_type;
   typedef tuples::cons<
-    ctor_args, 
+    ctor_args,
     typename super::ctor_args_list>           ctor_args_list;
   typedef typename mpl::push_front<
     typename super::index_type_list,
@@ -241,7 +241,7 @@ public:
       x,static_cast<final_node_type*>(position.get_node()));
     return make_iterator(p.first);
   }
-    
+
   template<typename InputIterator>
   void insert(InputIterator first,InputIterator last)
   {
@@ -259,7 +259,7 @@ public:
     this->final_erase_(static_cast<final_node_type*>(position++.get_node()));
     return position;
   }
-  
+
   size_type erase(key_param_type x)
   {
     BOOST_MULTI_INDEX_HASHED_INDEX_CHECK_INVARIANT;
@@ -349,7 +349,7 @@ public:
   key_from_value key_extractor()const{return key;}
   hasher         hash_function()const{return hash;}
   key_equal      key_eq()const{return eq;}
-  
+
   /* lookup */
 
   /* Internally, these ops rely on const_iterator being the same
@@ -891,7 +891,7 @@ private:
     }
     return true;
   }
-  
+
   void link(node_type* x,hashed_index_node_impl* pos)
   {
     hashed_index_node_impl::link(x->impl(),pos);
@@ -983,7 +983,7 @@ private:
   float                        mlf;
   size_type                    max_load;
   std::size_t                  first_bucket;
-      
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
     BOOST_WORKAROUND(__MWERKS__,<=0x3003)
 #pragma parse_mfunc_templ reset

@@ -11,9 +11,9 @@
 //  Version     : $Revision: 1.1.1.1 $
 //
 //  Description : this is an abridged version of an excelent BOOST_FOREACH facility
-//  presented by Eric Niebler. I am so fond of it so I couldn't wait till it 
-//  going to be accepted into Boost. Also I need version with less number of dependencies 
-//  and more portable. This version doesn't support rvalues and will reeveluate it's 
+//  presented by Eric Niebler. I am so fond of it so I couldn't wait till it
+//  going to be accepted into Boost. Also I need version with less number of dependencies
+//  and more portable. This version doesn't support rvalues and will reeveluate it's
 //  parameters, but should be good enough for my purposes.
 // ***************************************************************************
 

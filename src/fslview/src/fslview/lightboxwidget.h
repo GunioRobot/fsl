@@ -15,7 +15,7 @@
 class OverlayWidget;
 class QScrollView;
 
-class LightboxWidget : public ImageWidget  
+class LightboxWidget : public ImageWidget
 {
   Q_OBJECT
 public:
@@ -29,7 +29,7 @@ public:
 
 signals:
 
-  void  volChanged(int); 
+  void  volChanged(int);
 
 public slots:
   void scrolled(int);

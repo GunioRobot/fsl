@@ -1,4 +1,4 @@
-/* 
+/*
  * tkMacConfig.c --
  *
  *	This module implements the Macintosh system defaults for

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclThreadJoin.c --
  *
  *	This file implements a platform independent emulation layer for
@@ -94,7 +94,7 @@ TclJoinThread(id, result)
      * iv.   Error out if some other is already waiting.
      * v.    Skip the waiting part of the thread is already done.
      * vi.   Wait for the thread to exit, mark it as waited upon too.
-     * vii.  Get the result form the structure, 
+     * vii.  Get the result form the structure,
      * viii. switch to exclusive access of the list,
      * ix.   remove the structure from the list,
      * x.    then switch back to exclusive access to the structure

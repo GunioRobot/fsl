@@ -88,7 +88,7 @@ struct dynamic_cast_generator
         return dynamic_cast<Target*>(
             static_cast<Source*>(source));
     }
-        
+
 };
 
 template <class Source, class Target>

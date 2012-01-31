@@ -8,7 +8,7 @@
 
 #if !defined(__f2z_h)
 #define __f2z_h
-  
+
 #include <iostream>
 #include <fstream>
 #include "newmatap.h"
@@ -25,7 +25,7 @@ namespace MISCMATHS {
     public:
       static F2z& getInstance();
       ~F2z() { delete f2z; }
-      
+
       float convert(float f, int d1, int d2);
 
       static void ComputeFStats(const ColumnVector& p_fs, int p_dof1, int p_dof2, ColumnVector& p_zs);
@@ -35,10 +35,10 @@ namespace MISCMATHS {
     private:
       F2z() : Base2z()
 	{}
-      
+
       const F2z& operator=(F2z&);
       F2z(F2z&);
-      
+
       bool issmalllogp(float logp);
       bool islargef(float t, int d1, int d2, float &logp);
       float largef2logp(float t, int d1, int d2);
@@ -46,11 +46,11 @@ namespace MISCMATHS {
       static F2z* f2z;
 
     };
- 
+
   inline F2z& F2z::getInstance(){
     if(f2z == NULL)
       f2z = new F2z();
-  
+
     return *f2z;
   }
 

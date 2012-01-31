@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -87,10 +87,10 @@ namespace FILM {
     Tracer tr("AutoCorrEstimator::setDesignMatrix");
 
     int numPars = dm.Ncols();
-    
+
     dminFFTReal.ReSize(zeropad, numPars);
     dminFFTImag.ReSize(zeropad, numPars);
-      
+
     ColumnVector dmrow;
     dmrow.ReSize(zeropad);
 
@@ -109,10 +109,10 @@ namespace FILM {
 	dmrow.Rows(1,sizeTS) = dm.Column(k) - dm_mn(k);
 
 	FFT(dmrow, dummy, dm_fft_real, dm_fft_imag);
-	
+
 	dminFFTImag.Column(k) = dm_fft_imag;
 	dminFFTReal.Column(k) = dm_fft_real;
-      } 
+      }
   }
 
   void AutoCorrEstimator::preWhiten(const ColumnVector& in, ColumnVector& ret, int i, Matrix& dmret, bool highfreqremovalonly) {
@@ -128,10 +128,10 @@ namespace FILM {
       vrow.Rows(1,sizeTS/2) = acEst.Column(i).Rows(1,sizeTS/2);
       vrow.Rows(zeropad - sizeTS/2 + 2, zeropad) = acEst.Column(i).Rows(2, sizeTS/2).Reverse();
 
-      FFT(vrow, dummy, ac_fft_real, ac_fft_im);      
+      FFT(vrow, dummy, ac_fft_real, ac_fft_im);
 
       float norm = ac_fft_real.SumSquare();
-      
+
       // Compare with raw FFT to detect high frequency artefacts:
       bool violate = false;
       ColumnVector violators(zeropad);
@@ -141,10 +141,10 @@ namespace FILM {
 	  if(highfreqremovalonly)
 	    {
 	      E(j,i) = sqrt(E(j,i)/((ac_fft_real(j)*ac_fft_real(j))/norm));
-	      
+
 	      // look for high frequency artefacts
 	      if(E(j,i) > 4 && j > zeropad/4 && j < 3*zeropad/4)
-		{	  
+		{
 		  violate = true;
 		  violators(j) = 0;
 		  countLargeE(j) = countLargeE(j) + 1;
@@ -156,9 +156,9 @@ namespace FILM {
       dummy = 0;
       xrow = 0;
       xrow.Rows(1,sizeTS) = in;
-     
+
       FFT(xrow, dummy, x_fft_real, x_fft_im);
-      
+
       if(highfreqremovalonly)
 	{
 	  ac_fft_real = violators;
@@ -168,10 +168,10 @@ namespace FILM {
 	  // inverse auto corr to give prewhitening filter
 	  // no DC component so set first value to 0
 	  ac_fft_real(1) = 0.0;
-      
+
 	  for(int j = 2; j <= zeropad; j++)
 	    {
-	      ac_fft_real(j) = 1.0/sqrt(fabs(ac_fft_real(j)));	      
+	      ac_fft_real(j) = 1.0/sqrt(fabs(ac_fft_real(j)));
 	    }
 	}
 
@@ -193,21 +193,21 @@ namespace FILM {
 
       // Do filtering of data:
       FFTI(SP(ac_fft_real, x_fft_real), SP(ac_fft_real, x_fft_im), realifft, dummy);
-      
+
       // place result into ret:
-      ret = realifft.Rows(1,sizeTS);     
+      ret = realifft.Rows(1,sizeTS);
 
     }
 
   Matrix AutoCorrEstimator::fitAutoRegressiveModel()
     {
       Tracer trace("AutoCorrEstimator::fitAutoRegressiveModel");
-      
+
       cerr << "Fitting autoregressive model..." << endl;
-      
+
       const int maxorder = 15;
       const int minorder = 1;
-      
+
       // setup temp variables
       ColumnVector x(sizeTS);
       ColumnVector order(numTS);
@@ -216,7 +216,7 @@ namespace FILM {
       acEst.ReSize(sizeTS, numTS);
       acEst = 0;
       int co = 1;
-       
+
       for(int i = 1; i <= numTS; i++)
 	{
 	  x = xdata.Column(i);
@@ -235,10 +235,10 @@ namespace FILM {
 		  Krow.Rows(sizeTS-int(order(i)), sizeTS-1) = -betastmp.Rows(1,int(order(i))).Reverse();
 		  betas.SubMatrix(1,int(order(i)),i,i) = betastmp.Rows(1,int(order(i)));
 		}
-	      
+
 	      Matrix Kinv(sizeTS, sizeTS);
 	      Kinv = 0;
-  
+
 	      for(int j = 1; j <= sizeTS; j++)
 		{
 		  if(order(i)==1)
@@ -250,7 +250,7 @@ namespace FILM {
 			}
 		    }
 		  else
-		    Kinv.SubMatrix(j,j,1,j) = Krow.Rows(sizeTS-j+1,sizeTS).t();		  
+		    Kinv.SubMatrix(j,j,1,j) = Krow.Rows(sizeTS-j+1,sizeTS).t();
 		}
 
 	      // Kinv now becomes V:
@@ -258,7 +258,7 @@ namespace FILM {
 		Kinv = (Kinv.t()*Kinv).i();
 
 	      acEst.SubMatrix(1,sizeTS/2+1,i,i) = (Kinv.SubMatrix(sizeTS/2, sizeTS/2, sizeTS/2, sizeTS)/Kinv.MaximumAbsoluteValue()).AsColumn();
-	      
+
 	      if(co > 200)
 		{
 		  co = 1;
@@ -268,23 +268,23 @@ namespace FILM {
 		co++;
 	    }
 	}
-      
+
       write_ascii_matrix(LogSingleton::getInstance().appendDir("order"), order);
       write_ascii_matrix(LogSingleton::getInstance().appendDir("betas"), betas);
       countLargeE = 0;
-      cerr << " Completed" << endl; 
+      cerr << " Completed" << endl;
       return(betas);
     }
 
   int AutoCorrEstimator::pacf(const ColumnVector& x, int minorder, int maxorder, ColumnVector& betas)
-    { 
+    {
       Tracer ts("pacf");
       int order = -1;
 
       // Set c
       Matrix c(1,1);
       c(1,1) = 1;
-      
+
       Glm glm;
 
       for(int i = minorder+1; i <= maxorder+1; i++)
@@ -294,30 +294,30 @@ namespace FILM {
 	  // Setup design matrix
 	  Matrix X(sizeTS-i, i);
 	  X = 0;
-	  
+
 	  for(int j = 1; j <= i; j++)
 	    {
-	      X.Column(j) = x.Rows(i+1-j,sizeTS-j).AsColumn();	    
+	      X.Column(j) = x.Rows(i+1-j,sizeTS-j).AsColumn();
 	    }
-	  
+
 	  glm.setData(y, X, c);
-	  
+
 	  glm.ComputeResids();
 	  betas = glm.Getb();
-	  
-	  if((abs(betas(i)) < (1/sizeTS) + (2/pow(sizeTS,0.5)) && order == -1) 
+
+	  if((abs(betas(i)) < (1/sizeTS) + (2/pow(sizeTS,0.5)) && order == -1)
 	     || i == maxorder+1)
-          {      
+          {
 	    order = i-1;
 	    break;
 	  }
 	}
-      return order; 
+      return order;
     }
- 
+
   int AutoCorrEstimator::establishUsanThresh(const ColumnVector& epivol)
     {
-      int usanthresh = 100;      
+      int usanthresh = 100;
       int num = epivol.Nrows();
       Histogram hist(epivol, max(num/200,1));
       hist.generate();
@@ -341,18 +341,18 @@ namespace FILM {
       usanthresh = sig/3;
 
       return usanthresh;
-    } 
+    }
 
   void AutoCorrEstimator::spatiallySmooth(const string& usanfname, const ColumnVector& epivol, int masksize, const string& epifname, int usan_thresh, const volume<float>& usan_vol, int lag) {
     Tracer trace("AutoCorrEstimator::spatiallySmooth");
-    
+
     if(numTS<=1)
       {
 	cerr << "Warning: Number of voxels = " << numTS << ". Spatial smoothing of autocorrelation estimates is not carried out" << endl;
       }
     else
       {
-	
+
 	if(lag==0)
 	  lag = MISCMATHS::Min(40,int(sizeTS/4));
 
@@ -361,14 +361,14 @@ namespace FILM {
 	volume4D<float> susan_vol(mask.xsize(),mask.ysize(),mask.zsize(),1);
 	volume<float> usan_area(mask.xsize(),mask.ysize(),mask.zsize());
 	volume<float> kernel;
-	kernel = gaussian_kernel3D(masksize,mask.xdim(),mask.ydim(),mask.zdim(),2.0);	
+	kernel = gaussian_kernel3D(masksize,mask.xdim(),mask.ydim(),mask.zdim(),2.0);
 	int factor = 10000;
 	cerr << "Spatially smoothing auto corr estimates" << endl;
-	
+
 	for(int i=2 ; i <= lag; i++)
 	  {
 	    // setup susan input
-	    susan_vol.setmatrix(acEst.Row(i),mask); 
+	    susan_vol.setmatrix(acEst.Row(i),mask);
 	    susan_vol*=factor;
 	    susan_vol[0]=susan_convolve(susan_vol[0],kernel,1,0,1,&usan_area,usan_vol,usan_thresh*usan_thresh);
 	    // insert output back into acEst
@@ -376,20 +376,20 @@ namespace FILM {
 	    acEst.Row(i)=susan_vol.matrix(mask);
 	    cerr << ".";
 	  }
-	
+
 	cerr << endl << "Completed" << endl;
       }
   }
-  
-  void AutoCorrEstimator::calcRaw(int lag) { 
-    
-    cerr << "Calculating raw AutoCorrs...";      
+
+  void AutoCorrEstimator::calcRaw(int lag) {
+
+    cerr << "Calculating raw AutoCorrs...";
 
     MISCMATHS::xcorr(xdata, acEst, lag, zeropad);
 
-    cerr << " Completed" << endl;  
+    cerr << " Completed" << endl;
   }
-  
+
   void AutoCorrEstimator::filter(const ColumnVector& filterFFT) {
 
     Tracer tr("AutoCorrEstimator::filter");
@@ -406,7 +406,7 @@ namespace FILM {
 
     ColumnVector fft_real;
     ColumnVector fft_im;
-    ColumnVector dummy(zeropad);    
+    ColumnVector dummy(zeropad);
     ColumnVector realifft(zeropad);
 
     for(int i = 1; i <= numTS; i++)
@@ -415,29 +415,29 @@ namespace FILM {
 	vrow = 0;
 	vrow.Rows(1,sizeTS/2) = acEst.Column(i).Rows(1,sizeTS/2);
 	vrow.Rows(zeropad - sizeTS/2 + 2, zeropad) = acEst.Column(i).Rows(2, sizeTS/2).Reverse();
-      
+
 	FFT(vrow, dummy, fft_real, fft_im);
 
 	FFTI(SP(fft_real, filterFFT), dummy, realifft, dummy);
-	
+
 	// place result into acEst:
 	acEst.Column(i) = realifft.Rows(1,sizeTS)/realifft(1);
       }
 
     cerr << " Completed" << endl;
-    
+
   }
 
   void AutoCorrEstimator::multitaper(int M) {
     Tracer tr("AutoCorrEstimator::multitaper");
-    
+
     cerr << "Multitapering... ";
 
     Matrix slepians;
     getSlepians(M, sizeTS, slepians);
 
     //LogSingleton::getInstance().out("slepians", slepians, false);
-    
+
     ColumnVector x(zeropad);
     x = 0;
     ColumnVector fft_real;
@@ -446,18 +446,18 @@ namespace FILM {
     ColumnVector dummy2;
     ColumnVector realifft(zeropad);
     dummy = 0;
-    
+
     Matrix Sk(zeropad, slepians.Ncols());
     acEst.ReSize(sizeTS, numTS);
     acEst = 0;
 
-    for(int i = 1; i <= numTS; i++) 
+    for(int i = 1; i <= numTS; i++)
       {
 	// Compute FFT for each slepian taper
-	for(int k = 1; k <= slepians.Ncols(); k++) 
+	for(int k = 1; k <= slepians.Ncols(); k++)
 	  {
 	    x.Rows(1,sizeTS) = SP(slepians.Column(k), xdata.Column(i));
-	   
+
 	    FFT(x, dummy, fft_real, fft_im);
 	    for(int j = 1; j <= zeropad; j++)
 	    {
@@ -472,7 +472,7 @@ namespace FILM {
 	for(int j = 1; j <= zeropad; j++)
 	  {
 	    fft_real(j) = MISCMATHS::mean(ColumnVector(Sk.Row(j).t())).AsScalar();
-	    
+
 	  }
 
 	// IFFT to get autocorr
@@ -480,7 +480,7 @@ namespace FILM {
 	//LogSingleton::getInstance().out("Sk", Sk, false);
 	//LogSingleton::getInstance().out("realifft", realifft);
 	//LogSingleton::getInstance().out("fftreal", fft_real);
-	
+
 	float varx = MISCMATHS::var(ColumnVector(x.Rows(1,sizeTS))).AsScalar();
 	acEst.Column(i)=realifft.Rows(1,sizeTS)/varx;
       }
@@ -489,60 +489,60 @@ namespace FILM {
   }
 
   void AutoCorrEstimator::getSlepians(int M, int sizeTS, Matrix& slepians) {
-    
+
     Tracer tr("AutoCorrEstimator::getSlepians");
     slepians.ReSize(sizeTS, 2*M);
-    
+
     ifstream in;
-    
+
     ostringstream osc;
     osc << sizeTS << "_" << M;
-	
+
     string fname("/usr/people/woolrich/parads/mt_" + osc.str());
     in.open(fname.c_str(), ios::in);
     if(!in)
       throw Exception("Multitapering: Slepians file not found");
-   
-    for(int j = 1; j <= sizeTS; j++) 
+
+    for(int j = 1; j <= sizeTS; j++)
       {
-	for(int i = 1; i <= 2*M; i++) 
+	for(int i = 1; i <= 2*M; i++)
 	  {
 	    in >> slepians(j,i);
 	  }
-      }	
+      }
 
     in.close();
   }
 
   void AutoCorrEstimator::tukey(int M) {
-    
+
     Tracer tr("AutoCorrEstimator::tukey");
 
     cerr << "Tukey M = " << M << endl;
 
     cerr << "Tukey estimates... ";
-	
+
     ColumnVector window(M);
 
     for(int j = 1; j <= M; j++)
       {
 	window(j) = 0.5*(1+cos(M_PI*j/(float(M))));
       }
-    
+
     for(int i = 1; i <= xdata.Ncols(); i++) {
-	
+
 	acEst.SubMatrix(1,M,i,i) = SP(acEst.SubMatrix(1,M,i,i),window);
 	acEst.SubMatrix(M+1,sizeTS,i,i) = 0;
-	
+
     }
     countLargeE = 0;
     cerr << "Completed" << endl;
   }
 
   void AutoCorrEstimator::pava() {
-    
+
     Tracer tr("AutoCorrEstimator::pava");
-    
+
     cerr << "Using New PAVA on AutoCorr estimates... ";
 
     for(int i = 1; i <= numTS; i++) {
@@ -559,7 +559,7 @@ namespace FILM {
 	ColumnVector gm(stopat + 1);
 	for(int j = 1; j <= stopat + 1; ++j)
 	  gm(j) = j;
-	  
+
 	ColumnVector weights(stopat+1);
 	weights = 1;
 
@@ -567,7 +567,7 @@ namespace FILM {
 
 	while(anyviolators) {
 	  anyviolators = false;
-	  
+
 	  for(int k = 2; k <= values.Nrows(); k++) {
 	    if(values(k) > values(k-1)) {
 	      anyviolators = true;
@@ -577,7 +577,7 @@ namespace FILM {
 	      weights = weights.Rows(1,k-1) & weights.Rows(k+1,weights.Nrows());
 
 	      for(int j = 1; j <= stopat + 1; j++) {
-		if(gm(j) >= k)  
+		if(gm(j) >= k)
 		  gm(j) = gm(j)-1;
 	      }
 
@@ -585,12 +585,12 @@ namespace FILM {
 	    }
 	  }
 	}
-	
+
 	acEst.Column(i) = 0.0;
 	int j=1;
 
 	for(; j <= stopat; j++) {
-	  
+
 	  acEst(j,i) = values(int(gm(j)));
 	  if(acEst(j,i) <= 0.0)
 	    {
@@ -598,33 +598,33 @@ namespace FILM {
 	      break;
  	    }
 	}
-	
+
 	if(acEst(2,i) < th/2)
 	{
 	acEst.SubMatrix(2,stopat,i,i) = 0;
 	}
 
 	else if(j > 2)
-	  //if(j > 2)  
+	  //if(j > 2)
 	  {
 	    int endst = j;
 	    int stst = j-(int)(1+(j/8.0));
 
 	    const int expwidth = MISCMATHS::Max((endst - stst)/2,1);
 	    const int exppow = 2;
-	
+
 	    for(j = stst; j <= endst; j++)
 	      {
 		acEst(j,i) = acEst(j,i)*exp(-MISCMATHS::pow((j-stst)/float(expwidth),int(exppow)));
-	      }	
+	      }
 	  }
-	
+
     }
     countLargeE = 0;
 
     cerr << " Completed" << endl;
   }
-  
+
   void AutoCorrEstimator::applyConstraints() {
 
     Tracer tr("AutoCorrEstimator::applyConstraints");
@@ -652,24 +652,24 @@ namespace FILM {
 	    float grad = 0.0;
 
 	    while(j <= stopat && j < found1 + 2)
-	      {    
+	      {
 		grad = ((acEst(j,i) + acEst(j+1,i))/2 - acEst(j-1,i))/1.5;
 		if(grad < 0)
 		  acEst(j,i) = grad + acEst(j-1,i);
 		else
 		  acEst(j,i) = acEst(j-1,i);
-		
+
 		// look for threshold
 		if(acEst(j,i) < thresh/3.0 && found1 == stopat)
 		  {
 		    found1 = j;
 		  }
-	   
+
 		if(acEst(j,i) < 0)
 		  {
 		    acEst(j,i) = 0;
 		  }
-		
+
 		j++;
 	      }
 	  }

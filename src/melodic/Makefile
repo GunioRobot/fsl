@@ -2,7 +2,7 @@
 
 include ${FSLCONFDIR}/default.mk
 
-OPTFLAGS = -O3 -Wno-deprecated 
+OPTFLAGS = -O3 -Wno-deprecated
 OPTFLAGS_alphaev6-dec-osf 5.0-gcc2.95.2 = -O3 -mieee -mfp-trap-mode=sui
 
 PROJNAME = melodic
@@ -12,7 +12,7 @@ USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_PROB} -L${LIB_GD} -L${LIB_GDC} -L${LIB_PNG}
 
 LIBS = -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lfslio -lniftiio -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
 
-TEST_OBJS = test.o 
+TEST_OBJS = test.o
 
 GGMIX_OBJS = ggmix.o
 
@@ -24,7 +24,7 @@ FSL_MVLM_OBJS = melhlprfns.o fsl_mvlm.o
 
 FSL_REGFILT_OBJS = melhlprfns.o fsl_regfilt.o
 
-MELODIC_OBJS =  meloptions.o melhlprfns.o melgmix.o meldata.o melpca.o melica.o melreport.o melodic.o 
+MELODIC_OBJS =  meloptions.o melhlprfns.o melgmix.o meldata.o melpca.o melica.o melreport.o melodic.o
 
 TESTXFILES = test
 
@@ -37,7 +37,7 @@ SCRIPTS = melodicreport
 all: ggmix fsl_regfilt fsl_glm fsl_mvlm fsl_sbca melodic
 
 ggmix: ${GGMIX_OBJS}
-	${AR} -r libggmix.a ${GGMIX_OBJS} 
+	${AR} -r libggmix.a ${GGMIX_OBJS}
 
 melodic: ${MELODIC_OBJS}
 	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o $@ ${MELODIC_OBJS} ${LIBS}

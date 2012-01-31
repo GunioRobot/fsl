@@ -11,7 +11,7 @@ void NLLSInferenceTechnique::Setup(ArgsType& args)
   Tracer_Plus tr("NLLSInferenceTechnique::Setup");
   model = FwdModel::NewFromName(args.Read("model"), args);
   assert( model->NumParams() > 0 );
-  LOG_ERR("    Forward Model version:\n      " 
+  LOG_ERR("    Forward Model version:\n      "
 	  << model->ModelVersion() << endl);
 
   //determine whether NLLS is being run in isolation or as a pre-step for VB (alters what we do if result is ill conditioned)
@@ -40,7 +40,7 @@ void NLLSInferenceTechnique::DoCalculations(const DataSet& allData)
   int Nvoxels = data.Ncols();
   int Nsamples = data.Nrows();
   if (data.Nrows() != model->NumOutputs())
-    throw Invalid_option("Data length (" 
+    throw Invalid_option("Data length ("
       + stringify(data.Nrows())
       + ") does not match model's output length ("
       + stringify(model->NumOutputs())
@@ -49,7 +49,7 @@ void NLLSInferenceTechnique::DoCalculations(const DataSet& allData)
   for (int voxel = 1; voxel <= Nvoxels; voxel++)
     {
       ColumnVector y=data.Column(voxel);
-      
+
       LOG_ERR("  Voxel " << voxel << " of " << Nvoxels << endl);
 
       MVNDist fwdPosterior;
@@ -69,8 +69,8 @@ void NLLSInferenceTechnique::DoCalculations(const DataSet& allData)
       ColumnVector nlinics = initialFwdPosterior->means;
       nlinpar.SetStartingEstimate(nlinics);
       nlinpar.LogPar( true);nlinpar.LogCF(true);
-      
- 
+
+
       try {
 	NonlinOut status = nonlin(nlinpar,costfn);
 
@@ -93,21 +93,21 @@ void NLLSInferenceTechnique::DoCalculations(const DataSet& allData)
 	/* this is inv(J'*J)*mse?*/
 	double sqerr = costfn.cf( fwdPosterior.means );
 	double mse = sqerr/(Nsamples - Nparams);
-	
+
 	/*	Matrix Q = J;
 	UpperTriangularMatrix R;
 	QRZ(Q,R);
 	Matrix Rinv = R.i();
 	SymmetricMatrix nllscov;
 	nllscov = Rinv.t()*Rinv*mse;
-	
+
 	fwdPosterior.SetCovariance( nllscov );*/
 
-	
+
 	SymmetricMatrix nllsprec;
       	nllsprec << J.t()*J/mse;
-	
-	// look for zero diagonal elements (implies parameter is not observable) 
+
+	// look for zero diagonal elements (implies parameter is not observable)
 	//and set precision small, but non-zero - so that covariance can be calculated
 	for (int i=1; i<=nllsprec.Nrows(); i++)
 	  {
@@ -125,9 +125,9 @@ catch (Exception)
 	{
 	  LOG_ERR("   NEWMAT Exception in this voxel:\n"
 		  << Exception::what() << endl);
-	  
+
 	  //if (haltOnBadVoxel) throw;
-    
+
 	  LOG_ERR("   Estimates in this voxel may be unreliable" <<endl
 		  << "(precision matrix will be set manually)" <<endl
 		  << "   Going on to the next voxel" << endl);
@@ -137,10 +137,10 @@ catch (Exception)
 
 	    // recenter linearized model on new parameters
 	    linear.ReCentre( fwdPosterior.means );
-	    
+
 	    // precision matrix is probably singular so set manually
 	    fwdPosterior.SetPrecisions(  I*1e-12 );
-	 
+
 	}
 
       resultMVNs.push_back(new MVNDist(fwdPosterior));
@@ -199,7 +199,7 @@ boost::shared_ptr<BFMatrix> NLLSCF::hess(const ColumnVector& p, boost::shared_pt
     {
       hessm = boost::shared_ptr<BFMatrix>(new FullBFMatrix(p.Nrows(),p.Nrows()));
     }
-  
+
   // need to recenter the linearised model to the current parameter values
   linear.ReCentre( p );
   const Matrix& J = linear.Jacobian();
@@ -211,4 +211,4 @@ boost::shared_ptr<BFMatrix> NLLSCF::hess(const ColumnVector& p, boost::shared_pt
 
   return(hessm);
   }
-  
+

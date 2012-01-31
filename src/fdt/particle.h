@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 //                                                              //
-//           NB - Everything in this Class is in voxels!!       // 
+//           NB - Everything in this Class is in voxels!!       //
 //                                                              //
 //////////////////////////////////////////////////////////////////
 #include <iostream>
@@ -86,7 +86,7 @@ using namespace std;
 namespace PARTICLE{
 
   class Particle
-    { 
+    {
       float m_x;
       float m_y;
       float m_z;
@@ -116,14 +116,14 @@ namespace PARTICLE{
 	       const float& ydimin,
 	       const float& zdimin,
 	       const bool& hasjumpedin=false,
-	       const bool& simdiffin=false) : 
-	m_x(xin), m_y(yin), m_z(zin), m_rx(rxin),m_ry(ryin),m_rz(rzin),m_rx_init(rxin), 
+	       const bool& simdiffin=false) :
+	m_x(xin), m_y(yin), m_z(zin), m_rx(rxin),m_ry(ryin),m_rz(rzin),m_rx_init(rxin),
 	m_ry_init(ryin),m_rz_init(rzin),m_steplength(steplengthin),
 	m_xdim(xdimin),m_ydim(ydimin),m_zdim(zdimin),
 	m_has_jumped(hasjumpedin),m_simdiff(false){}
       Particle(){}
       ~Particle(){}
-      
+
       //initialise
       void initialise(const float& xin=0,const float& yin=0,
 		      const float& zin=0,const float& rxin=0,
@@ -134,11 +134,11 @@ namespace PARTICLE{
 		 const float& zdimin=2,
 		 const bool& hasjumpedin=false,
 		 const bool& simdiffin=false){
-       
+
 	m_x=xin;
 	m_y=yin;
 	m_z=zin;
-	m_rx=rxin; 
+	m_rx=rxin;
 	m_ry=ryin;
 	m_rz=rzin;
         m_rx_init=rxin;
@@ -152,24 +152,24 @@ namespace PARTICLE{
 	m_simdiff=simdiffin;
 
       }
-      
-      
+
+
       //return values
       const float& x() const { return m_x; }
       float x() { return m_x; }
-      
+
       const float& y() const { return m_y; }
       float y() { return m_y; }
-  
+
       const float& z() const { return m_z; }
       float z() { return m_z; }
-  
+
       const float& rx() const { return m_rx; }
       float rx() { return m_rx; }
-  
+
       const float& ry() const { return m_ry; }
       float ry() { return m_ry; }
-  
+
       const float& rz() const { return m_rz; }
       float rz() { return m_rz; }
 
@@ -181,10 +181,10 @@ namespace PARTICLE{
 
       const float& testz() const { return m_testz; }
       float testz() { return m_testz; }
-      
+
       const float& steplength() const { return m_steplength; }
       float steplength() { return m_steplength; }
-      
+
       //change values
       void change_x (float new_x) { m_x=new_x; }
       void change_y (float new_y) { m_y=new_y; }
@@ -193,8 +193,8 @@ namespace PARTICLE{
 	 m_x=new_x;
 	 m_y=new_y;
 	 m_z=new_z;
-      } 
-      void change_steplength (float new_sl) { m_steplength = new_sl; } 
+      }
+      void change_steplength (float new_sl) { m_steplength = new_sl; }
       void reset(){
 	m_x=0;m_y=0;m_z=0;m_rx=0;m_ry=0;m_rz=0;m_has_jumped=false;
       }
@@ -223,16 +223,16 @@ namespace PARTICLE{
 	m_y += sign*m_steplength/m_ydim*ry_new;
 	m_z += sign*m_steplength/m_zdim*rz_new;
 	m_rx=sign*rx_new; m_ry=sign*ry_new;m_rz=sign*rz_new;
-	
+
 	if(init){
 	  m_rx_init=m_rx;
 	  m_ry_init=m_ry;
 	  m_rz_init=m_rz;
 	}
-	
-	
+
+
       }
-     
+
 
       void testjump(const float& theta,const float& phi){
 	float rx_new=cos(phi)*sin(theta);
@@ -257,30 +257,30 @@ namespace PARTICLE{
 	m_testx = m_x+sign*m_steplength/m_xdim*rx_new;
 	m_testy = m_y+sign*m_steplength/m_ydim*ry_new;
 	m_testz = m_z+sign*m_steplength/m_zdim*rz_new;
-	
+
 	if(init){
 	  m_rx_init=m_rx;
 	  m_ry_init=m_ry;
 	  m_rz_init=m_rz;
 	}
-	
+
       }
-      
-      
+
+
       void restart_reverse(){
 	if(m_has_jumped){
 	  m_rx=-m_rx_init;
 	  m_ry=-m_ry_init;
 	  m_rz=-m_rz_init;
 	}
-	
+
       }
 
       void set_dir(const float& rx,const float& ry,const float& rz){
 	m_rx=rx;m_ry=ry;m_rz=rz;m_has_jumped=true;
       }
-      
-      
+
+
       bool check_dir(const float& theta,const float& phi, const float& thr){
 	if(m_has_jumped){
 	  float rx_new=cos(phi)*sin(theta);
@@ -302,14 +302,14 @@ namespace PARTICLE{
 	  tmpps=fabs((sin(th[i])*(cos(ph[i])*m_rx+sin(ph[i])*m_ry)+cos(th[i])*m_rz));
 	  r = tmpps > ps ? i : r;
 	}
-	
+
 	return r;
-	
+
       }
 
 
       friend ostream& operator<<(ostream& ostr,const Particle& p);
-  
+
 
     };
 
@@ -319,7 +319,7 @@ namespace PARTICLE{
     return ostr;
   }
 
-  
+
 
 
 }

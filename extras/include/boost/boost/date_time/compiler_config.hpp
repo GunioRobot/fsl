@@ -11,7 +11,7 @@
 
 // With boost release 1.33, date_time will be using a different,
 // more flexible, IO system. This new system is not compatible with
-// old compilers. The original date_time IO system remains for those 
+// old compilers. The original date_time IO system remains for those
 // compilers. They must define this macro to use the legacy IO.
 #if ((defined(__GNUC__) && (__GNUC__ < 3))                    || \
      (defined(_MSC_VER) && (_MSC_VER <= 1300) )               || \
@@ -25,7 +25,7 @@
 
 #include "boost/date_time/locale_config.hpp" //set up locale configurations
 
-//Set up a configuration parameter for platforms that have 
+//Set up a configuration parameter for platforms that have
 //GetTimeOfDay
 #if defined(BOOST_HAS_GETTIMEOFDAY) || defined(BOOST_HAS_FTIME)
 #define BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
@@ -61,7 +61,7 @@
 
 
 // Borland v5.64 does not have the following in std namespace; v5.5.1 does
-#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x0564) 
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x0564)
 #include <locale>
 namespace std {
   using stlport::tolower;
@@ -70,11 +70,11 @@ namespace std {
 }
 #endif
 
-// workaround for errors associated with output for date classes 
-// modifications and input streaming for time classes. 
+// workaround for errors associated with output for date classes
+// modifications and input streaming for time classes.
 // Compilers affected are:
 // gcc295, msvc (neither with STLPort), any borland
-// 
+//
 #if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
       (defined(_MSC_VER) && (_MSC_VER <= 1200)) ) && \
       !defined(_STLP_OWN_IOSTREAMS) ) || \
@@ -84,13 +84,13 @@ namespace std {
 
 /* The following handles the definition of the necessary macros
  * for dll building on Win32 platforms.
- * 
- * For code that will be placed in the date_time .dll, 
+ *
+ * For code that will be placed in the date_time .dll,
  * it must be properly prefixed with BOOST_DATE_TIME_DECL.
  * The corresponding .cpp file must have BOOST_DATE_TIME_SOURCES
  * defined before including its header. For examples see:
  * greg_month.hpp & greg_month.cpp
- * 
+ *
  */
 
 #ifdef BOOST_HAS_DECLSPEC // defined in config system
@@ -114,8 +114,8 @@ namespace std {
 #endif
 
 //
-// Automatically link to the correct build variant where possible. 
-// 
+// Automatically link to the correct build variant where possible.
+//
 #if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_DATE_TIME_NO_LIB) && !defined(BOOST_DATE_TIME_SOURCE)
 //
 // Set the name of our library, this will get undef'ed by auto_link.hpp
@@ -134,7 +134,7 @@ namespace std {
 #include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
 
-#if defined(BOOST_HAS_THREADS) 
+#if defined(BOOST_HAS_THREADS)
 #  if defined(_MSC_VER) || defined(__MWERKS__) || defined(__MINGW32__) ||  defined(__BORLANDC__)
      //no reentrant posix functions (eg: localtime_r)
 #  else

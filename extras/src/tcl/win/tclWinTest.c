@@ -1,4 +1,4 @@
-/* 
+/*
  * tclWinTest.c --
  *
  *	Contains commands for platform specific tests on Windows.
@@ -50,7 +50,7 @@ static int	TestwincpuidCmd _ANSI_ARGS_(( ClientData dummy,
 					      Tcl_Interp* interp,
 					      int objc,
 					      Tcl_Obj *CONST objv[] ));
-static int	TestplatformChmod _ANSI_ARGS_((CONST char *nativePath, 
+static int	TestplatformChmod _ANSI_ARGS_((CONST char *nativePath,
 						 int pmode));
 static int	TestchmodCmd _ANSI_ARGS_((ClientData dummy,
 		  Tcl_Interp *interp, int argc, CONST84 char **argv));
@@ -218,7 +218,7 @@ TestvolumetypeCmd(clientData, interp, objc, objv)
     } else {
 	path = NULL;
     }
-    found = GetVolumeInformationA(path, NULL, 0, NULL, NULL, 
+    found = GetVolumeInformationA(path, NULL, 0, NULL, NULL,
 	    NULL, volType, VOL_BUF_SIZE);
 
     if (found == 0) {
@@ -355,7 +355,7 @@ TestwincpuidCmd( ClientData dummy,
     }
     status = TclWinCPUID( (unsigned int) index, regs );
     if ( status != TCL_OK ) {
-	Tcl_SetObjResult( interp, Tcl_NewStringObj( "operation not available", 
+	Tcl_SetObjResult( interp, Tcl_NewStringObj( "operation not available",
 						    -1 ) );
 	return status;
     }
@@ -364,7 +364,7 @@ TestwincpuidCmd( ClientData dummy,
     }
     Tcl_SetObjResult( interp, Tcl_NewListObj( 4, regsObjs ) );
     return TCL_OK;
-       
+
 }
 
 /*
@@ -520,7 +520,7 @@ TestExceptionCmd(
     return TCL_OK;
 }
 
-static int 
+static int
 TestplatformChmod(CONST char *nativePath, int pmode)
 {
     SID_IDENTIFIER_AUTHORITY userSidAuthority =
@@ -534,10 +534,10 @@ TestplatformChmod(CONST char *nativePath, int pmode)
     static getSidLengthRequiredDef getSidLengthRequiredProc;
     static initializeSidDef initializeSidProc;
     static getSidSubAuthorityDef getSidSubAuthorityProc;
-    static const SECURITY_INFORMATION infoBits = OWNER_SECURITY_INFORMATION 
+    static const SECURITY_INFORMATION infoBits = OWNER_SECURITY_INFORMATION
       | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
-    static const DWORD readOnlyMask = FILE_DELETE_CHILD | FILE_ADD_FILE 
-      | FILE_ADD_SUBDIRECTORY | FILE_WRITE_EA |  FILE_APPEND_DATA 
+    static const DWORD readOnlyMask = FILE_DELETE_CHILD | FILE_ADD_FILE
+      | FILE_ADD_SUBDIRECTORY | FILE_WRITE_EA |  FILE_APPEND_DATA
       | FILE_WRITE_DATA | DELETE;
 
     BYTE *secDesc = 0;
@@ -548,12 +548,12 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 
     ACL_SIZE_INFORMATION ACLSize;
     BOOL curAclPresent, curAclDefaulted;
-    PACL curAcl; 
+    PACL curAcl;
     PACL newAcl = 0;
     DWORD newAclSize;
 
     WORD j;
-  
+
     SID *userSid = 0;
     TCHAR *userDomain = NULL;
 
@@ -573,11 +573,11 @@ TestplatformChmod(CONST char *nativePath, int pmode)
     typedef BOOL (WINAPI *addAccessDeniedAceDef) ( PACL, DWORD, DWORD, PSID );
     typedef BOOL (WINAPI *initializeAclDef) ( PACL, DWORD, DWORD );
     typedef DWORD (WINAPI *getLengthSidDef) ( PSID );
-    typedef BOOL (WINAPI *getAclInformationDef) (PACL, LPVOID, DWORD, 
+    typedef BOOL (WINAPI *getAclInformationDef) (PACL, LPVOID, DWORD,
       ACL_INFORMATION_CLASS );
     typedef BOOL (WINAPI *getSecurityDescriptorDaclDef) (PSECURITY_DESCRIPTOR,
       LPBOOL, PACL *, LPBOOL );
-    typedef BOOL (WINAPI *lookupAccountNameADef) ( LPCSTR, LPCSTR, PSID, 
+    typedef BOOL (WINAPI *lookupAccountNameADef) ( LPCSTR, LPCSTR, PSID,
       PDWORD, LPSTR, LPDWORD, PSID_NAME_USE );
     typedef BOOL (WINAPI *getFileSecurityADef) ( LPCSTR, SECURITY_INFORMATION,
       PSECURITY_DESCRIPTOR, DWORD, LPDWORD );
@@ -591,7 +591,7 @@ TestplatformChmod(CONST char *nativePath, int pmode)
     static getLengthSidDef getLengthSidProc;
     static getAclInformationDef getAclInformationProc;
     static getSecurityDescriptorDaclDef getSecurityDescriptorDaclProc;
-    static lookupAccountNameADef lookupAccountNameProc; 
+    static lookupAccountNameADef lookupAccountNameProc;
     static getFileSecurityADef getFileSecurityProc;
 
     static int initialized = 0;
@@ -653,15 +653,15 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 	goto done;
     }
 
-    /* If no ACL API is present or nativePath is not a directory, 
-     * there is no special handling 
+    /* If no ACL API is present or nativePath is not a directory,
+     * there is no special handling
      */
     if (initialized < 0 || !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
 	goto done;
     }
-    
-    /* Set the result to error, if the ACL change is successful it will 
-     *  be reset to 0 
+
+    /* Set the result to error, if the ACL change is successful it will
+     *  be reset to 0
      */
     res = -1;
 
@@ -674,8 +674,8 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 	    DWORD secDescLen2 = 0;
 	    secDesc = (BYTE *) ckalloc(secDescLen);
 	    if (!getFileSecurityProc(nativePath, infoBits,
-				     (PSECURITY_DESCRIPTOR)secDesc, 
-				     secDescLen, &secDescLen2) 
+				     (PSECURITY_DESCRIPTOR)secDesc,
+				     secDescLen, &secDescLen2)
 		|| (secDescLen < secDescLen2)) {
 		goto done;
 	    }
@@ -690,33 +690,33 @@ TestplatformChmod(CONST char *nativePath, int pmode)
     *(getSidSubAuthorityProc( userSid, 0)) = SECURITY_WORLD_RID;
 
     /* If curAclPresent == false then curAcl and curAclDefaulted not valid */
-    if (!getSecurityDescriptorDaclProc(secDesc, &curAclPresent, 
+    if (!getSecurityDescriptorDaclProc(secDesc, &curAclPresent,
 				       &curAcl, &curAclDefaulted))
 	goto done;
 
     if (!curAclPresent || !curAcl) {
 	ACLSize.AclBytesInUse = 0;
 	ACLSize.AceCount = 0;
-    } else if (!getAclInformationProc(curAcl, &ACLSize, sizeof(ACLSize), 
+    } else if (!getAclInformationProc(curAcl, &ACLSize, sizeof(ACLSize),
       AclSizeInformation))
 	goto done;
 
     /* Allocate memory for the new ACL */
-    newAclSize = ACLSize.AclBytesInUse + sizeof (ACCESS_DENIED_ACE) 
+    newAclSize = ACLSize.AclBytesInUse + sizeof (ACCESS_DENIED_ACE)
       + getLengthSidProc(userSid) - sizeof (DWORD);
     newAcl = (ACL *) ckalloc (newAclSize);
-  
+
     /* Initialize the new ACL */
     if(!initializeAclProc(newAcl, newAclSize, ACL_REVISION)) {
 	goto done;
     }
-    
+
     /* Add denied to make readonly, this will be known as a "read-only tag" */
-    if (set_readOnly && !addAccessDeniedAceProc(newAcl, ACL_REVISION, 
+    if (set_readOnly && !addAccessDeniedAceProc(newAcl, ACL_REVISION,
       readOnlyMask, userSid)) {
 	goto done;
     }
-      
+
     acl_readOnly_found = FALSE;
     for (j = 0; j < ACLSize.AceCount; j++) {
 	PACL *pACE2;
@@ -724,20 +724,20 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 	if (! getAceProc (curAcl, j, (LPVOID*) &pACE2)) {
 	    goto done;
 	}
-	
+
 	phACE2 = ((ACE_HEADER *) pACE2);
 
 	/* Do NOT propagate inherited ACEs */
 	if (phACE2->AceFlags & INHERITED_ACE) {
 	    continue;
 	}
-	
+
 	/* Skip the "read-only tag" restriction (either added above, or it
-	 * is being removed) 
+	 * is being removed)
 	 */
 	if (phACE2->AceType == ACCESS_DENIED_ACE_TYPE) {
 	    ACCESS_DENIED_ACE *pACEd = (ACCESS_DENIED_ACE *)phACE2;
-	    if (pACEd->Mask == readOnlyMask && equalSidProc(userSid, 
+	    if (pACEd->Mask == readOnlyMask && equalSidProc(userSid,
 	      (PSID)&(pACEd->SidStart))) {
 		acl_readOnly_found = TRUE;
 		continue;
@@ -745,7 +745,7 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 	}
 
 	/* Copy the current ACE from the old to the new ACL */
-	if(! addAceProc (newAcl, ACL_REVISION, MAXDWORD, pACE2, 
+	if(! addAceProc (newAcl, ACL_REVISION, MAXDWORD, pACE2,
 	  ((PACE_HEADER) pACE2)->AceSize)) {
 	    goto done;
 	}
@@ -753,7 +753,7 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 
     /* Apply the new ACL */
     if (set_readOnly == acl_readOnly_found
-	|| setNamedSecurityInfoProc((LPSTR)nativePath, SE_FILE_OBJECT, 
+	|| setNamedSecurityInfoProc((LPSTR)nativePath, SE_FILE_OBJECT,
 	     DACL_SECURITY_INFORMATION, NULL, NULL, newAcl, NULL)
 	   == ERROR_SUCCESS ) {
 	res = 0;
@@ -767,7 +767,7 @@ TestplatformChmod(CONST char *nativePath, int pmode)
 
     if (res != 0)
 	return res;
-    
+
     /* Run normal chmod command */
     return chmod(nativePath, pmode);
 }

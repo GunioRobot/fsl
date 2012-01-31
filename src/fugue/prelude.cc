@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -77,8 +77,8 @@ using namespace Utilities;
 string title="prelude (Version 2.0 in c# minor)\nPhase Region Expanding Labeller for Unwrapping Discrete Estimates\nCopyright(c) 2001, University of Oxford (Mark Jenkinson)";
 string examples="prelude -c <rawphase> -o <unwrappedphase> [options]\nprelude -p <phasevol> -a <absvol> -o <unwrappedphase> [options]";
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -147,7 +147,7 @@ void wrap(volume<float>& phasevol)
 }
 
 
-int do_unwrapping() 
+int do_unwrapping()
 {
 
   volume4D<float> phasemaps, absmaps, masks;
@@ -171,7 +171,7 @@ int do_unwrapping()
   bool threshset = thresh.set();
   float threshval = thresh.value();
   int imgstart=0, imgend, maskend=0;
-  imgend = phasemaps.maxt(); 
+  imgend = phasemaps.maxt();
   if (startimno.set())  imgstart = startimno.value();
   if (endimno.set())    imgend = endimno.value();
   if (inmask.set()) {
@@ -188,19 +188,19 @@ int do_unwrapping()
   for (int n=imgstart; n<=imgend; n++) {
     if ((phasemaps[n].max() - phasemaps[n].min())>3.0*M_PI) {
       cerr << "ERROR: input phase image exceeds allowable phase range."
-	   << endl << "Allowable range is 6.283 radians.  Image range is: " 
+	   << endl << "Allowable range is 6.283 radians.  Image range is: "
 	   << phasemaps[n].max() - phasemaps[n].min() << " radians."
 	   << endl << "Aborting." << endl;
       return -1;
     }
     if ( (phasemaps[n].max()>1.001*M_PI) || (phasemaps[n].min()<-1.001*M_PI) )
       {
-	if (verbose.value()) 
+	if (verbose.value())
 	  { cout << "Rewrapping phase range to [-pi,pi]" << endl; }
 	wrap(phasemaps[n]);
       }
   }
-  
+
 
   bool label_2D = labelslices.value();
   bool unwrap_2D = allslices.value();
@@ -246,7 +246,7 @@ int do_unwrapping()
 
     // Make labels
     volume<int> label;
-    if (verbose.value()) 
+    if (verbose.value())
       {cout << "Number of phase splits = " << num_phase_split.value() << endl;}
     if (unwrap_2D) {
       label = find_phase_labels2D(phasemaps[n],mask,
@@ -266,7 +266,7 @@ int do_unwrapping()
     } else {
       uph = unwrap(phasemaps[n],label,verbose.value());
     }
- 
+
     // Restore phase ramps
     if (removeramps.value()) {
       restore_linear_ramps(ramps,uph,mask);
@@ -316,7 +316,7 @@ int main(int argc,char *argv[])
     options.add(removeramps);
     options.add(verbose);
     options.add(help);
-    
+
     options.parse_command_line(argc, argv);
 
     if ( (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -324,43 +324,43 @@ int main(int argc,char *argv[])
 	options.usage();
 	exit(EXIT_FAILURE);
       }
-    
-    if ( ( (complexvol.set()) && (absvol.set()) ) || 
-	 ( (complexvol.set()) && (phasevol.set()) ) ) 
+
+    if ( ( (complexvol.set()) && (absvol.set()) ) ||
+	 ( (complexvol.set()) && (phasevol.set()) ) )
       {
 	options.usage();
-	cerr << endl 
+	cerr << endl
 	     << "Cannot specify both --complex AND --phase or --abs."
 	     << endl;
 	exit(EXIT_FAILURE);
       }
- 
-    if ( ( (phasevol.set()) && (absvol.unset()) ) || 
-	 ( (phasevol.unset()) && (absvol.set()) ) ) 
+
+    if ( ( (phasevol.set()) && (absvol.unset()) ) ||
+	 ( (phasevol.unset()) && (absvol.set()) ) )
       {
 	options.usage();
-	cerr << endl 
-	     << "Both --phase AND --abs must be used together." 
+	cerr << endl
+	     << "Both --phase AND --abs must be used together."
 	     << endl;
 	exit(EXIT_FAILURE);
       }
-    
+
     if (num_phase_split.value() < 2)
       {
 	options.usage();
-	cerr << endl 
-	     << "Always set --numphasesplit greater than 1." 
+	cerr << endl
+	     << "Always set --numphasesplit greater than 1."
 	     << endl << "NOT " << num_phase_split.value() << endl;
 	exit(EXIT_FAILURE);
       }
-    
+
   }  catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
   } catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   return do_unwrapping();
 }

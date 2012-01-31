@@ -12,9 +12,9 @@ srcdir=$FSLDIR/etc/fslpres
 
 if [ $1 = -text ] ; then
   src=/tmp/eqn2gif$$.txt ;
-  echo "$2" > $src ; 
+  echo "$2" > $src ;
   shift ;
-else 
+else
   src=$1;
 fi
 dest=$2;

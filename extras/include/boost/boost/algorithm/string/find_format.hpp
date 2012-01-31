@@ -36,9 +36,9 @@ namespace boost {
         /*!
             Use the Finder to search for a substring. Use the Formatter to format
             this substring and replace it in the input.
-            The result is a modified copy of the input. It is returned as a sequence 
+            The result is a modified copy of the input. It is returned as a sequence
             or copied to the output iterator.
-    
+
             \param Output An output iterator to which the result will be copied
             \param Input An input sequence
             \param Finder A Finder object used to search for a match to be replaced
@@ -48,7 +48,7 @@ namespace boost {
 
             \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
+        template<
             typename OutputIteratorT,
             typename RangeT,
             typename FinderT,
@@ -60,10 +60,10 @@ namespace boost {
             FormatterT Formatter )
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
@@ -80,8 +80,8 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
+        template<
+            typename SequenceT,
             typename FinderT,
             typename FormatterT>
         inline SequenceT find_format_copy(
@@ -90,10 +90,10 @@ namespace boost {
             FormatterT Formatter )
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
@@ -118,16 +118,16 @@ namespace boost {
             typename SequenceT,
             typename FinderT,
             typename FormatterT>
-        inline void find_format( 
+        inline void find_format(
             SequenceT& Input,
             FinderT Finder,
             FormatterT Formatter)
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
@@ -147,7 +147,7 @@ namespace boost {
             Use the Finder to search for a substring. Use the Formatter to format
             this substring and replace it in the input. Repeat this for all matching
             substrings.
-            The result is a modified copy of the input. It is returned as a sequence 
+            The result is a modified copy of the input. It is returned as a sequence
             or copied to the output iterator.
 
             \param Output An output iterator to which the result will be copied
@@ -159,7 +159,7 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
+        template<
             typename OutputIteratorT,
             typename RangeT,
             typename FinderT,
@@ -171,10 +171,10 @@ namespace boost {
             FormatterT Formatter)
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
@@ -191,8 +191,8 @@ namespace boost {
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
+        template<
+            typename SequenceT,
             typename FinderT,
             typename FormatterT >
         inline SequenceT find_format_all_copy(
@@ -201,10 +201,10 @@ namespace boost {
             FormatterT Formatter )
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
@@ -230,16 +230,16 @@ namespace boost {
             typename SequenceT,
             typename FinderT,
             typename FormatterT >
-        inline void find_format_all( 
+        inline void find_format_all(
             SequenceT& Input,
             FinderT Finder,
             FormatterT Formatter )
         {
             // Concept check
-            function_requires< 
+            function_requires<
                 FinderConcept<FinderT,
                 BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();
-            function_requires< 
+            function_requires<
                 FormatterConcept<
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<SequenceT>::type> >();

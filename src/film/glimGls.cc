@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -78,7 +78,7 @@ using namespace NEWIMAGE;
 
 namespace FILM {
 
-  GlimGls::GlimGls(const int pnumTS, const int psizeTS, const int pnumParams) : 
+  GlimGls::GlimGls(const int pnumTS, const int psizeTS, const int pnumParams) :
     numTS(pnumTS),
     sizeTS(psizeTS),
     numParams(pnumParams),
@@ -89,7 +89,7 @@ namespace FILM {
   {
     I=IdentityMatrix(sizeTS);
   }
-  
+
   void GlimGls::CleanUp()
   {
     corrections.CleanUp();
@@ -109,7 +109,7 @@ namespace FILM {
       Matrix R = I-x*inv_xx*x.t();
       r = R*y;
 
-      // compute sigma squareds 
+      // compute sigma squareds
       sigmaSquareds(ind) = (r.t()*r).AsScalar()/R.Trace();
 
       // set corrections
@@ -118,7 +118,7 @@ namespace FILM {
 
   void GlimGls::Save(const volume<float>& mask, const float reftdim=1.0)
     {
-      // Need to save b, sigmaSquareds, corrections and dof 
+      // Need to save b, sigmaSquareds, corrections and dof
       Log& logger = LogSingleton::getInstance();
 
 
@@ -141,7 +141,7 @@ namespace FILM {
       ColumnVector dofVec(1);
       dofVec = dof;
       write_ascii_matrix(logger.appendDir("dof"), dofVec);
-      
+
       peVol.setmatrix(corrections,mask);
       peVol.set_intent(NIFTI_INTENT_NONE,0,0,0);
       peVol.settdim(reftdim); //Possibly just set to a constant 1?
@@ -157,12 +157,12 @@ namespace FILM {
       // puts Matrix corr which is p*p into Matrix correction
       // as a p*p length row:
       int p = corr.Nrows();
-      
+
       for (int i = 1; i <= p; i++)
 	{
 	  for (int j = 1; j <= p; j++)
 	    {
-	      corrections((i-1)*p + j, ind) = corr(i,j); 
+	      corrections((i-1)*p + j, ind) = corr(i,j);
 	    }
 	}
     }

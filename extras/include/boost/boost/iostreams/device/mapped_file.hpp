@@ -183,8 +183,8 @@ public:
     //--------------Container interface---------------------------------------//
 
     size_type size() const { return delegate_.size(); }
-    char* data() const 
-    { 
+    char* data() const
+    {
         return (mode() & BOOST_IOS::out) ?
             const_cast<char*>(delegate_.data()) :
             0;
@@ -241,8 +241,8 @@ struct operations<boost::iostreams::mapped_file_sink>
 {
     static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file_sink& sink)
-    { 
-        return std::make_pair(sink.begin(), sink.end()); 
+    {
+        return std::make_pair(sink.begin(), sink.end());
     }
 };
 
@@ -252,13 +252,13 @@ struct operations<boost::iostreams::mapped_file>
 {
     static std::pair<char*, char*>
     input_sequence(boost::iostreams::mapped_file& file)
-    { 
-        return std::make_pair(file.begin(), file.end()); 
+    {
+        return std::make_pair(file.begin(), file.end());
     }
     static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file& file)
-    { 
-        return std::make_pair(file.begin(), file.end()); 
+    {
+        return std::make_pair(file.begin(), file.end());
     }
 };
 

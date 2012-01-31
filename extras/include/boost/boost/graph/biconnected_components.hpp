@@ -157,7 +157,7 @@ namespace boost
   }
 
   template<typename Graph, typename ComponentMap, typename OutputIterator,
-           typename DiscoverTimeMap, typename LowPointMap, 
+           typename DiscoverTimeMap, typename LowPointMap,
            typename VertexIndexMap>
   std::pair<std::size_t, OutputIterator>
   biconnected_components(const Graph & g, ComponentMap comp,
@@ -231,10 +231,10 @@ namespace boost
 
   template<typename Graph, typename OutputIterator, typename VertexIndexMap>
   OutputIterator
-  articulation_points(const Graph& g, OutputIterator out, 
+  articulation_points(const Graph& g, OutputIterator out,
                       VertexIndexMap index_map)
   {
-    return biconnected_components(g, dummy_property_map(), out, 
+    return biconnected_components(g, dummy_property_map(), out,
                                   index_map).second;
   }
 
@@ -242,7 +242,7 @@ namespace boost
   OutputIterator
   articulation_points(const Graph& g, OutputIterator out)
   {
-    return biconnected_components(g, dummy_property_map(), out, 
+    return biconnected_components(g, dummy_property_map(), out,
                                   get(vertex_index, g)).second;
   }
 

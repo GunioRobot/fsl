@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -125,7 +125,7 @@ volume<short> draw_mesh(const volume<short>& image, const Mesh &m)
 	{
 	  Pt p = (*i)->get_vertice(1)->get_coord()  + j* n;
 	  draw_segment(res, p, (*i)->get_vertice(2)->get_coord());
-	} 
+	}
     }
   return res;
 }
@@ -137,11 +137,11 @@ volume<short> make_mask_from_mesh(const volume<short> & image, const Mesh& m)
   double zdim = (double) image.zdim();
 
   volume<short> mask = image;
-  
+
   int xsize = mask.xsize();
   int ysize = mask.ysize();
   int zsize = mask.zsize();
-  
+
   vector<Pt> current;
   current.clear();
   Pt c(0., 0., 0.);
@@ -165,25 +165,25 @@ volume<short> make_mask_from_mesh(const volume<short> & image, const Mesh& m)
       if (0<=z-1 && mask.value(x, y, z-1)==0) current.push_back(Pt(x, y, z-1));
       if (xsize>x+1 && mask.value(x+1, y, z)==0) current.push_back(Pt(x+1, y, z));
       if (ysize>y+1 && mask.value(x, y+1, z)==0) current.push_back(Pt(x, y+1, z));
-      if (zsize>z+1 && mask.value(x, y, z+1)==0) current.push_back(Pt(x, y, z+1)); 
+      if (zsize>z+1 && mask.value(x, y, z+1)==0) current.push_back(Pt(x, y, z+1));
     }
   return mask;
 }
 
 int main(int argc, char *argv[]) {
 
-  
+
   if (argc != 3 && argc != 4) {
     cerr<<"Usage : drawmesh  [volume.hdr] [mesh.off] (-m for the mask)"<<endl;
     exit (-1);
   }
-  
+
   bool mesh = false;
   if (argc == 4)
     {
       if (argv[3]=="-m")
 	mesh = true;
-      else 
+      else
 	{
 	  cerr<<"Usage : drawmesh  [volume.hdr] [mesh.off] (-m for the mask)"<<endl;
 	  exit (-1);
@@ -192,7 +192,7 @@ int main(int argc, char *argv[]) {
 
   string volumename=argv[1];
   string meshname=argv[2];
-  
+
 
   string out = meshname;
   if (out.find(".off")!=string::npos) out.erase(out.find(".off"), 4);
@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
   if (in.find(".hdr")!=string::npos) in.erase(in.find(".hdr"), 4);
   if (in.find(".img")!=string::npos) in.erase(in.find(".hdr"), 4);
   if (out == "default__default") {out=in+"_brain";}
-  
+
 
   //set a memory hanlder that displays an error message
   set_new_handler(noMoreMemory);
@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
   //the real program
   volume<short> testvol;
   volume<double> testvol2;
-  
+
   if (read_volume(testvol2,in.c_str())<0)  return -1;
 
   copyconvert(testvol2, testvol);
@@ -218,21 +218,21 @@ int main(int argc, char *argv[]) {
   testvol = 0;
 
   Mesh m;
-  m.load(meshname);  
-  
+  m.load(meshname);
+
   cout<<"saving volume"<<endl;
   string outlinestr = in+"_outline";
   volume<short> outline = draw_mesh(testvol, m);
   if (save_volume(outline, outlinestr.c_str())<0)  return -1;
 
-  if (mesh) 
+  if (mesh)
     {
       outline = make_mask_from_mesh(outline, m);
       if (save_volume(outline, (in+"_mask"))<0)  return -1;
     }
 
   return 0;
-  
+
 }
 
 

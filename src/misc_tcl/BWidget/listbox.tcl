@@ -280,7 +280,7 @@ proc ListBox::insert { path index item args } {
 # Bastien Chevreux (bach@mwgdna.com)
 # The multipleinsert command performs inserts several items at once into
 #  the list. It is faster than calling insert multiple times as it uses the
-#  Widget::copyinit command for initializing all items after the 1st. The 
+#  Widget::copyinit command for initializing all items after the 1st. The
 #  speedup factor is between 2 and 3 for typical usage, but could be higher
 #  for inserts with many options.
 #
@@ -295,7 +295,7 @@ proc ListBox::multipleinsert { path index args } {
     upvar 0  $path data
 
     # If we got only one list as arg, take the first element as args
-    # This enables callers to use 
+    # This enables callers to use
     #	$list multipleinsert index $thelist
     # instead of
     #	eval $list multipleinsert index $thelist
@@ -309,7 +309,7 @@ proc ListBox::multipleinsert { path index args } {
 	if { [lsearch -exact $data(items) $item] != -1 } {
 	    return -code error "item \"$item\" already exists"
 	}
-	
+
 	if {$count==0} {
 	    Widget::init ListBox::Item $path.$item $iargs
 	    set firstpath $path.$item
@@ -1602,7 +1602,7 @@ proc ListBox::_drag_and_drop { path from endItem operation type startItem } {
     switch -- $place {
         "position" {
             set idx $i
-        } 
+        }
 
         "item" {
             set idx [$path index $i]

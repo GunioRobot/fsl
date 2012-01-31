@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -97,10 +97,10 @@ LinearFwdModel::LinearFwdModel(ArgsType& args)
   const int Ntimes = jacobian.Nrows();
   const int Nbasis = jacobian.Ncols();
 
-  LOG_ERR("      Loaded " << jacobian.Ncols() 
+  LOG_ERR("      Loaded " << jacobian.Ncols()
 	  << " basis functions of length " << Ntimes << endl);
 
-  centre.ReSize(Nbasis); 
+  centre.ReSize(Nbasis);
   centre = 0;
   offset.ReSize(Ntimes);
   offset = 0;
@@ -115,7 +115,7 @@ LinearFwdModel::LinearFwdModel(ArgsType& args)
   // Warning: Nbasis is now wrong!
 }
 
-void LinearFwdModel::HardcodedInitialDists(MVNDist& prior, 
+void LinearFwdModel::HardcodedInitialDists(MVNDist& prior,
 					   MVNDist& posterior) const
 {
   Tracer_Plus tr("LinearFwdModel::HardcodedInitialDists");
@@ -141,7 +141,7 @@ void LinearizedFwdModel::ReCentre(const ColumnVector& about)
   // Store new centre & offset
   centre = about;
   fcn->Evaluate(centre, offset);
-  if (0*offset != 0*offset) 
+  if (0*offset != 0*offset)
     {
       LOG_ERR("about:\n" << about);
       LOG_ERR("offset:\n" << offset.t());
@@ -151,7 +151,7 @@ void LinearizedFwdModel::ReCentre(const ColumnVector& about)
   // Calculate the Jacobian numerically.  jacobian is len(y)-by-len(m)
   jacobian.ReSize(offset.Nrows(), centre.Nrows());
   // jacobian = 0.0/0.0; // fill with NaNs to check
-  
+
   ColumnVector centre2, centre3;
   ColumnVector offset2, offset3;
   for (int i = 1; i <= centre.Nrows(); i++)
@@ -178,13 +178,13 @@ LOG << "offset2-offset3 == \n" << double(offset2(33)-offset3(33)) << endl;
 LOG << "Jac 33,4 == " << jacobian(33,4) << endl;
 }
 //*/
-    }   
+    }
 
-  if (0*jacobian != 0*jacobian) 
+  if (0*jacobian != 0*jacobian)
     {
       LOG << "jacobian:\n" << jacobian;
       LOG << "about':\n" << about.t();
-      LOG << "offset':\n" << offset.t();    
+      LOG << "offset':\n" << offset.t();
       throw overflow_error("ReCentre: Non-finite values found in jacobian");
     }
 }
@@ -200,7 +200,7 @@ void LinearFwdModel::DumpParameters(const ColumnVector& vec,
 void LinearFwdModel::NameParams(vector<string>& names) const
 {
     names.clear();
- 
+
     // Completely generic names.
     for (int i = 1; i <= NumParams(); i++)
         names.push_back("Parameter_" + stringify(i));

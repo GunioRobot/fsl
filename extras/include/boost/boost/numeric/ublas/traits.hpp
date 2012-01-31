@@ -52,7 +52,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Type traits - generic numeric properties and functions
     template<class T>
     struct type_traits;
-        
+
     // Define properties for a generic scalar type
     template<class T>
     struct scalar_traits {
@@ -119,7 +119,7 @@ namespace boost { namespace numeric { namespace ublas {
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
-    
+
     // Define default type traits, assume T is a scalar type
     template<class T>
     struct type_traits : scalar_traits <T> {
@@ -231,7 +231,7 @@ namespace boost { namespace numeric { namespace ublas {
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
-    
+
     // Define complex type traits
     template<>
     struct type_traits<std::complex<float> > : complex_traits<std::complex<float> >{

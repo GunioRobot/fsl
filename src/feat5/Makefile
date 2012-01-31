@@ -2,7 +2,7 @@ include $(FSLCONFDIR)/default.mk
 
 PROJNAME = feat5
 
-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -I${INC_GD} -I${INC_GDC} -I${INC_PNG} 
+USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -I${INC_GD} -I${INC_GDC} -I${INC_PNG}
 USRLDFLAGS =  -L${LIB_NEWMAT} -L${LIB_PROB} -L${LIB_ZLIB} -L${LIB_GD} -L${LIB_GDC} -L${LIB_PNG}
 
 IOLIBS = -lfslio -lniftiio -lznz
@@ -33,12 +33,12 @@ tsplot: tsplot.cc featlib.o featlib.h
 prewhiten: prewhiten.cc featlib.o featlib.h
 	$(CXX) $(CXXFLAGS) -o prewhiten featlib.o prewhiten.cc $(LDFLAGS) $(LIBS)
 
-cutoffcalc: cutoffcalc.cc 
+cutoffcalc: cutoffcalc.cc
 	$(CXX) $(CXXFLAGS) -o cutoffcalc cutoffcalc.cc $(LDFLAGS) $(LIBS)
 
 feat_model: feat_model.cc featlib.o
 	$(CXX) $(CXXFLAGS) -o feat_model featlib.o feat_model.cc $(LDFLAGS) $(LIBS)
 
-retroicor_evs: retroicor_evs.cc 
+retroicor_evs: retroicor_evs.cc
 	$(CXX) $(CXXFLAGS) -o retroicor_evs retroicor_evs.cc $(LDFLAGS) $(LIBS)
 

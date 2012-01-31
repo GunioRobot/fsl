@@ -184,19 +184,19 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromGifCtx(gdIOCtxPtr fd)
 	       }
                im->interlace = BitSet(buf[8], INTERLACE);
                if (! useGlobalColormap) {
-                       if (ReadColorMap(fd, bitPixel, localColorMap)) { 
+                       if (ReadColorMap(fd, bitPixel, localColorMap)) {
                                  return 0;
                        }
-                       ReadImage(im, fd, imw, imh, localColorMap, 
-                                 BitSet(buf[8], INTERLACE), &ZeroDataBlock); 
+                       ReadImage(im, fd, imw, imh, localColorMap,
+                                 BitSet(buf[8], INTERLACE), &ZeroDataBlock);
                } else {
                        ReadImage(im, fd, imw, imh,
-                                 ColorMap, 
+                                 ColorMap,
                                  BitSet(buf[8], INTERLACE), &ZeroDataBlock);
                }
                if (Transparent != (-1)) {
                        gdImageColorTransparent(im, Transparent);
-               }	   
+               }
 	       goto terminated;
        }
 
@@ -214,7 +214,7 @@ terminated:
                 } else {
                 	break;
                 }
-       } 
+       }
        return im;
 }
 
@@ -321,7 +321,7 @@ GetCode_(gdIOCtx *fd, int code_size, int flag, int *ZeroDataBlockP)
                if (done) {
                        if (curbit >= lastbit) {
                                 /* Oh well */
-                       }                        
+                       }
                        return -1;
                }
                buf[0] = buf[last_byte-2];
@@ -376,7 +376,7 @@ LWZReadByte_(gdIOCtx *fd, int flag, int input_code_size, int *ZeroDataBlockP)
                max_code = clear_code+2;
 
                GetCode(fd, 0, TRUE, ZeroDataBlockP);
-               
+
                fresh = TRUE;
 
                for (i = 0; i < clear_code; ++i) {
@@ -488,15 +488,15 @@ LWZReadByte(gdIOCtx *fd, int flag, int input_code_size, int *ZeroDataBlockP)
 static void
 ReadImage(gdImagePtr im, gdIOCtx *fd, int len, int height, unsigned char (*cmap)[256], int interlace, int *ZeroDataBlockP) /*1.4//, int ignore) */
 {
-       unsigned char   c;      
+       unsigned char   c;
        int             v;
        int             xpos = 0, ypos = 0, pass = 0;
        int i;
        /* Stash the color map into the image */
        for (i=0; (i<gdMaxColors); i++) {
-               im->red[i] = cmap[CM_RED][i];	
-               im->green[i] = cmap[CM_GREEN][i];	
-               im->blue[i] = cmap[CM_BLUE][i];	
+               im->red[i] = cmap[CM_RED][i];
+               im->green[i] = cmap[CM_GREEN][i];
+               im->blue[i] = cmap[CM_BLUE][i];
                im->open[i] = 1;
        }
        /* Many (perhaps most) of these colors will remain marked open. */
@@ -505,7 +505,7 @@ ReadImage(gdImagePtr im, gdIOCtx *fd, int len, int height, unsigned char (*cmap)
        **  Initialize the Compression routines
        */
        if (! ReadOK(fd,&c,1)) {
-               return; 
+               return;
        }
        if (LWZReadByte(fd, TRUE, c, ZeroDataBlockP) < 0) {
                return;

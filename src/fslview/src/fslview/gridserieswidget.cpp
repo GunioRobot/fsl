@@ -19,10 +19,10 @@
 #include <list>
 
 
-GridSeriesWidget::GridSeriesWidget(QWidget *parent, Image::Handle& image, Cursor::Handle& cursor, 
+GridSeriesWidget::GridSeriesWidget(QWidget *parent, Image::Handle& image, Cursor::Handle& cursor,
 				   PlotOptions::Handle& opts, short zOffset):
   TimeSeriesDisplay(parent)
-{  
+{
   int numRows(3),numCols(3);
 
   m_grid = new QGridLayout(this,numRows,numCols);
@@ -41,7 +41,7 @@ GridSeriesWidget::GridSeriesWidget(QWidget *parent, Image::Handle& image, Cursor
        options->setGrids(false,false);
        options->setFeedBack(true);
 
-       TimeSeriesDisplay::Handle graph = 
+       TimeSeriesDisplay::Handle graph =
          TimeSeriesDisplay::Handle(new SingleSeriesWidget(this,
                                                           image,
                                                           cursor,
@@ -53,16 +53,16 @@ GridSeriesWidget::GridSeriesWidget(QWidget *parent, Image::Handle& image, Cursor
       connect(this,SIGNAL(addTimeSeriesSignal()),
               graph.get(),SLOT(addTimeSeries()));
       connect(this,SIGNAL(remTimeSeriesSignal()),
-              graph.get(),SLOT(remTimeSeries()));      
+              graph.get(),SLOT(remTimeSeries()));
       connect(this,SIGNAL(demeanButtonToggleSignal(bool)),
               graph.get(),SLOT(demeanButtonToggle(bool)));
       connect(this,SIGNAL(setEnabledSignal(bool)),
-              graph.get(),SLOT(setEnabled(bool)));     
+              graph.get(),SLOT(setEnabled(bool)));
       connect(this,SIGNAL(axisDisplaySignal()),
               graph.get(),SLOT(axisDisplay()));
      }
   }
-  
+
   m_grid->activate();
 }
 

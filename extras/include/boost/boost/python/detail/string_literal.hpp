@@ -12,7 +12,7 @@
 # include <boost/mpl/bool.hpp>
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost { namespace python { namespace detail {
 
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
@@ -44,7 +44,7 @@ struct is_string_literal<T[n]>
     : is_same<T, char const>
 {
 };
-#  endif 
+#  endif
 # else
 template <bool is_array = true>
 struct string_literal_helper
@@ -60,7 +60,7 @@ struct string_literal_helper
         static yes_string_literal check(char const*);
         static no_string_literal check(char*);
         static no_string_literal check(void const volatile*);
-        
+
         BOOST_STATIC_CONSTANT(
             bool, value = sizeof(self::check(x)) == sizeof(yes_string_literal));
         typedef mpl::bool_<value> type;

@@ -19,24 +19,24 @@
 using namespace NEWMAT;
 using namespace std;
 
-namespace MISCMATHS {  
-  
+namespace MISCMATHS {
+
   class SparseMatrix
     {
     public:
 
       typedef map<int,double> Row;
- 
+
       SparseMatrix() : nrows(0), ncols(0) {}
 
       SparseMatrix(int pnrows, int pncols);
 
-      SparseMatrix(const SparseMatrix& psm) 
+      SparseMatrix(const SparseMatrix& psm)
 	{
 	  operator=(psm);
 	}
 
-      const SparseMatrix& operator=(const SparseMatrix& psm) 
+      const SparseMatrix& operator=(const SparseMatrix& psm)
 	{
 	  nrows = psm.nrows;
 	  ncols = psm.ncols;
@@ -45,7 +45,7 @@ namespace MISCMATHS {
 	  return *this;
 	}
 
-      SparseMatrix(const Matrix& pmatin) 
+      SparseMatrix(const Matrix& pmatin)
 	{
 	  operator=(pmatin);
 	}
@@ -59,10 +59,10 @@ namespace MISCMATHS {
 	{
 	  ReSize(0,0);
 	}
-      
+
       void transpose(SparseMatrix& ret);
-      
-      ReturnMatrix RowAsColumn(int r) const;      
+
+      ReturnMatrix RowAsColumn(int r) const;
 
       int maxnonzerosinrow() const;
 
@@ -77,35 +77,35 @@ namespace MISCMATHS {
 
 	  return ret;
 	}
-      
-      void set(int x, int y, double val) 
+
+      void set(int x, int y, double val)
 	{
 	  data[x-1][y-1] = val;
 	}
 
-      void update(int x, int y, double val) 
+      void update(int x, int y, double val)
 	{
 	  data[x-1][y-1] = val;
 	}
 
-      void insert(int x, int y, double val) 
+      void insert(int x, int y, double val)
 	{
 	  data[x-1].insert(Row::value_type(y-1,val));
 	}
 
-      void addto(int x, int y, double val) 
+      void addto(int x, int y, double val)
 	{
 	  if(val!=0)
 	    data[x-1][y-1] += val;
 	}
 
-      void multiplyby(int x, int y, double val) 
+      void multiplyby(int x, int y, double val)
 	{
 	  if((*this)(x,y)!=0)
 	    data[x-1][y-1] *= val;
 	}
-            
-      float trace() const;      
+
+      float trace() const;
 
       Row& row(int r) { return data[r-1]; }
 
@@ -124,13 +124,13 @@ namespace MISCMATHS {
       void horconcat2myleft(const SparseMatrix& A);  // me -> [A me]
 
     private:
-      
+
       int nrows;
       int ncols;
 
       vector<map<int,double> > data;
 
-    };   
+    };
 
   void multiply(const SparseMatrix& lm, const SparseMatrix& rm, SparseMatrix& ret);
   void multiply(const DiagonalMatrix& lm, const SparseMatrix& rm, SparseMatrix& ret);

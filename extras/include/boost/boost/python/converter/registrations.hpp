@@ -15,7 +15,7 @@
 
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace python { namespace converter { 
+namespace boost { namespace python { namespace converter {
 
 struct lvalue_from_python_chain
 {
@@ -34,7 +34,7 @@ struct BOOST_PYTHON_DECL registration
 {
  public: // member functions
     explicit registration(type_info target, bool is_shared_ptr = false);
-    
+
     // Convert the appropriately-typed data to Python
     PyObject* to_python(void const volatile*) const;
 
@@ -50,7 +50,7 @@ struct BOOST_PYTHON_DECL registration
 
     // The chain of eligible from_python converters when an rvalue is acceptable
     rvalue_from_python_chain* rvalue_chain;
-    
+
     // The class object associated with this type
     PyTypeObject* m_class_object;
 
@@ -64,7 +64,7 @@ struct BOOST_PYTHON_DECL registration
 # if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
  private:
     void operator=(registration); // This is not defined, and just keeps MWCW happy.
-# endif 
+# endif
 };
 
 //

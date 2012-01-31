@@ -8,20 +8,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -142,7 +142,7 @@ proc melodic:apply { w } {
 
 proc melodic { w } {
     global fmri FSLDIR USER feat_files unwarp_files unwarp_files_mag initial_highres_files highres_files VARS argc argv PWD gui_ext HOME tempSpin
- 
+
     #{{{ main window
 
 feat5:setupdefaults
@@ -167,10 +167,10 @@ set fmri(regstandard_res) 4
 #}}}
     #{{{ notebook
 
-NoteBook $w.nb -side top -bd 2 -tabpady {5 10} -arcradius 3 
-$w.nb insert 0 misc      -text "Misc"    
-$w.nb insert 1 data      -text "Data"     
-$w.nb insert 2 filtering -text "Pre-Stats"  
+NoteBook $w.nb -side top -bd 2 -tabpady {5 10} -arcradius 3
+$w.nb insert 0 misc      -text "Misc"
+$w.nb insert 1 data      -text "Data"
+$w.nb insert 2 filtering -text "Pre-Stats"
 $w.nb insert 3 reg       -text "Registration"
 $w.nb insert 4 stats     -text "Stats"
 $w.nb insert 5 poststats -text "Post-Stats"
@@ -206,8 +206,8 @@ set f $fmri(statsf)
 
 set fmri(varnorm) 1
 checkbutton $f.varnorm -variable fmri(varnorm) -text "Variance-normalise timecourses"
-balloonhelp_for $f.varnorm "When switched on, Melodic will rescale each time series so 
-that the estimation is more influenced by the voxel-wise 
+balloonhelp_for $f.varnorm "When switched on, Melodic will rescale each time series so
+that the estimation is more influenced by the voxel-wise
 temporal dynamics and less by a voxels' mean signal. "
 
 #}}}
@@ -220,8 +220,8 @@ checkbutton $f.dim.yn -variable fmri(dim_yn) -text "Automatic dimensionality est
 
 pack $f.dim.yn -in $f.dim -side left
 
-balloonhelp_for $f.dim "In order to avoid overfitting, Melodic will attempt to estimate the number of 
-components from the data using Bayesian estimators for the model 
+balloonhelp_for $f.dim "In order to avoid overfitting, Melodic will attempt to estimate the number of
+components from the data using Bayesian estimators for the model
 order and use PCA to reduce the data prior to the IC estimation."
 
 set fmri(dim) 1
@@ -281,21 +281,21 @@ frame $f.thresh
 set fmri(thresh_yn) 1
 checkbutton $f.thresh.yn -variable fmri(thresh_yn) -text "Threshold IC maps" -command "melodic:updatethresh $w"
 
-balloonhelp_for $f.thresh "MELODIC uses a mixture model approach to assign significance to individual 
-voxels within a spatial map. The mixture model of a single Gaussian 
-distribution (for the background noise within the spatial maps) and 
-2 Gamma distributions (which model the 'active' voxels contained in 
-the tails of the Gaussian) is fitted to the intensity histogram of 
-the Z-transformed IC maps using a restricted EM algorithm. 
+balloonhelp_for $f.thresh "MELODIC uses a mixture model approach to assign significance to individual
+voxels within a spatial map. The mixture model of a single Gaussian
+distribution (for the background noise within the spatial maps) and
+2 Gamma distributions (which model the 'active' voxels contained in
+the tails of the Gaussian) is fitted to the intensity histogram of
+the Z-transformed IC maps using a restricted EM algorithm.
 
-From this mixture model fit, MELODIC calculates voxel-wise probabilities 
-of 'activation' (as the ratio of a voxels' intensity being in the 
-non-background class relative to probability of the intensity being 
+From this mixture model fit, MELODIC calculates voxel-wise probabilities
+of 'activation' (as the ratio of a voxels' intensity being in the
+non-background class relative to probability of the intensity being
 background noise).
-Voxels above a certain threshold level are overlayed on top of 
-an example volume. The default level of 0.5 will report any voxel 
-where the probability of belonging to the non-background mixtures 
-exceeds the probability of the voxel belonging to the background 
+Voxels above a certain threshold level are overlayed on top of
+an example volume. The default level of 0.5 will report any voxel
+where the probability of belonging to the non-background mixtures
+exceeds the probability of the voxel belonging to the background
 noise Gaussian."
 
 set fmri(mmthresh) 0.5
@@ -331,9 +331,9 @@ set fmri(ostats) 0
 checkbutton $f.ostats -variable fmri(ostats) -text "Output full stats folder"
 
 balloonhelp_for $f.ostats "
-When switched on, Melodic will save the thresholded IC 
-maps and the probability maps inside a folder \/stats. 
-This will substantially increase the amount of space used, 
+When switched on, Melodic will save the thresholded IC
+maps and the probability maps inside a folder \/stats.
+This will substantially increase the amount of space used,
 so only switch this on if you intend to use these maps."
 
 #}}}
@@ -378,7 +378,7 @@ set fmri(level) 1
 set fmri(analysis) 7
 
 set tmpval $fmri(paradigm_hp)
-feat5:updatelevel $w 
+feat5:updatelevel $w
 set fmri(paradigm_hp) $tmpval
 
 $w.nb raise data
@@ -387,7 +387,7 @@ $w.nb raise data
     #{{{ button Frame
 
 frame $w.btns
-    
+
 button $w.btns.apply -command "melodic:apply $w" -text "Go"
 
 button $w.btns.save -command "feat_file:setup_dialog $w a a a [namespace current] *.fsf {Save Feat setup} {feat5:write $w 0 1 0} {}" -text "Save"
@@ -413,8 +413,8 @@ pack $w.btns.apply $w.btns.save $w.btns.load $w.btns.cancel $w.btns.help -in $w.
 
 #}}}
 
-    pack $w.nb -in $w -side top -anchor n -padx 10 -pady 10 
-    pack $w.btns -in $w -side bottom -fill x -padx 10 -pady 10 
+    pack $w.nb -in $w -side top -anchor n -padx 10 -pady 10
+    pack $w.btns -in $w -side bottom -fill x -padx 10 -pady 10
 
     #{{{ load fsf file
 

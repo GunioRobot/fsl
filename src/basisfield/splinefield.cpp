@@ -4,25 +4,25 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -89,10 +89,10 @@ namespace BASISFIELD {
 // Constructor, assignement and destructor
 
 // Plain vanilla constructors
-splinefield::splinefield(const std::vector<unsigned int>& psz, 
-			 const std::vector<double>&       pvxs, 
-			 const std::vector<unsigned int>& ksp, 
-			 int                              order) 
+splinefield::splinefield(const std::vector<unsigned int>& psz,
+			 const std::vector<double>&       pvxs,
+			 const std::vector<unsigned int>& ksp,
+			 int                              order)
   : basisfield(psz,pvxs), _sp(order,ksp), _dsp(3)
 {
   if (order < 2 || order > 3) {throw BasisfieldException("splinefield::splinefield: Only quadratic and cubic splines implemented yet");}
@@ -114,7 +114,7 @@ splinefield::splinefield(const std::vector<unsigned int>& psz,
 
   boost::shared_ptr<NEWMAT::ColumnVector>  lcoef(new NEWMAT::ColumnVector(CoefSz()));
   *lcoef = 0.0;
-  set_coef_ptr(lcoef);  
+  set_coef_ptr(lcoef);
 }
 
 // Copy constructor
@@ -167,17 +167,17 @@ double splinefield::Peek(double x, double y, double z, FieldIndex fi) const
     }
     sp_ptr = new Spline3D<double>(_sp.Order(),_sp.KnotSpacing(),deriv);
   }
-    
+
   std::vector<double>         vox(3);
   vox[0]=x; vox[1]=y; vox[2]=z;
   std::vector<unsigned int>   coefsz(3);
-  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z(); 
+  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z();
   std::vector<unsigned int>   first_cindx(3);
   std::vector<unsigned int>   last_cindx(3);
   sp_ptr->RangeOfSplines(vox,coefsz,first_cindx,last_cindx);
 
   double rval = 0.0;
-  std::vector<unsigned int>  cindx(3,0);  
+  std::vector<unsigned int>  cindx(3,0);
   for (cindx[2]=first_cindx[2]; cindx[2]<last_cindx[2]; cindx[2]++) {
     for (cindx[1]=first_cindx[1]; cindx[1]<last_cindx[1]; cindx[1]++) {
       for (cindx[0]=first_cindx[0]; cindx[0]<last_cindx[0]; cindx[0]++) {
@@ -206,11 +206,11 @@ void splinefield::Update(FieldIndex fi)
   Spline3D<double> spline(_sp.Order(),_sp.KnotSpacing(),deriv);
 
   std::vector<unsigned int> coefsz(3,0);
-  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z(); 
+  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z();
   std::vector<unsigned int> fieldsz(3,0);
-  fieldsz[0] = FieldSz_x(); fieldsz[1] = FieldSz_y(); fieldsz[2] = FieldSz_z(); 
+  fieldsz[0] = FieldSz_x(); fieldsz[1] = FieldSz_y(); fieldsz[2] = FieldSz_z();
   boost::shared_ptr<NEWMAT::ColumnVector>  fptr = get_ptr(fi);
-  
+
   get_field(spline,static_cast<double *>(lcoef->Store()),coefsz,fieldsz,static_cast<double *>(fptr->Store()));
   set_update_flag(true,fi);
 }
@@ -244,11 +244,11 @@ NEWMAT::ReturnMatrix splinefield::Jte(const std::vector<unsigned int>&  deriv,
 
   Spline3D<double>           spline(_sp.Order(),_sp.KnotSpacing(),deriv);
   std::vector<unsigned int>  coefsz(3,0);
-  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z(); 
+  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z();
   std::vector<unsigned int>  imasz(3,0);
-  imasz[0] = FieldSz_x(); imasz[1] = FieldSz_y(); imasz[2] = FieldSz_z(); 
+  imasz[0] = FieldSz_x(); imasz[1] = FieldSz_y(); imasz[2] = FieldSz_z();
   NEWMAT::ColumnVector       ovec(CoefSz());
-  
+
   get_jte(spline,coefsz,prodima,imasz,static_cast<double *>(ovec.Store()));
 
   delete[] prodima;
@@ -293,14 +293,14 @@ NEWMAT::ReturnMatrix splinefield::Jte(const std::vector<unsigned int>&  deriv,
 
   Spline3D<double>           spline(_sp.Order(),_sp.KnotSpacing(),deriv);
   std::vector<unsigned int>  coefsz(3,0);
-  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z(); 
+  coefsz[0] = CoefSz_x(); coefsz[1] = CoefSz_y(); coefsz[2] = CoefSz_z();
   std::vector<unsigned int>  imasz(3,0);
-  imasz[0] = FieldSz_x(); imasz[1] = FieldSz_y(); imasz[2] = FieldSz_z(); 
+  imasz[0] = FieldSz_x(); imasz[1] = FieldSz_y(); imasz[2] = FieldSz_z();
   NEWMAT::ColumnVector       ovec(CoefSz());
-  
+
   get_jte(spline,coefsz,fima,imasz,static_cast<double *>(ovec.Store()));
 
-  delete[] fima; 
+  delete[] fima;
   ovec.Release();
   return(ovec);
 }
@@ -353,10 +353,10 @@ const
   float *prodima = new float[FieldSz()];
   hadamard(ima1,ima2,mask,prodima);
   std::vector<unsigned int>  isz(3,0);
-  isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z(); 
+  isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z();
   std::vector<unsigned int>  csz(3,0);
-  csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z(); 
-   
+  csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z();
+
   boost::shared_ptr<BFMatrix> tmp;
   if (deriv[0]==0 && deriv[1]==0 && deriv[2]==0) {
     tmp = make_fully_symmetric_jtj(_sp,csz,prodima,isz,prec);
@@ -391,9 +391,9 @@ const
     float *prodima = new float[FieldSz()];
     hadamard(ima1,ima2,mask,prodima);
     std::vector<unsigned int>  isz(3,0);
-    isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z(); 
+    isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z();
     std::vector<unsigned int>  csz(3,0);
-    csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z(); 
+    csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z();
     Spline3D<double>           sp1(_sp.Order(),_sp.KnotSpacing(),deriv1);
     Spline3D<double>           sp2(_sp.Order(),_sp.KnotSpacing(),deriv2);
     tmp = make_asymmetric_jtj(sp1,csz,sp2,csz,prodima,isz,prec);
@@ -426,20 +426,20 @@ const
     hadamard(ima1,ima2,mask,prodima);
 
     std::vector<unsigned int>  isz(3,0);
-    isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z(); 
+    isz[0] = FieldSz_x(); isz[1] = FieldSz_y(); isz[2] = FieldSz_z();
     std::vector<unsigned int>  csz1(3,0);
-    csz1[0] = CoefSz_x(); csz1[1] = CoefSz_y(); csz1[2] = CoefSz_z(); 
+    csz1[0] = CoefSz_x(); csz1[1] = CoefSz_y(); csz1[2] = CoefSz_z();
     std::vector<unsigned int>  csz2(3,0);
     csz2[0] = tbf2.CoefSz_x(); csz2[1] = tbf2.CoefSz_y(); csz2[2] = tbf2.CoefSz_z();
 
-    tmp = make_asymmetric_jtj(_sp,csz1,tbf2._sp,csz2,prodima,isz,prec); 
+    tmp = make_asymmetric_jtj(_sp,csz1,tbf2._sp,csz2,prodima,isz,prec);
     delete[] prodima;
   }
   catch (bad_cast) {
     throw BasisfieldException("splinefield::JtJ: Must pass like to like field");
   }
-  
-  return(tmp);   
+
+  return(tmp);
 
 }
 
@@ -522,7 +522,7 @@ boost::shared_ptr<BFMatrix> splinefield::MemEnergyHess(MISCMATHS::BFMatrixPrecis
 
   boost::shared_ptr<BFMatrix> H = calculate_memen_bender_H(lksp,csz,isz,MemEn,prec);
 
-  return(H);   
+  return(H);
 }
 
 boost::shared_ptr<BFMatrix> splinefield::BendEnergyHess(MISCMATHS::BFMatrixPrecisionType   prec) const // Hessian of bending energy
@@ -536,7 +536,7 @@ boost::shared_ptr<BFMatrix> splinefield::BendEnergyHess(MISCMATHS::BFMatrixPreci
 
   boost::shared_ptr<BFMatrix> H = calculate_memen_bender_H(lksp,csz,isz,BendEn,prec);
 
-  return(H);   
+  return(H);
 }
 
 void splinefield::get_field(const Spline3D<double>&           sp,
@@ -617,15 +617,15 @@ void splinefield::get_jte(const Spline3D<double>&            sp,
 // This routines calculates A'*B where A is an nxm matrix where n is the
 // number of voxels in ima and m is the number of splines of one kind
 // and B is an nxl matrix where l is the number of splines of a different
-// kind. 
+// kind.
 //
 // The splines may e.g. be a spline of some ksp in A and the same
 // ksp spline differentiated in one direction in B. This can then be
-// used for modelling effects of Jacobian modulation in distortion 
-// correction. In this first case jtj is still square, though not 
-// symmetrical. 
+// used for modelling effects of Jacobian modulation in distortion
+// correction. In this first case jtj is still square, though not
+// symmetrical.
 //
-// The other possibility is that A has splines of ksp1 modelling e.g. 
+// The other possibility is that A has splines of ksp1 modelling e.g.
 // displacements and B has splines of ksp2 modelling e.g. an intensity
 // bias field. In this case jtj is no longer square.
 //
@@ -644,7 +644,7 @@ boost::shared_ptr<BFMatrix> splinefield::make_asymmetric_jtj(const Spline3D<doub
                                                              const std::vector<unsigned int>&  cszc,  // Coefficient matrix size for csp/sp2
                                                              const T                           *ima,  // Image (typically product of two images)
                                                              const std::vector<unsigned int>&  isz,   // Matrix size of image
-                                                             MISCMATHS::BFMatrixPrecisionType  prec)  // Precision (float/double) of resulting matrix 
+                                                             MISCMATHS::BFMatrixPrecisionType  prec)  // Precision (float/double) of resulting matrix
 const
 {
   Spline3D<double>             csp(sp2);    // Read-write copy of spline that determines column
@@ -664,7 +664,7 @@ const
   unsigned int ci = 0;       // Column index
 
   ZeroSplineMap   r_zeromap(rsp,cszr,ima,isz);
-  ZeroSplineMap   c_zeromap(csp,cszc,ima,isz);  
+  ZeroSplineMap   c_zeromap(csp,cszc,ima,isz);
 
   // Same Kernel Size?
   bool sks = (rsp.KernelSize(0) == csp.KernelSize(0) && rsp.KernelSize(1) == csp.KernelSize(1) && rsp.KernelSize(2) == csp.KernelSize(2));
@@ -685,7 +685,7 @@ const
               rindx[0]=i; rindx[1]=j; rindx[2]=k;
               irp[vali] = ri;
               if (c_is_zero || r_zeromap(rindx)) valp[vali++] = 0;
-              else valp[vali++] = csp.MulByOther(cindx,rindx,isz,rsp); 
+              else valp[vali++] = csp.MulByOther(cindx,rindx,isz,rsp);
 	    }
 	  }
 	}
@@ -698,7 +698,7 @@ const
   if (prec==BFMatrixFloatPrecision) jtj = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<float>(m,n,irp,jcp,valp));
   else jtj = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<double>(m,n,irp,jcp,valp));
 
-  delete [] irp; delete [] jcp; delete [] valp; 
+  delete [] irp; delete [] jcp; delete [] valp;
 
   return(jtj);
 }
@@ -743,7 +743,7 @@ const
   unsigned int vali = 0;     // Index of present non-zero value (linear indexing)
   unsigned int ci = 0;       // Column index
 
-  ZeroSplineMap  zeromap(sp1,csz,ima,isz);  
+  ZeroSplineMap  zeromap(sp1,csz,ima,isz);
 
   for (indx1[2]=0; indx1[2]<csz[2]; indx1[2]++) {
     for (indx1[1]=0; indx1[1]<csz[1]; indx1[1]++) {
@@ -753,8 +753,8 @@ const
         bool indx1_is_zero = zeromap(indx1);
         if (!indx1_is_zero) sp1.Premul(indx1,isz,ima);
         sp1.RangeOfOverlappingSplines(indx1,isz,fo,lo);
-        // 
-        // Fill in values above the main diagonal, 
+        //
+        // Fill in values above the main diagonal,
         // utilising the top level of symmetry.
         //
         for (unsigned int k=fo[2]; k<indx1[2]; k++) {
@@ -769,8 +769,8 @@ const
 	}
         for (unsigned int k=indx1[2]; k<lo[2]; k++) {
           //
-          // Fill in values above the main diagonals at the 
-          // 2nd level of symmetry. N.B. that the values should 
+          // Fill in values above the main diagonals at the
+          // 2nd level of symmetry. N.B. that the values should
           // NOT be mirrored around the main diagonal.
           //
           for (unsigned int j=fo[1]; j<indx1[1]; j++) {
@@ -783,7 +783,7 @@ const
               else valp[vali++] = get_val(cci,cri,irp,jcp,valp);
 	    }
 	  }
-                       
+
 	  for (unsigned int j=indx1[1]; j<lo[1]; j++) {
             //
             // Fill in values above the main diagonals at the third
@@ -800,8 +800,8 @@ const
             //
             // And these are the positions for which we actually need to
             // calculate new values. Roughly ~1/8 of the total.
-            //	    
-	    for (unsigned int i=indx1[0]; i<lo[0]; i++) { 
+            //
+	    for (unsigned int i=indx1[0]; i<lo[0]; i++) {
               unsigned int ri = k*csz[1]*csz[0] + j*csz[0] + i;
               indx2[0]=i; indx2[1]=j; indx2[2]=k;
               irp[vali] = ri;
@@ -819,14 +819,14 @@ const
   if (prec==BFMatrixFloatPrecision) jtj = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<float>(ncoef,ncoef,irp,jcp,valp));
   else jtj = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<double>(ncoef,ncoef,irp,jcp,valp));
 
-  delete [] irp; delete [] jcp; delete [] valp; 
+  delete [] irp; delete [] jcp; delete [] valp;
 
   return(jtj);
 }
 
 /////////////////////////////////////////////////////////////////////
 //
-// Helper routine to find the value for a given row-index in a 
+// Helper routine to find the value for a given row-index in a
 // (possibly unfinished) compressed column storage format. Uses
 // bisection.
 //
@@ -843,7 +843,7 @@ const
    const double        *v = &(val[jcp[col]]);
    int                 n = jcp[col+1]-jcp[col];
    int                 j = 0;
-   int                 jlo = -1;     
+   int                 jlo = -1;
    int                 jup = n;
 
    if (row < a[0] || row > a[n-1]) {return(0.0);}
@@ -885,7 +885,7 @@ const
     Memen_H_Helper     hlpr(sp2);
     sum_hlpr += hlpr;
   }
-  calculate_AtAb(b,isz,csz,sp1,sum_hlpr,grad);   
+  calculate_AtAb(b,isz,csz,sp1,sum_hlpr,grad);
 }
 
 //
@@ -918,7 +918,7 @@ const
   }
   // Use the helper to calculate (A_1^T*A_1 + A_2^T*A_2 ...)*b
   // where A_1 is a matrix with translated d2d/dx2 kernels etc
-  calculate_AtAb(b,isz,csz,sp,sum_hlpr,grad);   
+  calculate_AtAb(b,isz,csz,sp,sum_hlpr,grad);
 }
 
 //
@@ -939,7 +939,7 @@ const
   std::vector<unsigned int>   ci(3,0);            // Index of coefficient
   std::vector<unsigned int>   first(3,0);         // index of first overlapping coefficient
   std::vector<unsigned int>   last(3,0);          // Index of last overlapping coefficient
-  unsigned int                li=0;               // Linear index of coefficient             
+  unsigned int                li=0;               // Linear index of coefficient
   for (ci[2]=0; ci[2]<csz[2]; ci[2]++) {          // First three for loop over all coefficients
     for (ci[1]=0; ci[1]<csz[1]; ci[1]++) {
       for (ci[0]=0; ci[0]<csz[0]; ci[0]++, li++) {
@@ -958,7 +958,7 @@ const
 	}
       }
     }
-  }  
+  }
 }
 
 //
@@ -1010,7 +1010,7 @@ const
   std::vector<unsigned int>  fo(3,0);       // First index of overlapping spline in x-, y- and z-direction
   std::vector<unsigned int>  lo(3,0);       // Last index of overlapping spline in x-, y- and z-direction
 
-  Spline3D<double>  sp(_sp.Order(),lksp);                        
+  Spline3D<double>  sp(_sp.Order(),lksp);
   unsigned int      ncoef = csz[2]*csz[1]*csz[0];       // Size of JtJ
   unsigned int      nnz = sp.NzMax(isz);                // Max # of non-zero elements
   unsigned int      *irp = new unsigned int[nnz];       // Row indicies
@@ -1018,7 +1018,7 @@ const
   double            *valp = new double[nnz];            // The values of the matrix
 
   unsigned int      vali = 0;                           // Index of present non-zero value (linear indexing)
-  unsigned int      ci = 0;                             // Column index  
+  unsigned int      ci = 0;                             // Column index
 
   for (cindx[2]=0; cindx[2]<csz[2]; cindx[2]++) {
     for (cindx[1]=0; cindx[1]<csz[1]; cindx[1]++) {
@@ -1047,8 +1047,8 @@ const
   boost::shared_ptr<BFMatrix>  H;
   if (prec==BFMatrixFloatPrecision) H = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<float>(ncoef,ncoef,irp,jcp,valp));
   else H = boost::shared_ptr<BFMatrix>(new SparseBFMatrix<double>(ncoef,ncoef,irp,jcp,valp));
-	      
-  delete [] irp; delete [] jcp; delete [] valp;  
+
+  delete [] irp; delete [] jcp; delete [] valp;
 
   return(H);
 }
@@ -1099,10 +1099,10 @@ void splinefield::Set(const NEWIMAGE::volume<float>& pfield)
   helper_vol conv = get_coefs_one_dim(orig,0,CoefSz_x(),Order(),Ksp_x());
   if (NDim() > 1) conv = get_coefs_one_dim(conv,1,CoefSz_y(),Order(),Ksp_y());
   if (NDim() > 2) conv = get_coefs_one_dim(conv,2,CoefSz_z(),Order(),Ksp_z());
-  
+
   NEWMAT::ColumnVector lcoef = conv.AsNewmatVector();
   SetCoef(lcoef);
-  return; 
+  return;
 }
 
 
@@ -1112,7 +1112,7 @@ void splinefield::Set(const NEWIMAGE::volume<float>& pfield)
 // fields, and for deciding which zooms are valid and which are
 // not. These will be almost excessively commented. The reason
 // for that is that I have struggled so badly to get things clear
-// in my own head, and I don't want to return in 6 months not 
+// in my own head, and I don't want to return in 6 months not
 // understanding the code.
 //
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1124,12 +1124,12 @@ void splinefield::Set(const NEWIMAGE::volume<float>& pfield)
 // and/or knot-spacing. The new field will have coefficients set
 // so that the field is identical to the initial field (in the
 // case of upsampling) or the "best field in a least squares sense"
-// (in the case of downsampling). 
+// (in the case of downsampling).
 //
 /////////////////////////////////////////////////////////////////////
 
 boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vector<unsigned int>&   nms,
-                                                                 const std::vector<double>&         nvxs, 
+                                                                 const std::vector<double>&         nvxs,
                                                                  std::vector<unsigned int>          nksp) const
 {
   std::vector<unsigned int> oms(3), oksp(3);
@@ -1156,12 +1156,12 @@ boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vect
   // If voxel size changed, fake an old knot-spacing for the purpose of estimating new coefficients
   // This will always work when going from low->higher resolution (in which case the fake knot-spacing
   // will be some integer multiple of the old knot-spacing). It will not always work when going from
-  // high->lower resolution since we may then get a fake knot-spacing that should really be a 
-  // non-integer #, which or present implementation cannot handle. This is really indicative of a 
+  // high->lower resolution since we may then get a fake knot-spacing that should really be a
+  // non-integer #, which or present implementation cannot handle. This is really indicative of a
   // flawed implementation, but for the time being I will just work around it.
 
   std::vector<unsigned int> fksp = oksp;
-  if (nvxs != ovxs) { 
+  if (nvxs != ovxs) {
     if (faking_works(nvxs,nksp,ovxs)) {
       fksp = fake_old_ksp(nvxs,nksp,ovxs);
     }
@@ -1170,14 +1170,14 @@ boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vect
     }
   }
   // cout << "fksp[0] = " << fksp[0] << ", fksp[1] = " << fksp[1] << ", fksp[2] = " << fksp[2] << endl;
-  
+
   // Create the new field
   boost::shared_ptr<BASISFIELD::splinefield> tptr(new BASISFIELD::splinefield(nms,nvxs,nksp,this->Order()));
 
   // Get original set of coefficients
   const boost::shared_ptr<NEWMAT::ColumnVector> ocoef = GetCoef();
 
-  // If not all coefficients zero, create the coefficients for the 
+  // If not all coefficients zero, create the coefficients for the
   // new field from those of the old field
   NEWMAT::ColumnVector zerovec(ocoef->Nrows());
   zerovec = 0.0;
@@ -1208,7 +1208,7 @@ boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vect
         }
       }
     }
-     
+
     // Resample y-direction
     osp = BASISFIELD::Spline1D<double>(3,fksp[1]);                    // Spline object for old spline
     nsp = BASISFIELD::Spline1D<double>(3,nksp[1]);                    // Spline object for new spline
@@ -1227,7 +1227,7 @@ boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vect
         }
       }
     }
-    delete[] tmp_coef_x;                                
+    delete[] tmp_coef_x;
 
     // Resample z-direction
     osp = BASISFIELD::Spline1D<double>(3,fksp[2]);                    // Spline object for old spline
@@ -1248,11 +1248,11 @@ boost::shared_ptr<BASISFIELD::basisfield> splinefield::ZoomField(const std::vect
       }
     }
     delete[] tmp_coef_y;
-  
+
     tptr->SetCoef(ncoef);
   }
 
-  return(tptr);    
+  return(tptr);
 }
 
 /*
@@ -1269,7 +1269,7 @@ void splinefield::SetToConstant(double fv)
   vector<unsigned int>  sz(3,0);
   sz[0] = FieldSz_x(); sz[1] = FieldSz_y(); sz[2] = FieldSz_z();
   vector<double>        vxs(3,0.0);
-  vxs[0] = Vxs_x(); vxs[1] = Vxs_y(); vxs[2] = Vxs_z(); 
+  vxs[0] = Vxs_x(); vxs[1] = Vxs_y(); vxs[2] = Vxs_z();
   NEWIMAGE::volume<float>  vol(sz[0],sz[1],sz[2]);
   vol.setdims(vxs[0],vxs[1],vxs[2]);
   vol = fv;
@@ -1284,7 +1284,7 @@ void splinefield::SetToConstant(double fv)
 // "next_size_down" recursively so that at each subsequent upsampling
 // step the previous field should have a slightly larger FOV than
 // the new one. This guarantees that as we go to higher resolutions
-// we will not be in a position of having to extrapolate from a 
+// we will not be in a position of having to extrapolate from a
 // previous resolution.
 //
 // The "power of 2 constraint" is not strictly necessary, and the
@@ -1303,7 +1303,7 @@ std::vector<unsigned int> splinefield::SubsampledMatrixSize(const std::vector<un
   if (nms.size() != ss.size()) throw BasisfieldException("splinefield::SubsampledMatrixSize: Size mismatch between ss and oms");
   for (unsigned int i=0; i<ss.size(); i++) nms[i]=subsampled_matrix_size(ss[i],nms[i]);
 
-  return(nms); 
+  return(nms);
 }
 
 unsigned int splinefield::subsampled_matrix_size(unsigned int  ss,        // Subsampling factor
@@ -1319,12 +1319,12 @@ unsigned int splinefield::subsampled_matrix_size(unsigned int  ss,        // Sub
 
 /////////////////////////////////////////////////////////////////////
 //
-// Returns the new voxel-size for a given level of subsampling. 
+// Returns the new voxel-size for a given level of subsampling.
 // For splinefields this is simply the old voxel-size divided by
 // the subsampling factor, guaranteeing that every voxel centre
 // in the original (low res) field is represented by a voxel centre
 // in the new field.
-// For DCT-fields it is a little less straightforward, which is 
+// For DCT-fields it is a little less straightforward, which is
 // the reason we have declared the routine in the way it is.
 //
 /////////////////////////////////////////////////////////////////////
@@ -1339,7 +1339,7 @@ std::vector<double> splinefield::SubsampledVoxelSize(const std::vector<unsigned 
   if (ovxs.size() != ss.size()) throw BasisfieldException("splinefield::SubsampledVoxelSize: Size mismatch between ss and ovxs");
   for (unsigned int i=0; i<ss.size(); i++) nvxs[i]=subsampled_voxel_size(ss[i],nvxs[i]);
 
-  return(nvxs);  
+  return(nvxs);
 }
 
 double splinefield::subsampled_voxel_size(unsigned int   ss,         // Subsampling factor
@@ -1404,7 +1404,7 @@ bool splinefield::are_a_power_of_2(const std::vector<double>& facs) const
   for (unsigned int i=0; i<facs.size(); i++) if (!is_a_power_of_2(facs[i])) retval = false;
   return(retval);
 }
-		       
+
 bool splinefield::are_a_power_of_2(const std::vector<unsigned int>& facs) const
 {
   bool retval = true;
@@ -1444,7 +1444,7 @@ bool splinefield::new_vxs_is_ok(double nvxs,
   else {
     for (int i=2; i<33; i++) if (fabs(double(i)-(nvxs/ovxs)) < eps) return(true);
   }
-  return(false);    
+  return(false);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1487,7 +1487,7 @@ bool splinefield::faking_works(const std::vector<double>&        nvxs,
 {
   if (!ovxs.size()) {ovxs.resize(NDim()); ovxs[0]=Vxs_x(); if (NDim()>1) ovxs[1]=Vxs_y(); if (NDim()>2) ovxs[2]=Vxs_z();}
   for (unsigned int i=0; i<ovxs.size(); i++) if (!faking_works(nvxs[i],nksp[i],ovxs[i])) return(false);
-  return(true);  
+  return(true);
 }
 
 bool splinefield::faking_works(double        nvxs,
@@ -1542,7 +1542,7 @@ helper_vol splinefield::get_coefs_one_dim(const helper_vol&                 in,
   std::vector<unsigned int> nsz(3,0);
   for (unsigned int i=0; i<3; i++) {if (i==dim) nsz[i]=csz; else nsz[i]=in.Size(i); }
   helper_vol  out(nsz);
-  
+
   unsigned int ii, jj;
   switch (dim) {
   case 0:
@@ -1574,7 +1574,7 @@ helper_vol splinefield::get_coefs_one_dim(const helper_vol&                 in,
       out.SetColumn(i,j,dim,static_cast<double *>(b.Store()));
     }
   }
-  return(out); 
+  return(out);
 }
 
 NEWMAT::ReturnMatrix splinefield::get_s_matrix(unsigned int isz,
@@ -1627,9 +1627,9 @@ double splinefield::peek_outside_fov(int i, int j, int k, FieldIndex fi) const
       }
     }
   }
-  return(rval); 
+  return(rval);
 }
- 
+
 /////////////////////////////////////////////////////////////////////
 //
 // Member-functions for the ZeroSplineMap class. The class will
@@ -1638,7 +1638,7 @@ double splinefield::peek_outside_fov(int i, int j, int k, FieldIndex fi) const
 //
 /////////////////////////////////////////////////////////////////////
 
-                 
+
 /////////////////////////////////////////////////////////////////////
 //
 // Member-functions for the Memen_H_Helper class. The idea behind
@@ -1655,7 +1655,7 @@ Memen_H_Helper::Memen_H_Helper(const Spline3D<double>&  sp) : _sz(3,0), _cntr(3,
 {
   // Fake a "really large" FOV
   std::vector<unsigned int>    isz(3,0);
-  for (unsigned int i=0; i<3; i++) isz[i] = 1000*sp.KnotSpacing(i); 
+  for (unsigned int i=0; i<3; i++) isz[i] = 1000*sp.KnotSpacing(i);
 
   // Pick an index somewhere in the centre
   std::vector<unsigned int>    cindx(3,0);
@@ -1666,12 +1666,12 @@ Memen_H_Helper::Memen_H_Helper(const Spline3D<double>&  sp) : _sz(3,0), _cntr(3,
   if (!sp.RangeOfOverlappingSplines(cindx,isz,first,last)) throw BasisfieldException("Memen_H_Helper::Memen_H_Helper: No overlapping splines");
 
   _sz[0] = last[0]-first[0]; _sz[1] = last[1]-first[1]; _sz[2] = last[2]-first[2];
-  _cntr[0] = cindx[0]-first[0]; _cntr[1] = cindx[1]-first[1]; _cntr[2] = cindx[2]-first[2]; 
+  _cntr[0] = cindx[0]-first[0]; _cntr[1] = cindx[1]-first[1]; _cntr[2] = cindx[2]-first[2];
   _data = new double[_sz[0]*_sz[1]*_sz[2]];
- 
-  // Get values for all "overlaps" in "all positive" 1/8  
+
+  // Get values for all "overlaps" in "all positive" 1/8
   std::vector<unsigned int> cindx2(3,0);
-  for (unsigned int ck=first[2]; ck<last[2]; ck++) {  
+  for (unsigned int ck=first[2]; ck<last[2]; ck++) {
     for (unsigned int cj=first[1]; cj<last[1]; cj++) {
       for (unsigned int ci=first[0]; ci<last[0]; ci++) {
         unsigned int li = (ck-cindx[2]+_cntr[2])*_sz[1]*_sz[0] + (cj-cindx[1]+_cntr[1])*_sz[0] + (ci-cindx[0]+_cntr[0]);
@@ -1679,7 +1679,7 @@ Memen_H_Helper::Memen_H_Helper(const Spline3D<double>&  sp) : _sz(3,0), _cntr(3,
         _data[li] = sp.MulByOther(cindx,cindx2,isz,sp);
       }
     }
-  }  
+  }
 }
 
 double Memen_H_Helper::operator()(int i, int j, int k) const
@@ -1694,26 +1694,26 @@ double Memen_H_Helper::operator()(int i, int j, int k) const
 
 /////////////////////////////////////////////////////////////////////
 //
-// Member-functions for the helper_vol class. It is a little helper 
-// class that is used when deconvolving a field to obtain the spline 
+// Member-functions for the helper_vol class. It is a little helper
+// class that is used when deconvolving a field to obtain the spline
 // coefficients.
 //
 /////////////////////////////////////////////////////////////////////
 
-helper_vol::helper_vol(const std::vector<unsigned int>& sz) 
+helper_vol::helper_vol(const std::vector<unsigned int>& sz)
 {
-  if (sz.size()!=3) throw BasisfieldException("helper_vol::helper_vol: s must have 3 elements"); 
+  if (sz.size()!=3) throw BasisfieldException("helper_vol::helper_vol: s must have 3 elements");
   else {
-    _sz[0]=sz[0]; _sz[1]=sz[1]; _sz[2]=sz[2]; 
+    _sz[0]=sz[0]; _sz[1]=sz[1]; _sz[2]=sz[2];
     _data = new double[_sz[0]*_sz[1]*_sz[2]];
   }
 }
 helper_vol::helper_vol(const std::vector<unsigned int>& sz,
                        const NEWMAT::ColumnVector&      vec)
 {
-  if (sz.size()!=3) throw BasisfieldException("helper_vol::helper_vol: s must have 3 elements"); 
+  if (sz.size()!=3) throw BasisfieldException("helper_vol::helper_vol: s must have 3 elements");
   else {
-    _sz[0]=sz[0]; _sz[1]=sz[1]; _sz[2]=sz[2]; 
+    _sz[0]=sz[0]; _sz[1]=sz[1]; _sz[2]=sz[2];
     _data = new double[_sz[0]*_sz[1]*_sz[2]];
     double *dp = static_cast<double *>(vec.Store());
     memcpy(_data,dp,_sz[0]*_sz[1]*_sz[2]*sizeof(double));
@@ -1726,7 +1726,7 @@ helper_vol::helper_vol(const NEWIMAGE::volume<float>&   vol)
   double *trgt = _data;
   for (NEWIMAGE::volume<float>::fast_const_iterator it=vol.fbegin(), it_end=vol.fend(); it!=it_end; it++, trgt++) {
     *trgt = static_cast<double>(*it);
-  }   
+  }
 }
 helper_vol::helper_vol(const helper_vol& in)
 {
@@ -1742,7 +1742,7 @@ helper_vol& helper_vol::operator=(const helper_vol& rhs)
   _data = new double[_sz[0]*_sz[1]*_sz[2]];
   memcpy(_data,rhs._data,_sz[0]*_sz[1]*_sz[2]*sizeof(double));
   return(*this);
-} 
+}
 NEWMAT::ReturnMatrix helper_vol::AsNewmatVector() const
 {
   NEWMAT::ColumnVector  ovec(_sz[0]*_sz[1]*_sz[2]);
@@ -1803,7 +1803,7 @@ unsigned int helper_vol::step(unsigned dim) const
   }
 }
 
-     
+
 } // End namespace BASISFIELD
 
 /*
@@ -1847,7 +1847,7 @@ double splinefield::MemEnergy() const // Membrane energy of field
   std::vector<unsigned int>  csz(3,0);
   csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z();
 
-  return(calculate_memen(*lcoef,_sp.KnotSpacing(),csz)); 
+  return(calculate_memen(*lcoef,_sp.KnotSpacing(),csz));
 }
 
 double splinefield::BendEnergy() const // Bending energy of field
@@ -1858,9 +1858,9 @@ double splinefield::BendEnergy() const // Bending energy of field
   std::vector<unsigned int>  csz(3,0);
   csz[0] = CoefSz_x(); csz[1] = CoefSz_y(); csz[2] = CoefSz_z();
 
-  return(calculate_bender(*lcoef,_sp.KnotSpacing(),csz)); 
+  return(calculate_bender(*lcoef,_sp.KnotSpacing(),csz));
 }
- 
+
 NEWMAT::ReturnMatrix splinefield::MemEnergyGrad() const // Gradient of membrane energy of field
 {
   const boost::shared_ptr<NEWMAT::ColumnVector> lcoef = GetCoef();
@@ -1873,7 +1873,7 @@ NEWMAT::ReturnMatrix splinefield::MemEnergyGrad() const // Gradient of membrane 
   calculate_memen_grad(*lcoef,_sp.KnotSpacing(),csz,grad);
 
   grad.Release();
-  return(grad); 
+  return(grad);
 }
 
 NEWMAT::ReturnMatrix splinefield::BendEnergyGrad() const // Gradient of bending energy of field
@@ -1888,7 +1888,7 @@ NEWMAT::ReturnMatrix splinefield::BendEnergyGrad() const // Gradient of bending 
   calculate_bender_grad(*lcoef,_sp.KnotSpacing(),csz,grad);
 
   grad.Release();
-  return(grad); 
+  return(grad);
 }
 
 
@@ -1963,7 +1963,7 @@ const
       else grad += 2.0*memen_HtHb_helper(spd,csz,b,HtHb);
     }
   }
-  grad *= 2.0;     
+  grad *= 2.0;
 }
 
 void splinefield::calculate_memen_grad(const NEWMAT::ColumnVector&       b,
@@ -1985,17 +1985,17 @@ const
     spd /= vxs[d];                                // Derivative in mm^{-1}
     grad += memen_HtHb_helper(spd,csz,b,HtHb);
   }
-  grad *= 2.0;     
+  grad *= 2.0;
 }
 
 /////////////////////////////////////////////////////////////////////
 //
 // This is a helper-routine that calculates H*b or H'*H*b depending
-// on the switch "what". H in this case is the matrix such that 
-// b'*(H'*H)*b is the membrane energy for a field given by the 
+// on the switch "what". H in this case is the matrix such that
+// b'*(H'*H)*b is the membrane energy for a field given by the
 // coefficients b. It does so without explicitly representing H,
 // which is good because it can be very large. It is a helper both
-// for calculating the memebrane energy (as (H*b)'*(H*b)) and the 
+// for calculating the memebrane energy (as (H*b)'*(H*b)) and the
 // gradient of the membrane energy (as H'*H*b).
 // N.B. that we want to assess the energy for the "entire field",
 // i.e. also the parts that extends beyond the FOV of the image.

@@ -9,20 +9,20 @@
 #   Part of FSL - FMRIB's Software Library
 #   http://www.fmrib.ox.ac.uk/fsl
 #   fsl@fmrib.ox.ac.uk
-#   
+#
 #   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
 #   Imaging of the Brain), Department of Clinical Neurology, Oxford
 #   University, Oxford, UK
-#   
-#   
+#
+#
 #   LICENCE
-#   
+#
 #   FMRIB Software Library, Release 4.0 (c) 2007, The University of
 #   Oxford (the "Software")
-#   
+#
 #   The Software remains the property of the University of Oxford ("the
 #   University").
-#   
+#
 #   The Software is distributed "AS IS" under this Licence solely for
 #   non-commercial use in the hope that it will be useful, but in order
 #   that the University as a charitable foundation protects its assets for
@@ -34,13 +34,13 @@
 #   all responsibility for the use which is made of the Software. It
 #   further disclaims any liability for the outcomes arising from using
 #   the Software.
-#   
+#
 #   The Licensee agrees to indemnify the University and hold the
 #   University harmless from and against any and all claims, damages and
 #   liabilities asserted by third parties (including claims for
 #   negligence) which arise directly or indirectly from the use of the
 #   Software or the sale of any products based on the Software.
-#   
+#
 #   No part of the Software may be reproduced, modified, transmitted or
 #   transferred in any form or by any means, electronic or mechanical,
 #   without the express permission of the University. The permission of
@@ -51,7 +51,7 @@
 #   transmitted product. You may be held legally responsible for any
 #   copyright infringement that is caused or encouraged by your failure to
 #   abide by these terms and conditions.
-#   
+#
 #   You are not permitted under this Licence to use this Software
 #   commercially. Use for which any financial return is received shall be
 #   defined as commercial use, and includes (1) integration of all or part
@@ -109,7 +109,7 @@ done
 
 
 
-sizex=`fslval $A pixdim1` 
+sizex=`fslval $A pixdim1`
 sizey=`fslval $A pixdim2`
 sizez=`fslval $A pixdim3`
 
@@ -158,11 +158,11 @@ ${FSLDIR}/bin/flirt -in ${A}_brain_pve_0 -ref ${A}_brain_pve_0 -out ${A}_brain_p
 echo "Created T1 CSF"
 ##########original 5 dil outside mask 1 in#####################################################################################
 #${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -dilM -dilM -dilM -dilM -dilM -sub strucseg_2_${A}_brain ${A}_grot
-${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -kernel sphere 5.1 -dilF ${A}_grot 
+${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -kernel sphere 5.1 -dilF ${A}_grot
 ${FSLDIR}/bin/fslmaths ${A}_grot -sub strucseg_2_${A}_brain ${A}_grot
 #1 dil
 #${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -dilM -mul strucseg_2_${A}_brain -add ${A}_grot ${A}_csf_dil
-${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -kernel sphere 1.1 -dilF ${A}_csf_dil 
+${FSLDIR}/bin/fslmaths ${A}_brain_pve_0_iso -kernel sphere 1.1 -dilF ${A}_csf_dil
 ${FSLDIR}/bin/fslmaths ${A}_csf_dil -mul strucseg_2_${A}_brain -add ${A}_grot ${A}_csf_dil
 
 /bin/rm -f ${A}_grot*
@@ -246,7 +246,7 @@ echo "$A	`cat ${A}_lesions.txt`"
 #${FSLDIR}/bin/slicer $A                                   -A 400 $A
 #{FSLDIR}/bin/slicer ${A}_brain_seg strucseg_2_${A}_brain -A 400 ${A}_brain_seg
 #{FSLDIR}/bin/flirt -in $B             -ref $A -out ${B}_grot -applyxfm -init ${B}_to_${A}.mat
-#{FSLDIR}/bin/slicer ${B}_grot                            -A 400 $B 
+#{FSLDIR}/bin/slicer ${B}_grot                            -A 400 $B
 #{FSLDIR}/bin/flirt -in ${B}_brain_seg -ref $A -out ${B}_grot -applyxfm -init ${B}_to_${A}.mat
 #${FSLDIR}/bin/slicer ${B}_grot -i 0 $nclasses             -A 400 ${B}_brain_seg
 #${FSLDIR}/bin/overlay 0 1 $A -a ${A}_lesions $lesion_thr 1 ${A}_lesions_render ;                  ${FSLDIR}/bin/slicer ${A}_lesions_render                  -A 400 ${A}_lesions_render
@@ -259,6 +259,6 @@ echo "$A	`cat ${A}_lesions.txt`"
 #/bin/rm -f ${A}_brain_* ${B}_brain_* ${A}_lesions_render*  ${A}_lesions_render* ${A}_grot* ${B}_grot*
 #/bin/rm -f ${A}_lesions_thr*
 #/bin/rm -f ${A}_lesions*
-#/bin/rm -f ${A}_csf* 
+#/bin/rm -f ${A}_csf*
 ####JV#############################################################################################################################
 

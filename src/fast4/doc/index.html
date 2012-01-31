@@ -13,7 +13,7 @@ FAST v4.1 - User Guide
   fast3 options are related.</i>
 
 <H2>INTRODUCTION</H2>
- 
+
 <P>FAST (FMRIB's Automated Segmentation Tool) segments a 3D image of
 the brain into different tissue types (Grey Matter, White Matter, CSF,
 etc.), whilst also correcting for spatial intensity variations (also
@@ -42,11 +42,11 @@ journal reference listed there.
 <p>Before running FAST an image of a head should first be
 brain-extracted, using <a href="../bet2/index.html">BET</a>. The
 resulting brain-only image can then be fed into FAST.
- 
+
 <A NAME="FastGui"></A><hr><H2>Fast GUI</H2>
 
 <H3>MAIN OPTIONS</H3>
- 
+
 <P>If there is only one input image (i.e., you are not carrying out
 multi-channel segmentation) then leave the <b>Number of input
 channels</b> at 1. Otherwise, set appropriately.
@@ -104,7 +104,7 @@ after correction for bias field.
 </UL>
 
 <H3>ADVANCED OPTIONS</H3>
- 
+
 <p><b>Bias field iterations</b> determines the number of passes made
 during the initial bias field estimation stage.  A greater number of
 iterations can help esitmate particularly strong bias fields.
@@ -167,7 +167,7 @@ recommend using the partial volume estimates for the most accurate
 quantification.  The actual volume of tissue can be calculated easily
 from the corresponding partial volume map by summing up all the values.
 This can be done using <kbd>fslstats</kbd> and then multiplying
-the mean value by the volume (in voxels).  
+the mean value by the volume (in voxels).
 
 <p>For example, for an image called <kbd>structural_bet</kbd> that <kbd>fast</kbd> was run on, the tissue volume of tissue class 1 can be found by running the following:
 <br>&nbsp;&nbsp;&nbsp;<kbd>vol=`$FSLDIR/bin/fslstats structural_bet_pve_1 -V | awk '{print $1}'`</kbd>

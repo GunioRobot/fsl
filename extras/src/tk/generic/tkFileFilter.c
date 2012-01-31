@@ -118,7 +118,7 @@ TkGetFileFilters(interp, flistPtr, string, isWindows)
 	    code = TCL_ERROR;
 	    goto done;
 	}
-	
+
 	if (count != 2 && count != 3) {
 	    Tcl_AppendResult(interp, "bad file type \"", listArgv[i], "\", ",
 		"should be \"typeName {extension ?extensions ...?} ",
@@ -242,7 +242,7 @@ static int AddClause(interp, filterPtr, patternsStr, ostypesStr, isWindows)
     }
 
     /*
-     * Add the clause into the list of clauses 
+     * Add the clause into the list of clauses
      */
 
     clausePtr = (FileFilterClause*)ckalloc(sizeof(FileFilterClause));
@@ -263,7 +263,7 @@ static int AddClause(interp, filterPtr, patternsStr, ostypesStr, isWindows)
 	for (i=0; i<globCount; i++) {
 	    GlobPattern * globPtr = (GlobPattern*)ckalloc(sizeof(GlobPattern));
 	    int len;
-	    
+
 	    len = (strlen(globList[i]) + 1) * sizeof(char);
 
 	    if (globList[i][0] && globList[i][0] != '*') {
@@ -341,7 +341,7 @@ static int AddClause(interp, filterPtr, patternsStr, ostypesStr, isWindows)
     }
 
     return code;
-}	
+}
 
 /*
  *----------------------------------------------------------------------

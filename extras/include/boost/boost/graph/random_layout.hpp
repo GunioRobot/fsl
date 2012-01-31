@@ -18,11 +18,11 @@
 
 namespace boost {
 
-template<typename Graph, typename PositionMap, typename Dimension, 
+template<typename Graph, typename PositionMap, typename Dimension,
          typename RandomNumberGenerator>
 void
 random_graph_layout(const Graph& g, PositionMap position_map,
-                    Dimension minX, Dimension maxX, 
+                    Dimension minX, Dimension maxX,
                     Dimension minY, Dimension maxY,
                     RandomNumberGenerator& gen)
 {

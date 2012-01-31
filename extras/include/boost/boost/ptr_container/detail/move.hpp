@@ -26,7 +26,7 @@ private:
 
 
 template<typename T>
-move_ptrs::move_source<T> move(T& x) 
+move_ptrs::move_source<T> move(T& x)
 { return move_ptrs::move_source<T>(x); }
 
 } // namespace 'ptr_container_detail'

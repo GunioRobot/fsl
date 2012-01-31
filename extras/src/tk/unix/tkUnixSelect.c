@@ -1,7 +1,7 @@
-/* 
+/*
  * tkUnixSelect.c --
  *
- *	This file contains X specific routines for manipulating 
+ *	This file contains X specific routines for manipulating
  *	selections.
  *
  * Copyright (c) 1995-1997 Sun Microsystems, Inc.
@@ -252,7 +252,7 @@ TkSelPropProc(eventPtr)
     long buffer[TK_SEL_WORDS_AT_ONCE];
     TkDisplay *dispPtr = TkGetDisplay(eventPtr->xany.display);
     Tk_ErrorHandler errorHandler;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -273,7 +273,7 @@ TkSelPropProc(eventPtr)
 	/*
 	 * For each conversion that has been requested, handle any
 	 * chunks that haven't been transmitted yet.
-	 */						  
+	 */
 
 	for (i = 0; i < incrPtr->numConversions; i++) {
 	    if ((eventPtr->xproperty.atom != incrPtr->multAtoms[2*i + 1])
@@ -333,7 +333,7 @@ TkSelPropProc(eventPtr)
 
 		length = strlen(incrPtr->converts[i].buffer);
 		strcpy((char *)buffer, incrPtr->converts[i].buffer);
-			    
+
 		numItems = (*selPtr->proc)(selPtr->clientData,
 			incrPtr->converts[i].offset,
 			((char *) buffer) + length,
@@ -404,7 +404,7 @@ TkSelPropProc(eventPtr)
 
 		/*
 		 * Now convert the data, growing the destination buffer
-		 * as needed. 
+		 * as needed.
 		 */
 
 		while (1) {
@@ -492,7 +492,7 @@ TkSelPropProc(eventPtr)
 		 * Advance over the selection data that was consumed
 		 * this time.
 		 */
- 
+
 		incrPtr->converts[i].offset += numItems - length;
 	    }
 	    return;
@@ -597,7 +597,7 @@ TkSelEventProc(tkwin, eventPtr)
 	    if (format != 8) {
 		char buf[64 + TCL_INTEGER_SPACE];
 
-		sprintf(buf, 
+		sprintf(buf,
 			"bad format for string selection: wanted \"8\", got \"%d\"",
 			format);
 		Tcl_SetResult(retrPtr->interp, buf, TCL_VOLATILE);
@@ -643,7 +643,7 @@ TkSelEventProc(tkwin, eventPtr)
 	    if (format != 8) {
 		char buf[64 + TCL_INTEGER_SPACE];
 
-		sprintf(buf, 
+		sprintf(buf,
 			"bad format for string selection: wanted \"8\", got \"%d\"",
 			format);
 		Tcl_SetResult(retrPtr->interp, buf, TCL_VOLATILE);
@@ -686,7 +686,7 @@ TkSelEventProc(tkwin, eventPtr)
 	    if (format != 32) {
 		char buf[64 + TCL_INTEGER_SPACE];
 
-		sprintf(buf, 
+		sprintf(buf,
 			"bad format for selection: wanted \"32\", got \"%d\"",
 			format);
 		Tcl_SetResult(retrPtr->interp, buf, TCL_VOLATILE);
@@ -812,7 +812,7 @@ ConvertSelection(winPtr, eventPtr)
     Tk_ErrorHandler errorHandler;
     TkSelectionInfo *infoPtr;
     TkSelInProgress ip;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     errorHandler = Tk_CreateErrorHandler(eventPtr->display, -1, -1,-1,
@@ -993,7 +993,7 @@ ConvertSelection(winPtr, eventPtr)
 		encoding = Tcl_GetEncoding(NULL, "iso8859-1");
 	    } else {
 		encoding = Tcl_GetEncoding(NULL, "iso2022");
-	    } 
+	    }
 	    Tcl_UtfToExternalDString(encoding, (char*)buffer, -1, &ds);
 	    XChangeProperty(reply.display, reply.requestor,
 		    property, type, 8, PropModeReplace,
@@ -1166,8 +1166,8 @@ SelRcvIncrProc(clientData, eventPtr)
 
 	if (format != 8) {
 	    char buf[64 + TCL_INTEGER_SPACE];
-	    
-	    sprintf(buf, 
+
+	    sprintf(buf,
 		    "bad format for string selection: wanted \"8\", got \"%d\"",
 		    format);
 	    Tcl_SetResult(retrPtr->interp, buf, TCL_VOLATILE);
@@ -1212,7 +1212,7 @@ SelRcvIncrProc(clientData, eventPtr)
 	    src = propInfo;
 	    srcLen = numItems;
 	}
-	
+
 	/*
 	 * Set up the destination buffer so we can use as much space as
 	 * is available.

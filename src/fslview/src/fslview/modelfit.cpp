@@ -42,7 +42,7 @@ struct ModelFit::Implementation {
 
   // multiply the whole matrix xI with the scalar value betaI; refer to newmat
   Matrix xI_BetaI(Matrix xI, float betaI)
-  {  
+  {
     return xI * betaI;
   }
 
@@ -82,7 +82,7 @@ struct ModelFit::Implementation {
     ifstream is(filepath);
     if(!is)
       throw std::ios::failure("Couldn't open design f-test file!");
-    
+
     char buffer[1024];
 
     is.getline(buffer, 1024);
@@ -131,7 +131,7 @@ struct ModelFit::Implementation {
 	      m_contrastList.push_back(std::make_pair(QString("COPE%1").arg(j), true));
 	    }
 	  }
-	
+
 	findKey(fp,"/Matrix");
 
 	for(unsigned int jj=1;jj<=m_ncontrasts;jj++)
@@ -153,9 +153,9 @@ struct ModelFit::Implementation {
     char charArray[100];
     QString valueStr;
     bool keyFound(false);
-  
+
     fseek(fd,0,SEEK_SET);
-  
+
     while(!keyFound && fgets(charArray, 100, fd))
       {
 	QString lineStr(charArray);
@@ -164,15 +164,15 @@ struct ModelFit::Implementation {
 	    valueStr = lineStr.remove(0,keyName.length());
 	    keyFound = true;
 	  }
-      }	  
+      }
     //file pointer left at pos just after key
     return valueStr.simplifyWhiteSpace();
   }
 
   void loadPeData(const QString & filePath)
-  {  
+  {
     TRACKER("ModelFit::Implementation::loadPeData");
-  
+
     for(unsigned int n = 1; n <= m_nevs; n++)
       {
 	QString peFile = filePath + QString::number(n);
@@ -182,14 +182,14 @@ struct ModelFit::Implementation {
   }
 
   void loadFiltFuncData(const QString & filePath)
-  {  
+  {
     TRACKER("ModelFit::Implementation::loadFiltFuncData");
 
     m_filtFuncData = Image::load((const char *)filePath);
   }
 
   ColumnVector getPeColumnVector(short x, short y, short z)
-  {  
+  {
     TRACKER("ModelFit::Implementation::getPeColumnVector");
 
     unsigned int nevs = m_peData.size();
@@ -211,14 +211,14 @@ struct ModelFit::Implementation {
   Image::Handle m_filtFuncData;
 
   TimeSeries::Handle m_timeSeriesModel;
-  
+
   //QStringList m_contrList;
   std::vector< std::pair<QString, bool> > m_contrastList;
-  
+
   unsigned int m_npts, m_nevs, m_ncontrasts, m_nftests, m_curCope, m_curPE;
-  
+
   std::list< ModelFitObserver *> m_modelFitObservers;
-  
+
   bool COPE_PE;
 
   bool m_higherLevel;
@@ -237,7 +237,7 @@ ModelFit::Handle ModelFit::create(const QString& fd)
   return dst;
 }
 
-ModelFit::ModelFit(const QString& fd):   
+ModelFit::ModelFit(const QString& fd):
   m_impl(new ModelFit::Implementation(fd))
 {
 }
@@ -247,7 +247,7 @@ ModelFit::~ModelFit(){}
 QString& ModelFit::featDir() const { return m_impl->m_featDir; }
 
 TimeSeries::Handle ModelFit::getDataTimeSeries(short x, short y, short z)
-{  
+{
   TRACKER("ModelFit::getDataTimeSeries");
 
   return m_impl->m_filtFuncData->getTimeSeries(x,y,z);
@@ -264,46 +264,46 @@ TimeSeries::Handle ModelFit::fullModel(short x, short y, short z, float mean)
 {
   Matrix colVector(m_impl->m_npts, 1), result(m_impl->m_npts, 1);
   colVector=0.0; result=0.0;
-  
+
   for(unsigned int i=1; i<=m_impl->m_nevs; i++)  // full model mean + x1beta1 + x2beta2 + x3beta3
     {
       colVector = m_impl->m_designMatrix.Column(i);
-    
-      result += m_impl->xI_BetaI(colVector, m_impl->m_peData[i-1]->value(x, y, z)); 
+
+      result += m_impl->xI_BetaI(colVector, m_impl->m_peData[i-1]->value(x, y, z));
     }
-  
+
   if(!m_impl->m_higherLevel)
     result += mean;
-  
+
   TimeSeries::Handle pePlotCurve = TimeSeriesD::create(x, y, z, m_impl->m_npts);
-  
+
   for(unsigned int n = 1; n <= m_impl->m_npts; n++)
     pePlotCurve->setValue(n-1, (float)result(n, 1));
-    
+
   return pePlotCurve;
 }
 
 TimeSeries::Handle ModelFit::CopeCurve(short x, short y, short z, float mean)
 {
   TimeSeries::Handle copeCurve = TimeSeriesD::create(x, y, z, m_impl->m_npts);
-  
+
   Matrix colVector(m_impl->m_npts, 1), result(m_impl->m_npts, 1);
   result = 0.0;
-  
+
   for(unsigned int i=1; i<=m_impl->m_nevs; i++)
     {
       colVector = m_impl->m_designMatrix.Column(i);
-    
-      result += (m_impl->xI_BetaI(colVector, m_impl->m_peData[i-1]->value(x, y, z)) * 
+
+      result += (m_impl->xI_BetaI(colVector, m_impl->m_peData[i-1]->value(x, y, z)) *
 		 m_impl->m_copeVectors(curFit()-m_impl->m_nevs+1, i));
     }
-  
+
   if(!m_impl->m_higherLevel)
     result += mean;
-  
+
   for(unsigned int n = 1; n <= m_impl->m_npts; n++)
     copeCurve->setValue(n-1, (float)result(n, 1));
-    
+
   return copeCurve;
 }
 
@@ -317,30 +317,30 @@ TimeSeries::Handle ModelFit::CopeCurve(short x, short y, short z, float mean)
 TimeSeries::Handle ModelFit::peCurve(short x, short y, short z, float mean)
 {
   TimeSeries::Handle peCurve = TimeSeriesD::create(x, y, z, m_impl->m_npts);
-  
+
   Matrix result(m_impl->m_npts, 1);
-  
+
   result = (m_impl->xI_BetaI(m_impl->m_designMatrix.Column(m_impl->m_curPE+1),
 			     m_impl->m_peData[m_impl->m_curPE]->value(x, y, z))) + mean;
-  
+
   for(unsigned int n = 1; n <= m_impl->m_npts; n++)
     peCurve->setValue(n-1, (float)result(n, 1));
-    
+
   return peCurve;
-  
+
 }
 
 TimeSeries::Handle ModelFit::perCentChange(short x, short y, short z, float mean)
 {
   TimeSeries::Handle perCentChange = TimeSeriesD::create(x, y, z, m_impl->m_npts);
-  
+
   Matrix result(m_impl->m_npts, 1);
-  
+
   result = (m_impl->m_designMatrix.Column(m_impl->m_curPE+1) * 100) / mean;
-  
+
   for(unsigned int n = 1; n <= m_impl->m_npts; n++)
     perCentChange->setValue(n-1, (float)result(n, 1));
-    
+
   return perCentChange;
 }
 
@@ -358,7 +358,7 @@ bool ModelFit::isFeatDir(const QString& path)
   if((path.section("/", -2, -2).findRev(".feat"))>-1) {
     valid = true;
   }
-   
+
   return valid;
 }
 
@@ -381,7 +381,7 @@ void ModelFit::curFit(unsigned int i)
     throw Exception("Invalid contrast index");
 
   m_impl->m_curPE=i;
-  
+
   notify();
 }
 
@@ -399,8 +399,8 @@ void ModelFit::detach(ModelFitObserver *o)
 struct Update
 {
 public:
-  Update(ModelFit *m): m_modelFit(m) {} 
-    
+  Update(ModelFit *m): m_modelFit(m) {}
+
   void operator ()(ModelFitObserver *m_o)
   {
     m_o->update(m_modelFit);

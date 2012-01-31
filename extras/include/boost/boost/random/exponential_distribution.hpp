@@ -47,7 +47,7 @@ public:
 
   template<class Engine>
   result_type operator()(Engine& eng)
-  { 
+  {
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
 #endif

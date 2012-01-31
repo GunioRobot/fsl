@@ -29,8 +29,8 @@
 
     #If the next arguement is -command, set up command call else setup first menu item
     if { ![string compare $firstValue "-command"] } { set command $firstText } else {
-	
-    set command "" 
+
+    set command ""
     $w.menu add radiobutton \
         -label      $firstText \
         -value      $firstValue \
@@ -50,7 +50,7 @@
     proc optionMenuTrace {w valueText varName varIndex varOp} {
         upvar #0 $varName var
         array set map $valueText
-        $w configure -text $map($var($varIndex))   
+        $w configure -text $map($var($varIndex))
     }
 
     proc optionMenuRemoveTrace {varName} {
@@ -68,7 +68,7 @@
 
     # Return the menu's path
     return $w.menu
-} 
+}
 
 
 # usage -vcmd {validNum %W %V %P %s +10 +92}
@@ -85,6 +85,6 @@
         if { !$strongCheck } { set tempSpin $default }
         if { $strongCheck && $X < $min } { set tempSpin $min }
         if { $strongCheck && $X > $max } { set tempSpin $max }
-	if {[string is int -strict $min] && [string is int -strict $max] } { set strongCheck [expr {[string is int -strict $X] && ($X >= $min) && ($X <= $max)}]} else { set strongCheck [expr {[string is double -strict $X] && ($X >= $min) && ($X <= $max)}]}  
+	if {[string is int -strict $min] && [string is int -strict $max] } { set strongCheck [expr {[string is int -strict $X] && ($X >= $min) && ($X <= $max)}]} else { set strongCheck [expr {[string is double -strict $X] && ($X >= $min) && ($X <= $max)}]}
         return $strongCheck
     }

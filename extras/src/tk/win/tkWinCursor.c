@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinCursor.c --
  *
  *	This file contains Win32 specific cursor related routines.
@@ -76,10 +76,10 @@ static struct CursorName {
  *
  * TkGetCursorByName --
  *
- *	Retrieve a system cursor by name.  
+ *	Retrieve a system cursor by name.
  *
  * Results:
- *	Returns a new cursor, or NULL on errors.  
+ *	Returns a new cursor, or NULL on errors.
  *
  * Side effects:
  *	Allocates a new cursor.

@@ -385,7 +385,7 @@ static Tcl_ThreadDataKey dataKey;
 static int initialized;        /* Flag indicating whether module has
 				* been initialized. */
 
-/* 
+/*
  * A pointer to a shell proc which allows us to extract icons from
  * any file.  We just initialize this when we start up (if we can)
  * and then it never changes
@@ -452,9 +452,9 @@ static WinIconPtr       GetIconFromPixmap _ANSI_ARGS_((Display *dsPtr,
 						       Pixmap pixmap));
 static int     		ReadICOHeader _ANSI_ARGS_((Tcl_Channel channel));
 static BOOL 		AdjustIconImagePointers _ANSI_ARGS_((LPICONIMAGE lpImage));
-static HICON 		MakeIconOrCursorFromResource 
+static HICON 		MakeIconOrCursorFromResource
                             _ANSI_ARGS_((LPICONIMAGE lpIcon, BOOL isIcon));
-static HICON 		GetIcon _ANSI_ARGS_((WinIconPtr titlebaricon, 
+static HICON 		GetIcon _ANSI_ARGS_((WinIconPtr titlebaricon,
 			    int icon_size));
 static int 		WinSetIcon _ANSI_ARGS_((Tcl_Interp *interp,
 			    WinIconPtr titlebaricon, Tk_Window tkw));
@@ -575,7 +575,7 @@ static void		WmUpdateGeom _ANSI_ARGS_((WmInfo *wmPtr,
  *
  *----------------------------------------------------------------------
  */
-static WORD 
+static WORD
 DIBNumColors( LPSTR lpbi )
 {
     WORD wBitCount;
@@ -614,7 +614,7 @@ DIBNumColors( LPSTR lpbi )
  *
  *----------------------------------------------------------------------
  */
-static WORD 
+static WORD
 PaletteSize( LPSTR lpbi )
 {
     return ((WORD)( DIBNumColors( lpbi ) * sizeof( RGBQUAD )) );
@@ -637,7 +637,7 @@ PaletteSize( LPSTR lpbi )
  *
  *----------------------------------------------------------------------
  */
-static LPSTR 
+static LPSTR
 FindDIBBits( LPSTR lpbi )
 {
    return ( lpbi + *(LPDWORD)lpbi + PaletteSize( lpbi ) );
@@ -660,7 +660,7 @@ FindDIBBits( LPSTR lpbi )
  *
  *----------------------------------------------------------------------
  */
-static DWORD 
+static DWORD
 BytesPerLine( LPBITMAPINFOHEADER lpBMIH )
 {
     return WIDTHBYTES(lpBMIH->biWidth * lpBMIH->biPlanes * lpBMIH->biBitCount);
@@ -683,7 +683,7 @@ BytesPerLine( LPBITMAPINFOHEADER lpBMIH )
  *
  *----------------------------------------------------------------------
  */
-static BOOL 
+static BOOL
 AdjustIconImagePointers( LPICONIMAGE lpImage )
 {
     /*  Sanity check */
@@ -693,13 +693,13 @@ AdjustIconImagePointers( LPICONIMAGE lpImage )
     lpImage->lpbi = (LPBITMAPINFO)lpImage->lpBits;
     /*  Width - simple enough */
     lpImage->Width = lpImage->lpbi->bmiHeader.biWidth;
-    /* 
-     * Icons are stored in funky format where height is doubled 
-     * so account for that 
+    /*
+     * Icons are stored in funky format where height is doubled
+     * so account for that
      */
     lpImage->Height = (lpImage->lpbi->bmiHeader.biHeight)/2;
     /*  How many colors? */
-    lpImage->Colors = lpImage->lpbi->bmiHeader.biPlanes * 
+    lpImage->Colors = lpImage->lpbi->bmiHeader.biPlanes *
                             lpImage->lpbi->bmiHeader.biBitCount;
     /*  XOR bits follow the header and color table */
     lpImage->lpXOR = (LPBYTE)FindDIBBits(((LPSTR)lpImage->lpbi));
@@ -725,7 +725,7 @@ AdjustIconImagePointers( LPICONIMAGE lpImage )
  *
  *----------------------------------------------------------------------
  */
-static HICON 
+static HICON
 MakeIconOrCursorFromResource(LPICONIMAGE lpIcon, BOOL isIcon) {
     HICON hIcon ;
     static FARPROC pfnCreateIconFromResourceEx=NULL;
@@ -739,7 +739,7 @@ MakeIconOrCursorFromResource(LPICONIMAGE lpIcon, BOOL isIcon) {
 	HMODULE hMod = GetModuleHandleA("USER32.DLL");
 	initinfo=1;
 	if (hMod){
-	    pfnCreateIconFromResourceEx = 
+	    pfnCreateIconFromResourceEx =
 	      GetProcAddress(hMod, "CreateIconFromResourceEx");
 	}
     }
@@ -756,7 +756,7 @@ MakeIconOrCursorFromResource(LPICONIMAGE lpIcon, BOOL isIcon) {
     if (hIcon == NULL)    {
 	/*  We would break on NT if we try with a 16bpp image */
 	if (lpIcon->lpbi->bmiHeader.biBitCount != 16) {
-	    hIcon = CreateIconFromResource(lpIcon->lpBits, lpIcon->dwNumBytes, 
+	    hIcon = CreateIconFromResource(lpIcon->lpBits, lpIcon->dwNumBytes,
 					   isIcon, 0x00030000);
 	}
     }
@@ -780,7 +780,7 @@ MakeIconOrCursorFromResource(LPICONIMAGE lpIcon, BOOL isIcon) {
  *
  *----------------------------------------------------------------------
  */
-static int 
+static int
 ReadICOHeader( Tcl_Channel channel )
 {
     WORD    Input;
@@ -826,10 +826,10 @@ ReadICOHeader( Tcl_Channel channel )
  *
  *----------------------------------------------------------------------
  */
-static int 
+static int
 InitWindowClass(WinIconPtr titlebaricon)
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	    Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (! tsdPtr->initialized) {
@@ -847,9 +847,9 @@ InitWindowClass(WinIconPtr titlebaricon)
 	    if (shgetfileinfoProc == NULL) {
 		HINSTANCE hInstance = LoadLibraryA("shell32");
 		if (hInstance != NULL) {
-		    shgetfileinfoProc = 
+		    shgetfileinfoProc =
 		    (DWORD* (WINAPI *) (LPCTSTR pszPath, DWORD dwFileAttributes,
-    SHFILEINFO* psfi, UINT cbFileInfo, UINT uFlags)) GetProcAddress(hInstance, 
+    SHFILEINFO* psfi, UINT cbFileInfo, UINT uFlags)) GetProcAddress(hInstance,
 		      "SHGetFileInfo");
 		    FreeLibrary(hInstance);
 		}
@@ -1111,7 +1111,7 @@ TkWinGetIcon(Tk_Window tkwin, DWORD iconsize)
 {
     WmInfo *wmPtr;
     HICON icon;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	    Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (tsdPtr->iconPtr != NULL) {
@@ -1169,7 +1169,7 @@ TkWinGetIcon(Tk_Window tkwin, DWORD iconsize)
  *	icon assigned to the given file and use that.  If both of those
  *	fail, then NULL is returned, and an error message will already be
  *	in the interpreter.
- *	
+ *
  * Results:
  *	A WinIconPtr structure containing the icons in the file, with
  *	its ref count already incremented. The calling procedure should
@@ -1291,7 +1291,7 @@ ReadIconFromFile(interp, fileName)
  *	calling procedure should either place this structure inside a
  *	WmInfo structure, or it should pass it on to DecrIconRefCount()
  *	to ensure no memory leaks occur.
- *	
+ *
  *	If the given pixmap did not contain a valid icon structure,
  *	return NULL.
  *
@@ -1300,7 +1300,7 @@ ReadIconFromFile(interp, fileName)
  *	it contains.  If the structure is not wanted, it should be
  *	passed to DecrIconRefCount, and in any case a valid ref count
  *	should be ensured to avoid memory leaks.
- *	
+ *
  *	Currently icon resources are not shared, so the ref count of
  *	one of these structures will always be 0 or 1.  However all we
  *	need do is implement some sort of lookup function between
@@ -1309,18 +1309,18 @@ ReadIconFromFile(interp, fileName)
  *
  *----------------------------------------------------------------------
  */
-static WinIconPtr       
+static WinIconPtr
 GetIconFromPixmap(dsPtr, pixmap)
     Display *dsPtr;
     Pixmap pixmap;
 {
     WinIconPtr titlebaricon = NULL;
     TkWinDrawable* twdPtr = (TkWinDrawable*) pixmap;
-    
+
     if (twdPtr == NULL) {
         return NULL;
     }
-    
+
     if (0 /* If we already have an icon for this pixmap */) {
 	titlebaricon = NULL; /* Get the real value from a lookup */
 	titlebaricon->refCount++;
@@ -1385,7 +1385,7 @@ GetIconFromPixmap(dsPtr, pixmap)
  *
  *----------------------------------------------------------------------
  */
-static void 
+static void
 DecrIconRefCount(WinIconPtr titlebaricon) {
     titlebaricon->refCount--;
 
@@ -1416,7 +1416,7 @@ DecrIconRefCount(WinIconPtr titlebaricon) {
  *
  *----------------------------------------------------------------------
  */
-static void 
+static void
 FreeIconBlock(BlockOfIconImagesPtr lpIR)
 {
     int i;
@@ -1448,11 +1448,11 @@ FreeIconBlock(BlockOfIconImagesPtr lpIR)
  *
  *----------------------------------------------------------------------
  */
-static HICON 
+static HICON
 GetIcon(WinIconPtr titlebaricon, int icon_size)
 {
     BlockOfIconImagesPtr lpIR;
-    
+
     if (titlebaricon == NULL) {
         return NULL;
     }
@@ -1473,8 +1473,8 @@ GetIcon(WinIconPtr titlebaricon, int icon_size)
 	    }
 	}
 
-	/* 
-	 * If we get here, then just return the first one, 
+	/*
+	 * If we get here, then just return the first one,
 	 * it will have to do!
 	 */
 	if (lpIR->nNumImages >= 1) {
@@ -1484,12 +1484,12 @@ GetIcon(WinIconPtr titlebaricon, int icon_size)
     return NULL;
 }
 
-static HCURSOR 
+static HCURSOR
 TclWinReadCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName)
 {
     BlockOfIconImagesPtr lpIR;
     HICON res = NULL;
-    
+
     lpIR = ReadIconOrCursorFromFile(interp, fileName, FALSE);
     if (lpIR == NULL) {
         return NULL;
@@ -1518,7 +1518,7 @@ TclWinReadCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName)
  *
  *----------------------------------------------------------------------
  */
-static BlockOfIconImagesPtr 
+static BlockOfIconImagesPtr
 ReadIconOrCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName, BOOL isIcon)
 {
     BlockOfIconImagesPtr lpIR, lpNew;
@@ -1530,8 +1530,8 @@ ReadIconOrCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName, BOOL isIcon)
     /*  Open the file */
     channel = Tcl_FSOpenFileChannel(interp, fileName, "r", 0);
     if (channel == NULL) {
-	Tcl_AppendResult(interp,"Error opening file \"", 
-			 Tcl_GetString(fileName), 
+	Tcl_AppendResult(interp,"Error opening file \"",
+			 Tcl_GetString(fileName),
 	                 "\" for reading",(char*)NULL);
 	return NULL;
     }
@@ -1560,7 +1560,7 @@ ReadIconOrCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName, BOOL isIcon)
 	return NULL;
     }
     /*  Adjust the size of the struct to account for the images */
-    lpNew = (BlockOfIconImagesPtr) ckrealloc((char*)lpIR, 
+    lpNew = (BlockOfIconImagesPtr) ckrealloc((char*)lpIR,
 	sizeof(BlockOfIconImages) + ((lpIR->nNumImages-1) * sizeof(ICONIMAGE)));
     if (lpNew == NULL) {
 	Tcl_AppendResult(interp,"Error allocating memory",(char*)NULL);
@@ -1578,7 +1578,7 @@ ReadIconOrCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName, BOOL isIcon)
 	return NULL;
     }
     /*  Read in the icon directory entries */
-    dwBytesRead = Tcl_Read(channel, (char*)lpIDE, 
+    dwBytesRead = Tcl_Read(channel, (char*)lpIDE,
 			   lpIR->nNumImages * sizeof( ICONDIRENTRY ));
     if (dwBytesRead != lpIR->nNumImages * sizeof( ICONDIRENTRY ))    {
 	Tcl_AppendResult(interp,"Error reading file",(char*)NULL);
@@ -1605,7 +1605,7 @@ ReadIconOrCursorFromFile(Tcl_Interp* interp, Tcl_Obj* fileName, BOOL isIcon)
 	    goto readError;
 	}
 	/*  Read it in */
-	dwBytesRead = Tcl_Read( channel, lpIR->IconImages[i].lpBits, 
+	dwBytesRead = Tcl_Read( channel, lpIR->IconImages[i].lpBits,
 			       lpIDE[i].dwBytesInRes);
 	if (dwBytesRead != lpIDE[i].dwBytesInRes) {
 	    Tcl_AppendResult(interp,"Error reading file",(char*)NULL);

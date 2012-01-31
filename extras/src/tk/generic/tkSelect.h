@@ -164,7 +164,7 @@ typedef struct TkSelInProgress {
  * but shouldn't be used anywhere else in Tk (or by Tk clients):
  */
 
-extern TkSelInProgress * 
+extern TkSelInProgress *
                         TkSelGetInProgress _ANSI_ARGS_((void));
 extern void             TkSelSetInProgress _ANSI_ARGS_((
                             TkSelInProgress *pendingPtr));

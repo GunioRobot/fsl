@@ -38,7 +38,7 @@ dr=kmax/(nx*ny)/oversamp;
 
 kc=zeros(3,oversamp*nx*ny);
 n=1:oversamp*(nx*ny);
-kc(1,:)=n*dr.*cos(n*dtheta);  
+kc(1,:)=n*dr.*cos(n*dtheta);
 kc(2,:)=n*dr.*sin(n*dtheta);
 
 
@@ -49,7 +49,7 @@ sig=sinc(kc(1,:)*lx).*sinc(kc(2,:)*ly);
 sig=[sig ; 0*sig];
 
 
-%% show k-space trajectory of spiral vs standard epi 
+%% show k-space trajectory of spiral vs standard epi
 plot(kepi(1,:),kepi(2,:),'-x')
 hold on
 plot(kc(1,:),kc(2,:),'ro-')

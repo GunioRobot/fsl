@@ -1,4 +1,4 @@
-/* 
+/*
  * tclMacDNR.c
  *
  *	This file actually just includes the file "dnr.c" provided by

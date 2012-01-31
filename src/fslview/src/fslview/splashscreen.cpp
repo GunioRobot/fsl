@@ -25,7 +25,7 @@
 /**
  * Display a splash screen for a few seconds and then invoke the app.
  */
-SplashScreen::SplashScreen(QWidget *parent, ApplicationOptions& opts, const char *name) 
+SplashScreen::SplashScreen(QWidget *parent, ApplicationOptions& opts, const char *name)
   : QFrame(parent, name, QWidget::WStyle_NoBorder | QWidget::WStyle_Customize), m_options(opts)
 {
 
@@ -58,7 +58,7 @@ void SplashScreen::showEvent(QShowEvent *e)
 
     QTimer *timer = new QTimer( this );
     connect( timer, SIGNAL(timeout()), this, SLOT(runApplication()) );
-#if defined(WIN32)    
+#if defined(WIN32)
 	timer->start( 1, TRUE );
 #else
 	timer->start( 1000, TRUE );

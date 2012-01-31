@@ -51,7 +51,7 @@ General header common to chart (xy[z]) and pie
 
 #define ABS( x )			( (x)<0.0? -(x): (x) )
 #define MAX( x, y )			( (x)>(y)?(x):(y) )
-#define MIN( x, y )			( (x)<(y)?(x):(y) ) 
+#define MIN( x, y )			( (x)<(y)?(x):(y) )
 #define TO_RAD(o)			( (o)/360.0*(2.0*M_PI) )
 
 #define GDC_NOCOLOR			0x1000000L

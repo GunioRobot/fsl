@@ -221,8 +221,8 @@ ListBox has a command wrapper for <I>drag-init</I> events. This command refused 
 if no item is designated. In other cases:
 <BR>If <B>draginitcmd</B> is empty, it returns:
 <UL>
-<LI>the value of option <B>dragtype</B> or <I>LISTBOX_ITEM</I> if empty as the data type, 
-<LI><I>{move copy link}</I> as the operations, 
+<LI>the value of option <B>dragtype</B> or <I>LISTBOX_ITEM</I> if empty as the data type,
+<LI><I>{move copy link}</I> as the operations,
 <LI>the item identifier as the data.
 </UL>
 If <B>draginitcmd</B> is not empty, it is called with the following arguments:
@@ -558,10 +558,10 @@ Specifies a pathname to display at the left of the label of the item.
 </DT><DD>
 
 <B>Its use is deprecated. Use <I>items</I> instead.</B><BR>
-If <I>last</I> is omitted, returns the item at index <I>first</I> in the list, 
+If <I>last</I> is omitted, returns the item at index <I>first</I> in the list,
 or an empty string if <I>first</I> refers to a non-existent element.
 If <I>last</I> is specified, the command returns a list whose elements are all
-of the items between <I>first</I> and <I>last</I>, inclusive. 
+of the items between <I>first</I> and <I>last</I>, inclusive.
 Both <I>first</I> and <I>last</I> may have any of the standard forms for indices.
 
 </DD></DL>
@@ -581,7 +581,7 @@ Returns the current value of a configuration option for the item.
 
 This command is similar to the <B>configure</B> command, except that it applies to the
 options for an individual item, whereas <B>configure</B> applies to the options for
-the widget as a whole. <B>Options</B> may have any of the values accepted by the 
+the widget as a whole. <B>Options</B> may have any of the values accepted by the
 item creation widget command. If options are specified, options are modified as indicated
 in the command and the command returns an empty string. If no options are specified,
 returns a list describing the current options for the item.

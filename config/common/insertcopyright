@@ -27,7 +27,7 @@ for fname in $@ ; do
     cp -f $fname.copytmp $fname
     rm -f $fname.copytmp
   fi
-  
+
   # Insert TCLCOPYRIGHT message
   num=`grep -n TCLCOPYRIGHT $fname | head -1 | cut -d':' -f1 `; export num
   if [ "X${num}X" != XX ] ; then
@@ -59,4 +59,4 @@ for fname in $@ ; do
   fi
 
  fi
-done  
+done

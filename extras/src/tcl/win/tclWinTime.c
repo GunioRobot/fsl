@@ -1,4 +1,4 @@
-/* 
+/*
  * tclWinTime.c --
  *
  *	Contains Windows specific versions of Tcl functions that
@@ -75,7 +75,7 @@ typedef struct TimeInfo {
     /*
      * The following values are used for calculating virtual time.
      * Virtual time is always equal to:
-     *    lastFileTime + (current perf counter - lastCounter) 
+     *    lastFileTime + (current perf counter - lastCounter)
      *				* 10000000 / curCounterFreq
      * and lastFileTime and lastCounter are updated any time that
      * virtual time is returned to a caller.
@@ -122,7 +122,7 @@ static TimeInfo timeInfo = {
 };
 
 CONST static FILETIME posixEpoch = { 0xD53E8000, 0x019DB1DE };
-    
+
 /*
  * Declarations for functions defined later in this file.
  */
@@ -132,7 +132,7 @@ static void		StopCalibration _ANSI_ARGS_(( ClientData ));
 static DWORD WINAPI     CalibrationThread _ANSI_ARGS_(( LPVOID arg ));
 static void 		UpdateTimeEachSecond _ANSI_ARGS_(( void ));
 static void		ResetCounterSamples _ANSI_ARGS_((
-			    Tcl_WideUInt fileTime, 
+			    Tcl_WideUInt fileTime,
                             Tcl_WideInt perfCounter,
 			    Tcl_WideInt perfFreq
 			));
@@ -273,7 +273,7 @@ Tcl_GetTime(timePtr)
      * since it avoids an extra mutex lock in the common case.
      */
 
-    if ( !timeInfo.initialized ) { 
+    if ( !timeInfo.initialized ) {
 	TclpInitLock();
 	if ( !timeInfo.initialized ) {
 	    timeInfo.perfCounterAvailable
@@ -327,13 +327,13 @@ Tcl_GetTime(timePtr)
 		     && regs[3] == 0x49656e69 /* "ineI" */
 		     && regs[2] == 0x6c65746e /* "ntel" */
 
-		     && TclWinCPUID( 1, regs ) == TCL_OK 
+		     && TclWinCPUID( 1, regs ) == TCL_OK
 
 		     && ( (regs[0] & 0x00000F00) == 0x00000F00 /* Pentium 4 */
 			  || ( (regs[0] & 0x00F00000)    /* Extended family */
 			       && (regs[3] & 0x10000000) ) ) /* Hyperthread */
 		     && ( ( ( regs[1] & 0x00FF0000 ) >> 16 ) /* CPU count */
-			  == systemInfo.dwNumberOfProcessors ) 
+			  == systemInfo.dwNumberOfProcessors )
 
 		    ) {
 		    timeInfo.perfCounterAvailable = TRUE;
@@ -404,7 +404,7 @@ Tcl_GetTime(timePtr)
 
 	QueryPerformanceCounter( &curCounter );
 
-	/* 
+	/*
 	 * If it appears to be more than 1.1 seconds since the last trip
 	 * through the calibration loop, the performance counter may
 	 * have jumped forward. (See MSDN Knowledge Base article
@@ -497,8 +497,8 @@ TclpGetTZName(int dst)
      * tzset() under Borland doesn't seem to set up tzname[] at all.
      * tzset() under MSVC has the following weird observed behavior:
      *	 First time we call "clock format [clock seconds] -format %Z -gmt 1"
-     *	 we get "GMT", but on all subsequent calls we get the current time 
-     *	 zone string, even though env(TZ) is GMT and the variable _timezone 
+     *	 we get "GMT", but on all subsequent calls we get the current time
+     *	 zone string, even though env(TZ) is GMT and the variable _timezone
      *   is 0.
      */
 
@@ -509,8 +509,8 @@ TclpGetTZName(int dst)
 	/*
 	 * TZ is of form "NST-4:30NDT", where "NST" would be the
 	 * name of the standard time zone for this area, "-4:30" is
-	 * the offset from GMT in hours, and "NDT is the name of 
-	 * the daylight savings time zone in this area.  The offset 
+	 * the offset from GMT in hours, and "NDT is the name of
+	 * the daylight savings time zone in this area.  The offset
 	 * and DST strings are optional.
 	 */
 
@@ -545,11 +545,11 @@ TclpGetTZName(int dst)
 	    dst = 0;
 	}
 	encoding = Tcl_GetEncoding(NULL, "unicode");
-	Tcl_ExternalToUtf(NULL, encoding, 
-		(char *) ((dst) ? tz.DaylightName : tz.StandardName), -1, 
+	Tcl_ExternalToUtf(NULL, encoding,
+		(char *) ((dst) ? tz.DaylightName : tz.StandardName), -1,
 		0, NULL, name, sizeof(tsdPtr->tzName), NULL, NULL, NULL);
 	Tcl_FreeEncoding(encoding);
-    } 
+    }
     return name;
 }
 
@@ -722,7 +722,7 @@ ComputeGMT(tp)
 
     tmPtr->tm_yday = rem / SECSPERDAY;
     rem %= SECSPERDAY;
-    
+
     /*
      * Compute the time of day.
      */
@@ -904,7 +904,7 @@ UpdateTimeEachSecond()
 
     /*
      * We want to adjust things so that time appears to be continuous.
-     * Virtual file time, right now, is 
+     * Virtual file time, right now, is
      *
      * vt0 = 10000000 * ( curPerfCounter - perfCounterLastCall )
      *       / curCounterFreq
@@ -914,11 +914,11 @@ UpdateTimeEachSecond()
      * period of 2 sec, so that virtual time 2 sec from now will be
      *
      * vt1 = 20000000 + curFileTime
-     * 
+     *
      * The frequency that we need to use to drift the counter back into
      * place is estFreq * 20000000 / ( vt1 - vt0 )
      */
-    
+
     vt0 = 10000000 * ( curPerfCounter.QuadPart
 		       - timeInfo.perfCounterLastCall.QuadPart )
 	/ timeInfo.curCounterFreq.QuadPart
@@ -1026,7 +1026,7 @@ AccumulateSample( Tcl_WideInt perfCounter,
 				 * from or added to the circular buffer */
 
     Tcl_WideInt workPCSample;	/* Performance counter sample being
-				 * removed from or added to the circular 
+				 * removed from or added to the circular
 				 * buffer */
 
     Tcl_WideUInt lastFTSample;	/* Last file time sample recorded */
@@ -1061,22 +1061,22 @@ AccumulateSample( Tcl_WideInt perfCounter,
 	return timeInfo.nominalFreq.QuadPart;
 
     } else {
-    
+
 	/* Estimate the frequency */
-	
+
 	workPCSample = timeInfo.perfCounterSample[ timeInfo.sampleNo ];
 	workFTSample = timeInfo.fileTimeSample[ timeInfo.sampleNo ];
 	estFreq = 10000000 * ( perfCounter - workPCSample )
 	    / ( fileTime - workFTSample );
 	timeInfo.perfCounterSample[ timeInfo.sampleNo ] = perfCounter;
 	timeInfo.fileTimeSample[ timeInfo.sampleNo ] = (Tcl_WideInt) fileTime;
-	
+
 	/* Advance the sample number */
-	
+
 	if ( ++timeInfo.sampleNo >= SAMPLES ) {
 	    timeInfo.sampleNo = 0;
-	} 
-	
+	}
+
 	return estFreq;
     }
 }

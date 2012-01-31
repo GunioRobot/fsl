@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixMenubu.c --
  *
  *	This file implements the Unix specific portion of the
@@ -189,7 +189,7 @@ TkpDisplayMenuButton(clientData)
 	} else if (mbPtr->bitmap != None) {
 	    XSetClipOrigin(mbPtr->display, gc, imageXOffset, imageYOffset);
 	    XCopyPlane(mbPtr->display, mbPtr->bitmap, pixmap,
-		    gc, 0, 0, (unsigned) width, (unsigned) height, 
+		    gc, 0, 0, (unsigned) width, (unsigned) height,
 		    imageXOffset, imageYOffset, 1);
 	    XSetClipOrigin(mbPtr->display, gc, 0, 0);
 	}
@@ -209,7 +209,7 @@ TkpDisplayMenuButton(clientData)
 	} else if (mbPtr->bitmap != None) {
 	    XSetClipOrigin(mbPtr->display, gc, x, y);
 	    XCopyPlane(mbPtr->display, mbPtr->bitmap, pixmap,
-		    gc, 0, 0, (unsigned) width, (unsigned) height, 
+		    gc, 0, 0, (unsigned) width, (unsigned) height,
 		    x, y, 1);
 	    XSetClipOrigin(mbPtr->display, gc, 0, 0);
 	}
@@ -217,7 +217,7 @@ TkpDisplayMenuButton(clientData)
 	TkComputeAnchor(mbPtr->anchor, tkwin, mbPtr->padX, mbPtr->padY,
 		mbPtr->textWidth + mbPtr->indicatorWidth,
 		mbPtr->textHeight, &x, &y);
-	Tk_DrawTextLayout(mbPtr->display, pixmap, gc, mbPtr->textLayout, 
+	Tk_DrawTextLayout(mbPtr->display, pixmap, gc, mbPtr->textLayout,
 		x + textXOffset, y + textYOffset, 0, -1);
 	Tk_UnderlineTextLayout(mbPtr->display, pixmap, gc,
 		mbPtr->textLayout, x + textXOffset, y + textYOffset,
@@ -229,7 +229,7 @@ TkpDisplayMenuButton(clientData)
      * foreground color, generate the stippled effect.
      */
 
-    if ((mbPtr->state == STATE_DISABLED) 
+    if ((mbPtr->state == STATE_DISABLED)
             && ((mbPtr->disabledFg == NULL) || (mbPtr->image != NULL))) {
 	/*
 	 * Stipple the whole button if no disabledFg was specified,

@@ -2,7 +2,7 @@
 #define _DATE_TIME_TIME_ZONE_BASE__
 
 /* Copyright (c) 2003-2005 CrystalClear Software, Inc.
- * Subject to the Boost Software License, Version 1.0. 
+ * Subject to the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  * $Date: 2007/06/12 15:03:23 $
@@ -25,9 +25,9 @@ namespace date_time {
    *  would be to convert from POSIX timezone strings.  Regardless of
    *  the construction technique, this is the interface that these
    *  time zone types must provide.
-   * 
+   *
    * Note that this class is intended to be used as a shared
-   * resource (hence the derivation from boost::counted_base.  
+   * resource (hence the derivation from boost::counted_base.
    */
   template<typename time_type, typename CharT = char>
   class time_zone_base  {
@@ -59,9 +59,9 @@ namespace date_time {
     virtual time_duration_type dst_offset() const=0;
     //! Returns a POSIX time_zone string for this object
     virtual string_type to_posix_string() const =0;
-    
+
   private:
-    
+
   };
 
 
@@ -80,7 +80,7 @@ namespace date_time {
       dst_start_offset_(dst_start_offset),
       dst_end_offset_(dst_end_offset)
     {}
-    
+
     //! Amount DST adjusts the clock eg: plus one hour
     time_duration_type dst_adjust_;
     //! Time past midnight on start transition day that dst starts

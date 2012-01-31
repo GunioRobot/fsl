@@ -10,7 +10,7 @@ namespace boost { namespace parameter { namespace aux {
 
 // A placemarker for "no argument passed."
 // MAINTAINER NOTE: Do not make this into a metafunction
-struct void_ {}; 
+struct void_ {};
 
 }}} // namespace boost::parameter::aux
 

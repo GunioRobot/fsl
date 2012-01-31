@@ -50,7 +50,7 @@
 //   }
 // };
 
-BriConWidget::BriConWidget(QWidget* w, OverlayList::Handle list): 
+BriConWidget::BriConWidget(QWidget* w, OverlayList::Handle list):
   BriConWidgetBase(w), m_list(list)//, m_blockEvents(false)
 {
   MetaImage::Handle mi = m_list->getActiveMetaImage();
@@ -71,18 +71,18 @@ BriConWidget::BriConWidget(QWidget* w, OverlayList::Handle list):
   m_briSlider->setRange(-49, 49, 2, 1);
   m_conSlider->setRange(-49, 49, 2, 1);
 
-  connect(m_resetBriCon, SIGNAL(pressed()),this, SLOT(reset())); 
+  connect(m_resetBriCon, SIGNAL(pressed()),this, SLOT(reset()));
 
   connect(m_minBox, SIGNAL(lostFocus()), SLOT(minChanged()));
   connect(m_maxBox, SIGNAL(lostFocus()), SLOT(maxChanged()));
   connect(m_minBox, SIGNAL(returnPressed()), SLOT(minChanged()));
   connect(m_maxBox, SIGNAL(returnPressed()), SLOT(maxChanged()));
 
-  connect(m_briSlider, SIGNAL(valueChanged(double)),this, SLOT(briSliderChanged(double))); 
+  connect(m_briSlider, SIGNAL(valueChanged(double)),this, SLOT(briSliderChanged(double)));
   connect(m_conSlider, SIGNAL(valueChanged(double)),this, SLOT(conSliderChanged(double)));
   connect(m_briSlider, SIGNAL(sliderReleased()), this, SLOT(sliderReleased()));
   connect(m_conSlider, SIGNAL(sliderReleased()), this, SLOT(sliderReleased()));
-  
+
 }
 
 BriConWidget::~BriConWidget()
@@ -129,7 +129,7 @@ void BriConWidget::update(const OverlayList* list, OverlayListMsg msg)
 {
   TRACKER("BriConWidget::update(const OverlayList* list, OverlayListMsg msg)");
 
-  if(OverlayListMsg(Select) == msg) 
+  if(OverlayListMsg(Select) == msg)
     {
       MESSAGE("Select");
       MetaImage::Handle mi = list->getActiveMetaImage();
@@ -191,7 +191,7 @@ void BriConWidget::sliderReleased()
 
   m_minBox->setText( QString("%1").arg(m_bricon->inqMin(),7,'g',5) );
   m_maxBox->setText( QString("%1").arg(m_bricon->inqMax(),7,'g',5) );
-  
+
   m_briSlider->setValue(0);
   m_conSlider->setValue(0);
 }
@@ -200,7 +200,7 @@ void BriConWidget::updateMinMaxBoxes()
 {
   TRACKER("BriConWidget::updateMinMaxBoxes()");
   m_minBox->blockSignals(true);
-  m_minBox->setText( QString("%1").arg(m_bricon->inqAdjustedMin(),7,'g',5) );      
+  m_minBox->setText( QString("%1").arg(m_bricon->inqAdjustedMin(),7,'g',5) );
   m_minBox->blockSignals(false);
 
   m_maxBox->blockSignals(true);

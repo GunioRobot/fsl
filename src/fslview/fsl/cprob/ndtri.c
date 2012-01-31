@@ -398,7 +398,7 @@ if( y > 0.13533528323661269189 )
 	y = y - 0.5;
 	y2 = y * y;
 	x = y + y * (y2 * polevl( y2, P0, 4)/p1evl( y2, Q0, 8 ));
-	x = x * s2pi; 
+	x = x * s2pi;
 	return(x);
 	}
 

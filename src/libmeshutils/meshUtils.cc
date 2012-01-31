@@ -50,15 +50,15 @@ using namespace fslvtkio;
 using namespace FIRST_LIB;
 // Local functions
 namespace meshutils {
-	
+
 	meshUtils::meshUtils(){
-		
+
 	}
-	
+
 	meshUtils::meshUtils(const string & filename,const fslvtkIO::DataType i)
 {
-		
-		try 
+
+		try
 	{
 		switch (i)
 		{
@@ -81,18 +81,18 @@ namespace meshutils {
 		cout<<"invalid data type"<<endl;
 		return;
 	}
-		
+
 }
 	void meshUtils::loadMesh(const string & meshname){
 		//	mesh1=new fskvtkIO;
 			setDataType(static_cast<fslvtkIO::DataType>(0));
 			readPolyData(meshname);
 	}
-	
+
 	void meshUtils::getBounds(int *bounds,const float & xdim, const float & ydim,const float & zdim)
 	{
 		float xmin=1000,xmax=-1000,ymin=1000,ymax=-1000,zmin=1000,zmax=-1000;
-	
+
 		for (int i = 0; i<Points.Nrows(); i++ ){
 			float tempx=Points.element(i,0);
 			float tempy=Points.element(i,1);
@@ -122,23 +122,23 @@ namespace meshutils {
 		*(bounds+3)=static_cast<int>(ceil(ymax/ydim)+1);
 		*(bounds+4)=static_cast<int>(floor(zmin/zdim)-1);
 		*(bounds+5)=static_cast<int>(ceil(zmax/zdim)+1);
-		
+
 	}
-	
+
 	void meshUtils::generateRandomMeshUsingScalar(const Mesh & min, const string & outname, const vector<bool> & scal, const int & N)
 {
 
 	srand ( time(NULL) );
 	for (int i=0; i<N;i++)
 	{
-	
+
 	stringstream sout;
 		sout<<i;
 		string sind;
 		sout>>sind;
-		
+
 		Mesh m=min;
-		
+
 		int count=0;
 	    for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ , count++ )
 		{
@@ -147,16 +147,16 @@ namespace meshutils {
 				//	cout<<static_cast<float>(rand()-RAND_MAX/2.0)<<" "<<RAND_MAX<<" "<<static_cast<float>(rand()-RAND_MAX/2.0)/RAND_MAX<<endl;
 				float rn=static_cast<float>(rand()-RAND_MAX/2.0)/RAND_MAX*1.0+0.5;
 				//	cout<<"rn "<<rn<<endl;
-				
+
 				(*i)->_update_coord = (*i)->get_coord() + rn * ((*i)->local_normal());
 			}else
-			{	
-				
+			{
+
 				//						cout<<static_cast<float>(rand()-RAND_MAX/2.0)<<" "<<RAND_MAX<<" "<<static_cast<float>(rand()-RAND_MAX/2.0)/RAND_MAX<<endl;
-				
+
 				float rn2=static_cast<float>(rand()-RAND_MAX/2.0)/RAND_MAX*1.0+0;
 				//	cout<<"rn2 "<<rn2<<endl;
-				
+
 				(*i)->_update_coord = (*i)->get_coord() + rn2 * ((*i)->local_normal());
 			}
 		}
@@ -167,20 +167,20 @@ namespace meshutils {
 
 	void meshUtils::generateRandom6DOFMatrices( const string & outname, const int & N)
 {
-	
+
 	const float PI=3.14159;
 	//allow to go plus minus pi/4 in each direction
-	
+
 	srand ( time(NULL) );
 	for (int i=0; i<N;i++)
 	{
-	
+
 	stringstream sout;
 		sout<<i;
 		string sind;
 		sout>>sind;
-	
-		
+
+
 		float alpha=static_cast<float>(rand()-RAND_MAX/2.0)*2*PI/(4.0*RAND_MAX) ;
 		float beta=static_cast<float>(rand()-RAND_MAX/2.0)*2*PI/(4.0*RAND_MAX) ;
 		float gam=static_cast<float>(rand()-RAND_MAX/2.0)*2*PI/(4.0*RAND_MAX) ;
@@ -188,7 +188,7 @@ namespace meshutils {
 		Matrix Rx(4,4);
 		Matrix Ry(4,4);
 		Matrix Rz(4,4);
-		
+
 		Rx=0;
 		Rx.element(0,0)=1;
 		Rx.element(1,1)=cos(alpha);
@@ -215,7 +215,7 @@ namespace meshutils {
 
 
 		Matrix final=Rx*Ry*Rz;
-		
+
 		float tx=static_cast<float>(rand()-RAND_MAX/2.0)*2*50/(RAND_MAX) ;
 		float ty=static_cast<float>(rand()-RAND_MAX/2.0)*2*50/(RAND_MAX) ;
 		float tz=static_cast<float>(rand()-RAND_MAX/2.0)*2*50/(RAND_MAX) ;
@@ -237,11 +237,11 @@ namespace meshutils {
 		vector<float> vars;
 		for (int i=0;i<=mode;i++)
 			vars.push_back(0);
-		
+
 		volume4D<float> meanI4D;
 		volume4D<float> varI4D;
-		
-		
+
+
 		cout<<"calculate  base covariance"<<endl;
 		vector< vector<float> > prec=min->getShape(0)->getICondPrec();
 		vector<float> eigs=min->getShape(0)->getICondEigs();
@@ -258,29 +258,29 @@ time_t start,end;
 		cout<<"done ultiply"<<endl;
 
 				cout<<"time begin "<<time(&start)<<endl;
-		
+
 		for ( float b=bmin; b<bmax;b++)
 			  {
-				  cout<<"set mode "<<mode<<" to "<<b<<" "<<vars.size()<<endl; 
+				  cout<<"set mode "<<mode<<" to "<<b<<" "<<vars.size()<<endl;
 					vars.at(mode)=b;
 				  cout<<"vars adjusted "<<endl;
 				  vector<float> iprof=min->getDeformedIprof(vars,mode,vars.size());
-				 				  
+
 				  vector< vector<float> > vcov;
 				  vector<float> var;
-				
+
 				  if ( !(eigs.size()==prec.size()) )
 					  throw fslvtkIOException("number of eigenvalues does not match number of number modes");
-				  
-				
+
+
 				volume<float> imean=im;
 				volume<float> ivar=im;
 				imean=0;
 				ivar=0;
 				float xdim=im.xdim(),ydim=im.ydim(),zdim=im.zdim() ;
-				
+
 				Mesh m= min->getDeformedMeshTrans(vars,mode,vars.size());
-		
+
 		vector<float>::iterator iprof_iter=iprof.begin();
 		int ipp=min->getIPP(0);
 				cout<<"ipp "<<ipp<<endl;
@@ -301,7 +301,7 @@ time_t start,end;
 				ivar.value(vertNew.X/xdim,vertNew.Y/ydim,vertNew.Z/zdim)=Mprec.element(count,count);
 
 			}
-			
+
 		}
 		meanI4D.addvolume(imean);
 		varI4D.addvolume(ivar);
@@ -321,25 +321,25 @@ time_t start,end;
 //		if (*i) mag++;
 //	}
 //	mag=sqrt(mag);
-		
+
 		Mesh m =min->getShapeMesh(0);
 		unsigned int count=0;
 	    for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ , count++ )
 		{
 			vector< Vec > shapeMode;
-			
+
 			if (scal.at(count)){
 				vector<float> eigNew;
 				eigNew.push_back(1);
 				for (int j=0;j<min->getNumberOfModes();j++)
 				{
 					eigNew.push_back(min->getEigenValue(j));
-				}	
+				}
 				min->setEigenValues(eigNew);
-				
+
 				for (unsigned int j=0;j<scal.size();j++)
 				{
-					if (j==count) 
+					if (j==count)
 						shapeMode.push_back((*i)->local_normal());
 					else
 					{
@@ -355,7 +355,7 @@ time_t start,end;
 */
 //static function that takes in mesh class mesh
 	void meshUtils::getBounds(const Mesh & m, int *bounds, const float & xdim, const float & ydim,const float & zdim){
-		
+
 		float xmin=1000,xmax=-1000,ymin=1000,ymax=-1000,zmin=1000,zmax=-1000;
 		for (vector<Mpoint*>::const_iterator i = m._points.begin(); i!=m._points.end(); i++ ){
 			float tempx=(*i)->get_coord().X;
@@ -386,9 +386,9 @@ time_t start,end;
 		*(bounds+3)=static_cast<int>(ceil(ymax/ydim)+1);
 		*(bounds+4)=static_cast<int>(floor(zmin/zdim)-1);
 		*(bounds+5)=static_cast<int>(ceil(zmax/zdim)+1);
-		
+
 	}
-	
+
 	//static
 void meshUtils::fileToVector(const string & fname, vector<string> meshlist)
 {
@@ -428,7 +428,7 @@ ReturnMatrix meshUtils::readFlirtMat(const string & fname)
 		}
 	fmat.Release();
 	return fmat;
-	
+
 }
 void meshUtils::writeFlirtMatrix(const Matrix & fmat, const string & fname)
 {
@@ -465,7 +465,7 @@ void meshUtils::meshReg(const Matrix & fmat){
 	ones=1;
 	Points=Points | ones;
 	Points=(fmat*(Points.t())).t();
-	Points=Points.SubMatrix(1,Points.Nrows(),1,3); 
+	Points=Points.SubMatrix(1,Points.Nrows(),1,3);
 }
 
 
@@ -492,7 +492,7 @@ void meshUtils::shift3DMesh(Mesh & m, const float & tx, const float & ty, const 
 		(*i)->_update_coord.Z=(*i)->get_coord().Z+tz;
 	}
 	m.update();
-	
+
 }
 
 	void meshUtils::shiftPoints( const  float & tx, const float & ty, const float & tz ){
@@ -500,7 +500,7 @@ void meshUtils::shift3DMesh(Mesh & m, const float & tx, const float & ty, const 
 			Points.element(i,0)+=tx;
 			Points.element(i,1)+=ty;
 			Points.element(i,2)+=tz;
-			
+
 		}
 	}
 	void meshUtils::scalePoints( const  float & sx, const float & sy, const float & sz ){
@@ -511,61 +511,61 @@ void meshUtils::shift3DMesh(Mesh & m, const float & tx, const float & ty, const 
 			Points.element(i,2)*=sz;
 		}
 	}
-	
+
 	void meshUtils::shiftPolygonMatrix(const int & shift ){
 
 		for (int i=0; i<Polygons.Nrows();i++)
 			for (int j=0; j<Polygons.Ncols();j++)
 				Polygons.element(i,j)+=shift;
-		
+
 	}
-	
+
 	ReturnMatrix meshUtils::shiftPolygonMatrix(const Matrix & mat, const int & shift ){
 
 		Matrix polyShift(mat.Nrows(),mat.Ncols());
 		for (int i=0; i<mat.Nrows();i++)
 			for (int j=0; j<mat.Ncols();j++)
 				polyShift.element(i,j)=mat.element(i,j)+shift;
-		
+
 		polyShift.Release();
 		return polyShift;
 	}
 	ReturnMatrix meshUtils::meshPointsToMatrix(const Mesh & m1)
 {
-//this mimics the other except the reference should already be loaded 
+//this mimics the other except the reference should already be loaded
 	Matrix pointsRef(m1._points.size(),3);
 	int count=0;
 	for (vector<Mpoint*>::const_iterator i=m1._points.begin(); i!=m1._points.end();i++,count++)
 	{
-		pointsRef.element(count,0)=(*i)->get_coord().X;		
-		pointsRef.element(count,1)=(*i)->get_coord().Y;		
-		pointsRef.element(count,2)=(*i)->get_coord().Z;		
+		pointsRef.element(count,0)=(*i)->get_coord().X;
+		pointsRef.element(count,1)=(*i)->get_coord().Y;
+		pointsRef.element(count,2)=(*i)->get_coord().Z;
 	}
 	pointsRef.Release();
 	return pointsRef;
 }
-	
+
 bool meshUtils::checkLine(const float & p1, const float & p2, const float & test){
 	return (((p1>test)&&(p2<test)) ||  ((p1<test)&&(p2>test)));
 }
 
 
 bool meshUtils::checkTriangleNeighbour(const short & tri0, const short & tri1, const short & tri2 , const short & ind0, const short & ind1, short & ind0new , short & ind1new){
-	
+
 	if (((tri0==ind0) || (tri1==ind0) || (tri2==ind0)) && ((tri0==ind1) || (tri1==ind1) || (tri2==ind1))){
 		if (tri0==ind0) { ind0new=0 ; }
 		else if (tri1==ind0) { ind0new=1 ;  }
 		else if (tri2==ind0) { ind0new=2 ;  }
-		
-		
+
+
 		if (tri0==ind1) { ind1new=0 ; }
 		else if (tri1==ind1) { ind1new=1 ; }
 		else if (tri2==ind1) { ind1new=2 ; }
-		
+
 		return true;
 	}
 	return false;
-	
+
 }
 
 void meshUtils::intersectionPoint(const float & ycut, const float & px0, const float & py0, const float & pz0, const  float & dx, const float & dy, const float & dz, vector<float> & px, vector<float> & py, vector<float> & pz){
@@ -582,16 +582,16 @@ float meshUtils::myatan2(const float & y, const float & x)
 	const float PI=3.14159265358979323846;
 	float f=atan2(y,x);
 	/*float f=atan(y/x);
-	if ((y<0)&&(x<0)) 
+	if ((y<0)&&(x<0))
 		f+=PI;
 	else if ((y>0)&&(x<0))
 		f+=PI;
 	else if ((y<0)&&(x>0))
 		f+=2*PI;
-	*/	
+	*/
 	if (f<0)
 		f+=2*PI;
-	
+
 	return f;
 }
 
@@ -604,22 +604,22 @@ ReturnMatrix  meshUtils::addSphericalCorrdinates( const Matrix & m1, const Matri
 		const float PI=3.14159265358979323846;
 
 	Matrix Sum(m1.Nrows(),1);
-	
+
 	//we assume that problem are only with quadrant 1 and 4 operations
 	for (int i=0;i<m1.Nrows();i+=3)
 	{
 		Sum.element(i,0)=m1.element(i,0)+m2.element(i,0);
-		
+
 		int NcircM1= static_cast<int>(floor(m1.element(i+1,0) / (TPI) ));
 		if (NcircM1<0) NcircM1++;
-	
+
 		int NcircM2= static_cast<int>(floor(m2.element(i+1,0) / (TPI) ));
 		if (NcircM2<0) NcircM2++;
 
 
 
-		float remM1=m1.element(i+1,0) -NcircM1*TPI; 
-		float remM2=m2.element(i+1,0) - NcircM2*TPI; 
+		float remM1=m1.element(i+1,0) -NcircM1*TPI;
+		float remM2=m2.element(i+1,0) - NcircM2*TPI;
 
 		if (( (remM1>=0)&&(remM1<=PI/2) ) && ( (remM2>=3*PI/2)&&(remM2<=2*PI) ) )
 		{
@@ -628,21 +628,21 @@ ReturnMatrix  meshUtils::addSphericalCorrdinates( const Matrix & m1, const Matri
 //		}else if ( ( (remM2>=0)&&(remM2<=PI/2) ) && ( (remM1>=3*PI/2)&&(remM1<=2*PI) ) ){
 		//	Sum.element(i+1,0)=m1.element(i+1,0)-((abs(NcircM1)+1)*2*PI)+m2.element(i+1,0);
 	//		cout<<"case 2 "<<NcircM1<<" "<<NcircM2<<" "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<" "<<m1.element(i+1,0)+(m2.element(i+1,0) - 2*PI)<<endl;
-			
+
 		}else{
 			cout<<"case 3 "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<endl;
-			
+
 			Sum.element(i+1,0)=m1.element(i+1,0)+m2.element(i+1,0);//+m2.element(i+1,0);
 		}
-	if (Sum.element(i+1,0)<0) 
+	if (Sum.element(i+1,0)<0)
 			Sum.element(i+1,0)+=2*PI;
-		
+
 		Sum.element(i+2,0)=m1.element(i+2,0)+m2.element(i+2,0);
 	}
-	
+
 	Sum.Release();
 	return Sum;
-	
+
 }
 
 ReturnMatrix meshUtils::subSampleMatrix(const Matrix & m, const vector<bool> & vmask)
@@ -650,8 +650,8 @@ ReturnMatrix meshUtils::subSampleMatrix(const Matrix & m, const vector<bool> & v
 	unsigned int N=0;
 	for (vector<bool>::const_iterator i=vmask.begin();i!=vmask.end();i++)
 		if (*i) N++;
-		
-		
+
+
 	Matrix subM(N,m.Ncols());
 	unsigned int count=1,count2=1;
 	for (vector<bool>::const_iterator i=vmask.begin();i!=vmask.end();i++,count++)
@@ -672,12 +672,12 @@ ReturnMatrix meshUtils::subSample_Nby1_3D_Matrix(const Matrix & m, const vector<
 	unsigned int N=0;
 	for (vector<bool>::const_iterator i=vmask.begin();i!=vmask.end();i++)
 		if (*i) N++;
-		
+
 	Matrix subM(3*N,m.Ncols());
 	unsigned int count=1,count2=1;
 	for (vector<bool>::const_iterator i=vmask.begin();i!=vmask.end();i++,count+=3)
 		if (*i)
-		{		
+		{
 		cout<<"N "<<count2<<" "<<count<<" "<<m.Nrows()<<endl;
 			subM.Row(count2)=m.Row(count);
 			subM.Row(count2+1)=m.Row(count+1);
@@ -699,7 +699,7 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 		const float PI=3.14159265358979323846;
 
 	Matrix Sum(m1.Nrows(),1);
-	
+
 	//we assume that problem are only with quadrant 1 and 4 operations
 	int Nnew=N1+N2;
 	for (int i=0;i<m1.Nrows();i+=3)
@@ -711,12 +711,12 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 
 //		int NcircM1= floor(m1.element(i+1,0) / (TPI) );
 //		if (NcircM1<0) NcircM1++;
-	
+
 //		int NcircM2= floor(m2.element(i+1,0) / (TPI) );
 //		if (NcircM2<0) NcircM2++;
 		//assumign between 0 and 2PI
-		float remM1=m1.element(i+1,0);// -NcircM1*TPI; 
-		float remM2=m2.element(i+1,0);// - NcircM2*TPI; 
+		float remM1=m1.element(i+1,0);// -NcircM1*TPI;
+		float remM2=m2.element(i+1,0);// - NcircM2*TPI;
 
 		if (( (remM1>=0)&&(remM1<=PI/2) ) && ( (remM2>=3*PI/2.0)&&(remM2<2*PI) ) )
 		{
@@ -726,23 +726,23 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 		}else if ( ( (remM2>=0)&&(remM2<=PI/2) ) && ( (remM1>=3*PI/2.0)&&(remM1<2*PI) ) ){
 		Sum.element(i+1,0)=(m1.element(i+1,0)-2*PI)*N1+m2.element(i+1,0)*N2;
 			cout<<"case 2 "<<NcircM1<<" "<<NcircM2<<" "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<" "<<m1.element(i+1,0)+(m2.element(i+1,0) - 2*PI)<<endl;
-			
+
 		}else{
 			cout<<"case 3 "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<endl;
-			
+
 			Sum.element(i+1,0)=m1.element(i+1,0)*N1+m2.element(i+1,0)*N2;//+m2.element(i+1,0);
 		}
-		
+
 		Sum.element(i+1,0)/=Nnew;
-		if (Sum.element(i+1,0)<0) 
+		if (Sum.element(i+1,0)<0)
 			Sum.element(i+1,0)+=2*PI;
-		
+
 	}
 	N1=Nnew;
 
 	Sum.Release();
 	return Sum;
-	
+
 }
 */
 
@@ -760,7 +760,7 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 		}
 	}
 	SVD(m1,D,U,V);
-	 
+
 	 for (int j=0; j<U.Ncols();j++){
 		 for (int i=0; i<U.Nrows();i+=3){
 			 //sign for thetha contain within theta
@@ -768,7 +768,7 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 			 U.element(i+2,j)/=U.element(i,j);//U.element(i+2,j);
 		 }
 	 }
-	 
+
 }
 ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const Matrix & m2 , int & N1, const int & N2)
 {
@@ -781,7 +781,7 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 		const float PI=3.14159265358979323846;
 
 	Matrix Sum(m1.Nrows(),1);
-	
+
 	//we assume that problem are only with quadrant 1 and 4 operations
 	int Nnew=N1+N2;
 	for (int i=0;i<m1.Nrows();i+=3)
@@ -793,12 +793,12 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 
 //		int NcircM1= floor(m1.element(i+1,0) / (TPI) );
 //		if (NcircM1<0) NcircM1++;
-	
+
 //		int NcircM2= floor(m2.element(i+1,0) / (TPI) );
 //		if (NcircM2<0) NcircM2++;
 		//assumign between 0 and 2PI
-		float remM1=m1.element(i+1,0);// -NcircM1*TPI; 
-		float remM2=m2.element(i+1,0);// - NcircM2*TPI; 
+		float remM1=m1.element(i+1,0);// -NcircM1*TPI;
+		float remM2=m2.element(i+1,0);// - NcircM2*TPI;
 
 
 
@@ -809,23 +809,23 @@ ReturnMatrix  meshUtils::averageSphericalCorrdinates( const Matrix & m1, const M
 		}else if ( ((remM2>=0)&&(remM2<PI)) && (remM1>(remM2+PI)) ){
 		Sum.element(i+1,0)=(m1.element(i+1,0)-2*PI)*N1+m2.element(i+1,0)*N2;
 			cout<<"case 2 "<<" "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<" "<<m1.element(i+1,0)+(m2.element(i+1,0) - 2*PI)<<endl;
-			
+
 		}else{
 			cout<<"case 3 "<<m1.element(i+1,0)<<" "<<m2.element(i+1,0)<<" "<<m1.element(i+1,0)+m2.element(i+1,0)<<endl;
-			
+
 			Sum.element(i+1,0)=m1.element(i+1,0)*N1+m2.element(i+1,0)*N2;//+m2.element(i+1,0);
 		}
-		
+
 		Sum.element(i+1,0)/=Nnew;
-		if (Sum.element(i+1,0)<0) 
+		if (Sum.element(i+1,0)<0)
 			Sum.element(i+1,0)+=2*PI;
-		
+
 	}
 	N1=Nnew;
 
 	Sum.Release();
 	return Sum;
-	
+
 }
 
 //assume unwrapped coordinates
@@ -836,7 +836,7 @@ ReturnMatrix meshUtils::subtractSphericalCoordinates( const Matrix & m1, const M
 	//assume theta ranges from 0 to 2pi and is the second coordinate
 	const float PI=3.14159265358979323846;
 	Matrix Sum(m1.Nrows(),1);
-	
+
 	//we assume that problem are only with quadrant 1 and 4 operations
 	for (int i=0;i<m1.Nrows();i+=3)
 	{
@@ -847,13 +847,13 @@ ReturnMatrix meshUtils::subtractSphericalCoordinates( const Matrix & m1, const M
 			Sum.element(i+1,0)=(m1.element(i+1,0)-2*PI)-m2.element(i+1,0);
 		else
 			Sum.element(i+1,0)=m1.element(i+1,0)-m2.element(i+1,0);
-		
-		if (Sum.element(i+1,0)<0) 
+
+		if (Sum.element(i+1,0)<0)
 			Sum.element(i+1,0)+=2*PI;
-		
+
 		Sum.element(i+2,0)=m1.element(i+2,0)+m2.element(i+2,0);
 	}
-	
+
 	Sum.Release();
 	return Sum;
 }
@@ -868,7 +868,7 @@ void meshUtils::cartesianToSphericalCoord(vector<T> & verts)
 		float r=sqrt(verts.at(i)*verts.at(i)+verts.at(i+1)*verts.at(i+1)+verts.at(i+2)*verts.at(i+2));
 		float theta=myatan2(verts.at(i+1),verts.at(i));
 		float phi=acos(verts.at(i+2)/r);
-		
+
 		verts.at(i)=r;
 		verts.at(i+1)=theta;
 		verts.at(i+2)=phi;
@@ -906,8 +906,8 @@ void meshUtils::getSphericalCoordFromCart(NEWMAT::Matrix & Mr, NEWMAT::Matrix & 
 			float phi=acos(Points.element(i,1)/r);
 	//		float theta=myatan2(Points.element(i+1,j),Points.element(i,j));
 	//		float phi=acos(Points.element(i+2,j)/r);
-	
-			
+
+
 			Mr.element(i,0)=r;
 			Mtheta.element(i,0)=theta;
 			Mphi.element(i,0)=phi;
@@ -950,24 +950,24 @@ void meshUtils::cartesianToSphericalCoord(Mesh & m)
 {
 	for (vector<Mpoint*>::iterator i=m._points.begin();i!=m._points.end();i++)
 	{
-		
-		
+
+
 		T x=(*i)->get_coord().X;
 		T y=(*i)->get_coord().Y;
 		T z=(*i)->get_coord().Z;
-		
+
 		T r=sqrt(x*x+y*y+z*z);
 		T theta=myatan2(y,x);
 		T phi=cos(z/r);
-		
+
 		(*i)->_update_coord.X=r;
 		(*i)->_update_coord.Y=theta;
 		(*i)->_update_coord.Z=phi;
-		
-		
+
+
 	}
 				m.update();
-	
+
 }
 template void meshUtils::cartesianToSphericalCoord<float>(Mesh & m);
 template void meshUtils::cartesianToSphericalCoord<double>(Mesh & m);
@@ -987,7 +987,7 @@ void meshUtils::sphericalToCartesianCoord(Mesh & m)
 //		(*i)->_update_coord.X=r*cos(theta)*sin(phi);
 //		(*i)->_update_coord.Z=r*sin(theta)*sin(phi);
 //		(*i)->_update_coord.Y=r*cos(phi);
-		
+
 		(*i)->_update_coord.X=r*cos(theta)*sin(phi);
 		(*i)->_update_coord.Y=r*sin(theta)*sin(phi);
 		(*i)->_update_coord.Z=r*cos(phi);
@@ -1022,7 +1022,7 @@ template void meshUtils::sphericalToCartesianCoord<double>(Mesh & m);
 	}
 	void meshUtils::preMultiplyTranslation(Matrix & fmat, const  float & tx, const float & ty, const float & tz )
 	{
-		//must be a 4 by 4 matrix 
+		//must be a 4 by 4 matrix
 		fmat.element(0,3)+=tx;
 		fmat.element(1,3)+=ty;
 		fmat.element(2,3)+=tz;
@@ -1065,12 +1065,12 @@ void meshUtils::combineMeshesWithVectorsAndScalars(const vector<string> & meshli
 	Scalars=AllScalars;
 	Vectors=AllVectors;
 	Polygons=AllPolygons;
-	
+
 	AllPoints.Release();
 	AllScalars.Release();
 	AllVectors.Release();
 	AllPolygons.Release();
-	
+
 }
 
 
@@ -1078,64 +1078,64 @@ void meshUtils::combineMeshesWithVectorsAndScalars(const vector<string> & meshli
 
 
 
-	
+
 	void meshUtils::removeRow(Matrix & mat, int ind ){
 		//operate with ind from 0 to end-1
 		ind++;
 		mat=mat.SubMatrix(1,ind-1,1, mat.Ncols()) & mat.SubMatrix(ind+1,mat.Nrows(),1,mat.Ncols());
-		
+
 	}
 
 
-	
-	
-	ColumnVector meshUtils::sample_image_at_vertices(string meshname, string imagename) { 
+
+
+	ColumnVector meshUtils::sample_image_at_vertices(string meshname, string imagename) {
 		//setup objects
-		
-		
+
+
 		Mesh m;
 		volume<float> im;
-		
+
 		//load data
 		m.load(meshname);
 		read_volume(im,imagename);
 		float dx=im.xdim(), dy=im.ydim(), dz=im.zdim();
-		
+
 		//variables
 		int nverts=m._points.size();
 		ColumnVector Samples(nverts);
-		
+
 		int count=0;
 		for (vector<Mpoint*>::iterator i = m._points.begin(); i!=m._points.end(); i++ )
 		{
 			Samples.element(count)=im.interpolate(((*i)->get_coord().X)/dx,((*i)->get_coord().Y)/dy, ((*i)->get_coord().Z)/dz);//im.interpolate((*i)->get_coord().X, (*i)->get_coord().Y, (*i)->get_coord().Z);
 			count++;
 		}
-		
+
 		return Samples;
 	}
-	
-	void meshUtils::sample_image_at_verticesNN(const string & meshname,const string & imagename,const string & outname) 
-{ 
+
+	void meshUtils::sample_image_at_verticesNN(const string & meshname,const string & imagename,const string & outname)
+{
 	//setup objects
-	
-	
+
+
 	Mesh m;
 	volume<float> im;
-	
+
 	//load data
 	m.load(meshname);
 	read_volume(im,imagename);
 	float dx=im.xdim(), dy=im.ydim(), dz=im.zdim();
-	
+
 	//variables
 	int nverts=m._points.size();
 	ColumnVector Samples(nverts);
-	
+
 	int count=0;
 	for (vector<Mpoint*>::iterator iv = m._points.begin(); iv!=m._points.end(); iv++ )
 	{
-		
+
 		float val=im.interpolate(((*iv)->get_coord().X)/dx,((*iv)->get_coord().Y)/dy, ((*iv)->get_coord().Z)/dz);
 		if (val!=0){
 			Samples.element(count)=val;
@@ -1150,9 +1150,9 @@ void meshUtils::combineMeshesWithVectorsAndScalars(const vector<string> & meshli
 						}
 					}
 				}
-			}	
-			
-			
+			}
+
+
 		}//im.interpolate((*i)->get_coord().X, (*i)->get_coord().Y, (*i)->get_coord().Z);
 		count++;
 	}
@@ -1160,27 +1160,27 @@ void meshUtils::combineMeshesWithVectorsAndScalars(const vector<string> & meshli
 	output->setMesh(m);
 	output->setScalars(Samples);
 	output->save(outname);
-	
+
 }
 
 
 
 void meshUtils::sampleSumAndWrite(const string & inname, const string & inmeshname, const string & outname){
 	fslvtkIO* output = new fslvtkIO;
-	
+
 	Mesh m;
 	m.load(inmeshname);
 	output->setMesh(m);
-	
-	
-	
+
+
+
 	ifstream fin;
 	fin.open(inname.c_str());
 	int nSub;
 	fin>>nSub;
 	ColumnVector meanCV;
-	
-	
+
+
 	for (int i=0;i<nSub;i++){
 		string mname;
 		string iname;
@@ -1194,25 +1194,25 @@ void meshUtils::sampleSumAndWrite(const string & inname, const string & inmeshna
 			meanCV+=scalarsCV;
 		}
 	}
-	
+
 	//meanCV/=nSub;
-	
-	
+
+
 	output->setScalars(meanCV);
 	output->save(outname);
-	
+
 	//	ofstream scout;
 	//	scout.open(outname.value().c_str());
 	//	scout<<"SCALARS"<<" "<<meanCV.Nrows()<<endl;
 	//	for (int i=0;i<meanCV.Nrows();i++){
-	//		
+	//
 	//		scout<<meanCV.element(i)<<endl;
-	
+
 	//	}
-	
+
 	//	scout.close();
-	
-	
+
+
 }
 template<class T>
 void meshUtils::sampleImageAtPoints(const volume<T> & image, vector<T> & vsamples)
@@ -1244,7 +1244,7 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	Matrix PointsDM(Points.Nrows(),Points.Ncols());
 	Matrix refPointsDM(refPoints.Nrows(),refPoints.Ncols());
 
-	//calculate centroid to determine translation 
+	//calculate centroid to determine translation
 	float mean1x=0,mean1y=0,mean1z=0;
 	for (int i =0; i<Points.Nrows();i++){
 	  mean1x+=Points.element(i,0);
@@ -1256,7 +1256,7 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	mean1z/=Points.Nrows();
 
 
-	//calculate centroid to determine translation 
+	//calculate centroid to determine translation
 	float meanRefx=0,meanRefy=0,meanRefz=0;
 	for (int i =0; i<refPoints.Nrows();i++){
 	  meanRefx+=refPoints.element(i,0);
@@ -1269,7 +1269,7 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	meanRefz/=refPoints.Nrows();
 	//we now have enough to calculate translation
 
-	//demean data 
+	//demean data
 	//both meshes must have equal number odf vertices
 	for (int i =0; i<Points.Nrows();i++){
 	  PointsDM.element(i,0)=Points.element(i,0)-mean1x;
@@ -1286,12 +1286,12 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	float tx=meanRefx - mean1x ;
 	float ty=meanRefy - mean1y ;
 	float tz=meanRefz - mean1z ;
-	
+
 	//calculate scale
 	float ssq1[4]={0,0,0,0};
 	float ssqRef[4]={0,0,0,0};
 	float scale[4]={1,1,1,1};
-	
+
 	if (dof==7)
 	{
 		for (int i =0; i<Points.Nrows();i++)
@@ -1333,7 +1333,7 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	}
 	cout<<"Rotation Matrix ..."<<endl;
 	Matrix R(3,3);
-	cout<<D.Nrows()<<" "<<U.Nrows()<<" "<<U.Ncols()<<" "<<M.Nrows()<<" "<<refPointsDM.Nrows()<<" " <<refPointsDM.Ncols()<<endl; 
+	cout<<D.Nrows()<<" "<<U.Nrows()<<" "<<U.Ncols()<<" "<<M.Nrows()<<" "<<refPointsDM.Nrows()<<" " <<refPointsDM.Ncols()<<endl;
 	R=M*(U*D*U.t());
 	//R=R.t();
 	cout<<"Rotation Matrix "<<R<<endl;
@@ -1353,7 +1353,7 @@ void meshUtils::LQSurfaceReg(const Matrix & refPoints, Matrix & fmat, const int 
 	cout<<"fmat3"<<endl;
 	cout<<fmat<<endl;
 	if (dof>3)
-		preMultiplyGlobalRotation(fmat,R);	
+		preMultiplyGlobalRotation(fmat,R);
 	cout<<"fmat4 "<<mean1x<<" "<<tx<<endl;
 	cout<<fmat<<endl;
 	preMultiplyTranslation(fmat,mean1x+tx,mean1y+ty,mean1z+tz);
@@ -1368,10 +1368,10 @@ void meshUtils::findMidPointOfMidSlice(const volume<char> & im, const Matrix & f
 	getBounds(bounds,im.xdim(),im.ydim(),im.zdim());
 
 	cy=(bounds[2]+bounds[3])/2 * im.ydim();
-	vector<float> verts=sliceMesh(im, fmat, cy); 
-	
+	vector<float> verts=sliceMesh(im, fmat, cy);
+
 	cx=0,cz=0;
-	
+
 	float xmin=1000000,xmax=-10000, zmin=100000, zmax=-100000;
 	vector<float>::iterator i=verts.begin();
 	while (i!=verts.end())
@@ -1380,7 +1380,7 @@ void meshUtils::findMidPointOfMidSlice(const volume<char> & im, const Matrix & f
 		if ( (*i)<xmin ) xmin=(*i);
 		i++;
 		i++;//skip y
-	
+
 		if ( (*i)>zmax ) zmax=(*i);
 		if ( (*i)<zmin ) zmin=(*i);
 		i++;
@@ -1390,8 +1390,8 @@ void meshUtils::findMidPointOfMidSlice(const volume<char> & im, const Matrix & f
 	cx=(xmax+xmin)/2;
 	cz=(zmax+zmin)/2;
 	cout<<cx<<" "<<cy<<endl;
-//this would be centroid		
-//		cx+=*i; 
+//this would be centroid
+//		cx+=*i;
 //		i++;
 //		i++;//skip y coordinate
 //		cz+=*i;
@@ -1404,42 +1404,42 @@ void meshUtils::findMidPointOfMidSlice(const volume<char> & im, const Matrix & f
 
 vector<float> meshUtils::sliceMesh(const volume<char> & im, const Matrix & fmat,const float & ycut)
 {
-	
+
 	//float xdim=im.xdim(),ydim=im.ydim(),zdim=im.zdim();
-	
+
 	//apply registration to space of the image or for arbitrary slicing
 	meshReg(fmat);
-	
+
 	short ind0=-1, ind1=-1, indP=-1;
 	vector<short> mask;
 	for (int i=0; i<Polygons.Nrows();i++) //for each polygons, check if it intersect cut plane (in z)
 	{
 		//check each line
-	  if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,1)),1),ycut) ) 
+	  if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,1)),1),ycut) )
 			mask.push_back(i);
 	  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,2)),1),ycut) )
 			mask.push_back(i);
 	  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,1)),1), Points.element(static_cast<int>(Polygons.element(i,2)),1),ycut) )
 			mask.push_back(i);
 	}
-	
-	
+
+
 	int count=0;
-	cout<<"coutn "<<count<<endl;	
+	cout<<"coutn "<<count<<endl;
 	//this deterimes which line of first polygon is cut
 	if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),1)),1),ycut) )
-	{ 
+	{
 		indP=mask.at(0); ind0=0; ind1=1;
 	}
 	else if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),2)),1),ycut) )
-	{ 
-		indP=mask.at(0); ind0=0; ind1=2; 
+	{
+		indP=mask.at(0); ind0=0; ind1=2;
 	}
 	else if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),1)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),2)),1),ycut) )
 	{
 		indP=mask.at(0); ind0=1; ind1=2;
 	}
-	
+
 	//these describe the line
 	float px0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),0);
 	float dx=Points.element(static_cast<int>(Polygons.element(indP,ind1)),0)-px0;
@@ -1447,43 +1447,43 @@ vector<float> meshUtils::sliceMesh(const volume<char> & im, const Matrix & fmat,
 	float dy=Points.element(static_cast<int>(Polygons.element(indP,ind1)),1)-py0;
 	float pz0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),2);
 	float dz=Points.element(static_cast<int>(Polygons.element(indP,ind1)),2)-pz0;
-	
+
 	cout<<"point "<<px0<<" "<<py0<<" "<<pz0<<" "<<dx<<" "<<dy<<" "<<dz<<" "<<ind0<<" "<<ind1<<" "<<indP<<endl;
-	
+
 	//keep track of polygon id
 	vector<short> vP;
 	vP.push_back(indP);
-	
+
 	vector<float> vpx,vpy,vpz; //keep track of intersection points
 	intersectionPoint(ycut, px0,py0,pz0,dx,dy,dz,vpx,vpy,vpz);
-	
+
 	//found start point now find second in triangle this will define the direction of rotation
-	
+
 	if ((ind0==0)&&(ind1==1)) {
-	  if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) { 
+	  if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
 	    ind0=0; ind1=2;
 	  }
-	  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) { 
+	  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
 	    ind0=1; ind1=2;
 	  }
 	}
 	else if ((ind0==0)&&(ind1==2)) {
 	  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut)) {
-	    ind0=0; ind1=1;  
+	    ind0=0; ind1=1;
 	  }
 	  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
 	    ind0=1; ind1=2;
 	  }
 	}
 	else if ((ind0==1)&&(ind1==2)) {
-	  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {  
-	    ind0=0; ind1=1; 
+	  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {
+	    ind0=0; ind1=1;
 	  }
-	  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {  
-	    ind0=0; ind1=2;  
-	  }	   
+	  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
+	    ind0=0; ind1=2;
+	  }
 	}
-	
+
 	px0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),0);
 	//	 dx=Points.element(Polygons.element(indP,ind1),0)-px0;
 	py0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),1);
@@ -1492,72 +1492,72 @@ vector<float> meshUtils::sliceMesh(const volume<char> & im, const Matrix & fmat,
 	//	 dz=Points.element(Polygons.element(indP,ind1),2)-pz0;
 	//cout<<"point "<<px0<<" "<<py0<<" "<<pz0<<" "<<ind0<<" "<<ind1<<endl;
 	intersectionPoint(ycut, px0,py0,pz0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),0)-px0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),1)-py0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),2)-pz0,vpx,vpy,vpz);
-	
+
 	//we now have the point associate with the first triangle now find negihbouring triangle
 	int n=0;
 	do{
 		//cout<<"n "<<indP<<" "<<vP.front()<<" "<<mask.size()<<endl;
 		//	cout<<ycut<<" "<<Points.element(Polygons.element(indP,ind1),1)<<" "<<Points.element(Polygons.element(indP,ind0),1)<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<endl;
-		
+
 		for (vector<short>::iterator i=(mask.begin()+1); i!=mask.end(); i++){
 			//	cout<<"mask "<<*i<<" "<<mask.size()<<endl;
-			
+
 			//cout<<"HMM "<<ind0<<" "<<ind1<<endl;
 			//		cout<<ycut<<" "<<*i<<" "<<Points.element(Polygons.element(indP,ind1),1)<<" "<<Points.element(Polygons.element(indP,ind0),1)<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(*i,0)<<" "<<Polygons.element(*i,1)<<" "<<Polygons.element(*i,2)<<endl;
 			//	cout<<ycut<<" "<<*i<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(*i,0)<<" "<<Polygons.element(*i,1)<<" "<<Polygons.element(*i,2)<<endl;
-			
+
 			short ind0new=-1, ind1new=-1;
 		//	bool notused=true;
 			//	cout<<"INDP "<<indP<<" "<<*i<<" "<<vP.back()<<" "<<notused<<endl;
-			
+
 			//	for (vector<short>::iterator pit=vP.begin(); pit!=vP.end(); pit++){
 			//			cout<<*pit<<" ";
 			//			if ((*pit)==*i){ notused=false; cout<<"notused "<<*i<<endl;}
 			//		}
 			//	cout<<"maskvp "<<vP.size()<<" "<<*i<<" "<<checkTriangleNeighbour(Polygons.element(*i,0),Polygons.element(*i,1),Polygons.element(*i,2), Polygons.element(indP,ind0),Polygons.element(indP,ind1) , ind0new, ind1new ) <<endl;
-			
+
 			cout<<endl;
 			if  ( (checkTriangleNeighbour(static_cast<int>(Polygons.element(*i,0)),static_cast<int>(Polygons.element(*i,1)),static_cast<int>(Polygons.element(*i,2)), static_cast<int>(Polygons.element(indP,ind0)),static_cast<int>(Polygons.element(indP,ind1)) , ind0new, ind1new ) ) ){//&& ( notused)){
 																																																 //	cout<<"ENTERED "<<endl;
 																																																 //		cout<<"mask "<<*i<<" "<<mask.size()<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(indP,ind1)<<endl;
 				indP=*i;
 				vP.push_back(indP);
-				
+
 				mask.erase(i);
 				//i--;
-				
+
 				//need to get right edge of triangle
 				//	ind0=ind0new;
 				//	ind1=ind1new;
 				if  ( ((ind0new==0)&&(ind1new==1)) || ((ind0new==1)&&(ind1new==0)) ) {
-				  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) { 
-				    ind0=0; ind1=2; 
+				  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
+				    ind0=0; ind1=2;
 				  }
-				  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) { 
-				    ind0=1; ind1=2; 
+				  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
+				    ind0=1; ind1=2;
 				  }
 				}
 				else if ( ((ind0new==0)&&(ind1new==2)) || ((ind0new==2)&&(ind1new==0)) ) {
 				  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {
-				    ind0=0; ind1=1;  
+				    ind0=0; ind1=1;
 				  }
 				  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
-				    ind0=1; ind1=2;  
+				    ind0=1; ind1=2;
 				  }
 				}
 				else if ( ((ind0new==1)&&(ind1new==2)) ||  ((ind0new==2)&&(ind1new==1))  ) {
-				  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {  
-				    ind0=0; ind1=1;  
+				  if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {
+				    ind0=0; ind1=1;
 				  }
-				  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {  
-				    ind0=0; ind1=2;  
+				  else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
+				    ind0=0; ind1=2;
 				  }
-				}			
+				}
 				//			cout<<"ind01 "<<ind0<<" "<<ind1<<endl;
 				px0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),0);
 				py0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),1);
 				pz0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),2);
-				
+
 				intersectionPoint(ycut, px0,py0,pz0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),0)-px0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),1)-py0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),2)-pz0,vpx,vpy,vpz);
 				break;
 			}
@@ -1565,7 +1565,7 @@ vector<float> meshUtils::sliceMesh(const volume<char> & im, const Matrix & fmat,
 		//	cout<<"Indp "<<indP<<endl;
 		n++;
 		//	cout<<"mask "<<mask.size()<<endl;
-		//	cout<<"VP "<<indP<<" "<<vP.front()<<" "<<vP.size()<<" "<<mask.at(0)<<endl;	
+		//	cout<<"VP "<<indP<<" "<<vP.front()<<" "<<vP.size()<<" "<<mask.at(0)<<endl;
 }while (mask.size()>1);// (mask.size()>0);//(indP!=vP.front());
 cout<<"outside do-while"<<endl;
 //for (vector<short>::iterator pit=vP.begin(); pit!=vP.end(); pit++){
@@ -1574,16 +1574,16 @@ cout<<"outside do-while"<<endl;
 //		}
 
 vector<float> vVerts;
-vector<float>::iterator j=vpy.begin(); 
+vector<float>::iterator j=vpy.begin();
 vector<float>::iterator k=vpz.begin();
-cout<<"load verts in=to vectors"<<endl; 
+cout<<"load verts in=to vectors"<<endl;
 for (vector<float>::iterator i=vpx.begin(); i!=vpx.end();i++,j++,k++)
 {
 	cout<<*i<<" "<<*j<<" "<<*k<<endl;
 	vVerts.push_back(*i);
 	vVerts.push_back(*j);
 	vVerts.push_back(*k);
-	
+
 }
 return vVerts;
 }
@@ -1593,26 +1593,26 @@ return vVerts;
 //template<class T>
 vector<float> meshUtils::meshToContours(const volume<char> & im, const Matrix & fmat )
 {
-	
+
 //	float xdim=im.xdim(),ydim=im.ydim(),zdim=im.zdim();
-	
+
 	//apply registration to space of the image or for arbitrary slicing
 	meshReg(fmat);
-	
+
 	float minX=Points.Column(1).Minimum();
 	float minY=Points.Column(2).Minimum();
 	float minZ=Points.Column(3).Minimum();
-	
+
 	float maxX=Points.Column(1).Maximum();
 	float maxY=Points.Column(2).Maximum();
 	float maxZ=Points.Column(3).Maximum();
-	
+
 	cout<<"points bounds "<<minX<<" "<<minY<<" "<<minZ<<" "<<maxX<<" "<<maxY<<" "<<maxZ<<" "<<endl;
 	//will create a contour for each image slices.
 	//for (short i=floor(minY/ydim); i<floor(maxY/ydim);i++){
-	
+
 	//}
-	
+
 float testplane=(minY+maxY)/2;//to be replaced when looping
 cout<<"test plane "<<testplane<<" "<<Polygons.Nrows()<<" "<<Polygons.Ncols()<<endl;
 //find first polygon to intersect
@@ -1623,7 +1623,7 @@ short ind0=-1, ind1=-1, indP=-1;
 vector<short> mask;
 for (int i=0; i<Polygons.Nrows();i++) //for each polygons, check if it intersect cut plane (in z)
 { //check each line
-  if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,1)),1),ycut) ) 
+  if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,1)),1),ycut) )
     mask.push_back(i);
   else if ( checkLine(Points.element(static_cast<int>(Polygons.element(i,0)),1), Points.element(static_cast<int>(Polygons.element(i,2)),1),ycut) )
     mask.push_back(i);
@@ -1633,13 +1633,13 @@ for (int i=0; i<Polygons.Nrows();i++) //for each polygons, check if it intersect
 
 
 int count=0;
-cout<<"coutn "<<count<<endl;	
+cout<<"coutn "<<count<<endl;
 //this deterimes which line of first polygon is cut
-if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),1)),1),ycut) ) { 
+if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),1)),1),ycut) ) {
   indP=mask.at(0); ind0=0; ind1=1;
 }
-else if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),2)),1),ycut) ) { 
-  indP=mask.at(0); ind0=0; ind1=2; 
+else if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),0)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),2)),1),ycut) ) {
+  indP=mask.at(0); ind0=0; ind1=2;
 }
 else if (  checkLine(Points.element(static_cast<int>(Polygons.element(mask.at(0),1)),1), Points.element(static_cast<int>(Polygons.element(mask.at(0),2)),1),ycut) ) {
   indP=mask.at(0); ind0=1; ind1=2;
@@ -1665,28 +1665,28 @@ intersectionPoint(ycut, px0,py0,pz0,dx,dy,dz,vpx,vpy,vpz);
 //found start point now find second in triangle this will define the direction of rotation
 
 if ((ind0==0)&&(ind1==1)) {
-  if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) { 
+  if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
     ind0=0; ind1=2;
   }
-  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) { 
+  else if ( checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
     ind0=1; ind1=2;
   }
 }
 else if ((ind0==0)&&(ind1==2)) {
   if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut)) {
-    ind0=0; ind1=1;  
+    ind0=0; ind1=1;
   }
   else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut)) {
     ind0=1; ind1=2;
   }
  }
  else if ((ind0==1)&&(ind1==2)) {
-   if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {  
-     ind0=0; ind1=1; 
+   if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) ) {
+     ind0=0; ind1=1;
    }
-   else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {  
-     ind0=0; ind1=2;  
-   }  
+   else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) ) {
+     ind0=0; ind1=2;
+   }
  }
 
  px0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),0);
@@ -1703,73 +1703,73 @@ int n=0;
 do{
 	//cout<<"n "<<indP<<" "<<vP.front()<<" "<<mask.size()<<endl;
 	//	cout<<ycut<<" "<<Points.element(Polygons.element(indP,ind1),1)<<" "<<Points.element(Polygons.element(indP,ind0),1)<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<endl;
-	
+
 	for (vector<short>::iterator i=(mask.begin()+1); i!=mask.end(); i++){
 		//	cout<<"mask "<<*i<<" "<<mask.size()<<endl;
-		
+
 		//cout<<"HMM "<<ind0<<" "<<ind1<<endl;
 		//		cout<<ycut<<" "<<*i<<" "<<Points.element(Polygons.element(indP,ind1),1)<<" "<<Points.element(Polygons.element(indP,ind0),1)<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(*i,0)<<" "<<Polygons.element(*i,1)<<" "<<Polygons.element(*i,2)<<endl;
 		//	cout<<ycut<<" "<<*i<<" "<<Polygons.element(indP,ind1)<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(*i,0)<<" "<<Polygons.element(*i,1)<<" "<<Polygons.element(*i,2)<<endl;
-		
+
 		short ind0new=-1, ind1new=-1;
 	//	bool notused=true;
 		//	cout<<"INDP "<<indP<<" "<<*i<<" "<<vP.back()<<" "<<notused<<endl;
-		
+
 		//	for (vector<short>::iterator pit=vP.begin(); pit!=vP.end(); pit++){
 		//			cout<<*pit<<" ";
 		//			if ((*pit)==*i){ notused=false; cout<<"notused "<<*i<<endl;}
 		//		}
 		//	cout<<"maskvp "<<vP.size()<<" "<<*i<<" "<<checkTriangleNeighbour(Polygons.element(*i,0),Polygons.element(*i,1),Polygons.element(*i,2), Polygons.element(indP,ind0),Polygons.element(indP,ind1) , ind0new, ind1new ) <<endl;
-		
+
 		cout<<endl;
 		if  ( (checkTriangleNeighbour(static_cast<int>(Polygons.element(*i,0)),static_cast<int>(Polygons.element(*i,1)),static_cast<int>(Polygons.element(*i,2)), static_cast<int>(Polygons.element(indP,ind0)),static_cast<int>(Polygons.element(indP,ind1)) , ind0new, ind1new ) ) ){//&& ( notused)){
 																																															 //	cout<<"ENTERED "<<endl;
 																																															 //		cout<<"mask "<<*i<<" "<<mask.size()<<" "<<Polygons.element(indP,ind0)<<" "<<Polygons.element(indP,ind1)<<endl;
 			indP=*i;
 			vP.push_back(indP);
-			
+
 			mask.erase(i);
 			//i--;
-			
+
 			//need to get right edge of triangle
 			//	ind0=ind0new;
 			//	ind1=ind1new;
 			if  ( ((ind0new==0)&&(ind1new==1)) || ((ind0new==1)&&(ind1new==0)) )
 			{
 				if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) )
-				{ 
-					ind0=0; ind1=2; 
+				{
+					ind0=0; ind1=2;
 				}
 				else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) )
-				{ 
-					ind0=1; ind1=2; 
+				{
+					ind0=1; ind1=2;
 				}
-			}else if ( ((ind0new==0)&&(ind1new==2)) || ((ind0new==2)&&(ind1new==0)) ) 
+			}else if ( ((ind0new==0)&&(ind1new==2)) || ((ind0new==2)&&(ind1new==0)) )
 			{
 				if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) )
 				{
-					ind0=0; ind1=1;  
+					ind0=0; ind1=1;
 				}
 				else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,1)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) )
 				{
-					ind0=1; ind1=2;  
+					ind0=1; ind1=2;
 				}
 			}else if ( ((ind0new==1)&&(ind1new==2)) ||  ((ind0new==2)&&(ind1new==1))  )
 			{
 				if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,1)),1),ycut) )
-				{  
-					ind0=0; ind1=1;  
+				{
+					ind0=0; ind1=1;
 				}
 				else if (  checkLine(Points.element(static_cast<int>(Polygons.element(indP,0)),1), Points.element(static_cast<int>(Polygons.element(indP,2)),1),ycut) )
-				{  
-					ind0=0; ind1=2;  
+				{
+					ind0=0; ind1=2;
 				}
-			}			
+			}
 			//			cout<<"ind01 "<<ind0<<" "<<ind1<<endl;
 			px0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),0);
 			py0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),1);
 			pz0=Points.element(static_cast<int>(Polygons.element(indP,ind0)),2);
-			
+
 			intersectionPoint(ycut, px0,py0,pz0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),0)-px0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),1)-py0,Points.element(static_cast<int>(Polygons.element(indP,ind1)),2)-pz0,vpx,vpy,vpz);
 			break;
 		}
@@ -1777,7 +1777,7 @@ do{
 	//	cout<<"Indp "<<indP<<endl;
 				n++;
 	//	cout<<"mask "<<mask.size()<<endl;
-	//	cout<<"VP "<<indP<<" "<<vP.front()<<" "<<vP.size()<<" "<<mask.at(0)<<endl;	
+	//	cout<<"VP "<<indP<<" "<<vP.front()<<" "<<vP.size()<<" "<<mask.at(0)<<endl;
 }while (mask.size()>1);// (mask.size()>0);//(indP!=vP.front());
 cout<<"outside do-while"<<endl;
 //for (vector<short>::iterator pit=vP.begin(); pit!=vP.end(); pit++){
@@ -1786,16 +1786,16 @@ cout<<"outside do-while"<<endl;
 //		}
 
 vector<float> vVerts;
-vector<float>::iterator j=vpy.begin(); 
+vector<float>::iterator j=vpy.begin();
 vector<float>::iterator k=vpz.begin();
-cout<<"load verts in=to vectors"<<endl; 
+cout<<"load verts in=to vectors"<<endl;
 for (vector<float>::iterator i=vpx.begin(); i!=vpx.end();i++,j++,k++)
 {
 	cout<<*i<<" "<<*j<<" "<<*k<<endl;
 	vVerts.push_back(*i);
 	vVerts.push_back(*j);
 	vVerts.push_back(*k);
-	
+
 }
 return vVerts;
 }
@@ -1812,34 +1812,34 @@ void meshUtils::meshToContours(const string & imname,const string & meshname,con
 	volume<char> im;
 	read_volume(im,imname);
 	float xdim=im.xdim(),ydim=im.ydim(),zdim=im.zdim();
-	
+
 	fslvtkIO* min = new fslvtkIO;
 	min->setDataType(static_cast<fslvtkIO::DataType>(0));
 	min->readPolyData(meshname);
-	
-	
-	//register mesh 
+
+
+	//register mesh
 	//create contour in MNI space
 	Matrix fmat=readFlirtMat(flirtmatname);
 	meshReg(min,fmat);
-	
+
 	Matrix Points=min->getPointsAsMatrix();
 	Matrix Polys=min->getPolygons();
-	
+
 	float minX=Points.Column(1).Minimum();
 	float minY=Points.Column(2).Minimum();
 	float minZ=Points.Column(3).Minimum();
-	
+
 	float maxX=Points.Column(1).Maximum();
 	float maxY=Points.Column(2).Maximum();
 	float maxZ=Points.Column(3).Maximum();
-	
+
 	cout<<"points bounds "<<minX<<" "<<minY<<" "<<minZ<<" "<<maxX<<" "<<maxY<<" "<<maxZ<<" "<<endl;
 	//will create a contour for each image slices.
 	//for (short i=floor(minY/ydim+0.5); i<floor(maxY/ydim+0.5);i++){
-	
+
 	//}
-	
+
 float testplane=(minY+maxY)/2;
 cout<<"test plane "<<testplane<<" "<<Polys.Nrows()<<" "<<Polys.Ncols()<<endl;
 //find first polygon to intersect
@@ -1849,7 +1849,7 @@ vector<short> mask;
 for (int i=0; i<Polys.Nrows();i++){
 	//check each line
 	//	cout<<"i "<<i<<endl;
-	
+
 	if (  checkLine(Points.element(Polys.element(i,0),1), Points.element(Polys.element(i,1),1),ycut) ){ mask.push_back(i) ; }
 	else if (  checkLine(Points.element(Polys.element(i,0),1), Points.element(Polys.element(i,2),1),ycut) ){  mask.push_back(i) ; }
 	else if (  checkLine(Points.element(Polys.element(i,1),1), Points.element(Polys.element(i,2),1),ycut) ){ mask.push_back(i)  ;  }
@@ -1858,13 +1858,13 @@ for (int i=0; i<Polys.Nrows();i++){
 }
 for (vector<short>::iterator i=mask.begin(); i!=mask.end(); i++){
 				cout<<"M "<<Polys.element(*i,0)<<" "<<Polys.element(*i,1)<<" "<<Polys.element(*i,2)<<endl;
-	
+
 }
 
 int count=0;
 //	for (vector<short>::iterator i=mask.begin(); i!=mask.end(); i++){
 //check each line
-cout<<"coutn "<<count<<endl;	
+cout<<"coutn "<<count<<endl;
 
 if (  checkLine(Points.element(Polys.element(mask.at(0),0),1), Points.element(Polys.element(mask.at(0),1),1),ycut) ){ indP=mask.at(0); ind0=0; ind1=1;  }
 else if (  checkLine(Points.element(Polys.element(mask.at(0),0),1), Points.element(Polys.element(mask.at(0),2),1),ycut) ){ indP=mask.at(0); ind0=0; ind1=2; }
@@ -1898,7 +1898,7 @@ if ((ind0==0)&&(ind1==1)){
 }else if ((ind0==1)&&(ind1==2)){
 	if (  checkLine(Points.element(Polys.element(indP,0),1), Points.element(Polys.element(indP,1),1),ycut) ){  ind0=0; ind1=1;  }
 	else if (  checkLine(Points.element(Polys.element(indP,0),1), Points.element(Polys.element(indP,2),1),ycut) ){  ind0=0; ind1=2;  }
-}	
+}
 
 
 px0=Points.element(Polys.element(indP,ind0),0);
@@ -1925,36 +1925,36 @@ int n=0;
 do{
 	cout<<"n "<<indP<<" "<<vP.front()<<" "<<mask.size()<<endl;
 	cout<<ycut<<" "<<Points.element(Polys.element(indP,ind1),1)<<" "<<Points.element(Polys.element(indP,ind0),1)<<" "<<Polys.element(indP,ind1)<<" "<<Polys.element(indP,ind0)<<" "<<endl;
-	
+
 	for (vector<short>::iterator i=mask.begin(); i!=mask.end(); i++){
 		//cout<<"HMM "<<ind0<<" "<<ind1<<endl;
 		//		cout<<ycut<<" "<<*i<<" "<<Points.element(Polys.element(indP,ind1),1)<<" "<<Points.element(Polys.element(indP,ind0),1)<<" "<<Polys.element(indP,ind1)<<" "<<Polys.element(indP,ind0)<<" "<<Polys.element(*i,0)<<" "<<Polys.element(*i,1)<<" "<<Polys.element(*i,2)<<endl;
 		cout<<ycut<<" "<<*i<<" "<<Polys.element(indP,ind1)<<" "<<Polys.element(indP,ind0)<<" "<<Polys.element(*i,0)<<" "<<Polys.element(*i,1)<<" "<<Polys.element(*i,2)<<endl;
-		
+
 		short ind0new=-1, ind1new=-1;
 		bool notused=true;
 		for (vector<short>::iterator pit=vP.begin(); pit!=vP.end(); pit++){
 			if ((*pit)==*i) notused=false;
 		}
 								cout<<"INDP "<<indP<<" "<<*i<<" "<<vP.back()<<" "<<notused<<endl;
-		
+
 		if  ( (checkTriangleNeighbour(Polys.element(*i,0),Polys.element(*i,1),Polys.element(*i,2), Polys.element(indP,ind0),Polys.element(indP,ind1) , ind0new, ind1new ) )
 			  && ( notused)){
 			cout<<"ENTERED "<<endl;
 			cout<<"mask "<<*i<<" "<<mask.size()<<" "<<Polys.element(indP,ind0)<<" "<<Polys.element(indP,ind1)<<endl;
 			indP=*i;
 			vP.push_back(indP);
-			
+
 			//mask.erase(i);
-			
+
 			//							cout<<"mask "<<mask.size()<<endl;
-			
+
 			for (vector<short>::iterator i=mask.begin(); i!=mask.end(); i++){
 				cout<<"M "<<Polys.element(*i,0)<<" "<<Polys.element(*i,1)<<" "<<Polys.element(*i,2)<<endl;
-				
+
 			}
-			
-			
+
+
 			//need to get right edge of triangle
 			//	ind0=ind0new;
 			//	ind1=ind1new;
@@ -1967,21 +1967,21 @@ do{
 			}else if ( ((ind0new==1)&&(ind1new==2)) ||  ((ind0new==2)&&(ind1new==1))  ){
 				if (  checkLine(Points.element(Polys.element(indP,0),1), Points.element(Polys.element(indP,1),1),ycut) ){  ind0=0; ind1=1;  }
 				else if (  checkLine(Points.element(Polys.element(indP,0),1), Points.element(Polys.element(indP,2),1),ycut) ){  ind0=0; ind1=2;  }
-			}				
+			}
 			cout<<"ind01 "<<ind0<<" "<<ind1<<endl;
 			px0=Points.element(Polys.element(indP,ind0),0);
 			py0=Points.element(Polys.element(indP,ind0),1);
 			pz0=Points.element(Polys.element(indP,ind0),2);
-			
+
 			intersectionPoint(ycut, px0,py0,pz0,Points.element(Polys.element(indP,ind1),0)-px0,Points.element(Polys.element(indP,ind1),1)-py0,Points.element(Polys.element(indP,ind1),2)-pz0,vpx,vpy,vpz);
 			break;
 		}
 	}
 	//	cout<<"Indp "<<indP<<endl;
 				n++;
-	
+
 	cout<<"VP "<<vP.size()<<endl;
-	
+
 }while (n<70);//(indP!=vP.front());
 
 
@@ -2001,12 +2001,12 @@ void meshUtils::draw_segment(volume<short>& image, const Pt& p1, const Pt& p2, i
 	double xdim = (double) image.xdim();
 	double ydim = (double) image.ydim();
 	double zdim = (double) image.zdim();
-	
+
 	//in new version of bet2
 	double mininc = min(xdim,min(ydim,zdim)) * .5;
-	
-	
-	
+
+
+
 	Vec n = (p1 - p2);
 	double d = n.norm();
 	n.normalize();
@@ -2021,57 +2021,57 @@ void meshUtils::draw_segment(volume<short>& image, const Pt& p1, const Pt& p2, i
 
 volume<short> meshUtils::draw_mesh(const volume<short>& image, const Mesh &m, int label)
 {
-	
+
 	double xdim = (double) image.xdim();
 	double ydim = (double) image.ydim();
 	double zdim = (double) image.zdim();
-	
+
 	//in new version of bet2
 	double mininc = min(xdim,min(ydim,zdim)) * .5;
-	
-	
+
+
 	volume<short> res = image;
 	for (list<Triangle*>::const_iterator i = m._triangles.begin(); i!=m._triangles.end(); i++)
     {
 		Vec n = (*(*i)->get_vertice(0) - *(*i)->get_vertice(1));
 		double d = n.norm();
 		n.normalize();
-	       
-		
+
+
 		for (double j=0; j<=d ;  j+=mininc)
 		{
 			Pt p = (*i)->get_vertice(1)->get_coord()  + (double)j* n;
 			draw_segment(res, p, (*i)->get_vertice(2)->get_coord(),label);
-		} 
+		}
     }
 	return res;
 }
 
 volume<short> meshUtils::make_mask_from_mesh(const volume<float> & image, const Mesh& m, int label, int* bounds, const bool & sep_boundary)
 {
-	
+
 	float xdim = (float) image.xdim();
 	float ydim = (float) image.ydim();
 	float zdim = (float) image.zdim();
-	
+
 	volume<short> mask;
 	copyconvert(image,mask);
-	
-	
+
+
 	mask = 0;
 	if (sep_boundary)
 		mask = draw_mesh(mask, m,label+100);
 	else
 		mask = draw_mesh(mask, m,label);
 
-	
+
 	// THIS EXCLUDEDS THE ACTUAL MESH
 	volume<short> otl=mask;
 	getBounds(m,bounds,xdim,ydim,zdim);
 	vector<Pt> current;
 	current.clear();
 	Pt c(bounds[0]-2, bounds[2]-2, bounds[4]-2);
-	
+
 	mask.value(static_cast<int>(c.X),static_cast<int>(c.Y),static_cast<int>(c.Z)) = label;
 	current.push_back(c);
 	int fillCount=0;
@@ -2080,11 +2080,11 @@ volume<short> meshUtils::make_mask_from_mesh(const volume<float> & image, const 
 		Pt pc = current.back();
 		int x, y, z;
 		x=(int) pc.X; y=(int) pc.Y; z=(int) pc.Z;
-		
+
 		current.pop_back();
 		fillCount++;
-		
-		
+
+
 		if (bounds[0]<=x-1 && mask.value(x-1, y, z)==0) {
 			mask.value(x-1, y, z) = label;
 			current.push_back(Pt(x-1, y, z));
@@ -2107,9 +2107,9 @@ volume<short> meshUtils::make_mask_from_mesh(const volume<float> & image, const 
 		}
 		if (bounds[5]>=z+1 && mask.value(x, y, z+1)==0){
 			mask.value(x, y, z+1) = label;
-			current.push_back(Pt(x, y, z+1)); 
+			current.push_back(Pt(x, y, z+1));
 		}
-		
+
 	}
 	for (int i=bounds[0];i<bounds[1];i++){
 		for (int j=bounds[2];j<bounds[3];j++){
@@ -2120,10 +2120,10 @@ volume<short> meshUtils::make_mask_from_mesh(const volume<float> & image, const 
 			}
 		}
 	}
-	
+
 	return otl;
 	//return mask;
-	
+
 }
 
 
@@ -2131,17 +2131,17 @@ volume<short> meshUtils::make_mask_from_mesh(const volume<float> & image, const 
 void meshUtils::fillMesh(const string & imname, const string & meshname, const string & outname, const int & label, const bool & sep_bound ){
 	volume<float> im;
 	read_volume(im,imname);
-	
+
 	Mesh m;
 	m.load(meshname);
-	
+
 	int bounds[6];
-	
+
 	volume<short> imout;
 	imout=make_mask_from_mesh(im, m, label, bounds,sep_bound);
-	
+
 	save_volume(imout,outname);
-	
+
 }
 
 
@@ -2155,8 +2155,8 @@ double meshUtils::maxScalar()
 			max=Scalars.element(i,0);
 	//		cout<<"max "<<max<<endl;
 
-	}	
-	return max;		
+	}
+	return max;
 }
 
 
@@ -2166,7 +2166,7 @@ double meshUtils::meanScalar()
 	for (unsigned int i=0; i<(unsigned)Scalars.Nrows();i++)
 	{
 		mean+=Scalars.element(i,0);
-	
+
 	//	cout<<"mean "<<mean<<endl;
 	}
 	mean/=Scalars.Nrows();
@@ -2185,7 +2185,7 @@ bool meshUtils::findVertex(const Matrix & vert1,const Matrix & vert2, int ind1 )
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 void meshUtils::combinedSharedBoundaries(const string & mname1, const string & mname2 ){
@@ -2193,14 +2193,14 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 	fslvtkIO* mesh1 = new fslvtkIO;
 	mesh1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh1->readPolyData(mname1);
-	
+
 	fslvtkIO* mesh2 = new fslvtkIO;
 	mesh2->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh2->readPolyData(mname2);
-	
+
 	Matrix vert1=mesh1->getPointsAsMatrix();
 	Matrix vert2=mesh2->getPointsAsMatrix();
-	
+
 	Matrix Poly1=mesh1->getPolygons();
 	Matrix Poly2=mesh2->getPolygons();
 	vector<short> vind1,vind2;
@@ -2212,7 +2212,7 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 				(vert1.element(i,1)==vert2.element(j,1)) && \
 				(vert1.element(i,2)==vert2.element(j,2))) {
 				cout<<"found common point "<<" "<<endl;
-				
+
 				for (int k=0;k<Poly1.Nrows();k++){
 					if (Poly1.element(k,0)==i){
 						if ( (findVertex(vert1,vert2,static_cast<int>(Poly1.element(k,1)))) || (findVertex(vert1,vert2,static_cast<int>(Poly1.element(k,2))))){
@@ -2233,10 +2233,10 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 					vind2.push_back(j);
 				}
 			}
-			
+
 		}
 	}
-	
+
 	vector<short> vindP1;
 	vector<short> vindP2;
 	int vindc=0;
@@ -2246,7 +2246,7 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 		}
 		vindc++;
 	}
-	
+
 	vindc=0;
 	for ( int i=0;i<Poly2.Nrows();i++){
 		for (int j=0;j<3;j++){
@@ -2254,13 +2254,13 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 		}
 		vindc++;
 	}
-	
+
 	Matrix vert1new(vert1.Nrows()-vind1.size(),3);
 	Matrix vert2new(vert2.Nrows()-vind2.size(),3);
 	Matrix Poly1new(Poly1.Nrows()-vindP1.size(),3);
 	Matrix Poly2new(Poly2.Nrows()-vindP2.size(),3);
-	
-	
+
+
 	int count=0;
 	vindc=0;
 	for (int i=0; i<vert1.Nrows();i++){
@@ -2283,7 +2283,7 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 			vindc++;
 		}
 	}
-	
+
 	count=0;
 	vindc=0;
 	for (int i=0; i<vert2.Nrows();i++){
@@ -2295,13 +2295,13 @@ void meshUtils::combinedSharedBoundaries(const string & mname1, const string & m
 			vindc++;
 		}
 	}
-	
+
 	fslvtkIO* mout1 = new fslvtkIO;
 	mout1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mout1->setPoints(vert1new);
 	mout1->setPolygons(vert2new);
-	
-	
+
+
 }
 
 void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const string & mname2, const string & mout1name ){
@@ -2309,14 +2309,14 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 	fslvtkIO* mesh1 = new fslvtkIO;
 	mesh1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh1->readPolyData(mname1);
-	
+
 	fslvtkIO* mesh2 = new fslvtkIO;
 	mesh2->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh2->readPolyData(mname2);
-	
+
 	Matrix vert1=mesh1->getPointsAsMatrix();
 	Matrix vert2=mesh2->getPointsAsMatrix();
-	
+
 	Matrix Poly1=mesh1->getPolygons();
 	Matrix Poly2=mesh2->getPolygons();
 	vector<short> vind1,vind2;
@@ -2354,22 +2354,22 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	for (unsigned int i=0;i<vind2.size();i++){
 		removeRow(vert2,vind2.at(i));
 		for (unsigned int j=0; j<vind2.size();j++)
 			if (vind2.at(j) > vind2.at(i)) { vind2.at(j)--; }//vind2 will store the indices of the altered vertices
-				
+
 				for ( int k=0;k<Poly2.Nrows();k++){
 					for ( int l=0;l<Poly2.Ncols();l++){
 						if ( Poly2.element(k,l) > (vind2.at(i)+shift)) { Poly2.element(k,l)--; }
 					}
 				}
-				
+
 	}
-		
+
 		/*	for (unsigned int i=0;i<vind2.size();i++){
 			for ( int j=0;j<Poly2.Nrows();j++){
 				for ( int k=0;k<Poly2.Ncols();k++){
@@ -2377,17 +2377,17 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 				}
 			}
 		}
-*/	
+*/
 		//	mesh1->setPoints(vert2);
 		//	mesh1->setPolygons(Poly2);
-		
-		
-		
+
+
+
 		mesh1->setPoints(vert1 & vert2);
 		mesh1->setPolygons(Poly1 & Poly2);
 		mesh1->setScalars(Sc1 & Sc2);
 		mesh1->save(mout1name);
-		
+
 }
 
 
@@ -2397,7 +2397,7 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 	//m1 is the template first styrcture
 	//m2 is the boundary fro which we are searching for shared boundaries
 	//mbase is of the same topology as m1, on which we are placing the scalars
-	
+
 	Matrix Sc1(Points.Nrows(),1);
 	for (int i=0; i<Points.Nrows();i++){
 		//finds the common points but need to keep common points that are connect to 2 separate vertices
@@ -2405,7 +2405,7 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 		short index=-1;
 		for (int j=0; j<Points2.Nrows();j++)
 		{
-			if ((Points.element(i,0)==Points2.element(j,0)) && (Points.element(i,1)==Points2.element(j,1)) && (Points.element(i,2)==Points2.element(j,2))) 
+			if ((Points.element(i,0)==Points2.element(j,0)) && (Points.element(i,1)==Points2.element(j,1)) && (Points.element(i,2)==Points2.element(j,2)))
 			{
 				found=true;
 				index=j;
@@ -2413,7 +2413,7 @@ void meshUtils::labelAndCombineSharedBoundaries(const string & mname1, const str
 			}
 		}
 		Sc1.element(i,0)=index;
-	}	
+	}
 	Sc1.Release();
 	return Sc1;
 }
@@ -2433,24 +2433,24 @@ void meshUtils::appendSharedBoundaryMask(const string & mname1, const string & m
 	//m1 is the template first styrcture
 	//m2 is the boundary fro which we are searching for shared boundaries
 	//mbase is of the same topology as m1, on which we are placing the scalars
-	
+
 	fslvtkIO* mesh1 = new fslvtkIO;
 	mesh1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh1->readPolyData(mname1);
-	
+
 	fslvtkIO* mesh2 = new fslvtkIO;
 	mesh2->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh2->readPolyData(mname2);
-	
+
 	fslvtkIO* meshB = new fslvtkIO;
 	meshB->setDataType(static_cast<fslvtkIO::DataType>(0));
 	meshB->readPolyData(mbase);
-	
-	
-	
+
+
+
 	Matrix vert1=mesh1->getPointsAsMatrix();
 	Matrix vert2=mesh2->getPointsAsMatrix();
-	
+
 	Matrix Poly1=mesh1->getPolygons();
 	Matrix Poly2=mesh2->getPolygons();
 	vector<short> vind1,vind2;
@@ -2476,19 +2476,19 @@ void meshUtils::appendSharedBoundaryMask(const string & mname1, const string & m
 		}
 		if (found) { Sc1.element(i,0)=count; Sc2.element(vind2.back(),0)=count; } else { Sc1.element(i,0)=0; }
 	}
-	
+
 	if (useSc2){
 		meshB->setScalars(Sc2);
 	}else{
 		meshB->setScalars(Sc1);
 	}
-	
+
 	meshB->save(mout1name);
-	
+
 	mesh2->setScalars(Sc2);
 	mesh2->save("st2_"+mout1name);
-	
-	
+
+
 }
 */
 /*
@@ -2497,32 +2497,32 @@ void meshUtils::applyFlirtThenSBmask(const string & mname1, const string & mname
 	//m1 is the template first styrcture
 	//m2 is the boundary fro which we are searching for shared boundaries
 	//mbase is of the same topology as m1, on which we are placing the scalars
-	
+
 	fslvtkIO* mesh1 = new fslvtkIO;
 	mesh1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh1->readPolyData(mname1);
-	
+
 	Matrix fmat=readFlirtMat(mflirtname);
 	fmat=fmat.i();
 	meshReg(mesh1,fmat);
-	
-	
+
+
 	fslvtkIO* mesh2 = new fslvtkIO;
 	mesh2->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh2->readPolyData(mname2);
-	
-	
-	
+
+
+
 	Matrix vert1=mesh1->getPointsAsMatrix();
 	Matrix vert2=mesh2->getPointsAsMatrix();
-	
+
 	//	Matrix Poly1=mesh1->getPolygons();
 	//	Matrix Poly2=mesh2->getPolygons();
 	//	vector<short> vind1,vind2;
 	//	bool foundM12=false;
 	Matrix Sc1 = mesh1->getScalars();
 	Matrix Sc2 = mesh2->getScalars();
-	
+
 	//	Matrix Sc2(vert2.Nrows(),1);
 	//	Sc2=0;
 	//int count=0;
@@ -2530,20 +2530,20 @@ void meshUtils::applyFlirtThenSBmask(const string & mname1, const string & mname
 		//finds the common points but need to keep common points that are connect to 2 separate vertices
 		if (Sc1.element(i,0)>0){//search for coresponding vertex index
 			for (int j=0; j<Sc2.Nrows();j++){
-				if (Sc2.element(j,0)==Sc1.element(i,0)){ 
-					vert1.element(i,0)=vert2.element(j,0); 
-					vert1.element(i,1)=vert2.element(j,1); 
-					vert1.element(i,2)=vert2.element(j,2); 
-					break; 
+				if (Sc2.element(j,0)==Sc1.element(i,0)){
+					vert1.element(i,0)=vert2.element(j,0);
+					vert1.element(i,1)=vert2.element(j,1);
+					vert1.element(i,2)=vert2.element(j,2);
+					break;
 				}
 			}
-			
+
 		}
 	}
-	
+
 	mesh1->setPoints(vert1);
 	mesh1->save(mout1name);
-	
+
 }
 */
 
@@ -2555,23 +2555,23 @@ void meshUtils::do_work_uncentreMesh(const string & inim, const string & inmesh,
 	float cx=(im.xsize()-1)/2.0*abs(im.xdim());
 	float cy=(im.ysize()-1)/2.0*abs(im.ydim());
 	float cz=(im.zsize()-1)/2.0*abs(im.zdim());
-	
-	
+
+
   	fslvtkIO* mesh = new fslvtkIO;
 	mesh->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh->readPolyData(inmesh);
-	
+
 	Matrix MMesh = mesh->getPointsAsMatrix();
 	shift3DVertexMatrix(MMesh,cx,cy,cz);
-	
+
 	mesh->setPoints(MMesh);
 	mesh->save(outmesh);
-	
-	
+
+
 	delete mesh;
-	
-	
-	
+
+
+
 }
 
 void meshUtils::do_work_MeshReg(const string & inim, const string & inmesh, const string & outmesh){
@@ -2581,59 +2581,59 @@ void meshUtils::do_work_MeshReg(const string & inim, const string & inmesh, cons
 	float cx=(im.xsize()-1)/2.0*abs(im.xdim());
 	float cy=(im.ysize()-1)/2.0*abs(im.ydim());
 	float cz=(im.zsize()-1)/2.0*abs(im.zdim());
-	
-	
+
+
   	fslvtkIO* mesh = new fslvtkIO;
 	mesh->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh->readPolyData(inmesh);
-	
+
 	Matrix MMesh = mesh->getPointsAsMatrix();
 	shift3DVertexMatrix(MMesh,cx,cy,cz);
-	
+
 	mesh->setPoints(MMesh);
 	mesh->save(outmesh);
-	
-	
+
+
 	delete mesh;
-	
-	
-	
+
+
+
 }
 
  void meshUtils::meshUtils::subtractMeshes(const string & mesh1name, const string & mesh2name, const string & out){
-	
+
   	fslvtkIO* mesh1 = new fslvtkIO;
 	mesh1->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh1->readPolyData(mesh1name);
-	
+
 	fslvtkIO* mesh2 = new fslvtkIO;
 	mesh2->setDataType(static_cast<fslvtkIO::DataType>(0));
 	mesh2->readPolyData(mesh2name);
-	
+
 	Matrix Diff=mesh2->getPointsAsMatrix() -  mesh1->getPointsAsMatrix();
 	mesh1->setVectors(Diff);
 	mesh1->save(out);
-	
+
 }
 
 void meshUtils::warpMeshWithDefField(const string & fieldname, const string & meshname, const string & meshoutname, const float & dx, const float & dy, const float & dz){
-	
+
 	fslvtkIO* ugrid = new fslvtkIO;
 	ugrid->setDataType(static_cast<fslvtkIO::DataType>(0));
 	ugrid->readPolyData(meshname);
-	
+
 	Matrix Points=ugrid->getPointsAsMatrix();
 	//propogate volumetric mesh through deformation field //and sample intensities
-	
-	
+
+
 	//cout<<"done flirt"<<endl;
 	volume4D<float> defField;
 	read_volume4D(defField, fieldname);
-	
+
 	float resx=defField[0].xdim();
 	float resy=defField[0].ydim();
 	float resz=defField[0].zdim();
-	
+
 	for (int i=0;i<Points.Nrows();i++){
 		//shifts are for changes between roi and full image
 		float px=Points.element(i,0);
@@ -2642,33 +2642,33 @@ void meshUtils::warpMeshWithDefField(const string & fieldname, const string & me
 		Points.element(i,0)+=defField[0].interpolate(px/resx,py/resy,pz/resz) - dx;
 		Points.element(i,1)+=defField[1].interpolate(px/resx,py/resy,pz/resz) - dy;
 		Points.element(i,2)+=defField[2].interpolate(px/resx,py/resy,pz/resz) - dz;
-		
+
 	}
-	
+
 	ugrid->setPoints(Points);
 	ugrid->save(meshoutname);
-	
+
 }
 
 template< class T >
 void meshUtils::warpGridWithDefField(const volume4D<T> & defField, const float & dx, const float & dy, const float & dz){
-	
+
 	float resx=defField[0].xdim();
 	float resy=defField[0].ydim();
 	float resz=defField[0].zdim();
-	
+
 	for (int i=0;i<Points.Nrows();i++){
 		//shifts are for changes between roi and full image
 		float px=Points.element(i,0);
 		float py=Points.element(i,1);
 		float pz=Points.element(i,2);
-		
+
 		//cout<<"points "<<px<<" "<<py<<" "<<pz<<endl;
 		Points.element(i,0)=px+defField[0].interpolate(px/resx,py/resy,pz/resz) + dx;
 		Points.element(i,1)=py+defField[1].interpolate(px/resx,py/resy,pz/resz) + dy;
 		Points.element(i,2)=pz+defField[2].interpolate(px/resx,py/resy,pz/resz) + dz;
 	}
-		
+
 }
 
 template void meshUtils::warpGridWithDefField<float>(const volume4D<float> & fieldname, const float & dx, const float & dy, const float & dz);
@@ -2678,18 +2678,18 @@ template void meshUtils::warpGridWithDefField<double>(const volume4D<double> & f
 /*void meshUtils::warpMeshWithDefField( Mesh & m, const volume4D<float> & defField, const Matrix & mat){
 	//mat should be 4by 4 lfirt matrix
 	//cout<<"done flirt"<<endl;
-	
+
 	ColumnVector pdef(4);
 	pdef.element(4)=1;
-	
+
 	float resx=defField[0].xdim();
 	float resy=defField[0].ydim();
 	float resz=defField[0].zdim();
-	
+
 	for (vector<mesh::Mpoint*>::iterator i=m._points.begin();i!=m._points.end();i++){
 		//shifts are for changes between roi and full image
-		
-		
+
+
 		float px=(*i)->get_coord().X;
 		float py=(*i)->get_coord().Y;
 		float pz=(*i)->get_coord().Z;
@@ -2697,7 +2697,7 @@ template void meshUtils::warpGridWithDefField<double>(const volume4D<double> & f
 		pdef.element(1)=py+defField[1].interpolate(px/resx,py/resy,pz/resz) ;
 		pdef.element(2)=pz+defField[2].interpolate(px/resx,py/resy,pz/resz) ;
 		pdef=mat*pdef;
-		
+
 		(*i)->_update_coord.X=pdef.element(0);
 		(*i)->_update_coord.Y=pdef.element(1);
 		(*i)->_update_coord.Z=pdef.element(2);
@@ -2730,11 +2730,11 @@ cout<<"enter surf dist "<<endl;
 		int layer=0;
 		bool notFoundD=false;
 		while (notFoundD)
-		{ 
+		{
 			for (int x=centre[0]-layer; x<=centre[0]+layer; x++)
 				for (int y=centre[1]-layer; y<=centre[1]+layer;y++)
 					for (int z=centre[2]-layer; z<=centre[2]+layer;z++)
-					{	
+					{
 						if (image.value(x,y,z)>0)
 						{
 							float temp=x*x*xdim*xdim+y*y*ydim*ydim+z*z*zdim*zdim;
@@ -2744,12 +2744,12 @@ cout<<"enter surf dist "<<endl;
 								notFoundD=false;
 							}
 						}
-					}	
+					}
 						layer++;
 		}
-		vdist.push_back(static_cast<Tdist>(sqrt(dist)));	
+		vdist.push_back(static_cast<Tdist>(sqrt(dist)));
 	}
-	
+
 	//setScalars(vdist);
 }
 template void meshUtils::SurfDistToLabels<float,unsigned int>( vector<float> & dist,const volume<unsigned int>& image);
@@ -2788,9 +2788,9 @@ void meshUtils::SurfDistToLabels( vector<Tdist> & vdist, const volume<Tim> & ima
 							}
 						}
 		vdist.push_back(static_cast<Tdist>(sqrt(dist)));
-		
+
 	}
-	
+
 	//setScalars(vdist);
 }
 /*
@@ -2818,12 +2818,12 @@ void meshUtils::SurfDistToLabels( vector<Tdist> & vdist, const volume<Tim> & ima
 		bool notFoundD=true;
 		cout<<"test"<<endl;
 		while (notFoundD)
-		{ 
+		{
 			cout<<"layer "<<layer<<endl;
 			for (int x=centre[0]-layer; x<=centre[0]+layer; x++)
 				for (int y=centre[1]-layer; y<=centre[1]+layer;y++)
 					for (int z=centre[2]-layer; z<=centre[2]+layer;z++)
-					{	
+					{
 					//	cout<<x<<" "<<y<<" "<<z<<" "<<label<<" "<<image.value(x,y,z)<<endl;
 						if (image.value(x,y,z)==label)
 						{
@@ -2838,12 +2838,12 @@ void meshUtils::SurfDistToLabels( vector<Tdist> & vdist, const volume<Tim> & ima
 								notFoundD=false;
 							}
 						}
-					}	
+					}
 						layer++;
 		}
-		vdist.push_back(static_cast<Tdist>(sqrt(dist)));	
+		vdist.push_back(static_cast<Tdist>(sqrt(dist)));
 	}
-	
+
 	//setScalars(vdist);
 }
 */
@@ -2882,7 +2882,7 @@ void meshUtils::SurfScalarsMeanAndStdev(vector<string> meshList, Matrix & MeanPo
 	StDevScalars=(SP(tempScalars,tempScalars)-tempScalarsSq/N)/(N-1);
 	for (int i=0; i<StDevScalars.Nrows();i++)
 		StDevScalars.element(i,0)=sqrt(StDevScalars.element(i,0));
-	
+
 }
 
 
@@ -2890,18 +2890,18 @@ template<class T>
 void meshUtils::warpMeshWithDefField(mesh::Mesh & m, const volume4D<T> & defField, const Matrix & mat){
 			//mat should be 4by 4 lfirt matrix
 	//cout<<"done flirt"<<endl;
-	
+
 	ColumnVector pdef(4);
 	pdef.element(3)=1;
-	
+
 	float resx=defField[0].xdim();
 	float resy=defField[0].ydim();
 	float resz=defField[0].zdim();
-	
+
 	for (vector<mesh::Mpoint*>::iterator i=m._points.begin();i!=m._points.end();i++){
 		//shifts are for changes between roi and full image
-		
-		
+
+
 		float px=(*i)->get_coord().X;
 		float py=(*i)->get_coord().Y;
 		float pz=(*i)->get_coord().Z;
@@ -2909,7 +2909,7 @@ void meshUtils::warpMeshWithDefField(mesh::Mesh & m, const volume4D<T> & defFiel
 		pdef.element(1)=py+defField[1].interpolate(px/resx,py/resy,pz/resz) ;
 		pdef.element(2)=pz+defField[2].interpolate(px/resx,py/resy,pz/resz) ;
 		pdef=mat*pdef;
-		
+
 		(*i)->_update_coord.X=pdef.element(0);
 		(*i)->_update_coord.Y=pdef.element(1);
 		(*i)->_update_coord.Z=pdef.element(2);
@@ -2943,8 +2943,8 @@ void meshUtils::ugridToImage(volume<T> & im)
 	  im.value(static_cast<int>(Points.element(i,0)/xres),static_cast<int>(Points.element(i,1)/yres),static_cast<int>(Points.element(i,2)/zres))=static_cast<T>(Scalars.element(i,0));
 		//cout<<Scalars.element(i,0)<<" "<<Scalars.Nrows()<<endl;
 	}
-	
-	
+
+
 	/*
 	for (int i=0;i<im.xsize();i++)
 	{
@@ -2953,7 +2953,7 @@ void meshUtils::ugridToImage(volume<T> & im)
 		{
 			for (int k=0;k<im.zsize();k++)
 			{
-				//search for closest point 
+				//search for closest point
 				float mindist=(Points.element(0,0)-i*xres)*(Points.element(0,0)-i*xres) \
 				+(Points.element(0,1)-j*yres)*(Points.element(0,1)-j*yres) \
 				+(Points.element(0,2)-k*zres)*(Points.element(0,2)-k*zres) ;
@@ -2963,25 +2963,25 @@ void meshUtils::ugridToImage(volume<T> & im)
 					float dx=(Points.element(x,0)-i*xres);
 					float dy=(Points.element(x,1)-j*yres);
 					float dz=(Points.element(x,2)-k*zres);
-					
+
 					if ((dx*dx+dy*dy+dz*dz) < mindist){
 						//				cout<<i<<" "<<j<<" "<<k<<" search "<<indmin<<" "<<Points.element(x,0)<<" "<<Points.element(x,1)<<" "<<Points.element(x,2)<<" "<<dx<<" "<<dy<<" "<<dz<<endl;
 						indmin=x;
-						mindist=(dx*dx+dy*dy+dz*dz); 
+						mindist=(dx*dx+dy*dy+dz*dz);
 						if (mindist<dist_th) break;
 					}
-				}	
+				}
 				cout<<"indmind "<<indmin<<" "<<mindist<<" "<<dist_th<<endl;
 				im.value(i,j,k)=static_cast<T>(Scalars.element(indmin,0));
-		
+
 			}
 			//	cout<<i<<" "<<j<<" "<<k<<" INDMIN "<<indmin<<" "<<Points.element(indmin,0)<<" "<<Points.element(indmin,1)<<" "<<Points.element(indmin,2)<<endl;
-				
+
 		}
 	}
 	*/
-	
-}	
+
+}
 template void meshUtils::ugridToImage<short>(volume<short> & im);
 template void meshUtils::ugridToImage<float>(volume<float> & im);
 template void meshUtils::ugridToImage<double>(volume<double> & im);
@@ -2995,8 +2995,8 @@ ReturnMatrix meshUtils::getDeformedVector(const ColumnVector & mean, const Matri
 	{
 		def+=modes.Column(i+1)*sqrt(eigs.element(i))*vars.at(i);
 		//cout<<"var1 "<<vars.at(i)<<" "<<sqrt(eigs.element(i))<<endl;
-	}	
-		
+	}
+
 	def.Release();
 	return def;
 
@@ -3006,13 +3006,13 @@ template<class T,class T2>
 void meshUtils::deformSurface(const volume<T> & image, const float & maxit, const float & wIm, const float & wTang_in, const float & w_area, const float & w_norm, const T & max_thresh, const string & name)
 {
 	const T  max_thresh_sq=max_thresh*max_thresh;
-		const T xdim = static_cast<T>(image.xdim()); 
-		const T ydim = static_cast<T>(image.ydim()); 
-		const T zdim = static_cast<T>(image.zdim()); 
+		const T xdim = static_cast<T>(image.xdim());
+		const T ydim = static_cast<T>(image.ydim());
+		const T zdim = static_cast<T>(image.zdim());
 	float wTang=wTang_in;
 
 #ifdef USE_VTK
-	
+
 	vtkPolyData *meshData = vtkPolyData::New();
 	vtkPolyDataReader *vtkmesh = vtkPolyDataReader::New();
 	vtkRenderWindow *renWin = vtkRenderWindow::New();
@@ -3021,36 +3021,36 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 	vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
 	vtkImageData *imStruct =vtkImageData::New();
 	vtkImagePlaneWidget *planeWidgetX = vtkImagePlaneWidget::New();
-	
+
 	vtkmesh->SetFileName(name.c_str());
 	meshData=(vtkmesh->GetOutput());
 	meshmap->SetInput(meshData);
-	
+
 	//actor coordinates, geome..etc
 	vtkActor *aSurf = vtkActor::New();
 	aSurf->GetProperty()->SetColor(0.7,0,0);
-	aSurf->GetProperty()->SetOpacity(0.95); 
+	aSurf->GetProperty()->SetOpacity(0.95);
 	aSurf->GetProperty()->SetEdgeColor(0.0,0,8);
 	aSurf->GetProperty()->SetEdgeVisibility(1);
 	aSurf->GetProperty()->SetPointSize(2);
 	aSurf->GetProperty()->SetRepresentationToWireframe();
 	aSurf->SetMapper(meshmap);
-	
+
 	//interactorv
 	iren->SetRenderWindow(renWin);
-	
+
 	//add actor
 	ren1->AddActor(aSurf);
 	//ren1->AddActor(aSphere2);
 	ren1->SetBackground(0.4,0.4,0.4);
-	
+
 	//Render
 	renWin->AddRenderer(ren1);
-	
-	
-//	imStruct=newimageTovtkImageData(image);	
 
-  	
+
+//	imStruct=newimageTovtkImageData(image);
+
+
 //  planeWidgetX->DisplayTextOn();
   //planeWidgetX->SetInput(imStruct);
 //  planeWidgetX->SetPlaneOrientationToYAxes();
@@ -3059,40 +3059,40 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 //  planeWidgetX->SetInteractor(iren);
 //  planeWidgetX->TextureVisibilityOn();
 //  planeWidgetX->GetTexturePlaneProperty()->SetOpacity(0.9);
-  
+
  	renWin->Render();
 //	  iren->Start();
 
 
 #endif
-  
+
 	vector<T> pts_org=getPointsAsVector<T>();
 	vector<T> pts=pts_org;
-	
-	
+
+
 	vector<  vector<T2> > cells=this->getPolygonsAsVectorOfVectors<T2>();
 	vector<  vector<T2> > neighbours=first_mesh::findNeighbours<T2>(cells, pts.size()/3);
 	vector<  vector<T2> > neighbour_tris=first_mesh::findNeighbourTriangles<T2>(cells, pts.size()/3);
 
-	
-	
-	for (int n_iter=1; n_iter<=maxit; n_iter++) 
+
+
+	for (int n_iter=1; n_iter<=maxit; n_iter++)
 	{  //iterations
 	//	cout<<"n "<<n_iter<<endl;
-		
+
 		//calculate normals
 		vector<T> vnx,vny,vnz;
 		first_mesh::normal<T,T2>(pts,neighbour_tris,cells,vnx,vny,vnz);
-		
+
 		vector<T> vtri_x,vtri_y,vtri_z;
 		first_mesh::maxTriangle<T,T2>(pts,neighbour_tris,cells,vtri_x,vtri_y,vtri_z);
 
 		//	first_mesh::normal<T>(pts,triangles,vnx,vny,vnz);
-	
-	//	cout<<"normals"<<endl;		
-//				typename vector<T>::iterator a=vny.begin();		
+
+	//	cout<<"normals"<<endl;
+//				typename vector<T>::iterator a=vny.begin();
 //		typename vector<T>::iterator b=vnz.begin();
-//				typename vector<T>::iterator d=pts.begin();		
+//				typename vector<T>::iterator d=pts.begin();
 //		for (typename vector<T>::iterator c=vnx.begin();c!=vnx.end();c++,a++,b++,d+=3)
 //		{
 //			cout<<"vertex "<<*d<<" "<<*(d+1)<<" "<<*(d+2)<<endl;
@@ -3101,17 +3101,17 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 		//clauclate medium of neigbours than teh diference
 		vector<T> vmx,vmy,vmz;
 		first_mesh::medium_neighbours<T,T2>(pts,neighbours,cells,vmx,vmy,vmz);
-		
-	
+
+
 		typename vector<T>::iterator j=vmy.begin();
 		typename vector<T>::iterator k=vmz.begin();
 		typename vector<T>::iterator l=pts.begin();
-		
+
 		typename vector<T>::iterator m=vnx.begin();
-		typename vector<T>::iterator n=vny.begin();		
+		typename vector<T>::iterator n=vny.begin();
 		typename vector<T>::iterator o=vnz.begin();
 		//find diffenrece vector
-		
+
 			vector<T> v_im_nx,v_im_ny,v_im_nz;
 		for (typename vector<T>::iterator i=vmx.begin();i!=vmx.end();i++,j++,k++,m++,n++,o++,l+=3)
 		{
@@ -3126,22 +3126,22 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 			v_im_ny.push_back(im_int * (*n) );
 			v_im_nz.push_back(im_int * (*o) );
 
-			
+
 			T norm= (*i) * (*m)+ (*j) * (*n) + (*k) * (*o);
 		//	cout<<"norm "<<norm<<endl;
 			(*m) *= norm;
 			(*n) *= norm;
 			(*o) *= norm;
-			
+
 			(*i)-=(*m);
 			(*j)-=(*n);
 			(*k)-=(*o);
-			
-			
+
+
 		}
-		
+
 	//	cout<<"medium"<<endl;
-		
+
 		vector<T> v_dx, v_dy, v_dz;
 		//		float maxstep=0;
 		typename vector<T>::iterator tang_xi = vmx.begin();
@@ -3156,12 +3156,12 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 		typename vector<T>::iterator vtri_xi = vtri_x.begin();
 		typename vector<T>::iterator vtri_yi = vtri_y.begin();
 		typename vector<T>::iterator vtri_zi = vtri_z.begin();
-		
+
 	//	cout<<"delats"<<endl;
 		float max_step=0;
 		for (typename vector<T>::iterator i=pts.begin();i!=pts.end();i+=3, tang_xi++,tang_yi++,tang_zi++,norm_xi++,norm_yi++,norm_zi++, norm_im_xi++ , norm_im_yi++ , norm_im_zi++, vtri_xi++, vtri_yi++, vtri_zi++ )
 		{
-			
+
 			//cout<<wTang<<" "<<w_norm<<" "<<xdim<<" "<<ydim<<" "<<zdim<<" "<<(*i)/xdim<<" "<<(*(i+1))/ydim<<" "<<(*(i+2))/zdim<<" "<<image.interpolate( (*i)/xdim , (*(i+1))/ydim,  (*(i+2))/zdim )<<endl;
 			float dx = wTang * (*tang_xi) + w_norm * (*norm_xi) + wIm * (*norm_im_xi) + w_area * (*vtri_xi);
 			float dy = wTang * (*tang_yi) + w_norm * (*norm_yi) + wIm * (*norm_im_yi) + w_area * (*vtri_yi);
@@ -3170,18 +3170,18 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 				v_dy.push_back( dy );
 				v_dz.push_back( dx );
 			//	cout<<"updist "<<dx<<" "<<dy<<" "<<dz<<" "<<(dx*dx +dy*dy +dz*dz)<<" "<<(*norm_xi)<<" "<<(*norm_yi)<<" "<<(*norm_zi)<<endl;
-				
+
 				//max_thresh_sq=max_thresh*max_thresh
 				if ( (dx*dx +dy*dy +dz*dz) > max_step )
 					max_step=(dx*dx +dy*dy +dz*dz);
-				
+
 				//	v_dx.push_back(wIm * fim_xi + wTang * tang_xi + maxTri * maxtri_xi + w_norm * norm_xi);
 				//	v_dy.push_back(wIm * fim_yi + wTang * tang_yi + maxTri * maxtri_yi + w_norm * norm_yi);
 				//	v_dz.push_back(wIm * fim_zi + wTang * tang_zi + maxTri * maxtri_zi + w_norm * norm_zi);
 				//			float maxstep_temp=v_dx.back()*v_dx.back() + v_dy.back()*v_dy.back() + v_dz.back()*v_dz.back();
 				//fi (maxstep>
 	}
-	
+
 	float scale=1;
 //	cout<<"max_step "<<max_step<<" "<<max_thresh<<endl;
 		if ( max_step > max_thresh_sq)
@@ -3195,14 +3195,14 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 		for (typename vector<T>::iterator i=pts.begin();i!=pts.end();i+=3,dx_i++,dy_i++,dz_i++)
 		{
 			//	cout<<"count "<<count<<" "<<*i<<" "<<*(i+1)<<" "<<*(i+2)<<endl;
-			
+
 			*i+=(*dx_i)*scale;
 			*(i+1)+=(*dy_i)*scale;
 			*(i+2)+=(*dz_i)*scale;
 	//		count++;
 		//	cout<<"count "<<count<<endl;
 		}
-	
+
 		if ( n_iter % 100 == 0)
 			if (first_mesh::self_intersection_test<T,T2>(cells,pts))
 			{
@@ -3212,17 +3212,17 @@ void meshUtils::deformSurface(const volume<T> & image, const float & maxit, cons
 			n_iter=0;
 		}
 //		volume<float> fslim;
-//	read_volume(fslim,"ststs");	
+//	read_volume(fslim,"ststs");
 //	cout<<"convert to vtk"<<endl;
 //	image=newimageTovtkImageData(fslim);
-		
+
 #ifdef USE_VTK
 		fslvtkconvname::update_vtkPolyData(pts,meshData);
 		meshData->GetPoints()->Modified();
 	//	cout<<"render"<<endl;
 //	for (int i=0;i<100000000;i++)
 //		int a=1;
-		
+
 		renWin->Render();
 #endif
 }
@@ -3249,7 +3249,7 @@ void meshUtils::applyReg(Matrix & pts, const Matrix & fmat)
 }
 
 ReturnMatrix meshUtils::calculateRotation(const Matrix & Pts_src_dm, const Matrix & Pts_targ_dm)
-{	
+{
 	Matrix M_Rot(4,4);
 	M_Rot=0;
 	M_Rot.element(3,3)=1;
@@ -3263,21 +3263,21 @@ ReturnMatrix meshUtils::calculateRotation(const Matrix & Pts_src_dm, const Matri
 		for (int i=0;i<D.Nrows();i++){
 			D.element(i)=1/sqrt(D.element(i));
 		}
-		
+
 		Matrix R(3,3);
 		R=M*(U*D*U.t());
-		
-		
+
+
 		SVD(R,D,U);
 //cout<<"D "<<D<<endl;
-		
+
 		M_Rot.SubMatrix(1,3,1,3)=R;
-	
+
 		M_Rot.Release();
 		return M_Rot;
 }
 ReturnMatrix meshUtils::calculateScale(const Matrix & Pts_src_dm, const Matrix & Pts_targ_dm, const bool & global)
-{	
+{
 	Matrix M_Sc(4,4);
 	M_Sc=0;
 	M_Sc.element(0,0)=1;M_Sc.element(1,1)=1;M_Sc.element(2,2)=1;M_Sc.element(3,3)=1;
@@ -3286,11 +3286,11 @@ ReturnMatrix meshUtils::calculateScale(const Matrix & Pts_src_dm, const Matrix &
 				sumlx += Pts_src_dm.element(i,0)*Pts_src_dm.element(i,0);
 				sumly += Pts_src_dm.element(i,1)*Pts_src_dm.element(i,1);
 			    sumlz += Pts_src_dm.element(i,2)*Pts_src_dm.element(i,2);
-			  
+
 				sumrx += Pts_targ_dm.element(i,0)*Pts_targ_dm.element(i,0);
 				sumry += Pts_targ_dm.element(i,1)*Pts_targ_dm.element(i,1);
 				sumrz += Pts_targ_dm.element(i,2)*Pts_targ_dm.element(i,2);
-			
+
 			}
 			if (global)
 			{
@@ -3305,30 +3305,30 @@ ReturnMatrix meshUtils::calculateScale(const Matrix & Pts_src_dm, const Matrix &
 
 Matrix meshUtils::reg_leastsq(const Matrix & SourcePoints, const short & dof)
 {
-	
-	unsigned int Npoints=Points.Nrows(); 
-	
+
+	unsigned int Npoints=Points.Nrows();
+
 		Matrix M_trans_src(4,4);
 	M_trans_src=0;
 	M_trans_src.element(0,0)=1;	M_trans_src.element(1,1)=1;	M_trans_src.element(2,2)=1;M_trans_src.element(3,3)=1;
 
-	
+
 	Matrix M_trans_targ(4,4);
 	M_trans_targ=0;
 	M_trans_targ.element(0,0)=1;	M_trans_targ.element(1,1)=1;	M_trans_targ.element(2,2)=1;M_trans_targ.element(3,3)=1;
-	
-	
+
+
 	Matrix M_Sc(4,4);
 	M_Sc=0;
 	M_Sc.element(0,0)=1;M_Sc.element(1,1)=1;M_Sc.element(2,2)=1;M_Sc.element(3,3)=1;
-	
+
 	Matrix M_Rot(4,4);
 	M_Rot=0;
 	M_Rot.element(0,0)=1;M_Rot.element(1,1)=1;M_Rot.element(2,2)=1;M_Rot.element(3,3)=1;
 	//---------------------CALCULATE CENTROIDS----------------------//
 	double mean_src_x=0, mean_src_y=0, mean_src_z=0;
 	double mean_targ_x=0, mean_targ_y=0,mean_targ_z=0;
-	
+
 	for (unsigned int i=0; i<Npoints;i++)
 	{
 		mean_src_x+=SourcePoints.element(i,0);
@@ -3338,8 +3338,8 @@ Matrix meshUtils::reg_leastsq(const Matrix & SourcePoints, const short & dof)
 		mean_targ_x+=Points.element(i,0);
 		mean_targ_y+=Points.element(i,1);
 		mean_targ_z+=Points.element(i,2);
-	} 
-		
+	}
+
 		mean_src_x/=Npoints;
 		mean_src_y/=Npoints;
 		mean_src_z/=Npoints;
@@ -3351,33 +3351,33 @@ Matrix meshUtils::reg_leastsq(const Matrix & SourcePoints, const short & dof)
 	//---------------------TRANSLATION COMPONENTS----------------------//
 
 	M_trans_src.element(0,3)=-mean_src_x;	M_trans_src.element(1,3)=-mean_src_y;	M_trans_src.element(2,3)=-mean_src_z;
-	
+
 	M_trans_targ.element(0,3)=mean_targ_x;	M_trans_targ.element(1,3)=mean_targ_y;	M_trans_targ.element(2,3)=mean_targ_z;
-	
+
 	//---------------------DEMEAN POINTS ---------------------------//
 
 	Matrix Pts_src_dm=SourcePoints;
 	Matrix Pts_targ_dm=Points;
-	
+
 	for (unsigned int i=0;i<Npoints;i++)
 	{
 		 Pts_src_dm.element(i,0)-=mean_src_x;
 		 Pts_src_dm.element(i,1)-=mean_src_y;
 		 Pts_src_dm.element(i,2)-=mean_src_z;
-		 
+
 		 Pts_targ_dm.element(i,0)-=mean_targ_x;
 		 Pts_targ_dm.element(i,1)-=mean_targ_y;
 		 Pts_targ_dm.element(i,2)-=mean_targ_z;
 	}
 
-	
-	
+
+
 		//---------------------ROTATION COMPONENT (OPTIONAL)----------------------//
 Matrix M_Sc_final=M_Sc;
 Matrix M_Rot_final=M_Rot;
 
 for (unsigned int i=0;i<100;i++)
-{ 
+{
 	if (dof>=6)
 	{
 		M_Rot=calculateRotation(Pts_src_dm,Pts_targ_dm);
@@ -3408,9 +3408,9 @@ for (unsigned int i=0;i<100;i++)
 	cout<<"rot "<<M_Rot_final<<endl;
 	cout<<"sc "<<M_Sc_final<<endl;
 //	cout<<M_trans_targ  *  M_Sc_final * M_Rot_final * M_trans_src<<endl;
-	
+
 	return M_trans_targ * M_Sc_final * M_Rot_final * M_trans_src;
-	
+
 }
 
 Matrix meshUtils::alignSurfaces(const string & src_list, const short & dof, const string & outname )
@@ -3435,14 +3435,14 @@ Matrix meshUtils::alignSurfaces(const string & src_list, const short & dof, cons
 			{
 				cout<<"adding DDDDDDDpoints"<<endl;
 			fout->setPolygons(meshIn->getPolygons());
-			fout->setPoints(meshIn->getPointsAsMatrix());						
+			fout->setPoints(meshIn->getPointsAsMatrix());
 			}
 			allPoints = first_newmat_vector::unwrapMatrix(meshIn->getPointsAsMatrix());
-		}else 
+		}else
 		{
 			cout<<fout->getPointsAsMatrix().Nrows()<<" "<<fout->getPointsAsMatrix().Ncols()<<" "<<meshIn->getPointsAsMatrix().Nrows()<<" "<<meshIn->getPointsAsMatrix().Ncols()<<" "<<endl;
 			if (strcmp(outname.c_str(),"nosave"))
-					fout->appendPointsAndPolygons(meshIn->getPointsAsMatrix(), meshIn->getPolygons());						
+					fout->appendPointsAndPolygons(meshIn->getPointsAsMatrix(), meshIn->getPolygons());
 			allPoints = allPoints |   first_newmat_vector::unwrapMatrix(meshIn->getPointsAsMatrix());
 		}
 			//	cout<<"points reg "<<meshIn->getPointsAsMatrix()<<endl;
@@ -3455,12 +3455,12 @@ Matrix meshUtils::alignSurfaces(const string & src_list, const short & dof, cons
 
 			if (strcmp(outname.c_str(),"nosave"))
 			fout->save(outname);
-	
+
 	delete fout;
-	
+
 	return allPoints;
 }
 
 
 
-}	
+}

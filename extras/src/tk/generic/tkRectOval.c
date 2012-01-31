@@ -1,4 +1,4 @@
-/* 
+/*
  * tkRectOval.c --
  *
  *	This file implements rectangle and oval items for canvas
@@ -366,7 +366,7 @@ RectOvalCoords(interp, canvas, itemPtr, objc, objv)
 	ComputeRectOvalBbox(canvas, rectOvalPtr);
     } else {
 	char buf[64 + TCL_INTEGER_SPACE];
-	
+
 	sprintf(buf, "wrong # coordinates: expected 0 or 4, got %d", objc);
 	Tcl_SetResult(interp, buf, TCL_VOLATILE);
 	return TCL_ERROR;
@@ -682,7 +682,7 @@ ComputeRectOvalBbox(canvas, rectOvalPtr)
 #endif
     } else {
 #ifdef MAC_OSX_TK
-	/* Mac OS X CoreGraphics needs correct rounding here 
+	/* Mac OS X CoreGraphics needs correct rounding here
 	 * otherwise it will draw outside the bounding box.
 	 * Probably correct on other platforms as well? */
 	bloat = (int) (width+1.5)/2;

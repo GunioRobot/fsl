@@ -17,7 +17,7 @@
 //
 // At one point SparseMatrix was replaced by SpMat as the underlying
 // sparse matrix representation in SparseBFMatrix. SpMat was written
-// with an API that largely mimicks that of NEWMAT. This is the 
+// with an API that largely mimicks that of NEWMAT. This is the
 // "historical" reason why a wrapper class was written, rather than
 // using templatisation which would have been possible given the
 // similarities in API between SpMat and NEWMAT.
@@ -63,7 +63,7 @@ public:
 
   // Access as NEWMAT::Matrix
   virtual NEWMAT::ReturnMatrix AsMatrix() const = 0;
-  
+
   // Basic properties
   virtual unsigned int Nrows() const = 0;
   virtual unsigned int Ncols() const = 0;
@@ -85,7 +85,7 @@ public:
   // Assigning
   virtual void Set(unsigned int x, unsigned int y, double val) = 0;
   virtual void Insert(unsigned int x, unsigned int y, double val) = 0;
-  virtual void AddTo(unsigned int x, unsigned int y, double val) = 0;  
+  virtual void AddTo(unsigned int x, unsigned int y, double val) = 0;
 
   // Transpose
   virtual boost::shared_ptr<BFMatrix> Transpose() const = 0;
@@ -108,13 +108,13 @@ public:
   virtual void MulMeByScalar(double s) = 0;
   // Multiply by vector
   virtual NEWMAT::ReturnMatrix MulByVec(const NEWMAT::ColumnVector& v) const = 0;
-  // Add another matrix to this one 
+  // Add another matrix to this one
   virtual void AddToMe(const BFMatrix& m, double s=1.0) = 0;
   // Given A*x=b, solve for x.
   virtual NEWMAT::ReturnMatrix SolveForx(const NEWMAT::ColumnVector& b,
 					 MISCMATHS::MatrixType       type=SYM_POSDEF,
 					 double                      tol=1e-6,
-                                         int                         miter=200) const = 0;  
+                                         int                         miter=200) const = 0;
 };
 
 template<class T>
@@ -125,15 +125,15 @@ private:
 
 public:
   // Constructors, destructor and assignment
-  SparseBFMatrix() 
+  SparseBFMatrix()
   : mp(boost::shared_ptr<MISCMATHS::SpMat<T> >(new MISCMATHS::SpMat<T>())) {}
-  SparseBFMatrix(unsigned int m, unsigned int n) 
+  SparseBFMatrix(unsigned int m, unsigned int n)
   : mp(boost::shared_ptr<MISCMATHS::SpMat<T> >(new MISCMATHS::SpMat<T>(m,n))) {}
   SparseBFMatrix(unsigned int m, unsigned int n, const unsigned int *irp, const unsigned int *jcp, const double *sp)
   : mp(boost::shared_ptr<MISCMATHS::SpMat<T> >(new MISCMATHS::SpMat<T>(m,n,irp,jcp,sp))) {}
-  SparseBFMatrix(const MISCMATHS::SpMat<T>& M) 
+  SparseBFMatrix(const MISCMATHS::SpMat<T>& M)
   : mp(boost::shared_ptr<MISCMATHS::SpMat<T> >(new MISCMATHS::SpMat<T>(M))) {}
-  SparseBFMatrix(const NEWMAT::Matrix& M) 
+  SparseBFMatrix(const NEWMAT::Matrix& M)
   : mp(boost::shared_ptr<MISCMATHS::SpMat<T> >(new MISCMATHS::SpMat<T>(M))) {}
   virtual ~SparseBFMatrix() {}
   virtual const SparseBFMatrix& operator=(const SparseBFMatrix<T>& M) {
@@ -142,7 +142,7 @@ public:
 
   // Access as NEWMAT::Matrix
   virtual NEWMAT::ReturnMatrix AsMatrix() const {NEWMAT::Matrix ret; ret = mp->AsNEWMAT(); ret.Release(); return(ret);}
-  
+
   // Basic properties
   virtual unsigned int Nrows() const {return(mp->Nrows());}
   virtual unsigned int Ncols() const {return(mp->Ncols());}
@@ -166,9 +166,9 @@ public:
   virtual void Insert(unsigned int x, unsigned int y, double val) {mp->Set(x,y,val);}
   virtual void AddTo(unsigned int x, unsigned int y, double val) {mp->AddTo(x,y,val);}
 
-  // Transpose. 
+  // Transpose.
   virtual boost::shared_ptr<BFMatrix> Transpose() const;
-  
+
   // Concatenation of two matrices returning a third
   // AB = [*this B] in Matlab lingo
   virtual void HorConcat(const BFMatrix& B, BFMatrix& AB) const;
@@ -215,7 +215,7 @@ public:
   }
 
   virtual NEWMAT::ReturnMatrix AsMatrix() const {NEWMAT::Matrix ret; ret = *mp; ret.Release(); return(ret);}
-  virtual const NEWMAT::Matrix& ReadAsMatrix() const {return(*mp);} 
+  virtual const NEWMAT::Matrix& ReadAsMatrix() const {return(*mp);}
 
   // Basic properties
   virtual unsigned int Nrows() const {return(mp->Nrows());}
@@ -225,8 +225,8 @@ public:
   virtual void Print(const std::string fname=std::string("")) const;
 
   // Setting, deleting or resizing the whole matrix.
-  virtual void SetMatrix(const MISCMATHS::SpMat<double>& M) {mp = boost::shared_ptr<NEWMAT::Matrix>(new NEWMAT::Matrix(M.AsNEWMAT()));} 
-  virtual void SetMatrix(const MISCMATHS::SpMat<float>& M) {mp = boost::shared_ptr<NEWMAT::Matrix>(new NEWMAT::Matrix(M.AsNEWMAT()));} 
+  virtual void SetMatrix(const MISCMATHS::SpMat<double>& M) {mp = boost::shared_ptr<NEWMAT::Matrix>(new NEWMAT::Matrix(M.AsNEWMAT()));}
+  virtual void SetMatrix(const MISCMATHS::SpMat<float>& M) {mp = boost::shared_ptr<NEWMAT::Matrix>(new NEWMAT::Matrix(M.AsNEWMAT()));}
   virtual void SetMatrix(const NEWMAT::Matrix& M) {mp = boost::shared_ptr<NEWMAT::Matrix>(new NEWMAT::Matrix(M));}
   virtual void SetMatrixPtr(boost::shared_ptr<NEWMAT::Matrix>& mptr) {mp = mptr;}
   virtual void Clear() {mp->ReSize(0,0);}
@@ -240,9 +240,9 @@ public:
   virtual void Insert(unsigned int x, unsigned int y, double val) {(*mp)(x,y)=val;}
   virtual void AddTo(unsigned int x, unsigned int y, double val) {(*mp)(x,y)+=val;}
 
-  // Transpose. 
+  // Transpose.
   virtual boost::shared_ptr<BFMatrix> Transpose() const;
-  
+
   // Concatenation of two matrices returning a third
   virtual void HorConcat(const BFMatrix& B, BFMatrix& AB) const;
   virtual void HorConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const;
@@ -269,7 +269,7 @@ public:
 					 MISCMATHS::MatrixType       type,
 					 double                      tol,
                                          int                         miter) const;
-    
+
 };
 
 //
@@ -306,12 +306,12 @@ void SparseBFMatrix<T>::HorConcat(const BFMatrix& B, BFMatrix& AB) const
     pAB->HorConcat2MyRight(B);
   }
   else {
-    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);        
-    if (fpAB) { // Means that output is full 
+    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);
+    if (fpAB) { // Means that output is full
       *fpAB = FullBFMatrix(this->AsMatrix());
       fpAB->HorConcat2MyRight(B);
     }
-    else throw BFMatrixException("SparseBFMatrix::HorConcat: dynamic cast error"); 
+    else throw BFMatrixException("SparseBFMatrix::HorConcat: dynamic cast error");
   }
 }
 
@@ -320,18 +320,18 @@ void SparseBFMatrix<T>::HorConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
 {
   if (B.Nrows() && int(Nrows()) != B.Nrows()) {throw BFMatrixException("SparseBFMatrix::HorConcat: Matrices must have same # of rows");}
 
-  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);   
+  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);
   if (pAB) { // Means that output is sparse
     *pAB = *this;
     pAB->HorConcat2MyRight(B);
   }
   else {
-    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);     
+    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);
     if (fpAB) {// Means that output is full
       *fpAB = FullBFMatrix(this->AsMatrix());
       fpAB->HorConcat2MyRight(B);
     }
-    else throw BFMatrixException("SparseBFMatrix::HorConcat: dynamic cast error"); 
+    else throw BFMatrixException("SparseBFMatrix::HorConcat: dynamic cast error");
   }
 }
 
@@ -340,18 +340,18 @@ void SparseBFMatrix<T>::VertConcat(const BFMatrix& B, BFMatrix& AB) const
 {
   if (B.Ncols() && Ncols() != B.Ncols()) {throw BFMatrixException("SparseBFMatrix::VertConcat: Matrices must have same # of columns");}
 
-  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);      
+  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);
   if (pAB) { // Means that output is sparse
     *pAB = *this;
     pAB->VertConcatBelowMe(B);
   }
   else {
-    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);        
+    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);
     if (fpAB) { // Means that output is full
       *fpAB = FullBFMatrix(this->AsMatrix());
       fpAB->VertConcatBelowMe(B);
     }
-    else throw BFMatrixException("SparseBFMatrix::VertConcat: dynamic cast error"); 
+    else throw BFMatrixException("SparseBFMatrix::VertConcat: dynamic cast error");
   }
 }
 
@@ -360,18 +360,18 @@ void SparseBFMatrix<T>::VertConcat(const NEWMAT::Matrix& B, BFMatrix& AB) const
 {
   if (B.Ncols() && int(Ncols()) != B.Ncols()) {throw BFMatrixException("SparseBFMatrix::VertConcat: Matrices must have same # of columns");}
 
-  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);      
+  SparseBFMatrix<T> *pAB = dynamic_cast<SparseBFMatrix<T> *>(&AB);
   if (pAB) { // Means that output is sparse
     *pAB = *this;
     pAB->VertConcatBelowMe(B);
   }
   else {
-    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);        
+    FullBFMatrix *fpAB = dynamic_cast<FullBFMatrix *>(&AB);
     if (fpAB) { // Means that output is full
       *fpAB = FullBFMatrix(this->AsMatrix());
       fpAB->VertConcatBelowMe(B);
     }
-    else throw BFMatrixException("SparseBFMatrix::VertConcat: dynamic cast error"); 
+    else throw BFMatrixException("SparseBFMatrix::VertConcat: dynamic cast error");
   }
 }
 
@@ -385,12 +385,12 @@ void SparseBFMatrix<T>::HorConcat2MyRight(const BFMatrix& B)
 
   if (Nrows() != B.Nrows()) {throw BFMatrixException("SparseBFMatrix::HorConcat2MyRight: Matrices must have same # of rows");}
 
-  const SparseBFMatrix<T> *pB = dynamic_cast<const SparseBFMatrix<T> *>(&B);   
+  const SparseBFMatrix<T> *pB = dynamic_cast<const SparseBFMatrix<T> *>(&B);
   if (pB) { // Means that we want to concatenate a sparse matrix
     *mp |= *(pB->mp);
   }
   else {
-    const FullBFMatrix *fpB = dynamic_cast<const FullBFMatrix *>(&B);     
+    const FullBFMatrix *fpB = dynamic_cast<const FullBFMatrix *>(&B);
     if (fpB) { // Means that we want to concatenate a full
       this->HorConcat2MyRight(fpB->AsMatrix());
     }
@@ -414,12 +414,12 @@ void SparseBFMatrix<T>::VertConcatBelowMe(const BFMatrix& B)
 
   if (Ncols() != B.Ncols()) {throw BFMatrixException("SparseBFMatrix::VertConcatBelowMe: Matrices must have same # of columns");}
 
-  const SparseBFMatrix<T> *pB = dynamic_cast<const SparseBFMatrix<T> *>(&B);   
+  const SparseBFMatrix<T> *pB = dynamic_cast<const SparseBFMatrix<T> *>(&B);
   if (pB) { // Means that we want to concatenate a sparse matrix
     *mp &= *(pB->mp);
   }
   else {
-    const FullBFMatrix *fpB = dynamic_cast<const FullBFMatrix *>(&B);     
+    const FullBFMatrix *fpB = dynamic_cast<const FullBFMatrix *>(&B);
     if (fpB) { // Means that we want to concatenate a full
       this->VertConcatBelowMe(fpB->AsMatrix());
     }
@@ -454,18 +454,18 @@ void SparseBFMatrix<T>::AddToMe(const BFMatrix& M, double s)
     throw BFMatrixException("SparseBFMatrix::AddToMe: Matrix size mismatch");
   }
 
-  const SparseBFMatrix<T> *pM = dynamic_cast<const SparseBFMatrix<T> *>(&M);  
+  const SparseBFMatrix<T> *pM = dynamic_cast<const SparseBFMatrix<T> *>(&M);
   if (pM) { // Add sparse matrix to this sparse matrix
     if (s == 1.0) *mp += *(pM->mp);
     else *mp += s * *(pM->mp);
   }
   else {
-    const FullBFMatrix *fpM = dynamic_cast<const FullBFMatrix *>(&M);      
+    const FullBFMatrix *fpM = dynamic_cast<const FullBFMatrix *>(&M);
     if (fpM) { // Add full matrix to this sparse matrix
       if (s == 1.0) *mp += SpMat<T>(fpM->ReadAsMatrix());
       else *mp += s * SpMat<T>(fpM->ReadAsMatrix());
     }
-    else throw BFMatrixException("SparseBFMatrix::AddToMe: dynamic cast error"); 
+    else throw BFMatrixException("SparseBFMatrix::AddToMe: dynamic cast error");
   }
 }
 

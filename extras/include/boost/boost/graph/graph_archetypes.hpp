@@ -17,10 +17,10 @@ namespace boost { // should use a different namespace for this
 
   namespace detail {
     struct null_graph_archetype : public null_archetype<> {
-      struct traversal_category { }; 
+      struct traversal_category { };
     };
   }
-  
+
   //===========================================================================
   template <typename Vertex, typename Directed, typename ParallelCategory,
     typename Base = detail::null_graph_archetype >
@@ -64,7 +64,7 @@ namespace boost { // should use a different namespace for this
   {
     return V(static_object<detail::dummy_constructor>::get());
   }
-  
+
   template <typename V, typename D, typename P, typename B>
   std::pair<typename incidence_graph_archetype<V,D,P,B>::out_edge_iterator,
             typename incidence_graph_archetype<V,D,P,B>::out_edge_iterator>
@@ -73,7 +73,7 @@ namespace boost { // should use a different namespace for this
     typedef typename incidence_graph_archetype<V,D,P,B>::out_edge_iterator Iter;
     return std::make_pair(Iter(), Iter());
   }
-  
+
   template <typename V, typename D, typename P, typename B>
   typename incidence_graph_archetype<V,D,P,B>::degree_size_type
   out_degree(const V&, const incidence_graph_archetype<V,D,P,B>& )
@@ -104,7 +104,7 @@ namespace boost { // should use a different namespace for this
     typedef void vertex_iterator;
     typedef void edge_iterator;
   };
-  
+
   template <typename V, typename D, typename P, typename B>
   std::pair<typename adjacency_graph_archetype<V,D,P,B>::adjacency_iterator,
             typename adjacency_graph_archetype<V,D,P,B>::adjacency_iterator>
@@ -126,9 +126,9 @@ namespace boost { // should use a different namespace for this
     typename Base = detail::null_graph_archetype >
   struct vertex_list_graph_archetype : public Base
   {
-    typedef incidence_graph_archetype<Vertex, Directed, ParallelCategory> 
+    typedef incidence_graph_archetype<Vertex, Directed, ParallelCategory>
       Incidence;
-    typedef adjacency_graph_archetype<Vertex, Directed, ParallelCategory> 
+    typedef adjacency_graph_archetype<Vertex, Directed, ParallelCategory>
       Adjacency;
 
     typedef typename Base::traversal_category base_trav_cat;
@@ -153,7 +153,7 @@ namespace boost { // should use a different namespace for this
     typedef void in_edge_iterator;
     typedef void edge_iterator;
   };
-  
+
   template <typename V, typename D, typename P, typename B>
   std::pair<typename vertex_list_graph_archetype<V,D,P,B>::vertex_iterator,
             typename vertex_list_graph_archetype<V,D,P,B>::vertex_iterator>
@@ -203,7 +203,7 @@ namespace boost { // should use a different namespace for this
   struct edge_property_selector<property_graph_archetype_tag> {
     typedef choose_edge_property_map_archetype type;
   };
-  
+
   struct choose_vertex_property_map_archetype {
     template <typename Graph, typename Property, typename Tag>
     struct bind_ {
@@ -218,7 +218,7 @@ namespace boost { // should use a different namespace for this
   struct vertex_property_selector<property_graph_archetype_tag> {
     typedef choose_vertex_property_map_archetype type;
   };
-  
+
   template <typename G, typename P, typename V>
   typename property_map<property_graph_archetype<G, P, V>, P>::type
   get(P, property_graph_archetype<G, P, V>&) {
@@ -241,7 +241,7 @@ namespace boost { // should use a different namespace for this
 
   template <typename G, typename P, typename V, typename Key>
   void
-  put(P p, property_graph_archetype<G, P, V>& g, 
+  put(P p, property_graph_archetype<G, P, V>& g,
       const Key& key, const V& value)
   {
     typedef typename boost::property_map<property_graph_archetype<G, P, V>, P>::type Map;
@@ -258,19 +258,19 @@ namespace boost { // should use a different namespace for this
   template <>
   struct color_traits<color_value_archetype> {
     static color_value_archetype white()
-    { 
+    {
       return color_value_archetype
-        (static_object<detail::dummy_constructor>::get()); 
+        (static_object<detail::dummy_constructor>::get());
     }
     static color_value_archetype gray()
     {
       return color_value_archetype
-        (static_object<detail::dummy_constructor>::get()); 
+        (static_object<detail::dummy_constructor>::get());
     }
     static color_value_archetype black()
     {
       return color_value_archetype
-        (static_object<detail::dummy_constructor>::get()); 
+        (static_object<detail::dummy_constructor>::get());
     }
   };
 
@@ -283,7 +283,7 @@ namespace boost { // should use a different namespace for this
     const T& top() const { return static_object<T>::get(); }
     bool empty() const { return true; }
   };
-  
+
 } // namespace boost
 
 

@@ -8,8 +8,8 @@ USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_ZLIB}
 
 LIBS=-lmeshclass -lnewimage -lprob -lmiscmaths -lfslio -lniftiio -lznz -lnewmat -lutils -lz
 
-BETOBJS=bet2.o 
-BETSURFOBJS=betsurf.o 
+BETOBJS=bet2.o
+BETSURFOBJS=betsurf.o
 
 XFILES=bet2 betsurf
 
@@ -19,10 +19,10 @@ RUNTCLS = Bet
 
 all: ${XFILES}
 
-bet2: ${BETOBJS} 
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BETOBJS} ${LIBS} 
+bet2: ${BETOBJS}
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BETOBJS} ${LIBS}
 
-betsurf: ${BETSURFOBJS} 
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BETSURFOBJS} ${LIBS} 
+betsurf: ${BETSURFOBJS}
+	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ ${BETSURFOBJS} ${LIBS}
 
 

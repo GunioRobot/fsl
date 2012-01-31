@@ -19,10 +19,10 @@
 // missing partial specialization  workaround.
 //////////////////////////////////////////////////////////////////////////////
 
-namespace boost 
+namespace boost
 {
-    namespace range_detail 
-    {        
+    namespace range_detail
+    {
         template< typename T >
         struct range_value_type_;
 
@@ -48,17 +48,17 @@ namespace boost
 
         template<>
         struct range_value_type_<array_>
-        { 
+        {
             template< typename T >
             struct pts
             {
                 typedef BOOST_DEDUCED_TYPENAME remove_extent<T>::type type;
             };
         };
-        
+
         template<>
         struct range_value_type_<char_array_>
-        { 
+        {
             template< typename T >
             struct pts
             {
@@ -72,10 +72,10 @@ namespace boost
             template< typename S >
             struct pts
             {
-                typedef char type; 
-            };         
+                typedef char type;
+            };
         };
-        
+
         template<>
         struct range_value_type_<const_char_ptr_>
         {
@@ -83,7 +83,7 @@ namespace boost
             struct pts
             {
                 typedef const char type;
-            };         
+            };
         };
 
         template<>
@@ -93,7 +93,7 @@ namespace boost
             struct pts
             {
                 typedef wchar_t type;
-            };         
+            };
         };
 
         template<>
@@ -103,17 +103,17 @@ namespace boost
              struct pts
              {
                  typedef const wchar_t type;
-             };         
+             };
          };
 
-    } 
-    
+    }
+
     template< typename C >
     class range_value
     {
         typedef BOOST_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:
-        typedef BOOST_DEDUCED_TYPENAME range_detail::range_value_type_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
+        typedef BOOST_DEDUCED_TYPENAME range_detail::range_value_type_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type;
     };
 
 }

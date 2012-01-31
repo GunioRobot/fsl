@@ -2,7 +2,7 @@
 #define POSIX_TIME_CONFIG_HPP___
 
 /* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -30,7 +30,7 @@ namespace posix_time {
 #define BOOST_DATE_TIME_HAS_MILLISECONDS
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #define BOOST_DATE_TIME_HAS_NANOSECONDS
-  typedef date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::nano, 
+  typedef date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::nano,
     1000000000, 9 > time_res_traits;
 #else
   // set up conditional test compilations
@@ -38,14 +38,14 @@ namespace posix_time {
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #undef  BOOST_DATE_TIME_HAS_NANOSECONDS
   typedef date_time::time_resolution_traits<
-    boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 
+    boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro,
                                             1000000, 6 > time_res_traits;
 
 
 // #undef BOOST_DATE_TIME_HAS_MILLISECONDS
 // #undef BOOST_DATE_TIME_HAS_MICROSECONDS
 // #undef BOOST_DATE_TIME_HAS_NANOSECONDS
-//   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::tenth, 
+//   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::tenth,
 //                                              10, 0 > time_res_traits;
 
 #endif
@@ -134,7 +134,7 @@ namespace posix_time {
     }
   };
 
-  class posix_time_system_config 
+  class posix_time_system_config
   {
    public:
     typedef simple_time_rep time_rep_type;
@@ -143,7 +143,7 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
-#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers
 #else
     BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000000);
 #endif
@@ -151,7 +151,7 @@ namespace posix_time {
 
 #else
 
-  class millisec_posix_time_system_config 
+  class millisec_posix_time_system_config
   {
    public:
     typedef boost::int64_t time_rep_type;
@@ -162,7 +162,7 @@ namespace posix_time {
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits::impl_type impl_type;
     typedef time_res_traits resolution_traits;
-#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers
 #else
     BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000);
 #endif

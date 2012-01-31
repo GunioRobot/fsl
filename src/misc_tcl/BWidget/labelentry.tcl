@@ -42,7 +42,7 @@ proc LabelEntry::create { path args } {
     eval [list frame $path] $maps(:cmd) -class LabelEntry \
 	    -relief flat -bd 0 -highlightthickness 0 -takefocus 0
     Widget::initFromODB LabelEntry $path $maps(LabelEntry)
-	
+
     set labf  [eval [list LabelFrame::create $path.labf] $maps(.labf) \
                    [list -relief flat -borderwidth 0 -focus $path.e]]
     set subf  [LabelFrame::getframe $labf]

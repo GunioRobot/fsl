@@ -13,7 +13,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // collections_load_imp.hpp: serialization for loading stl collections
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -28,18 +28,18 @@ namespace detail {
 
 // reserve space on stack for an object of type T without actually
 // construction such an object
-template<typename T > 
+template<typename T >
 struct stack_allocate
 {
     T * address() {
-        return static_cast<T*>(storage_.address()); 
+        return static_cast<T*>(storage_.address());
     }
     T & reference() {
         return * address();
     }
 private:
     typedef BOOST_DEDUCED_TYPENAME boost::aligned_storage<
-        sizeof(T), 
+        sizeof(T),
         #if BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x560))
             8
         #else

@@ -1,5 +1,5 @@
 # $Id: rules.mk,v 1.30 2006/03/27 08:48:16 steve Exp $
-all: 
+all:
 
 help:
 	@echo " make                Rebuild project targets";
@@ -10,7 +10,7 @@ help:
 	@echo " make tagstable      Tag the project as stable in the CVS repository";
 	@echo " make stable-branch  Create and tag a branch as stable for this project in the CVS repository";
 	@echo "";
-	@echo " make install        Install into your local FSLDEVDIR"; 
+	@echo " make install        Install into your local FSLDEVDIR";
 	@echo " make install-fmrib  Install includes, lib, scripts and binaries to FSLDIR";
 
 debug:
@@ -34,7 +34,7 @@ clean:
 install:
 	@${MAKE} "DESTDIR=${FSLDEVDIR}" master-install-script
 
-install-fmrib: 
+install-fmrib:
 	@numunst=`cvs status | grep "Sticky Tag" | grep -v -i stable | wc -l` ; export numunst ; \
 	if [ $$numunst -ge 1 ] ; then \
 	  echo " " ; \
@@ -270,11 +270,11 @@ tagstable: commit
 		echo " " ; \
 		exit 4 ; \
 	fi;
-	cvs tag -F stable 
+	cvs tag -F stable
 	cvs tag -F stable-`date +%d%b%Y`
 
 
-stable-branch: 
+stable-branch:
 	dt=`date +%d%b%Y` ; export dt ; \
 	bnchnm=stable-branch-$$dt; export bnchnm ; \
 	if [ ! -f branchname.log ] ; then \
@@ -290,11 +290,11 @@ stable-branch:
 	cvs tag -F stable ; \
 	cvs tag -F stable-$$dt  ; \
 	cvs tag -F last-merge  ; \
-	cvs update -A 
-        
+	cvs update -A
+
 
 insertcopyright:
-	${FSLCONFDIR}/common/insertcopyright * */*	
+	${FSLCONFDIR}/common/insertcopyright * */*
 
 update:
 	cvs -q -r update
@@ -303,7 +303,7 @@ update:
 commit:
 	cvs -q commit
 
-depend: 
+depend:
 	${RM} -f /tmp/fslgrot depend.mk
 	${MAKE} depend.mk
 

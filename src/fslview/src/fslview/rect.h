@@ -11,7 +11,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <memory>
-class Rect 
+class Rect
 {
 public:
   typedef boost::shared_ptr< Rect > Handle;
@@ -34,8 +34,8 @@ public:
 
 private:
 
-  Rect(int,int,int,int); 
-  struct Implementation;  
+  Rect(int,int,int,int);
+  struct Implementation;
   const std::auto_ptr<Implementation> m_impl;
 };
 

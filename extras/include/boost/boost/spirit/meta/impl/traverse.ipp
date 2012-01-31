@@ -254,7 +254,7 @@ namespace impl
         template <typename MetaT, typename ParserT, typename EnvT>
         static
         typename parser_traversal_unary_result<
-            MetaT, ParserT, 
+            MetaT, ParserT,
             typename traverse_post_order_return<
                 MetaT, typename ParserT::subject_t, EnvT
             >::type,
@@ -295,7 +295,7 @@ namespace impl
         template <typename MetaT, typename ParserT, typename EnvT>
         static
         typename parser_traversal_action_result<
-            MetaT, ParserT, 
+            MetaT, ParserT,
             typename traverse_post_order_return<
                 MetaT, typename ParserT::subject_t, EnvT
             >::type,
@@ -337,7 +337,7 @@ namespace impl
         template <typename MetaT, typename ParserT, typename EnvT>
         static
         typename parser_traversal_binary_result<
-            MetaT, ParserT, 
+            MetaT, ParserT,
             typename traverse_post_order_return<
                 MetaT, typename ParserT::left_t, EnvT
             >::type,

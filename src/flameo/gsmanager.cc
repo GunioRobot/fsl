@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -85,7 +85,7 @@ using namespace NEWIMAGE;
 using namespace std;
 
 namespace Gs {
-  
+
   bool compare(const pair<float,int> &r1,const pair<float,int> &r2){
     return (r1.first<r2.first);
   }
@@ -103,26 +103,26 @@ namespace Gs {
     randomise(v);
     return v;
   }
-  
+
   void Gsmanager::do_kmeans(const Matrix& data,vector<int>& z,const int k,Matrix& means){
-    Tracer tr("Gsmanager::do_kmeans");  
+    Tracer tr("Gsmanager::do_kmeans");
 
     // note that first class is restricted to having a mean of zero
 
     int numiter=100;
     if(data.Nrows() != (int)z.size())
       z.resize(data.Nrows());
-    
+
     // k is number of classes
     int n = data.Nrows(); // number of observations
     int d = data.Ncols(); // dimension
-    
+
     //    Matrix means(d,k),newmeans(d,k);
     Matrix newmeans(d,k);
     ColumnVector nmeans(k);
-       
+
     nmeans=0;
-	
+
  //    //    cout<<"inside kmeans"<<endl;
 //     // initialise random
 //     vector< pair<float,int> > rindex(n);
@@ -162,7 +162,7 @@ namespace Gs {
       newmeans.Column(mm) += data.Row(i).t();
       nmeans(mm) += 1;
     }
-    
+
     // compute means
     for(int m=1;m<=k;m++){
       // if(nmeans(m)==0){
@@ -178,7 +178,7 @@ namespace Gs {
 
   float Gsmanager::log_likelihood(float beta, const ColumnVector& gam, const ColumnVector& Y, const Matrix& z, const ColumnVector& S)
   {
-    Tracer tr("Gsmanager::log_likelihood");  
+    Tracer tr("Gsmanager::log_likelihood");
 
     int nts=Y.Nrows();
 
@@ -187,7 +187,7 @@ namespace Gs {
     float ret=0;
 
     for(int t=1;t<=nts;t++)
-      { 
+      {
 	if(beta+S(t) == 0) return 1e32;
 	U(t) = S(t)+beta;
 	float vr = S(t)+beta;
@@ -198,16 +198,16 @@ namespace Gs {
 //     OUT(Y.t());
 //     OUT(gam);
 //     OUT(ret);
-    
+
     //float ret=std::log(mvnpdf(Y.t(),(z*gam).t(),U));
 
     return ret;
 
   }
- 
+
   float Gsmanager::marg_posterior_energy(float x, const ColumnVector& y, const Matrix& z, const ColumnVector& S)
   {
-    //Tracer tr("Gsmanager::marg_posterior_energy");  
+    //Tracer tr("Gsmanager::marg_posterior_energy");
 
     // x is log(variance)
 
@@ -226,7 +226,7 @@ namespace Gs {
     DiagonalMatrix iU(nts);
 
     for(int t=1;t<=nts;t++)
-      { 
+      {
 	if(ex+S(t) == 0) return 1e32;
 	iU(t) = 1.0/(S(t)+ex);
       }
@@ -235,7 +235,7 @@ namespace Gs {
     Matrix tmp = z.t()*iU;
     SymmetricMatrix ziUz;
     ziUz << tmp*z;
-    ColumnVector gam=ziUz.i()*tmp*y;  
+    ColumnVector gam=ziUz.i()*tmp*y;
 
     //   OUT(iU);
     //   OUT(log(priorsum));
@@ -250,20 +250,20 @@ namespace Gs {
     return ret;
 
   }
-  
+
   float Gsmanager::log_likelihood_outlier(float beta, float beta_outlier, const ColumnVector& gam, const ColumnVector& Y, const Matrix& z, const ColumnVector& S, float global_prob_outlier, const ColumnVector& prob_outlier)
   {
-    //Tracer tr("Gsmanager::log_likelihood_outlier");  
+    //Tracer tr("Gsmanager::log_likelihood_outlier");
 
 
     int nts=Y.Nrows();
 
     DiagonalMatrix U1(nts);
     DiagonalMatrix U2(nts);
-    
+
     float ret=0;
     for(int t=1;t<=nts;t++)
-      { 
+      {
 	float vr1=S(t)+beta;
 	if(vr1 <= 0) return 1e32;
 	U1(t) = vr1;
@@ -293,7 +293,7 @@ namespace Gs {
 
   float Gsmanager::marg_posterior_energy_outlier(float log_beta, float log_beta_outlier, const ColumnVector& y, const Matrix& z, const ColumnVector& S, const ColumnVector& prob_outlier)
   {
-    //   Tracer tr("Gsmanager::marg_posterior_energy_outlier");  
+    //   Tracer tr("Gsmanager::marg_posterior_energy_outlier");
 
     float beta=std::exp(log_beta);    // beta is a variance
     float beta_outlier=std::exp(log_beta_outlier);
@@ -305,7 +305,7 @@ namespace Gs {
 
     DiagonalMatrix iU(y.Nrows());
     for(int t=1;t<=y.Nrows();t++)
-      { 
+      {
 	//float vr=Sqr(1-prob_outlier(t))*(S(t)+beta)+Sqr(prob_outlier(t))*(S(t)+beta_outlier);
 	double vr=Sqr(1-prob_outlier(t))*(S(t)+beta)+Sqr(prob_outlier(t))*(beta_outlier);
 // 	double vr2=(S(t)+beta);
@@ -329,17 +329,17 @@ namespace Gs {
     Matrix tmp = z.t()*iU;
     SymmetricMatrix ziUz;
     ziUz << tmp*z;
-    ColumnVector gam=pinv(ziUz)*tmp*y;  
+    ColumnVector gam=pinv(ziUz)*tmp*y;
 
 //     float logprior = -log_beta-log_beta_outlier;
 //     float logdfxbydx = log_beta+log_beta_outlier;
 
 //     float ret = -(0.5*iU.LogDeterminant().LogValue()-0.5*ziUz.LogDeterminant().LogValue()-0.5*(y.t()*iU*y-gam.t()*ziUz*gam).AsScalar()+logprior+logdfxbydx);
- 
+
     float ret = -(0.5*iU.LogDeterminant().LogValue()-0.5*ziUz.LogDeterminant().LogValue()-0.5*(y.t()*iU*y-gam.t()*ziUz*gam).AsScalar());
 
 //    if(log_beta>2.5 && log_beta_outlier>6.06)
-//      {    
+//      {
 //     OUT(beta);
 //     OUT(beta_outlier);
 //     OUT(prob_outlier);
@@ -353,7 +353,7 @@ namespace Gs {
   }
 
   float Gsmanager::solveforbeta(const ColumnVector& y, const Matrix& z, const ColumnVector& S)
-  { 
+  {
     //    Tracer tr("Gsmanager::solveforbeta");
 
     // Value of golden section (1 + sqrt(5))/2.0
@@ -361,7 +361,7 @@ namespace Gs {
     double cphi = 1.0 - 1.0/phi;
     double TOL = 1.0e-6;	// Maximal fractional precision
     double TINY = 1.0e-10;         // Can't use fractional precision when minimum is at 0
-  
+
     // Bracket the minimum
     double br_min=log(1e-10);
     double br_mid=0;
@@ -384,7 +384,7 @@ namespace Gs {
     double fw = fx;
     double d = 0.0;
     double tol1 = TOL*abs(x) + TINY;
-   
+
     float prec = 0.00001;
     int niters=100;
     double u = 0.0;
@@ -397,7 +397,7 @@ namespace Gs {
 	// Decide termination on absolute precision required by options(2)
 	if (abs(x - xm) <= prec && br_max-br_min < 4*prec)
 	  break;
-      
+
 	// Check if step before last was big enough to try a parabolic step.
 	// Note that this will fail on first iteration, which must be a golden
 	// section step.
@@ -415,7 +415,7 @@ namespace Gs {
 	      p = -p;
 	    q = abs(q);
 	    // Test if the parabolic fit is OK
-	  
+
 	    if (abs(p) >= abs(0.5*q*e) || p <= q*(br_min-x) || p >= q*(br_max-x))
 	      {
 
@@ -429,19 +429,19 @@ namespace Gs {
 	      }
 	    else
 	      {
-	      
+
 		// Yes it is, so take the parabolic step
 		e = d;
 		d = p/q;
 		u = x+d;
 		if (u-br_min < 2*tol1 || br_max-u < 2*tol1)
 		  d = sign(xm-x)*tol1;
-	      
+
 	      }
 	  }
 	else
 	  {
-	  
+
 	    // Step before last not big enough, so take a golden section step
 	    if (x >= xm)
 	      {
@@ -454,7 +454,7 @@ namespace Gs {
 
 	    d = cphi*e;
 	  }
-      
+
 	// Make sure that step is big enough
 	if (abs(d) >= tol1)
 	  {
@@ -476,17 +476,17 @@ namespace Gs {
 	      br_min = x;
 	    else
 	      br_max = x;
-	  
+
 	    v = w; w = x; x = u;
 	    fv = fw; fw = fv; fx = fu;
 	  }
 	else
 	  {
 	    if (u < x)
-	      br_min = u;   
+	      br_min = u;
 	    else
 	      br_max = u;
-	  
+
 	    if (fu <= fw || w == x)
 	      {
 		v = w; w = u;
@@ -497,7 +497,7 @@ namespace Gs {
 		v = u;
 		fv = fu;
 	      }
-	  }      
+	  }
       }
 
     //    OUT(exp(x));
@@ -516,7 +516,7 @@ namespace Gs {
 
     Matrix mx;
     if(!fixmean)
-      {	
+      {
 	Matrix mn;
 	remmean(x,mx,mn,2);
 	m = mn.t().AsColumn();
@@ -532,7 +532,7 @@ namespace Gs {
       }
 
     covar = cov(mx.t());
-    float tmp = pow(covar.Determinant(),(1.0/P));    
+    float tmp = pow(covar.Determinant(),(1.0/P));
 
     covar=covar/tmp;
 
@@ -540,7 +540,7 @@ namespace Gs {
     ColumnVector xsq(n);
     SymmetricMatrix invcovar = covar.i();
 
-    float cosi = 0.0;    
+    float cosi = 0.0;
     for(int i = 1; i <= n; i++)
       {
 	xsq(i) = (mx.Column(i).t()*invcovar*mx.Column(i)).AsScalar();
@@ -566,7 +566,7 @@ namespace Gs {
 	//	v = mdofls(xsq,phi,P);
 	v =  2.0/(1.0-phi/cosi);
 	//	OUT(v);
-      } 
+      }
 
     covar = covar*phi;
   }
@@ -574,7 +574,7 @@ namespace Gs {
   void Gsmanager::setup()
   {
     Tracer_Plus trace("Gsmanager::setup");
-    
+
     if(opts.debuglevel.value()==2)
       {
 	cout << "******************************************" << endl
@@ -585,8 +585,8 @@ namespace Gs {
     dofpassedin = opts.dofvarcopefile.value() != string("");
 
     // setup design
-    design.setup();    
-        
+    design.setup();
+
     mcmc_mask=design.getmask();
 
     volume<float> tmp_mask=mcmc_mask;
@@ -599,7 +599,7 @@ namespace Gs {
     xsize = design.getmask().xsize();
     ysize = design.getmask().ysize();
     zsize = design.getmask().zsize();
-    
+
     cout << "nevs=" << nevs << endl;
     cout << "ntpts=" << ntpts << endl;
     cout << "ngs=" << ngs << endl;
@@ -613,7 +613,7 @@ namespace Gs {
   {
     Tracer_Plus trace("Gsmanager::initialise");
 
-    pes.resize(design.getnevs());      
+    pes.resize(design.getnevs());
 
     ts.resize(design.getnumtcontrasts());
     tdofs.resize(design.getnumtcontrasts());
@@ -633,7 +633,7 @@ namespace Gs {
     beta_b.resize(design.getngs());
     beta_c.resize(design.getngs());
     beta_mean.resize(design.getngs());
-    
+
     weights.resize(design.getngs());
 
     if(opts.infer_outliers.value())
@@ -658,18 +658,18 @@ namespace Gs {
 
     if(!(opts.runmode.value()==string("fe") || (opts.runmode.value()==string("ols") && !opts.infer_outliers.value())))
       {
-	cov_pes.reinitialize(xsize,ysize,zsize,nevs*nevs);   
+	cov_pes.reinitialize(xsize,ysize,zsize,nevs*nevs);
 	cov_pes = 0;
       }
 
     for(int g = 0; g < ngs; g++)
       {
-	beta_mean[g].reinitialize(xsize,ysize,zsize);		
+	beta_mean[g].reinitialize(xsize,ysize,zsize);
 	beta_mean[g].copyproperties(design.getmask());
 	beta_mean[g] = 0;
-	beta_b[g].reinitialize(xsize,ysize,zsize);		
+	beta_b[g].reinitialize(xsize,ysize,zsize);
 	beta_b[g] = 0;
-	beta_c[g].reinitialize(xsize,ysize,zsize);		
+	beta_c[g].reinitialize(xsize,ysize,zsize);
 	beta_c[g] = 0;
 	weights[g].reinitialize(xsize,ysize,zsize,design.getntptsingroup(g+1));
 	weights[g].copyproperties(design.getmask());
@@ -688,7 +688,7 @@ namespace Gs {
 	    prob_outlier_mean[g] = 0;
 
 	  }
-    }    
+    }
 
     for(int e = 0; e < nevs; e++)
       {
@@ -748,14 +748,14 @@ namespace Gs {
 	zfs[f] = 0;
 	zflame1upperfs[f].reinitialize(xsize,ysize,zsize);
 	zflame1upperfs[f].copyproperties(design.getmask());
-	zflame1upperfs[f] = 0;	
+	zflame1upperfs[f] = 0;
 	zflame1lowerfs[f].reinitialize(xsize,ysize,zsize);
 	zflame1lowerfs[f].copyproperties(design.getmask());
 	zflame1lowerfs[f] = 0;
       }
-    
+
   }
-  
+
   void Gsmanager::run()
   {
     Tracer_Plus trace("Gsmanager::run");
@@ -763,7 +763,7 @@ namespace Gs {
     if(opts.runmode.value()==string("fe"))
       {
 	// check that varcope data is available
-	if(GsOptions::getInstance().varcopefile.value() == string(""))	
+	if(GsOptions::getInstance().varcopefile.value() == string(""))
 	  {
 	    cout << "Fixed effects requires lower level variance, this must be passed in when doing fixed effects using the --varcope option." << endl;
 	    throw Exception("Fixed effects requires lower level variance, this must be passed in when doing fixed effects using the --varcope option.");
@@ -772,32 +772,32 @@ namespace Gs {
 	  {
 	    fixed_effects();
 	  }
-      }    
+      }
     else if(opts.runmode.value()==string("ols"))
       {
 	if(opts.infer_outliers.value())
 	  {
 	    // set varcopedata (var_filtered_func_data) to zero and run flame stage 1
 	    design.setvarcopedata(0);
-	    flame_stage1();	 
+	    flame_stage1();
 	  }
 	else
 	  {
 	    ols();
 	  }
-	
-      }      
-    else if(opts.runmode.value()==string("flame1"))
-      {	  	
-	flame_stage1();	    
+
       }
-    else if(opts.runmode.value()==string("flame12"))	
+    else if(opts.runmode.value()==string("flame1"))
       {
-	flame_stage1();	
-	flame_stage2();	    
-      }      
+	flame_stage1();
+      }
+    else if(opts.runmode.value()==string("flame12"))
+      {
+	flame_stage1();
+	flame_stage2();
+      }
     else
-      {	
+      {
 	throw Exception("Invalid run mode");
       }
   }
@@ -817,21 +817,21 @@ namespace Gs {
 	    if(design.getmask()(x,y,z))
 	      {
 		Matrix dm = design.getdm(x,y,z);
-		
+
 		ColumnVector petmp(nevs);
 		for(int e = 0; e < nevs; e++)
 		  {
 		    petmp(e+1) = pes[e](x,y,z);
-		  }	      
-		
+		  }
+
 		// remove any zero EV PEs
 		petmp = design.remove_zeroev_pes(x,y,z,petmp);
-		
+
 		res.setvoxelts(design.getcopedata().voxelts(x,y,z)-dm*petmp,x,y,z);
-		  
+
 	      }
 	  }
-    
+
 
     if ( opts.outputDof.value() ) {
       ColumnVector dofVec(1);
@@ -841,14 +841,14 @@ namespace Gs {
 
     res.set_intent(NIFTI_INTENT_ESTIMATE, 0, 0, 0);
     res.setDisplayMaximumMinimum(res.max(),res.min());
-    save_volume4D(res, LogSingleton::getInstance().appendDir("res4d"));      
+    save_volume4D(res, LogSingleton::getInstance().appendDir("res4d"));
 
     design.getmask().set_intent(NIFTI_INTENT_NONE, 0, 0, 0);
     const_cast< volume <float>& >(design.getmask()).setDisplayMaximumMinimum(design.getmask().max(),design.getmask().min());
     save_volume(design.getmask(), LogSingleton::getInstance().appendDir("mask"));
 
     for(int t = 0; t < design.getnumtcontrasts(); t++)
-      {	
+      {
 	ts[t].set_intent(NIFTI_INTENT_TTEST, 0, 0, 0);
 	ts[t].setDisplayMaximumMinimum(ts[t].max(),ts[t].min());
 	save_volume(ts[t],LogSingleton::getInstance().appendDir("tstat"+num2str(t+1)));
@@ -928,7 +928,7 @@ namespace Gs {
 	weights[g].set_intent(NIFTI_INTENT_ESTIMATE, 0, 0, 0);
 	weights[g].setDisplayMaximumMinimum(weights[g].max(),weights[g].min());
 	save_volume4D(weights[g],LogSingleton::getInstance().appendDir("weights"+num2str(g+1)));
-	      
+
 	if(opts.infer_outliers.value())
 	  {
 	    beta_outlier_mean[g].set_intent(NIFTI_INTENT_ESTIMATE, 0, 0, 0);
@@ -942,7 +942,7 @@ namespace Gs {
 	    prob_outlier_mean[g].set_intent(NIFTI_INTENT_ESTIMATE, 0, 0, 0);
 	    prob_outlier_mean[g].setDisplayMaximumMinimum(prob_outlier_mean[g].max(),prob_outlier_mean[g].min());
 	    save_volume4D(prob_outlier_mean[g],LogSingleton::getInstance().appendDir("prob_outlier"+num2str(g+1)));
-	   
+
 	  }
       }
 
@@ -960,7 +960,7 @@ namespace Gs {
       {
 	throw Exception("Singular design. Number of EVs > number of time points. ");
       }
- 
+
     int vox2=0;
     int voxout=0;
     for(int x = 0; x < xsize; x++)
@@ -973,7 +973,7 @@ namespace Gs {
 		vox2++;
 		if(vox2 > voxout*nmaskvoxels/100.0)
 		  {
-		    //cout<<(voxout+1)<<'%' <<'\r';		
+		    //cout<<(voxout+1)<<'%' <<'\r';
 		    cout << " " << (voxout+1);
 		    cout.flush();
 		    voxout++;
@@ -1011,7 +1011,7 @@ namespace Gs {
 
 		// insert any zero EV PEs back in
 		covariance = design.insert_zeroev_covpes(x,y,z,covariance);
-			
+
 // 		if(!opts.no_pe_output.value())
 // 		  {
 // 		    // store cov
@@ -1030,34 +1030,34 @@ namespace Gs {
 
   void Gsmanager::fixed_effects_onvoxel(const ColumnVector& Y, const Matrix& z, const ColumnVector& S, ColumnVector& gam, SymmetricMatrix& gamcovariance)
   {
- 
+
     Tracer_Plus trace("Gsmanager::fixed_effects_onvoxel");
 
     // calc gam
     DiagonalMatrix iU(ntpts);
     iU = 0;
-   
+
     for(int t=1;t<=ntpts;t++)
-      {		    
+      {
 	iU(t) = 1.0/S(t);
       }
-   
+
     // calc gam covariance
     gamcovariance << (z.t()*iU*z).i();
 
-    gam=gamcovariance*z.t()*iU*Y;          	
+    gam=gamcovariance*z.t()*iU*Y;
 
   }
 
   void Gsmanager::fixed_effects()
   {
     Tracer_Plus trace("Gsmanager::fixed_effects");
-  
-    Matrix dm = design.getdm();    
+
+    Matrix dm = design.getdm();
 
     // loop through voxels calling fixed effects inference on each
     OUT(nmaskvoxels);
-    
+
     int vox2=0;
     int voxout=0;
     for(int x = 0; x < xsize; x++)
@@ -1069,7 +1069,7 @@ namespace Gs {
 		vox2++;
 		if(vox2 > voxout*nmaskvoxels/100.0)
 		  {
-		    //cout<<(voxout+1)<<'%' <<'\r';		
+		    //cout<<(voxout+1)<<'%' <<'\r';
 		    cout << " " << (voxout+1);
 		    cout.flush();
 		    voxout++;
@@ -1078,7 +1078,7 @@ namespace Gs {
 		if(design.is_voxelwise_dm())
 		  {
 		    dm = design.getdm(x,y,z);
-		  }	       
+		  }
 
 		//	cout << x << "," << y << "," << z << endl;
 
@@ -1090,9 +1090,9 @@ namespace Gs {
 		SymmetricMatrix gamcovariance;
 
 		fixed_effects_onvoxel(Y, dm, S, gam, gamcovariance);
-  
+
 		// insert any zero EV PEs back in
-		gam = design.insert_zeroev_pes(x,y,z,gam);		    
+		gam = design.insert_zeroev_pes(x,y,z,gam);
 
 		if(!opts.no_pe_output.value())
 		  {
@@ -1102,27 +1102,27 @@ namespace Gs {
 			pes[e](x,y,z) = gam(e+1);
 		      }
 		  }
-		   
+
 		// insert any zero EV PEs back in
 		gamcovariance = design.insert_zeroev_covpes(x,y,z,gamcovariance);
-		    		
+
 // 		if(!opts.no_pe_output.value())
 // 		  {
 // 		    // store results for gam covariance
 // 		    ColumnVector gamcovariance2;
-// 		    reshape(gamcovariance2, gamcovariance, nevs*nevs, 1);		
+// 		    reshape(gamcovariance2, gamcovariance, nevs*nevs, 1);
 // 		    cov_pes.setvoxelts(gamcovariance2,x,y,z);
 // 		  }
-		
+
 		fe_contrasts(gam,gamcovariance,x,y,z);
 	      }
 	  }
     cout << endl;
-  }	
+  }
 
   void Gsmanager::flame_stage1_onvoxel(const vector<ColumnVector>& Yg, const ColumnVector& Y, const vector<Matrix>& zg, const Matrix& z, const vector<ColumnVector>& Sg, const ColumnVector& S, ColumnVector& beta, ColumnVector& gam, SymmetricMatrix& gamcovariance, vector<float>& marg, vector<ColumnVector>& weights_g, int& nparams, int px, int py, int pz)
   {
- 
+
     Tracer_Plus trace("Gsmanager::flame_stage1_onvoxel");
 
     ////////////////////////////////////////////////////////////
@@ -1131,25 +1131,25 @@ namespace Gs {
     // calc betas and weights
     beta.ReSize(ngs);
     beta=0;
- 
+
    for(int g = 1; g <= ngs; g++)
       {
 	beta(g) = solveforbeta(Yg[g-1],zg[g-1],Sg[g-1]);
 
 	weights_g[g-1].ReSize(design.getntptsingroup(g));
-	
+
 	for(int t=1;t<=design.getntptsingroup(g);t++)
-	  {		 		
-	    weights_g[g-1](t)=1.0/(Sg[g-1](t)+beta(g));	
+	  {
+	    weights_g[g-1](t)=1.0/(Sg[g-1](t)+beta(g));
 	  }
       }
-      
+
     // calc gam
     DiagonalMatrix iU(ntpts);
     iU = 0;
-   
+
     for(int t=1;t<=ntpts;t++)
-      {		    
+      {
 	//	iU(t) = 1.0/(S(t)+beta(design.getgroup(t)));
 // 	OUT(t);
 // 	OUT(design.getgroup(t));
@@ -1167,16 +1167,16 @@ namespace Gs {
 //     OUT(Y);
 //     OUT(z);
 //     OUT(iU);
-    gam=gamcovariance*z.t()*iU*Y;    	
+    gam=gamcovariance*z.t()*iU*Y;
 
     // calc log marg posterior
 //     loglik=0;
 //     float loglik2=0;
-    
+
     ColumnVector gamtmp=gam;
     gamtmp = design.insert_zeroev_pes(px,py,pz,gamtmp);
     for(int g = 1; g <= ngs; g++)
-      {	
+      {
 	// need to extract gamg from gam
 	ColumnVector gamg(zg[g-1].Ncols());
 	int ind=1;
@@ -1188,10 +1188,10 @@ namespace Gs {
 	      gamg(ind++)=gamtmp(e);
 	  }
 
-// 	loglik+=log_likelihood(beta(g), gamg, Yg[g-1], zg[g-1], Sg[g-    
+// 	loglik+=log_likelihood(beta(g), gamg, Yg[g-1], zg[g-1], Sg[g-
 
-	marg[g-1]=marg_posterior_energy(log(beta(g)),Yg[g-1],zg[g-1],Sg[g-1]);       
-   
+	marg[g-1]=marg_posterior_energy(log(beta(g)),Yg[g-1],zg[g-1],Sg[g-1]);
+
 // 	loglik2+=log_likelihood_outlier(beta(g), 0, gam, Yg[g-1], zg[g-1], Sg[g-1],0.3);
       }
 
@@ -1203,7 +1203,7 @@ namespace Gs {
     Tracer_Plus trace("Gsmanager::init_flame_stage1_inferoutliers");
 
     ////////////////////////////////////////////////////////////
-    // init flame stage 1 for outlier inference 
+    // init flame stage 1 for outlier inference
 
     for(int x = 0; x < xsize; x++)
       for(int y = 0; y < ysize; y++)
@@ -1215,7 +1215,7 @@ namespace Gs {
 		ColumnVector gam(nevs);
 		for(int e = 0; e < nevs; e++)
 		  {
-		    gam(e+1)=pes[e](x,y,z);	
+		    gam(e+1)=pes[e](x,y,z);
 		  }
 		// remove any zero EV PEs
 		gam = design.remove_zeroev_pes(x,y,z,gam);
@@ -1225,7 +1225,7 @@ namespace Gs {
 		ColumnVector Y = design.getcopedata().voxelts(x,y,z);
 		ColumnVector S = design.getvarcopedata().voxelts(x,y,z);
 
-		// setup data for groups		
+		// setup data for groups
 		vector<Matrix> zg(ngs);
 		vector<ColumnVector> Yg(ngs);
 		vector<ColumnVector> Sg(ngs);
@@ -1249,7 +1249,7 @@ namespace Gs {
 			if(design.get_evs_group(e,x,y,z)==g)
 			  gamg(ind++)=gamtmp(e);
 		      }
-		    
+
 		    // calc residuals
 		    ColumnVector resids=Yg[g-1]-zg[g-1]*gamg;
 		    // normalise
@@ -1262,9 +1262,9 @@ namespace Gs {
 		    Matrix means(1,2);
 		    means(1,1)=mean(data).AsScalar();
 		    means(1,2)=4*means(1,1);
-		    
+
 		    do_kmeans(data,classif,2,means);
-		    
+
 		    int count_outliers=0;
 		    ColumnVector zout(classif.size());
 		    for(unsigned int cock=0; cock<classif.size(); cock++)
@@ -1277,15 +1277,15 @@ namespace Gs {
 
 		    //	global_prob_outlier(g)=(1.0/design.getntptsingroup(g))/2.0;
 		    float gpo=count_outliers/float(classif.size());
-		    
+
 		    // 	OUT(gpo);
-		    
+
 		    if(gpo>0.25) gpo=0.25;
-		    
+
 		    // set prob(outlier) parameters with values found from k-means
 		    ColumnVector tmp(design.getntptsingroup(g));
 		    tmp=gpo;
-		    global_prob_outlier_mean[g-1](x,y,z)=gpo;		   
+		    global_prob_outlier_mean[g-1](x,y,z)=gpo;
 
 		    prob_outlier_mean[g-1].setvoxelts(tmp,x,y,z);
 
@@ -1297,19 +1297,19 @@ namespace Gs {
 //   void Gsmanager::flame_stage1_inferoutliers()
 //   {
 //     Tracer_Plus trace("Gsmanager::flame_stage1_inferoutliers");
-    
+
 //     ////////////////////////////////////////////////////////////
-//     // runs flame stage 1  with outlier inference 
+//     // runs flame stage 1  with outlier inference
 //     init_flame_stage1_inferoutliers();
 
 //     int niters=opts.io_niters.value();
 //     ColumnVector loglik_io(niters);
 //     loglik_io=0;
 
-//     // store no outlier results in case we want to revert to them later		    
+//     // store no outlier results in case we want to revert to them later
 //     vector<volume<float> > pes_nooutliers(nevs);
 //     vector<volume<float> > beta_mean_nooutliers(ngs);
-//     volume4D<float> cov_pes_nooutliers=cov_pes;    
+//     volume4D<float> cov_pes_nooutliers=cov_pes;
 //     for(int e = 0; e < nevs; e++)
 //       {
 // 	pes_nooutliers[e] = pes[e];
@@ -1317,8 +1317,8 @@ namespace Gs {
 //     for(int g = 0; g < ngs; g++)
 //       {
 // 	beta_mean_nooutliers[g]=beta_mean[g];
-//       }	  
-    
+//       }
+
 //     ColumnVector num_bins_log_beta_col(niters);
 //     ColumnVector num_bins_log_beta_outlier_col(niters);
 //     for(int it = 1; it <= niters; it++)
@@ -1358,7 +1358,7 @@ namespace Gs {
 // 		    ColumnVector gam(nevs);
 // 		    for(int e = 0; e < nevs; e++)
 // 		      {
-// 			gam(e+1)=pes[e](x,y,z);	
+// 			gam(e+1)=pes[e](x,y,z);
 // 		      }
 // 		    // remove any zero EV PEs
 // 		    gam = design.remove_zeroev_pes(x,y,z,gam);
@@ -1378,13 +1378,13 @@ namespace Gs {
 // 		      }
 // 		    ///////////
 
-// 		    /////////// 
+// 		    ///////////
 // 		    // setup data
 // 		    ColumnVector Y = design.getcopedata().voxelts(x,y,z);
 // 		    ColumnVector S = design.getvarcopedata().voxelts(x,y,z);
 // 		    Matrix dm=design.getdm(x,y,z);
 
-// 		    // setup data for groups		
+// 		    // setup data for groups
 // 		    vector<Matrix> zg(ngs);
 // 		    vector<ColumnVector> Yg(ngs);
 // 		    vector<ColumnVector> Sg(ngs);
@@ -1394,22 +1394,22 @@ namespace Gs {
 // 			Yg[g-1]=design.getcopedata(x,y,z,g);
 // 			Sg[g-1]=design.getvarcopedata(x,y,z,g);
 // 		      }
-		    
+
 // 		    /////////////
 // 		    // setup grid for marg
 // 		    ColumnVector min_log_beta(ngs);
 // 		    min_log_beta=log(1e-9);
 // 		    ColumnVector max_log_beta(ngs);
 // 		    max_log_beta=log(beta*1e2);
-		    
+
 // 		    ColumnVector min_log_beta_outlier(ngs);
 // 		    min_log_beta_outlier=log((mean(S)+Minimum(beta))/100.0).AsScalar();
 // 		    ColumnVector max_log_beta_outlier(ngs);
 // 		    max_log_beta_outlier=log((mean(S)+Minimum(beta))*1e9).AsScalar();
-		    
+
 // 		    vector<ColumnVector> log_beta(ngs);
 // 		    vector<ColumnVector> log_beta_outlier(ngs);
-		    
+
 // 		    // need to extract gamg from gam
 // 		    ColumnVector gamtmp=gam;
 // 		    gamtmp = design.insert_zeroev_pes(x,y,z,gamtmp);
@@ -1424,29 +1424,29 @@ namespace Gs {
 // 			      gamg[g-1](ind++)=gamtmp(e);
 // 			  }
 // 		      }
-		    
+
 // 		    // calc betas for each group
 // 		    for(int g = 1; g <= ngs; g++)
 // 		      {
-			
+
 // 			// setup values for doing 2D grid integration later
 // 			int num_bins_log_beta=int(num_bins_log_beta_col(it));
 
 // 			float res_log_beta=(max_log_beta(g)-min_log_beta(g))/(num_bins_log_beta-1);
-			
+
 // 			log_beta[g-1].ReSize(num_bins_log_beta);
 // 			for(int i=1;i<=log_beta[g-1].Nrows();i++){
 // 			  log_beta[g-1](i)=min_log_beta(g)+(i-1)*res_log_beta;
-// 			} 
-			
-// 			// setup values for doing 2D grid integration later		
+// 			}
+
+// 			// setup values for doing 2D grid integration later
 // 			int num_bins_log_beta_outlier=int(num_bins_log_beta_outlier_col(it));
 
 // 			float res_log_beta_outlier=(max_log_beta_outlier(g)-min_log_beta_outlier(g))/(num_bins_log_beta_outlier-1);
 // 			log_beta_outlier[g-1].ReSize(num_bins_log_beta_outlier);
 // 			for(int i=1;i<=log_beta_outlier[g-1].Nrows();i++){
 // 			  log_beta_outlier[g-1](i)=min_log_beta_outlier(g)+(i)*res_log_beta_outlier;
-// 			} 
+// 			}
 // 			log_beta_outlier[g-1](log_beta_outlier[g-1].Nrows())=std::log(1e9);
 
 // 			// compute membership given gam, beta, beta_outlier and global_prob_outlier
@@ -1465,12 +1465,12 @@ namespace Gs {
 // 				pin=0.5;
 // 				pout=0.5;
 // 			      }
-			    
+
 // 			    prob_outlier_g[g-1](i)=pout/(pin+pout);
 
 // 			    prob_outlier(design.getglobalindex(g,i))=prob_outlier_g[g-1](i);
 // 			  }
-			
+
 // 			float tmp=mean(prob_outlier_g[g-1]).AsScalar();
 
 // 			if(isnan(tmp))
@@ -1498,55 +1498,55 @@ namespace Gs {
 // 			    OUT("Error in Gsmanager::flame_stage1_onvoxel");
 // 			    exit(0);
 // 			  }
- 
+
 // 			// update g with membership
 // 			global_prob_outlier(g)=tmp;
-			
-// 			if(global_prob_outlier(g)>0.25) global_prob_outlier(g)=0.25; 
-			
+
+// 			if(global_prob_outlier(g)>0.25) global_prob_outlier(g)=0.25;
+
 // 			// marg out gam and estimate beta and beta_outlier from numerical integration on a 2D grid
 // 			Matrix margpost(log_beta[g-1].Nrows(),log_beta_outlier[g-1].Nrows());
 // 			margpost=0;
-			
+
 // 			ColumnVector marg_beta(log_beta[g-1].Nrows());
 // 			marg_beta=0;
 // 			ColumnVector marg_beta_outlier(log_beta_outlier[g-1].Nrows());
 // 			marg_beta_outlier=0;
 // 			for(int j=1;j<=log_beta_outlier[g-1].Nrows();j++){
 // 			  for(int i=1;i<=log_beta[g-1].Nrows();i++){
-			    
+
 // 			    margpost(i,j) = marg_posterior_energy_outlier(log_beta[g-1](i),log_beta_outlier[g-1](j),Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]);
 // 			    marg_beta_outlier(j)+=margpost(i,j);
 // 			    marg_beta(i)+=margpost(i,j);
-// 			  }	
-// 			}     
-			
+// 			  }
+// 			}
+
 // 			int ind;
-			
+
 // 			marg_beta.Minimum1(ind);
 // 			beta(g)=std::exp(log_beta[g-1](ind));
-			
+
 // 			marg_beta_outlier.Minimum1(ind);
 // 			OUT(ind);
 // 			beta_outlier(g)=std::exp(log_beta_outlier[g-1](ind));
-			
-// 		      }  
-		    
+
+// 		      }
+
 // 		    // calc gam
 // 		    DiagonalMatrix iU(ntpts);
 // 		    iU = 0;
-		    
+
 // 		    for(int t=1;t<=ntpts;t++)
-// 		      {		   
+// 		      {
 // 			float vr=Sqr(1-prob_outlier(t))*(S(t)+beta(design.getgroup(t)))+Sqr(prob_outlier(t))*(S(t)+beta(design.getgroup(t))+beta_outlier(design.getgroup(t)));
 // 			iU(t) = 1.0/vr;
 // 		      }
-		    
+
 // 		    // calc gam covariance
 // 		    SymmetricMatrix gamcovariance;
-// 		    gamcovariance << (dm.t()*iU*dm).i();		    
-// 		    gam=gamcovariance*dm.t()*iU*Y;		   
-		    
+// 		    gamcovariance << (dm.t()*iU*dm).i();
+// 		    gam=gamcovariance*dm.t()*iU*Y;
+
 // 		    // calc likelihood
 // 		    // first need to extract gamg from gam
 // 		    gamtmp=gam;
@@ -1563,16 +1563,16 @@ namespace Gs {
 // 		      }
 // 		    for(int g = 1; g <= ngs; g++)
 // 		      {
-// 			loglik_io(it)+=log_likelihood_outlier(beta(g),beta_outlier(g),gamg[g-1],Yg[g-1],zg[g-1],Sg[g-1],global_prob_outlier(g));	
+// 			loglik_io(it)+=log_likelihood_outlier(beta(g),beta_outlier(g),gamg[g-1],Yg[g-1],zg[g-1],Sg[g-1],global_prob_outlier(g));
 // 		      }
-		    		    
+
 // 		    // insert any zero EV PEs back in
-// 		    gam = design.insert_zeroev_pes(x,y,z,gam);	      
-		
+// 		    gam = design.insert_zeroev_pes(x,y,z,gam);
+
 // 		    // store latest results for this voxel
 // 		    for(int e = 0; e < nevs; e++)
 // 		      {
-// 			pes[e](x,y,z)=gam(e+1);	
+// 			pes[e](x,y,z)=gam(e+1);
 // 		      }
 // 		    for(int g = 0; g < ngs; g++)
 // 		      {
@@ -1584,11 +1584,11 @@ namespace Gs {
 
 // 		    // insert any zero EV PEs back in
 // 		    gamcovariance = design.insert_zeroev_covpes(x,y,z,gamcovariance);
-	
+
 // 		    // store results for gam covariance
 // 		    ColumnVector gamcovariance2;
-// 		    reshape(gamcovariance2, gamcovariance, nevs*nevs, 1);		
-// 		    cov_pes.setvoxelts(gamcovariance2,x,y,z);		      
+// 		    reshape(gamcovariance2, gamcovariance, nevs*nevs, 1);
+// 		    cov_pes.setvoxelts(gamcovariance2,x,y,z);
 
 // 		  }
 // 	      }
@@ -1603,10 +1603,10 @@ namespace Gs {
 // 	for(int z = 0; z < zsize; z++)
 // 	  {
 // 	    if(design.getmask()(x,y,z))
-// 	      {	
+// 	      {
 // 		bool no_outliers=true;
 // 		for(int g = 0; g < ngs; g++)
-// 		  {		   	
+// 		  {
 // 		    if(global_prob_outlier_mean[g](x,y,z)>(1.0/ntpts)/10.0)
 // 		      no_outliers=false;
 // 		  }
@@ -1618,14 +1618,14 @@ namespace Gs {
 // 		    ColumnVector gam(nevs);
 // 		    for(int e = 0; e < nevs; e++)
 // 		      {
-// 			gam(e+1)=pes[e](x,y,z);	
+// 			gam(e+1)=pes[e](x,y,z);
 // 		      }
 
 // 		    // extract gamcovariance
 // 		    SymmetricMatrix gamcovariance;
 // 		    Matrix tmp_mat;
 // 		    ColumnVector tmp=cov_pes.voxelts(x,y,z);
-// 		    reshape(tmp_mat, tmp, nevs, nevs);		
+// 		    reshape(tmp_mat, tmp, nevs, nevs);
 // 		    gamcovariance << tmp_mat;
 
 // 		    //////////
@@ -1641,20 +1641,20 @@ namespace Gs {
 // 			pes[e](x,y,z) = pes_nooutliers[e](x,y,z);
 // 		      }
 // 		    cov_pes.setvoxelts(cov_pes_nooutliers.voxelts(x,y,z),x,y,z);
-		    
+
 // 		    for(int g = 0; g < ngs; g++)
 // 		      {
 // 			beta_mean[g](x,y,z) = beta_mean_nooutliers[g](x,y,z);
-// 		      }	      
+// 		      }
 // 		  }
 
 // 		for(int g = 1; g <= ngs; g++)
 // 		  for(int i = 1; i <= prob_outlier_mean[g-1].tsize(); i++)
 // 		    {
-// 		      if(prob_outlier_mean[g-1](x,y,z,i-1) < 1e-4) prob_outlier_mean[g-1](x,y,z,i-1)=0;		    
+// 		      if(prob_outlier_mean[g-1](x,y,z,i-1) < 1e-4) prob_outlier_mean[g-1](x,y,z,i-1)=0;
 // 		    }
 // 	      }
-// 	  }			    
+// 	  }
 //   }
 
   void Gsmanager::flame_stage1_onvoxel_inferoutliers(const vector<ColumnVector>& Yg, const ColumnVector& Y, const vector<Matrix>& zg, const Matrix& z, const vector<ColumnVector>& Sg, const ColumnVector& S, ColumnVector& beta, ColumnVector& gam, SymmetricMatrix& gamcovariance, ColumnVector& global_prob_outlier, vector<ColumnVector>& prob_outlier_g,  ColumnVector& prob_outlier, ColumnVector& beta_outlier, vector<float>& marg, vector<ColumnVector>& weights_g, int& nparams, vector<bool>& no_outliers, int px, int py, int pz)
@@ -1662,7 +1662,7 @@ namespace Gs {
     Tracer_Plus trace("Gsmanager::flame_stage1_onvoxel_inferoutliers");
 
     ////////////////////////////////////////////////////////////
-    // runs flame stage 1 on a voxel with outlier inference 
+    // runs flame stage 1 on a voxel with outlier inference
 
     global_prob_outlier.ReSize(ngs);
     prob_outlier_g.resize(ngs);
@@ -1671,7 +1671,7 @@ namespace Gs {
     prob_outlier=0.05;
 
     beta_outlier.ReSize(ngs);
-    beta_outlier=Sqr(100);       
+    beta_outlier=Sqr(100);
 
 //     OUT("===================");
 //     OUT(beta);
@@ -1690,7 +1690,7 @@ namespace Gs {
 
     vector<ColumnVector> log_beta(ngs);
     vector<ColumnVector> log_rho_outlier(ngs);
-    
+
     ColumnVector gamtmp=gam;
     ColumnVector maxsg(ngs);
 
@@ -1746,15 +1746,15 @@ namespace Gs {
 	float gpo=count_outliers/float(zc.size());
 
 	// 	OUT(gpo);
-	
+
 	if(gpo>0.25) gpo=0.25;
 
 	global_prob_outlier(g)=gpo;
-	
+
 	prob_outlier_g[g-1].ReSize(design.getntptsingroup(g));
 	prob_outlier_g[g-1]=global_prob_outlier(g);
       }
-    
+
     int niters=opts.io_niters.value();
     vector<bool> converged(ngs,false);
     vector<float> marg_io_old(ngs,0);
@@ -1776,7 +1776,7 @@ namespace Gs {
 
     for(int it = 1; it <= niters; it++)
       {
-	// need to extact gamg from gam	
+	// need to extact gamg from gam
 	vector<ColumnVector> gamg(ngs);
 	ColumnVector gamtmp=gam;
 	gamtmp = design.insert_zeroev_pes(px,py,pz,gamtmp);
@@ -1805,16 +1805,16 @@ namespace Gs {
 	    log_beta[g-1].ReSize(num_bins_log_beta);
 	    for(int i=1;i<=log_beta[g-1].Nrows();i++){
 	      log_beta[g-1](i)=min_log_beta(g)+(i-1)*res_log_beta;
-	    } 
+	    }
 
-	    // setup values for doing 2D grid integration later		
+	    // setup values for doing 2D grid integration later
 	    int num_bins_log_rho_outlier=int(num_bins_log_rho_outlier_col(it));
 
 	    float res_log_rho_outlier=(max_log_rho_outlier(g)-min_log_rho_outlier(g))/float(num_bins_log_rho_outlier-1);
 	    log_rho_outlier[g-1].ReSize(num_bins_log_rho_outlier);
 	    for(int i=1;i<=log_rho_outlier[g-1].Nrows();i++){
 	      log_rho_outlier[g-1](i)=min_log_rho_outlier(g)+(i-1)*res_log_rho_outlier;
-	    } 
+	    }
 
 // 	    OUT(res_log_rho_outlier);
 // 	    OUT(exp(min_log_rho_outlier(g)));
@@ -1851,16 +1851,16 @@ namespace Gs {
 		    pout=0.5;
 		  }
 
- 		prob_outlier_g[g-1](i)=pout/(pin+pout);	
+ 		prob_outlier_g[g-1](i)=pout/(pin+pout);
 
 		// this will encourage a sparse solution
 		if(prob_outlier_g[g-1](i)<0.1)
 		  prob_outlier_g[g-1](i)=0;
 
 		prob_outlier(design.getglobalindex(g,i))=prob_outlier_g[g-1](i);
- 
+
 	      }
-	
+
 // 	    prob_outlier_g[g-1]=0;
 // 	    prob_outlier_g[g-1](1)=1;
 // 	    prob_outlier=0;
@@ -1893,12 +1893,12 @@ namespace Gs {
 		OUT("Error in Gsmanager::flame_stage1_onvoxel_inferoutliers");
 		exit(0);
 	      }
- 
+
 	    // update g with membership
 	    global_prob_outlier(g)=tmp;
 
-	    if(global_prob_outlier(g)>0.25) global_prob_outlier(g)=0.25; 
-	    
+	    if(global_prob_outlier(g)>0.25) global_prob_outlier(g)=0.25;
+
 	    // marg out gam and estimate beta and beta_outlier from numerical integration on a 2D grid
 	    Matrix margpost(log_beta[g-1].Nrows(),log_rho_outlier[g-1].Nrows());
 	    margpost=0;
@@ -1909,14 +1909,14 @@ namespace Gs {
 	    marg_beta_outlier=0;
 	    for(int j=1;j<=log_rho_outlier[g-1].Nrows();j++){
 	      for(int i=1;i<=log_beta[g-1].Nrows();i++){
-		
+
  		float log_beta_outlier_tmp=std::log(std::exp(log_rho_outlier[g-1](j))*(std::exp(log_beta[g-1](i))+maxsg(g)));
 		//float log_beta_outlier_tmp=std::log(std::exp(log_rho_outlier[g-1](j))*(std::exp(log_beta[g-1](i))));
 		margpost(i,j) = marg_posterior_energy_outlier(log_beta[g-1](i),log_beta_outlier_tmp,Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]);
 		marg_beta_outlier(j)+=margpost(i,j);
 		marg_beta(i)+=margpost(i,j);
-	      }	
-	    }     
+	      }
+	    }
 
 // 	    if(it==1)
 // 	      {
@@ -1935,14 +1935,14 @@ namespace Gs {
 // 		write_ascii_matrix(margpost,LogSingleton::getInstance().appendDir("margpost"));
 // 		write_ascii_matrix(marg_beta,LogSingleton::getInstance().appendDir("marg_beta"));
 // 		write_ascii_matrix(marg_beta_outlier,LogSingleton::getInstance().appendDir("marg_beta_outlier"));
-		
-	
+
+
 // 		//cd ..;X=load('zg'); y=load('Yg'); s=load('Sg'); x2=X(2:end); y2=y(2:end); s2=s(2:end); res=ols(y2,x2); [gam, beta, covgam] = flame1(y2,x2,s2); gam, covgam, beta, gam/sqrt(covgam)
 // 		// p=load('prob_outlier_g');
 // 		//mp=load('margpost');mb=load('marg_beta');mbo=load('marg_beta_outlier');lb=load('log_beta');[i,j]=min(mb);exp(lb(j))
 // 	      }
-	    
-	    int ind;	    
+
+	    int ind;
 	    marg_beta.Minimum1(ind);
 	    beta(g)=std::exp(log_beta[g-1](ind));
 
@@ -1968,23 +1968,23 @@ namespace Gs {
 	    weights_g[g-1].ReSize(design.getntptsingroup(g));
 
 	    for(int t=1;t<=design.getntptsingroup(g);t++)
-	      {		 		
-		weights_g[g-1](t)=1.0/(Sqr(1-prob_outlier_g[g-1](t))*(Sg[g-1](t)+beta(g))+Sqr(prob_outlier_g[g-1](t))*(beta_outlier(g)));		
-	      
+	      {
+		weights_g[g-1](t)=1.0/(Sqr(1-prob_outlier_g[g-1](t))*(Sg[g-1](t)+beta(g))+Sqr(prob_outlier_g[g-1](t))*(beta_outlier(g)));
+
 		if(prob_outlier_g[g-1](t)>0.999)
-		  weights_g[g-1](t)=0;	
+		  weights_g[g-1](t)=0;
 
 	      }
 
 	      }
 	  }
-   	
+
 	// calc gam
 	DiagonalMatrix iU(ntpts);
 // 	DiagonalMatrix iU2(ntpts);
-	
+
  	for(int t=1;t<=ntpts;t++)
- 	  {		 
+ 	  {
 
 // 	    OUT(design.getgroup(t));
 // 	    OUT(design.getglobalindex(design.getgroup(t),t));
@@ -1993,9 +1993,9 @@ namespace Gs {
 
 // 	    // 	    float vr=Sqr(1-prob_outlier(t))*(S(t)+beta(design.getgroup(t)))+Sqr(prob_outlier(t))*(S(t)+beta_outlier(design.getgroup(t)));
 // 	    float vr=Sqr(1-prob_outlier(t))*(S(t)+beta(design.getgroup(t)))+Sqr(prob_outlier(t))*(beta_outlier(design.getgroup(t)));
-	    
+
 // 	    iU(t) = 1.0/vr;
-	      
+
 // 	      if(prob_outlier(t)>0.999)
 // 		iU(t)=0;
 
@@ -2003,10 +2003,10 @@ namespace Gs {
 
 	// calc gam covariance
 	gamcovariance << pinv(z.t()*iU*z);
-	
-	gam=gamcovariance*z.t()*iU*Y;          	
-	      	
-// 	if(it==niters)	      	
+
+	gam=gamcovariance*z.t()*iU*Y;
+
+// 	if(it==niters)
 // 	  {
 //  	    OUT(Y.t());
 //  	    OUT(z.t());
@@ -2021,7 +2021,7 @@ namespace Gs {
 // 	    OUT(max_log_beta);
 // 	    OUT(min_log_beta);
 // // 	    OUT(gamcovariance);
-// 	    OUT(gam(1)/sqrt(gamcovariance(1,1)));	  	
+// 	    OUT(gam(1)/sqrt(gamcovariance(1,1)));
 // 	  }
 
 
@@ -2039,45 +2039,45 @@ namespace Gs {
 // 		if(design.get_evs_group(e,px,py,pz)==g)
 // 		  gamg(ind++)=gamtmp(e);
 // 	      }
-	    
-// 	    loglik_io+=log_likelihood_outlier(beta(g),beta_outlier(g),gamg,Yg[g-1],zg[g-1],Sg[g-1],global_prob_outlier(g),prob_outlier_g[g-1]);	
-	
+
+// 	    loglik_io+=log_likelihood_outlier(beta(g),beta_outlier(g),gamg,Yg[g-1],zg[g-1],Sg[g-1],global_prob_outlier(g),prob_outlier_g[g-1]);
+
 	    // calc log marg posterior to monitor convergence
-	   
- 	float marg_io=marg_posterior_energy_outlier(log(beta(g)),log(beta_outlier(g)),Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]);	
+
+ 	float marg_io=marg_posterior_energy_outlier(log(beta(g)),log(beta_outlier(g)),Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]);
 
 
 	if(abs((marg_io - marg_io_old[g-1])/marg_io_old[g-1]) < tol && it>6)
 	      {
 		converged[g-1]=true;
-	       
+
 	      }
-	    
+
 	    marg_io_old[g-1]=marg_io;
 
 	  }
-    
+
 
       } // end iterations
 
     // check to see if there are any outliers
     no_outliers.resize(ngs);
     for(int g = 0; g < ngs; g++)
-      {		   	
+      {
 	no_outliers[g]=true;
 	if(global_prob_outlier(g+1)>(1.0/ntpts)/10.0)
 	  no_outliers[g]=false;
       }
- 
+
 //    // due to finite variance for outlier class, set prob_outlier to zero if less than 1e-4:
 //     for(int g = 1; g <= ngs; g++)
 //       for(int i = 1; i <= prob_outlier_g[g-1].Nrows(); i++)
 // 	{
 // 	  if(prob_outlier_g[g-1](i) < 1e-4) prob_outlier_g[g-1](i)=0;
-	  
+
 // 	  prob_outlier(design.getglobalindex(g,i))=prob_outlier_g[g-1](i);
 // 	}
-    
+
 
 //     float loglik_io=0;
 //     gamtmp=gam;
@@ -2100,29 +2100,29 @@ namespace Gs {
 //     nparams=gam.Nrows();
 
 //  //    OUT(loglik_io);
-// //     OUT(loglik);  
+// //     OUT(loglik);
 // //     OUT(nparams_io);
 // //     OUT(nparams);
 
 //     no_outliers=true;
 //     for(int g = 0; g < ngs; g++)
-//       {		   	
+//       {
 // 	if(global_prob_outlier(g+1)>(1.0/ntpts)/10.0)
 // 	  no_outliers=false;
 //       }
-    
+
 //     float complexity_term=0.0;
 //     float complexity_term_io=0.0;
-    
+
 //     if(opts.model_select_mode.value()==string("aic"))
 //       {
 // 	complexity_term=nparams*2;
-// 	complexity_term_io=nparams_io*2;	
-//       } 
+// 	complexity_term_io=nparams_io*2;
+//       }
 //     else if(opts.model_select_mode.value()==string("loglik"))
 //       {
 // 	complexity_term=0;
-// 	complexity_term_io=0;	
+// 	complexity_term_io=0;
 //       }
 //     else
 //       {
@@ -2147,19 +2147,19 @@ namespace Gs {
 // 	     no_outliers=true;
 // 	   }
 //        }
-    
+
     ///////////////////////////
 
     // double check best energy between with and without outliers
     // calc log marg posterior
-    
+
     for(int g = 1; g <= ngs; g++)
-      {	
-	// calc log marg posterior 
-	float marg_io=marg_posterior_energy_outlier(log(beta(g)),log(beta_outlier(g)),Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]); 
-	
+      {
+	// calc log marg posterior
+	float marg_io=marg_posterior_energy_outlier(log(beta(g)),log(beta_outlier(g)),Yg[g-1],zg[g-1],Sg[g-1],prob_outlier_g[g-1]);
+
 	if(!no_outliers[g-1])
-	  {	
+	  {
 	    if(marg[g-1]<marg_io)
 	      {
 		// 	    OUT(marg_io);
@@ -2169,21 +2169,21 @@ namespace Gs {
 		// 		OUT(beta(g));
 		// 		OUT(beta_outlier(g));
 		// 		OUT(g);
-		
+
 		no_outliers[g-1]=true;
 	      }
 	  }
       }
   }
-  
+
   void Gsmanager::flame_stage1()
   {
     Tracer_Plus trace("Gsmanager::flame_stage1");
-  
+
     if(nevs >= ntpts)
       {
 	throw Exception("nevs >= ntpts, Singular matrix.");
-      }       
+      }
 
     // loop through voxels calling flame stage 1 on each
     OUT(nmaskvoxels);
@@ -2198,7 +2198,7 @@ namespace Gs {
 		vox2++;
 		if(vox2 > voxout*nmaskvoxels/100.0)
 		  {
-		    //cout<<(voxout+1)<<'%' <<'\r';		
+		    //cout<<(voxout+1)<<'%' <<'\r';
 		    cout << " " << (voxout+1);
 		    cout.flush();
 		    voxout++;
@@ -2207,9 +2207,9 @@ namespace Gs {
 		// setup data
 		ColumnVector Y = design.getcopedata().voxelts(x,y,z);
 		ColumnVector S = design.getvarcopedata().voxelts(x,y,z);
-		Matrix dm = design.getdm(x,y,z);    
-   
-		// setup data for groups		
+		Matrix dm = design.getdm(x,y,z);
+
+		// setup data for groups
 		vector<Matrix> zg(ngs);
 		vector<ColumnVector> Yg(ngs);
 		vector<ColumnVector> Sg(ngs);
@@ -2246,8 +2246,8 @@ namespace Gs {
 		    vector<ColumnVector> weights_g_io(ngs);
 
 		    flame_stage1_onvoxel_inferoutliers(Yg, Y, zg, dm, Sg, S, beta_io, gam_io, gamcovariance_io, global_prob_outlier, prob_outlier_g, prob_outlier, beta_outlier,marg, weights_g_io,nparams,no_outliers,x,y,z);
-		    
-		    // if outliers then replace flame1 results with outlier results		    					
+
+		    // if outliers then replace flame1 results with outlier results
 
 		    // OUT(no_outliers[0]);
 
@@ -2261,15 +2261,15 @@ namespace Gs {
 		      }
 
 		    // recalc gam and gamcovariance with blend of outlier and no outlier betas
-		    DiagonalMatrix iU(ntpts);		    
+		    DiagonalMatrix iU(ntpts);
 		    for(int t=1;t<=ntpts;t++)
-		      {		 
+		      {
 			iU(t)=weights_g[design.getgroup(t)-1](design.getindexingroup(design.getgroup(t),t));
 		      }
-		    gamcovariance << pinv(dm.t()*iU*dm);		    
-		    gam=gamcovariance*dm.t()*iU*Y;     
+		    gamcovariance << pinv(dm.t()*iU*dm);
+		    gam=gamcovariance*dm.t()*iU*Y;
 
-		    // store outlier results		    
+		    // store outlier results
 		    for(int g = 0; g < ngs; g++)
 		      {
 			if(!no_outliers[g])
@@ -2278,8 +2278,8 @@ namespace Gs {
 			    global_prob_outlier_mean[g](x,y,z) = global_prob_outlier(g+1);
 			    prob_outlier_mean[g].setvoxelts(prob_outlier_g[g],x,y,z);
 			  }
-		      }		    		 
-		
+		      }
+
 		  }
 
 		for(int g = 0; g < ngs; g++)
@@ -2297,15 +2297,15 @@ namespace Gs {
 		// store results for gam:
 		for(int e = 0; e < nevs; e++)
 		  {
-		    pes[e](x,y,z) = gam(e+1);			
+		    pes[e](x,y,z) = gam(e+1);
 		  }
 
 		// store results for beta:
 		for(int g = 0; g < ngs; g++)
 		  {
 		    beta_mean[g](x,y,z) = beta(g+1);
-		  }	      
-	
+		  }
+
 		// insert any zero EV PEs back in
 		gamcovariance = design.insert_zeroev_covpes(x,y,z,gamcovariance);
 
@@ -2317,7 +2317,7 @@ namespace Gs {
 		if(opts.infer_outliers.value() && opts.sigma_smooth_globalproboutlier.value()<=0)
 		  flame1_contrasts_with_outliers(gam,gamcovariance,x,y,z);
 		else
-		  flame1_contrasts(gam,gamcovariance,x,y,z);	  
+		  flame1_contrasts(gam,gamcovariance,x,y,z);
 	      }
 	  }
     cout << endl;
@@ -2325,7 +2325,7 @@ namespace Gs {
     if(opts.infer_outliers.value() && opts.sigma_smooth_globalproboutlier.value()>0)
       {
 	throw Exception("flame_stage1_inferoutliers() unsupported");
-	// flame_stage1_inferoutliers();	              
+	// flame_stage1_inferoutliers();
       }
 
     ////////////////////////////////////////////////////////////////
@@ -2337,8 +2337,8 @@ namespace Gs {
 	    for(int z = 0; z < zsize; z++)
 	      {
 		if(design.getmask()(x,y,z))
-		  {		    
-		    mcmc_mask(x,y,z) = pass_through_to_mcmc(opts.zlowerthreshold.value(),opts.zupperthreshold.value(),x,y,z);		      
+		  {
+		    mcmc_mask(x,y,z) = pass_through_to_mcmc(opts.zlowerthreshold.value(),opts.zupperthreshold.value(),x,y,z);
 		  }
 
 	      }
@@ -2365,17 +2365,17 @@ namespace Gs {
     vector<volume<float> > phi_naccepted(ntpts);
     vector<volume<float> > phi_nrejected(ntpts);
     vector<volume4D<float> > ss_samples(design.getnumfcontrasts()+1);
-    
+
     int nsamples = (opts.njumps.value()-opts.burnin.value())/opts.sampleevery.value();
     cout << "njumps = " << opts.njumps.value() << endl;
     cout << "burnin = " << opts.burnin.value() << endl;
     cout << "sampleevery = " << opts.sampleevery.value() << endl;
-    cout << "nsamples = " << nsamples << endl << endl;        
+    cout << "nsamples = " << nsamples << endl << endl;
 
     if(opts.verbose.value())
       {
 	for(int e = 0; e < nevs; e++)
-	  {	
+	  {
 	    gamma_samples[e].reinitialize(xsize,ysize,zsize,nsamples);
 	    gamma_samples[e] = 0;
 	    gamma_naccepted[e].reinitialize(xsize,ysize,zsize);
@@ -2394,7 +2394,7 @@ namespace Gs {
 	      phi_nrejected[t].reinitialize(xsize,ysize,zsize);
 	      phi_nrejected[t] = 0;
 	    }
-	
+
 	for(int g = 0; g < ngs; g++)
 	  {
 	    beta_samples[g].reinitialize(xsize,ysize,zsize,nsamples);
@@ -2437,7 +2437,7 @@ namespace Gs {
 	for(int z = 0; z < zsize; z++)
 	  {
 	    if(design.getmask()(x,y,z))
-	      {		
+	      {
 		if(mcmc_mask(x,y,z))
 		  {
 		    vox2++;
@@ -2447,7 +2447,7 @@ namespace Gs {
 
 		    if(vox2 > voxout*nmaskvoxels/100.0)
 		      {
-			//cout<<(voxout+1)<<'%' <<'\r';		
+			//cout<<(voxout+1)<<'%' <<'\r';
 			cout << " " << (voxout+1);
 			cout.flush();
 			voxout++;
@@ -2473,7 +2473,7 @@ namespace Gs {
 		    SymmetricMatrix gamcovariance;
 		    Matrix tmp_mat;
 		    ColumnVector tmp=cov_pes.voxelts(x,y,z);
-		    reshape(tmp_mat, tmp, nevs, nevs);		
+		    reshape(tmp_mat, tmp, nevs, nevs);
 		    gamcovariance << tmp_mat;
 		    gamcovariance=design.remove_zeroev_covpes(x,y,z,gamcovariance);
 
@@ -2487,10 +2487,10 @@ namespace Gs {
 
 		    srand(opts.seed.value());
 
-		    // get ready the outlier results		    
+		    // get ready the outlier results
 		    ColumnVector prob_outlier_mcmc(ntpts);
 		    vector<float> global_prob_outlier_mcmc(ngs);
-		    vector<float> beta_outlier_mcmc(ngs);		    		    
+		    vector<float> beta_outlier_mcmc(ngs);
 
 		    if(opts.infer_outliers.value())
 		      {
@@ -2521,7 +2521,7 @@ namespace Gs {
 			ColumnVector tmp_gam(gammamean.Nrows());
 			for(int e = 0; e < gammamean.Nrows(); e++)
 			  {
-			    tmp_gam(e+1)=mean(gamsamples.Row(e+1).t()).AsScalar();			    
+			    tmp_gam(e+1)=mean(gamsamples.Row(e+1).t()).AsScalar();
 			  }
 
 			// insert any zero EV PEs
@@ -2541,7 +2541,7 @@ namespace Gs {
 
 		    // insert any zero EV PE samples
 		    gamsamples=design.insert_zeroev_pemcmcsamples(x,y,z,gamsamples);
-		    
+
 		    //		    write_ascii_matrix(LogSingleton::getInstance().appendDir("gamsamples"),gamsamples);
 		    flame2_contrasts(gamsamples,x,y,z);
 
@@ -2571,13 +2571,13 @@ namespace Gs {
 			    gamma_samples[e].setvoxelts(gamsamples.Row(e+1).t(),x,y,z);
 			    gamma_naccepted[e](x,y,z) = mcmc_mh.getgamma_naccepted()(e+1);
 			    gamma_nrejected[e](x,y,z) = mcmc_mh.getgamma_nrejected()(e+1);
-			  }	
+			  }
 
 			for(int f = 0; f < design.getnumfcontrasts()+1; f++)
 			  {
 			    ss_samples[f].setvoxelts(sssamples[f],x,y,z);
 			  }
-		    
+
 			for(int g = 0; g < ngs; g++)
 			  {
 			    beta_samples[g].setvoxelts(betasamples.Row(g+1).t(),x,y,z);
@@ -2594,35 +2594,35 @@ namespace Gs {
 			    }
 
 		      }
-		  }	      	    
+		  }
 	      }
 	  }
-	  
+
     if(opts.verbose.value())
       {
 	for(int g = 0; g < ngs; g++)
 	  {
-	    save_volume4D(beta_samples[g], LogSingleton::getInstance().appendDir("beta"+num2str(g+1)+"_samples"));	
+	    save_volume4D(beta_samples[g], LogSingleton::getInstance().appendDir("beta"+num2str(g+1)+"_samples"));
 	    save_volume(beta_naccepted[g], LogSingleton::getInstance().appendDir("beta"+num2str(g+1)+"_naccepted"));
-	    save_volume(beta_nrejected[g], LogSingleton::getInstance().appendDir("beta"+num2str(g+1)+"_nrejected"));	
+	    save_volume(beta_nrejected[g], LogSingleton::getInstance().appendDir("beta"+num2str(g+1)+"_nrejected"));
 	  }
 
 	if(dofpassedin)
 	  for(int t = 0; t < ntpts; t++)
 	    {
-	      save_volume4D(phi_samples[t], LogSingleton::getInstance().appendDir("phi"+num2str(t+1)+"_samples"));	
+	      save_volume4D(phi_samples[t], LogSingleton::getInstance().appendDir("phi"+num2str(t+1)+"_samples"));
 	      save_volume(phi_naccepted[t], LogSingleton::getInstance().appendDir("phi"+num2str(t+1)+"_naccepted"));
-	      save_volume(phi_nrejected[t], LogSingleton::getInstance().appendDir("phi"+num2str(t+1)+"_nrejected"));	
+	      save_volume(phi_nrejected[t], LogSingleton::getInstance().appendDir("phi"+num2str(t+1)+"_nrejected"));
 	    }
-	
+
 	for(int e = 0; e < nevs; e++)
 	  {
 	    save_volume4D(gamma_samples[e], LogSingleton::getInstance().appendDir("gamma"+num2str(e+1)+"_samples"));
 	    save_volume(gamma_naccepted[e], LogSingleton::getInstance().appendDir("gamma"+num2str(e+1)+"_naccepted"));
 	    save_volume(gamma_nrejected[e], LogSingleton::getInstance().appendDir("gamma"+num2str(e+1)+"_nrejected"));
-	    
+
 	  }
-	
+
 	// 	for(int f = 0; f < design.getnumfcontrasts()+1; f++)
 	// 	  {
 	// 	    save_volume4D(ss_samples[f], LogSingleton::getInstance().appendDir("ss"+num2str(f+1)+"_samples"));
@@ -2631,7 +2631,7 @@ namespace Gs {
       }
 
     regularise_flame2_contrasts();
-  
+
     cout << endl;
   }
 
@@ -2645,13 +2645,13 @@ namespace Gs {
       {
 	volume<float> kern=gaussian_kernel3D(sig, int(4*sig/design.getmask().xdim()));
 	for(int t = 0; t < design.getnumtcontrasts(); t++)
-	  {	   	
+	  {
 	    tdofs[t]=convolve(tdofs[t], kern, design.getmask());
-	  } 
-	
+	  }
+
 	for(int f = 0; f < design.getnumfcontrasts(); f++)
 	  {
-	    fdof2s[f]=convolve(fdof2s[f], kern, design.getmask());		    
+	    fdof2s[f]=convolve(fdof2s[f], kern, design.getmask());
 	  }
       }
 
@@ -2660,14 +2660,14 @@ namespace Gs {
 	for(int z = 0; z < zsize; z++)
 	  {
 	    if(design.getmask()(x,y,z))
-	      {		
+	      {
 		if(mcmc_mask(x,y,z))
 		  {
 		    for(int t = 0; t < design.getnumtcontrasts(); t++)
 		      {
 			if(int(tdofs[t](x,y,z))<=0)
 			  {
-			    cout << "x=" << x << ",y=" << y << ",z=" << z << endl;	
+			    cout << "x=" << x << ",y=" << y << ",z=" << z << endl;
 			    OUT(zflame1lowerts[0](x,y,z));
 			    OUT(tdofs[t](x,y,z));
 			    OUT(ts[t](x,y,z));
@@ -2688,15 +2688,15 @@ namespace Gs {
 
   bool Gsmanager::pass_through_to_mcmc(float zlowerthresh, float zupperthresh, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::pass_through_to_mcmc");   
-    
+    Tracer_Plus trace("Gsmanager::pass_through_to_mcmc");
+
     bool ret = false;
-    
+
     // both emupper and emlower need to be jointly above
-    // or below the threshold region to avoid the need 
+    // or below the threshold region to avoid the need
     // for MCMC
     for(int t = 0; !ret && t < design.getnumtcontrasts(); t++)
-      {		
+      {
 	ret = !(((zflame1upperts[t](px,py,pz)) > (zupperthresh) &&
 		 (zflame1lowerts[t](px,py,pz)) > (zupperthresh)) ||
 		((zflame1upperts[t](px,py,pz)) < (zlowerthresh) &&
@@ -2722,8 +2722,8 @@ namespace Gs {
 
   void Gsmanager::ols_contrasts(const ColumnVector& mn, const SymmetricMatrix& covariance, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::ols_contrasts");    
-    
+    Tracer_Plus trace("Gsmanager::ols_contrasts");
+
     for(int t = 0; t < design.getnumtcontrasts(); t++)
       {
 	tdofs[t](px,py,pz) = ntpts - nevs;
@@ -2737,18 +2737,18 @@ namespace Gs {
 	fdof2s[f](px,py,pz) = float(ntpts - nevs);
 
 	f_ols_contrast(mn,covariance,design.getfcontrast(f+1),fs[f](px,py,pz), fdof1s[f](px,py,pz), fdof2s[f](px,py,pz), zfs[f](px,py,pz), px,py,pz);
-      }    
+      }
   }
 
   void Gsmanager::fe_contrasts(const ColumnVector& mn, const SymmetricMatrix& covariance, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::fe_contrasts");    
+    Tracer_Plus trace("Gsmanager::fe_contrasts");
 
     // contrasts for fixed effects
 
     float sumdof=1000;
-    sumdof=design.getsumdofvarcopedata()(px,py,pz);    
-    if(sumdof>1000) sumdof=1000; 
+    sumdof=design.getsumdofvarcopedata()(px,py,pz);
+    if(sumdof>1000) sumdof=1000;
 
     for(int t = 0; t < design.getnumtcontrasts(); t++)
       {
@@ -2757,7 +2757,7 @@ namespace Gs {
 	else
 	  tdofs[t](px,py,pz) = 1000;
 
-	t_ols_contrast(mn,covariance,design.gettcontrast(t+1),tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofs[t](px,py,pz), zts[t](px,py,pz), px,py,pz);		
+	t_ols_contrast(mn,covariance,design.gettcontrast(t+1),tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofs[t](px,py,pz), zts[t](px,py,pz), px,py,pz);
       }
 
 
@@ -2776,8 +2776,8 @@ namespace Gs {
 
   void Gsmanager::flame1_contrasts(const ColumnVector& mn, const SymmetricMatrix& covariance, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::flame1_contrasts");    
-    
+    Tracer_Plus trace("Gsmanager::flame1_contrasts");
+
     for(int t = 0; t < design.getnumtcontrasts(); t++)
       {
 	float tdofupper = 1000;
@@ -2792,23 +2792,23 @@ namespace Gs {
 	    float tmpdof = design.getntptsingroup(g+1) - design.getnevsingroup(g+1);
 	    if(design.is_group_in_tcontrast(g+1, design.gettcontrast(t+1)) && tmpdof>0 && tmpdof<tdoflower)
 	      tdoflower=tmpdof;
-	  }       
+	  }
 
 	// call first with highest possible DOF
 	t_ols_contrast(mn,covariance, design.gettcontrast(t+1), tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofupper, zflame1upperts[t](px,py,pz), px,py,pz);
-	
+
 	// call with OLS DOF
 	t_ols_contrast(mn,covariance, design.gettcontrast(t+1), tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdoflower, zflame1lowerts[t](px,py,pz), px,py,pz);
 
-	// set z-score to lower z bound	
+	// set z-score to lower z bound
 	tdofs[t](px,py,pz) = tdoflower;
 	zts[t](px,py,pz) = zflame1lowerts[t](px,py,pz);
       }
-	      
+
     for(int f = 0; f < design.getnumfcontrasts(); f++)
       {
 	fdof1s[f](px,py,pz) = float(design.getfcontrast(f+1).Nrows());
-	float fdof2upper = 1000;       
+	float fdof2upper = 1000;
 
 	// double fdof2lower = float(ntpts - nevs);
 	// eventually work out effective DOF based on which variance groups interact with the contrast
@@ -2829,14 +2829,14 @@ namespace Gs {
 
 	// set z-score to lower z bound
 	fdof2s[f](px,py,pz) = fdof2lower;
-	zfs[f](px,py,pz) = zflame1lowerfs[f](px,py,pz);	
+	zfs[f](px,py,pz) = zflame1lowerfs[f](px,py,pz);
       }
   }
 
   void Gsmanager::flame1_contrasts_with_outliers(const ColumnVector& mn, const SymmetricMatrix& covariance, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::flame1_contrasts_with_outliers");    
-    
+    Tracer_Plus trace("Gsmanager::flame1_contrasts_with_outliers");
+
     for(int t = 0; t < design.getnumtcontrasts(); t++)
       {
 	float tdofupper = 1000;
@@ -2863,18 +2863,18 @@ namespace Gs {
 
 	// call first with highest possible DOF
 	t_ols_contrast(mn,covariance, design.gettcontrast(t+1), tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofupper, zflame1upperts[t](px,py,pz), px,py,pz);
-       
+
 	// call with OLS DOF
 	t_ols_contrast(mn,covariance, design.gettcontrast(t+1), tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdoflower, zflame1lowerts[t](px,py,pz), px,py,pz);
 
-	// set z-score to lower z bound	
+	// set z-score to lower z bound
 	tdofs[t](px,py,pz) = tdoflower;
 	zts[t](px,py,pz) = zflame1lowerts[t](px,py,pz);
 
 // 	OUT(zts[t](px,py,pz));
 // 	OUT(tdoflower);
 // 	exit(1);
-      }	        
+      }
 
     for(int f = 0; f < design.getnumfcontrasts(); f++)
       {
@@ -2900,7 +2900,7 @@ namespace Gs {
 
 // 	    OUT(g+1);
 // 	    OUT(design.getfcontrast(f+1));
-	      
+
 	  }
 
 	// call first with highest possible DOF
@@ -2911,7 +2911,7 @@ namespace Gs {
 
 	// set z-score to lower z bound
 	fdof2s[f](px,py,pz) = fdof2lower;
-	zfs[f](px,py,pz) = zflame1lowerfs[f](px,py,pz);	
+	zfs[f](px,py,pz) = zflame1lowerfs[f](px,py,pz);
 
       }
 
@@ -2919,19 +2919,19 @@ namespace Gs {
 
   void Gsmanager::flame2_contrasts(const Matrix& gamsamples, int px, int py, int pz)
   {
-    Tracer_Plus trace("Gsmanager::flame2_contrasts");   
-    
+    Tracer_Plus trace("Gsmanager::flame2_contrasts");
+
     for(int t = 0; t < design.getnumtcontrasts(); t++)
       {
 	RowVector tcon = design.gettcontrast(t+1);
-	t_mcmc_contrast(gamsamples, tcon, tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofs[t](px,py,pz), zts[t](px,py,pz), px,py,pz);		    
+	t_mcmc_contrast(gamsamples, tcon, tcopes[t](px,py,pz), tvarcopes[t](px,py,pz), ts[t](px,py,pz), tdofs[t](px,py,pz), zts[t](px,py,pz), px,py,pz);
       }
 
     for(int f = 0; f < design.getnumfcontrasts(); f++)
       {
-	f_mcmc_contrast(gamsamples, design.getfcontrast(f+1), fs[f](px,py,pz), fdof1s[f](px,py,pz), fdof2s[f](px,py,pz), zfs[f](px,py,pz), px,py,pz);		    
+	f_mcmc_contrast(gamsamples, design.getfcontrast(f+1), fs[f](px,py,pz), fdof1s[f](px,py,pz), fdof2s[f](px,py,pz), zfs[f](px,py,pz), px,py,pz);
       }
-       
+
   }
 
   inline void Gsmanager::t_ols_contrast(const ColumnVector& mn, const SymmetricMatrix& covariance, const RowVector& tcontrast, float& cope, float& varcope, float& t, float& dof, float& z, int px, int py, int pz)
@@ -2941,7 +2941,7 @@ namespace Gs {
     if(design.tcontrast_has_zeroevs(px,py,pz,tcontrast))
       {
 // 	cout << endl << "WARNING: FLAME has detected a contrast that includes a voxelwise regressor which is all zeros at voxel:" << endl;
-// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 // 	OUT(tcontrast);
 	// set values to something sensible and continue
 	t=0;
@@ -2966,7 +2966,7 @@ namespace Gs {
     if(design.fcontrast_has_zeroevs(px,py,pz,fcontrast))
       {
 // 	cout << endl << "WARNING: FLAME has detected a contrast that includes a voxelwise regressor which is all zeros at voxel:" << endl;
-// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 // 	OUT(fcontrast);
 	// set values to something sensible and continue
 	f=0;
@@ -2984,18 +2984,18 @@ namespace Gs {
 //     OUT(f);
 //     OUT(z);
   }
- 
+
   void Gsmanager::t_mcmc_contrast(const Matrix& gamsamples, const RowVector& tcontrast, float& cope, float& varcope, float& t, float& dof, float& z, int px, int py, int pz)
   {
     Tracer_Plus trace("Gsmanager::t_mcmc_contrast");
- 
+
     //gamsamples(nevs, nsamples);
-  
+
     ColumnVector m;
     SymmetricMatrix covar;
 
     Matrix tcsamples = tcontrast*gamsamples;
-   
+
     float tmpdof;
 
     ColumnVector gammean(nevs);gammean=0;
@@ -3003,19 +3003,19 @@ namespace Gs {
       gammean(e+1) = pes[e](px,py,pz);
 
     m = tcontrast*gammean;
-    multitfit(tcsamples, m, covar, tmpdof, true); 
-       
+    multitfit(tcsamples, m, covar, tmpdof, true);
+
     dof = float(tmpdof);
- 
+
     varcope = covar(1,1);
     cope = m(1);
 
     t = cope/sqrt(varcope);
-   
+
     if(design.tcontrast_has_zeroevs(px,py,pz,tcontrast))
       {
 // 	cout << endl << "WARNING: FLAME stage 2 has detected a contrast that includes a voxelwise regressor which is all zeros at voxel:" << endl;
-// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 // 	OUT(tcontrast);
 	// set values to something sensible and continue
 	t=0;
@@ -3026,7 +3026,7 @@ namespace Gs {
       }
     else if(int(floor(dof+0.5))<=0)
       {
-	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 	OUT(cope);
 	OUT(varcope);
 	OUT(zflame1lowerts[0](px,py,pz));
@@ -3035,7 +3035,7 @@ namespace Gs {
 	OUT(m);
 	OUT(tcontrast);
 	OUT(design.getdm());
-	OUT(design.getdm(px,py,pz));   
+	OUT(design.getdm(px,py,pz));
 
 	throw Exception("Error. DOF<=0 in Gsmanager::t_mcmc_contrast. ");
       }
@@ -3048,12 +3048,12 @@ namespace Gs {
   void Gsmanager::f_mcmc_contrast(const Matrix& gamsamples, const Matrix& fcontrast, float& f, float& dof1, float& dof2, float& z, int px, int py, int pz)
   {
     Tracer_Plus trace("Gsmanager::f_mcmc_contrast");
-    
+
     //gamsamples(nevs, nsamples);
-    
+
     ColumnVector m;
     SymmetricMatrix covar;
-    
+
     float tmpdof2;
     ColumnVector gammean(nevs);gammean=0;
     for(int e = 0; e < nevs; e++)
@@ -3070,7 +3070,7 @@ namespace Gs {
     if(design.fcontrast_has_zeroevs(px,py,pz,fcontrast))
       {
 // 	cout << endl << "WARNING: FLAME stage 2 has detected a contrast that includes a voxelwise regressor which is all zeros at voxel:" << endl;
-// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+// 	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 // 	OUT(fcontrast);
 	// set values to something sensible and continue
 	f=0;
@@ -3079,18 +3079,18 @@ namespace Gs {
       }
     else if(int(floor(dof2+0.5))<=0)
       {
-	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;	
+	cout << "x=" << px << ",y=" << py << ",z=" << pz << endl;
 	OUT(dof2);
 	OUT(gammean);
 	OUT(m);
 	OUT(fcontrast);
 	OUT(design.getdm());
-	OUT(design.getdm(px,py,pz));   
+	OUT(design.getdm(px,py,pz));
 
 	throw Exception("Error. DOF<=0 in Gsmanager::f_mcmc_contrast. ");
       }
     else
-      {	       
+      {
 	z = F2z::getInstance().convert(f,int(floor(dof1+0.5)),int(floor(dof2+0.5)));
       }
   }

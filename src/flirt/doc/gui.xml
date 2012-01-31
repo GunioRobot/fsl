@@ -33,20 +33,20 @@ journal reference listed there.
 
 <p>
 In single-level registration, the reslice image is registered to the standard, and the resulting transform applied to the secondary
-image(s). Thus the transformed reslice and secondary image(s) are in alignment with the standard image. 
+image(s). Thus the transformed reslice and secondary image(s) are in alignment with the standard image.
 </p>
 
 <p>
 In two-level registration, the low-res image (e.g. functional EPI image) is registered to the hi-res image (e.g. structural image) and
 the hi-res is registered to the standard. The two resulting transforms are combined into one, and this is then applied to the low-res
 and the secondary image(s). Thus the transformed hi-res, low-res and secondary image(s) are all in alignment with the standard
-image. 
+image.
 </p>
 </section>
 
 <section title="Suggested Usage">
 
-<subsection title="Reslice Image/Group -&gt; Standard Image"> 
+<subsection title="Reslice Image/Group -&gt; Standard Image">
 <p>
 <itemize>
 <item>To register an image to a standard template, put the name of
@@ -64,7 +64,7 @@ image.
 
 </subsection>
 
-<subsection title="Low Res Image/Group -&gt; High Res Image/Group -&gt; Standard Image"> 
+<subsection title="Low Res Image/Group -&gt; High Res Image/Group -&gt; Standard Image">
 <p>
 <itemize>
 <item>To register both a functional image and its corresponding structural to the standard image, put the template image in the
@@ -88,8 +88,8 @@ image.
 <section title="General Advice">
 <itemize>
 
-<item>DO use the default settings (especially in advanced options) as they have been carefully chosen.</item> 
-<item>DO use it for registering to the MNI152 average as this is what it is designed to do well.</item> 
+<item>DO use the default settings (especially in advanced options) as they have been carefully chosen.</item>
+<item>DO use it for registering to the MNI152 average as this is what it is designed to do well.</item>
 <item>DO use the Group facility for running the registration on a collection of images (this should avoid the need for scripting). </item>
 
 </itemize>

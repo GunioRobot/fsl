@@ -1,4 +1,4 @@
-/* 
+/*
  * tkWinImage.c --
  *
  *	This file contains routines for manipulation full-color images.
@@ -142,7 +142,7 @@ PutPixel(image, x, y, pixel)
 	     * Pixel is WORD: 5-5-5 (R-G-B)
 	     */
 
-	    (*(WORD*)destPtr) = 
+	    (*(WORD*)destPtr) =
 		((GetRValue(pixel) & 0xf8) << 7)
 		| ((GetGValue(pixel) & 0xf8) <<2)
 		| ((GetBValue(pixel) & 0xf8) >> 3);
@@ -255,7 +255,7 @@ XCreateImage(display, visual, depth, format, offset, data, width, height,
     imagePtr->f.create_image = NULL;
     imagePtr->f.sub_image = NULL;
     imagePtr->f.add_pixel = NULL;
-    
+
     return imagePtr;
 }
 

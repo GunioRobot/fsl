@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 #include <cstdlib>
@@ -44,7 +44,7 @@ using namespace FNIRT;
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-fnirt_CF::fnirt_CF(const NEWIMAGE::volume<float>&                                  pvref, 
+fnirt_CF::fnirt_CF(const NEWIMAGE::volume<float>&                                  pvref,
                    const NEWIMAGE::volume<float>&                                  pvobj,
                    const NEWMAT::Matrix&                                           paff,
                    std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&        pdf_field,
@@ -54,7 +54,7 @@ fnirt_CF::fnirt_CF(const NEWIMAGE::volume<float>&                               
   common_construction(pdf_field);
 }
 
-fnirt_CF::fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >               pvref, 
+fnirt_CF::fnirt_CF(const boost::shared_ptr<NEWIMAGE::volume<float> >               pvref,
                    const boost::shared_ptr<NEWIMAGE::volume<float> >               pvobj,
                    const NEWMAT::Matrix&                                           paff,
                    std::vector<boost::shared_ptr<BASISFIELD::basisfield> >&        pdf_field,
@@ -69,7 +69,7 @@ void fnirt_CF::common_construction(std::vector<boost::shared_ptr<BASISFIELD::bas
   // Do some checks to see all is kosher
 
   if (pdf_field.size() != 3) {throw FnirtException("fnirt_CF::fnirt_CF: 3 fields must be input");}
-  if (OrigRefSz_x() != pdf_field[0]->FieldSz_x() || OrigRefSz_y() != pdf_field[0]->FieldSz_y() || OrigRefSz_z() != pdf_field[0]->FieldSz_z()) { 
+  if (OrigRefSz_x() != pdf_field[0]->FieldSz_x() || OrigRefSz_y() != pdf_field[0]->FieldSz_y() || OrigRefSz_z() != pdf_field[0]->FieldSz_z()) {
     throw FnirtException("fnirt_CF::fnirt_CF: Mismatch between reference volume and basis field");
   }
 
@@ -82,7 +82,7 @@ void fnirt_CF::common_construction(std::vector<boost::shared_ptr<BASISFIELD::bas
   // Since no smoothing or subsampling has yet to be applied to the ref image we point
   // the smoothed and subsampled version straight back to the original. Dito for obj.
   svref = vref;
-  ssvref = vref; 
+  ssvref = vref;
   svobj = vobj;
   // Initialise objects that will be used during the minimisation
   // robj is used for resampling vobj. Set size to that of ssvref
@@ -135,12 +135,12 @@ void fnirt_CF::SaveDefFields(std::string fname) const
 {
   if (Verbose()) cout << "Saving Displacement fields to " << fname << endl;
 
-  NEWIMAGE::FnirtFileWriter  write_it(fname,Ref(),DefFieldAsVol(0),DefFieldAsVol(1),DefFieldAsVol(2),AffineMat()); 
+  NEWIMAGE::FnirtFileWriter  write_it(fname,Ref(),DefFieldAsVol(0),DefFieldAsVol(1),DefFieldAsVol(2),AffineMat());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// This saves out a field of Jacobian-determinant values. It saves _only_ the Jacobian of 
+// This saves out a field of Jacobian-determinant values. It saves _only_ the Jacobian of
 // the non-linear part of the field. If you want to include also the affine part you need
 // to calculate the determinant of the flirt matrix and add that to the values in the field.
 //
@@ -178,7 +178,7 @@ void fnirt_CF::SaveScaledRef(std::string fname) const
   if (Verbose()) cout << "Saving scaled --ref file to " << fname << endl;
   save_volume(sref,fname);
 }
-	     
+
 void fnirt_CF::SaveRef(std::string fname) const
 {
   if (Verbose()) cout << "Saving --ref file to " << fname << endl;
@@ -258,7 +258,7 @@ void fnirt_CF::SubsampleRef(const std::vector<unsigned int>& ss)
 
     // Resample field
     for (unsigned int i=0; i<df_field.size(); i++) {
-      boost::shared_ptr<BASISFIELD::basisfield> tmp = df_field[i]->ZoomField(ss2ms(ss),ss2vxs(ss)); 
+      boost::shared_ptr<BASISFIELD::basisfield> tmp = df_field[i]->ZoomField(ss2ms(ss),ss2vxs(ss));
       df_field[i] = tmp;
     }
 
@@ -270,7 +270,7 @@ void fnirt_CF::SubsampleRef(const std::vector<unsigned int>& ss)
     for (unsigned int i=0; i<df_field.size(); i++) {
       copybasicproperties(*ssvref,(*df)[i]);
       df_field[i]->AsVolume((*df)[i]);
-    }    
+    }
 
     // Resize robj, robjmask and datamask
     robj = boost::shared_ptr<NEWIMAGE::volume<float> >(new NEWIMAGE::volume<float>(RefSz_x(),RefSz_y(),RefSz_z()));
@@ -286,7 +286,7 @@ void fnirt_CF::SubsampleRef(const std::vector<unsigned int>& ss)
     if (robj_deriv) {
       robj_deriv = boost::shared_ptr<NEWIMAGE::volume4D<float> >();
       robj_deriv_updated = false;
-    }    
+    }
 
     // Resize totmask
     if (totmask) {
@@ -340,7 +340,7 @@ void fnirt_CF::SmoothObj(double fwhm)
       svobj = boost::shared_ptr<NEWIMAGE::volume<float> >(new NEWIMAGE::volume<float>(smooth(*vobj,fwhm/sqrt(8.0*log(2.0)))));
     }
     robj_updated = false;
-  }    
+  }
 
   if (Verbose()) cout << "New FWHM (mm) for --in: " << fwhm << endl;
 }
@@ -361,7 +361,7 @@ void fnirt_CF::SetRefMask(const boost::shared_ptr<NEWIMAGE::volume<char> > mask)
   if (subsamp[0]!=1 || subsamp[1]!=1 || subsamp[2]!=1) {
     subsample_refmask(ss2ms(subsamp),ss2vxs(subsamp));
   }
-  else ssrefmask = refmask;    
+  else ssrefmask = refmask;
   if (!totmask) {
     totmask = boost::shared_ptr<NEWIMAGE::volume<char> >(new NEWIMAGE::volume<char>(RefSz_x(),RefSz_y(),RefSz_z()));
     copybasicproperties(*ssvref,*totmask);
@@ -419,7 +419,7 @@ void fnirt_CF::update_robj() const
     general_transform(*svobj,aff,*df,*robj,*datamask);
     robj_updated = true;
     totmask_updated = false;
-  }    
+  }
 }
 
 void fnirt_CF::update_robjmask() const
@@ -445,7 +445,7 @@ const NEWIMAGE::volume4D<float>& fnirt_CF::RobjDeriv() const
     robj_deriv_updated = false;
   }
   if (!robj_deriv_updated) { // If the derivatives doesn't reflect current df field
-    // When we are doing this we might as well update robj 
+    // When we are doing this we might as well update robj
     // and data mask as well.
     general_transform_3partial(*svobj,aff,*df,*robj,*robj_deriv,*datamask);
     (*robj_deriv)[0] /= ObjVxs_x();
@@ -476,7 +476,7 @@ const NEWIMAGE::volume4D<float>& fnirt_CF::RefDeriv() const
   if (!ref_deriv) {
     ref_deriv = boost::shared_ptr<NEWIMAGE::volume4D<float> >(new NEWIMAGE::volume4D<float>(RefSz_x(),RefSz_y(),RefSz_z(),3));
     ref_deriv->copyproperties(*ssvref);
-    NEWIMAGE::volume<float>    skrutt(RefSz_x(),RefSz_y(),RefSz_z());    
+    NEWIMAGE::volume<float>    skrutt(RefSz_x(),RefSz_y(),RefSz_z());
     skrutt.copyproperties(*ssvref);
     affine_transform_3partial(*ssvref,IdentityMatrix(4),skrutt,*ref_deriv);
     (*ref_deriv)[0] /= RefVxs_x();
@@ -516,7 +516,7 @@ const NEWIMAGE::volume<char>& fnirt_CF::Mask() const
     }
     return(*totmask);
   }
-  // else 
+  // else
   return(*datamask);
 }
 
@@ -561,7 +561,7 @@ void fnirt_CF::SetDefFieldParams(const NEWMAT::ColumnVector& p) const
       totmask_updated = false;
       robjmask_updated = false;
     }
-  }  
+  }
 }
 
 void fnirt_CF::SetScaleParams(const NEWMAT::ColumnVector& p)
@@ -610,14 +610,14 @@ void fnirt_CF::subsample_refmask(const std::vector<unsigned int>  nms,
     if (refmask->sform_code() != NIFTI_XFORM_UNKNOWN) ssrefmask->set_sform(refmask->sform_code(),refmask->sform_mat() * M);
     if (refmask->qform_code() != NIFTI_XFORM_UNKNOWN) ssrefmask->set_qform(refmask->qform_code(),refmask->qform_mat() * M);
 
-    // I will (rather lazily) use a temporary float-copy of the mask for the 
+    // I will (rather lazily) use a temporary float-copy of the mask for the
     // downsampling. This will then be thresholded at 0.99 when translating back to char.
     NEWIMAGE::volume<float> finmask(vref->xsize(),vref->ysize(),vref->zsize());
     copybasicproperties(*refmask,finmask);
     finmask.insert_vec(refmask->vec());
     NEWIMAGE::volume<float> foutmask(ssrefmask->xsize(),ssrefmask->ysize(),ssrefmask->zsize());
     copybasicproperties(*ssrefmask,foutmask);
-    
+
     // And now resample. Note that we don't do any integration, but rather assume
     // that the smoothing of the original volume above has effectively done that.
     // Note also that after this call ssrefmask will be one for all voxels falling
@@ -666,7 +666,7 @@ double SSD_fnirt_CF::cf(const NEWMAT::ColumnVector& p) const
   const NEWIMAGE::volume<float>& ref = Ref();
   const NEWIMAGE::volume<float>& obj = Robj();
   const NEWIMAGE::volume<char>&  mask = Mask();
-  
+
   NEWIMAGE::volume<float>        sref(ref.xsize(),ref.ysize(),ref.zsize());
   copybasicproperties(ref,sref);
   ScaledRef(sref);                              // Returns intensity-mapped ref in sref.
@@ -677,7 +677,7 @@ double SSD_fnirt_CF::cf(const NEWMAT::ColumnVector& p) const
     for (unsigned int j=0; j<RefSz_y(); j++) {
       for (unsigned int i=0; i<RefSz_x(); i++) {
         if (mask(i,j,k)) {
-          n++; 
+          n++;
           ssd += SQR(obj(i,j,k) - sref(i,j,k));
         }
       }
@@ -693,7 +693,7 @@ double SSD_fnirt_CF::cf(const NEWMAT::ColumnVector& p) const
     SaveRobj(string("FnirtDebugRobj_")+DebugString());
     SaveScaledRef(string("FnirtDebugScaledRef_")+DebugString());
     SaveJacobian(string("FnirtDebugJacobian_")+DebugString());
-    if (Debug() > 1) {    
+    if (Debug() > 1) {
       SaveMask(string("FnirtDebugMask_")+DebugString());
       SaveDataMask(string("FnirtDebugDataMask_")+DebugString());
       SaveRobjMask(string("FnirtDebugRobjMask_")+DebugString());
@@ -782,7 +782,7 @@ NEWMAT::ReturnMatrix SSD_fnirt_CF::grad(const NEWMAT::ColumnVector& p) const
       MISCMATHS::write_ascii_matrix(string("FnirtDebugGradient_")+DebugString()+string(".txt"),gradient);
     }
   }
-  
+
   gradient.Release();
   return(gradient);
 }
@@ -803,7 +803,7 @@ boost::shared_ptr<MISCMATHS::BFMatrix> SSD_fnirt_CF::hess(const NEWMAT::ColumnVe
     if (int(last_hess->Ncols()) == p.Nrows()) {     // If there has been no zooming
       return(last_hess);
     }
-    else { 
+    else {
       last_hess->Clear();
       last_hess = boost::shared_ptr<MISCMATHS::BFMatrix>();
     }
@@ -894,9 +894,9 @@ boost::shared_ptr<MISCMATHS::BFMatrix> SSD_fnirt_CF::hess(const NEWMAT::ColumnVe
   imapH->MulMeByScalar(2.0/double(n));
 
   // Calculate Cross-term between spatial and intensity mapping.
-  boost::shared_ptr<MISCMATHS::BFMatrix> xCross = IMap()->CrossHessian(DefField(0),partial[0],ref,&mask,HessianPrecision());  
+  boost::shared_ptr<MISCMATHS::BFMatrix> xCross = IMap()->CrossHessian(DefField(0),partial[0],ref,&mask,HessianPrecision());
   xCross->MulMeByScalar(2.0/double(n));
-  boost::shared_ptr<MISCMATHS::BFMatrix> yCross = IMap()->CrossHessian(DefField(0),partial[1],ref,&mask,HessianPrecision());  
+  boost::shared_ptr<MISCMATHS::BFMatrix> yCross = IMap()->CrossHessian(DefField(0),partial[1],ref,&mask,HessianPrecision());
   yCross->MulMeByScalar(2.0/double(n));
   boost::shared_ptr<MISCMATHS::BFMatrix> zCross = IMap()->CrossHessian(DefField(0),partial[2],ref,&mask,HessianPrecision());
   zCross->MulMeByScalar(2.0/double(n));
@@ -912,7 +912,7 @@ boost::shared_ptr<MISCMATHS::BFMatrix> SSD_fnirt_CF::hess(const NEWMAT::ColumnVe
   xCross->VertConcatBelowMe(*imapH);
   dxTdx->HorConcat2MyRight(*xCross);
   xCross->Clear();
-    
+
   if (UsingRefDeriv()) last_hess = dxTdx;
 
   if (Debug() > 1) dxTdx->Print(string("FnirtDebugHessian_")+DebugString()+string(".txt"));

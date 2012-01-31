@@ -8,20 +8,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -152,8 +152,8 @@ Option<string> alternatePriors(string("-A"), "",
 Option<string> manualsegmentation(string("-s,--manualseg"), "",
 		  string("~<filename> Filename containing intensities"),
 		  false, requires_argument);
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -170,8 +170,8 @@ string csfPriorName, grayPriorName, whitePriorName;
     csfPriorName = priorRootName+"csf";
     grayPriorName = priorRootName+"gray";
     whitePriorName = priorRootName+"white";
-  } 
-  else 
+  }
+  else
   {
     csfPriorName = alternatePriors.value(0);
     grayPriorName = alternatePriors.value(1);
@@ -199,7 +199,7 @@ string csfPriorName, grayPriorName, whitePriorName;
       if(fsl_imageexists(grayPriorName))
 	read_volume(pGM, grayPriorName);
       else
-        {  
+        {
 	  cerr<< "prior image " << grayPriorName << " is not found! priors are not used!\n";
 	  bapused = 0;
         }
@@ -207,7 +207,7 @@ string csfPriorName, grayPriorName, whitePriorName;
       if(fsl_imageexists(whitePriorName))
 	read_volume(pWM, whitePriorName);
       else
-        {  
+        {
 	  cerr<< "prior image " << whitePriorName << " is not found! priors are not used!\n";
 	  bapused = 0;
         }
@@ -231,17 +231,17 @@ string csfPriorName, grayPriorName, whitePriorName;
       if(bapused>0)
       {
 	if(fsl_imageexists((main_prior_vol+"_csf_stdspace")))
-	  read_volume(pCSF, (main_prior_vol+"_csf_stdspace"));	    
+	  read_volume(pCSF, (main_prior_vol+"_csf_stdspace"));
 	else
-        {  
+        {
           cerr << "csf prior image not transformed correctly! priors are not used!\n";
           bapused = 0;
           return -1;
 	}
 	if(fsl_imageexists(main_prior_vol+"_gm_stdspace"))
-	  read_volume(pGM, main_prior_vol+"_gm_stdspace");	    
+	  read_volume(pGM, main_prior_vol+"_gm_stdspace");
 	else
-	{  
+	{
 	  cerr << "grey matter prior image not transformed correctly! priors are not used!\n";
 	  bapused = 0;
 	  return -1;
@@ -249,7 +249,7 @@ string csfPriorName, grayPriorName, whitePriorName;
 	if(fsl_imageexists(main_prior_vol+"_wm_stdspace"))
 	  read_volume(pWM, main_prior_vol+"_wm_stdspace");
 	else
-	{  
+	{
 	  cerr << "white matter prior image not transformed correctly! priors are not used!\n";
 	  bapused = 0;
 	  return -1;
@@ -270,16 +270,16 @@ string csfPriorName, grayPriorName, whitePriorName;
 
 //Single channel main call
 
-int segmentSingleChannel(int argc, char* argv[]) 
-{ 
+int segmentSingleChannel(int argc, char* argv[])
+{
   volume<float> inputImage,pCSF, pGM, pWM;
 
-  if (verbose.value()) cout << "Starting Single Image Segmentation" << endl; 
+  if (verbose.value()) cout << "Starting Single Image Segmentation" << endl;
 
   string inputName(argv[argc-1]);
-  if (outname.unset()) 
+  if (outname.unset())
     outname.set_value(inputName);
-  
+
   string tempName=outname.value();
   make_basename(tempName);
   outname.set_value(tempName);
@@ -296,8 +296,8 @@ int segmentSingleChannel(int argc, char* argv[])
     else inputImage.threshold(0,inputImage.max(),inclusive);
   }
 
-  if(verbose.value()) 
-  { 
+  if(verbose.value())
+  {
     switch(typeofimage.value())
     {
       default:
@@ -335,25 +335,25 @@ int segmentSingleChannel(int argc, char* argv[])
       for(int z=0;z<inputImage.zsize();z++)
 	for(int y=0;y<inputImage.ysize();y++)
 	  for(int x=0;x<inputImage.xsize();x++)
-	    ind_segments.value(x, y, z) = (ind_segments.value(x, y, z)==i);	 
-       save_volume(ind_segments,outname.value()+"_seg_"+num2str(i-1)); 
+	    ind_segments.value(x, y, z) = (ind_segments.value(x, y, z)==i);
+       save_volume(ind_segments,outname.value()+"_seg_"+num2str(i-1));
     }
   }
-  
+
   if(outputProbabilities.value())
   {
     copybasicproperties(mri.m_Segment,mri.members);
     for(int i=1; i<=nclass.value(); i++)
-      save_volume(mri.members[i-1],outname.value()+"_prob_"+num2str(i-1)); 
+      save_volume(mri.members[i-1],outname.value()+"_prob_"+num2str(i-1));
   }
-    
-  
+
+
   if(pve.value())
   {
     for(int i=1; i<=nclass.value(); i++)
-      save_volume(mri.m_pve[i],outname.value()+"_pve_"+num2str(i-1)); 	
+      save_volume(mri.m_pve[i],outname.value()+"_pve_"+num2str(i-1));
     save_volume(mri.m_pveSegment,outname.value()+"_pveseg");
-    save_volume(mri.hardPV, outname.value()+"_mixeltype");	  
+    save_volume(mri.hardPV, outname.value()+"_mixeltype");
   }
 
   if(outputCorrected.value())
@@ -379,12 +379,12 @@ int segmentSingleChannel(int argc, char* argv[])
 
 //Multi channel main call
 
-int segmentMultiChannel(int argc, char* argv[]) 
-{ 
+int segmentMultiChannel(int argc, char* argv[])
+{
   volume<float> pCSF, pGM, pWM;
   string inputName;
 
-  if (verbose.value()) cout << "Starting Multi Image Segmentation" << endl; 
+  if (verbose.value()) cout << "Starting Multi Image Segmentation" << endl;
 
   if(nchannel.value()>=2)
   {
@@ -394,9 +394,9 @@ int segmentMultiChannel(int argc, char* argv[])
       {
 	if (c==0) {
 	  inputName=string(argv[argc-c-1]);
-	  if (outname.unset()) 
+	  if (outname.unset())
 	    outname.set_value(inputName);
-	    
+
 	  string tempName=outname.value();
 	  make_basename(tempName);
 	  outname.set_value(tempName);
@@ -420,7 +420,7 @@ int segmentMultiChannel(int argc, char* argv[])
 
       ZMRIMULTISegmentation mri;
       mri.TanakaCreate(images, nclass.value(), false, nbiter.value(), nblowpass.value(), fbeta.value(), bapused, pve.value(), nchannel.value(),!removeBias.value(),initfixity.value(), verbose.value(), pve.value(), inititer.value(),fpveMRFmixeltype.value(), Hyp.value(),manualsegmentation.value(),typeofimage.value());
-      if (mri.TanakaMain(pCSF, pGM, pWM)) return -1; 
+      if (mri.TanakaMain(pCSF, pGM, pWM)) return -1;
       save_volume(mri.m_Segment, outname.value()+"_seg");
 
       if(segments.value())
@@ -433,8 +433,8 @@ int segmentMultiChannel(int argc, char* argv[])
 	    for(int y=0;y<images[0].ysize();y++)
 	      for(int x=0;x<images[0].xsize();x++)
 		ind_segments.value(x, y, z) = (ind_segments.value(x, y, z)==i);
-		  
-	  save_volume(ind_segments,outname.value()+"_seg_"+num2str(i-1)); 
+
+	  save_volume(ind_segments,outname.value()+"_seg_"+num2str(i-1));
 	}
       }
 
@@ -442,14 +442,14 @@ int segmentMultiChannel(int argc, char* argv[])
       {
 	copybasicproperties(mri.m_Segment,mri.members);
 	for(int i=1; i<=nclass.value(); i++)
-	  save_volume(mri.members[i-1],outname.value()+"_prob_"+num2str(i-1)); 
-      }	
-    
+	  save_volume(mri.members[i-1],outname.value()+"_prob_"+num2str(i-1));
+      }
+
       if(pve.value())
       {
 	  volume<float> ind_pve;
 	  for(int i=1; i<=nclass.value(); i++)
-	    save_volume(mri.m_pve[i],outname.value()+"_pve_"+num2str(i-1)); 	    
+	    save_volume(mri.m_pve[i],outname.value()+"_pve_"+num2str(i-1));
 	  save_volume(mri.m_pveSegment,outname.value()+"_pveseg");
 	  save_volume(mri.hardPV, outname.value()+"_mixeltype");
       }
@@ -470,9 +470,9 @@ int segmentMultiChannel(int argc, char* argv[])
 	  estimatedField/=mri.m_Finalbias[i];
 	  save_volume(estimatedField,outname.value()+"_bias_"+num2str(i));
 	}
-	   
+
       delete[] images;
-      return 0;   
+      return 0;
     }
   else cerr<<"At least 2 channels required for Multi Channel Segmentation";
   return 1;
@@ -486,7 +486,7 @@ int main(int argc,char *argv[])
 {
   Tracer tr("main");
   OptionParser options(title, examples);
-  try 
+  try
     {
       // must include all wanted options here (the order determines how
       // the help message is printed)
@@ -513,7 +513,7 @@ int main(int argc,char *argv[])
       options.add(help);
       options.add(manualsegmentation);
       options.add(outputProbabilities);
-      // line below stops the program if the help was requested or 
+      // line below stops the program if the help was requested or
       // a compulsory option was not set
       options.parse_command_line(argc, argv);
       if ( argc<2 || (help.value()) || (!options.check_compulsory_arguments(true)) )
@@ -528,12 +528,12 @@ int main(int argc,char *argv[])
       options.usage();
       cerr << endl << e.what() << endl;
       exit(EXIT_FAILURE);
-    } 
+    }
   catch(std::exception &e)
     {
       cerr << e.what() << endl;
-    } 
-  if (Hyp.value()<0) 
+    }
+  if (Hyp.value()<0)
   {
     cerr << "ERROR: Segmentation smoothness must be positive. Exiting" << endl;;
     return(1);

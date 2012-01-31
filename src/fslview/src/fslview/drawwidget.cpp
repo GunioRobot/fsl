@@ -41,11 +41,11 @@ DrawWidget::DrawWidget(QWidget* w, OverlayList::Handle ol, DrawSettings::Handle 
 {
   connect(m_valBox,      SIGNAL(valueChanged(int)), SLOT(valBoxChanged(int)));
   connect(m_sizeBox,     SIGNAL(valueChanged(int)), SLOT(sizeBoxChanged(int)));
- 
-  connect(m_linkCursorButton,   
+
+  connect(m_linkCursorButton,
                          SIGNAL(toggled(bool)),     SLOT(linkButtonToggled(bool)));
   connect(m_penButton,   SIGNAL(toggled(bool)),     SLOT(penButtonToggled(bool)));
-  connect(m_eraseButton, SIGNAL(toggled(bool)),     SLOT(eraseButtonToggled(bool))); 
+  connect(m_eraseButton, SIGNAL(toggled(bool)),     SLOT(eraseButtonToggled(bool)));
   connect(m_fillButton,  SIGNAL(toggled(bool)),     SLOT(fillButtonToggled(bool)));
 
   connect(m_undoButton,  SIGNAL(clicked()),         SIGNAL(undoButtonClicked()));
@@ -61,7 +61,7 @@ DrawWidget::DrawWidget(QWidget* w, OverlayList::Handle ol, DrawSettings::Handle 
   m_bricon->attach(this);
   m_drawSettings->attach(this);
 
-  updateControls();  
+  updateControls();
 }
 
 DrawWidget::~DrawWidget()
@@ -115,7 +115,7 @@ void DrawWidget::eraseButtonToggled(bool state)
 }
 
 void DrawWidget::updateControls()
-{  
+{
   TRACKER("DrawWidget::updateControls");
 
   blockControlSignals(true);
@@ -125,7 +125,7 @@ void DrawWidget::updateControls()
   m_fillButton->setOn(m_drawSettings->inqMode() == DrawSettings::Fill);
   m_linkCursorButton->setOn(m_drawSettings->linkCursorOn());
   m_valBox->setValue(m_drawSettings->inqPenValue());
-  m_sizeBox->setValue(m_drawSettings->inqPenSize()); 
+  m_sizeBox->setValue(m_drawSettings->inqPenSize());
   LookUpTable::Handle lut = m_overlayList->getActiveMetaImage()->getDs()->inqLookUpTable();
   if(lut) {
     MESSAGE(QString("setting color %1").arg(m_drawSettings->inqPenValue()));
@@ -148,7 +148,7 @@ void DrawWidget::updateControls()
 
 void DrawWidget::blockControlSignals(bool state)
 {
-  m_valBox->blockSignals(state); 
+  m_valBox->blockSignals(state);
   m_sizeBox->blockSignals(state);
   m_undoButton->blockSignals(state);
   m_penButton->blockSignals(state);
@@ -159,14 +159,14 @@ void DrawWidget::blockControlSignals(bool state)
 void DrawWidget::update(const BriCon* b)
 {
   if(b->inqMin()  < b->inqMax())
-  {  
+  {
     if(m_valBox->value() < b->inqMin()
     || m_valBox->value() > b->inqMax())
       {
 	m_valBox->setValue(int(b->inqMin()));
       }
   }
-  else return; 
-  
+  else return;
+
   updateControls();
 }

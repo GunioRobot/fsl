@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 //
 // Usage:
-//      
+//
 // typedef typename select<
 //                      case1,  type1,
 //                      case2,  type2,
@@ -22,19 +22,19 @@
 // bool, and n <= 10.
 
 #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
-#define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED   
+#define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                  
- 
+#endif
+
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/void.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
 typedef mpl::true_ else_;
 

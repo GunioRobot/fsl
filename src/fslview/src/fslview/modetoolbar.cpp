@@ -12,7 +12,7 @@
 
 using namespace std;
 
-ModeToolBarWidget::ModeToolBarWidget(QWidget *parent): 
+ModeToolBarWidget::ModeToolBarWidget(QWidget *parent):
   ModeToolbarBase(parent)
 {
   connect(m_movieModeButton,   SIGNAL(stateChanged(int)), SIGNAL(movieStateChanged(int)));

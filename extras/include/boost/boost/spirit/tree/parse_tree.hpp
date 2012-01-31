@@ -171,7 +171,7 @@ const gen_pt_node_parser_gen gen_pt_node_d = gen_pt_node_parser_gen();
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <
-    typename NodeFactoryT, typename IteratorT, typename ParserT, 
+    typename NodeFactoryT, typename IteratorT, typename ParserT,
     typename SkipT
 >
 inline tree_parse_info<IteratorT, NodeFactoryT>

@@ -13,7 +13,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // collections_load_imp.hpp: serialization for loading stl collections
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -64,7 +64,7 @@ struct archive_input_map
         detail::stack_construct<Archive, BOOST_DEDUCED_TYPENAME Container::value_type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
+        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result =
             s.insert(t.reference());
         assert(result.second); // make sure we inserted a new element
         ar.reset_object_address(& (* result.first), & t.reference());
@@ -76,12 +76,12 @@ template<class Archive, class Container>
 struct archive_input_set
 {
     inline void operator()(Archive &ar, Container &s)
-    {   
+    {
         typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
         detail::stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
+        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result =
             s.insert(t.reference());
         assert(result.second); // make sure we inserted a new element
         ar.reset_object_address(& (* result.first), & t.reference());
@@ -97,7 +97,7 @@ struct archive_input_multimap
         detail::stack_construct<Archive, BOOST_DEDUCED_TYPENAME Container::value_type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        BOOST_DEDUCED_TYPENAME Container::const_iterator result 
+        BOOST_DEDUCED_TYPENAME Container::const_iterator result
             = s.insert(t.reference());
         ar.reset_object_address(& (* result), & t.reference());
     }
@@ -108,12 +108,12 @@ template<class Archive, class Container>
 struct archive_input_multiset
 {
     inline void operator()(Archive &ar, Container &s)
-    {   
+    {
         typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
         detail::stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        BOOST_DEDUCED_TYPENAME Container::const_iterator result 
+        BOOST_DEDUCED_TYPENAME Container::const_iterator result
             = s.insert(t.reference());
         ar.reset_object_address(& (* result), & t.reference());
     }
@@ -172,7 +172,7 @@ inline void load_collection(Archive & ar, Container &s){
 }
 
 
-} // namespace stl 
+} // namespace stl
 } // namespace serialization
 } // namespace boost
 

@@ -65,7 +65,7 @@
         };
         // don't track shared pointers
         template<class T>
-        struct tracking_level< ::boost::shared_ptr<T> > { 
+        struct tracking_level< ::boost::shared_ptr<T> > {
             typedef mpl::integral_c_tag tag;
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
             typedef BOOST_DEDUCED_TYPENAME mpl::int_< ::boost::serialization::track_never> type;
@@ -118,7 +118,7 @@ class shared_ptr_helper {
     // return a void pointer to the most derived type
     template<class T>
     void * object_identifier(T * t) const {
-        const extended_type_info * true_type 
+        const extended_type_info * true_type
             = type_info_implementation<T>::type::get_derived_extended_type_info(*t);
         // note:if this exception is thrown, be sure that derived pointer
         // is either regsitered or exported.
@@ -216,7 +216,7 @@ inline void load(
         get_helper<Archive, boost_132::serialization::detail::shared_ptr_helper>(ar).append(sp);
         r = sp.get();
     }
-    else    
+    else
     #endif
     {
         ar >> boost::serialization::make_nvp("px", r);

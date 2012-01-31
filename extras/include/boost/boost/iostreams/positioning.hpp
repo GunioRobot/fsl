@@ -20,7 +20,7 @@
 #include <boost/iostreams/detail/ios.hpp> // streamoff, streampos.
 
 // Must come last.
-#include <boost/iostreams/detail/config/disable_warnings.hpp> 
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -92,6 +92,6 @@ inline stream_offset position_to_offset(std::streampos pos) { return pos; }
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/config/enable_warnings.hpp> 
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_POSITIONING_HPP_INCLUDED

@@ -4,7 +4,7 @@
 //
 // Jesper Andersson, FMRIB Image Analysis Group
 //
-// Copyright (C) 2007 University of Oxford 
+// Copyright (C) 2007 University of Oxford
 //
 
 
@@ -44,17 +44,17 @@ public:
 //
 // 1. _sfac.size() == 1 && _sfld.size() == 0 :
 // In this case there is no intensity scaling and it is assumed that
-// obj(x,y,z) = ref(x,y,z) + err 
+// obj(x,y,z) = ref(x,y,z) + err
 // Probably never useful.
 //
 // 2. _sfac.size() == 1 && _sfld.size() == 0 :
 // This is the "normal" case where we have a single scale-factor between the ref and
-// obj images such that 
+// obj images such that
 // obj(x,y,z) = _sfac[0] * ref(x,y,z) + err
 //
 // 3. _sfac.size() > 1 && _sfld.size() == 0 :
 // This is used to accomplish a "global" non-linear mapping between the intensities
-// in the ref and obj such that 
+// in the ref and obj such that
 // obj(x,y,z) = _sfac[0] + _sfac[1]*ref(x,y,z) + _sfac[2]*ref(x,y,z).^2 + ... + err
 // This gives a "correlation-ratio like" cost-function
 //
@@ -86,7 +86,7 @@ public:
   // Constructor for global linear mapping
   IntensityMapper(double sfac) : _sfac(1,sfac), _presc(1,1.0), _sfld(), _lambda(0.0), _mt(GLOBAL_LINEAR), _fixed(false) {}
 
-  // Constructor for global non-linear mapping  
+  // Constructor for global non-linear mapping
   IntensityMapper(const std::vector<double>&  sfac) : _sfac(sfac), _presc(_sfac.size(),1.0), _sfld(), _lambda(0.0), _mt((_sfac.size() > 1) ? GLOBAL_NON_LINEAR : GLOBAL_LINEAR), _fixed(false)
   {
     if (!_sfac.size()) throw IntensityMapperException("IntensityMapper::IntensityMapper: Cannot pass zero length vector");
@@ -112,7 +112,7 @@ public:
 
   // General utility functions
 
-  // Number of "components" the the mapping consists of 
+  // Number of "components" the the mapping consists of
   unsigned int NComp() const {return(_sfac.size() + _sfld.size());}
 
   // Number of parameters needed to completely determine the mapping
@@ -164,13 +164,13 @@ public:
                       const std::vector<unsigned int>&    new_ss,   // New level of sub-sampling
                       const std::vector<unsigned int>&    old_ss);  // Old level of sub-sampling
 
-  // Calculates the gradient of the cost-function with 
+  // Calculates the gradient of the cost-function with
   // respect to the parameters determining the scaling.
   virtual NEWMAT::ReturnMatrix Gradient(const NEWIMAGE::volume<float>&   ref,
                                         const NEWIMAGE::volume<float>&   diff,
                                         const NEWIMAGE::volume<char>     *mask);
 
-  // Calculates the Hessian of the cost-function with 
+  // Calculates the Hessian of the cost-function with
   // respect to the parameters determining the scaling.
   virtual boost::shared_ptr<MISCMATHS::BFMatrix> Hessian(const NEWIMAGE::volume<float>&    ref,
                                                          const NEWIMAGE::volume<char>      *mask,
@@ -185,7 +185,7 @@ public:
                                                               const NEWIMAGE::volume<float>&       ref,
                                                               const NEWIMAGE::volume<char>         *mask,
                                                               MISCMATHS::BFMatrixPrecisionType     prec) const;
-  
+
 protected:
   enum MappingType {NO_SCALING, GLOBAL_LINEAR, GLOBAL_NON_LINEAR,
                     LOCAL_LINEAR, LOCAL_BIAS_WITH_GLOBAL_NON_LINEAR,
@@ -203,7 +203,7 @@ protected:
 //
 // The SSDIntensityMapper is a sub-class of IntensityMapper. It provides instances of the
 // gradient and hessian methods that are relevent/suitable for sum-of-squared differences
-// type cost-functions. 
+// type cost-functions.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,10 +216,10 @@ public:
   SSDIntensityMapper() : IntensityMapper() {}
   // Constructor for global linear mapping
   SSDIntensityMapper(double sfac) : IntensityMapper(sfac) {}
-  // Constructor for global non-linear mapping  
-  SSDIntensityMapper(const std::vector<double>&  sfac) : IntensityMapper(sfac) {} 
+  // Constructor for global non-linear mapping
+  SSDIntensityMapper(const std::vector<double>&  sfac) : IntensityMapper(sfac) {}
   // Constructor for local linear mapping
-  SSDIntensityMapper(boost::shared_ptr<BASISFIELD::basisfield>&  sfld, 
+  SSDIntensityMapper(boost::shared_ptr<BASISFIELD::basisfield>&  sfld,
                      double                                      lambda=1000.0) : IntensityMapper(sfld,lambda) {}
   // Constructor for global non-linear mapping with local bias-field
   SSDIntensityMapper(const std::vector<double>&                        sfac,
@@ -230,13 +230,13 @@ public:
 
   ~SSDIntensityMapper() {} // Thanks to boost
 
-  // Calculates the gradient of the cost-function with 
+  // Calculates the gradient of the cost-function with
   // respect to the parameters determining the scaling.
   virtual NEWMAT::ReturnMatrix Gradient(const NEWIMAGE::volume<float>&   ref,
                                         const NEWIMAGE::volume<float>&   diff,
                                         const NEWIMAGE::volume<char>     *mask);
 
-  // Calculates the Hessian of the cost-function with 
+  // Calculates the Hessian of the cost-function with
   // respect to the parameters determining the scaling.
   virtual boost::shared_ptr<MISCMATHS::BFMatrix> Hessian(const NEWIMAGE::volume<float>&    ref,
                                                          const NEWIMAGE::volume<char>      *mask,
@@ -312,7 +312,7 @@ public:
   std::vector<double> GetGlobal() const {return(_global);}
   std::vector<boost::shared_ptr<BASISFIELD::basisfield> > GetLocalAsSplinefieldVector(const std::vector<unsigned int>&  ksp) const;
   BASISFIELD::splinefield GetLocalAsSingleSplinefield(const std::vector<unsigned int>&  ksp,
-                                                      unsigned int                      indx=0) const;  
+                                                      unsigned int                      indx=0) const;
 protected:
   void common_read(const std::string& fname);
 private:

@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2002-2005.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -131,7 +131,7 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
     }
 
     std::cout << "\n**** no errors detected\n";
-    
+
     return boost::exit_success;
 }
 
@@ -141,7 +141,7 @@ int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
 
 // ***************************************************************************
 //  Revision History :
-//  
+//
 //  $Log: minimal.hpp,v $
 //  Revision 1.1.1.1  2007/06/12 15:03:25  duncan
 //  Import of Boost 1.33.1

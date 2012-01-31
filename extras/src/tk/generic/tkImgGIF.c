@@ -113,7 +113,7 @@ static int	StringReadGIF _ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *dataObj,
 		    Tcl_Obj *format, Tk_PhotoHandle imageHandle,
 		    int destX, int destY, int width, int height,
 		    int srcX, int srcY));
-static int 	FileWriteGIF _ANSI_ARGS_((Tcl_Interp *interp,  
+static int 	FileWriteGIF _ANSI_ARGS_((Tcl_Interp *interp,
 		    CONST char *filename, Tcl_Obj *format,
 		    Tk_PhotoImageBlock *blockPtr));
 static int	CommonWriteGIF _ANSI_ARGS_((Tcl_Interp *interp,
@@ -428,7 +428,7 @@ FileReadGIF(interp, chan, fileName, format, imageHandle, destX, destY,
 
 	if (BitSet(buf[8], LOCALCOLORMAP)) {
 	    if (!ReadColorMap(chan, bitPixel, colorMap)) {
-		    Tcl_AppendResult(interp, "error reading color map", 
+		    Tcl_AppendResult(interp, "error reading color map",
 			    (char *) NULL);
 		    goto error;
 	    }
@@ -548,7 +548,7 @@ StringMatchGIF(dataObj, format, widthPtr, heightPtr, interp)
      * Check whether the data is Base64 encoded.
      */
 
-    if ((strncmp(GIF87a, (char *) data, 6) != 0) && 
+    if ((strncmp(GIF87a, (char *) data, 6) != 0) &&
 	    (strncmp(GIF89a, (char *) data, 6) != 0)) {
 	/*
 	 * Try interpreting the data as Base64 encoded
@@ -574,7 +574,7 @@ StringMatchGIF(dataObj, format, widthPtr, heightPtr, interp)
  * StringReadGif -- --
  *
  *	This procedure is called by the photo image type to read
- *	GIF format data from an object, optionally base64 encoded, 
+ *	GIF format data from an object, optionally base64 encoded,
  *	and give it to the photo image.
  *
  * Results:
@@ -602,7 +602,7 @@ StringReadGIF(interp, dataObj, format, imageHandle,
 {
     int result, length;
     MFile handle;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	    Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     Tcl_Channel dataSrc;
     char *data;
@@ -856,7 +856,7 @@ ReadImage(interp, imagePtr, chan, len, rows, cmap,
     maxCode = clearCode + 2;
     oldCode = -1;
     firstCode = -1;
-    
+
     memset((void *)prefix, 0, (1 << MAX_LWZ_BITS) * sizeof(short));
     memset((void *)append, 0, (1 << MAX_LWZ_BITS) * sizeof(char));
     for (i = 0; i < clearCode; i++) {
@@ -902,7 +902,7 @@ ReadImage(interp, imagePtr, chan, len, rows, cmap,
 		    oldCode = -1;
 		    continue;
 		}
-		
+
 		if (oldCode == -1) {
 		    /*
 		     * Last pass reset the decoder, so the first code we
@@ -917,7 +917,7 @@ ReadImage(interp, imagePtr, chan, len, rows, cmap,
 		    firstCode = code;
 		    continue;
 		}
-		
+
 		inCode = code;
 
 		if (code == maxCode) {
@@ -981,9 +981,9 @@ ReadImage(interp, imagePtr, chan, len, rows, cmap,
 		return TCL_OK;
 	    }
 
-	    /* 
+	    /*
 	     * If pixelPtr is null, we're skipping this image (presumably
-	     * there are more in the file and we will be called to read 
+	     * there are more in the file and we will be called to read
 	     * one of them later)
 	     */
 	    *pixelPtr++ = cmap[v][CM_RED];
@@ -1059,7 +1059,7 @@ GetCode(chan, code_size, flag)
     static unsigned int window;
     static int bitsInWindow = 0;
     int ret;
-    
+
     if (flag) {
 	/*
 	 * Initialize the decoder.
@@ -1104,7 +1104,7 @@ GetCode(chan, code_size, flag)
      * The next code will always be the last code_size bits of the window.
      */
     ret = window & ((1 << code_size) - 1);
-    
+
     /*
      * Shift data in the window to put the next code at the end.
      */
@@ -1146,7 +1146,7 @@ mInit(string, length, handle)
  *
  * Mread --
  *
- *	This procedure is invoked by the GIF file reader as a 
+ *	This procedure is invoked by the GIF file reader as a
  *	temporary replacement for "fread", to get GIF data out
  *	of a string (using Mgetc).
  *
@@ -1160,7 +1160,7 @@ mInit(string, length, handle)
  */
 
 static int
-Mread(dst, chunkSize, numChunks, handle)  
+Mread(dst, chunkSize, numChunks, handle)
     unsigned char *dst;	/* where to put the result */
     size_t chunkSize;	/* size of each transfer */
     size_t numChunks;	/* number of chunks */
@@ -1319,7 +1319,7 @@ Fread(dst, hunk, count, chan)
     size_t hunk,count;		/* how many */
     Tcl_Channel chan;
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
 	    Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     MFile *handle;
 
@@ -1345,8 +1345,8 @@ Fread(dst, hunk, count, chan)
  * ChanWriteGIF - writes a image in GIF format.
  *-------------------------------------------------------------------------
  * Author:			Lolo
- *				Engeneering Projects Area 
- *				Department of Mining 
+ *				Engeneering Projects Area
+ *				Department of Mining
  *				University of Oviedo
  * e-mail			zz11425958@zeus.etsimo.uniovi.es
  *				lolo@pcsig22.etsimo.uniovi.es
@@ -1359,7 +1359,7 @@ Fread(dst, hunk, count, chan)
  * FileWriteGIF-
  *
  *    This procedure is called by the photo image type to write
- *    GIF format data from a photo image into a given file 
+ *    GIF format data from a photo image into a given file
  *
  * Results:
  *	A standard TCL completion code.  If TCL_ERROR is returned
@@ -1372,7 +1372,7 @@ Fread(dst, hunk, count, chan)
   *  Types, defines and variables needed to write and compress a GIF.
   */
 
-typedef int (* ifunptr) _ANSI_ARGS_((void));	
+typedef int (* ifunptr) _ANSI_ARGS_((void));
 
 #define LSB(a)			((unsigned char) (((short)(a)) & 0x00FF))
 #define MSB(a)			((unsigned char) (((short)(a)) >> 8))
@@ -1564,12 +1564,12 @@ CommonWriteGIF(interp, handle, format, blockPtr)
     csize = blockPtr->height;
     compress(resolution+1, handle, ReadValue);
 
-    c = 0; 
+    c = 0;
     Mputc(c,handle);
     c = GIF_TERMINATOR;
     Mputc(c,handle);
 
-    return TCL_OK;	
+    return TCL_OK;
 }
 
 static int
@@ -1693,7 +1693,7 @@ ReadValue()
  * not limited to implied warranties of merchantability and fitness
  * for a particular purpose, with respect to this code and
  * accompanying documentation.
- * 
+ *
  * The miGIF compression routines do not, strictly speaking, generate
  * files conforming to the GIF spec, since the image data is not
  * LZW-compressed (this is the point: in order to avoid transgression

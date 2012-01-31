@@ -1,26 +1,26 @@
 /*  Diffusion model fitting
 
     Timothy Behrens, Saad Jbabdi  - FMRIB Image Analysis Group
- 
+
     Copyright (C) 2005 University of Oxford  */
 
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -143,13 +143,13 @@ ReturnMatrix DTI::calc_fa_grad(const ColumnVector& _intens)const{
   float b  = _l1*_l1+_l2*_l2+_l3*_l3;
 
   float _fa  = std::sqrt(3.0/2.0)*std::sqrt(t/b);
-  
+
 
   float dfadl1 = 3.0/4.0/_fa * ( 6.0/9.0*(2.0*_l1-_l2-_l3)/b - t/b/b*2.0*_l1 );
   float dfadl2 = 3.0/4.0/_fa * ( 6.0/9.0*(2.0*_l2-_l1-_l3)/b - t/b/b*2.0*_l2 );
   float dfadl3 = 3.0/4.0/_fa * ( 6.0/9.0*(2.0*_l3-_l1-_l2)/b - t/b/b*2.0*_l3 );
 
-  
+
 
   // determine dkdx
   ColumnVector dkdx(6);
@@ -185,7 +185,7 @@ float DTI::calc_fa_var()const{
   ColumnVector g(7);
   g.SubMatrix(1,6,1,1) = grd;
   g(7) = 0;
-  
+
   return((g.t()*m_covar*g).AsScalar());
 }
 
@@ -213,7 +213,7 @@ void DTI::angles2rot(const float& th1,const float& th2,const float& th3,Matrix& 
 }
 
 
-// nonlinear tensor fitting 
+// nonlinear tensor fitting
 void DTI::nonlinfit(){
   // initialise with linear fitting
   linfit();
@@ -242,7 +242,7 @@ void DTI::nonlinfit(){
 
 
   // do the fit
-  NonlinParam  lmpar(start.Nrows(),NL_LM); 
+  NonlinParam  lmpar(start.Nrows(),NL_LM);
   lmpar.SetGaussNewtonType(LM_L);
   lmpar.SetStartingEstimate(start);
 
@@ -283,7 +283,7 @@ void DTI::sort(){
   ls[2].first=m_l3;
   ls[2].second=2;
   vs[0]=m_v1;vs[1]=m_v2;vs[2]=m_v3;
-  
+
   std::sort(ls.begin(),ls.end());
 
   m_l1 = ls[2].first;
@@ -292,7 +292,7 @@ void DTI::sort(){
   m_v2 = vs[ ls[1].second ];
   m_l3 = ls[0].first;
   m_v3 = vs[ ls[0].second ];
-  
+
 }
 void DTI::calc_tensor_parameters(){
   Matrix Vd;
@@ -336,9 +336,9 @@ double DTI::cf(const NEWMAT::ColumnVector& p)const{
   }
   ////////////////////////////////////
   for(int i=1;i<=Y.Nrows();i++){
-    err = p(1)*anisoterm(i,ls,rot) - Y(i); 
-    cfv += err*err; 
-  }  
+    err = p(1)*anisoterm(i,ls,rot) - Y(i);
+    cfv += err*err;
+  }
   //OUT(cfv);
   //cout<<"--------"<<endl;
   return(cfv);
@@ -370,7 +370,7 @@ NEWMAT::ReturnMatrix DTI::grad(const NEWMAT::ColumnVector& p)const{
   float sig;
   for(int i=1;i<=Y.Nrows();i++){
     sig = p(1)*anisoterm(i,ls,rot);
-    
+
     J(i,1) = sig/p(1);
 
     x = rotproduct(bvecs.Column(i),rot);
@@ -390,7 +390,7 @@ NEWMAT::ReturnMatrix DTI::grad(const NEWMAT::ColumnVector& p)const{
 
   OUT(diff.t());
   OUT(J.t());
-  
+
   gradv = 2.0*J.t()*diff;
 
   OUT(gradv.t());
@@ -408,7 +408,7 @@ boost::shared_ptr<BFMatrix> DTI::hess(const NEWMAT::ColumnVector& p,boost::share
 
   cout<<"hess"<<endl;
   OUT(p.t());
-  
+
   ////////////////////////////////////
   ColumnVector ls(3);
   Matrix rot(3,3);
@@ -427,7 +427,7 @@ boost::shared_ptr<BFMatrix> DTI::hess(const NEWMAT::ColumnVector& p,boost::share
   float sig;
   for(int i=1;i<=Y.Nrows();i++){
     sig = p(1)*anisoterm(i,ls,rot);
-    
+
     J(i,1) = sig/p(1);
 
     x = rotproduct(bvecs.Column(i),rot);
@@ -442,7 +442,7 @@ boost::shared_ptr<BFMatrix> DTI::hess(const NEWMAT::ColumnVector& p,boost::share
     x = rotproduct(bvecs.Column(i),rot3,rot);
     J(i,7) = -2.0*bvals(1,i)*(ls(1)*x(1)+ls(2)*x(2)+ls(3)*x(3))*sig;
   }
-  
+
 
   for (int i=1; i<=p.Nrows(); i++){
     for (int j=i; j<=p.Nrows(); j++){
@@ -466,21 +466,21 @@ boost::shared_ptr<BFMatrix> DTI::hess(const NEWMAT::ColumnVector& p,boost::share
 
 ColumnVector DTI::rotproduct(const ColumnVector& x,const Matrix& R)const{
   ColumnVector ret(3);
-  
+
   for(int i=1;i<=3;i++)
     ret(i) = x(1)*x(1)*R(1,i)*R(1,i)+x(2)*x(2)*R(2,i)*R(2,i)+x(3)*x(3)*R(3,i)*R(3,i)
-      +2.0*( x(1)*R(1,i)*(x(2)*R(2,i)+x(3)*R(3,i)) +x(2)*x(3)*R(2,i)*R(3,i) );   
-  
+      +2.0*( x(1)*R(1,i)*(x(2)*R(2,i)+x(3)*R(3,i)) +x(2)*x(3)*R(2,i)*R(3,i) );
+
   return ret;
 }
 ColumnVector DTI::rotproduct(const ColumnVector& x,const Matrix& R1,const Matrix& R2)const{
   ColumnVector ret(3);
-  
+
   for(int i=1;i<=3;i++)
     ret(i) = x(1)*x(1)*R1(1,i)*R2(1,i)+x(2)*x(2)*R1(2,i)*R2(2,i)+x(3)*x(3)*R1(3,i)*R2(3,i)
       +( x(1)*R1(1,i)*(x(2)*R2(2,i)+x(3)*R2(3,i)) +x(2)*x(3)*R1(2,i)*R2(3,i) )
-      +( x(1)*R2(1,i)*(x(2)*R1(2,i)+x(3)*R1(3,i)) +x(2)*x(3)*R2(2,i)*R1(3,i) );   
-  
+      +( x(1)*R2(1,i)*(x(2)*R1(2,i)+x(3)*R1(3,i)) +x(2)*x(3)*R2(2,i)*R1(3,i) );
+
   return ret;
 }
 
@@ -509,7 +509,7 @@ void PVM_single::fit(){
   ColumnVector start(nparams);
   start(1) = dti.get_s0();
   start(2) = dti.get_md()>0?dti.get_md()*2:0.001; // empirically found that d~2*MD
-  start(3) = dti.get_fa()<1?f2x(dti.get_fa()):f2x(0.95); // first pvf = FA 
+  start(3) = dti.get_fa()<1?f2x(dti.get_fa()):f2x(0.95); // first pvf = FA
   start(4) = _th;
   start(5) = _ph;
   float sumf=x2f(start(2));
@@ -529,7 +529,7 @@ void PVM_single::fit(){
 
 
   // do the fit
-  NonlinParam  lmpar(start.Nrows(),NL_LM); 
+  NonlinParam  lmpar(start.Nrows(),NL_LM);
   lmpar.SetGaussNewtonType(LM_L);
   lmpar.SetStartingEstimate(start);
 
@@ -613,8 +613,8 @@ NEWMAT::ReturnMatrix PVM_single::forwardModel(const NEWMAT::ColumnVector& p)cons
     for(int k=1;k<=nfib;k++){
       val += fs(k)*anisoterm(i,_d,x.Row(k).t());
     }
-    pred(i) = p(1)*((1-sumf)*isoterm(i,_d)+val); 
-  }  
+    pred(i) = p(1)*((1-sumf)*isoterm(i,_d)+val);
+  }
   pred.Release();
   //cout<<"----"<<endl;
   return pred;
@@ -643,9 +643,9 @@ double PVM_single::cf(const NEWMAT::ColumnVector& p)const{
     for(int k=1;k<=nfib;k++){
       err += fs(k)*anisoterm(i,_d,x.Row(k).t());
     }
-    err = (p(1)*((1-sumf)*isoterm(i,_d)+err) - Y(i)); 
-    cfv += err*err; 
-  }  
+    err = (p(1)*((1-sumf)*isoterm(i,_d)+err) - Y(i));
+    cfv += err*err;
+  }
   //OUT(cfv);
   //cout<<"----"<<endl;
   return(cfv);
@@ -696,7 +696,7 @@ NEWMAT::ReturnMatrix PVM_single::grad(const NEWMAT::ColumnVector& p)const{
     J(i,1) = sig/p(1);
     J(i,2) += (p(2)>0?1.0:-1.0)*p(1)*(1-sumf)*isoterm_d(i,_d);
   }
-  
+
   gradv = 2*J.t()*diff;
   //OUT(gradv.t());
   //cout<<"----"<<endl;
@@ -750,9 +750,9 @@ boost::shared_ptr<BFMatrix> PVM_single::hess(const NEWMAT::ColumnVector& p,boost
     // other stuff for derivatives
     J(i,1) = sig/p(1);
     J(i,2) += (p(2)>0?1.0:-1.0)*p(1)*(1-sumf)*isoterm_d(i,_d);
-    
+
   }
-  
+
 
   for (int i=1; i<=p.Nrows(); i++){
     for (int j=i; j<=p.Nrows(); j++){
@@ -798,9 +798,9 @@ void PVM_multi::fit(){
     start(ii+1) = pvm1.get_th(i);
     start(ii+2) = pvm1.get_ph(i);
   }
-  
+
   // do the fit
-  NonlinParam  lmpar(start.Nrows(),NL_LM); 
+  NonlinParam  lmpar(start.Nrows(),NL_LM);
   lmpar.SetGaussNewtonType(LM_L);
   lmpar.SetStartingEstimate(start);
 
@@ -884,8 +884,8 @@ NEWMAT::ReturnMatrix PVM_multi::forwardModel(const NEWMAT::ColumnVector& p)const
     for(int k=1;k<=nfib;k++){
       val += fs(k)*anisoterm(i,_a,_b,x.Row(k).t());
     }
-    pred(i) = p(1)*((1-sumf)*isoterm(i,_a,_b)+val); 
-  }  
+    pred(i) = p(1)*((1-sumf)*isoterm(i,_a,_b)+val);
+  }
   pred.Release();
   return pred;
 }
@@ -914,9 +914,9 @@ double PVM_multi::cf(const NEWMAT::ColumnVector& p)const{
     for(int k=1;k<=nfib;k++){
       err += fs(k)*anisoterm(i,_a,_b,x.Row(k).t());
     }
-    err = (std::abs(p(1))*((1-sumf)*isoterm(i,_a,_b)+err) - Y(i)); 
-    cfv += err*err; 
-  }  
+    err = (std::abs(p(1))*((1-sumf)*isoterm(i,_a,_b)+err) - Y(i));
+    cfv += err*err;
+  }
   //OUT(cfv);
   //cout<<"----"<<endl;
   return(cfv);
@@ -971,7 +971,7 @@ NEWMAT::ReturnMatrix PVM_multi::grad(const NEWMAT::ColumnVector& p)const{
     J(i,2) += (p(2)>0?1.0:-1.0)*std::abs(p(1))*(1-sumf)*isoterm_a(i,_a,_b);
     J(i,3) += (p(3)>0?1.0:-1.0)*std::abs(p(1))*(1-sumf)*isoterm_b(i,_a,_b);
   }
-  
+
   gradv = 2*J.t()*diff;
   //OUT(gradv.t());
   //cout<<"----"<<endl;
@@ -1035,7 +1035,7 @@ boost::shared_ptr<BFMatrix> PVM_multi::hess(const NEWMAT::ColumnVector& p,boost:
     J(i,3) += (p(3)>0?1.0:-1.0)*std::abs(p(1))*(1-sumf)*isoterm_b(i,_a,_b);
 
   }
-  
+
 
   for (int i=1; i<=p.Nrows(); i++){
     for (int j=i; j<=p.Nrows(); j++){

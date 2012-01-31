@@ -1,4 +1,4 @@
-/* 
+/*
  * tkGet.c --
  *
  *	This file contains a number of "Tk_GetXXX" procedures, which
@@ -20,9 +20,9 @@
 #include "tkPort.h"
 
 /*
- * One of these structures is created per thread to store 
- * thread-specific data.  In this case, it is used to house the 
- * Tk_Uid structs used by each thread.  The "dataKey" below is 
+ * One of these structures is created per thread to store
+ * thread-specific data.  In this case, it is used to house the
+ * Tk_Uid structs used by each thread.  The "dataKey" below is
  * used to locate the ThreadSpecificData for the current thread.
  */
 
@@ -68,7 +68,7 @@ static CONST char *justifyStrings[] = {
 int
 Tk_GetAnchorFromObj(interp, objPtr, anchorPtr)
     Tcl_Interp *interp;		/* Used for error reporting. */
-    Tcl_Obj *objPtr;		/* The object we are trying to get the 
+    Tcl_Obj *objPtr;		/* The object we are trying to get the
 				 * value from. */
     Tk_Anchor *anchorPtr;	/* Where to place the Tk_Anchor that
 				 * corresponds to the string value of
@@ -76,7 +76,7 @@ Tk_GetAnchorFromObj(interp, objPtr, anchorPtr)
 {
     int index, code;
 
-    code = Tcl_GetIndexFromObj(interp, objPtr, anchorStrings, "anchor", 0, 
+    code = Tcl_GetIndexFromObj(interp, objPtr, anchorStrings, "anchor", 0,
 	    &index);
     if (code == TCL_OK) {
 	*anchorPtr = (Tk_Anchor) index;
@@ -385,7 +385,7 @@ Tk_NameOfCapStyle(cap)
 int
 Tk_GetJustifyFromObj(interp, objPtr, justifyPtr)
     Tcl_Interp *interp;		/* Used for error reporting. */
-    Tcl_Obj *objPtr;		/* The object we are trying to get the 
+    Tcl_Obj *objPtr;		/* The object we are trying to get the
 				 * value from. */
     Tk_Justify *justifyPtr;	/* Where to place the Tk_Justify that
 				 * corresponds to the string value of
@@ -503,7 +503,7 @@ static void
 FreeUidThreadExitProc(clientData)
     ClientData clientData;		/* Not used. */
 {
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     Tcl_DeleteHashTable(&tsdPtr->uidTable);
     tsdPtr->initialized = 0;
@@ -537,7 +537,7 @@ Tk_GetUid(string)
     CONST char *string;		/* String to convert. */
 {
     int dummy;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
     Tcl_HashTable *tablePtr = &tsdPtr->uidTable;
 

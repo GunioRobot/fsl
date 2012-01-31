@@ -1,10 +1,10 @@
-<usrguide name="NEWIMAGE Reference Guide" section="l" rootdir="../" author="Mark Jenkinson" 
+<usrguide name="NEWIMAGE Reference Guide" section="l" rootdir="../" author="Mark Jenkinson"
 year="2000">
 
 <p>
 This document describes the two templated container classes
 (<function>volume</function> and <function>volume4D</function>) in
-NEWIMAGE.  In addition, it describes the general functions supporting them, 
+NEWIMAGE.  In addition, it describes the general functions supporting them,
 including file I/O operations, in AVW format.
 </p>
 
@@ -35,7 +35,7 @@ This is the basic 3D container class.
 
 <itemize>
 <item><function>volume<tag>T</tag></function>( )
-<break></break>Creates an empty volume, which allocates <em>no</em> data 
+<break></break>Creates an empty volume, which allocates <em>no</em> data
 storage.</item>
 <item><function>volume<tag>T</tag></function>(<param-in type="int">xsize</param-in>, <param-in type="int">ysize</param-in>, <param-in type="int">zsize</param-in>)
 <break></break>Creates a volume of specified size (number of voxels in each dimension), allocating the required amount of data storage.</item>
@@ -60,7 +60,7 @@ To do this the assignment operator should be used.
 <break></break>Returns a reference to data value at position (x,y,z) without any bounds checking or extrapolation.</item>
 </itemize>
 
-Note that both <param-in>const</param-in> and non-<param-in>const</param-in> 
+Note that both <param-in>const</param-in> and non-<param-in>const</param-in>
 versions of the above access operators exist.
 
 The first form <function>operator()</function> is the most general form, and
@@ -261,7 +261,7 @@ described above.
 
 <itemize>
 <item><function>volume4D<tag>T</tag></function>( )
-<break></break>Creates an empty 4D volume, which allocates <em>no</em> data 
+<break></break>Creates an empty 4D volume, which allocates <em>no</em> data
 storage.</item>
 </itemize>
 

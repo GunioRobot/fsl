@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -73,19 +73,19 @@ using namespace NEWIMAGE;
 void print_usage(const string& progname) {
   cout << "Usage: " << progname << " <-outputtype> <input> <output> [startvol [endvol]]" << endl << endl;
 
-  cout << "       " << progname << " -realabs complexvol absvol" 
+  cout << "       " << progname << " -realabs complexvol absvol"
        << " [startvol [endvol]]" << endl;
-  cout << "       " << progname << " -realphase complexvol phasevol" 
+  cout << "       " << progname << " -realphase complexvol phasevol"
        << " [startvol [endvol]]" << endl;
-  cout << "       " << progname << " -realpolar complexvol absvol phasevol" 
+  cout << "       " << progname << " -realpolar complexvol absvol phasevol"
        << " [startvol [endvol]]" << endl;
   cout << "       " << progname << " -realcartesian complexvol realvol"
        << " imagvol [startvol [endvol]]" << endl;
-  cout << "       " << progname << " -complex realvol imagvol" 
+  cout << "       " << progname << " -complex realvol imagvol"
        << " complexvol [startvol [endvol]]" << endl;
-  cout << "       " << progname << " -complexpolar absvol phasevol" 
+  cout << "       " << progname << " -complexpolar absvol phasevol"
        << " complexvol [startvol [endvol]]" << endl;
-  cout << "       " << progname << " -complexsplit source dest" 
+  cout << "       " << progname << " -complexsplit source dest"
        << " [startvol [endvol]]" << endl;
   cout << "       " << progname << " -complexmerge source1 source2 dest" <<endl;
   cout << "       " << progname << " -copyonly source dest" << endl;
@@ -102,8 +102,8 @@ void fix_start_and_end(int& start, int& end, int mint, int maxt)
 }
 
 
-void realpolar(const string& fin, const string& fabs, const string& fphase, 
-	       int start, int end) 
+void realpolar(const string& fin, const string& fabs, const string& fphase,
+	       int start, int end)
 {
   volume4D<float> vreal, vimag;
   read_complexvolume4D(vreal, vimag, fin);
@@ -128,7 +128,7 @@ void realpolar(const string& fin, const string& fabs, const string& fphase,
   }
 }
 
-void realcartesian(const string& fin, const string& freal, const string& fimag, 
+void realcartesian(const string& fin, const string& freal, const string& fimag,
 		   int start, int end)
 {
   volume4D<float> vreal, vimag;
@@ -155,7 +155,7 @@ void realcartesian(const string& fin, const string& freal, const string& fimag,
 }
 
 
-void complexsave(const string& freal, const string& fimag, 
+void complexsave(const string& freal, const string& fimag,
 		 const string& fcomplex, int start, int end)
 {
   volume4D<float> vreal, vimag;
@@ -177,7 +177,7 @@ void complexsave(const string& freal, const string& fimag,
 }
 
 
-void complexpolar(const string& fabsvol, const string& fphasevol, 
+void complexpolar(const string& fabsvol, const string& fphasevol,
 		  const string& fcomplex, int start, int end)
 {
   volume4D<float> vabs, vphase;
@@ -198,7 +198,7 @@ void complexpolar(const string& fabsvol, const string& fphasevol,
   }
 }
 
-void complexsplit(const string& fsource, const string& fdest, 
+void complexsplit(const string& fsource, const string& fdest,
 		  int start, int end)
 {
   volume4D<float> vreal, vimag;
@@ -264,9 +264,9 @@ int main(int argc,char *argv[])
   Tracer tr("main");
 
   string progname=argv[0];
-  if (argc<4) { 
+  if (argc<4) {
     print_usage(progname);
-    return -1; 
+    return -1;
   }
 
   string arg = argv[1];

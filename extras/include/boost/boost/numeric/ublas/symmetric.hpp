@@ -177,7 +177,7 @@ namespace boost { namespace numeric { namespace ublas {
         void erase_element (size_type i, size_type j) {
             return (operator () (i, j) = value_type/*zero*/());
         }
-        
+
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {

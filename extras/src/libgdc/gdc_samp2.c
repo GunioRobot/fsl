@@ -37,7 +37,7 @@ main()
 						"Nov", "Dec", "Jan", "Feb",        "Mar",  "Apr" };
 
 	/* set color RGB as ulong array */
-	unsigned long	setcolor[3]    = { 0xC0C0FF, 0xFF4040, 0xFFFFFF }; 
+	unsigned long	setcolor[3]    = { 0xC0C0FF, 0xFF4040, 0xFFFFFF };
 
 	GDC_ANNOTATION_T	anno;
 

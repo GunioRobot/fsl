@@ -189,7 +189,7 @@ int main()
       TestTypeSP(); TestTypeKP(); TestTypeOrder();
 
 
-      Try { 
+      Try {
          trymat1();
          trymat2();
          trymat3();

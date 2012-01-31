@@ -1,4 +1,4 @@
-/* 
+/*
  * tkInitScript.h --
  *
  *	This file contains Unix & Windows common init script

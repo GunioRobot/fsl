@@ -5,9 +5,9 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-'\" 
+'\"
 '\" RCS: @(#) $Id: namespace.n,v 1.1.1.1 2007/07/10 15:04:23 duncan Exp $
-'\" 
+'\"
 .so man.macros
 .TH namespace n 8.0 Tcl "Tcl Built-In Commands"
 .BS
@@ -132,18 +132,18 @@ Each \fIpattern\fR is a simple or qualified name such as
 Qualified names contain double colons (\fB::\fR) and qualify a name
 with the name of one or more namespaces.
 Each \fIqualified pattern\fR is qualified with the name of an
-exporting namespace 
+exporting namespace
 and may have glob-style special characters in the command name
 at the end of the qualified name.
 Glob characters may not appear in a namespace name.
 For each \fIsimple pattern\fR this command deletes the matching
-commands of the 
+commands of the
 current namespace that were imported from a different namespace.
 For \fIqualified patterns\fR, this command first finds the matching
-exported commands. 
+exported commands.
 It then checks whether any of those commands
 were previously imported by the current namespace.
-If so, this command deletes the corresponding imported commands. 
+If so, this command deletes the corresponding imported commands.
 In effect, this un-does the action of a \fBnamespace import\fR command.
 .TP
 \fBnamespace import \fR?\fB\-force\fR? ?\fIpattern\fR \fIpattern ...\fR?
@@ -239,7 +239,7 @@ this command returns a fully-qualified name in the global namespace.
 If the command or variable does not exist,
 this command returns an empty string.  If the variable has been
 created but not defined, such as with the \fBvariable\fR command
-or through a \fBtrace\fR on the variable, this command will return the 
+or through a \fBtrace\fR on the variable, this command will return the
 fully-qualified name of the variable.
 If no flag is given, \fIname\fR is treated as a command name.
 See the section \fBNAME RESOLUTION\fR below for an explanation of
@@ -379,7 +379,7 @@ If you provide a fully-qualified name that starts with a \fB::\fR,
 there is no question about what command, variable, or namespace
 you mean.
 However, if the name does not start with a \fB::\fR
-(i.e., is \fIrelative\fR), 
+(i.e., is \fIrelative\fR),
 Tcl follows a fixed rule for looking it up:
 Command and variable names are always resolved
 by looking first in the current namespace,
@@ -411,7 +411,7 @@ set traceLevel 0
 }
 .CE
 Here Tcl looks for \fBtraceLevel\fR first in the namespace \fBFoo::Debug\fR.
-Since it is not found there, Tcl then looks for it 
+Since it is not found there, Tcl then looks for it
 in the global namespace.
 The variable \fBFoo::traceLevel\fR is completely ignored
 during the name resolution process.

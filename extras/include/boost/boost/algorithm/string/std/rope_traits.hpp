@@ -38,7 +38,7 @@ namespace boost {
         yes_type has_const_time_erase_tester( const std::rope<T, TraitsT, AllocT>* );
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    
+
     // native replace trait
         template<typename T, typename TraitsT, typename AllocT>
         class has_native_replace< std::rope<T,TraitsT,AllocT> >
@@ -49,7 +49,7 @@ namespace boost {
 #else
             BOOST_STATIC_CONSTANT(bool, value=true);
 #endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-            typedef mpl::bool_<value> type;     
+            typedef mpl::bool_<value> type;
         };
 
     // stable iterators trait
@@ -62,7 +62,7 @@ namespace boost {
 #else
             BOOST_STATIC_CONSTANT(bool, value=true);
 #endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-            typedef mpl::bool_<value> type;     
+            typedef mpl::bool_<value> type;
         };
 
     // const time insert trait
@@ -75,7 +75,7 @@ namespace boost {
 #else
             BOOST_STATIC_CONSTANT(bool, value=true);
 #endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-            typedef mpl::bool_<value> type;     
+            typedef mpl::bool_<value> type;
         };
 
     // const time erase trait
@@ -88,7 +88,7 @@ namespace boost {
 #else
             BOOST_STATIC_CONSTANT(bool, value=true);
 #endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-            typedef mpl::bool_<value> type;     
+            typedef mpl::bool_<value> type;
         };
 #endif
 

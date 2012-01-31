@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -79,7 +79,7 @@ using namespace Utilities;
 namespace MISCMATHS {
 
   F2z* F2z::f2z = NULL;
- 
+
   float F2z::largef2logp(float f, int d1, int d2)
   {
     Tracer_Plus ts("F2z::largef2logp");
@@ -95,12 +95,12 @@ namespace MISCMATHS {
       cerr << "f cannot be zero or negative!" << endl;
       return 0.0;
     }
-  
-    if (d1<=0 || d2<=0) { 
+
+    if (d1<=0 || d2<=0) {
       cerr << "DOFs cannot be zero or negative!" << endl;
-      return 0.0; 
+      return 0.0;
     }
- 
+
     double alpha=d1/(double)d2;
     double m=(d1+d2)/2.0;
     double n=(1-d1/2.0);
@@ -111,7 +111,7 @@ namespace MISCMATHS {
     double top = 1.0;
     double bot = n+m-1;
     double iter = 0.0;
- 
+
 //     cerr << "logbeta(d2/2.0,d1/2.0)=" << logbeta(d2/2.0,d1/2.0) << endl;
 //     cerr << "loggam = " << loggam << endl;
 //     cerr << "n = " << n << endl;
@@ -120,7 +120,7 @@ namespace MISCMATHS {
     for(int i = 1; i <= N; i++)
       {
 	// cerr << "i=" << i;
-		  iter = iter + top* ( std::pow( f,float(-(n+i-1)) ) / ( std::pow(alpha,double(i))*bot ) );	
+		  iter = iter + top* ( std::pow( f,float(-(n+i-1)) ) / ( std::pow(alpha,double(i))*bot ) );
 	top = top*(n-1+i)*(-1);
 	bot = bot*(n+m-1+i);
 // 	cerr << "iter=" << iter;
@@ -138,15 +138,15 @@ namespace MISCMATHS {
   }
 
   bool F2z::islargef(float f, int d1, int d2, float &logp) {
-   
+
     if(f > 2.0 && d1>1)
       {
 
 	try
 	  {
-	    logp=largef2logp(f,d1,d2);	
+	    logp=largef2logp(f,d1,d2);
 	  }
-	catch(Exception& p_excp) 
+	catch(Exception& p_excp)
 	  {
 	    cerr << "Negative iter in F2z::largef2logp" << endl;
 	    return false;
@@ -162,7 +162,7 @@ namespace MISCMATHS {
     return (logp < -14.5);
   }
 
-  float F2z::convert(float f, int d1, int d2) 
+  float F2z::convert(float f, int d1, int d2)
   {
     Tracer_Plus ts("F2z::convert");
 
@@ -188,18 +188,18 @@ namespace MISCMATHS {
     dof2 = p_dof2;
     ComputeFStats(p_fs,p_dof1,dof2,p_zs);
   }
-  
+
   void F2z::ComputeFStats(const ColumnVector& p_fs, int p_dof1, const ColumnVector& p_dof2, ColumnVector& p_zs)
   {
     Tracer_Plus ts("F2z::ComputeFStats");
-    
+
     int numTS = p_fs.Nrows();
 
     p_zs.ReSize(numTS);
     F2z& f2z = F2z::getInstance();
-    
+
     for(int i = 1; i <= numTS; i++)
-      {		  	
+      {
 	if (p_fs(i) > 0.0)
 	  {
 
@@ -208,25 +208,25 @@ namespace MISCMATHS {
 // 	    cerr << ",p_dof1=" << p_dof1;
 // 	    cerr << ",p_dof2=" << p_dof2(i) << endl;
 
-	    p_zs(i) = f2z.convert(p_fs(i),int(p_dof1),int(p_dof2(i)));  
+	    p_zs(i) = f2z.convert(p_fs(i),int(p_dof1),int(p_dof2(i)));
 	  }
 	else
 	  {
 	    p_zs(i) = 0.0;
-	  }     
+	  }
       }
   }
    void F2z::ComputeFStats(const ColumnVector& p_fs, const ColumnVector& p_dof1, const ColumnVector& p_dof2, ColumnVector& p_zs)
   {
     Tracer_Plus ts("F2z::ComputeFStats");
-    
+
     int numTS = p_fs.Nrows();
 
     p_zs.ReSize(numTS);
     F2z& f2z = F2z::getInstance();
-    
+
     for(int i = 1; i <= numTS; i++)
-      {		  	
+      {
 	if (p_fs(i) > 0.0)
 	  {
 
@@ -235,15 +235,15 @@ namespace MISCMATHS {
 // 	    cerr << ",p_dof1=" << p_dof1;
 // 	    cerr << ",p_dof2=" << p_dof2(i) << endl;
 
-	    p_zs(i) = f2z.convert(p_fs(i),int(p_dof1(i)),int(p_dof2(i)));  
+	    p_zs(i) = f2z.convert(p_fs(i),int(p_dof1(i)),int(p_dof2(i)));
 	  }
 	else
 	  {
 	    p_zs(i) = 0.0;
-	  }     
+	  }
       }
   }
-  
+
 }
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclUnixSock.c --
  *
  *	This file contains Unix-specific socket related code.
@@ -53,7 +53,7 @@ TCL_DECLARE_MUTEX(hostMutex)
  *
  * Results:
  *	A string containing the network name for this machine, or
- *	an empty string if we can't figure out the name.  The caller 
+ *	an empty string if we can't figure out the name.  The caller
  *	must not modify or free this string.
  *
  * Side effects:

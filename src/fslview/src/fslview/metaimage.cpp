@@ -21,12 +21,12 @@ MetaImage::MetaImage(Image::Handle i, ImageDisplaySetting::Handle d):
 
 MetaImage::~MetaImage(){}
 
-MetaImage::Handle MetaImage::create(Image::Handle i, 
+MetaImage::Handle MetaImage::create(Image::Handle i,
                                     ImageDisplaySetting::Handle d)
 {
   Handle dst(new MetaImage(i,d));
   return dst;
-}  
+}
 
 Image::Handle MetaImage::getImage()const
 {
@@ -51,7 +51,7 @@ MetaImage::Handle MetaImage::clone()
 short MetaImage::inqX()const{return m_impl->m_image->getVolume(0)->inqX();}
 short MetaImage::inqY()const{return m_impl->m_image->getVolume(0)->inqY();}
 short MetaImage::inqZ()const{return m_impl->m_image->getVolume(0)->inqZ();}
-  
+
 bool  MetaImage::inqVisibility()const  { return m_impl->m_ds->inqVisibility();}
 bool  MetaImage::inqReadOnly()  const  { return m_impl->m_image->getInfo()->inqReadOnly();}
 float MetaImage::inqTransparency()   const { return m_impl->m_ds->inqTransparency();}

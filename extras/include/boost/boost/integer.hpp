@@ -30,7 +30,7 @@ namespace boost
   template< typename LeastInt >
   struct int_fast_t { typedef LeastInt fast; }; // imps may specialize
 
-  //  convert category to type 
+  //  convert category to type
   template< int Category > struct int_least_helper {}; // default is empty
 
   //  specializatons: 1=long, 2=int, 3=short, 4=signed char,
@@ -49,7 +49,7 @@ namespace boost
 
   //  signed
   template< int Bits >   // bits (including sign) required
-  struct int_t 
+  struct int_t
   {
       typedef typename int_least_helper
         <
@@ -63,10 +63,10 @@ namespace boost
 
   //  unsigned
   template< int Bits >   // bits required
-  struct uint_t 
+  struct uint_t
   {
       typedef typename int_least_helper
-        < 
+        <
           5 +
           (Bits <= std::numeric_limits<unsigned long>::digits) +
           (Bits <= std::numeric_limits<unsigned int>::digits) +
@@ -81,7 +81,7 @@ namespace boost
 
   //  signed
   template< long MaxValue >   // maximum value to require support
-  struct int_max_value_t 
+  struct int_max_value_t
   {
       typedef typename int_least_helper
         <
@@ -94,7 +94,7 @@ namespace boost
   };
 
   template< long MinValue >   // minimum value to require support
-  struct int_min_value_t 
+  struct int_min_value_t
   {
       typedef typename int_least_helper
         <
@@ -108,10 +108,10 @@ namespace boost
 
   //  unsigned
   template< unsigned long Value >   // maximum value to require support
-  struct uint_value_t 
+  struct uint_value_t
   {
       typedef typename int_least_helper
-        < 
+        <
           5 +
           (Value <= integer_traits<unsigned long>::const_max) +
           (Value <= integer_traits<unsigned int>::const_max) +

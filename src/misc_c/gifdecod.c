@@ -60,7 +60,7 @@ void GifDecode(FILE *fp, UBYTE *pix, GifImageHdr gifimage)
   }
 
   while(buffCount > 0) {
-    if ( fread(charBuff, 1, buffCount, fp) != buffCount ) { 
+    if ( fread(charBuff, 1, buffCount, fp) != buffCount ) {
       sprintf(charBuff, "Premature end of file; Image # %d\n", count);
       TheEnd1(charBuff);
     }
@@ -119,7 +119,7 @@ void GifDecode(FILE *fp, UBYTE *pix, GifImageHdr gifimage)
     }
   }
 
-skipRest: 
+skipRest:
   if (debugFlag) fprintf(stderr, "Ending GifDecode, written: %d=%d\n",
 	  interlaced && (pix-picture == 0) ? imgsize : pix - picture, imgsize);
   return ;

@@ -30,12 +30,12 @@ public:
 
 private:
 
-	template <typename VoxelType> 
+	template <typename VoxelType>
 		void calculate(VolumeStore<VoxelType>::WeakHandle target);
-				
+
 private:
 	float total_;
 	unsigned int count_;
 };
 
-#endif 
+#endif

@@ -340,7 +340,7 @@ test event-click-drag-1.1 { click and drag in a text widget, this
 
     # Save the position of the insert cursor
     lappend result [$e index insert]
-    
+
     # Now drag until selend is highlighted, then click up
 
     set current $anchor
@@ -408,7 +408,7 @@ test event-click-drag-1.2 { click and drag in an entry widget, this
 
     # Save the position of the insert cursor
     lappend result [$e index insert]
-    
+
     # Now drag until selend is highlighted, then click up
 
     set current $anchor

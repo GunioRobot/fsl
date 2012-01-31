@@ -1,4 +1,4 @@
-/* 
+/*
  * tkUnixEmbed.c --
  *
  *	This file contains platform-specific procedures for UNIX to provide
@@ -111,7 +111,7 @@ TkpUseWindow(interp, tkwin, string)
     Tk_ErrorHandler handler;
     Container *containerPtr;
     XWindowAttributes parentAtts;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (winPtr->window != None) {
@@ -218,7 +218,7 @@ TkpMakeWindow(winPtr, parent)
 				 * which the window is to be created. */
 {
     Container *containerPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (winPtr->flags & TK_EMBEDDED) {
@@ -275,7 +275,7 @@ TkpMakeContainer(tkwin)
 {
     TkWindow *winPtr = (TkWindow *) tkwin;
     Container *containerPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -401,7 +401,7 @@ ContainerEventProc(clientData, eventPtr)
     TkWindow *winPtr = (TkWindow *) clientData;
     Container *containerPtr;
     Tk_ErrorHandler errHandler;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -565,11 +565,11 @@ EmbedFocusProc(clientData, eventPtr)
     if (eventPtr->type == FocusIn) {
 	/*
 	 * The focus just arrived at the container.  Change the X focus
-	 * to move it to the embedded application, if there is one. 
+	 * to move it to the embedded application, if there is one.
 	 * Ignore X errors that occur during this operation (it's
 	 * possible that the new focus window isn't mapped).
 	 */
-    
+
 	if (containerPtr->wrapper != None) {
 	    errHandler = Tk_CreateErrorHandler(eventPtr->xfocus.display, -1,
 		    -1, -1, (Tk_ErrorProc *) NULL, (ClientData) NULL);
@@ -717,10 +717,10 @@ TkpGetOtherWindow(winPtr)
 				 * embedded window. */
 {
     Container *containerPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
-    for (containerPtr = tsdPtr->firstContainerPtr; 
+    for (containerPtr = tsdPtr->firstContainerPtr;
             containerPtr != NULL;
 	    containerPtr = containerPtr->nextPtr) {
 	if (containerPtr->embeddedPtr == winPtr) {
@@ -763,7 +763,7 @@ TkpRedirectKeyEvent(winPtr, eventPtr)
 {
     Container *containerPtr;
     Window saved;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -835,7 +835,7 @@ TkpClaimFocus(topLevelPtr, force)
 {
     XEvent event;
     Container *containerPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if (!(topLevelPtr->flags & TK_EMBEDDED)) {
@@ -887,7 +887,7 @@ TkpTestembedCmd(clientData, interp, argc, argv)
     Container *containerPtr;
     Tcl_DString dString;
     char buffer[50];
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     if ((argc > 1) && (strcmp(argv[1], "all") == 0)) {
@@ -961,7 +961,7 @@ EmbedWindowDeleted(winPtr)
 				 * was deleted. */
 {
     Container *containerPtr, *prevPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
     /*
@@ -1019,10 +1019,10 @@ TkUnixContainerId(winPtr)
     TkWindow *winPtr;		/* Tk's structure for an embedded window. */
 {
     Container *containerPtr;
-    ThreadSpecificData *tsdPtr = (ThreadSpecificData *) 
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)
             Tcl_GetThreadData(&dataKey, sizeof(ThreadSpecificData));
 
-    for (containerPtr = tsdPtr->firstContainerPtr; 
+    for (containerPtr = tsdPtr->firstContainerPtr;
             containerPtr != NULL; containerPtr = containerPtr->nextPtr) {
 	if (containerPtr->embeddedPtr == winPtr) {
 	    return containerPtr->parent;

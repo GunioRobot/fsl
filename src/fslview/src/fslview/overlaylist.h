@@ -13,8 +13,8 @@
 #include "imagegroup.h"
 #include <boost/shared_ptr.hpp>
 
-enum OverlayListMsg {Select, Visibility, Transparency, Order,  
-              Add,    Rem ,       LookUpTable,  Security, 
+enum OverlayListMsg {Select, Visibility, Transparency, Order,
+              Add,    Rem ,       LookUpTable,  Security,
               ImageName,  DtiMode, ModImage};
 
 class OverlayListObserver;
@@ -23,7 +23,7 @@ class OverlayListObserver;
  * @author David Flitney <flitney@fmrib.ox.ac.uk>
  *
  * @date   Dec 2002
- * 
+ *
  * @brief OverlayList groups images according to their display order
  * and provides convenience functions for accessing display properties.
  *
@@ -38,14 +38,14 @@ class OverlayList :  public ImageGroupObserver
 public:
   typedef boost::shared_ptr< OverlayList > Handle;
   typedef boost::weak_ptr< OverlayList > WeakHandle;
-  
+
   Handle clone();
   static Handle create(ImageGroup::Handle i);
 
   ~OverlayList();
   const MetaImage::Handle getMainMetaImage() const;
   const MetaImage::Handle getMetaImage(Image::Handle i) const;
-  const Image::Handle     getMainImage() const; 
+  const Image::Handle     getMainImage() const;
   const ImageGroup::Handle getImageGroup() const { return m_imageGroup; }
 
   const MetaImage::Handle getActiveMetaImage() const;
@@ -67,27 +67,27 @@ public:
   const MetaImageListIt end();
 
   void update(const ImageGroup* i);
-  
+
   void attach(OverlayListObserver* o);
   void detach(OverlayListObserver* o);
   void notify(OverlayListMsg message);
-  
+
   Image::Handle inqActiveImage();
   inline int inqX();
   inline int inqY();
   inline int inqZ();
 
-private:  
-  
+private:
+
   OverlayList(ImageGroup::Handle i);
   void loadOverlaysList();
   void assignLatestLUT();
   void setOverlays(std::list<MetaImage::Handle>);
-  
+
   std::list<MetaImage::Handle> m_overlays;
-  ImageGroup::Handle   m_imageGroup;    
+  ImageGroup::Handle   m_imageGroup;
   int m_xDim;
-  int m_yDim; 
+  int m_yDim;
   int m_zDim;
   int m_currentLut;
   MetaImage::Handle    m_activeMetaImage;
@@ -102,7 +102,7 @@ int OverlayList::inqZ(){return m_zDim;}
 
 class OverlayListObserver
 {
- 
+
 public:
 
   virtual ~OverlayListObserver() {}

@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // text_wiarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -29,11 +29,11 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
 namespace archive {
 
 template<class Archive>
-class text_wiarchive_impl : 
+class text_wiarchive_impl :
     public basic_text_iprimitive<std::wistream>,
     public basic_text_iarchive<Archive>
 {
@@ -67,7 +67,7 @@ protected:
     void load_override(T & t, BOOST_PFTO int){
         basic_text_iarchive<Archive>::load_override(t, 0);
     }
-    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
     text_wiarchive_impl(std::wistream & is, unsigned int flags);
     ~text_wiarchive_impl(){};
 };
@@ -75,7 +75,7 @@ protected:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from text_wiarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class text_wiarchive : 
+class text_wiarchive :
     public text_wiarchive_impl<text_wiarchive>
 {
 public:
@@ -88,7 +88,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
+// required by smart_cast for compilers not implementing
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::text_wiarchive)
 

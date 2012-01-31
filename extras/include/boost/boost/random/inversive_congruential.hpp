@@ -50,8 +50,8 @@ public:
     BOOST_STATIC_ASSERT(b >= 0);
     BOOST_STATIC_ASSERT(p > 1);
     BOOST_STATIC_ASSERT(a >= 1);
-    if(b == 0) 
-      assert(y0 > 0); 
+    if(b == 0)
+      assert(y0 > 0);
   }
   template<class It> inversive_congruential(It& first, It last)
   { seed(first, last); }

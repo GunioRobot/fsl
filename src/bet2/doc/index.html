@@ -5,11 +5,11 @@ BET v2.1 - User Guide
 <TD ALIGN=RIGHT><a href="../index.html"><IMG BORDER=0 SRC="../images/fsl-logo.jpg"></a></TR></TABLE><HR>
 
 <IMG ALIGN=RIGHT SRC="bet2_eg_small.png" width="50%" hspace="20"><H2>INTRODUCTION</H2>
- 
+
 <P>BET (Brain Extraction Tool) deletes non-brain tissue from an image
 of the whole head. It can also estimate the inner and outer skull
 surfaces, and outer scalp surface, if you have good quality
-T1 <i>and</i> T2 input images. 
+T1 <i>and</i> T2 input images.
 
 <p>For more information about BET, see the <A
 HREF="http://www.fmrib.ox.ac.uk/analysis/research/bet/">BET research
@@ -18,7 +18,7 @@ following reference in any publications:
 
 <font size=-1><em>
 <p>S.M. Smith.
-<br>Fast robust automated brain extraction. 
+<br>Fast robust automated brain extraction.
 <br>Human Brain Mapping, 17(3):143-155, November 2002.
 </em></font>
 
@@ -26,8 +26,8 @@ following reference in any publications:
 also reference the following:
 
 <font size=-1><em>
-<p>M. Jenkinson, M. Pechaud, and S. Smith. 
-<br>BET2: MR-based estimation of brain, skull and scalp surfaces. 
+<p>M. Jenkinson, M. Pechaud, and S. Smith.
+<br>BET2: MR-based estimation of brain, skull and scalp surfaces.
 <br>In Eleventh Annual Meeting of the Organization for Human Brain Mapping, 2005.
 </em></font>
 
@@ -82,7 +82,7 @@ replaced by the -Z option in <b>bet</b>.
 
 <p><b>-t</b>&nbsp;&nbsp;&nbsp; apply thresholding to segmented brain image and mask
 
-<p><b>-e</b>&nbsp;&nbsp;&nbsp; generates brain surface as mesh in .vtk format. 
+<p><b>-e</b>&nbsp;&nbsp;&nbsp; generates brain surface as mesh in .vtk format.
 
 
 
@@ -159,7 +159,7 @@ slightly before being used.
     image</b> filename. The output name is also used to generate the
     filenames for any optional outputs that are turned
     on in <b>Advanced options</b>.
- 
+
 <P>Changing <B>Fractional intensity threshold</B> from its default
 value of 0.5 will cause the overall segmented brain to become larger
 (<0.5) or smaller (>0.5). This threshold must lie between 0 and 1.
@@ -170,7 +170,7 @@ value of 0.5 will cause the overall segmented brain to become larger
     above.
 
 <H3>ADVANCED OPTIONS</H3>
- 
+
 <P>By default the only output from BET is an image with all non-brain
 matter removed - this is the <B>Output brain-extracted image</B>
 option.
@@ -191,7 +191,7 @@ to produce an image which is an estimate of the exterior surface of
 the skull. All non-skull-surface points are 0 in this image, and
 skull-surface points are 100.
 
-<p>The 
+<p>The
 <B>Output brain surface overlaid onto original image</B> option
 creates an output image which is a copy of the original image, with
 additionally an outline of the brain's surface drawn on top.
@@ -203,7 +203,7 @@ the bottom of the brain, giving a larger brain estimate there, and a
 smaller estimate of the brain towards the top of the image. This value
 must lie between -1 and 1.
 
-  
+
 
 
 

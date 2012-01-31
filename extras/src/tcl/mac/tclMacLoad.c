@@ -2,7 +2,7 @@
  * tclMacLoad.c --
  *
  *	This procedure provides a version of the TclLoadFile for use
- *	on the Macintosh.  This procedure will only work with systems 
+ *	on the Macintosh.  This procedure will only work with systems
  *	that use the Code Fragment Manager.
  *
  * Copyright (c) 1995-1997 Sun Microsystems, Inc.
@@ -23,7 +23,7 @@
  * Seems that the 3.0.1 Universal headers leave this define out.  So we
  * define it here...
  */
- 
+
 #ifndef fragNoErr
     #define fragNoErr noErr
 #endif
@@ -92,7 +92,7 @@ typedef struct TclMacLoadInfo {
     FSSpec fileSpec;
 } TclMacLoadInfo;
 
-static int TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr, 
+static int TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr,
 		     CONST char *sym /* native */);
 
 
@@ -121,7 +121,7 @@ TclpDlopen(interp, pathPtr, loadHandle, unloadProcPtr)
     Tcl_Obj *pathPtr;		/* Name of the file containing the desired
 				 * code (UTF-8). */
     Tcl_LoadHandle *loadHandle;	/* Filled with token for dynamically loaded
-				 * file which will be passed back to 
+				 * file which will be passed back to
 				 * (*unloadProcPtr)() to unload the file. */
     Tcl_FSUnloadFileProc **unloadProcPtr;
 				/* Filled with address of Tcl_FSUnloadFileProc
@@ -132,20 +132,20 @@ TclpDlopen(interp, pathPtr, loadHandle, unloadProcPtr)
     FSSpec fileSpec;
     CONST char *native;
     TclMacLoadInfo *loadInfo;
-    
+
     native = Tcl_FSGetNativePath(pathPtr);
     err = FSpLocationFromPath(strlen(native), native, &fileSpec);
-    
+
     if (err != noErr) {
 	Tcl_SetResult(interp, "could not locate shared library", TCL_STATIC);
 	return TCL_ERROR;
     }
-    
+
     loadInfo = (TclMacLoadInfo *) ckalloc(sizeof(TclMacLoadInfo));
     loadInfo->loaded = 0;
     loadInfo->fileSpec = fileSpec;
     loadInfo->connID = NULL;
-    
+
     if (TryToLoad(interp, loadInfo, pathPtr, NULL) != TCL_OK) {
 	ckfree((char*) loadInfo);
 	return TCL_ERROR;
@@ -156,14 +156,14 @@ TclpDlopen(interp, pathPtr, loadHandle, unloadProcPtr)
     return TCL_OK;
 }
 
-/* 
+/*
  * See the comments about 'struct TclMacLoadInfo' above. This
  * function ensures the appropriate library or symbol is
  * loaded.
  */
 static int
 TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr,
-	  CONST char *sym /* native */) 
+	  CONST char *sym /* native */)
 {
     OSErr err;
     CFragConnectionID connID;
@@ -186,7 +186,7 @@ TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr,
      * exist we find the frag that matches the one we are looking for and
      * get the offset and size from the resource.
      */
-     
+
     saveFileRef = CurResFile();
     SetResLoad(false);
     fragFileRef = FSpOpenResFile(&loadInfo->fileSpec, fsRdPerm);
@@ -236,18 +236,18 @@ TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr,
      * obtained from the resource.  We don't worry about the main entry point
      * as we are going to search for specific entry points passed to us.
      */
-    
+
     err = GetDiskFragment(&loadInfo->fileSpec, offset, length, fragName,
 	    kLoadCFrag, &connID, &dummy, errName);
-    
+
     if (err != fragNoErr) {
 	p2cstr(errName);
 	if(pathPtr) {
-	Tcl_AppendResult(interp, "couldn't load file \"", 
+	Tcl_AppendResult(interp, "couldn't load file \"",
 			 Tcl_GetString(pathPtr),
 			 "\": ", errName, (char *) NULL);
 	} else if(sym) {
-	Tcl_AppendResult(interp, "couldn't load library \"", 
+	Tcl_AppendResult(interp, "couldn't load library \"",
 			 sym,
 			 "\": ", errName, (char *) NULL);
 	}
@@ -276,7 +276,7 @@ TryToLoad(Tcl_Interp *interp, TclMacLoadInfo *loadInfo, Tcl_Obj *pathPtr,
  *----------------------------------------------------------------------
  */
 Tcl_PackageInitProc*
-TclpFindSymbol(interp, loadHandle, symbol) 
+TclpFindSymbol(interp, loadHandle, symbol)
     Tcl_Interp *interp;
     Tcl_LoadHandle loadHandle;
     CONST char *symbol;
@@ -287,7 +287,7 @@ TclpFindSymbol(interp, loadHandle, symbol)
     Str255 symbolName;
     CFragSymbolClass symClass;
     OSErr err;
-   
+
     if (loadInfo->loaded == 0) {
 	int res;
 	/*
@@ -302,7 +302,7 @@ TclpFindSymbol(interp, loadHandle, symbol)
 	    return NULL;
 	}
     }
-    
+
     Tcl_UtfToExternalDString(NULL, symbol, -1, &ds);
     strcpy((char *) symbolName + 1, Tcl_DStringValue(&ds));
     symbolName[0] = (unsigned) Tcl_DStringLength(&ds);
@@ -338,8 +338,8 @@ TclpFindSymbol(interp, loadHandle, symbol)
 void
 TclpUnloadFile(loadHandle)
     Tcl_LoadHandle loadHandle;	/* loadHandle returned by a previous call
-				 * to TclpDlopen().  The loadHandle is 
-				 * a token that represents the loaded 
+				 * to TclpDlopen().  The loadHandle is
+				 * a token that represents the loaded
 				 * file. */
 {
     TclMacLoadInfo *loadInfo = (TclMacLoadInfo *)loadHandle;

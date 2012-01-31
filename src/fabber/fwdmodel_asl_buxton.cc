@@ -7,20 +7,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -32,13 +32,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -49,7 +49,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -80,7 +80,7 @@ string BuxtonFwdModel::ModelVersion() const
   return "$Id: fwdmodel_asl_buxton.cc,v 1.7 2008/05/22 11:57:48 chappell Exp $";
 }
 
-void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior, 
+void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior,
     MVNDist& posterior) const
 {
     Tracer_Plus tr("BuxtonFwdModel::HardcodedInitialDists");
@@ -96,8 +96,8 @@ void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior,
     // Tissue bolus transit delay
      prior.means(tiss_index()+1) = 0.7;
      precisions(tiss_index()+1,tiss_index()+1) = 10;
-    
-    
+
+
     // Tissue bolus length
      if (infertau) {
        prior.means(tau_index()) = seqtau;
@@ -107,8 +107,8 @@ void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior,
      // T1 & T1b
     if (infert1) {
       int tidx = t1_index();
-      prior.means(tidx) = t1;  
-      prior.means(tidx+1) = t1b; 
+      prior.means(tidx) = t1;
+      prior.means(tidx+1) = t1b;
       precisions(tidx,tidx) = 100;
       precisions(tidx+1,tidx+1) = 100;
     }
@@ -127,7 +127,7 @@ void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior,
 
     // Set precsions on priors
     prior.SetPrecisions(precisions);
-    
+
     // Set initial posterior
     posterior = prior;
 
@@ -135,10 +135,10 @@ void BuxtonFwdModel::HardcodedInitialDists(MVNDist& prior,
     posterior.means(tiss_index()) = 10;
     precisions(tiss_index(),tiss_index()) = 0.1;
     posterior.SetPrecisions(precisions);
-    
-}    
-    
-    
+
+}
+
+
 
 void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) const
 {
@@ -153,7 +153,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 
      // sensible limits on transit times
      if (params(tiss_index()+1)>timax-0.2) { paramcpy(tiss_index()+1) = timax-0.2; }
- 
+
   // parameters that are inferred - extract and give sensible names
   float ftiss;
   float delttiss;
@@ -169,7 +169,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 
   if (infertau) { tautiss=paramcpy(tau_index()); }
   else { tautiss = seqtau; }
-  
+
   if (infert1) {
     T_1 = paramcpy(t1_index());
     T_1b = paramcpy(t1_index()+1);
@@ -183,7 +183,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
     ftiss2 = paramcpy(tiss2_index());
     delttiss2 = paramcpy(tiss2_index()+1);
   }
-    
+
 
     float lambda = 0.9;
 
@@ -199,7 +199,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 
     float F=0;float F2=0;
     float kctissue; float kctissue2;
- 
+
 
     // loop over tis
     float ti;
@@ -234,7 +234,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 	  }
 	else /*(ti > tau2)*/
 	  {kctissue2 = F2/R * (exp(R*tau4) - exp(R*tau3)); }
-	
+
 	/* output */
 	// loop over the repeats
 	for (int rpt=1; rpt<=repeats; rpt++)
@@ -252,7 +252,7 @@ void BuxtonFwdModel::Evaluate(const ColumnVector& params, ColumnVector& result) 
 BuxtonFwdModel::BuxtonFwdModel(ArgsType& args)
 {
     string scanParams = args.ReadWithDefault("scan-params","cmdline");
-    
+
     if (scanParams == "cmdline")
     {
       // specify command line parameters here
@@ -264,18 +264,18 @@ BuxtonFwdModel::BuxtonFwdModel(ArgsType& args)
       twobol = args.ReadBool("twobol"); //infer a second bolus?
       doard=false;
       if (twobol) { doard = true; } //ARD is always used on perfusion of second bolus
-      seqtau = convertTo<double>(args.Read("tau")); 
- 
+      seqtau = convertTo<double>(args.Read("tau"));
+
       // Deal with tis
       tis.ReSize(1); //will add extra values onto end as needed
       tis(1) = atof(args.Read("ti1").c_str());
-      
+
       while (true) //get the rest of the tis
 	{
 	  int N = tis.Nrows()+1;
 	  string tiString = args.ReadWithDefault("ti"+stringify(N), "stop!");
 	  if (tiString == "stop!") break; //we have run out of tis
-	 
+
 	  // append the new ti onto the end of the list
 	  ColumnVector tmp(1);
 	  tmp = convertTo<double>(tiString);
@@ -297,17 +297,17 @@ BuxtonFwdModel::BuxtonFwdModel(ArgsType& args)
       for (int i=1; i <= tis.Nrows(); i++)
 	LOG << tis(i) << " ";
       LOG << endl;
-	  
+
     }
 
     else
-        throw invalid_argument("Only --scan-params=cmdline is accepted at the moment");    
-    
- 
+        throw invalid_argument("Only --scan-params=cmdline is accepted at the moment");
+
+
 }
 
 void BuxtonFwdModel::ModelUsage()
-{ 
+{
   cout << "\nUsage info for --model=buxton:\n"
        << "Required parameters:\n"
        << "--repeats=<no. repeats in data>\n"
@@ -325,13 +325,13 @@ void BuxtonFwdModel::ModelUsage()
 void BuxtonFwdModel::DumpParameters(const ColumnVector& vec,
                                     const string& indent) const
 {
-    
+
 }
 
 void BuxtonFwdModel::NameParams(vector<string>& names) const
 {
   names.clear();
-  
+
   names.push_back("ftiss");
   names.push_back("delttiss");
   if (infertau)
@@ -358,9 +358,9 @@ void BuxtonFwdModel::SetupARD( const MVNDist& theta, MVNDist& thetaPrior, double
     {
       SymmetricMatrix PriorPrec;
       PriorPrec = thetaPrior.GetPrecisions();
-      
+
       PriorPrec(ardindex,ardindex) = 1e-12;
-      
+
       thetaPrior.SetPrecisions(PriorPrec);
 
       thetaPrior.means(ardindex)=0;
@@ -379,7 +379,7 @@ void BuxtonFwdModel::UpdateARD(
 				MVNDist& thetaPrior, double& Fard) const
 {
   Tracer_Plus tr("BuxtonFwdModel::UpdateARD");
-  
+
   int ardindex = ard_index();
 
   if (doard)
@@ -391,7 +391,7 @@ void BuxtonFwdModel::UpdateARD(
 
       PriorCov(ardindex,ardindex) = theta.means(ardindex)*theta.means(ardindex) + PostCov(ardindex,ardindex);
 
-      
+
       thetaPrior.SetCovariance(PriorCov);
 
       //Calculate the extra terms for the free energy

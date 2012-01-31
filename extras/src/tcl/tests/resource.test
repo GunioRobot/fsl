@@ -166,7 +166,7 @@ test resource-6.3 {resource write tests} {macOnly} {
     lappend result [lsearch [resource list TEXT $id] Hello]
     resource close $id
     file delete rsrc2.file
-    set result   
+    set result
 } {1 0 -1}
 test resource-6.4 {resource write tests} {macOnly} {
     catch {file delete rsrc2.file}
@@ -190,7 +190,7 @@ test resource-6.6 {resource write tests} {macOnly} {
     catch {file delete rsrc2.file}
     testWriteTextResource -rsrc fileRsrcName -rsrcid 256  -file rsrc2.file  -protected {error "don't tread on me"}
     set id [resource open rsrc2.file w]
-    set result [catch {resource write -id 256 -force -file $id TEXT {NAHNAHNANAHNAH}} mssg] 
+    set result [catch {resource write -id 256 -force -file $id TEXT {NAHNAHNANAHNAH}} mssg]
     resource close $id
     file delete rsrc2.file
     lappend result $mssg
@@ -253,8 +253,8 @@ test resource-8.2 {resource delete tests} {macOnly} {
 } {1 {you must specify either "-id" or "-name" or both to "resource delete"}}
 test resource-8.3 {resource delete tests} {macOnly} {
     set result [catch {resource delete -file ffffff -id 128 TEXT} mssg]
-    lappend result $mssg    
-} {1 {invalid resource file reference "ffffff"}}    
+    lappend result $mssg
+} {1 {invalid resource file reference "ffffff"}}
 test resource-8.4 {resource delete tests} {macOnly} {
     catch {file delete rsrc2.file}
     testWriteTextResource -rsrc fileRsrcName -rsrcid 128 -file rsrc2.file {Some stuff}
@@ -262,7 +262,7 @@ test resource-8.4 {resource delete tests} {macOnly} {
     set result [catch {resource delete -id 128 -file $id TEXT} mssg]
     resource close $id
     file delete rsrc2.file
-    lappend result [string compare $mssg "cannot delete from resource file \"$id\", it was opened read only"]   
+    lappend result [string compare $mssg "cannot delete from resource file \"$id\", it was opened read only"]
 } {1 0}
 test resource-8.5 {resource delete tests} {macOnly} {
     catch {file delete rsrc2.file}
@@ -303,7 +303,7 @@ test resource-8.8 {resource delete tests} {macOnly} {
     catch {file delete rsrc2.file}
     testWriteTextResource -rsrc fileRsrcName -rsrcid 256  -file rsrc2.file  -protected {error "don't tread on me"}
     set id [resource open rsrc2.file w]
-    set result [catch {resource delete -id 256 -file $id TEXT } mssg] 
+    set result [catch {resource delete -id 256 -file $id TEXT } mssg]
     resource close $id
     file delete rsrc2.file
     lappend result $mssg
@@ -319,7 +319,7 @@ test resource-8.9 {resource delete tests} {macOnly} {
     file delete rsrc2.file
     set result
 } {fileRsrcName {}}
-    
+
 # Tests for the Mac version of the source command
 catch {file delete rsrc.file}
 test resource-9.1 {source command} {macOnly} {

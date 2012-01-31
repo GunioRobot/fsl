@@ -16,7 +16,7 @@ are required:
    that specifies whether to use compression (1) or not (0)
  - use znz_isnull rather than any (pointer == NULL) comparisons in the code
    for znzfile types (normally done after a return from znzopen)
- 
+
 NB: seeks for writable files with compression are quite restricted
 
  */
@@ -41,7 +41,7 @@ znzlib.c  (zipped or non-zipped library)
 */
 
 
-/* Note extra argument (use_compression) where 
+/* Note extra argument (use_compression) where
    use_compression==0 is no compression
    use_compression!=0 uses zlib (gzip) compression
 */
@@ -118,7 +118,7 @@ int Xznzclose(znzFile * file)
     if ((*file)->zfptr!=NULL)  { retval = gzclose((*file)->zfptr); }
 #endif
     if ((*file)->nzfptr!=NULL) { retval = fclose((*file)->nzfptr); }
-                                                                                
+
     free(*file);
     *file = NULL;
   }
@@ -132,10 +132,10 @@ size_t znzread(void* buf, size_t size, size_t nmemb, znzFile file)
 #ifdef HAVE_ZLIB
   if (file->zfptr!=NULL) {
     char* bufferCopy=(char *)buf;
-    size_t bytesRead=0;	
+    size_t bytesRead=0;
     while ( nmemb > 0 ) {
       size_t blockLength=MIN(INT_MAX,nmemb);
-      bytesRead+=  (size_t) (gzread(file->zfptr,bufferCopy,size*blockLength) / size);	  
+      bytesRead+=  (size_t) (gzread(file->zfptr,bufferCopy,size*blockLength) / size);
       bufferCopy+=( blockLength * size );
       nmemb-=blockLength;
     }
@@ -156,7 +156,7 @@ size_t znzwrite(const void* buf, size_t size, size_t nmemb, znzFile file)
       size_t blockLength=MIN(INT_MAX,nmemb);
       /*  NOTE:  We must typecast const away from the buffer because
           gzwrite does not have complete const specification */
-      bytesWritten+= (size_t) ( gzwrite(file->zfptr,(void *)bufferCopy,size*blockLength) / size );	  
+      bytesWritten+= (size_t) ( gzwrite(file->zfptr,(void *)bufferCopy,size*blockLength) / size );
       bufferCopy+=( blockLength * size );
       nmemb-=blockLength;
     }
@@ -279,7 +279,7 @@ int znzprintf(znzFile stream, const char *format, ...)
     vsprintf(tmpstr,format,va);
     retval=gzprintf(stream->zfptr,"%s",tmpstr);
     free(tmpstr);
-  } else 
+  } else
 #endif
   {
    retval=vfprintf(stream->nzfptr,format,va);

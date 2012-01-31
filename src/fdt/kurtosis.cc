@@ -5,20 +5,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -30,13 +30,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -47,7 +47,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -82,7 +82,7 @@ const float maxfloat=1e10;
 const float minfloat=1e-10;
 const float maxlogfloat=23;
 const float minlogfloat=-23;
-const int maxint=1000000000; 
+const int maxint=1000000000;
 
 
 ReturnMatrix form_Kmat(const Matrix& r){
@@ -171,7 +171,7 @@ public:
 	m_A(i)=0;
       }
       m_B(i) = 1.0;
-      
+
       m_C(i,1) = -bvals(1,i)*bvecs(1,i)*bvecs(1,i);
       m_C(i,2) = -2*bvals(1,i)*bvecs(1,i)*bvecs(2,i);
       m_C(i,3) = -2*bvals(1,i)*bvecs(1,i)*bvecs(3,i);
@@ -185,7 +185,7 @@ public:
     }
 
     //        m_D=0;
-    
+
   }
 
   virtual ~KurtosisNonlinCF(){};
@@ -203,9 +203,9 @@ public:
   ReturnMatrix g_evaluate(const ColumnVector& x) const{
     ColumnVector sj_g(x.Nrows());
     //    ColumnVector sj_gg;
-    
+
     //  sj_gg = MISCMATHS::gradient(x,*this,1e-4);
- 
+
     ColumnVector sj_d(6);
     ColumnVector sj_w(15);
     sj_d = x.SubMatrix(1,6,1,1);
@@ -224,7 +224,7 @@ public:
     sj_g(6) = 2*NEWMAT::SP(sj_func,m_C.Column(6)+2*sj_t*m_D*sj_w).Sum();
 
     sj_g(7) = 2*NEWMAT::SP(sj_func,m_B).Sum();
- 
+
     for(int i=1,j=8;j<=x.Nrows();i++,j++)
       sj_g(j) = 2*NEWMAT::SP(sj_func,sj_t2*m_D.Column(i)).Sum();
 
@@ -246,7 +246,7 @@ public:
     m_n = par.m_n;
 
     return *this;
-    
+
   }
   KurtosisNonlinCF(const KurtosisNonlinCF& rhs):
     m_A(rhs.m_A),m_B(rhs.m_B),m_C(rhs.m_C),m_D(rhs.m_D),m_n(rhs.m_n){
@@ -256,7 +256,7 @@ public:
 };
 
 inline Matrix Anis()
-{ 
+{
   Matrix A(3,3);
   A << 1 << 0 << 0
     << 0 << 0 << 0
@@ -268,7 +268,7 @@ Matrix form_Amat(const Matrix& r,const Matrix& b)
 {
   Matrix A(r.Ncols(),7);
   Matrix tmpvec(3,1), tmpmat;
-  
+
   for( int i = 1; i <= r.Ncols(); i++){
     tmpvec << r(1,i) << r(2,i) << r(3,i);
     tmpmat = tmpvec*tmpvec.t()*b(1,i);
@@ -294,7 +294,7 @@ inline SymmetricMatrix vec2tens(ColumnVector& Vec){
 }
 
 void kurtosisfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2, ColumnVector& evec3,
-		 float& f,float& s0,ColumnVector& Dvec, float& mk, ColumnVector& tens4, 
+		 float& f,float& s0,ColumnVector& Dvec, float& mk, ColumnVector& tens4,
 		 const Matrix& Amat,const Matrix& Kmat,const ColumnVector& S,const Matrix& bvals,const Matrix& bvecs){
 
 
@@ -308,7 +308,7 @@ void kurtosisfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2, Col
 
   Dvec.SubMatrix(1,6,1,1) = xmin.SubMatrix(1,6,1,1);
   tens4 = xmin.SubMatrix(8,22,1,1);
-  Dvec(7) = exp(xmin(7));  
+  Dvec(7) = exp(xmin(7));
   s0 = Dvec(7);
 
   // Tensor Stuff
@@ -349,7 +349,7 @@ void kurtosisfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2, Col
   }
   mk *= mDd*mDd;
   mk /= float(S.Nrows());
-  
+
 }
 
 int main(int argc, char** argv)
@@ -384,7 +384,7 @@ int main(int argc, char** argv)
       r(1,i)=r(1,i)/tmpsum;
       r(2,i)=r(2,i)/tmpsum;
       r(3,i)=r(3,i)/tmpsum;
-    }  
+    }
   }
   Matrix b = read_ascii_matrix(opts.bvalsfile.value());
   if(b.Nrows()>1) b=b.t();
@@ -452,9 +452,9 @@ int main(int argc, char** argv)
     cout<<k<<" slices processed"<<endl;
       for(int j=miny; j < maxy; j++){
 	for(int i =minx; i< maxx; i++){
-	
+
 	  if(mask(i,j,k)>0){
-	    
+
 	    for(int t=0;t < data.tsize();t++){
 	      S(t+1)=data(i,j,k,t);
 	    }
@@ -492,7 +492,7 @@ int main(int argc, char** argv)
 	}
       }
   }
-  
+
     string fafile=opts.ofile.value()+"_FA";
     string s0file=opts.ofile.value()+"_S0";
     string l1file=opts.ofile.value()+"_L1";
@@ -519,7 +519,7 @@ int main(int argc, char** argv)
       MKfile+="littlebit";
       kurtosisfile+="littlebit";
     }
-  
+
     save_volume(FA,fafile);
     save_volume(S0,s0file);
     save_volume(l1,l1file);
@@ -535,8 +535,8 @@ int main(int argc, char** argv)
       save_volume4D(Delements,tensfile);
       save_volume4D(KurtTens,kurtosisfile);
     }
-      
-    
+
+
   return 0;
 }
 

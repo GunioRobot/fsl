@@ -18,7 +18,7 @@
 
 class SliceVisitor;
 
-class Slice  
+class Slice
 {
 public:
 	typedef boost::shared_ptr< Slice > Handle;
@@ -40,7 +40,7 @@ public:
 	typedef boost::weak_ptr< SliceStore<VoxelType> > WeakHandle;
 
 	virtual ~SliceStore();
-	
+
 	VoxelType& operator()(short x, short y);
 	VoxelType& operator()(unsigned int offset);
 

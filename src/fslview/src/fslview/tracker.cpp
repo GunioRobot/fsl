@@ -12,7 +12,7 @@
 
 struct Tracker::Implementation {
 
-  Implementation(const void *o, const std::string &msg): 
+  Implementation(const void *o, const std::string &msg):
     m_object(o), m_msg(msg), m_count(0) { }
 
   ~Implementation() {}
@@ -23,7 +23,7 @@ struct Tracker::Implementation {
   unsigned int m_count;
 };
 
-std::string Tracker::Implementation::m_indentation = ""; 
+std::string Tracker::Implementation::m_indentation = "";
 
 Tracker::Tracker(const void *o, const std::string &msg):m_impl(new Implementation(o, msg))
 {
@@ -32,8 +32,8 @@ Tracker::Tracker(const void *o, const std::string &msg):m_impl(new Implementatio
 }
 
 Tracker::Handle Tracker::create(const void *object, const std::string &msg)
-{ 
-  return Tracker::Handle(new Tracker(object, msg)); 
+{
+  return Tracker::Handle(new Tracker(object, msg));
 }
 
 Tracker::~Tracker()
@@ -50,15 +50,15 @@ void Tracker::trace()
 //   size_t size;
 //   char **strings;
 //   size_t i;
-     
+
 //   size = backtrace (array, 10);
 //   strings = backtrace_symbols (array, size);
-     
+
 //   cout << "Obtained " << size << "stack frames." << endl;
-  
+
 //   for (i = 0; i < size; i++)
 //     cout << strings[i] << endl;
-     
+
 //   free (strings);
 }
 
@@ -70,7 +70,7 @@ void Tracker::checkpoint()
 
 void Tracker::message(const std::string &msg) const
 {
-  warning("%s(%p): %s", message().c_str(), m_impl->m_object, msg.c_str());  
+  warning("%s(%p): %s", message().c_str(), m_impl->m_object, msg.c_str());
 }
 
 const std::string Tracker::message() const { return m_impl->m_indentation + m_impl->m_msg; }

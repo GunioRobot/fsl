@@ -11,7 +11,7 @@
  * RCS: @(#) $Id: tkUnixDialog.c,v 1.1.1.1 2007/07/10 15:05:18 duncan Exp $
  *
  */
- 
+
 #include "tkPort.h"
 #include "tkInt.h"
 #include "tkUnixInt.h"
@@ -61,7 +61,7 @@ static int EvalArgv(interp, cmdName, argc, argv)
 	cmdArgv[0] = "auto_load";
 	cmdArgv[1] = cmdName;
 
-	if ((*cmdInfo.proc)(cmdInfo.clientData, interp, 2, cmdArgv)!= TCL_OK){ 
+	if ((*cmdInfo.proc)(cmdInfo.clientData, interp, 2, cmdArgv)!= TCL_OK){
 	    return TCL_ERROR;
 	}
 

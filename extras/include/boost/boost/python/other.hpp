@@ -16,7 +16,7 @@
 namespace boost { namespace python {
 
 template<class T> struct other
-{ 
+{
     typedef T type;
 };
 
@@ -27,7 +27,7 @@ namespace detail
   class is_other
   {
    public:
-      BOOST_STATIC_CONSTANT(bool, value = false); 
+      BOOST_STATIC_CONSTANT(bool, value = false);
   };
 
   template<typename T>
@@ -63,7 +63,7 @@ namespace detail
 {
   typedef char (&yes_other_t)[1];
   typedef char (&no_other_t)[2];
-      
+
   no_other_t is_other_test(...);
 
   template<typename T>

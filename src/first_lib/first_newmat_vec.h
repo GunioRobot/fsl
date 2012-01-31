@@ -1,6 +1,6 @@
 /*
  *  first_newmat_vec.h
- *  
+ *
  *
  *  Created by Brian Patenaude on 12/08/2008.
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
@@ -13,14 +13,14 @@
 #include <newmat.h>
 
 namespace FIRST_LIB{
-	
+
 	class first_newmat_vector{
 		public:
-			
+
 	first_newmat_vector();
 	~first_newmat_vector();
-	
-	
+
+
 template<class T>
 static std::vector<T> vectorToVector( const NEWMAT::Matrix & sm, const int & MaxModes);
 
@@ -43,7 +43,7 @@ template<class T>
 static std::vector< std::vector<T> > matrixToVectorOfVectors(const NEWMAT::Matrix & m);
 
 inline
-static NEWMAT::ReturnMatrix unwrapMatrix(const NEWMAT::Matrix & m) 
+static NEWMAT::ReturnMatrix unwrapMatrix(const NEWMAT::Matrix & m)
 {
 	NEWMAT::ColumnVector munwrap(m.Nrows()*m.Ncols());
 	unsigned int count=0;
@@ -54,9 +54,9 @@ static NEWMAT::ReturnMatrix unwrapMatrix(const NEWMAT::Matrix & m)
 }
 
 inline
-static NEWMAT::ReturnMatrix wrapMatrix(const NEWMAT::ColumnVector & m) 
+static NEWMAT::ReturnMatrix wrapMatrix(const NEWMAT::ColumnVector & m)
 {
-	
+
 	NEWMAT::Matrix wrapped(m.Nrows()/3,3);
 	unsigned int count=0;
 	for (int i =0; i<m.Nrows() ; i+=3,count++)
@@ -69,9 +69,9 @@ static NEWMAT::ReturnMatrix wrapMatrix(const NEWMAT::ColumnVector & m)
 }
 
 
-	
+
 	};
-	
+
 }
 
 #endif

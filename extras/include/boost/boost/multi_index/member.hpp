@@ -68,7 +68,7 @@ struct const_member_base
   }
 
   Type& operator()(const reference_wrapper<Class> x,int=0)const
-  { 
+  {
     return operator()(x.get());
   }
 };
@@ -90,7 +90,7 @@ struct non_const_member_base
   }
 
   Type& operator()(Class& x)const
-  { 
+  {
     return x.*PtrToMember;
   }
 
@@ -100,7 +100,7 @@ struct non_const_member_base
   }
 
   Type& operator()(const reference_wrapper<Class>& x)const
-  { 
+  {
     return operator()(x.get());
   }
 };
@@ -183,7 +183,7 @@ struct non_const_member_offset_base
   }
 
   Type& operator()(Class& x)const
-  { 
+  {
     return *static_cast<Type*>(
       static_cast<void*>(
         static_cast<char*>(static_cast<void *>(&x))+OffsetOfMember));

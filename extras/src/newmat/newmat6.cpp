@@ -516,7 +516,7 @@ void Matrix::operator=(const BaseMatrix& X)
    REPORT //CheckConversion(X);
    // MatrixConversionCheck mcc;
    Eq(X,MatrixType::Rt);
-} 
+}
 
 void RowVector::operator=(const BaseMatrix& X)
 {

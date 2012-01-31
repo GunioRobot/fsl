@@ -19,7 +19,7 @@
 # Also delete any procedures that are listed in the auto-load index
 # except those defined in this file.
 #
-# Arguments: 
+# Arguments:
 # None.
 
 proc auto_reset {} {
@@ -178,7 +178,7 @@ proc tcl_findLibrary {basename version patch initScript enVarName varName} {
 # parse Tcl source files, writing out index entries as "proc"
 # commands are encountered.  This implementation won't work in a
 # safe interpreter, since a safe interpreter can't create the
-# special parser and mess with its commands.  
+# special parser and mess with its commands.
 
 if {[interp issafe]} {
     return	;# Stop sourcing the file here
@@ -190,7 +190,7 @@ if {[interp issafe]} {
 # followed by any number of glob patterns to use in that directory to
 # locate all of the relevant files.
 #
-# Arguments: 
+# Arguments:
 # dir -		Name of the directory in which to create an index.
 # args -	Any number of additional arguments giving the
 #		names of files within dir.  If no additional
@@ -349,7 +349,7 @@ namespace eval auto_mkindex_parser {
 # handles things like the "proc" command by adding an entry for the
 # index file.  Returns a string that represents the index file.
 #
-# Arguments: 
+# Arguments:
 #	file	Name of Tcl source file to be indexed.
 
 proc auto_mkindex_parser::mkindex {file} {
@@ -374,7 +374,7 @@ proc auto_mkindex_parser::mkindex {file} {
     # if somebody actually tries to have a \0 in their proc name.  Too bad
     # for them.
     set contents [string map "$ \u0000" $contents]
-    
+
     set index ""
     set contextStack ""
     set imports ""
@@ -466,7 +466,7 @@ proc auto_mkindex_parser::commandInit {name arglist body} {
     if {[string match *::* $name]} {
         set exportCmd [list _%@namespace export [namespace tail $name]]
         $parser eval [list _%@namespace eval $ns $exportCmd]
- 
+
 	# The following proc definition does not work if you
 	# want to tolerate space or something else diabolical
 	# in the procedure name, (i.e., space in $alias)
@@ -518,7 +518,7 @@ proc auto_mkindex_parser::fullname {name} {
     } elseif {![string match ::* $name]} {
         set name "::$name"
     }
-    
+
     # Earlier, mkindex replaced all $'s with \0.  Now, we have to reverse
     # that replacement.
     return [string map "\u0000 $" $name]
@@ -535,7 +535,7 @@ auto_mkindex_parser::command proc {name args} {
     variable scriptFile
     # Do some fancy reformatting on the "source" call to handle platform
     # differences with respect to pathnames.  Use format just so that the
-    # command is a little easier to read (otherwise it'd be full of 
+    # command is a little easier to read (otherwise it'd be full of
     # backslashed dollar signs, etc.
     append index [list set auto_index([fullname $name])] \
 	    [format { [list source [file join $dir %s]]} \
@@ -560,7 +560,7 @@ auto_mkindex_parser::hook {
 
 	# AUTO MKINDEX:  tbcload::bcproc name arglist body
 	# Adds an entry to the auto index list for the given pre-compiled
-	# procedure name.  
+	# procedure name.
 
 	auto_mkindex_parser::commandInit tbcload::bcproc {name args} {
 	    variable index

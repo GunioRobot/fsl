@@ -13,7 +13,7 @@
 *ignoreName:   &Ignorar
 *okName:       &OK
 *cancelName:   &Anular
-*yesName:      &Sí 
+*yesName:      &Sí
 *noName:       &No
 
 ! --- symbolic names of label of SelectFont dialog ----------------------------
@@ -30,7 +30,7 @@
 ! --- symbolic names of label of PasswdDlg dialog -----------------------------
 
 *loginName:    Nombre de &usuario
-*passwordName: &Contraseña 
+*passwordName: &Contraseña
 
 ! --- resource for SelectFont dialog ------------------------------------------
 

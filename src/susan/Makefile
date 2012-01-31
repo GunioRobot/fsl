@@ -15,7 +15,7 @@ LIBS++ = -lnewimage -lmiscmaths -lprob -lfslio -lnewmat -lutils -lniftiio -lznz 
 
 RUNTCLS = Susan
 
-XFILES = susan 
+XFILES = susan
 
 all: susan
 

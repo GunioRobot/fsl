@@ -1,7 +1,7 @@
-/* 
+/*
  * tkMacScale.c --
  *
- *	This file implements the Macintosh specific portion of the 
+ *	This file implements the Macintosh specific portion of the
  *	scale widget.
  *
  * Copyright (c) 1996 by Sun Microsystems, Inc.
@@ -71,16 +71,16 @@ TkpCreateScale(tkwin)
     Tk_Window tkwin;
 {
     MacScale *macScalePtr;;
-    
+
     macScalePtr = (MacScale *) ckalloc(sizeof(MacScale));
     macScalePtr->scaleHandle = NULL;
     if (scaleActionProc == NULL) {
 	scaleActionProc = NewControlActionProc(ScaleActionProc);
     }
-    
+
     Tk_CreateEventHandler(tkwin, ButtonPressMask,
 	    MacScaleEventProc, (ClientData) macScalePtr);
-	    
+
     return (TkScale *) macScalePtr;
 }
 
@@ -105,7 +105,7 @@ TkpDestroyScale(scalePtr)
     TkScale *scalePtr;
 {
     MacScale *macScalePtr = (MacScale *) scalePtr;
-    
+
     /*
      * Free Macintosh control.
      */
@@ -143,7 +143,7 @@ TkpDisplayScale(clientData)
     MacScale *macScalePtr = (MacScale *) clientData;
     Rect r;
     WindowRef windowRef;
-    GWorldPtr destPort;        
+    GWorldPtr destPort;
     CGrafPtr saveWorld;
     GDHandle saveDevice;
     MacDrawable *macDraw;
@@ -184,7 +184,7 @@ TkpDisplayScale(clientData)
 
     if (scalePtr->highlightWidth != 0) {
 	GC gc;
-    
+
 	gc = Tk_GCForColor(scalePtr->highlightColorPtr, Tk_WindowId(tkwin));
 	Tk_DrawFocusHighlight(tkwin, gc, scalePtr->highlightWidth,
 		Tk_WindowId(tkwin));
@@ -212,7 +212,7 @@ TkpDisplayScale(clientData)
         r.right = r.bottom = 1;
         /* TODO: initial value. */
         /* 16*slider+4 */
-	macScalePtr->scaleHandle = NewControl((WindowRef) destPort, 
+	macScalePtr->scaleHandle = NewControl((WindowRef) destPort,
 		&r, "\p", false, (short) 35, 0, 1000,
 		16*slider, (SInt32) macScalePtr);
 
@@ -295,7 +295,7 @@ TkpScaleElement(scalePtr, x, y)
     Rect bounds;
     CGrafPtr saveWorld;
     GDHandle saveDevice;
-    GWorldPtr destPort;        
+    GWorldPtr destPort;
 
     destPort = TkMacGetDrawablePort(Tk_WindowId(scalePtr->tkwin));
     GetGWorld(&saveWorld, &saveDevice);
@@ -306,13 +306,13 @@ TkpScaleElement(scalePtr, x, y)
      * DisplayScrollbar.  Be sure to keep the two consistent.
      */
 
-    TkMacWinBounds((TkWindow *) scalePtr->tkwin, &bounds);		
+    TkMacWinBounds((TkWindow *) scalePtr->tkwin, &bounds);
     where.h = x + bounds.left;
     where.v = y + bounds.top;
     part = TestControl(macScalePtr->scaleHandle, where);
-    
+
     SetGWorld(saveWorld, saveDevice);
-    
+
     switch (part) {
     	case inSlider:
 	    return SLIDER;
@@ -338,7 +338,7 @@ TkpScaleElement(scalePtr, x, y)
  *
  * MacScaleEventProc --
  *
- *	This procedure is invoked by the Tk dispatcher for 
+ *	This procedure is invoked by the Tk dispatcher for
  *	ButtonPress events on scales.
  *
  * Results:
@@ -376,16 +376,16 @@ MacScaleEventProc(clientData, eventPtr)
     SetGWorld(destPort, NULL);
     TkMacSetUpClippingRgn(Tk_WindowId(macScalePtr->info.tkwin));
 
-    TkMacWinBounds((TkWindow *) macScalePtr->info.tkwin, &bounds);		
+    TkMacWinBounds((TkWindow *) macScalePtr->info.tkwin, &bounds);
     where.h = eventPtr->xbutton.x + bounds.left;
     where.v = eventPtr->xbutton.y + bounds.top;
     part = TestControl(macScalePtr->scaleHandle, where);
     if (part == 0) {
 	return;
     }
-    
+
     part = TrackControl(macScalePtr->scaleHandle, where, scaleActionProc);
-    
+
     /*
      * Update the value for the widget.
      */

@@ -1,4 +1,4 @@
-/* 
+/*
  * tclNotify.c --
  *
  *	This file implements the generic portion of the Tcl notifier.
@@ -135,7 +135,7 @@ TclInitNotifier()
  *	subsystem.
  *
  * Results:
- *	None.	
+ *	None.
  *
  * Side effects:
  *	Removes the notifier associated with the current thread from
@@ -468,7 +468,7 @@ QueueEvent(tsdPtr, evPtr, position)
 	evPtr->nextPtr = tsdPtr->firstEventPtr;
 	if (tsdPtr->firstEventPtr == NULL) {
 	    tsdPtr->lastEventPtr = evPtr;
-	}	    
+	}
 	tsdPtr->firstEventPtr = evPtr;
     } else if (position == TCL_QUEUE_MARK) {
 	/*
@@ -585,7 +585,7 @@ Tcl_ServiceEvent(flags)
      * priority events, and so must be invoked before we process events
      * on the event queue.
      */
-    
+
     if (Tcl_AsyncReady()) {
 	(void) Tcl_AsyncInvoke((Tcl_Interp *) NULL, 0);
 	return 1;
@@ -594,7 +594,7 @@ Tcl_ServiceEvent(flags)
     /*
      * No event flags is equivalent to TCL_ALL_EVENTS.
      */
-    
+
     if ((flags & TCL_ALL_EVENTS) == 0) {
 	flags |= TCL_ALL_EVENTS;
     }
@@ -833,7 +833,7 @@ Tcl_DoOneEvent(flags)
      * The first thing we do is to service any asynchronous event
      * handlers.
      */
-    
+
     if (Tcl_AsyncReady()) {
 	(void) Tcl_AsyncInvoke((Tcl_Interp *) NULL, 0);
 	return 1;
@@ -842,7 +842,7 @@ Tcl_DoOneEvent(flags)
     /*
      * No event flags is equivalent to TCL_ALL_EVENTS.
      */
-    
+
     if ((flags & TCL_ALL_EVENTS) == 0) {
 	flags |= TCL_ALL_EVENTS;
     }
@@ -969,8 +969,8 @@ Tcl_DoOneEvent(flags)
 	 * indicating that one system event has been dispatched
 	 * (and thus that some Tcl code might have been indirectly executed),
 	 * we break out of the loop.
-	 * We do this to give VwaitCmd for instance a chance to check 
-	 * if that system event had the side effect of changing the 
+	 * We do this to give VwaitCmd for instance a chance to check
+	 * if that system event had the side effect of changing the
 	 * variable (so the vwait can return and unwind properly).
 	 *
 	 * NB: We will process idle events if any first, because
@@ -1024,7 +1024,7 @@ Tcl_ServiceAll()
      * We need to turn off event servicing like we to in Tcl_DoOneEvent,
      * to avoid recursive calls.
      */
-    
+
     tsdPtr->serviceMode = TCL_SERVICE_NONE;
 
     /*
@@ -1080,7 +1080,7 @@ Tcl_ServiceAll()
  * Tcl_ThreadAlert --
  *
  *	This function wakes up the notifier associated with the
- *	specified thread (if there is one).  
+ *	specified thread (if there is one).
  *
  * Results:
  *	None.

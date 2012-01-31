@@ -110,7 +110,7 @@ namespace boost { namespace fusion { namespace detail
         {
             typedef meta::equal_to<Iterator, BOOST_DEDUCED_TYPENAME static_find_if<First,Last,Pred>::type> found;
             return call(obj,iter, found());
-        };        
+        };
     }
 
 }}}

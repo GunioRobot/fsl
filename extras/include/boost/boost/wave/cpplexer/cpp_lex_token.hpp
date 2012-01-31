@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     A generic C++ lexer token definition
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
@@ -15,7 +15,7 @@
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/util/file_position.hpp>
-#include <boost/wave/token_ids.hpp>  
+#include <boost/wave/token_ids.hpp>
 #include <boost/wave/language_support.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,22 +29,22 @@ template <typename PositionT = boost::wave::util::file_position_type>
 class lex_token;
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  lex_token
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename PositionT>
-class lex_token 
+class lex_token
 {
 public:
     typedef BOOST_WAVE_STRINGTYPE   string_type;
     typedef PositionT               position_type;
-    
+
     lex_token()
     :   id(T_EOI)
     {}
-    
+
     lex_token(token_id id_, string_type const &value_, PositionT const &pos_)
     :   id(id_), value(value_), pos(pos_)
     {}
@@ -59,20 +59,20 @@ public:
 
     friend bool operator== (lex_token const& lhs, lex_token const& rhs)
     {
-        //  two tokens are considered equal even if they contain different 
+        //  two tokens are considered equal even if they contain different
         //  positions
         return (lhs.id == rhs.id && lhs.value == rhs.value) ? true : false;
     }
-    
-// debug support    
+
+// debug support
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
 // access functions for the tree_to_xml functionality
-    static int get_token_id(lex_token const &t) 
+    static int get_token_id(lex_token const &t)
         { return ID_FROM_TOKEN(token_id(t)); }
-    static string_type get_token_value(lex_token const &t) 
+    static string_type get_token_value(lex_token const &t)
         { return t.get_value(); }
-#endif 
-    
+#endif
+
 #if defined(BOOST_SPIRIT_DEBUG)
 // debug support
     void print (std::ostream &stream) const
@@ -83,7 +83,7 @@ public:
             case '\r':  stream << "\\r"; break;
             case '\n':  stream << "\\n"; break;
             default:
-                stream << value[i]; 
+                stream << value[i];
                 break;
             }
         }

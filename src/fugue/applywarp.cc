@@ -8,20 +8,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -33,13 +33,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -50,7 +50,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -105,8 +105,8 @@ string title="applywarp (Version 1.2)\nCopyright(c) 2001, University of Oxford (
 string examples=string("applywarp -i invol -o outvol -r refvol -w warpvol\n") +
                 string("applywarp -i invol -o outvol -r refvol -w coefvol\n");
 
-Option<bool> verbose(string("-v,--verbose"), false, 
-		     string("switch on diagnostic messages"), 
+Option<bool> verbose(string("-v,--verbose"), false,
+		     string("switch on diagnostic messages"),
 		     false, no_argument);
 Option<bool> help(string("-h,--help"), false,
 		  string("display this message"),
@@ -172,7 +172,7 @@ int applywarp()
       exit(EXIT_FAILURE);
     }
   }
-  
+
   // read in pre/post transforms
   Matrix premat, postmat;
   premat = IdentityMatrix(4);
@@ -187,9 +187,9 @@ int applywarp()
   // read in-images
   volume4D<float> invol;
   read_volume4D(invol,inname.value());
-  
+
   //
-  // Get size of output from --ref. 
+  // Get size of output from --ref.
   //
   volume<float>    refvol;
   read_volume(refvol,refname.value());
@@ -243,7 +243,7 @@ int applywarp()
         cerr << "Invalid argument " << supersamplelevel.value() << " to --superlevel parameter" << endl;
         exit(EXIT_FAILURE);
       }
-      if (ssfac < 1 || ssfac > 10) { 
+      if (ssfac < 1 || ssfac > 10) {
         cerr << "Argument to --superlevel parameter must be between 1 and 10, or a (for automatic)" << endl;
         exit(EXIT_FAILURE);
       }
@@ -259,7 +259,7 @@ int applywarp()
   // Read and verify mask
   //
   volume<float>    mask;
-  if (maskname.set()) { 
+  if (maskname.set()) {
     read_volume(mask,maskname.value());
     if (!samesize(refvol,mask)) {
       cerr << "--ref and --mask must have same size" << endl;
@@ -270,10 +270,10 @@ int applywarp()
   // set interpolation method
   if (interp.value() == "nn" ) {
     invol.setinterpolationmethod(nearestneighbour);
-  } 
+  }
   else if (!interp.set() || interp.value() == "trilinear") {
     invol.setinterpolationmethod(trilinear);
-  } 
+  }
   else if (interp.value() == "sinc") {
     invol.setinterpolationmethod(sinc);
   }
@@ -336,7 +336,7 @@ int applywarp()
   else {
     save_volume4D_dtype(outvol,outname.value(),dtype(inname.value()));
   }
-  
+
   return(EXIT_SUCCESS);
 }
 
@@ -377,15 +377,15 @@ int main(int argc, char *argv[])
       options.usage();
       exit(EXIT_FAILURE);
     }
-  }  
+  }
   catch(X_OptionError& e) {
     options.usage();
     cerr << endl << e.what() << endl;
     exit(EXIT_FAILURE);
-  } 
+  }
   catch(std::exception &e) {
     cerr << e.what() << endl;
-  } 
+  }
 
   return(applywarp());
 }
@@ -446,7 +446,7 @@ float hist_mode(vector<float>  vec)
     modeval = pos->first;
     if (!(vec.size()%2)) { // If even
       ++pos;
-      modeval = (modeval + pos->first) / 2.0;      
+      modeval = (modeval + pos->first) / 2.0;
     }
   }
   return(modeval);

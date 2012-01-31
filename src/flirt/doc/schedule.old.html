@@ -22,7 +22,7 @@ Any constant can be used as a scalar value in the schedule file.  In addition
 token names can be used, and the following token names are currently defined:
 <DL>
 <DT><CODE>MAXDOF</CODE></DT>
-<DD>the user-defined maximum degrees of freedom (via the 
+<DD>the user-defined maximum degrees of freedom (via the
 <CODE>-dof</CODE> option).</DD>
 <DT><CODE>MINSAMPLING</CODE></DT>
 <DD>the minimum sampling that is sensible, as calculated from the
@@ -50,7 +50,7 @@ The form of this reference is: <CODE>mat:r1-r2</CODE> <BR>
 where <CODE>mat</CODE> is the matrix name (e.g. <CODE>UB</CODE>), <CODE>r1</CODE>
 is the first row, and <CODE>r2</CODE> the last row to be used.  Note that
 some parts of this may be omitted so that <CODE>mat:r1- </CODE> specifies
-the matrix from row <CODE>r1</CODE> to the end, and <CODE>mat:r1</CODE> just 
+the matrix from row <CODE>r1</CODE> to the end, and <CODE>mat:r1</CODE> just
 specifies a single row (<CODE>r1</CODE>).
 <BR>NB: The first row of any matrix has an index of 1.
 
@@ -70,7 +70,7 @@ results of the 8mm search algorithm.
 <DT><CODE>clear </CODE><I>mat</I><CODE></CODE></DT>
 <DD>Clears the matrix <I>mat</I>.</DD>
 <DT><CODE>copy </CODE><I>mat1</I><CODE> </CODE><I>mat2</I><CODE></CODE></DT>
-<DD>Copies the contents of matrix <I>mat1</I> into matrix <I>mat2</I>.  
+<DD>Copies the contents of matrix <I>mat1</I> into matrix <I>mat2</I>.
 It does not affect the contents of matrix <I>mat1</I>.</DD>
 <DT><CODE>print </CODE><I>mat</I><CODE></CODE></DT>
 <DD>Prints the contents of matrix <I>mat</I> to the screen.</DD>
@@ -78,21 +78,21 @@ It does not affect the contents of matrix <I>mat1</I>.</DD>
 <DD>Saves an ascii copy of the contents of matrix <I>mat</I> to the file
 named by <I>filename</I>.</DD>
 <DT><CODE>read </CODE><I>mat</I><CODE> </CODE><I>filename</I><CODE></CODE></DT>
-<DD>Reads an ascii file (<I>filename</I>) and stores 
+<DD>Reads an ascii file (<I>filename</I>) and stores
 the contents in matrix <I>mat</I>.</DD>
 <DT><CODE>printparams </CODE><I>mat</I><CODE></CODE></DT>
-<DD>Prints the contents of matrix <I>mat</I> to the screen as parameter 
+<DD>Prints the contents of matrix <I>mat</I> to the screen as parameter
 values (rather than reshaped 4 by 4 affine matrices).</DD>
 <DT><CODE>saveparams </CODE><I>mat</I><CODE> </CODE><I>filename</I><CODE></CODE></DT>
-<DD>Saves an ascii copy of the contents of matrix <I>mat</I>, as parameter 
+<DD>Saves an ascii copy of the contents of matrix <I>mat</I>, as parameter
 values, to the file named by <I>filename</I>.</DD>
 <DT><CODE>readparams </CODE><I>mat</I><CODE> </CODE><I>filename</I><CODE></CODE></DT>
-<DD>Reads an ascii file (<I>filename</I>) where each line represents 
+<DD>Reads an ascii file (<I>filename</I>) where each line represents
 1 cost value followed by 12 parameter values.  It then converts these parameters
 to reshaped affine matrices and stores the contents in matrix <I>mat</I>.</DD>
 <DT><CODE>setrow </CODE><I>mat</I><CODE> </CODE><I>v1 v2 ... v16</I><CODE></CODE></DT>
-<DD>Adds a row to the end of matrix <I>mat</I> with the value given by the 
-reshaped matrix: <I>v1 v2 ... v16</I>.  Note that only the 16 matrix values 
+<DD>Adds a row to the end of matrix <I>mat</I> with the value given by the
+reshaped matrix: <I>v1 v2 ... v16</I>.  Note that only the 16 matrix values
 are used, not the cost value (which is initialised to 0).</DD>
 <DT><CODE>setoption </CODE><I>option</I><CODE> </CODE><I>v1 v2 ...</I><CODE></CODE></DT>
 <DD>Sets the value of certain defined options.  The name of the option is
@@ -104,16 +104,16 @@ and <I>boundguess</I>.</DD>
 <DD>Sorts the rows of matrix <I>mat</I> into <em>ascending</em> order
 based on the first column entries of each row (the cost function values).</DD>
 <DT><CODE>dualsort </CODE><I>mat1 mat2</I><CODE></CODE></DT>
-<DD>Sorts the rows of matrix <I>mat1</I> and <I>mat2</I> into 
-<em>ascending</em> order based on the first column entries <I>mat1</I> only 
+<DD>Sorts the rows of matrix <I>mat1</I> and <I>mat2</I> into
+<em>ascending</em> order based on the first column entries <I>mat1</I> only
 (the cost function values).</DD>
 <DT><CODE>search [</CODE><I>dof</I><CODE>]</CODE></DT>
 <DD>Performs the 8mm search algorithm on the currently defined image pair.
 The result is returned in matrices <CODE>S</CODE> and <CODE>P</CODE> where
-<CODE>S</CODE> contains the optimised values (which are sorted), 
-and <CODE>P</CODE> the pre-optimised values from the search grid.  
+<CODE>S</CODE> contains the optimised values (which are sorted),
+and <CODE>P</CODE> the pre-optimised values from the search grid.
 The rows of the two matrices correspond to each other.  The optional argument
-<I>dof</I> specifies the number of degrees of freedom for the search (only 6 
+<I>dof</I> specifies the number of degrees of freedom for the search (only 6
 or 7 are currently sensible).</DD>
 <DT><CODE>optimise </CODE><I>dof</I><CODE> </CODE><I>mat</I><CODE> [</CODE><I>perturbation_vector</I><CODE> </CODE><I>rel/abs</I><CODE> </CODE><I>max_iterations</I><CODE>]</CODE></DT>
 <DD>Performs a single optimisation (of Powell) on the currently defined
@@ -142,7 +142,7 @@ values of <I>scale</I> are: 8, 4, 2 and 1.
 <DT><CODE>if </CODE><I>val1</I><CODE> </CODE><I>op</I><CODE> </CODE><I>val2</I><CODE></CODE></DT>
 <DD>Determines whether the <em>next line only</em> is executed.  The test
 condition compares two scalars: <I>val1</I> and <I>val2</I> using
-the boolean operation <I>op</I>.  There are 6 permissable values for 
+the boolean operation <I>op</I>.  There are 6 permissable values for
 <I>op</I>, which are: <CODE> > < == != <= >= </CODE>
 </DL>
 
@@ -160,7 +160,7 @@ search
 # 4mm scale
 setscale 4
 clear U
-clear UA 
+clear UA
 clear UB
 clear US
 clear UP

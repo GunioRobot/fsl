@@ -3,8 +3,8 @@
  * Copyright (c) 2004
  * John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -93,7 +93,7 @@ boost::shared_ptr<Object> object_cache<Key, Object>::do_get(const Key& k, size_t
    if(mpos != s_data.index.end())
    {
       //
-      // Eureka! 
+      // Eureka!
       // We have a cached item, bump it up the list and return it:
       //
       if(--(s_data.cont.end()) != mpos->second)
@@ -141,11 +141,11 @@ boost::shared_ptr<Object> object_cache<Key, Object>::do_get(const Key& k, size_t
          {
             list_iterator condemmed(pos);
             ++pos;
-            // now remove the items from our containers, 
+            // now remove the items from our containers,
             // then order has to be as follows:
             BOOST_ASSERT(s_data.index.find(*(condemmed->second)) != s_data.index.end());
             s_data.index.erase(*(condemmed->second));
-            s_data.cont.erase(condemmed); 
+            s_data.cont.erase(condemmed);
             --s;
          }
          else

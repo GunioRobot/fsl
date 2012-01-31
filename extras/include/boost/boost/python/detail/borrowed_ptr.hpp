@@ -15,7 +15,7 @@
 namespace boost { namespace python { namespace detail {
 
 template<class T> class borrowed
-{ 
+{
     typedef T type;
 };
 
@@ -23,7 +23,7 @@ template<class T> class borrowed
 template<typename T>
 struct is_borrowed_ptr
 {
-    BOOST_STATIC_CONSTANT(bool, value = false); 
+    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 #  if !defined(__MWERKS__) || __MWERKS__ > 0x3000
@@ -66,7 +66,7 @@ struct is_borrowed_ptr<T*>
     : is_borrowed<typename remove_cv<T>::type>
 {
 };
-#  endif 
+#  endif
 
 # else // no partial specialization
 

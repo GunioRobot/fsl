@@ -5,7 +5,7 @@
 #include "options.h"
 
 namespace Utilities {
-  
+
   using namespace std;
 
   template<> string Option<bool>::config_key() const
@@ -14,12 +14,12 @@ namespace Utilities {
       string key(long_form());
       if( key == "" )
 	key = short_form();
-      
+
       return key;
     } else
       return "";
-  } 
-  
+  }
+
   template<> string Option<bool>::value_string() const { return ""; }
 
   template<> bool Option<bool>::set_value(const string& s)
@@ -42,15 +42,15 @@ namespace Utilities {
     return !unset_;
   }
 
-  template<> ostream& Option<bool>::print(ostream& os) const 
+  template<> ostream& Option<bool>::print(ostream& os) const
   {
     os << "# " << help_text() << endl;
     if(set())
-      os << config_key().substr(0, config_key().find("=")); 
+      os << config_key().substr(0, config_key().find("="));
 
     return os;
   }
-  
+
   ostream& operator<<(ostream& os, const BaseOption& o)
   {
     return o.print(os);
@@ -158,7 +158,7 @@ namespace Utilities {
   const string BaseOption::short_form() const
   {
     string::size_type pos(0), np;
-    
+
     while( (np = key_.find(",", pos)) != string::npos ) {
       string candidate(key_.substr(pos, np - pos));
       if( is_short_form(candidate) )
@@ -179,7 +179,7 @@ namespace Utilities {
   const string BaseOption::long_form() const
   {
     string::size_type pos(0), np;
-    
+
     while( (np = key_.find(",", pos)) != string::npos ) {
       string candidate(key_.substr(pos, np - pos));
 

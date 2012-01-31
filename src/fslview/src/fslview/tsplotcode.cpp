@@ -6,12 +6,12 @@
 void TsPlotCode::preWhitenModel(const ColumnVector& ac,
                                 const Matrix& designMatrix,
                                 Matrix& preWhitenedMatrix)
-{          
+{
   int nevs = designMatrix.Ncols();
   int npts = designMatrix.Nrows();
 
   preWhitenedMatrix = designMatrix;
-  
+
   int zeropad = (int)pow(2,ceil(log(npts)/log(2)));
 
   // get prewhitening filter from ac
@@ -24,14 +24,14 @@ void TsPlotCode::preWhitenModel(const ColumnVector& ac,
     {
       ColumnVector pwdata;
       ColumnVector test = designMatrix.Column(ev);
-      preWhitenData(designMatrix.Column(ev), 
+      preWhitenData(designMatrix.Column(ev),
                     pwdata, pwfilter, zeropad, npts);
       preWhitenedMatrix.Column(ev) = pwdata;
     }
 }
 
-void TsPlotCode::establishPwFilter(const ColumnVector& ac, 
-                                   ColumnVector& pwfilter, 
+void TsPlotCode::establishPwFilter(const ColumnVector& ac,
+                                   ColumnVector& pwfilter,
                                    int zeropad, int npts)
 {
  // FFT auto corr estimate
@@ -44,18 +44,18 @@ void TsPlotCode::establishPwFilter(const ColumnVector& ac,
   int sizeTS = ac.Nrows();
   if (sizeTS > npts/2)
     sizeTS = npts/2;
-  
+
   vrow.Rows(1,sizeTS) = ac.Rows(1,sizeTS);
   vrow.Rows(zeropad - sizeTS + 2, zeropad) = ac.Rows(2, sizeTS).Reverse();
 
   ColumnVector ac_fft_imag;
 
-  FFT(vrow, dummy, pwfilter, ac_fft_imag);      
+  FFT(vrow, dummy, pwfilter, ac_fft_imag);
 
   // inverse auto corr to give prewhitening filter
   // no DC component so set first value to 0
   pwfilter(1) = 0.0;
-  
+
   for(int j = 2; j <= zeropad; j++)
     {
       if (pwfilter(j)<0)
@@ -64,15 +64,15 @@ void TsPlotCode::establishPwFilter(const ColumnVector& ac,
 	  pwfilter(j)=0;
 	}
       else
-		  pwfilter(j) = 1.0/::sqrt(pwfilter(j));	      
-    }  
+		  pwfilter(j) = 1.0/::sqrt(pwfilter(j));
+    }
 
   // normalise pwfilter such that sum(j)((pwfilter)^2/zeropad)) = 1
   pwfilter /= ::sqrt(pwfilter.SumSquare()/zeropad);
 }
 
 void TsPlotCode::preWhitenData(const ColumnVector& data, ColumnVector& pwdata, ColumnVector& pwfilter, int zeropad, int npts)
-{ 
+{
 
  ColumnVector data_fft_real, data_fft_imag, realifft, dummy;
   dummy.ReSize(zeropad);
@@ -88,11 +88,11 @@ void TsPlotCode::preWhitenData(const ColumnVector& data, ColumnVector& pwdata, C
 
   // FFT data
   FFT(pwdata, dummy, data_fft_real, data_fft_imag);
-  FFTI(SP(pwfilter, data_fft_real), SP(pwfilter, data_fft_imag), realifft, dummy); 
+  FFTI(SP(pwfilter, data_fft_real), SP(pwfilter, data_fft_imag), realifft, dummy);
 
   // take first npts and restore mean
-  pwdata = realifft.Rows(1,npts) + mn;  
-  
+  pwdata = realifft.Rows(1,npts) + mn;
+
 }
 
 
@@ -100,15 +100,15 @@ void TsPlotCode::preWhitenData(const ColumnVector& data, ColumnVector& pwdata, C
 
 
 
-TimeSeries::Handle TsPlotCode::preWhitenTimeseries(const ColumnVector& ac, 
+TimeSeries::Handle TsPlotCode::preWhitenTimeseries(const ColumnVector& ac,
                                    TimeSeries::Handle& ts)
 {
   int npts = ts->inqVolCount();
-  
+
   ColumnVector  tsCv(convertTimeSeries(ts));
 
   int zeropad = (int)pow(2,ceil(log(npts)/log(2)));
-  
+
   // get prewhitening filter from ac
   ColumnVector pwfilter;
   establishPwFilter(ac, pwfilter, zeropad, npts);
@@ -119,7 +119,7 @@ TimeSeries::Handle TsPlotCode::preWhitenTimeseries(const ColumnVector& ac,
 
   return convertColumnVector(pwts,ts->inqX(),ts->inqY(),ts->inqZ());
 }
-  
+
 
 TimeSeries::Handle TsPlotCode::convertColumnVector(const ColumnVector& cv,
                                            short x, short y, short z)
@@ -145,7 +145,7 @@ TimeSeries::Handle TsPlotCode::convertMatrix(const Matrix& mat, int col,
 ColumnVector TsPlotCode::convertTimeSeries(const TimeSeries::Handle& ts)
 {
   ColumnVector colVec(ts->inqVolCount());
-  
+
   for(int j = 0;j < ts->inqVolCount();++j)
     colVec(j+1) = ts->value(j);
 

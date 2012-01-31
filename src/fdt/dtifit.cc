@@ -3,20 +3,20 @@
 /*  Part of FSL - FMRIB's Software Library
     http://www.fmrib.ox.ac.uk/fsl
     fsl@fmrib.ox.ac.uk
-    
+
     Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
     Imaging of the Brain), Department of Clinical Neurology, Oxford
     University, Oxford, UK
-    
-    
+
+
     LICENCE
-    
+
     FMRIB Software Library, Release 4.0 (c) 2007, The University of
     Oxford (the "Software")
-    
+
     The Software remains the property of the University of Oxford ("the
     University").
-    
+
     The Software is distributed "AS IS" under this Licence solely for
     non-commercial use in the hope that it will be useful, but in order
     that the University as a charitable foundation protects its assets for
@@ -28,13 +28,13 @@
     all responsibility for the use which is made of the Software. It
     further disclaims any liability for the outcomes arising from using
     the Software.
-    
+
     The Licensee agrees to indemnify the University and hold the
     University harmless from and against any and all claims, damages and
     liabilities asserted by third parties (including claims for
     negligence) which arise directly or indirectly from the use of the
     Software or the sale of any products based on the Software.
-    
+
     No part of the Software may be reproduced, modified, transmitted or
     transferred in any form or by any means, electronic or mechanical,
     without the express permission of the University. The permission of
@@ -45,7 +45,7 @@
     transmitted product. You may be held legally responsible for any
     copyright infringement that is caused or encouraged by your failure to
     abide by these terms and conditions.
-    
+
     You are not permitted under this Licence to use this Software
     commercially. Use for which any financial return is received shall be
     defined as commercial use, and includes (1) integration of all or part
@@ -80,7 +80,7 @@ const float maxfloat=1e10;
 const float minfloat=1e-10;
 const float maxlogfloat=23;
 const float minlogfloat=-23;
-const int maxint=1000000000; 
+const int maxint=1000000000;
 
 inline float PI() { return  3.14159265358979;}
 inline float min(float a,float b){
@@ -88,7 +88,7 @@ inline float min(float a,float b){
 inline float max(float a,float b){
   return a>b ? a:b;}
 inline Matrix Anis()
-{ 
+{
   Matrix A(3,3);
   A << 1 << 0 << 0
     << 0 << 0 << 0
@@ -97,7 +97,7 @@ inline Matrix Anis()
 }
 
 inline Matrix Is()
-{ 
+{
   Matrix I(3,3);
   I << 1 << 0 << 0
     << 0 << 1 << 0
@@ -135,7 +135,7 @@ Matrix form_Amat(const Matrix& r,const Matrix& b)
 {
   Matrix A(r.Ncols(),7);
   Matrix tmpvec(3,1), tmpmat;
-  
+
   for( int i = 1; i <= r.Ncols(); i++){
     tmpvec << r(1,i) << r(2,i) << r(3,i);
     tmpmat = tmpvec*tmpvec.t()*b(1,i);
@@ -157,7 +157,7 @@ Matrix form_Amat(const Matrix& r,const Matrix& b, const Matrix & cni )
   Matrix A(r.Ncols(),7 + cni.Ncols());
   Matrix A_noconf(r.Ncols(),7);
   Matrix tmpvec(3,1), tmpmat;
-  
+
   for( int i = 1; i <= r.Ncols(); i++){
     tmpvec << r(1,i) << r(2,i) << r(3,i);
     tmpmat = tmpvec*tmpvec.t()*b(1,i);   //this is the b-Matrix for direction i
@@ -168,7 +168,7 @@ Matrix form_Amat(const Matrix& r,const Matrix& b, const Matrix & cni )
     A(i,5) = 2*tmpmat(2,3);
     A(i,6) = tmpmat(3,3);
     A(i,7) = 1;
-    
+
     A_noconf(i,1) = tmpmat(1,1);
     A_noconf(i,2) = 2*tmpmat(1,2);
     A_noconf(i,3) = 2*tmpmat(1,3);
@@ -176,13 +176,13 @@ Matrix form_Amat(const Matrix& r,const Matrix& b, const Matrix & cni )
     A_noconf(i,5) = 2*tmpmat(2,3);
     A_noconf(i,6) = tmpmat(3,3);
     A_noconf(i,7) = 1;
-    
+
     for( int col=1;col<=cni.Ncols();col++){
       A(i,col+7)=cni(i,col);
     }
   }
-  
-  
+
+
   Matrix tmp1=(A_noconf.t()*A_noconf).i();
   Matrix tmp2=(A.t()*A).i();
   cout<<"Efficiency loss due to confounds: xx xy xz yy yz zz"<<endl;
@@ -216,8 +216,8 @@ ReturnMatrix WLS_pinv(const Matrix& Amat, const ColumnVector& S)
 
   W=0;
   for (int i=1; i<=S.Nrows(); i++)
-      W(i)=(S(i)>0 ? S(i)*S(i):1);             //Weights according to (Salvador, HBM 2005) 
- 
+      W(i)=(S(i)>0 ? S(i)*S(i):1);             //Weights according to (Salvador, HBM 2005)
+
   pinvA=(((Amat.t()*W)*Amat).i()*Amat.t())*W;  //WLS pseudoinverse of Amat
   pinvA.Release();
   return pinvA;
@@ -225,7 +225,7 @@ ReturnMatrix WLS_pinv(const Matrix& Amat, const ColumnVector& S)
 
 
 
-  
+
 //Performs fitting of the tensor using a precalculated pseudoinverse of the design matrix (Amat_pinv)
 //Depending on Amat_pinv, the function performs an OLS or WLS fiting of the DTI model.
 void tensorfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2,ColumnVector& evec3,float& f,float& s0,float& mode,ColumnVector& Dvec, float& sse, const Matrix& Amat, const Matrix& Amat_pinv, const ColumnVector& S)
@@ -244,12 +244,12 @@ void tensorfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2,Column
 	logS(i)=0;
     }
   Dvec=-Amat_pinv*logS;       //Estimate the model parameters
-  
+
   if(Dvec(7)>-maxlogfloat )
     s0=exp(-Dvec(7));
   else
     s0=S.MaximumAbsoluteValue();
-  
+
   for ( int i = 1; i <= S.Nrows(); i++)
     {
       if(s0<S.Sum()/S.Nrows()){ s0=S.MaximumAbsoluteValue();  }
@@ -257,12 +257,12 @@ void tensorfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2,Column
     }
   Dvec = -Amat_pinv*logS;
   sse=(Amat*Dvec+logS).SumSquare();
-  //sse = (W*(Amat*Dvec+logS)).SumSquare();   //In case of WLS, the weighted SSE will be evaluated, otherwise W=I, so OLS SSE is computed 
-  
+  //sse = (W*(Amat*Dvec+logS)).SumSquare();   //In case of WLS, the weighted SSE will be evaluated, otherwise W=I, so OLS SSE is computed
+
   s0=exp(-Dvec(7));
   if(s0<S.Sum()/S.Nrows()){ s0=S.Sum()/S.Nrows();  }
   tens = vec2tens(Dvec);
-  
+
   EigenValues(tens,Dd,Vd);
   mDd = Dd.Sum()/Dd.Nrows();
   int maxind = Dd(1) > Dd(2) ? 1:2;   //finding max,mid and min eigenvalues
@@ -286,10 +286,10 @@ void tensorfit(DiagonalMatrix& Dd,ColumnVector& evec1,ColumnVector& evec2,Column
   d = 2*d*d*d;
   mode = MIN(MAX(d ? n/d : 0.0, -1),1);
 
-  //Compute the FA  
-  float numer=1.5*((Dd(1)-mDd)*(Dd(1)-mDd)+(Dd(2)-mDd)*(Dd(2)-mDd)+(Dd(3)-mDd)*(Dd(3)-mDd));  
+  //Compute the FA
+  float numer=1.5*((Dd(1)-mDd)*(Dd(1)-mDd)+(Dd(2)-mDd)*(Dd(2)-mDd)+(Dd(3)-mDd)*(Dd(3)-mDd));
   float denom=(Dd(1)*Dd(1)+Dd(2)*Dd(2)+Dd(3)*Dd(3));
- 
+
   if(denom>0) fsquared=numer/denom;
   else fsquared=0;
   if(fsquared>0){f=sqrt(fsquared);}
@@ -318,7 +318,7 @@ int main(int argc, char** argv)
       cout<<"max x     "<<opts.x_max.value()<<endl;
     }
   }
-  
+
   // Set random seed:
   Matrix r = read_ascii_matrix(opts.bvecsfile.value());
   if(r.Nrows()>3) r=r.t();
@@ -328,7 +328,7 @@ int main(int argc, char** argv)
       r(1,i)=r(1,i)/tmpsum;
       r(2,i)=r(2,i)/tmpsum;
       r(3,i)=r(3,i)/tmpsum;
-    }  
+    }
   }
   Matrix b = read_ascii_matrix(opts.bvalsfile.value());
   if(b.Nrows()>1) b=b.t();
@@ -388,7 +388,7 @@ int main(int argc, char** argv)
   ColumnVector evec1(3),evec2(3),evec3(3);
   ColumnVector S(data.tsize());
   float fa,s0,mode,sseval;
-  Matrix Amat, cni; 
+  Matrix Amat, cni;
   if(opts.verbose.value()) cout<<"Forming A matrix"<<endl;
   if(opts.cni.value()!=""){
     cni=read_ascii_matrix(opts.cni.value());
@@ -407,16 +407,16 @@ int main(int argc, char** argv)
   }
 
   if(opts.verbose.value()) cout<<"starting the fits"<<endl;
-  ColumnVector Dvec(7); Dvec=0; 
+  ColumnVector Dvec(7); Dvec=0;
   Matrix pinv_Amat=pinv(Amat);
 
   for(int k = minz; k < maxz; k++){
     cout<<k<<" slices processed"<<endl;
       for(int j=miny; j < maxy; j++){
 	for(int i =minx; i< maxx; i++){
-	
+
 	  if(mask(i,j,k)>0){
-	    
+
 	    for(int t=0;t < data.tsize();t++){
 	      S(t+1)=data(i,j,k,t);
 	    }
@@ -445,7 +445,7 @@ int main(int argc, char** argv)
 	    Delements(i-minx,j-miny,k-minz,3)=Dvec(4);
 	    Delements(i-minx,j-miny,k-minz,4)=Dvec(5);
 	    Delements(i-minx,j-miny,k-minz,5)=Dvec(6);
-	    
+
  	    if(opts.cni.value()!=""){
  	      for(int iter=0;iter<cni.Ncols();iter++)
  		cni_cope(i-minx,j-miny,k-minz,iter)=Dvec(8+iter);
@@ -456,9 +456,9 @@ int main(int argc, char** argv)
 
 
 //	    EigenValues(dyad,dyad_D,dyad_V);
-	   
 
-	    
+
+
 //  	    // work out which is the maximum eigenvalue;
 //  	    int maxeig;
 //  	    if(dyad_D(1)>dyad_D(2)){
@@ -472,7 +472,7 @@ int main(int argc, char** argv)
 //  	    dyadic_vecs(i-minx,j-miny,k-minz,0)=dyad_V(1,maxeig);
 //  	    dyadic_vecs(i-minx,j-miny,k-minz,1)=dyad_V(2,maxeig);
 //  	    dyadic_vecs(i-minx,j-miny,k-minz,2)=dyad_V(3,maxeig);
-	    
+
 
 
 
@@ -480,7 +480,7 @@ int main(int argc, char** argv)
 	}
       }
   }
-  
+
     string fafile=opts.ofile.value()+"_FA";
     string s0file=opts.ofile.value()+"_S0";
     string l1file=opts.ofile.value()+"_L1";

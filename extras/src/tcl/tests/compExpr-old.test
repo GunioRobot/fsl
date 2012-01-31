@@ -148,7 +148,7 @@ test compExpr-old-3.1 {CompileCondExpr: just lor expr} {expr 3||0} 1
 test compExpr-old-3.2 {CompileCondExpr: error in lor expr} {
     catch {expr x||3} msg
     set msg
-} {syntax error in expression "x||3": variable references require preceding $} 
+} {syntax error in expression "x||3": variable references require preceding $}
 test compExpr-old-3.3 {CompileCondExpr: test true arm} {expr 3>2?44:66} 44
 test compExpr-old-3.4 {CompileCondExpr: error compiling true arm} {
     catch {expr 3>2?2**3:66} msg
@@ -174,7 +174,7 @@ test compExpr-old-4.1 {CompileLorExpr: just land expr} {expr 1.3&&3.3} 1
 test compExpr-old-4.2 {CompileLorExpr: error in land expr} {
     catch {expr x&&3} msg
     set msg
-} {syntax error in expression "x&&3": variable references require preceding $} 
+} {syntax error in expression "x&&3": variable references require preceding $}
 test compExpr-old-4.3 {CompileLorExpr: simple lor exprs} {expr 0||1.0} 1
 test compExpr-old-4.4 {CompileLorExpr: simple lor exprs} {expr 3.0||0.0} 1
 test compExpr-old-4.5 {CompileLorExpr: simple lor exprs} {expr 0||0||1} 1
@@ -199,7 +199,7 @@ test compExpr-old-5.1 {CompileLandExpr: just bitor expr} {expr 7|0x13} 23
 test compExpr-old-5.2 {CompileLandExpr: error in bitor expr} {
     catch {expr x|3} msg
     set msg
-} {syntax error in expression "x|3": variable references require preceding $} 
+} {syntax error in expression "x|3": variable references require preceding $}
 test compExpr-old-5.3 {CompileLandExpr: simple land exprs} {expr 0&&1.0} 0
 test compExpr-old-5.4 {CompileLandExpr: simple land exprs} {expr 0&&0} 0
 test compExpr-old-5.5 {CompileLandExpr: simple land exprs} {expr 3.0&&1.2} 1
@@ -225,7 +225,7 @@ test compExpr-old-6.1 {CompileBitXorExpr: just bitand expr} {expr 7&0x13} 3
 test compExpr-old-6.2 {CompileBitXorExpr: error in bitand expr} {
     catch {expr x|3} msg
     set msg
-} {syntax error in expression "x|3": variable references require preceding $} 
+} {syntax error in expression "x|3": variable references require preceding $}
 test compExpr-old-6.3 {CompileBitXorExpr: simple bitxor exprs} {expr 7^0x13} 20
 test compExpr-old-6.4 {CompileBitXorExpr: simple bitxor exprs} {expr 3^0x10} 19
 test compExpr-old-6.5 {CompileBitXorExpr: simple bitxor exprs} {expr 0^7} 7
@@ -252,7 +252,7 @@ test compExpr-old-7.4 {CompileBitAndExpr: just equality expr} {expr {"abc" == "a
 test compExpr-old-7.5 {CompileBitAndExpr: error in equality expr} {
     catch {expr x==3} msg
     set msg
-} {syntax error in expression "x==3": variable references require preceding $} 
+} {syntax error in expression "x==3": variable references require preceding $}
 test compExpr-old-7.6 {CompileBitAndExpr: simple bitand exprs} {expr 7&0x13} 3
 test compExpr-old-7.7 {CompileBitAndExpr: simple bitand exprs} {expr 0xf2&0x53} 82
 test compExpr-old-7.8 {CompileBitAndExpr: simple bitand exprs} {expr 3&6} 2
@@ -279,7 +279,7 @@ test compExpr-old-8.4 {CompileEqualityExpr: just relational expr} {expr {"0y"<"0
 test compExpr-old-8.5 {CompileEqualityExpr: error in relational expr} {
     catch {expr x>3} msg
     set msg
-} {syntax error in expression "x>3": variable references require preceding $} 
+} {syntax error in expression "x>3": variable references require preceding $}
 test compExpr-old-8.6 {CompileEqualityExpr: simple equality exprs} {expr 7==0x13} 0
 test compExpr-old-8.7 {CompileEqualityExpr: simple equality exprs} {expr -0xf2!=0x53} 1
 test compExpr-old-8.8 {CompileEqualityExpr: simple equality exprs} {expr {"12398712938788234-1298379" != ""}} 1
@@ -314,7 +314,7 @@ if {0x80000000 > 0} {
 test compExpr-old-9.6 {CompileRelationalExpr: error in shift expr} {
     catch {expr x>>3} msg
     set msg
-} {syntax error in expression "x>>3": variable references require preceding $} 
+} {syntax error in expression "x>>3": variable references require preceding $}
 test compExpr-old-9.7 {CompileRelationalExpr: simple relational exprs} {expr 0xff>=+0x3} 1
 test compExpr-old-9.8 {CompileRelationalExpr: simple relational exprs} {expr -0xf2<0x3} 1
 test compExpr-old-9.9 {CompileRelationalExpr: error compiling relational arm} {
